@@ -37,7 +37,7 @@ const downloadImage = async ({ src, auth }: DownloadImageType) => {
     await downloadFile(src, auth);
     showToast('Download complete');
   } catch (error) {
-    showToast('Can not download');
+    showToast('Cannot download');
   }
 };
 

@@ -19,7 +19,7 @@ export const responseToActions = (state: GlobalState, response: Object): Action[
       if (action.type === 'ignore') return false;
 
       if (!action || !action.type || action.type === 'unknown') {
-        console.log('Can not handle event', action.event); // eslint-disable-line
+        console.log('Cannot handle event', action.event); // eslint-disable-line
         return false;
       }
 

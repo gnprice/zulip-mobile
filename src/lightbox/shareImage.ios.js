@@ -11,9 +11,9 @@ export default async (url: string, auth: Auth) => {
     try {
       await Share.share({ url: uri, message: url });
     } catch (error) {
-      showToast('Can not share');
+      showToast('Cannot share');
     }
   } catch (error) {
-    showToast('Can not download');
+    showToast('Cannot download');
   }
 };
