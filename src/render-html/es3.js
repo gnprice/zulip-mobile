@@ -45,6 +45,8 @@ var pollForPostMessage = function pollForPostMessage() {
 
 pollForPostMessage();
 
+sendMessage({type: 'debug', a: 'loading script'});
+
 var isNearByPositions = function isNearByPositions(x1, y1, x2, y2) {
   return x1 && y1 && x2 && y2 && Math.abs(x1 - x2) < 10 && Math.abs(y1 - y2) < 10;
 };
@@ -91,6 +93,8 @@ var getStartAndEndNodes = function getStartAndEndNodes() {
 };
 
 var scrollToAnchor = function scrollToAnchor(anchor) {
+  sendMessage({type: 'debug', a: 'scrollToAnchor'});
+  alert('scrollToAnchor');
   var anchorNode = document.getElementById('msg-' + anchor);
 
   if (anchorNode) {
@@ -113,12 +117,14 @@ var prevNodes = getStartAndEndNodes();
 
 var handleScrollEvent = function handleScrollEvent() {
   lastTouchEventTimestamp = 0;
+  sendMessage({type: 'debug', a: 'handleScrollEvent...'});
   if (scrollEventsDisabled) return;
 
   var currentNodes = getStartAndEndNodes();
 
   window.postMessage(JSON.stringify({
     type: 'scroll',
+    yo: 'there',
     scrollY: window.scrollY,
     innerHeight: window.innerHeight,
     offsetHeight: document.body.offsetHeight,

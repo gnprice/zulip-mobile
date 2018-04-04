@@ -29,6 +29,7 @@ export default class MessageListWeb extends Component<Props> {
 
   handleMessage = (event: Object) => {
     const eventData = JSON.parse(event.nativeEvent.data);
+    console.log(`message data!: ${JSON.stringify(eventData)}`);
     const handler = `handle${eventData.type.charAt(0).toUpperCase()}${eventData.type.slice(1)}`;
 
     webViewEventHandlers[handler](this.props, eventData); // $FlowFixMe

@@ -18,7 +18,9 @@ window.__forceSmoothScrollPolyfill__ = true;
 ${config.enableWebViewErrorDisplay ? errorHandler : ''}
 ${smoothScroll}
 document.addEventListener('DOMContentLoaded', function() {
+  window.postMessage(JSON.stringify({type: 'debug', a: 'start DOMContentLoaded'}), '*');
   ${js}
+  sendMessage({type: 'debug', a: 'DOMContentLoaded'});
   scrollToAnchor(${anchor});
   scrollEventsDisabled = false;
 });

@@ -83,7 +83,7 @@ const getStartAndEndNodes = () => {
 
 const scrollToAnchor = anchor => {
   const anchorNode = document.getElementById(`msg-${anchor}`);
-  console.log(`scrollToAnchor: ${anchor}`);
+  sendMessage({type: 'debug', a: 'scrollToAnchor'});
 
   if (anchorNode) {
     anchorNode.scrollIntoView({ block: 'start' });
@@ -105,6 +105,7 @@ let prevNodes = getStartAndEndNodes();
 
 const handleScrollEvent = () => {
   lastTouchEventTimestamp = 0;
+  sendMessage({type: 'debug', a: 'handleScrollEvent'});
   if (scrollEventsDisabled) return;
 
   const currentNodes = getStartAndEndNodes();
@@ -112,6 +113,7 @@ const handleScrollEvent = () => {
   window.postMessage(
     JSON.stringify({
       type: 'scroll',
+      yo: 'there',
       scrollY: window.scrollY,
       innerHeight: window.innerHeight,
       offsetHeight: document.body.offsetHeight,
