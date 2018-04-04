@@ -73,6 +73,7 @@ export const backgroundFetchMessages = (
   numAfter: number,
   useFirstUnread: boolean = false,
 ) => async (dispatch: Dispatch, getState: GetState) => {
+  console.log('background fetch...');
   const messages = await getMessages(
     getAuth(getState()),
     narrow,
@@ -82,6 +83,7 @@ export const backgroundFetchMessages = (
     useFirstUnread,
   );
 
+  console.log('got messages');
   dispatch(messageFetchComplete(messages, narrow, anchor, numBefore, numAfter));
 };
 
@@ -92,7 +94,9 @@ export const fetchMessages = (
   numAfter: number,
   useFirstUnread: boolean = false,
 ): FetchMessagesAction => async (dispatch: Dispatch) => {
+  console.log('fetchMessages');
   dispatch(messageFetchStart(narrow, numBefore, numAfter));
+  console.log('fetchMessages 2');
   dispatch(backgroundFetchMessages(narrow, anchor, numBefore, numAfter, useFirstUnread));
 };
 

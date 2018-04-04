@@ -36,9 +36,13 @@ export const doNarrow = (narrow: Narrow, anchor: number = 0) => (
   const isCaughtUp = caughtUp.newer && caughtUp.older;
 
   if (anchor === 0 && tooFewMessages && !isCaughtUp) {
+    console.log('fetching: first unread');
     dispatch(fetchMessagesAtFirstUnread(narrow));
   } else if (anchor !== 0) {
+    console.log('fetching: anchor');
     dispatch(fetchMessagesAroundAnchor(narrow, anchor));
+  } else {
+    console.log('fetching nothing');
   }
 };
 
