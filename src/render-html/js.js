@@ -3,9 +3,42 @@ let lastTouchEventTimestamp = 0;
 let lastTouchPositionX = null;
 let lastTouchPositionY = null;
 
-const sendMessage = msg => {
-  window.postMessage(JSON.stringify(msg), '*');
+const sendMessageQueue = [];
+
+const rnPostMessageIsReady = () => {
+  // The postMessage provided by React Native takes just one parameter
+  // while the normal one takes two; use that to determine if RN has
+  // put its version in place yet.
+  // This trick taken from:
+  //   https://github.com/facebook/react-native/issues/11594#issuecomment-281232273
+  return (window.postMessage.length === 1);
 };
+
+const sendMessage = msg => {
+  // We'd like to just call `window.postMessage`.  Unfortunately RN has a bug:
+  //   https://github.com/facebook/react-native/issues/11594
+  // where when the document first loads (and even after the `DOMContentLoaded`
+  // event fires), RN hasn't yet set up its `window.postMessage`, so our events
+  // never make it to the `onMessage` callback we provided as a WebView prop.
+  // Work around this by queueing up events that arrive early.
+  if (rnPostMessageIsReady()) {
+    window.postMessage(JSON.stringify(msg));
+  } else {
+    sendMessageQueue.push(msg);
+  }
+};
+
+const pollForPostMessage = () => {
+  if (rnPostMessageIsReady()) {
+    for (const msg of sendMessageQueue) {
+      sendMessage(msg);
+    }
+  } else {
+    setTimeout(pollForPostMessage, 50);
+  }
+};
+
+pollForPostMessage();
 
 const isNearByPositions = (x1, y1, x2, y2) =>
   x1 && y1 && x2 && y2 && Math.abs(x1 - x2) < 10 && Math.abs(y1 - y2) < 10;
