@@ -128,5 +128,5 @@ export const handleReaction = (props: Props, event: MessageListEventReaction) =>
 };
 
 export const handleDebug = (props: Props, event: MessageListEventDebug) => {
-  console.debug(props, event); // eslint-disable-line
+  console.debug('WebViewDebug', event); // eslint-disable-line
 };
