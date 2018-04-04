@@ -100,6 +100,10 @@ export const findAnchor = (
   console.log(`finding anchor: ${typeof messages} / ${typeof messages[0]}`);
   const firstUnreadMessage = findFirstUnread(messages, flags, subscriptions, mute);
   console.log(`first unread: ${firstUnreadMessage && firstUnreadMessage.id}`);
-  console.log(`${messages.map((m) => m.id).join(' ')}`);
+  console.log(`message IDs: ${messages.map((m) => m.id).join(' ')}`);
+  console.log(`message unreads: ${messages.map(m => !isMessageRead(m, flags, subscriptions, mute)).join(' ')}`);
+  console.log(`message muteds: ${messages.map(m => shouldBeMuted(m, homeNarrow, subscriptions, mute)).join(' ')}`);
+  console.log(`message reads: ${messages.map(m => !!flags.read[m.id]).join(' ')}`);
+  console.log(`flags: ${JSON.stringify(flags)}`);
   return firstUnreadMessage ? firstUnreadMessage.id : 0;
 };

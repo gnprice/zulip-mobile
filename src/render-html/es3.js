@@ -95,7 +95,7 @@ var getStartAndEndNodes = function getStartAndEndNodes() {
 };
 
 var scrollToAnchor = function scrollToAnchor(anchor) {
-  sendMessage({type: 'debug', a: 'scrollToAnchor'});
+  sendMessage({type: 'debug', a: 'scrollToAnchor', anchor });
   var anchorNode = document.getElementById('msg-' + anchor);
 
   if (anchorNode) {
