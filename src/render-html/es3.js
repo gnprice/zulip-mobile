@@ -94,7 +94,6 @@ var getStartAndEndNodes = function getStartAndEndNodes() {
 
 var scrollToAnchor = function scrollToAnchor(anchor) {
   sendMessage({type: 'debug', a: 'scrollToAnchor'});
-  alert('scrollToAnchor');
   var anchorNode = document.getElementById('msg-' + anchor);
 
   if (anchorNode) {
