@@ -83,6 +83,7 @@ const getStartAndEndNodes = () => {
 
 const scrollToAnchor = anchor => {
   const anchorNode = document.getElementById(`msg-${anchor}`);
+  console.log(`scrollToAnchor: ${anchor}`);
 
   if (anchorNode) {
     anchorNode.scrollIntoView({ block: 'start' });

@@ -73,6 +73,7 @@ const messageBody = ({
   realmEmoji: ReactionType,
   timeEdited: Date,
 }) => `
+[${id}]
 ${content}
 ${isOutbox ? '<div class="loading-spinner outbox-spinner"></div>' : ''}
 ${messageTagsAsHtml(flags, timeEdited)}
