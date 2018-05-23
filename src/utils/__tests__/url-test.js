@@ -82,17 +82,24 @@ describe('getResource', () => {
 
 describe('isUrlOnRealm', () => {
   test('when link is on realm, return true', () => {
-    expect(isUrlOnRealm('/#narrow/stream/jest', 'https://example.com')).toBe(true);
-
-    expect(isUrlOnRealm('https://example.com/#narrow/stream/jest', 'https://example.com')).toBe(
+    expect(isUrlOnRealm('/#narrow/stream/jest', 'https://example.com')).toBe(
       true,
     );
+
+    expect(
+      isUrlOnRealm(
+        'https://example.com/#narrow/stream/jest',
+        'https://example.com',
+      ),
+    ).toBe(true);
 
     expect(isUrlOnRealm('#narrow/#near/1', 'https://example.com')).toBe(true);
   });
 
   test('when link is on not realm, return false', () => {
-    expect(isUrlOnRealm('https://demo.example.com', 'https://example.com')).toBe(false);
+    expect(
+      isUrlOnRealm('https://demo.example.com', 'https://example.com'),
+    ).toBe(false);
 
     expect(isUrlOnRealm('www.google.com', 'https://example.com')).toBe(false);
   });
@@ -100,56 +107,90 @@ describe('isUrlOnRealm', () => {
 
 describe('isUrlInAppLink', () => {
   test('when link is external, return false', () => {
-    expect(isUrlInAppLink('https://example.com', 'https://another.com')).toBe(false);
-  });
-
-  test('when link is internal, but not in app, return false', () => {
-    expect(isUrlInAppLink('https://example.com/user_uploads', 'https://example.com')).toBe(false);
-  });
-
-  test('when link is internal and in app, return true', () => {
-    expect(isUrlInAppLink('https://example.com/#narrow/stream/jest', 'https://example.com')).toBe(
-      true,
+    expect(isUrlInAppLink('https://example.com', 'https://another.com')).toBe(
+      false,
     );
   });
 
+  test('when link is internal, but not in app, return false', () => {
+    expect(
+      isUrlInAppLink('https://example.com/user_uploads', 'https://example.com'),
+    ).toBe(false);
+  });
+
+  test('when link is internal and in app, return true', () => {
+    expect(
+      isUrlInAppLink(
+        'https://example.com/#narrow/stream/jest',
+        'https://example.com',
+      ),
+    ).toBe(true);
+  });
+
   test('when link is relative and in app, return true', () => {
-    expect(isUrlInAppLink('#narrow/stream/jest/topic/topic1', 'https://example.com')).toBe(true);
-    expect(isUrlInAppLink('/#narrow/stream/jest', 'https://example.com')).toBe(true);
+    expect(
+      isUrlInAppLink('#narrow/stream/jest/topic/topic1', 'https://example.com'),
+    ).toBe(true);
+    expect(isUrlInAppLink('/#narrow/stream/jest', 'https://example.com')).toBe(
+      true,
+    );
   });
 });
 
 describe('isMessageLink', () => {
   test('only in-app link containing "near/<message-id>" is a message link', () => {
-    expect(isMessageLink('https://example.com/#narrow/stream/jest', 'https://example.com')).toBe(
-      false,
-    );
-    expect(isMessageLink('https://example.com/#narrow/#near/1', 'https://example.com')).toBe(true);
+    expect(
+      isMessageLink(
+        'https://example.com/#narrow/stream/jest',
+        'https://example.com',
+      ),
+    ).toBe(false);
+    expect(
+      isMessageLink(
+        'https://example.com/#narrow/#near/1',
+        'https://example.com',
+      ),
+    ).toBe(true);
   });
 });
 
 describe('isStreamLink', () => {
   test('only in-app link containing "stream" is a stream link', () => {
     expect(
-      isStreamLink('https://example.com/#narrow/pm-with/1,2-group', 'https://example.com'),
+      isStreamLink(
+        'https://example.com/#narrow/pm-with/1,2-group',
+        'https://example.com',
+      ),
     ).toBe(false);
-    expect(isStreamLink('https://example.com/#narrow/stream/jest', 'https://example.com')).toBe(
-      true,
-    );
-    expect(isStreamLink('https://example.com/#narrow/stream/stream/', 'https://example.com')).toBe(
-      true,
-    );
+    expect(
+      isStreamLink(
+        'https://example.com/#narrow/stream/jest',
+        'https://example.com',
+      ),
+    ).toBe(true);
+    expect(
+      isStreamLink(
+        'https://example.com/#narrow/stream/stream/',
+        'https://example.com',
+      ),
+    ).toBe(true);
   });
 });
 
 describe('isTopicLink', () => {
   test('when a url is not a topic narrow return false', () => {
     expect(
-      isTopicLink('https://example.com/#narrow/pm-with/1,2-group', 'https://example.com'),
+      isTopicLink(
+        'https://example.com/#narrow/pm-with/1,2-group',
+        'https://example.com',
+      ),
     ).toBe(false);
-    expect(isTopicLink('https://example.com/#narrow/stream/jest', 'https://example.com')).toBe(
-      false,
-    );
+    expect(
+      isTopicLink(
+        'https://example.com/#narrow/stream/jest',
+        'https://example.com',
+      ),
+    ).toBe(false);
 
     expect(
       isTopicLink(
@@ -158,14 +199,20 @@ describe('isTopicLink', () => {
       ),
     ).toBe(false);
 
-    expect(isTopicLink('https://example.com/#narrow/stream/topic/', 'https://example.com')).toBe(
-      false,
-    );
+    expect(
+      isTopicLink(
+        'https://example.com/#narrow/stream/topic/',
+        'https://example.com',
+      ),
+    ).toBe(false);
   });
 
   test('when a url is a topic narrow return true', () => {
     expect(
-      isTopicLink('https://example.com/#narrow/stream/jest/topic/test', 'https://example.com'),
+      isTopicLink(
+        'https://example.com/#narrow/stream/jest/topic/test',
+        'https://example.com',
+      ),
     ).toBe(true);
 
     expect(
@@ -176,7 +223,10 @@ describe('isTopicLink', () => {
     ).toBe(true);
 
     expect(
-      isTopicLink('https://example.com/#narrow/stream/mobile/topic/topic/', 'https://example.com'),
+      isTopicLink(
+        'https://example.com/#narrow/stream/mobile/topic/topic/',
+        'https://example.com',
+      ),
     ).toBe(true);
 
     expect(
@@ -193,20 +243,34 @@ describe('isTopicLink', () => {
       ),
     ).toBe(true);
 
-    expect(isTopicLink('/#narrow/stream/stream/subject/topic', 'https://example.com')).toBe(true);
+    expect(
+      isTopicLink(
+        '/#narrow/stream/stream/subject/topic',
+        'https://example.com',
+      ),
+    ).toBe(true);
   });
 });
 
 describe('isGroupLink', () => {
   test('only in-app link containing "pm-with" is a group link', () => {
     expect(
-      isGroupLink('https://example.com/#narrow/stream/jest/topic/test', 'https://example.com'),
+      isGroupLink(
+        'https://example.com/#narrow/stream/jest/topic/test',
+        'https://example.com',
+      ),
     ).toBe(false);
     expect(
-      isGroupLink('https://example.com/#narrow/pm-with/1,2-group', 'https://example.com'),
+      isGroupLink(
+        'https://example.com/#narrow/pm-with/1,2-group',
+        'https://example.com',
+      ),
     ).toBe(true);
     expect(
-      isGroupLink('https://example.com/#narrow/pm-with/1,2-group/near/1', 'https://example.com'),
+      isGroupLink(
+        'https://example.com/#narrow/pm-with/1,2-group/near/1',
+        'https://example.com',
+      ),
     ).toBe(true);
     expect(
       isGroupLink(
@@ -220,30 +284,53 @@ describe('isGroupLink', () => {
 describe('isSpecialLink', () => {
   test('only in-app link containing "is" is a special link', () => {
     expect(
-      isSpecialLink('https://example.com/#narrow/stream/jest/topic/test', 'https://example.com'),
+      isSpecialLink(
+        'https://example.com/#narrow/stream/jest/topic/test',
+        'https://example.com',
+      ),
     ).toBe(false);
 
-    expect(isSpecialLink('https://example.com/#narrow/is/private', 'https://example.com')).toBe(
-      true,
-    );
+    expect(
+      isSpecialLink(
+        'https://example.com/#narrow/is/private',
+        'https://example.com',
+      ),
+    ).toBe(true);
 
-    expect(isSpecialLink('https://example.com/#narrow/is/starred', 'https://example.com')).toBe(
-      true,
-    );
+    expect(
+      isSpecialLink(
+        'https://example.com/#narrow/is/starred',
+        'https://example.com',
+      ),
+    ).toBe(true);
 
-    expect(isSpecialLink('https://example.com/#narrow/is/mentioned', 'https://example.com')).toBe(
-      true,
-    );
+    expect(
+      isSpecialLink(
+        'https://example.com/#narrow/is/mentioned',
+        'https://example.com',
+      ),
+    ).toBe(true);
 
-    expect(isSpecialLink('https://example.com/#narrow/is/men', 'https://example.com')).toBe(false);
+    expect(
+      isSpecialLink(
+        'https://example.com/#narrow/is/men',
+        'https://example.com',
+      ),
+    ).toBe(false);
 
-    expect(isSpecialLink('https://example.com/#narrow/is/men/stream', 'https://example.com')).toBe(
-      false,
-    );
+    expect(
+      isSpecialLink(
+        'https://example.com/#narrow/is/men/stream',
+        'https://example.com',
+      ),
+    ).toBe(false);
 
-    expect(isSpecialLink('https://example.com/#narrow/are/men/stream', 'https://example.com')).toBe(
-      false,
-    );
+    expect(
+      isSpecialLink(
+        'https://example.com/#narrow/are/men/stream',
+        'https://example.com',
+      ),
+    ).toBe(false);
   });
 });
 
@@ -276,40 +363,58 @@ describe('getNarrowFromLink', () => {
   ];
 
   test('when link is not in-app link, return default homeNarrow', () => {
-    expect(getNarrowFromLink('https://example.com/user_uploads', 'https://example.com')).toEqual(
-      [],
-    );
+    expect(
+      getNarrowFromLink(
+        'https://example.com/user_uploads',
+        'https://example.com',
+      ),
+    ).toEqual([]);
   });
 
   test('when link is stream link, return matching streamNarrow', () => {
     expect(
-      getNarrowFromLink('https://example.com/#narrow/stream/jest', 'https://example.com'),
+      getNarrowFromLink(
+        'https://example.com/#narrow/stream/jest',
+        'https://example.com',
+      ),
     ).toEqual(streamNarrow('jest'));
 
     expect(
-      getNarrowFromLink('https://example.com/#narrow/stream/bot.20testing', 'https://example.com'),
+      getNarrowFromLink(
+        'https://example.com/#narrow/stream/bot.20testing',
+        'https://example.com',
+      ),
     ).toEqual(streamNarrow('bot testing'));
 
     expect(
-      getNarrowFromLink('https://example.com/#narrow/stream/jest.API', 'https://example.com'),
+      getNarrowFromLink(
+        'https://example.com/#narrow/stream/jest.API',
+        'https://example.com',
+      ),
     ).toEqual(streamNarrow('jest.API'));
 
     expect(
-      getNarrowFromLink('https://example.com/#narrow/stream/stream', 'https://example.com'),
+      getNarrowFromLink(
+        'https://example.com/#narrow/stream/stream',
+        'https://example.com',
+      ),
     ).toEqual(streamNarrow('stream'));
 
     expect(
-      getNarrowFromLink('https://example.com/#narrow/stream/topic', 'https://example.com'),
+      getNarrowFromLink(
+        'https://example.com/#narrow/stream/topic',
+        'https://example.com',
+      ),
     ).toEqual(streamNarrow('topic'));
   });
 
   test('when link is stream link, without realm info, return matching streamNarrow', () => {
-    expect(getNarrowFromLink('/#narrow/stream/jest', 'https://example.com')).toEqual(
-      streamNarrow('jest'),
-    );
-    expect(getNarrowFromLink('#narrow/stream/jest', 'https://example.com')).toEqual(
-      streamNarrow('jest'),
-    );
+    expect(
+      getNarrowFromLink('/#narrow/stream/jest', 'https://example.com'),
+    ).toEqual(streamNarrow('jest'));
+    expect(
+      getNarrowFromLink('#narrow/stream/jest', 'https://example.com'),
+    ).toEqual(streamNarrow('jest'));
   });
 
   test('when link is a topic link and encoded, decode stream and topic names and return matching streamNarrow and topicNarrow', () => {
@@ -350,12 +455,18 @@ describe('getNarrowFromLink', () => {
   });
 
   test('when link is pointing to a topic without realm info, return matching topicNarrow', () => {
-    expect(getNarrowFromLink('/#narrow/stream/stream/topic/topic', 'https://example.com')).toEqual(
-      topicNarrow('stream', 'topic'),
-    );
-    expect(getNarrowFromLink('#narrow/stream/stream/topic/topic', 'https://example.com')).toEqual(
-      topicNarrow('stream', 'topic'),
-    );
+    expect(
+      getNarrowFromLink(
+        '/#narrow/stream/stream/topic/topic',
+        'https://example.com',
+      ),
+    ).toEqual(topicNarrow('stream', 'topic'));
+    expect(
+      getNarrowFromLink(
+        '#narrow/stream/stream/topic/topic',
+        'https://example.com',
+      ),
+    ).toEqual(topicNarrow('stream', 'topic'));
   });
 
   test('when link is a group link, return matching groupNarrow', () => {
@@ -382,7 +493,10 @@ describe('getNarrowFromLink', () => {
       },
     ];
     expect(
-      getNarrowFromLink('https://example.com/#narrow/is/starred', 'https://example.com'),
+      getNarrowFromLink(
+        'https://example.com/#narrow/is/starred',
+        'https://example.com',
+      ),
     ).toEqual(expectedValue);
   });
 
@@ -421,7 +535,10 @@ describe('getNarrowFromLink', () => {
 describe('getMessageIdFromLink', () => {
   test('not message link', () => {
     expect(
-      getMessageIdFromLink('https://example.com/#narrow/is/private', 'https://example.com'),
+      getMessageIdFromLink(
+        'https://example.com/#narrow/is/private',
+        'https://example.com',
+      ),
     ).toBe(0);
   });
 
@@ -480,7 +597,9 @@ describe('fixRealmUrl', () => {
   });
 
   test('remove white-space around input', () => {
-    expect(fixRealmUrl(' https://example.com/  ')).toEqual('https://example.com');
+    expect(fixRealmUrl(' https://example.com/  ')).toEqual(
+      'https://example.com',
+    );
   });
 
   test('remove white-space inside input', () => {
@@ -496,22 +615,42 @@ describe('autocompleteUrl', () => {
   });
 
   test('when an protocol is provided use it', () => {
-    const result = autocompleteUrl('http://example', 'https://', '.zulipchat.com', '');
+    const result = autocompleteUrl(
+      'http://example',
+      'https://',
+      '.zulipchat.com',
+      '',
+    );
     expect(result).toEqual('http://example.zulipchat.com');
   });
 
   test('do not use any other protocol than http and https', () => {
-    const result = autocompleteUrl('ftp://example', 'https://', '.zulipchat.com', '');
+    const result = autocompleteUrl(
+      'ftp://example',
+      'https://',
+      '.zulipchat.com',
+      '',
+    );
     expect(result).toEqual('https://ftp://example.zulipchat.com');
   });
 
   test('if one dot in the input use the short append instead', () => {
-    const result = autocompleteUrl('subdomain.mydomain', 'https://', '.zulipchat.com', '.com');
+    const result = autocompleteUrl(
+      'subdomain.mydomain',
+      'https://',
+      '.zulipchat.com',
+      '.com',
+    );
     expect(result).toEqual('https://subdomain.mydomain.com');
   });
 
   test('if more than one dots in input do not use any append', () => {
-    const result = autocompleteUrl('subdomain.mydomain.org', 'https://', '.zulipchat.com', '.com');
+    const result = autocompleteUrl(
+      'subdomain.mydomain.org',
+      'https://',
+      '.zulipchat.com',
+      '.com',
+    );
     expect(result).toEqual('https://subdomain.mydomain.org');
   });
 });
@@ -537,7 +676,8 @@ describe('appendAuthToImages', () => {
 
   test('appends the api key to an absolute image src if in the same realm', () => {
     const input = '<img src="https://realm.zulip.com/user_uploads/img.png" />';
-    const expected = '<img src="https://realm.zulip.com/user_uploads/img.png?api_key=some_key" />';
+    const expected =
+      '<img src="https://realm.zulip.com/user_uploads/img.png?api_key=some_key" />';
     expect(appendAuthToImages(input, auth)).toEqual(expected);
   });
 
@@ -577,7 +717,8 @@ describe('appendAuthToImages', () => {
   });
 
   test('replaces urls in images in the whole string', () => {
-    const input = '<img src="/user_uploads/img.png" /><img src="/user_uploads/img.png" />';
+    const input =
+      '<img src="/user_uploads/img.png" /><img src="/user_uploads/img.png" />';
     const expected =
       '<img src="/user_uploads/img.png?api_key=some_key" /><img src="/user_uploads/img.png?api_key=some_key" />';
     expect(appendAuthToImages(input, auth)).toEqual(expected);
@@ -585,7 +726,8 @@ describe('appendAuthToImages', () => {
 
   test('does not overrun', () => {
     const input = '<img src="/user_uploads/img.png">"But soft,"';
-    const expected = '<img src="/user_uploads/img.png?api_key=some_key">"But soft,"';
+    const expected =
+      '<img src="/user_uploads/img.png?api_key=some_key">"But soft,"';
     expect(appendAuthToImages(input, auth)).toEqual(expected);
   });
 });

@@ -29,7 +29,9 @@ export default ({
   }
 
   if (isStreamNarrow(narrow)) {
-    const topicNarrowStr = JSON.stringify(topicNarrow(item.display_recipient, item.subject));
+    const topicNarrowStr = JSON.stringify(
+      topicNarrow(item.display_recipient, item.subject),
+    );
 
     return template`
 <div
@@ -47,8 +49,12 @@ export default ({
 
     const backgroundColor = stream ? stream.color : '#ccc';
     const textColor = foregroundColorFromBackground(backgroundColor);
-    const streamNarrowStr = JSON.stringify(streamNarrow(item.display_recipient));
-    const topicNarrowStr = JSON.stringify(topicNarrow(item.display_recipient, item.subject));
+    const streamNarrowStr = JSON.stringify(
+      streamNarrow(item.display_recipient),
+    );
+    const topicNarrowStr = JSON.stringify(
+      topicNarrow(item.display_recipient, item.subject),
+    );
 
     return template`
 <div class="header-wrapper stream-header" data-msg-id="${item.id}">
@@ -72,7 +78,8 @@ export default ({
     !isTopicNarrow(narrow)
   ) {
     const recipients =
-      item.display_recipient.length === 1 && item.display_recipient[0].email === auth.email
+      item.display_recipient.length === 1 &&
+      item.display_recipient[0].email === auth.email
         ? item.display_recipient
         : item.display_recipient.filter(r => r.email !== auth.email);
 

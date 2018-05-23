@@ -6,7 +6,10 @@ import { streamNarrow, privateNarrow } from '../../utils/narrow';
 import { BRAND_COLOR } from '../../styles';
 import { defaultNav, otherNav } from '../../utils/testHelpers';
 
-const subscriptions = [{ name: 'all', color: '#fff' }, { name: 'announce', color: '#000' }];
+const subscriptions = [
+  { name: 'all', color: '#fff' },
+  { name: 'announce', color: '#000' },
+];
 
 describe('getTitleBackgroundColor', () => {
   test('return transparent color for account', () => {
@@ -15,7 +18,9 @@ describe('getTitleBackgroundColor', () => {
       subscriptions,
     });
 
-    expect(getTitleBackgroundColor(streamNarrow('all'))(state)).toEqual('transparent');
+    expect(getTitleBackgroundColor(streamNarrow('all'))(state)).toEqual(
+      'transparent',
+    );
   });
 
   test('return stream color for stream and topic narrow', () => {
@@ -33,7 +38,9 @@ describe('getTitleBackgroundColor', () => {
       subscriptions,
     });
 
-    expect(getTitleBackgroundColor(streamNarrow('feedback'))(state)).toEqual('gray');
+    expect(getTitleBackgroundColor(streamNarrow('feedback'))(state)).toEqual(
+      'gray',
+    );
   });
 
   test('return transparent for other narrow and screens', () => {
@@ -42,7 +49,9 @@ describe('getTitleBackgroundColor', () => {
       subscriptions,
     });
 
-    expect(getTitleBackgroundColor(privateNarrow('abc@zulip.com'))(state)).toEqual('transparent');
+    expect(
+      getTitleBackgroundColor(privateNarrow('abc@zulip.com'))(state),
+    ).toEqual('transparent');
   });
 });
 
@@ -53,7 +62,9 @@ describe('getTitleTextColor', () => {
       subscriptions,
     });
 
-    expect(getTitleTextColor(streamNarrow('all'))(state)).toEqual('rgba(82, 194, 175, 1)');
+    expect(getTitleTextColor(streamNarrow('all'))(state)).toEqual(
+      'rgba(82, 194, 175, 1)',
+    );
   });
 
   test('for stream and topic narrow get use foregroundColorFromBackground', () => {
@@ -71,6 +82,8 @@ describe('getTitleTextColor', () => {
       subscriptions,
     });
 
-    expect(getTitleTextColor(privateNarrow('abc@zulip.com'))(state)).toEqual(BRAND_COLOR);
+    expect(getTitleTextColor(privateNarrow('abc@zulip.com'))(state)).toEqual(
+      BRAND_COLOR,
+    );
   });
 });

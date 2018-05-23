@@ -37,7 +37,12 @@ export default class UnreadCards extends PureComponent<Props> {
 
   render() {
     const { styles } = this.context;
-    const { isLoading, conversations, unreadStreamsAndTopics, ...restProps } = this.props;
+    const {
+      isLoading,
+      conversations,
+      unreadStreamsAndTopics,
+      ...restProps
+    } = this.props;
     const unreadCards = [
       {
         key: 'private',

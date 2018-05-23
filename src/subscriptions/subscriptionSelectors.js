@@ -14,11 +14,13 @@ export const getStreamsById = createSelector(getStreams, streams =>
   }, {}),
 );
 
-export const getSubscriptionsById = createSelector(getSubscriptions, subscriptions =>
-  subscriptions.reduce((subsById, subscription) => {
-    subsById[subscription.stream_id] = subscription;
-    return subsById;
-  }, {}),
+export const getSubscriptionsById = createSelector(
+  getSubscriptions,
+  subscriptions =>
+    subscriptions.reduce((subsById, subscription) => {
+      subsById[subscription.stream_id] = subscription;
+      return subsById;
+    }, {}),
 );
 
 export const getIsActiveStreamSubscribed = (narrow: Narrow) =>
@@ -27,7 +29,9 @@ export const getIsActiveStreamSubscribed = (narrow: Narrow) =>
       return true;
     }
 
-    return subscriptions.find(sub => narrow[0].operand === sub.name) !== undefined;
+    return (
+      subscriptions.find(sub => narrow[0].operand === sub.name) !== undefined
+    );
   });
 
 export const getSubscribedStreams = createSelector(
@@ -42,5 +46,6 @@ export const getSubscribedStreams = createSelector(
 
 export const getStreamEditInitialValues = createSelector(
   [getStreams, getEditStreamScreenParams],
-  (streams, params) => streams.find(x => x.stream_id === params.streamId) || NULL_STREAM,
+  (streams, params) =>
+    streams.find(x => x.stream_id === params.streamId) || NULL_STREAM,
 );

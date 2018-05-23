@@ -17,24 +17,35 @@ const onPushRegistered = async (
   saveTokenPush(deviceToken, result.msg, result.result);
 };
 
-export const addNotificationListener = (notificationHandler: (notification: Object) => void) => {
+export const addNotificationListener = (
+  notificationHandler: (notification: Object) => void,
+) => {
   NotificationsIOS.addEventListener('notificationOpened', notificationHandler);
 };
 
-export const removeNotificationListener = (notificationHandler: (notification: Object) => void) => {
-  NotificationsIOS.removeEventListener('notificationOpened', notificationHandler);
+export const removeNotificationListener = (
+  notificationHandler: (notification: Object) => void,
+) => {
+  NotificationsIOS.removeEventListener(
+    'notificationOpened',
+    notificationHandler,
+  );
 };
 
 export const initializeNotifications = (
   auth: Auth,
   saveTokenPush: any /* Actions.saveTokenPush */,
 ) => {
-  NotificationsIOS.addEventListener('remoteNotificationsRegistered', deviceToken =>
-    onPushRegistered(auth, deviceToken, saveTokenPush),
+  NotificationsIOS.addEventListener(
+    'remoteNotificationsRegistered',
+    deviceToken => onPushRegistered(auth, deviceToken, saveTokenPush),
   );
-  NotificationsIOS.addEventListener('remoteNotificationsRegistrationFailed', (error: string) => {
-    logErrorRemotely(new Error(error), 'register ios push token failed');
-  });
+  NotificationsIOS.addEventListener(
+    'remoteNotificationsRegistrationFailed',
+    (error: string) => {
+      logErrorRemotely(new Error(error), 'register ios push token failed');
+    },
+  );
   NotificationsIOS.requestPermissions();
 };
 
@@ -56,7 +67,10 @@ export const handlePendingNotifications = (
   }
 };
 
-export const handleInitialNotification = async (actions: Actions, usersById: UserIdMap) => {
+export const handleInitialNotification = async (
+  actions: Actions,
+  usersById: UserIdMap,
+) => {
   const data = await PushNotificationIOS.getInitialNotification();
   handlePendingNotifications(data, actions, usersById);
 };

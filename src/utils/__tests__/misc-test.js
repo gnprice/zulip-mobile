@@ -1,4 +1,9 @@
-import { initialsFromName, isValidEmailFormat, numberWithSeparators, deeperMerge } from '../misc';
+import {
+  initialsFromName,
+  isValidEmailFormat,
+  numberWithSeparators,
+  deeperMerge,
+} from '../misc';
 
 describe('numberWithSeparators', () => {
   test('do not change a small number', () => {

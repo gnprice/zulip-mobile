@@ -3,7 +3,10 @@ import template from './template';
 import messageLoadingList from './messageLoadingListAsHtml';
 import htmlScrollToBottom from './htmlScrollToBottom';
 
-export default (content: string, showMessagePlaceholders: boolean): string => template`
+export default (
+  content: string,
+  showMessagePlaceholders: boolean,
+): string => template`
 <div id="js-error"></div>
 <div id="spinner-older" class="hidden loading-spinner"></div>
 

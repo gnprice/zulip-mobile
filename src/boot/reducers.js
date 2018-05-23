@@ -62,5 +62,9 @@ const reducers = {
 };
 
 export default enableBatching(
-  combineReducers(config.enableReduxSlowReducerWarnings ? logSlowReducers(reducers) : reducers),
+  combineReducers(
+    config.enableReduxSlowReducerWarnings
+      ? logSlowReducers(reducers)
+      : reducers,
+  ),
 );

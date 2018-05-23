@@ -21,7 +21,12 @@ class TranslationProvider extends PureComponent<Props> {
     const { locale, children } = this.props;
 
     return (
-      <IntlProvider key={locale} locale={locale} textComponent={Text} messages={messages[locale]}>
+      <IntlProvider
+        key={locale}
+        locale={locale}
+        textComponent={Text}
+        messages={messages[locale]}
+      >
         {children}
       </IntlProvider>
     );

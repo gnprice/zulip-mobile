@@ -44,7 +44,13 @@ export default class ConversationsCard extends PureComponent<Props> {
 
   render() {
     const { styles } = this.context;
-    const { actions, conversations, isLoading, presences, usersByEmail } = this.props;
+    const {
+      actions,
+      conversations,
+      isLoading,
+      presences,
+      usersByEmail,
+    } = this.props;
 
     if (isLoading) {
       return <LoadingIndicator size={40} />;
@@ -69,7 +75,10 @@ export default class ConversationsCard extends PureComponent<Props> {
           />
         </View>
         {conversations.length === 0 ? (
-          <Label style={componentStyles.emptySlate} text="No recent conversations" />
+          <Label
+            style={componentStyles.emptySlate}
+            text="No recent conversations"
+          />
         ) : (
           <ConversationList
             actions={actions}

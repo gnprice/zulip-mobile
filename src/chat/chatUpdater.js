@@ -3,8 +3,15 @@ import type { MessageState, Message } from '../types';
 
 type UpdaterFunc = (message: Message) => Message;
 
-export default (state: MessageState, messageId: number, updater: UpdaterFunc): MessageState => {
-  const allMessages = Object.keys(state).reduce((msg, key) => msg.concat(state[key]), []);
+export default (
+  state: MessageState,
+  messageId: number,
+  updater: UpdaterFunc,
+): MessageState => {
+  const allMessages = Object.keys(state).reduce(
+    (msg, key) => msg.concat(state[key]),
+    [],
+  );
   if (allMessages.findIndex(x => x.id === messageId) === -1) {
     return state;
   }

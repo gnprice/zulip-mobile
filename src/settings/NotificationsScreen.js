@@ -49,7 +49,11 @@ class NotificationsScreen extends PureComponent<Props> {
   };
 
   render() {
-    const { offlineNotification, onlineNotification, streamNotification } = this.props;
+    const {
+      offlineNotification,
+      onlineNotification,
+      streamNotification,
+    } = this.props;
 
     return (
       <Screen title="Notifications">

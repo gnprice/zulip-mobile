@@ -2,7 +2,11 @@ import deepFreeze from 'deep-freeze';
 
 import fetchingReducers from '../fetchingReducers';
 import { homeNarrowStr, streamNarrow } from '../../utils/narrow';
-import { SWITCH_NARROW, MESSAGE_FETCH_START, MESSAGE_FETCH_COMPLETE } from '../../actionConstants';
+import {
+  SWITCH_NARROW,
+  MESSAGE_FETCH_START,
+  MESSAGE_FETCH_COMPLETE,
+} from '../../actionConstants';
 
 describe('fetchingReducers', () => {
   describe('SWITCH_NARROW', () => {
@@ -60,7 +64,10 @@ describe('fetchingReducers', () => {
 
       const expectedState = {
         [homeNarrowStr]: { older: false, newer: false },
-        [JSON.stringify(streamNarrow('some stream'))]: { older: true, newer: false },
+        [JSON.stringify(streamNarrow('some stream'))]: {
+          older: true,
+          newer: false,
+        },
       };
 
       const newState = fetchingReducers(initialState, action);

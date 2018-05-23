@@ -8,7 +8,10 @@ import composeBoxStyles from './composeBoxStyles';
 import navStyles from './navStyles';
 import miscStyles from './miscStyles';
 
-export type AppStyles = UtilityStyles & ComposeBoxStyles & NavStyles & MiscStyles;
+export type AppStyles = UtilityStyles &
+  ComposeBoxStyles &
+  NavStyles &
+  MiscStyles;
 
 type Props = {
   color: string,

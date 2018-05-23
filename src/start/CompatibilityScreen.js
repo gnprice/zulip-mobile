@@ -25,7 +25,9 @@ export default class CompatibilityScreen extends PureComponent<{}> {
       <View style={styles.screen}>
         <Logo />
         <Text style={styles.text}>This app is too old!</Text>
-        <Text style={styles.text}>Please download the latest version from the App Store.</Text>
+        <Text style={styles.text}>
+          Please download the latest version from the App Store.
+        </Text>
       </View>
     );
   }

@@ -1,6 +1,9 @@
 import deepFreeze from 'deep-freeze';
 
-import { SETTINGS_CHANGE, EVENT_UPDATE_GLOBAL_NOTIFICATIONS_SETTINGS } from '../../actionConstants';
+import {
+  SETTINGS_CHANGE,
+  EVENT_UPDATE_GLOBAL_NOTIFICATIONS_SETTINGS,
+} from '../../actionConstants';
 import settingsReducers from '../settingsReducers';
 
 describe('settingsReducers', () => {

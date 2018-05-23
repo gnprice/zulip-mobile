@@ -495,7 +495,13 @@ describe('getUnreadStreamsAndTopics', () => {
             isMuted: false,
             lastUnreadMsgId: 5,
           },
-          { key: 'a topic', topic: 'a topic', unread: 3, isMuted: false, lastUnreadMsgId: 3 },
+          {
+            key: 'a topic',
+            topic: 'a topic',
+            unread: 3,
+            isMuted: false,
+            lastUnreadMsgId: 3,
+          },
         ],
       },
       {
@@ -594,8 +600,20 @@ describe('getUnreadStreamsAndTopics', () => {
         isPinned: true,
         unread: 2,
         data: [
-          { key: 'e topic', topic: 'e topic', unread: 1, isMuted: false, lastUnreadMsgId: 10 },
-          { key: 'd topic', topic: 'd topic', unread: 1, isMuted: false, lastUnreadMsgId: 9 },
+          {
+            key: 'e topic',
+            topic: 'e topic',
+            unread: 1,
+            isMuted: false,
+            lastUnreadMsgId: 10,
+          },
+          {
+            key: 'd topic',
+            topic: 'd topic',
+            unread: 1,
+            isMuted: false,
+            lastUnreadMsgId: 9,
+          },
         ],
       },
       {
@@ -607,8 +625,20 @@ describe('getUnreadStreamsAndTopics', () => {
         isPinned: false,
         unread: 5,
         data: [
-          { key: 'a topic', topic: 'a topic', unread: 2, isMuted: false, lastUnreadMsgId: 5 },
-          { key: 'z topic', topic: 'z topic', unread: 3, isMuted: false, lastUnreadMsgId: 3 },
+          {
+            key: 'a topic',
+            topic: 'a topic',
+            unread: 2,
+            isMuted: false,
+            lastUnreadMsgId: 5,
+          },
+          {
+            key: 'z topic',
+            topic: 'z topic',
+            unread: 3,
+            isMuted: false,
+            lastUnreadMsgId: 3,
+          },
         ],
       },
       {
@@ -620,8 +650,20 @@ describe('getUnreadStreamsAndTopics', () => {
         isPinned: false,
         unread: 2,
         data: [
-          { key: 'c topic', topic: 'c topic', unread: 2, isMuted: true, lastUnreadMsgId: 8 },
-          { key: 'b topic', topic: 'b topic', unread: 2, isMuted: false, lastUnreadMsgId: 7 },
+          {
+            key: 'c topic',
+            topic: 'c topic',
+            unread: 2,
+            isMuted: true,
+            lastUnreadMsgId: 8,
+          },
+          {
+            key: 'b topic',
+            topic: 'b topic',
+            unread: 2,
+            isMuted: false,
+            lastUnreadMsgId: 7,
+          },
         ],
       },
     ]);

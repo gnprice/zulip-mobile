@@ -1,5 +1,10 @@
 /* @flow */
-import type { DraftState, DraftsAction, DraftAddAction, DraftRemoveAction } from '../types';
+import type {
+  DraftState,
+  DraftsAction,
+  DraftAddAction,
+  DraftRemoveAction,
+} from '../types';
 import { DRAFT_ADD, DRAFT_REMOVE, LOGOUT } from '../actionConstants';
 import { NULL_OBJECT } from '../nullObjects';
 
@@ -7,10 +12,15 @@ const initialState = NULL_OBJECT;
 
 const draftAdd = (state: DraftState, action: DraftAddAction): DraftState => {
   const narrowStr = JSON.stringify(action.narrow);
-  return state[narrowStr] === action.content ? state : { ...state, [narrowStr]: action.content };
+  return state[narrowStr] === action.content
+    ? state
+    : { ...state, [narrowStr]: action.content };
 };
 
-const draftRemove = (state: DraftState, action: DraftRemoveAction): DraftState => {
+const draftRemove = (
+  state: DraftState,
+  action: DraftRemoveAction,
+): DraftState => {
   const narrowStr = JSON.stringify(action.narrow);
 
   if (!state[narrowStr]) {
@@ -22,7 +32,10 @@ const draftRemove = (state: DraftState, action: DraftRemoveAction): DraftState =
   return newState;
 };
 
-export default (state: DraftState = initialState, action: DraftsAction): DraftState => {
+export default (
+  state: DraftState = initialState,
+  action: DraftsAction,
+): DraftState => {
   switch (action.type) {
     case LOGOUT:
       return initialState;

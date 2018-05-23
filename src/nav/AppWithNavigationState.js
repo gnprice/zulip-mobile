@@ -18,11 +18,17 @@ type Props = {
 
 class AppWithNavigation extends PureComponent<Props> {
   componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonPress);
+    BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.handleBackButtonPress,
+    );
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonPress);
+    BackHandler.removeEventListener(
+      'hardwareBackPress',
+      this.handleBackButtonPress,
+    );
   }
 
   handleBackButtonPress = () => {

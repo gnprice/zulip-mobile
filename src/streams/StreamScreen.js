@@ -50,15 +50,20 @@ class StreamScreen extends PureComponent<Props> {
   toggleStreamPushNotification = () => {
     const { subscriptions, navigation, actions } = this.props;
     const { streamId } = navigation.state.params;
-    const subscription = subscriptions.find(x => x.stream_id === streamId) || NULL_SUBSCRIPTION;
-    actions.toggleStreamNotification(streamId, !subscription.push_notifications);
+    const subscription =
+      subscriptions.find(x => x.stream_id === streamId) || NULL_SUBSCRIPTION;
+    actions.toggleStreamNotification(
+      streamId,
+      !subscription.push_notifications,
+    );
   };
 
   render() {
     const { isAdmin, streams, subscriptions, navigation } = this.props;
     const { streamId } = navigation.state.params;
     const stream = streams.find(x => x.stream_id === streamId) || NULL_STREAM;
-    const subscription = subscriptions.find(x => x.stream_id === streamId) || NULL_SUBSCRIPTION;
+    const subscription =
+      subscriptions.find(x => x.stream_id === streamId) || NULL_SUBSCRIPTION;
     const { styles } = this.context;
 
     return (
@@ -84,7 +89,11 @@ class StreamScreen extends PureComponent<Props> {
         <View style={styles.padding}>
           <ZulipButton text="Topics" onPress={this.handleTopics} />
           {isAdmin && (
-            <ZulipButton style={styles.marginTop} text="Edit" onPress={this.handleEdit} />
+            <ZulipButton
+              style={styles.marginTop}
+              text="Edit"
+              onPress={this.handleEdit}
+            />
           )}
         </View>
       </Screen>

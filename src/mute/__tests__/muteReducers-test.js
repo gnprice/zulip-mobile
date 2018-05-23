@@ -1,7 +1,11 @@
 import deepFreeze from 'deep-freeze';
 
 import muteReducers from '../muteReducers';
-import { ACCOUNT_SWITCH, EVENT_MUTED_TOPICS, REALM_INIT } from '../../actionConstants';
+import {
+  ACCOUNT_SWITCH,
+  EVENT_MUTED_TOPICS,
+  REALM_INIT,
+} from '../../actionConstants';
 
 describe('muteReducers', () => {
   describe('REALM_INIT', () => {

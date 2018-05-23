@@ -61,7 +61,9 @@ export default class StreamListCard extends PureComponent<Props, State> {
 
   render() {
     const { actions, canCreateStreams, streams, subscriptions } = this.props;
-    const filteredStreams = streams.filter(x => x.name.includes(this.state.filter));
+    const filteredStreams = streams.filter(x =>
+      x.name.includes(this.state.filter),
+    );
     const subsAndStreams = filteredStreams.map(x => ({
       ...x,
       subscribed: subscriptions.some(s => s.stream_id === x.stream_id),

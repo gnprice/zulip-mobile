@@ -10,7 +10,8 @@ export default (text: string, selection: InputSelectionType) => {
   const lastIndex: number = Math.max(
     text.lastIndexOf(':'),
     text.lastIndexOf('#'),
-    [' ', '#', ':'].includes(text[text.lastIndexOf('@') - 1]) || text.lastIndexOf('@') === 0 // to make sure `@` is not the part of email
+    [' ', '#', ':'].includes(text[text.lastIndexOf('@') - 1]) ||
+    text.lastIndexOf('@') === 0 // to make sure `@` is not the part of email
       ? text.lastIndexOf('@')
       : -1,
   );

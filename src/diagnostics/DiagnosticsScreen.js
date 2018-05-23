@@ -24,7 +24,10 @@ class DiagnosticsScreen extends PureComponent<Props> {
 
   handleExperimentalChange = () => {
     const { actions, experimentalFeaturesEnabled } = this.props;
-    actions.settingsChange('experimentalFeaturesEnabled', !experimentalFeaturesEnabled);
+    actions.settingsChange(
+      'experimentalFeaturesEnabled',
+      !experimentalFeaturesEnabled,
+    );
   };
 
   render() {
@@ -32,13 +35,19 @@ class DiagnosticsScreen extends PureComponent<Props> {
 
     return (
       <Screen title="Diagnostics">
-        <RawLabel style={styles.versionLabel} text={`v${DeviceInfo.getVersion()}`} />
+        <RawLabel
+          style={styles.versionLabel}
+          text={`v${DeviceInfo.getVersion()}`}
+        />
         <OptionDivider />
         <OptionButton label="Variables" onPress={actions.navigateToVariables} />
         <OptionButton label="Timing" onPress={actions.navigateToTiming} />
         <OptionButton label="Storage" onPress={actions.navigateToStorage} />
         <OptionButton label="Debug" onPress={actions.navigateToDebug} />
-        <OptionButton label="Notifications" onPress={actions.navigateToNotifDiag} />
+        <OptionButton
+          label="Notifications"
+          onPress={actions.navigateToNotifDiag}
+        />
       </Screen>
     );
   }

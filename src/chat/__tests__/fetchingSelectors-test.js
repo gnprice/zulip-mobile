@@ -1,6 +1,9 @@
 import deepFreeze from 'deep-freeze';
 
-import { getFetchingForActiveNarrow, getIsFetching } from '../fetchingSelectors';
+import {
+  getFetchingForActiveNarrow,
+  getIsFetching,
+} from '../fetchingSelectors';
 import { homeNarrow, homeNarrowStr } from '../../utils/narrow';
 
 describe('getFetchingForActiveNarrow', () => {

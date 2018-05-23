@@ -6,7 +6,10 @@ import type { Narrow } from '../types';
 import connectWithActions from '../connectWithActions';
 import { ViewPlaceholder } from '../common';
 import { getTitleTextColor } from '../selectors';
-import { getInfoButtonFromNarrow, getExtraButtonFromNarrow } from './titleButtonFromNarrow';
+import {
+  getInfoButtonFromNarrow,
+  getExtraButtonFromNarrow,
+} from './titleButtonFromNarrow';
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -34,7 +37,11 @@ class TitleNavButtons extends PureComponent<Props> {
         ) : (
           <ViewPlaceholder width={44} />
         )}
-        {InfoButton ? <InfoButton color={color} narrow={narrow} /> : <ViewPlaceholder width={44} />}
+        {InfoButton ? (
+          <InfoButton color={color} narrow={narrow} />
+        ) : (
+          <ViewPlaceholder width={44} />
+        )}
       </View>
     );
   }

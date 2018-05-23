@@ -21,10 +21,16 @@ import { NULL_ARRAY } from '../nullObjects';
 
 const initialState: UnreadPmsState = NULL_ARRAY;
 
-const realmInit = (state: UnreadPmsState, action: RealmInitAction): UnreadPmsState =>
+const realmInit = (
+  state: UnreadPmsState,
+  action: RealmInitAction,
+): UnreadPmsState =>
   (action.data.unread_msgs && action.data.unread_msgs.pms) || NULL_ARRAY;
 
-const eventNewMessage = (state: UnreadPmsState, action: EventNewMessageAction): UnreadPmsState => {
+const eventNewMessage = (
+  state: UnreadPmsState,
+  action: EventNewMessageAction,
+): UnreadPmsState => {
   if (action.message.type !== 'private') {
     return state;
   }
@@ -37,11 +43,17 @@ const eventNewMessage = (state: UnreadPmsState, action: EventNewMessageAction): 
     return state;
   }
 
-  return addItemsToPmArray(state, [action.message.id], action.message.sender_id);
+  return addItemsToPmArray(
+    state,
+    [action.message.id],
+    action.message.sender_id,
+  );
 };
 
-const markMessagesRead = (state: UnreadPmsState, action: MarkMessagesReadAction): UnreadPmsState =>
-  removeItemsDeeply(state, action.messageIds);
+const markMessagesRead = (
+  state: UnreadPmsState,
+  action: MarkMessagesReadAction,
+): UnreadPmsState => removeItemsDeeply(state, action.messageIds);
 
 const eventMessageDelete = (
   state: UnreadPmsState,
@@ -69,7 +81,10 @@ const eventUpdateMessageFlags = (
   return state;
 };
 
-export default (state: UnreadPmsState = initialState, action: UnreadAction): UnreadPmsState => {
+export default (
+  state: UnreadPmsState = initialState,
+  action: UnreadAction,
+): UnreadPmsState => {
   switch (action.type) {
     case ACCOUNT_SWITCH:
       return initialState;

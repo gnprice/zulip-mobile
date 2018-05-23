@@ -85,7 +85,8 @@ export default class ComponentWithOverlay extends PureComponent<Props> {
       <Touchable onPress={onPress}>
         <View style={wrapperStyle}>
           {children}
-          {showOverlay && overlaySize > 0 && <View style={overlayStyle}>{overlay}</View>}
+          {showOverlay &&
+            overlaySize > 0 && <View style={overlayStyle}>{overlay}</View>}
         </View>
       </Touchable>
     );

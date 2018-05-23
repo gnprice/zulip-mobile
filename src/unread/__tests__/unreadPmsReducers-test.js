@@ -97,7 +97,10 @@ describe('unreadPmsReducers', () => {
           type: 'private',
           sender_id: 1,
           sender_email: 'me@example.com',
-          display_recipient: [{ email: 'john@example.com' }, { email: 'me@example.com' }],
+          display_recipient: [
+            { email: 'john@example.com' },
+            { email: 'me@example.com' },
+          ],
         },
         ownEmail: 'me@example.com',
       });
@@ -143,7 +146,10 @@ describe('unreadPmsReducers', () => {
           id: 4,
           type: 'private',
           sender_id: 1,
-          display_recipient: [{ email: 'john@example.com' }, { email: 'me@example.com' }],
+          display_recipient: [
+            { email: 'john@example.com' },
+            { email: 'me@example.com' },
+          ],
         },
       });
 
@@ -173,7 +179,10 @@ describe('unreadPmsReducers', () => {
           id: 4,
           type: 'private',
           sender_id: 2,
-          display_recipient: [{ email: 'john@example.com' }, { email: 'me@example.com' }],
+          display_recipient: [
+            { email: 'john@example.com' },
+            { email: 'me@example.com' },
+          ],
         },
       });
 

@@ -39,7 +39,9 @@ export default class MessageListWeb extends Component<Props> {
       this.isReady = true;
       this.sendMessages(this.unsentMessages);
     } else {
-      const handler = `handle${eventData.type.charAt(0).toUpperCase()}${eventData.type.slice(1)}`;
+      const handler = `handle${eventData.type
+        .charAt(0)
+        .toUpperCase()}${eventData.type.slice(1)}`;
       webViewEventHandlers[handler](this.props, eventData); // $FlowFixMe
     }
   };

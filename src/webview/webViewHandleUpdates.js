@@ -6,7 +6,10 @@ import type { UpdateStrategy } from '../message/messageUpdates';
 import htmlBody from './html/htmlBody';
 import renderMessagesAsHtml from './html/renderMessagesAsHtml';
 import messageTypingAsHtml from './html/messageTypingAsHtml';
-import { getMessageTransitionProps, getMessageUpdateStrategy } from '../message/messageUpdates';
+import {
+  getMessageTransitionProps,
+  getMessageUpdateStrategy,
+} from '../message/messageUpdates';
 
 export type MessageInputContent = {
   type: 'content',
@@ -27,10 +30,19 @@ export type MessageInputTyping = {
   content: string,
 };
 
-export type WebviewInputMessage = MessageInputContent | MessageInputFetching | MessageInputTyping;
+export type WebviewInputMessage =
+  | MessageInputContent
+  | MessageInputFetching
+  | MessageInputTyping;
 
-const updateContent = (prevProps: Props, nextProps: Props): MessageInputContent => {
-  const content = htmlBody(renderMessagesAsHtml(nextProps), nextProps.showMessagePlaceholders);
+const updateContent = (
+  prevProps: Props,
+  nextProps: Props,
+): MessageInputContent => {
+  const content = htmlBody(
+    renderMessagesAsHtml(nextProps),
+    nextProps.showMessagePlaceholders,
+  );
   const transitionProps = getMessageTransitionProps(prevProps, nextProps);
   const updateStrategy = getMessageUpdateStrategy(transitionProps);
 
@@ -42,14 +54,20 @@ const updateContent = (prevProps: Props, nextProps: Props): MessageInputContent 
   };
 };
 
-const updateFetching = (prevProps: Props, nextProps: Props): MessageInputFetching => ({
+const updateFetching = (
+  prevProps: Props,
+  nextProps: Props,
+): MessageInputFetching => ({
   type: 'fetching',
   showMessagePlaceholders: nextProps.showMessagePlaceholders,
   fetchingOlder: nextProps.fetching.older && !nextProps.showMessagePlaceholders,
   fetchingNewer: nextProps.fetching.newer && !nextProps.showMessagePlaceholders,
 });
 
-const updateTyping = (prevProps: Props, nextProps: Props): MessageInputTyping => ({
+const updateTyping = (
+  prevProps: Props,
+  nextProps: Props,
+): MessageInputTyping => ({
   type: 'typing',
   content:
     nextProps.typingUsers.length > 0
@@ -57,7 +75,10 @@ const updateTyping = (prevProps: Props, nextProps: Props): MessageInputTyping =>
       : '',
 });
 
-export const getInputMessages = (prevProps: Props, nextProps: Props): WebviewInputMessage[] => {
+export const getInputMessages = (
+  prevProps: Props,
+  nextProps: Props,
+): WebviewInputMessage[] => {
   if (!isEqual(prevProps.renderedMessages, nextProps.renderedMessages)) {
     return [updateContent(prevProps, nextProps)];
   }

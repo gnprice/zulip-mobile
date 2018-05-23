@@ -1,7 +1,10 @@
 import deepFreeze from 'deep-freeze';
 
 import caughtUpReducers from '../caughtUpReducers';
-import { MESSAGE_FETCH_START, MESSAGE_FETCH_COMPLETE } from '../../actionConstants';
+import {
+  MESSAGE_FETCH_START,
+  MESSAGE_FETCH_COMPLETE,
+} from '../../actionConstants';
 import {
   homeNarrow,
   homeNarrowStr,

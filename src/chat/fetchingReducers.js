@@ -50,7 +50,10 @@ const messageFetchComplete = (
   };
 };
 
-export default (state: FetchingState = initialState, action: Action): FetchingState => {
+export default (
+  state: FetchingState = initialState,
+  action: Action,
+): FetchingState => {
   switch (action.type) {
     case APP_REFRESH:
     case LOGOUT:

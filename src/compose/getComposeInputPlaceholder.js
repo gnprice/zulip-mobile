@@ -1,8 +1,17 @@
 /* @flow */
 import type { Narrow, User, LocalizableText } from '../types';
-import { isStreamNarrow, isTopicNarrow, isPrivateNarrow, isGroupNarrow } from '../utils/narrow';
+import {
+  isStreamNarrow,
+  isTopicNarrow,
+  isPrivateNarrow,
+  isGroupNarrow,
+} from '../utils/narrow';
 
-export default (narrow: Narrow, ownEmail: string, users: User[]): LocalizableText => {
+export default (
+  narrow: Narrow,
+  ownEmail: string,
+  users: User[],
+): LocalizableText => {
   if (isGroupNarrow(narrow)) {
     return { text: 'Message group' };
   }

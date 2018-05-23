@@ -11,7 +11,11 @@ type InitOptionsType = {
   showMessagePlaceholders: boolean,
 };
 
-export default (content: string, theme: ThemeType, initOptions: InitOptionsType) => template`
+export default (
+  content: string,
+  theme: ThemeType,
+  initOptions: InitOptionsType,
+) => template`
 $!${script(initOptions.anchor)}
 $!${css(theme, initOptions.highlightUnreadMessages)}
 

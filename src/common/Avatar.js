@@ -45,8 +45,19 @@ class Avatar extends PureComponent<Props> {
   };
 
   render() {
-    const { avatarUrl, email, name, size, presence, onPress, realm, shape } = this.props;
-    const fullAvatarUrl = avatarUrl ? getFullUrl(avatarUrl, realm) : getGravatarFromEmail(email);
+    const {
+      avatarUrl,
+      email,
+      name,
+      size,
+      presence,
+      onPress,
+      realm,
+      shape,
+    } = this.props;
+    const fullAvatarUrl = avatarUrl
+      ? getFullUrl(avatarUrl, realm)
+      : getGravatarFromEmail(email);
     const AvatarComponent = fullAvatarUrl ? ImageAvatar : TextAvatar;
 
     return (
@@ -57,7 +68,11 @@ class Avatar extends PureComponent<Props> {
         onPress={onPress}
         shape={shape}
       >
-        <UserStatusIndicator style={componentStyles.status} presence={presence} hideIfOffline />
+        <UserStatusIndicator
+          style={componentStyles.status}
+          presence={presence}
+          hideIfOffline
+        />
       </AvatarComponent>
     );
   }

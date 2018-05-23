@@ -164,7 +164,13 @@ describe('realmReducers', () => {
         eventId: 4,
         id: 4,
         op: 'update',
-        realm_filters: [['#(?P<id>[0-9]+)', 'https://github.com/zulip/zulip/issues/%(id)s', 2]],
+        realm_filters: [
+          [
+            '#(?P<id>[0-9]+)',
+            'https://github.com/zulip/zulip/issues/%(id)s',
+            2,
+          ],
+        ],
         type: EVENT_REALM_FILTER_UPDATE,
       });
 
@@ -172,7 +178,13 @@ describe('realmReducers', () => {
         twentyFourHourTime: false,
         pushToken: { token: '', result: '', msg: '' },
         emoji: {},
-        filters: [['#(?P<id>[0-9]+)', 'https://github.com/zulip/zulip/issues/%(id)s', 2]],
+        filters: [
+          [
+            '#(?P<id>[0-9]+)',
+            'https://github.com/zulip/zulip/issues/%(id)s',
+            2,
+          ],
+        ],
       };
 
       const newState = realmReducers(prevState, action);

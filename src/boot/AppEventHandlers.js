@@ -1,12 +1,23 @@
 /* @flow */
 import React, { PureComponent } from 'react';
-import { AppState, NetInfo, View, StyleSheet, Platform, NativeModules } from 'react-native';
+import {
+  AppState,
+  NetInfo,
+  View,
+  StyleSheet,
+  Platform,
+  NativeModules,
+} from 'react-native';
 import SafeArea from 'react-native-safe-area';
 import Orientation from 'react-native-orientation';
 
 import type { Actions, ChildrenArray, UserIdMap } from '../types';
 import connectWithActions from '../connectWithActions';
-import { getSession, getUnreadByHuddlesMentionsAndPMs, getUsersById } from '../selectors';
+import {
+  getSession,
+  getUnreadByHuddlesMentionsAndPMs,
+  getUsersById,
+} from '../selectors';
 import {
   addNotificationListener,
   removeNotificationListener,
@@ -40,7 +51,8 @@ class AppEventHandlers extends PureComponent<Props> {
 
   handleConnectivityChange = connectionInfo => {
     const { actions, needsInitialFetch } = this.props;
-    const isConnected = connectionInfo.type !== 'none' && connectionInfo.type !== 'unknown';
+    const isConnected =
+      connectionInfo.type !== 'none' && connectionInfo.type !== 'unknown';
     actions.appOnline(isConnected);
     if (!needsInitialFetch && isConnected) {
       actions.trySendMessages();
@@ -80,7 +92,10 @@ class AppEventHandlers extends PureComponent<Props> {
   }
 
   componentWillUnmount() {
-    NetInfo.removeEventListener('connectionChange', this.handleConnectivityChange);
+    NetInfo.removeEventListener(
+      'connectionChange',
+      this.handleConnectivityChange,
+    );
     AppState.removeEventListener('change', this.handleAppStateChange);
     AppState.removeEventListener('memoryWarning', this.handleMemoryWarning);
     Orientation.removeOrientationListener(this.handleOrientationChange);

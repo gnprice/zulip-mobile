@@ -8,7 +8,12 @@ import connectWithActions from '../connectWithActions';
 import { OptionButton, OptionDivider, OptionRow, WebLink } from '../common';
 import SwitchAccountButton from '../account-info/SwitchAccountButton';
 import LogoutButton from '../account-info/LogoutButton';
-import { IconDiagnostics, IconNotifications, IconNight, IconLanguage } from '../common/Icons';
+import {
+  IconDiagnostics,
+  IconNotifications,
+  IconNight,
+  IconLanguage,
+} from '../common/Icons';
 
 const componentStyles = StyleSheet.create({
   optionWrapper: {
@@ -56,7 +61,11 @@ class SettingsCard extends PureComponent<Props> {
           label="Notifications"
           onPress={actions.navigateToNotifications}
         />
-        <OptionButton Icon={IconLanguage} label="Language" onPress={actions.navigateToLanguage} />
+        <OptionButton
+          Icon={IconLanguage}
+          label="Language"
+          onPress={actions.navigateToLanguage}
+        />
         <OptionButton
           Icon={IconDiagnostics}
           label="Diagnostics"

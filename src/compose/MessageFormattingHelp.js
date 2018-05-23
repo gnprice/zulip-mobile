@@ -63,16 +63,21 @@ export default class MessageFormattingHelp extends PureComponent<{}> {
             <Text style={styles.td}>Some inline code</Text>
           </View>
           <View style={styles.tr}>
-            <Text style={styles.td}>{'```\ndef zulip():\n  print "Zulip"\n````'}</Text>
-            <Text style={styles.td}>TODO</Text>
-          </View>
-          <View style={styles.tr}>
-            <Text style={styles.td}>{'``` .py\ndef zulip():\n  print "Zulip"\n````'}</Text>
+            <Text style={styles.td}>
+              {'```\ndef zulip():\n  print "Zulip"\n````'}
+            </Text>
             <Text style={styles.td}>TODO</Text>
           </View>
           <View style={styles.tr}>
             <Text style={styles.td}>
-              You can also make a code block by indenting each line with 4 spaces.
+              {'``` .py\ndef zulip():\n  print "Zulip"\n````'}
+            </Text>
+            <Text style={styles.td}>TODO</Text>
+          </View>
+          <View style={styles.tr}>
+            <Text style={styles.td}>
+              You can also make a code block by indenting each line with 4
+              spaces.
             </Text>
           </View>
           <View style={styles.tr}>
@@ -84,7 +89,9 @@ export default class MessageFormattingHelp extends PureComponent<{}> {
             <Text style={styles.td}>Quoted block</Text>
           </View>
           <View style={styles.tr}>
-            <Text>You can also make tables with this Markdown-like table syntax.</Text>
+            <Text>
+              You can also make tables with this Markdown-like table syntax.
+            </Text>
           </View>
         </View>
       </View>

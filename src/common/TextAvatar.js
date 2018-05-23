@@ -37,7 +37,13 @@ export default class TextAvatar extends PureComponent<Props> {
       height: size,
       width: size,
       borderRadius:
-        shape === 'rounded' ? size / 8 : shape === 'circle' ? size / 2 : shape === 'square' ? 0 : 0,
+        shape === 'rounded'
+          ? size / 8
+          : shape === 'circle'
+            ? size / 2
+            : shape === 'square'
+              ? 0
+              : 0,
       backgroundColor: colorHashFromName(name),
     };
     const textSize = {

@@ -86,7 +86,8 @@ export default class StreamItem extends PureComponent<Props> {
       : color ||
         foregroundColorFromBackground(
           backgroundColor || // $FlowFixMe
-            (StyleSheet.flatten(styles.backgroundColor) || {}).backgroundColor ||
+            (StyleSheet.flatten(styles.backgroundColor) || {})
+              .backgroundColor ||
             null,
         );
     const textColorStyle = isSelected
@@ -98,9 +99,19 @@ export default class StreamItem extends PureComponent<Props> {
     return (
       <Touchable onPress={this.handlePress}>
         <View style={wrapperStyle}>
-          <StreamIcon size={iconSize} color={iconColor} isMuted={isMuted} isPrivate={isPrivate} />
+          <StreamIcon
+            size={iconSize}
+            color={iconColor}
+            isMuted={isMuted}
+            isPrivate={isPrivate}
+          />
           <View style={componentStyles.text}>
-            <RawLabel numberOfLines={1} style={textColorStyle} text={name} ellipsizeMode="tail" />
+            <RawLabel
+              numberOfLines={1}
+              style={textColorStyle}
+              text={name}
+              ellipsizeMode="tail"
+            />
             {!!description && (
               <RawLabel
                 numberOfLines={1}
@@ -110,7 +121,11 @@ export default class StreamItem extends PureComponent<Props> {
               />
             )}
           </View>
-          <UnreadCount color={iconColor} count={unreadCount} inverse={isSelected} />
+          <UnreadCount
+            color={iconColor}
+            count={unreadCount}
+            inverse={isSelected}
+          />
           {showSwitch && (
             <ZulipSwitch
               defaultValue={!!isSwitchedOn}

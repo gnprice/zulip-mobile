@@ -20,16 +20,24 @@ import { NULL_OBJECT } from '../nullObjects';
 
 const initialState: TypingState = NULL_OBJECT;
 
-const eventTypingStart = (state: TypingState, action: StartTypingAction): TypingState => {
+const eventTypingStart = (
+  state: TypingState,
+  action: StartTypingAction,
+): TypingState => {
   if (action.sender.email === action.ownEmail) {
     // don't change state when self is typing
     return state;
   }
 
-  const normalizedRecipients = normalizeRecipientsSansMe(action.recipients, action.ownEmail);
+  const normalizedRecipients = normalizeRecipientsSansMe(
+    action.recipients,
+    action.ownEmail,
+  );
   const previousTypingUsers = state[normalizedRecipients] || { userIds: [] };
 
-  const isUserAlreadyTyping = previousTypingUsers.userIds.indexOf(action.sender.user_id);
+  const isUserAlreadyTyping = previousTypingUsers.userIds.indexOf(
+    action.sender.user_id,
+  );
   if (isUserAlreadyTyping > -1) {
     return {
       ...state,
@@ -49,8 +57,14 @@ const eventTypingStart = (state: TypingState, action: StartTypingAction): Typing
   };
 };
 
-const eventTypingStop = (state: TypingState, action: StopTypingAction): TypingState => {
-  const normalizedRecipients = normalizeRecipientsSansMe(action.recipients, action.ownEmail);
+const eventTypingStop = (
+  state: TypingState,
+  action: StopTypingAction,
+): TypingState => {
+  const normalizedRecipients = normalizeRecipientsSansMe(
+    action.recipients,
+    action.ownEmail,
+  );
   const previousTypingUsers = state[normalizedRecipients];
 
   if (!previousTypingUsers) {
@@ -77,13 +91,19 @@ const eventTypingStop = (state: TypingState, action: StopTypingAction): TypingSt
   return newState;
 };
 
-const clearTyping = (state: TypingState, action: ClearTypingAction): TypingState => {
+const clearTyping = (
+  state: TypingState,
+  action: ClearTypingAction,
+): TypingState => {
   const newState = { ...state };
   action.outdatedNotifications.map(recipients => delete newState[recipients]);
   return newState;
 };
 
-export default (state: TypingState = initialState, action: TypingAction): TypingState => {
+export default (
+  state: TypingState = initialState,
+  action: TypingAction,
+): TypingState => {
   switch (action.type) {
     case EVENT_TYPING_START:
       return eventTypingStart(state, action);

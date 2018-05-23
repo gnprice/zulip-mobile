@@ -20,8 +20,16 @@ export default class SpinningProgress extends React.PureComponent<Props> {
     return (
       <AnimatedRotateComponent>
         <ART.Surface width={size} height={size}>
-          <Circle color={`rgba(${color}, 0.25)`} size={size} thickness={thickness} />
-          <Arc color={`rgba(${color}, 0.75)`} size={size} thickness={thickness} />
+          <Circle
+            color={`rgba(${color}, 0.25)`}
+            size={size}
+            thickness={thickness}
+          />
+          <Arc
+            color={`rgba(${color}, 0.75)`}
+            size={size}
+            thickness={thickness}
+          />
         </ART.Surface>
       </AnimatedRotateComponent>
     );

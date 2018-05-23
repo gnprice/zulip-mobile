@@ -1,8 +1,15 @@
 /* @flow */
 import type { StreamUnreadItem } from '../types';
-import { addItemsToArray, removeItemsFromArray, filterArray } from '../utils/immutability';
+import {
+  addItemsToArray,
+  removeItemsFromArray,
+  filterArray,
+} from '../utils/immutability';
 
-export const removeItemsDeeply = (objArray: Object[], messageIds: number[]): Object[] => {
+export const removeItemsDeeply = (
+  objArray: Object[],
+  messageIds: number[],
+): Object[] => {
   let changed = false;
   const objWithAddedUnreadIds = objArray.map(obj => {
     const newIds = removeItemsFromArray(obj.unread_message_ids, messageIds);
@@ -10,7 +17,10 @@ export const removeItemsDeeply = (objArray: Object[], messageIds: number[]): Obj
       return obj;
     }
 
-    const filteredIds = removeItemsFromArray(obj.unread_message_ids, messageIds);
+    const filteredIds = removeItemsFromArray(
+      obj.unread_message_ids,
+      messageIds,
+    );
 
     if (filteredIds.length === obj.unread_message_ids.length) {
       return obj;
@@ -34,7 +44,11 @@ export const removeItemsDeeply = (objArray: Object[], messageIds: number[]): Obj
   );
 };
 
-const addItemsDeeply = (input: Object[], itemsToAdd: Object[], index: number): Object[] => {
+const addItemsDeeply = (
+  input: Object[],
+  itemsToAdd: Object[],
+  index: number,
+): Object[] => {
   const item = input[index];
 
   const unreadMessageIds = addItemsToArray(item.unread_message_ids, itemsToAdd);
@@ -78,7 +92,9 @@ export const addItemsToHuddleArray = (
   itemsToAdd: Object[],
   userIds: string,
 ): Object[] => {
-  const index = input.findIndex(recipients => recipients.user_ids_string === userIds);
+  const index = input.findIndex(
+    recipients => recipients.user_ids_string === userIds,
+  );
 
   if (index !== -1) {
     return addItemsDeeply(input, itemsToAdd, index);
@@ -99,7 +115,9 @@ export const addItemsToStreamArray = (
   streamId: string,
   topic: string,
 ): Object[] => {
-  const index = input.findIndex(s => s.stream_id === streamId && s.topic === topic);
+  const index = input.findIndex(
+    s => s.stream_id === streamId && s.topic === topic,
+  );
 
   if (index !== -1) {
     return addItemsDeeply(input, itemsToAdd, index);

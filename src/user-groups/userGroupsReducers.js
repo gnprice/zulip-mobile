@@ -24,8 +24,10 @@ import { NULL_ARRAY } from '../nullObjects';
 
 const initialState: UserGroupsState = NULL_ARRAY;
 
-const realmInit = (state: UserGroupsState, action: RealmInitAction): UserGroupsState =>
-  action.data.realm_user_groups;
+const realmInit = (
+  state: UserGroupsState,
+  action: RealmInitAction,
+): UserGroupsState => action.data.realm_user_groups;
 
 const eventUserGroupAdd = (
   state: UserGroupsState,
@@ -75,7 +77,9 @@ const eventUserGroupRemoveMembers = (
         ? userGroup
         : {
             ...userGroup,
-            members: userGroup.members.filter(x => !action.user_ids.includes(x)),
+            members: userGroup.members.filter(
+              x => !action.user_ids.includes(x),
+            ),
           },
   );
 

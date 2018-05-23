@@ -28,25 +28,36 @@ import { filterArray } from '../utils/immutability';
 
 const initialState: SubscriptionsState = NULL_ARRAY;
 
-const realmInit = (state: SubscriptionsState, action: RealmInitAction): SubscriptionsState =>
+const realmInit = (
+  state: SubscriptionsState,
+  action: RealmInitAction,
+): SubscriptionsState =>
   isEqual(action.data.subscriptions, state) ? state : action.data.subscriptions;
 
 const initSubscriptions = (
   state: SubscriptionsState,
   action: InitSubscriptionsAction,
-): SubscriptionsState => (isEqual(action.subscriptions, state) ? state : action.subscriptions);
+): SubscriptionsState =>
+  isEqual(action.subscriptions, state) ? state : action.subscriptions;
 
 const eventSubscriptionAdd = (
   state: SubscriptionsState,
   action: EventSubscriptionAddAction,
 ): SubscriptionsState =>
-  state.concat(action.subscriptions.filter(x => !state.find(y => x.stream_id === y.stream_id)));
+  state.concat(
+    action.subscriptions.filter(
+      x => !state.find(y => x.stream_id === y.stream_id),
+    ),
+  );
 
 const eventSubscriptionRemove = (
   state: SubscriptionsState,
   action: EventSubscriptionRemoveAction,
 ): SubscriptionsState =>
-  filterArray(state, x => !action.subscriptions.find(y => x && y && x.stream_id === y.stream_id));
+  filterArray(
+    state,
+    x => !action.subscriptions.find(y => x && y && x.stream_id === y.stream_id),
+  );
 
 const eventSubscriptionUpdate = (
   state: SubscriptionsState,

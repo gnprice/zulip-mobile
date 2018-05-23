@@ -84,7 +84,11 @@ class DevAuthScreen extends PureComponent<Props, State> {
             text="Administrators"
           />
           {directAdmins.map(email => (
-            <ZulipButton key={email} text={email} onPress={() => this.tryDevLogin(email)} />
+            <ZulipButton
+              key={email}
+              text={email}
+              onPress={() => this.tryDevLogin(email)}
+            />
           ))}
           <Label
             style={[styles.field, styles.heading2, inlineStyles.heading]}
@@ -93,7 +97,9 @@ class DevAuthScreen extends PureComponent<Props, State> {
           <FlatList
             data={directUsers}
             keyExtractor={(item, index) => item}
-            ItemSeparatorComponent={() => <View style={inlineStyles.accountItem} />}
+            ItemSeparatorComponent={() => (
+              <View style={inlineStyles.accountItem} />
+            )}
             renderItem={({ item }) => (
               <ZulipButton
                 key={item}

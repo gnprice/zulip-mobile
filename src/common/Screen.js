@@ -2,7 +2,13 @@
 import React, { PureComponent } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 
-import type { ChildrenArray, Context, Dimensions, LocalizableText, Style } from '../types';
+import type {
+  ChildrenArray,
+  Context,
+  Dimensions,
+  LocalizableText,
+  Style,
+} from '../types';
 import { connectWithActionsPreserveOnBack } from '../connectWithActions';
 import { KeyboardAvoider, ZulipStatusBar } from '../common';
 import { getSession } from '../selectors';
@@ -70,7 +76,10 @@ class Screen extends PureComponent<Props> {
       <View style={[styles.screen, { marginBottom: safeAreaInsets.bottom }]}>
         <ZulipStatusBar />
         {search ? (
-          <ModalSearchNavBar autoFocus={autoFocus} searchBarOnChange={searchBarOnChange} />
+          <ModalSearchNavBar
+            autoFocus={autoFocus}
+            searchBarOnChange={searchBarOnChange}
+          />
         ) : (
           <ModalNavBar title={title} />
         )}
@@ -81,7 +90,10 @@ class Screen extends PureComponent<Props> {
         >
           <ScrollView
             style={componentStyles.childrenWrapper}
-            contentContainerStyle={[centerContent && componentStyles.content, style]}
+            contentContainerStyle={[
+              centerContent && componentStyles.content,
+              style,
+            ]}
             keyboardShouldPersistTaps={keyboardShouldPersistTaps}
           >
             {children}

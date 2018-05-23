@@ -33,6 +33,8 @@ export default class AnimatedRotateComponent extends PureComponent<Props> {
     });
     const animatedStyle = { transform: [{ rotate: rotation }] };
 
-    return <Animated.View style={[animatedStyle, style]}>{children}</Animated.View>;
+    return (
+      <Animated.View style={[animatedStyle, style]}>{children}</Animated.View>
+    );
   }
 }

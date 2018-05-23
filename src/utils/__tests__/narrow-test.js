@@ -80,7 +80,9 @@ describe('groupNarrow', () => {
     expect(isGroupNarrow([])).toBe(false);
     expect(isGroupNarrow([{}, {}])).toBe(false);
     expect(isGroupNarrow(privateNarrow('bob@example.com'))).toBe(false);
-    expect(isGroupNarrow(groupNarrow(['bob@example.com', 'john@example.com']))).toBe(true);
+    expect(
+      isGroupNarrow(groupNarrow(['bob@example.com', 'john@example.com'])),
+    ).toBe(true);
     expect(
       isGroupNarrow([
         {
@@ -106,7 +108,11 @@ describe('isPrivateOrGroupNarrow', () => {
     expect(isPrivateOrGroupNarrow([])).toBe(false);
     expect(isPrivateOrGroupNarrow([{}, {}])).toBe(false);
     expect(isPrivateOrGroupNarrow(privateNarrow('bob@example.com'))).toBe(true);
-    expect(isPrivateOrGroupNarrow(groupNarrow(['bob@example.com', 'john@example.com']))).toBe(true);
+    expect(
+      isPrivateOrGroupNarrow(
+        groupNarrow(['bob@example.com', 'john@example.com']),
+      ),
+    ).toBe(true);
     expect(
       isPrivateOrGroupNarrow([
         {
@@ -130,12 +136,16 @@ describe('isStreamOrTopicNarrow', () => {
   test('check for stream or topic narrow', () => {
     expect(isStreamOrTopicNarrow(undefined)).toBe(false);
     expect(isStreamOrTopicNarrow(streamNarrow('some stream'))).toBe(true);
-    expect(isStreamOrTopicNarrow(topicNarrow('some stream', 'some topic'))).toBe(true);
+    expect(
+      isStreamOrTopicNarrow(topicNarrow('some stream', 'some topic')),
+    ).toBe(true);
     expect(isStreamOrTopicNarrow(homeNarrow)).toBe(false);
     expect(isStreamOrTopicNarrow(privateNarrow('a@a.com'))).toBe(false);
-    expect(isStreamOrTopicNarrow(groupNarrow(['john@example.com', 'mark@example.com']))).toBe(
-      false,
-    );
+    expect(
+      isStreamOrTopicNarrow(
+        groupNarrow(['john@example.com', 'mark@example.com']),
+      ),
+    ).toBe(false);
     expect(isStreamOrTopicNarrow(specialNarrow('starred'))).toBe(false);
   });
 });
@@ -156,8 +166,12 @@ describe('specialNarrow', () => {
     expect(isSearchNarrow([{}, {}])).toBe(false);
     expect(isSpecialNarrow(streamNarrow('some stream'))).toBe(false);
     expect(isSpecialNarrow(specialNarrow('starred'))).toBe(true);
-    expect(isSpecialNarrow([{ operator: 'stream', operand: 'some stream' }])).toBe(false);
-    expect(isSpecialNarrow([{ operator: 'is', operand: 'starred' }])).toBe(true);
+    expect(
+      isSpecialNarrow([{ operator: 'stream', operand: 'some stream' }]),
+    ).toBe(false);
+    expect(isSpecialNarrow([{ operator: 'is', operand: 'starred' }])).toBe(
+      true,
+    );
   });
 });
 
@@ -176,7 +190,9 @@ describe('streamNarrow', () => {
     expect(isStreamNarrow([])).toBe(false);
     expect(isSearchNarrow([{}, {}])).toBe(false);
     expect(isStreamNarrow(streamNarrow('some stream'))).toBe(true);
-    expect(isStreamNarrow([{ operator: 'stream', operand: 'some stream' }])).toBe(true);
+    expect(
+      isStreamNarrow([{ operator: 'stream', operand: 'some stream' }]),
+    ).toBe(true);
   });
 });
 
@@ -236,7 +252,10 @@ describe('isMessageInNarrow', () => {
   test('message with type "private" is in private narrow if recipient matches', () => {
     const message = {
       type: 'private',
-      display_recipient: [{ email: 'me@example.com' }, { email: 'john@example.com' }],
+      display_recipient: [
+        { email: 'me@example.com' },
+        { email: 'john@example.com' },
+      ],
     };
     const narrow = privateNarrow('john@example.com');
 
@@ -271,7 +290,10 @@ describe('isMessageInNarrow', () => {
   test('message with type "private" is always in "private messages" narrow', () => {
     const message = {
       type: 'private',
-      display_recipient: [{ email: 'me@example.com' }, { email: 'john@example.com' }],
+      display_recipient: [
+        { email: 'me@example.com' },
+        { email: 'john@example.com' },
+      ],
     };
     expect(isMessageInNarrow(message, allPrivateNarrow)).toBe(true);
   });
@@ -315,7 +337,10 @@ describe('getNarrowFromMessage', () => {
 
   test('for message with multiple recipients, return a group narrow', () => {
     const message = {
-      display_recipient: [{ email: 'bob@example.com' }, { email: 'john@example.com' }],
+      display_recipient: [
+        { email: 'bob@example.com' },
+        { email: 'john@example.com' },
+      ],
     };
     const auth = {
       email: 'hamlet@zulip.com',
@@ -355,13 +380,27 @@ describe('isSameNarrow', () => {
   test('Return true if two narrows are same', () => {
     expect(isSameNarrow(undefined, undefined)).toBe(false);
     expect(isSameNarrow(streamNarrow('stream'), undefined)).toBe(false);
-    expect(isSameNarrow(streamNarrow('stream'), streamNarrow('stream'))).toBe(true);
-    expect(isSameNarrow(streamNarrow('stream'), streamNarrow('stream1'))).toBe(false);
-    expect(isSameNarrow(streamNarrow('stream'), topicNarrow('stream', 'topic'))).toBe(false);
-    expect(isSameNarrow(topicNarrow('stream', 'topic'), topicNarrow('stream', 'topic'))).toBe(true);
-    expect(isSameNarrow(topicNarrow('stream', 'topic'), topicNarrow('stream', 'topic1'))).toBe(
+    expect(isSameNarrow(streamNarrow('stream'), streamNarrow('stream'))).toBe(
+      true,
+    );
+    expect(isSameNarrow(streamNarrow('stream'), streamNarrow('stream1'))).toBe(
       false,
     );
+    expect(
+      isSameNarrow(streamNarrow('stream'), topicNarrow('stream', 'topic')),
+    ).toBe(false);
+    expect(
+      isSameNarrow(
+        topicNarrow('stream', 'topic'),
+        topicNarrow('stream', 'topic'),
+      ),
+    ).toBe(true);
+    expect(
+      isSameNarrow(
+        topicNarrow('stream', 'topic'),
+        topicNarrow('stream', 'topic1'),
+      ),
+    ).toBe(false);
     expect(isSameNarrow(homeNarrow, specialNarrow('private'))).toBe(false);
     expect(isSameNarrow(homeNarrow, homeNarrow)).toBe(true);
   });
@@ -370,8 +409,8 @@ describe('isSameNarrow', () => {
 describe('parseNarrowString', () => {
   test('straightforward arrays are parsed', () => {
     expect(parseNarrowString('[]')).toEqual([]);
-    expect(parseNarrowString('[{&quot;operator&quot;:&quot;hey&quot;}]')).toEqual([
-      { operator: 'hey' },
-    ]);
+    expect(
+      parseNarrowString('[{&quot;operator&quot;:&quot;hey&quot;}]'),
+    ).toEqual([{ operator: 'hey' }]);
   });
 });

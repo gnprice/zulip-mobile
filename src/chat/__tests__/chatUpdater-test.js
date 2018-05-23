@@ -7,7 +7,9 @@ describe('chatUpdater', () => {
       '[]': [],
     });
 
-    const actualState = chatUpdater(initialState, 1, () => ({ hello: 'world' }));
+    const actualState = chatUpdater(initialState, 1, () => ({
+      hello: 'world',
+    }));
 
     expect(actualState).toBe(initialState);
   });
@@ -20,7 +22,9 @@ describe('chatUpdater', () => {
       '[]': [{ hello: 'world' }, { id: 2 }],
     };
 
-    const actualState = chatUpdater(initialState, 1, prev => ({ hello: 'world' }));
+    const actualState = chatUpdater(initialState, 1, prev => ({
+      hello: 'world',
+    }));
 
     expect(actualState).toEqual(expectedState);
   });

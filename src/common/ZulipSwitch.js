@@ -43,7 +43,8 @@ export default class ZulipSwitch extends PureComponent<Props, State> {
   render() {
     const { value, disabled } = this.props;
     const { valueControlled } = this.state;
-    const switchValue = typeof valueControlled !== 'undefined' ? valueControlled : value;
+    const switchValue =
+      typeof valueControlled !== 'undefined' ? valueControlled : value;
 
     return (
       <Switch

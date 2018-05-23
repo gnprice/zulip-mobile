@@ -90,7 +90,10 @@ describe('outboxReducers', () => {
         localMessageId: 546,
       });
 
-      const expectedState = [{ timestamp: 150238512430 }, { timestamp: 150238594540 }];
+      const expectedState = [
+        { timestamp: 150238512430 },
+        { timestamp: 150238594540 },
+      ];
 
       const actualState = outboxReducers(initialState, action);
 

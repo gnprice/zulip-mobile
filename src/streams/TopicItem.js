@@ -64,7 +64,10 @@ export default class StreamItem extends PureComponent<Props> {
           ]}
         >
           <RawLabel
-            style={[componentStyles.label, isSelected && componentStyles.selectedText]}
+            style={[
+              componentStyles.label,
+              isSelected && componentStyles.selectedText,
+            ]}
             text={name}
             numberOfLines={1}
             ellipsizeMode="tail"

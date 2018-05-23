@@ -3,7 +3,12 @@ import { createSelector } from 'reselect';
 
 import type { GlobalState } from './types';
 import { allPrivateNarrowStr } from './utils/narrow';
-import { getAllMessages, getNavigationRoutes, getNavigationIndex, getNav } from './directSelectors';
+import {
+  getAllMessages,
+  getNavigationRoutes,
+  getNavigationIndex,
+  getNav,
+} from './directSelectors';
 import { NULL_ARRAY } from './nullObjects';
 
 export const getPrivateMessages = createSelector(

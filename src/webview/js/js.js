@@ -62,8 +62,12 @@ const showHideElement = (elementId: string, show: boolean) => {
   }
 };
 
-const isNearPositions = (x1: number = 0, y1: number = 0, x2: number = 0, y2: number = 0): boolean =>
-  Math.abs(x1 - x2) < 10 && Math.abs(y1 - y2) < 10;
+const isNearPositions = (
+  x1: number = 0,
+  y1: number = 0,
+  x2: number = 0,
+  y2: number = 0,
+): boolean => Math.abs(x1 - x2) < 10 && Math.abs(y1 - y2) < 10;
 
 const getMessageNode = (node: Element): Element => {
   let curNode = node;
@@ -79,11 +83,16 @@ const getMessageIdFromNode = (node: Node): string => {
 };
 
 const scrollToBottom = () => {
-  window.scroll({ left: 0, top: documentBody.scrollHeight, behavior: 'smooth' });
+  window.scroll({
+    left: 0,
+    top: documentBody.scrollHeight,
+    behavior: 'smooth',
+  });
 };
 
 const isNearBottom = (): boolean =>
-  documentBody.scrollHeight - 100 < documentBody.scrollTop + documentBody.clientHeight;
+  documentBody.scrollHeight - 100 <
+  documentBody.scrollTop + documentBody.clientHeight;
 
 const scrollToBottomIfNearEnd = () => {
   if (isNearBottom()) {
@@ -104,7 +113,10 @@ const scrollToAnchor = (anchor: number) => {
 let height = documentBody.clientHeight;
 window.addEventListener('resize', event => {
   const difference = height - documentBody.clientHeight;
-  if (documentBody.scrollHeight !== documentBody.scrollTop + documentBody.clientHeight) {
+  if (
+    documentBody.scrollHeight !==
+    documentBody.scrollTop + documentBody.clientHeight
+  ) {
     window.scrollBy({ left: 0, top: difference });
   }
   height = documentBody.clientHeight;
@@ -115,7 +127,9 @@ const isMessageNode = (node: Element): boolean =>
 
 const getStartAndEndNodes = (): { start: number, end: number } => {
   const startNode = getMessageNode(document.elementFromPoint(200, 20));
-  const endNode = getMessageNode(document.elementFromPoint(200, window.innerHeight - 20));
+  const endNode = getMessageNode(
+    document.elementFromPoint(200, window.innerHeight - 20),
+  );
 
   return {
     start: isMessageNode(startNode)
@@ -156,7 +170,8 @@ const handleScrollEvent = () => {
 
   sendScrollMessage();
 
-  const nearEnd = documentBody.offsetHeight - window.scrollY - window.innerHeight > 100;
+  const nearEnd =
+    documentBody.offsetHeight - window.scrollY - window.innerHeight > 100;
   showHideElement('scroll-bottom', nearEnd);
 };
 
@@ -322,7 +337,8 @@ documentBody.addEventListener('click', e => {
 });
 
 const handleLongPress = e => {
-  if (!lastTouchEventTimestamp || Date.now() - lastTouchEventTimestamp < 500) return;
+  if (!lastTouchEventTimestamp || Date.now() - lastTouchEventTimestamp < 500)
+    return;
 
   lastTouchEventTimestamp = 0;
 

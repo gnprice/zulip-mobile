@@ -19,14 +19,21 @@ const actionSheetButtons: ActionSheetButtonType[] = [
   },
 ];
 
-export const constructActionButtons = ({ narrow }: ConstructActionButtonsType) => {
-  const buttons = actionSheetButtons.filter(x => !x.onlyIf || x.onlyIf(narrow)).map(x => x.title);
+export const constructActionButtons = ({
+  narrow,
+}: ConstructActionButtonsType) => {
+  const buttons = actionSheetButtons
+    .filter(x => !x.onlyIf || x.onlyIf(narrow))
+    .map(x => x.title);
 
   buttons.push('Cancel');
   return buttons;
 };
 
-export const executeActionSheetAction = ({ title, ...props }: ExecuteActionSheetParams) => {
+export const executeActionSheetAction = ({
+  title,
+  ...props
+}: ExecuteActionSheetParams) => {
   const button = actionSheetButtons.find(x => x.title === title);
   if (button) {
     button.onPress(props);

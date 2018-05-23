@@ -74,7 +74,10 @@ export default class InputWithClearButton extends PureComponent<Props, State> {
           value={text}
         />
         {canBeCleared && (
-          <Touchable style={componentStyles.clearButtonContainer} onPress={this.handleClear}>
+          <Touchable
+            style={componentStyles.clearButtonContainer}
+            onPress={this.handleClear}
+          >
             <Icon name="x" size={20} style={componentStyles.clearButtonIcon} />
           </Touchable>
         )}

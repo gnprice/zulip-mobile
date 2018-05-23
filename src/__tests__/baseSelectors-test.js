@@ -135,7 +135,10 @@ describe('getTopMostNarrow', () => {
     const state = deepFreeze({
       nav: {
         index: 1,
-        routes: [{ routeName: 'main' }, { routeName: 'chat', params: { narrow } }],
+        routes: [
+          { routeName: 'main' },
+          { routeName: 'chat', params: { narrow } },
+        ],
       },
     });
     expect(getTopMostNarrow(state)).toEqual(narrow);

@@ -24,7 +24,9 @@ describe('navReducers', () => {
       const newState = navReducers(prevState, action);
 
       expect(newState.index).toEqual(expectedState.index);
-      expect(newState.routes[0].routeName).toEqual(expectedState.routes[0].routeName);
+      expect(newState.routes[0].routeName).toEqual(
+        expectedState.routes[0].routeName,
+      );
     });
   });
 

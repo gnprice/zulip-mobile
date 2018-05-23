@@ -25,7 +25,10 @@ class LanguageScreen extends PureComponent<Props> {
 
     return (
       <Screen title="Language">
-        <LanguagePicker value={locale} onValueChange={this.handleLocaleChange} />
+        <LanguagePicker
+          value={locale}
+          onValueChange={this.handleLocaleChange}
+        />
       </Screen>
     );
   }

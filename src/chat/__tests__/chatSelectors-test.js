@@ -102,7 +102,9 @@ describe('getMessagesForNarrow', () => {
       ],
     });
 
-    const anchor = getMessagesForNarrow(privateNarrow('john@example.com'))(state);
+    const anchor = getMessagesForNarrow(privateNarrow('john@example.com'))(
+      state,
+    );
 
     const expectedState = deepFreeze([{ id: 123 }]);
 
@@ -181,7 +183,10 @@ describe('getLastTopicForNarrow', () => {
   test('when last message has a `subject` property, return it', () => {
     const state = deepFreeze({
       messages: {
-        [homeNarrowStr]: [{ id: 0, subject: 'First subject' }, { id: 1, subject: 'Last subject' }],
+        [homeNarrowStr]: [
+          { id: 0, subject: 'First subject' },
+          { id: 1, subject: 'Last subject' },
+        ],
       },
       outbox: [],
     });
@@ -209,7 +214,11 @@ describe('getLastTopicForNarrow', () => {
     const narrow = privateNarrow('john@example.com');
     const state = deepFreeze({
       messages: {
-        [JSON.stringify(narrow)]: [{ id: 0 }, { id: 1, subject: 'Some subject' }, { id: 2 }],
+        [JSON.stringify(narrow)]: [
+          { id: 0 },
+          { id: 1, subject: 'Some subject' },
+          { id: 2 },
+        ],
       },
       outbox: [],
     });
@@ -232,13 +241,19 @@ describe('getStreamInNarrow', () => {
   test('return subscription if stream in narrow is subscribed', () => {
     const narrow = streamNarrow('stream');
 
-    expect(getStreamInNarrow(narrow)(state)).toEqual({ name: 'stream', in_home_view: false });
+    expect(getStreamInNarrow(narrow)(state)).toEqual({
+      name: 'stream',
+      in_home_view: false,
+    });
   });
 
   test('return stream if stream in narrow is not subscribed', () => {
     const narrow = streamNarrow('stream3');
 
-    expect(getStreamInNarrow(narrow)(state)).toEqual({ name: 'stream3', in_home_view: true });
+    expect(getStreamInNarrow(narrow)(state)).toEqual({
+      name: 'stream3',
+      in_home_view: true,
+    });
   });
 
   test('return NULL_SUBSCRIPTION if stream in narrow is not valid', () => {
@@ -249,7 +264,11 @@ describe('getStreamInNarrow', () => {
 
   test('return NULL_SUBSCRIPTION is narrow is not topic or stream', () => {
     expect(getStreamInNarrow(undefined)(state)).toEqual(NULL_SUBSCRIPTION);
-    expect(getStreamInNarrow(privateNarrow('abc@zulip.com'))(state)).toEqual(NULL_SUBSCRIPTION);
-    expect(getStreamInNarrow(topicNarrow('stream4', 'topic'))(state)).toEqual(NULL_SUBSCRIPTION);
+    expect(getStreamInNarrow(privateNarrow('abc@zulip.com'))(state)).toEqual(
+      NULL_SUBSCRIPTION,
+    );
+    expect(getStreamInNarrow(topicNarrow('stream4', 'topic'))(state)).toEqual(
+      NULL_SUBSCRIPTION,
+    );
   });
 });

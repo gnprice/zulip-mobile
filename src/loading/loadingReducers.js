@@ -26,7 +26,10 @@ const initialState: LoadingState = {
   users: false,
 };
 
-const initialFetchStart = (state: LoadingState, action: InitialFetchStartAction): LoadingState => ({
+const initialFetchStart = (
+  state: LoadingState,
+  action: InitialFetchStartAction,
+): LoadingState => ({
   ...state,
   presence: true,
   subscriptions: true,
@@ -45,22 +48,34 @@ const initialFetchComplete = (
   users: false,
 });
 
-const initUsers = (state: LoadingState, action: InitUsersAction): LoadingState => ({
+const initUsers = (
+  state: LoadingState,
+  action: InitUsersAction,
+): LoadingState => ({
   ...state,
   users: false,
 });
 
-const initStreams = (state: LoadingState, action: InitStreamsAction): LoadingState => ({
+const initStreams = (
+  state: LoadingState,
+  action: InitStreamsAction,
+): LoadingState => ({
   ...state,
   streams: false,
 });
 
-const initSubscriptions = (state: LoadingState, action: InitSubscriptionsAction): LoadingState => ({
+const initSubscriptions = (
+  state: LoadingState,
+  action: InitSubscriptionsAction,
+): LoadingState => ({
   ...state,
   subscriptions: false,
 });
 
-export default (state: LoadingState = initialState, action: LoadingAction): LoadingState => {
+export default (
+  state: LoadingState = initialState,
+  action: LoadingAction,
+): LoadingState => {
   switch (action.type) {
     case APP_REFRESH:
     case ACCOUNT_SWITCH:

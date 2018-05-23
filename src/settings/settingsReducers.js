@@ -21,13 +21,19 @@ const initialState: SettingsState = {
   streamNotification: false,
 };
 
-const realmInit = (state: SettingsState, action: RealmInitAction): SettingsState => ({
+const realmInit = (
+  state: SettingsState,
+  action: RealmInitAction,
+): SettingsState => ({
   ...state,
   offlineNotification: action.data.enable_offline_push_notifications,
   onlineNotification: action.data.enable_online_push_notifications,
 });
 
-const settingsChange = (state: SettingsState, action: SettingsChangeAction): SettingsState => ({
+const settingsChange = (
+  state: SettingsState,
+  action: SettingsChangeAction,
+): SettingsState => ({
   ...state,
   [action.key]: action.value,
 });
@@ -48,7 +54,10 @@ const eventUpdateGlobalNotificationsSettings = (
   }
 };
 
-export default (state: SettingsState = initialState, action: SettingsAction): SettingsState => {
+export default (
+  state: SettingsState = initialState,
+  action: SettingsAction,
+): SettingsState => {
   switch (action.type) {
     case REALM_INIT:
       return realmInit(state, action);

@@ -10,7 +10,10 @@ import { getAuth } from '../selectors';
 import actionCreator from '../actionCreator';
 import progressiveTimeout from '../utils/progressiveTimeout';
 
-export const responseToActions = (state: GlobalState, response: Object): EventAction[] =>
+export const responseToActions = (
+  state: GlobalState,
+  response: Object,
+): EventAction[] =>
   response.events
     .map(event => {
       eventMiddleware(state, event);
@@ -58,7 +61,10 @@ export const startEventPolling = (queueId: number, eventId: number) => async (
       actionCreator(dispatch, actions, getState());
       dispatchOrBatch(dispatch, actions);
 
-      lastEventId = Math.max.apply(null, [lastEventId, ...response.events.map(x => x.id)]);
+      lastEventId = Math.max.apply(null, [
+        lastEventId,
+        ...response.events.map(x => x.id),
+      ]);
     } catch (e) {
       // protection from inadvertent DDOS
       await progressiveTimeout();

@@ -74,7 +74,12 @@ class RealmScreen extends PureComponent<Props, State> {
     const { progress, error, realm } = this.state;
 
     return (
-      <Screen title="Welcome" padding centerContent keyboardShouldPersistTaps="always">
+      <Screen
+        title="Welcome"
+        padding
+        centerContent
+        keyboardShouldPersistTaps="always"
+      >
         <Label text="Organization URL" />
         <SmartUrlInput
           style={styles.marginVertical}
@@ -103,6 +108,8 @@ class RealmScreen extends PureComponent<Props, State> {
 
 export default connectWithActions((state, props) => ({
   initialRealm:
-    (props.navigation && props.navigation.state.params && props.navigation.state.params.realm) ||
+    (props.navigation &&
+      props.navigation.state.params &&
+      props.navigation.state.params.realm) ||
     '',
 }))(RealmScreen);

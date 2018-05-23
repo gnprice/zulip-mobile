@@ -67,21 +67,31 @@ describe('isSameRecipient', () => {
   });
 
   test('recipient types are compared first, if they differ then recipients differ', () => {
-    expect(isSameRecipient({ type: 'private' }, { type: 'stream' })).toBe(false);
+    expect(isSameRecipient({ type: 'private' }, { type: 'stream' })).toBe(
+      false,
+    );
   });
 
   test('recipient of unknown types are never the same', () => {
-    expect(isSameRecipient({ type: 'someUnknown' }, { type: 'someUnknown' })).toBe(false);
+    expect(
+      isSameRecipient({ type: 'someUnknown' }, { type: 'someUnknown' }),
+    ).toBe(false);
   });
 
   test('recipients are same for private type if display_recipient match in any order', () => {
     const msg1 = {
       type: 'private',
-      display_recipient: [{ email: 'abc@example.com' }, { email: 'xyz@example.com' }],
+      display_recipient: [
+        { email: 'abc@example.com' },
+        { email: 'xyz@example.com' },
+      ],
     };
     const msg2 = {
       type: 'private',
-      display_recipient: [{ email: 'xyz@example.com' }, { email: 'abc@example.com' }],
+      display_recipient: [
+        { email: 'xyz@example.com' },
+        { email: 'abc@example.com' },
+      ],
     };
     expect(isSameRecipient(msg1, msg2)).toBe(true);
   });

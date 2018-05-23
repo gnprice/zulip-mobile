@@ -29,7 +29,13 @@ export default class ImageAvatar extends PureComponent<Props> {
     };
 
     const borderRadius =
-      shape === 'rounded' ? size / 8 : shape === 'circle' ? size / 2 : shape === 'square' ? 0 : 0;
+      shape === 'rounded'
+        ? size / 8
+        : shape === 'circle'
+          ? size / 2
+          : shape === 'square'
+            ? 0
+            : 0;
 
     return (
       <View>

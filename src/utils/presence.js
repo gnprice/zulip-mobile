@@ -22,7 +22,10 @@ export const getAggregatedPresence = (presence: Presence): PresenceAggregated =>
               }
               break;
             case 'offline':
-              if (aggregated.status !== 'active' && aggregated.status !== 'idle') {
+              if (
+                aggregated.status !== 'active' &&
+                aggregated.status !== 'idle'
+              ) {
                 return { client, status, timestamp };
               }
               break;
@@ -39,7 +42,8 @@ export const presenceToHumanTime = (presence: Presence): string => {
   if (!presence || !presence.aggregated) return 'never';
 
   const lastTimeActive = new Date(presence.aggregated.timestamp * 1000);
-  return differenceInSeconds(Date.now(), lastTimeActive) < OFFLINE_THRESHOLD_SECS
+  return differenceInSeconds(Date.now(), lastTimeActive) <
+    OFFLINE_THRESHOLD_SECS
     ? 'now'
     : `${distanceInWordsToNow(lastTimeActive)} ago`;
 };

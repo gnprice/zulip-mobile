@@ -35,10 +35,18 @@ export default class TitlePrivate extends PureComponent<Props> {
         />
         <ViewPlaceholder width={8} />
         <View>
-          <Text style={[styles.navTitle, { color }]} numberOfLines={1} ellipsizeMode="tail">
+          <Text
+            style={[styles.navTitle, { color }]}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
             {user.full_name}
           </Text>
-          <ActivityText style={styles.navSubtitle} color={color} email={user.email} />
+          <ActivityText
+            style={styles.navSubtitle}
+            color={color}
+            email={user.email}
+          />
         </View>
       </View>
     );

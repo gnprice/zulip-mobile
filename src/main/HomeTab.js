@@ -31,8 +31,14 @@ class HomeTab extends PureComponent<Props> {
       <View style={styles.wrapper}>
         <View style={styles.iconList}>
           <NavButton name="home" onPress={() => actions.doNarrow(homeNarrow)} />
-          <NavButton name="star" onPress={() => actions.doNarrow(specialNarrow('starred'))} />
-          <NavButton name="at-sign" onPress={() => actions.doNarrow(specialNarrow('mentioned'))} />
+          <NavButton
+            name="star"
+            onPress={() => actions.doNarrow(specialNarrow('starred'))}
+          />
+          <NavButton
+            name="at-sign"
+            onPress={() => actions.doNarrow(specialNarrow('mentioned'))}
+          />
           <NavButton name="search" onPress={() => actions.navigateToSearch()} />
         </View>
         <UnreadContainer />

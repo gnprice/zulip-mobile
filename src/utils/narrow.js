@@ -39,7 +39,9 @@ export const isGroupNarrow = (narrow: Narrow): boolean =>
   narrow[0].operand.indexOf(',') >= 0;
 
 export const isPrivateOrGroupNarrow = (narrow: Narrow): boolean =>
-  Array.isArray(narrow) && narrow.length === 1 && narrow[0].operator === 'pm-with';
+  Array.isArray(narrow) &&
+  narrow.length === 1 &&
+  narrow[0].operator === 'pm-with';
 
 export const specialNarrow = (operand: string): Narrow => [
   {
@@ -69,7 +71,9 @@ export const streamNarrow = (stream: string): Narrow => [
 ];
 
 export const isStreamNarrow = (narrow: Narrow): boolean =>
-  Array.isArray(narrow) && narrow.length === 1 && narrow[0].operator === 'stream';
+  Array.isArray(narrow) &&
+  narrow.length === 1 &&
+  narrow[0].operator === 'stream';
 
 export const topicNarrow = (stream: string, topic: string): Narrow => [
   {
@@ -83,10 +87,14 @@ export const topicNarrow = (stream: string, topic: string): Narrow => [
 ];
 
 export const isTopicNarrow = (narrow: Narrow): boolean =>
-  Array.isArray(narrow) && narrow.length === 2 && narrow[1].operator === 'topic';
+  Array.isArray(narrow) &&
+  narrow.length === 2 &&
+  narrow[1].operator === 'topic';
 
 export const isStreamOrTopicNarrow = (narrow: Narrow): boolean =>
-  Array.isArray(narrow) && narrow.length >= 1 && narrow[0].operator === 'stream';
+  Array.isArray(narrow) &&
+  narrow.length >= 1 &&
+  narrow[0].operator === 'stream';
 
 export const searchNarrow = (query: string): Narrow => [
   {
@@ -96,14 +104,23 @@ export const searchNarrow = (query: string): Narrow => [
 ];
 
 export const isSearchNarrow = (narrow: Narrow): boolean =>
-  Array.isArray(narrow) && narrow.length === 1 && narrow[0].operator === 'search';
+  Array.isArray(narrow) &&
+  narrow.length === 1 &&
+  narrow[0].operator === 'search';
 
-export const isMessageInNarrow = (message: Message, narrow: Narrow, ownEmail: string): boolean => {
+export const isMessageInNarrow = (
+  message: Message,
+  narrow: Narrow,
+  ownEmail: string,
+): boolean => {
   if (isHomeNarrow(narrow)) {
     return true;
   }
 
-  if (isStreamNarrow(narrow) && message.display_recipient === narrow[0].operand) {
+  if (
+    isStreamNarrow(narrow) &&
+    message.display_recipient === narrow[0].operand
+  ) {
     return true;
   }
 
@@ -117,9 +134,14 @@ export const isMessageInNarrow = (message: Message, narrow: Narrow, ownEmail: st
 
   if (isPrivateOrGroupNarrow(narrow)) {
     const normalizedRecipients = normalizeRecipients(message.display_recipient);
-    const normalizedNarrow = [...narrow[0].operand.split(','), ownEmail].sort().join(',');
+    const normalizedNarrow = [...narrow[0].operand.split(','), ownEmail]
+      .sort()
+      .join(',');
 
-    return normalizedRecipients === ownEmail || normalizedRecipients === normalizedNarrow;
+    return (
+      normalizedRecipients === ownEmail ||
+      normalizedRecipients === normalizedNarrow
+    );
   }
 
   if (isSpecialNarrow(narrow) && narrow[0].operand === message.type) {
@@ -151,15 +173,23 @@ export const getNarrowFromMessage = (message: Message, email: string) => {
   return streamNarrow(message.display_recipient);
 };
 
-export const validateNarrow = (narrow: Narrow, streams: Stream[], users: User[]): boolean => {
+export const validateNarrow = (
+  narrow: Narrow,
+  streams: Stream[],
+  users: User[],
+): boolean => {
   if (isStreamOrTopicNarrow(narrow)) {
     // check if stream is not outdated
-    return streams && streams.find(s => s.name === narrow[0].operand) !== undefined;
+    return (
+      streams && streams.find(s => s.name === narrow[0].operand) !== undefined
+    );
   }
 
   if (isPrivateNarrow(narrow)) {
     // check user account is not deactivited
-    return users && users.find(u => u.email === narrow[0].operand) !== undefined;
+    return (
+      users && users.find(u => u.email === narrow[0].operand) !== undefined
+    );
   }
 
   return true;
@@ -168,4 +198,5 @@ export const validateNarrow = (narrow: Narrow, streams: Stream[], users: User[])
 export const isSameNarrow = (narrow1: Narrow, narrow2: Narrow): boolean =>
   Array.isArray(narrow1) && Array.isArray(narrow2) && isEqual(narrow1, narrow2);
 
-export const parseNarrowString = (narrowStr: string): Narrow => JSON.parse(unescape(narrowStr));
+export const parseNarrowString = (narrowStr: string): Narrow =>
+  JSON.parse(unescape(narrowStr));

@@ -113,7 +113,10 @@ describe('renderMessages', () => {
         id: 1,
         sender_full_name: 'John',
         avatar_url: '',
-        display_recipient: [{ email: 'john@example.com' }, { email: 'mark@example.com' }],
+        display_recipient: [
+          { email: 'john@example.com' },
+          { email: 'mark@example.com' },
+        ],
       },
       {
         timestamp: 123,
@@ -121,7 +124,10 @@ describe('renderMessages', () => {
         id: 2,
         sender_full_name: 'Mark',
         avatar_url: '',
-        display_recipient: [{ email: 'john@example.com' }, { email: 'mark@example.com' }],
+        display_recipient: [
+          { email: 'john@example.com' },
+          { email: 'mark@example.com' },
+        ],
       },
     ]);
 

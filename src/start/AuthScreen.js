@@ -77,7 +77,9 @@ class AuthScreen extends PureComponent<Props> {
 
   handlePassword = () => {
     const { serverSettings } = this.props.navigation.state.params;
-    this.props.actions.navigateToPassword(serverSettings.require_email_format_usernames);
+    this.props.actions.navigateToPassword(
+      serverSettings.require_email_format_usernames,
+    );
   };
 
   handleGoogle = () => {
@@ -102,17 +104,19 @@ class AuthScreen extends PureComponent<Props> {
             name={serverSettings.realm_name}
             iconUrl={getFullUrl(serverSettings.realm_icon, this.props.realm)}
           />
-          {activeAuthentications(serverSettings.authentication_methods).map(auth => (
-            <AuthButton
-              key={auth.method}
-              name={auth.name}
-              Icon={auth.Icon}
-              onPress={
-                // $FlowFixMe
-                this[auth.handler]
-              }
-            />
-          ))}
+          {activeAuthentications(serverSettings.authentication_methods).map(
+            auth => (
+              <AuthButton
+                key={auth.method}
+                name={auth.name}
+                Icon={auth.Icon}
+                onPress={
+                  // $FlowFixMe
+                  this[auth.handler]
+                }
+              />
+            ),
+          )}
         </Centerer>
       </Screen>
     );

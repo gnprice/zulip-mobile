@@ -16,9 +16,15 @@ describe('getAccountDetailsUser', () => {
     const state = deepFreeze({
       nav: {
         index: 1,
-        routes: [{ routeName: 'first' }, { routeName: 'second', params: { email: 'b@a.com' } }],
+        routes: [
+          { routeName: 'first' },
+          { routeName: 'second', params: { email: 'b@a.com' } },
+        ],
       },
-      users: [{ firstName: 'a', email: 'a@a.com' }, { firstName: 'b', email: 'b@a.com' }],
+      users: [
+        { firstName: 'a', email: 'a@a.com' },
+        { firstName: 'b', email: 'b@a.com' },
+      ],
     });
     const expectedUser = { firstName: 'b', email: 'b@a.com' };
 
@@ -221,7 +227,10 @@ describe('getUsersSansMe', () => {
       ],
       accounts: [{ email: 'me@example.com' }],
     });
-    const expectedResult = [{ email: 'john@example.com' }, { email: 'doe@example.com' }];
+    const expectedResult = [
+      { email: 'john@example.com' },
+      { email: 'doe@example.com' },
+    ];
 
     const actualResult = getUsersSansMe(state);
 

@@ -3,7 +3,12 @@ import React, { PureComponent } from 'react';
 
 import type { Auth, Actions, Orientation, User, PresenceState } from '../types';
 import { connectWithActionsPreserveOnBack } from '../connectWithActions';
-import { getAuth, getSession, getAccountDetailsUser, getPresence } from '../selectors';
+import {
+  getAuth,
+  getSession,
+  getAccountDetailsUser,
+  getPresence,
+} from '../selectors';
 import { Screen } from '../common';
 import AccountDetails from './AccountDetails';
 

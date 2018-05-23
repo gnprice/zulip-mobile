@@ -38,7 +38,8 @@ const renderMessages = ({
             content: message.match_content || message.content,
             flags: message.flags || [],
             timestamp: message.timestamp,
-            avatarUrl: message.avatar_url || getGravatarFromEmail(message.sender_email),
+            avatarUrl:
+              message.avatar_url || getGravatarFromEmail(message.sender_email),
             timeEdited: message.last_edit_timestamp,
             isOutbox: message.isOutbox,
             reactions: message.reactions,

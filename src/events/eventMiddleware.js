@@ -3,7 +3,12 @@
 
 import type { GlobalState } from '../types';
 import { isHomeNarrow, isMessageInNarrow } from '../utils/narrow';
-import { getActiveAccount, getChatScreenParams, getOwnEmail, getIsActive } from '../selectors';
+import {
+  getActiveAccount,
+  getChatScreenParams,
+  getOwnEmail,
+  getIsActive,
+} from '../selectors';
 import { playMessageSound } from '../utils/sound';
 
 export default (state: GlobalState, event: Object) => {
@@ -11,7 +16,10 @@ export default (state: GlobalState, event: Object) => {
     case 'message': {
       const isActive = getIsActive(state);
       const isPrivateMessage = Array.isArray(event.message.display_recipient);
-      if (!isActive || (!isPrivateMessage && event.flags.indexOf('mentioned') === -1)) {
+      if (
+        !isActive ||
+        (!isPrivateMessage && event.flags.indexOf('mentioned') === -1)
+      ) {
         break;
       }
 
@@ -20,7 +28,8 @@ export default (state: GlobalState, event: Object) => {
       const isUserInSameNarrow =
         activeAccount &&
         (narrow !== undefined && // chat screen is not at top
-          (!isHomeNarrow(narrow) && isMessageInNarrow(event.message, narrow, activeAccount.email)));
+          (!isHomeNarrow(narrow) &&
+            isMessageInNarrow(event.message, narrow, activeAccount.email)));
       const isSenderSelf = getOwnEmail(state) === event.message.sender_email;
       if (!isUserInSameNarrow && !isSenderSelf) {
         playMessageSound();

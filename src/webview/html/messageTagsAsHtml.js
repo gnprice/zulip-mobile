@@ -9,8 +9,16 @@ export default (flags: Object, timeEdited?: number): string => {
   const editedTime = timeEdited ? distanceInWordsToNow(timeEdited * 1000) : '';
 
   return template`<div class="message-tags">
-  $!${timeEdited ? template`<span class="message-tag">edited ${editedTime} ago</span>` : ''}
-  $!${flags.indexOf('starred') > -1 ? '<span class="message-tag">starred</span>' : ''}
+  $!${
+    timeEdited
+      ? template`<span class="message-tag">edited ${editedTime} ago</span>`
+      : ''
+  }
+  $!${
+    flags.indexOf('starred') > -1
+      ? '<span class="message-tag">starred</span>'
+      : ''
+  }
 </div>
 `;
 };

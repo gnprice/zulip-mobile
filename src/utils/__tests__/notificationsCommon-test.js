@@ -37,7 +37,11 @@ describe('getNarrowFromNotificationData', () => {
       '2': { email: 'mark@example.com' },
       '4': { email: 'john@example.com' },
     };
-    const expectedNarrow = groupNarrow(['me@example.com', 'mark@example.com', 'john@example.com']);
+    const expectedNarrow = groupNarrow([
+      'me@example.com',
+      'mark@example.com',
+      'john@example.com',
+    ]);
 
     const narrow = getNarrowFromNotificationData(notification, usersById);
 

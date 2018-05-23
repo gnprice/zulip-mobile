@@ -50,7 +50,12 @@ class ModalNavBar extends PureComponent<Props> {
     ];
     const content =
       React.Children.count(this.props.children) === 0 ? (
-        <Label style={textStyle} text={title} numberOfLines={1} ellipsizeMode="tail" />
+        <Label
+          style={textStyle}
+          text={title}
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        />
       ) : (
         this.props.children
       );
@@ -58,7 +63,11 @@ class ModalNavBar extends PureComponent<Props> {
     return (
       <View style={[styles.navBar, style]}>
         {canGoBack && (
-          <NavButton name="arrow-left" color={itemsColor} onPress={actions.navigateBack} />
+          <NavButton
+            name="arrow-left"
+            color={itemsColor}
+            onPress={actions.navigateBack}
+          />
         )}
         <View style={[styles.flexedLeftAlign, childrenStyle]}>{content}</View>
         {rightItem && <NavButton color={itemsColor} {...rightItem} />}

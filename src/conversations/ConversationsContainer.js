@@ -1,6 +1,11 @@
 /* @flow */
 import connectWithActions from '../connectWithActions';
-import { getLoading, getPresence, getRecentConversations, getUsersByEmail } from '../selectors';
+import {
+  getLoading,
+  getPresence,
+  getRecentConversations,
+  getUsersByEmail,
+} from '../selectors';
 import ConversationsCard from './ConversationsCard';
 
 export default connectWithActions(state => ({

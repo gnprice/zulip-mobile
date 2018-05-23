@@ -24,8 +24,10 @@ export const getAccountDetailsUser = createSelector(
   },
 );
 
-export const getSelfUserDetail = createSelector(getUsers, getOwnEmail, (users, ownEmail) =>
-  getUserByEmail(users, ownEmail),
+export const getSelfUserDetail = createSelector(
+  getUsers,
+  getOwnEmail,
+  (users, ownEmail) => getUserByEmail(users, ownEmail),
 );
 
 export const getActiveUsers = createSelector(getUsers, users =>
@@ -33,15 +35,31 @@ export const getActiveUsers = createSelector(getUsers, users =>
 );
 
 export const getSortedUsers = createSelector(getUsers, users =>
-  [...users].sort((x1, x2) => x1.full_name.toLowerCase().localeCompare(x2.full_name.toLowerCase())),
+  [...users].sort((x1, x2) =>
+    x1.full_name.toLowerCase().localeCompare(x2.full_name.toLowerCase()),
+  ),
 );
 
-export const getUsersStatusActive = createSelector(getActiveUsers, getPresence, (users, presence) =>
-  users.filter(user => presence[user.email] && presence[user.email].aggregated.status === 'active'),
+export const getUsersStatusActive = createSelector(
+  getActiveUsers,
+  getPresence,
+  (users, presence) =>
+    users.filter(
+      user =>
+        presence[user.email] &&
+        presence[user.email].aggregated.status === 'active',
+    ),
 );
 
-export const getUsersStatusIdle = createSelector(getActiveUsers, getPresence, (users, presence) =>
-  users.filter(user => presence[user.email] && presence[user.email].aggregated.status === 'idle'),
+export const getUsersStatusIdle = createSelector(
+  getActiveUsers,
+  getPresence,
+  (users, presence) =>
+    users.filter(
+      user =>
+        presence[user.email] &&
+        presence[user.email].aggregated.status === 'idle',
+    ),
 );
 
 export const getUsersStatusOffline = createSelector(
@@ -49,7 +67,9 @@ export const getUsersStatusOffline = createSelector(
   getPresence,
   (users, presence) =>
     users.filter(
-      user => presence[user.email] && presence[user.email].aggregated.status === 'offline',
+      user =>
+        presence[user.email] &&
+        presence[user.email].aggregated.status === 'offline',
     ),
 );
 
@@ -67,6 +87,8 @@ export const getUsersById = createSelector(getUsers, (users = []) =>
   }, {}),
 );
 
-export const getUsersSansMe = createSelector(getUsers, getOwnEmail, (users, ownEmail) =>
-  users.filter(user => user.email !== ownEmail),
+export const getUsersSansMe = createSelector(
+  getUsers,
+  getOwnEmail,
+  (users, ownEmail) => users.filter(user => user.email !== ownEmail),
 );

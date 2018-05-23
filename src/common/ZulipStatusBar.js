@@ -5,7 +5,12 @@ import Color from 'color';
 
 import type { Dimensions, StatusBarStyle, ThemeType } from '../types';
 import connectWithActions from '../connectWithActions';
-import { getSession, getSettings, getTitleBackgroundColor, getTitleTextColor } from '../selectors';
+import {
+  getSession,
+  getSettings,
+  getTitleBackgroundColor,
+  getTitleTextColor,
+} from '../selectors';
 import getStatusBarStyle from '../utils/getStatusBarStyle';
 import getStatusBarColor from '../utils/getStatusBarColor';
 

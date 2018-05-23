@@ -30,7 +30,9 @@ describe('getCurrentTypingUsers', () => {
       users: [expectedUser],
     });
 
-    const typingUsers = getCurrentTypingUsers(privateNarrow('john@example.com'))(state);
+    const typingUsers = getCurrentTypingUsers(
+      privateNarrow('john@example.com'),
+    )(state);
 
     expect(typingUsers).toEqual([expectedUser]);
   });
@@ -71,7 +73,9 @@ describe('getCurrentTypingUsers', () => {
       },
     });
 
-    const typingUsers = getCurrentTypingUsers(privateNarrow('mark@example.com'))(state);
+    const typingUsers = getCurrentTypingUsers(
+      privateNarrow('mark@example.com'),
+    )(state);
 
     expect(typingUsers).toEqual(NULL_ARRAY);
   });

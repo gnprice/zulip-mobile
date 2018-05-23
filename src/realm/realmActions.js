@@ -43,7 +43,10 @@ export const saveTokenPush = (
   msg,
 });
 
-export const initNotifications = () => (dispatch: Dispatch, getState: GetState) => {
+export const initNotifications = () => (
+  dispatch: Dispatch,
+  getState: GetState,
+) => {
   initializeNotifications(getAuth(getState()), (token, msg, result) =>
     dispatch(saveTokenPush(token, result, msg)),
   );
@@ -57,7 +60,9 @@ export const initRealmEmojis = (emojis: Object): InitRealmEmojiAction => ({
 export const fetchRealmEmojis = (auth: Auth) => async (dispatch: Dispatch) =>
   dispatch(initRealmEmojis(await getRealmEmojis(auth)));
 
-export const initRealmFilters = (filters: RealmFilter[]): InitRealmFilterAction => ({
+export const initRealmFilters = (
+  filters: RealmFilter[],
+): InitRealmFilterAction => ({
   type: INIT_REALM_FILTER,
   filters,
 });

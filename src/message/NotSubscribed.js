@@ -46,9 +46,16 @@ class NotSubscribed extends PureComponent<Props> {
 
     return (
       <View style={styles.container}>
-        <Label style={styles.text} text="You are not subscribed to this stream" />
+        <Label
+          style={styles.text}
+          text="You are not subscribed to this stream"
+        />
         {!stream.invite_only && (
-          <ZulipButton style={styles.button} text="Subscribe" onPress={this.subscribeToStream} />
+          <ZulipButton
+            style={styles.button}
+            text="Subscribe"
+            onPress={this.subscribeToStream}
+          />
         )}
       </View>
     );

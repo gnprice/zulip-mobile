@@ -1,7 +1,12 @@
 import deepFreeze from 'deep-freeze';
 
 import getComposeInputPlaceholder from '../getComposeInputPlaceholder';
-import { privateNarrow, streamNarrow, topicNarrow, groupNarrow } from '../../utils/narrow';
+import {
+  privateNarrow,
+  streamNarrow,
+  topicNarrow,
+  groupNarrow,
+} from '../../utils/narrow';
 
 describe('getComposeInputPlaceholder', () => {
   test('returns "Message @ThisPerson" object for person narrow', () => {
@@ -23,7 +28,10 @@ describe('getComposeInputPlaceholder', () => {
     ]);
 
     const placeholder = getComposeInputPlaceholder(narrow, ownEmail, users);
-    expect(placeholder).toEqual({ text: 'Message {recipient}', values: { recipient: '@ABC' } });
+    expect(placeholder).toEqual({
+      text: 'Message {recipient}',
+      values: { recipient: '@ABC' },
+    });
   });
 
   test('returns "Jot down something" object for self narrow', () => {
@@ -39,7 +47,10 @@ describe('getComposeInputPlaceholder', () => {
     const narrow = deepFreeze(streamNarrow('Denmark'));
 
     const placeholder = getComposeInputPlaceholder(narrow);
-    expect(placeholder).toEqual({ text: 'Message {recipient}', values: { recipient: '#Denmark' } });
+    expect(placeholder).toEqual({
+      text: 'Message {recipient}',
+      values: { recipient: '#Denmark' },
+    });
   });
 
   test('returns properly for topic narrow', () => {

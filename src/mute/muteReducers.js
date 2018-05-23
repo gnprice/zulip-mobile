@@ -1,8 +1,18 @@
 /* @flow */
 import isEqual from 'lodash.isequal';
 
-import type { MuteState, MuteAction, RealmInitAction, EventMutedTopicsAction } from '../types';
-import { APP_REFRESH, REALM_INIT, ACCOUNT_SWITCH, EVENT_MUTED_TOPICS } from '../actionConstants';
+import type {
+  MuteState,
+  MuteAction,
+  RealmInitAction,
+  EventMutedTopicsAction,
+} from '../types';
+import {
+  APP_REFRESH,
+  REALM_INIT,
+  ACCOUNT_SWITCH,
+  EVENT_MUTED_TOPICS,
+} from '../actionConstants';
 import { NULL_ARRAY } from '../nullObjects';
 
 const initialState: MuteState = NULL_ARRAY;
@@ -10,10 +20,15 @@ const initialState: MuteState = NULL_ARRAY;
 const realmInit = (state: MuteState, action: RealmInitAction): MuteState =>
   isEqual(action.data.muted_topics, state) ? state : action.data.muted_topics;
 
-const eventMutedTopics = (state: MuteState, action: EventMutedTopicsAction): MuteState =>
-  action.muted_topics;
+const eventMutedTopics = (
+  state: MuteState,
+  action: EventMutedTopicsAction,
+): MuteState => action.muted_topics;
 
-export default (state: MuteState = initialState, action: MuteAction): MuteState => {
+export default (
+  state: MuteState = initialState,
+  action: MuteAction,
+): MuteState => {
   switch (action.type) {
     case APP_REFRESH:
     case ACCOUNT_SWITCH:

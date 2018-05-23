@@ -29,7 +29,11 @@ export const removeAccount = (index: number): AccountRemoveAction => ({
   index,
 });
 
-export const loginSuccess = (realm: string, email: string, apiKey: string): LoginSuccessAction => ({
+export const loginSuccess = (
+  realm: string,
+  email: string,
+  apiKey: string,
+): LoginSuccessAction => ({
   type: LOGIN_SUCCESS,
   realm,
   email,

@@ -1,10 +1,19 @@
 /* @flow */
 import { NavigationActions } from 'react-navigation';
 
-import type { NavigateAction, GetState, Message, Narrow, ApiServerSettings } from '../types';
+import type {
+  NavigateAction,
+  GetState,
+  Message,
+  Narrow,
+  ApiServerSettings,
+} from '../types';
 import { getSameRoutesCount } from '../selectors';
 
-export const navigateBack = () => (dispatch: Dispatch, getState: GetState): NavigateAction =>
+export const navigateBack = () => (
+  dispatch: Dispatch,
+  getState: GetState,
+): NavigateAction =>
   // $FlowFixMe
   dispatch(NavigationActions.pop({ n: getSameRoutesCount(getState()) }));
 
@@ -23,28 +32,48 @@ export const navigateToSearch = (): NavigateAction =>
 export const navigateToSettings = (): NavigateAction =>
   NavigationActions.navigate({ routeName: 'settings' });
 
-export const navigateToAuth = (serverSettings: ApiServerSettings): NavigateAction =>
+export const navigateToAuth = (
+  serverSettings: ApiServerSettings,
+): NavigateAction =>
   NavigationActions.navigate({ routeName: 'auth', params: { serverSettings } });
 
-export const navigateToDev = (): NavigateAction => NavigationActions.navigate({ routeName: 'dev' });
+export const navigateToDev = (): NavigateAction =>
+  NavigationActions.navigate({ routeName: 'dev' });
 
-export const navigateToPassword = (requireEmailFormat: boolean): NavigateAction =>
-  NavigationActions.navigate({ routeName: 'password', params: { requireEmailFormat } });
+export const navigateToPassword = (
+  requireEmailFormat: boolean,
+): NavigateAction =>
+  NavigationActions.navigate({
+    routeName: 'password',
+    params: { requireEmailFormat },
+  });
 
 export const navigateToAccountPicker = (): NavigateAction =>
   NavigationActions.navigate({ routeName: 'account' });
 
 export const navigateToAccountDetails = (email: string): NavigateAction =>
-  NavigationActions.navigate({ routeName: 'account-details', params: { email } });
+  NavigationActions.navigate({
+    routeName: 'account-details',
+    params: { email },
+  });
 
 export const navigateToGroupDetails = (recipients: string[]): NavigateAction =>
-  NavigationActions.navigate({ routeName: 'group-details', params: { recipients } });
+  NavigationActions.navigate({
+    routeName: 'group-details',
+    params: { recipients },
+  });
 
 export const navigateToAddNewAccount = (realm: string): NavigateAction =>
   NavigationActions.navigate({ routeName: 'realm', params: { realm } });
 
-export const navigateToLightbox = (src: string, message: Message): NavigateAction =>
-  NavigationActions.navigate({ routeName: 'lightbox', params: { src, message } });
+export const navigateToLightbox = (
+  src: string,
+  message: Message,
+): NavigateAction =>
+  NavigationActions.navigate({
+    routeName: 'lightbox',
+    params: { src, message },
+  });
 
 export const navigateToLoading = (): NavigateAction =>
   NavigationActions.navigate({ routeName: 'loading' });
@@ -89,7 +118,10 @@ export const navigateToCreateStream = (): NavigateAction =>
   NavigationActions.navigate({ routeName: 'stream-create' });
 
 export const navigateToEditStream = (streamId: number): NavigateAction =>
-  NavigationActions.navigate({ routeName: 'stream-edit', params: { streamId } });
+  NavigationActions.navigate({
+    routeName: 'stream-edit',
+    params: { streamId },
+  });
 
 export const navigateToNotifications = (): NavigateAction =>
   NavigationActions.navigate({ routeName: 'notifications' });

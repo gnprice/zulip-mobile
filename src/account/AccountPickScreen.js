@@ -35,7 +35,8 @@ class AccountPickScreen extends PureComponent<Props> {
     }
   };
 
-  handleAccountRemove = (index: number) => this.props.actions.removeAccount(index);
+  handleAccountRemove = (index: number) =>
+    this.props.actions.removeAccount(index);
 
   render() {
     const { accounts, actions, auth } = this.props;

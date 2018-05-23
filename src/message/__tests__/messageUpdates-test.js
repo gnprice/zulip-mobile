@@ -1,4 +1,7 @@
-import { getMessageTransitionProps, getMessageUpdateStrategy } from '../messageUpdates';
+import {
+  getMessageTransitionProps,
+  getMessageUpdateStrategy,
+} from '../messageUpdates';
 
 describe('getMessageTransitionProps', () => {
   test('recognize when messages are the same and the narrows are the same', () => {
@@ -55,7 +58,14 @@ describe('getMessageTransitionProps', () => {
       narrow: 'some narrow',
     };
     const nextProps = {
-      messages: [{ id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }],
+      messages: [
+        { id: 2 },
+        { id: 3 },
+        { id: 4 },
+        { id: 5 },
+        { id: 6 },
+        { id: 7 },
+      ],
       narrow: 'some narrow',
     };
 
@@ -180,7 +190,9 @@ describe('getMessageUpdateStrategy', () => {
       narrow: 'some narrow',
     };
 
-    const result = getMessageUpdateStrategy(getMessageTransitionProps(prevProps, nextProps));
+    const result = getMessageUpdateStrategy(
+      getMessageTransitionProps(prevProps, nextProps),
+    );
 
     expect(result).toEqual('scroll-to-anchor');
   });
@@ -195,7 +207,9 @@ describe('getMessageUpdateStrategy', () => {
       narrow: 'another narrow',
     };
 
-    const result = getMessageUpdateStrategy(getMessageTransitionProps(prevProps, nextProps));
+    const result = getMessageUpdateStrategy(
+      getMessageTransitionProps(prevProps, nextProps),
+    );
 
     expect(result).toEqual('scroll-to-anchor');
   });
@@ -210,7 +224,9 @@ describe('getMessageUpdateStrategy', () => {
       narrow: 'some other narrow',
     };
 
-    const result = getMessageUpdateStrategy(getMessageTransitionProps(prevProps, nextProps));
+    const result = getMessageUpdateStrategy(
+      getMessageTransitionProps(prevProps, nextProps),
+    );
 
     expect(result).toEqual('replace');
   });
@@ -225,7 +241,9 @@ describe('getMessageUpdateStrategy', () => {
       narrow: 'some narrow',
     };
 
-    const result = getMessageUpdateStrategy(getMessageTransitionProps(prevProps, nextProps));
+    const result = getMessageUpdateStrategy(
+      getMessageTransitionProps(prevProps, nextProps),
+    );
 
     expect(result).toEqual('scroll-to-anchor');
   });
@@ -236,11 +254,20 @@ describe('getMessageUpdateStrategy', () => {
       narrow: 'some narrow',
     };
     const nextProps = {
-      messages: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }],
+      messages: [
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+        { id: 4 },
+        { id: 5 },
+        { id: 6 },
+      ],
       narrow: 'some narrow',
     };
 
-    const result = getMessageUpdateStrategy(getMessageTransitionProps(prevProps, nextProps));
+    const result = getMessageUpdateStrategy(
+      getMessageTransitionProps(prevProps, nextProps),
+    );
 
     expect(result).toEqual('preserve-position');
   });
@@ -251,11 +278,20 @@ describe('getMessageUpdateStrategy', () => {
       narrow: 'some narrow',
     };
     const nextProps = {
-      messages: [{ id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }, { id: 9 }],
+      messages: [
+        { id: 4 },
+        { id: 5 },
+        { id: 6 },
+        { id: 7 },
+        { id: 8 },
+        { id: 9 },
+      ],
       narrow: 'some narrow',
     };
 
-    const result = getMessageUpdateStrategy(getMessageTransitionProps(prevProps, nextProps));
+    const result = getMessageUpdateStrategy(
+      getMessageTransitionProps(prevProps, nextProps),
+    );
 
     expect(result).toEqual('preserve-position');
   });
@@ -270,7 +306,9 @@ describe('getMessageUpdateStrategy', () => {
       narrow: 'some narrow',
     };
 
-    const result = getMessageUpdateStrategy(getMessageTransitionProps(prevProps, nextProps));
+    const result = getMessageUpdateStrategy(
+      getMessageTransitionProps(prevProps, nextProps),
+    );
 
     expect(result).toEqual('scroll-to-bottom-if-near-bottom');
   });
@@ -285,7 +323,9 @@ describe('getMessageUpdateStrategy', () => {
       narrow: 'some narrow',
     };
 
-    const result = getMessageUpdateStrategy(getMessageTransitionProps(prevProps, nextProps));
+    const result = getMessageUpdateStrategy(
+      getMessageTransitionProps(prevProps, nextProps),
+    );
 
     expect(result).toEqual('scroll-to-anchor');
   });

@@ -525,7 +525,10 @@ export type NotificationStream = NotificationCommon & {
   topic: string,
 };
 
-export type Notification = NotificationPrivate | NotificationGroup | NotificationStream;
+export type Notification =
+  | NotificationPrivate
+  | NotificationGroup
+  | NotificationStream;
 
 export type NamedUser = {
   id: number,

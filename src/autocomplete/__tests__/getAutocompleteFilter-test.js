@@ -4,15 +4,24 @@ import getAutocompleteFilter from '../getAutocompleteFilter';
 describe('getAutocompleteFilter', () => {
   let selection = { start: 0, end: 0 };
   test('get empty object for empty text', () => {
-    expect(getAutocompleteFilter('', selection)).toEqual({ filter: '', lastWordPrefix: '' });
+    expect(getAutocompleteFilter('', selection)).toEqual({
+      filter: '',
+      lastWordPrefix: '',
+    });
   });
 
   test('get @users filters', () => {
     selection = { start: 1, end: 1 };
-    expect(getAutocompleteFilter('@', selection)).toEqual({ filter: '', lastWordPrefix: '@' });
+    expect(getAutocompleteFilter('@', selection)).toEqual({
+      filter: '',
+      lastWordPrefix: '@',
+    });
 
     selection = { start: 3, end: 3 };
-    expect(getAutocompleteFilter('@ab', selection)).toEqual({ filter: 'ab', lastWordPrefix: '@' });
+    expect(getAutocompleteFilter('@ab', selection)).toEqual({
+      filter: 'ab',
+      lastWordPrefix: '@',
+    });
 
     selection = { start: 6, end: 6 };
     expect(getAutocompleteFilter('@ab cd', selection)).toEqual({
@@ -29,10 +38,16 @@ describe('getAutocompleteFilter', () => {
 
   test('get #streams filters', () => {
     selection = { start: 1, end: 1 };
-    expect(getAutocompleteFilter('#', selection)).toEqual({ filter: '', lastWordPrefix: '#' });
+    expect(getAutocompleteFilter('#', selection)).toEqual({
+      filter: '',
+      lastWordPrefix: '#',
+    });
 
     selection = { start: 3, end: 3 };
-    expect(getAutocompleteFilter('#ab', selection)).toEqual({ filter: 'ab', lastWordPrefix: '#' });
+    expect(getAutocompleteFilter('#ab', selection)).toEqual({
+      filter: 'ab',
+      lastWordPrefix: '#',
+    });
 
     selection = { start: 6, end: 6 };
     expect(getAutocompleteFilter('#ab cd', selection)).toEqual({
@@ -49,10 +64,16 @@ describe('getAutocompleteFilter', () => {
 
   test('get :emoji filters', () => {
     selection = { start: 1, end: 1 };
-    expect(getAutocompleteFilter(':', selection)).toEqual({ filter: '', lastWordPrefix: ':' });
+    expect(getAutocompleteFilter(':', selection)).toEqual({
+      filter: '',
+      lastWordPrefix: ':',
+    });
 
     selection = { start: 3, end: 3 };
-    expect(getAutocompleteFilter(':ab', selection)).toEqual({ filter: 'ab', lastWordPrefix: ':' });
+    expect(getAutocompleteFilter(':ab', selection)).toEqual({
+      filter: 'ab',
+      lastWordPrefix: ':',
+    });
 
     selection = { start: 6, end: 6 };
     expect(getAutocompleteFilter(':ab cd', selection)).toEqual({
@@ -75,7 +96,10 @@ describe('getAutocompleteFilter', () => {
     });
 
     selection = { start: 2, end: 2 };
-    expect(getAutocompleteFilter(':s@ab', selection)).toEqual({ filter: 's', lastWordPrefix: ':' });
+    expect(getAutocompleteFilter(':s@ab', selection)).toEqual({
+      filter: 's',
+      lastWordPrefix: ':',
+    });
 
     selection = { start: 12, end: 12 };
     expect(getAutocompleteFilter(':smile@ab cd', selection)).toEqual({

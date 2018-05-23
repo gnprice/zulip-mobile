@@ -25,7 +25,9 @@ class NotificationDiagScreen extends PureComponent<Props> {
         <FlatList
           data={Object.keys(variables)}
           keyExtractor={item => item}
-          renderItem={({ item }) => <InfoItem label={item} value={variables[item]} />}
+          renderItem={({ item }) => (
+            <InfoItem label={item} value={variables[item]} />
+          )}
         />
       </Screen>
     );

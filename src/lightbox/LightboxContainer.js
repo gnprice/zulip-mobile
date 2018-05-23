@@ -10,7 +10,10 @@ import { getAuth } from '../selectors';
 import { getResource } from '../utils/url';
 import AnimatedLightboxHeader from './AnimatedLightboxHeader';
 import AnimatedLightboxFooter from './AnimatedLightboxFooter';
-import { constructActionSheetButtons, executeActionSheetAction } from './LightboxActionSheet';
+import {
+  constructActionSheetButtons,
+  executeActionSheetAction,
+} from './LightboxActionSheet';
 import { NAVBAR_SIZE } from '../styles';
 import { getGravatarFromEmail } from '../utils/avatar';
 
@@ -93,7 +96,9 @@ class LightboxContainer extends PureComponent<Props, State> {
   render() {
     const { src, message, auth } = this.props;
     const footerMessage =
-      message.type === 'stream' ? `Shared in #${message.display_recipient}` : 'Shared with you';
+      message.type === 'stream'
+        ? `Shared in #${message.display_recipient}`
+        : 'Shared with you';
     const resource = getResource(src, auth);
     const { width, height } = Dimensions.get('window');
 
@@ -105,7 +110,9 @@ class LightboxContainer extends PureComponent<Props, State> {
           from={-NAVBAR_SIZE}
           to={0}
           timestamp={message.timestamp}
-          avatarUrl={message.avatar_url || getGravatarFromEmail(message.sender_email)}
+          avatarUrl={
+            message.avatar_url || getGravatarFromEmail(message.sender_email)
+          }
           senderName={message.sender_full_name}
           realm={auth.realm}
           {...this.getAnimationProps()}

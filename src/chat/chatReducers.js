@@ -37,7 +37,8 @@ const messageFetchComplete = (
   const key = JSON.stringify(action.narrow);
   const messages = state[key] || NULL_ARRAY;
   const messagesById = groupItemsById(messages);
-  const replaceExisting = action.anchor === 0 || action.anchor === Number.MAX_SAFE_INTEGER;
+  const replaceExisting =
+    action.anchor === 0 || action.anchor === Number.MAX_SAFE_INTEGER;
   const newMessages = replaceExisting
     ? action.messages.map(
         item =>
@@ -58,7 +59,10 @@ const messageFetchComplete = (
   };
 };
 
-const eventReactionAdd = (state: MessageState, action: EventReactionAddAction): MessageState =>
+const eventReactionAdd = (
+  state: MessageState,
+  action: EventReactionAddAction,
+): MessageState =>
   chatUpdater(state, action.messageId, oldMessage => ({
     ...oldMessage,
     reactions: oldMessage.reactions.concat({
@@ -74,14 +78,22 @@ const eventReactionRemove = (
   chatUpdater(state, action.messageId, oldMessage => ({
     ...oldMessage,
     reactions: oldMessage.reactions.filter(
-      x => !(x.emoji_name === action.emoji && x.user.email === action.user.email),
+      x =>
+        !(x.emoji_name === action.emoji && x.user.email === action.user.email),
     ),
   }));
 
-const eventNewMessage = (state: MessageState, action: EventNewMessageAction): MessageState => {
+const eventNewMessage = (
+  state: MessageState,
+  action: EventNewMessageAction,
+): MessageState => {
   let stateChange = false;
   const newState = Object.keys(state).reduce((msg, key) => {
-    const isInNarrow = isMessageInNarrow(action.message, JSON.parse(key), action.ownEmail);
+    const isInNarrow = isMessageInNarrow(
+      action.message,
+      JSON.parse(key),
+      action.ownEmail,
+    );
     const isCaughtUp = action.caughtUp[key] && action.caughtUp[key].newer;
     const messageDoesNotExist =
       state[key].find(item => action.message.id === item.id) === undefined;
@@ -114,7 +126,10 @@ const eventMessageDelete = (
   return stateChange ? newState : state;
 };
 
-const eventUpdateMessage = (state: MessageState, action: EventUpdateMessageAction): MessageState =>
+const eventUpdateMessage = (
+  state: MessageState,
+  action: EventUpdateMessageAction,
+): MessageState =>
   chatUpdater(state, action.message_id, oldMessage => ({
     ...oldMessage,
     content: action.rendered_content || oldMessage.content,
@@ -127,13 +142,15 @@ const eventUpdateMessage = (state: MessageState, action: EventUpdateMessageActio
               prev_rendered_content: action.orig_rendered_content,
               prev_subject: oldMessage.subject,
               timestamp: action.edit_timestamp,
-              prev_rendered_content_version: action.prev_rendered_content_version,
+              prev_rendered_content_version:
+                action.prev_rendered_content_version,
               user_id: action.user_id,
             }
           : {
               prev_rendered_content: action.orig_rendered_content,
               timestamp: action.edit_timestamp,
-              prev_rendered_content_version: action.prev_rendered_content_version,
+              prev_rendered_content_version:
+                action.prev_rendered_content_version,
               user_id: action.user_id,
             }
         : {
@@ -146,7 +163,10 @@ const eventUpdateMessage = (state: MessageState, action: EventUpdateMessageActio
     last_edit_timestamp: action.edit_timestamp,
   }));
 
-export default (state: MessageState = initialState, action: MessageAction): MessageState => {
+export default (
+  state: MessageState = initialState,
+  action: MessageAction,
+): MessageState => {
   switch (action.type) {
     case APP_REFRESH:
     case LOGOUT:

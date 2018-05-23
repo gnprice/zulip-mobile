@@ -68,7 +68,9 @@ describe('getIsActiveStreamSubscribed', () => {
       subscriptions: [{ name: 'announce' }],
     });
 
-    expect(getIsActiveStreamSubscribed(streamNarrow('announce'))(state)).toBe(true);
+    expect(getIsActiveStreamSubscribed(streamNarrow('announce'))(state)).toBe(
+      true,
+    );
   });
 
   test('return false if current narrowed stream is not subscribed', () => {
@@ -84,7 +86,9 @@ describe('getIsActiveStreamSubscribed', () => {
       subscriptions: [{ name: 'announce' }],
     });
 
-    expect(getIsActiveStreamSubscribed(topicNarrow('announce', 'news'))(state)).toBe(true);
+    expect(
+      getIsActiveStreamSubscribed(topicNarrow('announce', 'news'))(state),
+    ).toBe(true);
   });
 
   test('return false if stream of current narrowed topic is not subscribed', () => {
@@ -92,7 +96,9 @@ describe('getIsActiveStreamSubscribed', () => {
       subscriptions: [{ name: 'announce' }],
     });
 
-    expect(getIsActiveStreamSubscribed(topicNarrow('all', 'news'))(state)).toBe(false);
+    expect(getIsActiveStreamSubscribed(topicNarrow('all', 'news'))(state)).toBe(
+      false,
+    );
   });
 });
 
@@ -101,7 +107,11 @@ describe('getSubscribedStreams', () => {
     const state = deepFreeze({
       streams: [
         { stream_id: 1, name: 'all', description: 'stream for all' },
-        { stream_id: 2, name: 'new announce', description: 'stream for announce' },
+        {
+          stream_id: 2,
+          name: 'new announce',
+          description: 'stream for announce',
+        },
         { stream_id: 3, name: 'Denmark', description: 'Denmark is awesome' },
         { stream_id: 4, name: 'general', description: 'stream for general' },
       ],
@@ -113,9 +123,24 @@ describe('getSubscribedStreams', () => {
     });
 
     const expectedResult = [
-      { stream_id: 1, name: 'all', color: '#001', description: 'stream for all' },
-      { stream_id: 2, name: 'new announce', color: '#002', description: 'stream for announce' },
-      { stream_id: 4, name: 'general', color: '#003', description: 'stream for general' },
+      {
+        stream_id: 1,
+        name: 'all',
+        color: '#001',
+        description: 'stream for all',
+      },
+      {
+        stream_id: 2,
+        name: 'new announce',
+        color: '#002',
+        description: 'stream for announce',
+      },
+      {
+        stream_id: 4,
+        name: 'general',
+        color: '#003',
+        description: 'stream for general',
+      },
     ];
 
     const actualResult = getSubscribedStreams(state);

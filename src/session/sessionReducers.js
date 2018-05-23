@@ -65,28 +65,43 @@ const appRefresh = (
   needsInitialFetch: true,
 });
 
-const loginSuccess = (state: SessionState, action: LoginSuccessAction): SessionState => ({
+const loginSuccess = (
+  state: SessionState,
+  action: LoginSuccessAction,
+): SessionState => ({
   ...state,
   needsInitialFetch: !!action.apiKey,
 });
 
-const rehydrate = (state: SessionState, action: RehydrateAction): SessionState => ({
+const rehydrate = (
+  state: SessionState,
+  action: RehydrateAction,
+): SessionState => ({
   ...state,
   isHydrated: true,
   needsInitialFetch: !!getAuth(action.payload).apiKey,
 });
 
-const realmInit = (state: SessionState, action: RealmInitAction): SessionState => ({
+const realmInit = (
+  state: SessionState,
+  action: RealmInitAction,
+): SessionState => ({
   ...state,
   eventQueueId: action.data.queue_id,
 });
 
-const appOnline = (state: SessionState, action: AppOnlineAction): SessionState => ({
+const appOnline = (
+  state: SessionState,
+  action: AppOnlineAction,
+): SessionState => ({
   ...state,
   isOnline: action.isOnline,
 });
 
-const appState = (state: SessionState, action: AppStateAction): SessionState => ({
+const appState = (
+  state: SessionState,
+  action: AppStateAction,
+): SessionState => ({
   ...state,
   isActive: action.isActive,
 });
@@ -107,17 +122,26 @@ const initSafeAreaInsets = (
   safeAreaInsets: action.safeAreaInsets,
 });
 
-const appOrientation = (state: SessionState, action: AppOrientationAction): SessionState => ({
+const appOrientation = (
+  state: SessionState,
+  action: AppOrientationAction,
+): SessionState => ({
   ...state,
   orientation: action.orientation,
 });
 
-const cancelEditMessage = (state: SessionState, action: CancelEditMessageAction): SessionState => ({
+const cancelEditMessage = (
+  state: SessionState,
+  action: CancelEditMessageAction,
+): SessionState => ({
   ...state,
   editMessage: null,
 });
 
-const startEditMessage = (state: SessionState, action: StartEditMessageAction): SessionState => ({
+const startEditMessage = (
+  state: SessionState,
+  action: StartEditMessageAction,
+): SessionState => ({
   ...state,
   editMessage: {
     id: action.messageId,
@@ -131,7 +155,10 @@ const toggleOutboxSending = (
   action: ToggleOutboxSendingAction,
 ): SessionState => ({ ...state, outboxSending: action.sending });
 
-const debugFlagToggle = (state: SessionState, action: DebugFlagToggleAction): SessionState => ({
+const debugFlagToggle = (
+  state: SessionState,
+  action: DebugFlagToggleAction,
+): SessionState => ({
   ...state,
   debug: {
     ...state.debug,
@@ -139,7 +166,10 @@ const debugFlagToggle = (state: SessionState, action: DebugFlagToggleAction): Se
   },
 });
 
-export default (state: SessionState = initialState, action: SessionAction): SessionState => {
+export default (
+  state: SessionState = initialState,
+  action: SessionAction,
+): SessionState => {
   switch (action.type) {
     case APP_REFRESH:
     case ACCOUNT_SWITCH:

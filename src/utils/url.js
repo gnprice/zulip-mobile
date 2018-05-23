@@ -3,7 +3,13 @@ import base64 from 'base-64';
 import urlRegex from 'url-regex';
 
 import type { Auth, Narrow, User } from '../types';
-import { homeNarrow, topicNarrow, streamNarrow, groupNarrow, specialNarrow } from './narrow';
+import {
+  homeNarrow,
+  topicNarrow,
+  streamNarrow,
+  groupNarrow,
+  specialNarrow,
+} from './narrow';
 import { getUserById } from '../users/userHelpers';
 import { transformToEncodedURI } from './string';
 
@@ -27,17 +33,24 @@ export const getAuthHeader = (email: string, apiKey: string): ?string =>
 
 export const encodeAsURI = (params: { [key: string]: any }): string =>
   Object.keys(params)
-    .map((key: string) => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+    .map(
+      (key: string) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`,
+    )
     .join('&');
 
 export const getFullUrl = (url: string = '', realm: string): string =>
-  !url.startsWith('http') ? `${realm}${url.startsWith('/') ? '' : '/'}${url}` : url;
+  !url.startsWith('http')
+    ? `${realm}${url.startsWith('/') ? '' : '/'}${url}`
+    : url;
 
 export const isUrlOnRealm = (url: string = '', realm: string): boolean =>
   url.startsWith('/') || url.startsWith(realm) || !/^(http|www.)/i.test(url);
 
 export const isUrlInAppLink = (url: string, realm: string): boolean =>
-  isUrlOnRealm(url, realm) ? /^(\/#narrow|#narrow)/i.test(url.split(realm).pop()) : false;
+  isUrlOnRealm(url, realm)
+    ? /^(\/#narrow|#narrow)/i.test(url.split(realm).pop())
+    : false;
 
 export const isMessageLink = (url: string, realm: string): boolean =>
   isUrlInAppLink(url, realm) && url.includes('near');
@@ -63,7 +76,9 @@ export const isGroupLink = (url: string, realm: string): boolean => {
 
 export const isStreamLink = (url: string, realm: string): boolean => {
   const paths = getPathsFromUrl(url, realm);
-  return isUrlInAppLink(url, realm) && paths.length === 2 && paths[0] === 'stream';
+  return (
+    isUrlInAppLink(url, realm) && paths.length === 2 && paths[0] === 'stream'
+  );
 };
 
 export const isSpecialLink = (url: string, realm: string): boolean => {
@@ -77,18 +92,26 @@ export const isSpecialLink = (url: string, realm: string): boolean => {
 };
 
 export const isEmojiUrl = (url: string, realm: string): boolean =>
-  isUrlOnRealm(url, realm) && url.includes('/static/generated/emoji/images/emoji/unicode/');
+  isUrlOnRealm(url, realm) &&
+  url.includes('/static/generated/emoji/images/emoji/unicode/');
 
 export const getEmojiUrl = (unicode: string): string =>
   `/static/generated/emoji/images/emoji/unicode/${unicode}.png`;
 
-export const getNarrowFromLink = (url: string, realm: string, users: User[]): Narrow => {
+export const getNarrowFromLink = (
+  url: string,
+  realm: string,
+  users: User[],
+): Narrow => {
   const paths = getPathsFromUrl(url, realm);
 
   if (isGroupLink(url, realm)) {
     const recipients = paths[1].split('-')[0].split(',');
     return groupNarrow(
-      recipients.map((recipient: string) => getUserById(users, parseInt(recipient, 10)).email),
+      recipients.map(
+        (recipient: string) =>
+          getUserById(users, parseInt(recipient, 10)).email,
+      ),
     );
   } else if (isTopicLink(url, realm)) {
     return topicNarrow(
@@ -107,7 +130,9 @@ export const getNarrowFromLink = (url: string, realm: string, users: User[]): Na
 export const getMessageIdFromLink = (url: string, realm: string): number => {
   const paths = getPathsFromUrl(url, realm);
 
-  return isMessageLink(url, realm) ? parseInt(paths[paths.lastIndexOf('near') + 1], 10) : 0;
+  return isMessageLink(url, realm)
+    ? parseInt(paths[paths.lastIndexOf('near') + 1], 10)
+    : 0;
 };
 
 const getResourceWithAuth = (uri: string, auth: Auth) => ({
@@ -122,17 +147,25 @@ const getResourceNoAuth = (uri: string) => ({
 });
 
 export const getResource = (uri: string, auth: Auth): Object =>
-  isUrlOnRealm(uri, auth.realm) ? getResourceWithAuth(uri, auth) : getResourceNoAuth(uri);
+  isUrlOnRealm(uri, auth.realm)
+    ? getResourceWithAuth(uri, auth)
+    : getResourceNoAuth(uri);
 
-export const hasProtocol = (url: string = '') => url.search(/\b(http|https):\/\//) !== -1;
+export const hasProtocol = (url: string = '') =>
+  url.search(/\b(http|https):\/\//) !== -1;
 
 export const fixRealmUrl = (url: string = '') =>
-  url.length > 0 ? (!hasProtocol(url) ? 'https://' : '') + url.trim().replace(/\s+|\/$/g, '') : '';
+  url.length > 0
+    ? (!hasProtocol(url) ? 'https://' : '') + url.trim().replace(/\s+|\/$/g, '')
+    : '';
 
-export const getFileExtension = (filename: string): string => filename.split('.').pop();
+export const getFileExtension = (filename: string): string =>
+  filename.split('.').pop();
 
 export const isUrlAnImage = (url: string): boolean =>
-  ['jpg', 'jpeg', 'png', 'gif', 'bmp'].includes(getFileExtension(url).toLowerCase());
+  ['jpg', 'jpeg', 'png', 'gif', 'bmp'].includes(
+    getFileExtension(url).toLowerCase(),
+  );
 
 const mimes = {
   jpeg: 'image/jpeg',
@@ -155,18 +188,27 @@ export const autocompleteUrl = (
 ): string =>
   value.length > 0
     ? `${hasProtocol(value) ? '' : protocol}${value || 'your-org'}${
-        value.indexOf('.') === -1 ? append : !value.match(/.+\..+\.+./g) ? shortAppend : ''
+        value.indexOf('.') === -1
+          ? append
+          : !value.match(/.+\..+\.+./g)
+            ? shortAppend
+            : ''
       }`
     : '';
 
-export const isValidUrl = (url: string): boolean => urlRegex({ exact: true }).test(url);
+export const isValidUrl = (url: string): boolean =>
+  urlRegex({ exact: true }).test(url);
 
 // This formula borrowed from MDN:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
-const escapeRegExp = (str: string): string => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const escapeRegExp = (str: string): string =>
+  str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 export const appendAuthToImages = (messageStr: string, auth: Auth): string =>
   messageStr.replace(
-    new RegExp(`<img src="((?:|/|${escapeRegExp(auth.realm)}/)user_uploads/[^"]*)"`, 'g'),
+    new RegExp(
+      `<img src="((?:|/|${escapeRegExp(auth.realm)}/)user_uploads/[^"]*)"`,
+      'g',
+    ),
     `<img src="$1?api_key=${auth.apiKey}"`,
   );

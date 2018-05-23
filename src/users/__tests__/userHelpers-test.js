@@ -23,14 +23,20 @@ describe('filterUserList', () => {
   });
 
   test('returns same list if no filter', () => {
-    const users = deepFreeze([{ email: 'user1@example.com' }, { email: 'user2@example.com' }]);
+    const users = deepFreeze([
+      { email: 'user1@example.com' },
+      { email: 'user2@example.com' },
+    ]);
 
     const filteredUsers = filterUserList(users);
     expect(filteredUsers).toEqual(users);
   });
 
   test("filters out user's own entry", () => {
-    const users = deepFreeze([{ email: 'email@example.com' }, { email: 'my@example.com' }]);
+    const users = deepFreeze([
+      { email: 'email@example.com' },
+      { email: 'my@example.com' },
+    ]);
 
     const shouldMatch = [{ email: 'email@example.com' }];
     const filteredUsers = filterUserList(users, '', 'my@example.com');
@@ -84,7 +90,11 @@ describe('getAutocompleteSuggestion', () => {
       },
       { email: 'email@example.com', full_name: 'Some Guy' },
     ];
-    const filteredUsers = getAutocompleteSuggestion(users, '', 'my@example.com');
+    const filteredUsers = getAutocompleteSuggestion(
+      users,
+      '',
+      'my@example.com',
+    );
     expect(filteredUsers).toEqual(shouldMatch);
   });
 
@@ -139,9 +149,17 @@ describe('getAutocompleteSuggestion', () => {
 
 describe('sortUserList', () => {
   test('sorts list by name', () => {
-    const users = deepFreeze([{ full_name: 'abc' }, { full_name: 'xyz' }, { full_name: 'jkl' }]);
+    const users = deepFreeze([
+      { full_name: 'abc' },
+      { full_name: 'xyz' },
+      { full_name: 'jkl' },
+    ]);
     const presences = {};
-    const shouldMatch = [{ full_name: 'abc' }, { full_name: 'jkl' }, { full_name: 'xyz' }];
+    const shouldMatch = [
+      { full_name: 'abc' },
+      { full_name: 'jkl' },
+      { full_name: 'xyz' },
+    ];
 
     const sortedUsers = sortUserList(users, presences);
 
@@ -158,10 +176,17 @@ describe('sortUserList', () => {
     const presences = {
       'mark@example.com': { aggregated: { status: 'offline' } },
       'john@example.com': {
-        aggregated: { status: 'active', timestamp: Date.now() / 1000 - 120 * 60 },
+        aggregated: {
+          status: 'active',
+          timestamp: Date.now() / 1000 - 120 * 60,
+        },
       },
-      'bob@example.com': { aggregated: { status: 'idle', timestamp: Date.now() / 1000 - 20 * 60 } },
-      'rick@example.com': { aggregated: { status: 'active', timestamp: Date.now() / 1000 } },
+      'bob@example.com': {
+        aggregated: { status: 'idle', timestamp: Date.now() / 1000 - 20 * 60 },
+      },
+      'rick@example.com': {
+        aggregated: { status: 'active', timestamp: Date.now() / 1000 },
+      },
     };
     const shouldMatch = [
       { full_name: 'Rick', email: 'rick@example.com' },
@@ -239,7 +264,9 @@ describe('filterUserStartWith', () => {
       { full_name: 'Apple', email: 'a@example.com' },
       { full_name: 'app', email: 'p@p.com' },
     ];
-    expect(filterUserStartWith(users, 'app', 'own@example.com')).toEqual(expectedUsers);
+    expect(filterUserStartWith(users, 'app', 'own@example.com')).toEqual(
+      expectedUsers,
+    );
   });
 });
 
@@ -259,7 +286,9 @@ describe('filterUserByInitials', () => {
       { full_name: 'Mobile Application', email: 'p3@p.com' },
       { full_name: 'Mac App', email: 'p@p2.com' },
     ];
-    expect(filterUserByInitials(users, 'ma', 'own@example.com')).toEqual(expectedUsers);
+    expect(filterUserByInitials(users, 'ma', 'own@example.com')).toEqual(
+      expectedUsers,
+    );
   });
 });
 
@@ -281,7 +310,9 @@ describe('groupUsersByStatus', () => {
     ]);
     const presence = {
       'allen@example.com': { aggregated: { status: 'active' } },
-      'bob@example.com': { aggregated: { status: 'idle', timestamp: Date.now() / 1000 - 10 } },
+      'bob@example.com': {
+        aggregated: { status: 'idle', timestamp: Date.now() / 1000 - 10 },
+      },
       'carter@example.com': { aggregated: { status: 'offline' } },
     };
     const expectedResult = {
@@ -311,7 +342,9 @@ describe('filterUserThatContains', () => {
       { full_name: 'mam', email: 'f@app.com' },
       { full_name: 'Mac App', email: 'p@p2.com' },
     ];
-    expect(filterUserThatContains(users, 'ma', 'own@example.com')).toEqual(expectedUsers);
+    expect(filterUserThatContains(users, 'ma', 'own@example.com')).toEqual(
+      expectedUsers,
+    );
   });
 });
 
@@ -328,7 +361,9 @@ describe('filterUserMatchesEmail', () => {
     ]);
 
     const expectedUsers = [{ full_name: 'Apple', email: 'a@example.com' }];
-    expect(filterUserMatchesEmail(users, 'example', 'own@example.com')).toEqual(expectedUsers);
+    expect(filterUserMatchesEmail(users, 'example', 'own@example.com')).toEqual(
+      expectedUsers,
+    );
   });
 });
 

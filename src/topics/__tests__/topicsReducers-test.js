@@ -1,7 +1,11 @@
 import deepFreeze from 'deep-freeze';
 
 import topicsReducers from '../topicsReducers';
-import { ACCOUNT_SWITCH, INIT_TOPICS, EVENT_NEW_MESSAGE } from '../../actionConstants';
+import {
+  ACCOUNT_SWITCH,
+  INIT_TOPICS,
+  EVENT_NEW_MESSAGE,
+} from '../../actionConstants';
 import { NULL_OBJECT } from '../../nullObjects';
 
 describe('streamsReducers', () => {

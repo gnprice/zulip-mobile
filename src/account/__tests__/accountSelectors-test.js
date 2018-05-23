@@ -16,7 +16,10 @@ test('getAuth returns an empty object when no accounts', () => {
 
 test('getAuth returns the auth information from the first account', () => {
   const state = deepFreeze({
-    accounts: [{ realm: 'https://realm1.com' }, { realm: 'https://realm2.com' }],
+    accounts: [
+      { realm: 'https://realm1.com' },
+      { realm: 'https://realm2.com' },
+    ],
   });
 
   const auth = getAuth(state);

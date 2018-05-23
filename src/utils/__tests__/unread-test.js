@@ -1,4 +1,8 @@
-import { countUnread, filterUnreadMessageIds, filterUnreadMessagesInRange } from '../unread';
+import {
+  countUnread,
+  filterUnreadMessageIds,
+  filterUnreadMessagesInRange,
+} from '../unread';
 
 describe('filterUnreadMessageIds', () => {
   test('empty message list has no unread messages', () => {
@@ -58,7 +62,14 @@ describe('filterUnreadMessagesInRange', () => {
   });
 
   test('messages with no flags or empty flag array are not read', () => {
-    const messages = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }];
+    const messages = [
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+      { id: 4 },
+      { id: 5 },
+      { id: 6 },
+    ];
     const flags = {
       read: {
         3: true,
@@ -72,7 +83,14 @@ describe('filterUnreadMessagesInRange', () => {
   });
 
   test('if start is after end no messages are returned', () => {
-    const messages = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }];
+    const messages = [
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+      { id: 4 },
+      { id: 5 },
+      { id: 6 },
+    ];
     const flags = {};
     const expectedUnread = [];
 
@@ -86,7 +104,12 @@ describe('filterUnreadMessagesInRange', () => {
     const flags = {};
     const expectedUnread = [1, 2];
 
-    const actualUnread = filterUnreadMessagesInRange(messages, flags, 1, Number.MAX_SAFE_INTEGER);
+    const actualUnread = filterUnreadMessagesInRange(
+      messages,
+      flags,
+      1,
+      Number.MAX_SAFE_INTEGER,
+    );
 
     expect(actualUnread).toEqual(expectedUnread);
   });

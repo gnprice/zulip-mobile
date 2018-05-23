@@ -6,7 +6,13 @@ import ImagePicker from 'react-native-image-picker';
 
 import type { Actions, Context, Narrow } from '../types';
 import { showErrorAlert } from '../utils/info';
-import { IconPlus, IconLeft, IconPeople, IconImage, IconCamera } from '../common/Icons';
+import {
+  IconPlus,
+  IconLeft,
+  IconPeople,
+  IconImage,
+  IconCamera,
+} from '../common/Icons';
 import AnimatedComponent from '../animation/AnimatedComponent';
 
 type Props = {
@@ -63,7 +69,12 @@ export default class ComposeMenu extends Component<Props> {
 
     return (
       <View style={styles.composeMenu}>
-        <AnimatedComponent property="width" useNativeDriver={false} visible={expanded} width={120}>
+        <AnimatedComponent
+          property="width"
+          useNativeDriver={false}
+          visible={expanded}
+          width={120}
+        >
           <View style={styles.composeMenu}>
             <IconPeople
               style={styles.composeMenuButton}
@@ -82,8 +93,20 @@ export default class ComposeMenu extends Component<Props> {
             />
           </View>
         </AnimatedComponent>
-        {!expanded && <IconPlus style={styles.expandButton} size={24} onPress={onExpandContract} />}
-        {expanded && <IconLeft style={styles.expandButton} size={24} onPress={onExpandContract} />}
+        {!expanded && (
+          <IconPlus
+            style={styles.expandButton}
+            size={24}
+            onPress={onExpandContract}
+          />
+        )}
+        {expanded && (
+          <IconLeft
+            style={styles.expandButton}
+            size={24}
+            onPress={onExpandContract}
+          />
+        )}
       </View>
     );
   }

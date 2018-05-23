@@ -21,12 +21,18 @@ export type UpdateStrategy =
   | 'scroll-to-anchor'
   | 'scroll-to-bottom-if-near-bottom';
 
-export const getMessageTransitionProps = (prevProps: Props, nextProps: Props): TransitionProps => {
+export const getMessageTransitionProps = (
+  prevProps: Props,
+  nextProps: Props,
+): TransitionProps => {
   const sameNarrow = isEqual(prevProps.narrow, nextProps.narrow);
   const noMessages = nextProps.messages.length === 0;
-  const noNewMessages = sameNarrow && prevProps.messages.length === nextProps.messages.length;
+  const noNewMessages =
+    sameNarrow && prevProps.messages.length === nextProps.messages.length;
   const allNewMessages =
-    sameNarrow && prevProps.messages.length === 0 && nextProps.messages.length > 0;
+    sameNarrow &&
+    prevProps.messages.length === 0 &&
+    nextProps.messages.length > 0;
   const oldMessagesAdded =
     sameNarrow &&
     prevProps.messages.length > 0 &&
@@ -48,7 +54,8 @@ export const getMessageTransitionProps = (prevProps: Props, nextProps: Props): T
     sameNarrow &&
     prevProps.messages.length > 0 &&
     nextProps.messages.length > 0 &&
-    prevProps.messages[prevProps.messages.length - 1].id < nextProps.messages[0].id;
+    prevProps.messages[prevProps.messages.length - 1].id <
+      nextProps.messages[0].id;
 
   return {
     sameNarrow,
@@ -62,7 +69,9 @@ export const getMessageTransitionProps = (prevProps: Props, nextProps: Props): T
   };
 };
 
-export const getMessageUpdateStrategy = (transitionProps: TransitionProps): UpdateStrategy => {
+export const getMessageUpdateStrategy = (
+  transitionProps: TransitionProps,
+): UpdateStrategy => {
   if (transitionProps.noMessages) {
     return 'replace';
   } else if (

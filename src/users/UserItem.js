@@ -53,11 +53,21 @@ export default class UserItem extends PureComponent<Props> {
 
   render() {
     const { styles } = this.context;
-    const { fullName, avatarUrl, presence, isSelected, unreadCount, showEmail, email } = this.props;
+    const {
+      fullName,
+      avatarUrl,
+      presence,
+      isSelected,
+      unreadCount,
+      showEmail,
+      email,
+    } = this.props;
 
     return (
       <Touchable onPress={this.handlePress}>
-        <View style={[styles.listItem, isSelected && componentStyles.selectedRow]}>
+        <View
+          style={[styles.listItem, isSelected && componentStyles.selectedRow]}
+        >
           <Avatar
             size={32}
             avatarUrl={avatarUrl}
@@ -68,7 +78,10 @@ export default class UserItem extends PureComponent<Props> {
           />
           <View style={componentStyles.textWrapper}>
             <RawLabel
-              style={[componentStyles.text, isSelected && componentStyles.selectedText]}
+              style={[
+                componentStyles.text,
+                isSelected && componentStyles.selectedText,
+              ]}
               text={fullName}
               numberOfLines={1}
               ellipsizeMode="tail"

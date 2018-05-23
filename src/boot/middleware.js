@@ -6,9 +6,16 @@ import createActionBuffer from 'redux-action-buffer';
 import { createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
 import config from '../config';
 
-const reactNavigationMiddleware = createReactNavigationReduxMiddleware('root', state => state.nav);
+const reactNavigationMiddleware = createReactNavigationReduxMiddleware(
+  'root',
+  state => state.nav,
+);
 
-const middleware = [reactNavigationMiddleware, thunk, createActionBuffer(REHYDRATE)];
+const middleware = [
+  reactNavigationMiddleware,
+  thunk,
+  createActionBuffer(REHYDRATE),
+];
 
 if (config.enableReduxLogging) {
   middleware.push(

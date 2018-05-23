@@ -1,6 +1,11 @@
 /* @flow */
 import type { AuthenticationMethods } from '../types';
-import { IconPrivate, IconGoogle, IconGitHub, IconTerminal } from '../common/Icons';
+import {
+  IconPrivate,
+  IconGoogle,
+  IconGitHub,
+  IconTerminal,
+} from '../common/Icons';
 
 const authentications = [
   {
@@ -41,7 +46,9 @@ const authentications = [
   },
 ];
 
-export const activeAuthentications = (authenticationMethods: AuthenticationMethods) =>
+export const activeAuthentications = (
+  authenticationMethods: AuthenticationMethods,
+) =>
   authentications.filter(
     auth =>
       authenticationMethods[auth.method] &&

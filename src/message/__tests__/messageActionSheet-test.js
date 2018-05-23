@@ -1,6 +1,9 @@
 import deepFreeze from 'deep-freeze';
 
-import { constructActionButtons, constructHeaderActionButtons } from '../messageActionSheet';
+import {
+  constructActionButtons,
+  constructHeaderActionButtons,
+} from '../messageActionSheet';
 import extractString from '../../i18n/extractString';
 
 describe('constructActionButtons', () => {
@@ -76,7 +79,12 @@ describe('constructHeaderActionButtons', () => {
 
     const mute = deepFreeze([['electron issues', 'issue #556']]);
 
-    const buttons = constructHeaderActionButtons({ message, subscriptions, mute, getString });
+    const buttons = constructHeaderActionButtons({
+      message,
+      subscriptions,
+      mute,
+      getString,
+    });
 
     expect(buttons).toContain('Unmute topic');
   });
@@ -95,7 +103,12 @@ describe('constructHeaderActionButtons', () => {
 
     const mute = deepFreeze([]);
 
-    const buttons = constructHeaderActionButtons({ message, subscriptions, mute, getString });
+    const buttons = constructHeaderActionButtons({
+      message,
+      subscriptions,
+      mute,
+      getString,
+    });
 
     expect(buttons).toContain('Mute topic');
   });
@@ -115,7 +128,12 @@ describe('constructHeaderActionButtons', () => {
 
     const mute = deepFreeze([]);
 
-    const buttons = constructHeaderActionButtons({ message, subscriptions, mute, getString });
+    const buttons = constructHeaderActionButtons({
+      message,
+      subscriptions,
+      mute,
+      getString,
+    });
 
     expect(buttons).toContain('Unmute stream');
   });
@@ -132,7 +150,12 @@ describe('constructHeaderActionButtons', () => {
 
     const mute = deepFreeze([]);
 
-    const buttons = constructHeaderActionButtons({ message, subscriptions, mute, getString });
+    const buttons = constructHeaderActionButtons({
+      message,
+      subscriptions,
+      mute,
+      getString,
+    });
 
     expect(buttons).toContain('Mute stream');
   });

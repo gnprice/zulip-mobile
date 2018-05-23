@@ -86,7 +86,10 @@ export default class GroupCard extends PureComponent<Props, State> {
   };
 
   componentDidUpdate = (prevProps: Props, prevState: State) => {
-    if (this.listRef && this.state.selected.length > prevState.selected.length) {
+    if (
+      this.listRef &&
+      this.state.selected.length > prevState.selected.length
+    ) {
       setTimeout(() => this.listRef.scrollToEnd());
     }
   };
@@ -115,7 +118,10 @@ export default class GroupCard extends PureComponent<Props, State> {
           selected={selected}
           onPress={this.handleUserPress}
         />
-        <AnimatedScaleComponent style={styles.button} visible={selected.length > 0}>
+        <AnimatedScaleComponent
+          style={styles.button}
+          visible={selected.length > 0}
+        >
           <FloatingActionButton
             Icon={IconDone}
             size={50}

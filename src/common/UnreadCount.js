@@ -55,7 +55,15 @@ export default class UnreadCount extends PureComponent<Props> {
   };
 
   render() {
-    const { style, isMuted, borderRadius, color, count, inverse, limited } = this.props;
+    const {
+      style,
+      isMuted,
+      borderRadius,
+      color,
+      count,
+      inverse,
+      limited,
+    } = this.props;
 
     if (!count) return null;
 
@@ -69,7 +77,11 @@ export default class UnreadCount extends PureComponent<Props> {
     ];
 
     const textColor = foregroundColorFromBackground(color);
-    const textStyle = [styles.text, inverse && styles.textInverse, { color: textColor }];
+    const textStyle = [
+      styles.text,
+      inverse && styles.textInverse,
+      { color: textColor },
+    ];
 
     return (
       <View style={frameStyle}>

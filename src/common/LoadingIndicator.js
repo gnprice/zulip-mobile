@@ -41,12 +41,20 @@ export default class LoadingIndicator extends PureComponent<Props> {
     return (
       <View style={styles.wrapper}>
         <View>
-          <SpinningProgress color={color} size={size} thickness={Math.round(size / 20)} />
+          <SpinningProgress
+            color={color}
+            size={size}
+            thickness={Math.round(size / 20)}
+          />
           {showLogo && (
             <Image
               style={[
                 styles.logo,
-                { width: size / 3 * 2, height: size / 3 * 2, marginTop: size / 6 },
+                {
+                  width: size / 3 * 2,
+                  height: size / 3 * 2,
+                  marginTop: size / 6,
+                },
               ]}
               source={messageLoadingImg}
               resizeMode="contain"

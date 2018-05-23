@@ -21,7 +21,10 @@ class WelcomeScreen extends PureComponent<Props> {
           onPress={() => actions.navigateToAddNewAccount('')}
         />
         <ViewPlaceholder height={20} />
-        <ZulipButton text="I am new to Zulip" onPress={() => actions.navigateToWelcomeHelp()} />
+        <ZulipButton
+          text="I am new to Zulip"
+          onPress={() => actions.navigateToWelcomeHelp()}
+        />
       </Screen>
     );
   }

@@ -1,6 +1,11 @@
 /* @flow */
 import type { GlobalState } from '../types';
-import { getAuth, getCanCreateStreams, getStreams, getSubscriptions } from '../selectors';
+import {
+  getAuth,
+  getCanCreateStreams,
+  getStreams,
+  getSubscriptions,
+} from '../selectors';
 import connectWithActions from '../connectWithActions';
 import StreamListCard from './StreamListCard';
 

@@ -12,7 +12,10 @@ import { NULL_SUBSCRIPTION } from '../nullObjects';
 export const getIsInTopicOrStreamNarrow = (narrow: Narrow) =>
   createSelector(
     getCurrentRoute,
-    route => (route === 'chat' ? isStreamNarrow(narrow) || isTopicNarrow(narrow) : false),
+    route =>
+      route === 'chat'
+        ? isStreamNarrow(narrow) || isTopicNarrow(narrow)
+        : false,
   );
 
 export const getTitleBackgroundColor = (narrow: Narrow) =>
@@ -21,7 +24,10 @@ export const getTitleBackgroundColor = (narrow: Narrow) =>
     getIsInTopicOrStreamNarrow(narrow),
     (subscriptions, isInTopicOrStreamNarrow) =>
       isInTopicOrStreamNarrow
-        ? (subscriptions.find(sub => narrow[0].operand === sub.name) || NULL_SUBSCRIPTION).color
+        ? (
+            subscriptions.find(sub => narrow[0].operand === sub.name) ||
+            NULL_SUBSCRIPTION
+          ).color
         : 'transparent',
   );
 

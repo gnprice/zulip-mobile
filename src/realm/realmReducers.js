@@ -46,7 +46,10 @@ const realmInit = (state: RealmState, action: RealmInitAction): RealmState => ({
   twentyFourHourTime: action.data.twenty_four_hour_time,
 });
 
-const saveTokenPush = (state: RealmState, action: SaveTokenPushAction): RealmState => ({
+const saveTokenPush = (
+  state: RealmState,
+  action: SaveTokenPushAction,
+): RealmState => ({
   ...state,
   pushToken: {
     token: action.pushToken,
@@ -55,23 +58,35 @@ const saveTokenPush = (state: RealmState, action: SaveTokenPushAction): RealmSta
   },
 });
 
-const deleteTokenPush = (state: RealmState, action: DeleteTokenPushAction): RealmState => ({
+const deleteTokenPush = (
+  state: RealmState,
+  action: DeleteTokenPushAction,
+): RealmState => ({
   ...state,
   pushToken: { token: '', result: '', msg: '' },
 });
 
-const loginChange = (state: RealmState, action: LoginSuccessAction | LogoutAction): RealmState => ({
+const loginChange = (
+  state: RealmState,
+  action: LoginSuccessAction | LogoutAction,
+): RealmState => ({
   ...state,
   emoji: {},
   pushToken: { token: '', result: '', msg: '' },
 });
 
-const initRealmEmoji = (state: RealmState, action: InitRealmEmojiAction): RealmState => ({
+const initRealmEmoji = (
+  state: RealmState,
+  action: InitRealmEmojiAction,
+): RealmState => ({
   ...state,
   emoji: action.emojis,
 });
 
-const initRealmFilter = (state: RealmState, action: InitRealmFilterAction): RealmState => ({
+const initRealmFilter = (
+  state: RealmState,
+  action: InitRealmFilterAction,
+): RealmState => ({
   ...state,
   filters: action.filters,
 });
@@ -92,7 +107,10 @@ const eventRealmEmojiUpdate = (
   emoji: action.realm_emoji,
 });
 
-export default (state: RealmState = initialState, action: RealmAction): RealmState => {
+export default (
+  state: RealmState = initialState,
+  action: RealmAction,
+): RealmState => {
   switch (action.type) {
     case APP_REFRESH:
     case ACCOUNT_SWITCH:

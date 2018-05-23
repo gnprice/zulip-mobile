@@ -12,7 +12,10 @@ const darkTextColor = 'black';
 
 const DARK_CONTENT_STYLE = 'dark-content';
 
-const subscriptions = [{ name: 'all', color: '#fff' }, { name: 'announce', color: '#000' }];
+const subscriptions = [
+  { name: 'all', color: '#fff' },
+  { name: 'announce', color: '#000' },
+];
 
 describe('getStatusBarStyle', () => {
   test('return bar style according to theme for screens other than main', () => {
@@ -21,7 +24,11 @@ describe('getStatusBarStyle', () => {
       subscriptions,
     });
 
-    const result = getStatusBarStyle(getTitleBackgroundColor(state), darkTextColor, themeDefault);
+    const result = getStatusBarStyle(
+      getTitleBackgroundColor(state),
+      darkTextColor,
+      themeDefault,
+    );
 
     expect(result).toEqual(DARK_CONTENT_STYLE);
   });

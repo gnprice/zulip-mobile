@@ -52,7 +52,9 @@ export const appRefresh = (): AppRefreshAction => ({
   type: APP_REFRESH,
 });
 
-export const initSafeAreaInsets = (safeAreaInsets: Dimensions): InitSafeAreaInsetsAction => ({
+export const initSafeAreaInsets = (
+  safeAreaInsets: Dimensions,
+): InitSafeAreaInsetsAction => ({
   type: INIT_SAFE_AREA_INSETS,
   safeAreaInsets,
 });
@@ -86,7 +88,10 @@ export const cancelEditMessage = (): CancelEditMessageAction => ({
   type: CANCEL_EDIT_MESSAGE,
 });
 
-export const debugFlagToggle = (key: string, value: any): DebugFlagToggleAction => ({
+export const debugFlagToggle = (
+  key: string,
+  value: any,
+): DebugFlagToggleAction => ({
   type: DEBUG_FLAG_TOGGLE,
   key,
   value,

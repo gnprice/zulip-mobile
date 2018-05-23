@@ -74,13 +74,17 @@ class ModalSearchNavBar extends PureComponent<Props, State> {
 
     return (
       <View style={styles.navBar}>
-        {nav.index > 0 && <NavButton name="arrow-left" onPress={actions.navigateBack} />}
+        {nav.index > 0 && (
+          <NavButton name="arrow-left" onPress={actions.navigateBack} />
+        )}
         {showSearchInput ? (
           <SearchInput autoFocus={autoFocus} onChange={searchBarOnChange} />
         ) : (
           <Label style={textStyle} text={title} />
         )}
-        {!showSearchInput && <NavButton name="search" onPress={this.enableSearchActiveState} />}
+        {!showSearchInput && (
+          <NavButton name="search" onPress={this.enableSearchActiveState} />
+        )}
         {showSearchInput &&
           clearSearchInput && (
             <NavButton

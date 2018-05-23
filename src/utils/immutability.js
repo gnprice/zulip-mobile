@@ -1,6 +1,9 @@
 /* @flow */
 
-export const removeItemsFromArray = (input: number[], itemsToRemove: number[]): number[] => {
+export const removeItemsFromArray = (
+  input: number[],
+  itemsToRemove: number[],
+): number[] => {
   const output = input.filter((item: number) => !itemsToRemove.includes(item));
   return input.length === output.length ? input : output;
 };

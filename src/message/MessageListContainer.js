@@ -15,7 +15,10 @@ import type {
   User,
 } from '../types';
 import connectWithActions from '../connectWithActions';
-import { constructActionButtons, executeActionSheetAction } from './messageActionSheet';
+import {
+  constructActionButtons,
+  executeActionSheetAction,
+} from './messageActionSheet';
 import MessageListWeb from '../webview/MessageListWeb';
 import {
   getAuth,
@@ -96,7 +99,9 @@ class MessageListContainer extends PureComponent<Props> {
   };
 
   render() {
-    return <MessageListWeb {...this.props} onLongPress={this.handleLongPress} />;
+    return (
+      <MessageListWeb {...this.props} onLongPress={this.handleLongPress} />
+    );
   }
 }
 
@@ -109,9 +114,11 @@ export default connectWithActions((state, props) => ({
   isFetching: props.isFetching || getIsFetching(props.narrow)(state),
   messages: props.messages || getShownMessagesForNarrow(props.narrow)(state),
   realmEmoji: getAllRealmEmoji(state),
-  renderedMessages: props.renderedMessages || getRenderedMessages(props.narrow)(state),
+  renderedMessages:
+    props.renderedMessages || getRenderedMessages(props.narrow)(state),
   showMessagePlaceholders:
-    props.showMessagePlaceholders || getShowMessagePlaceholders(props.narrow)(state),
+    props.showMessagePlaceholders ||
+    getShowMessagePlaceholders(props.narrow)(state),
   subscriptions: getSubscriptions(state),
   typingUsers: props.typingUsers || getCurrentTypingUsers(props.narrow)(state),
 }))(connectActionSheet(MessageListContainer));

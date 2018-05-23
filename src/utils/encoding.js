@@ -8,7 +8,9 @@ export const xorHexStrings = (hex1: string, hex2: string) => {
 
   return hex1
     .split('')
-    .map((char, i) => (parseInt(hex1[i], 16) ^ parseInt(hex2[i], 16)).toString(16))
+    .map((char, i) =>
+      (parseInt(hex1[i], 16) ^ parseInt(hex2[i], 16)).toString(16),
+    )
     .join('')
     .toUpperCase();
 };

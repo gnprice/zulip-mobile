@@ -13,7 +13,14 @@ describe('getFilteredEmojiList', () => {
 
   test('returns a sorted list of emojis starting with query', () => {
     const list = getFilteredEmojiList('go', {});
-    expect(list).toEqual(['goal_net', 'goat', 'goblin', 'golf', 'golfer', 'gorilla']);
+    expect(list).toEqual([
+      'goal_net',
+      'goat',
+      'goblin',
+      'golf',
+      'golfer',
+      'gorilla',
+    ]);
   });
 
   test('search in realm emojis as well', () => {

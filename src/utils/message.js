@@ -1,5 +1,12 @@
 /* @flow */
-import type { FlagsState, Recipient, Narrow, Message, MuteState, Subscription } from '../types';
+import type {
+  FlagsState,
+  Recipient,
+  Narrow,
+  Message,
+  MuteState,
+  Subscription,
+} from '../types';
 import { homeNarrow, isTopicNarrow } from './narrow';
 
 // TODO types: this union is confusing
@@ -12,12 +19,18 @@ export const normalizeRecipients = (recipients: Recipient[] | string) =>
         .sort()
         .join(',');
 
-export const normalizeRecipientsSansMe = (recipients: Recipient[], ownEmail: string) =>
+export const normalizeRecipientsSansMe = (
+  recipients: Recipient[],
+  ownEmail: string,
+) =>
   recipients.length === 1
     ? recipients[0].email
     : normalizeRecipients(recipients.filter(r => r.email !== ownEmail));
 
-export const getRecipientsIds = (recipients: Recipient[], ownEmail?: string): string =>
+export const getRecipientsIds = (
+  recipients: Recipient[],
+  ownEmail?: string,
+): string =>
   recipients.length === 2
     ? recipients.filter(r => r.email !== ownEmail)[0].id.toString()
     : recipients
@@ -25,7 +38,10 @@ export const getRecipientsIds = (recipients: Recipient[], ownEmail?: string): st
         .sort((a, b) => a - b)
         .join(',');
 
-export const isSameRecipient = (message1: Message, message2: Message): boolean => {
+export const isSameRecipient = (
+  message1: Message,
+  message2: Message,
+): boolean => {
   if (message1 === undefined || message2 === undefined) {
     return false;
   }
@@ -42,7 +58,8 @@ export const isSameRecipient = (message1: Message, message2: Message): boolean =
       );
     case 'stream':
       return (
-        message1.display_recipient.toLowerCase() === message2.display_recipient.toLowerCase() &&
+        message1.display_recipient.toLowerCase() ===
+          message2.display_recipient.toLowerCase() &&
         message1.subject.toLowerCase() === message2.subject.toLowerCase()
       );
     case 'outbox': {
@@ -54,8 +71,11 @@ export const isSameRecipient = (message1: Message, message2: Message): boolean =
   }
 };
 
-export const isTopicMuted = (stream: string, topic: string, mute: MuteState = []): boolean =>
-  mute.some(x => x[0] === stream && x[1] === topic);
+export const isTopicMuted = (
+  stream: string,
+  topic: string,
+  mute: MuteState = [],
+): boolean => mute.some(x => x[0] === stream && x[1] === topic);
 
 export const shouldBeMuted = (
   message: Message,
@@ -78,7 +98,9 @@ export const shouldBeMuted = (
     }
   }
 
-  return mutes.some(x => x[0] === message.display_recipient && x[1] === message.subject);
+  return mutes.some(
+    x => x[0] === message.display_recipient && x[1] === message.subject,
+  );
 };
 
 export const isMessageRead = (
@@ -86,7 +108,9 @@ export const isMessageRead = (
   flags: FlagsState,
   subscriptions: Subscription[],
   mute: MuteState,
-): boolean => shouldBeMuted(message, homeNarrow, subscriptions, mute) || !!flags.read[message.id];
+): boolean =>
+  shouldBeMuted(message, homeNarrow, subscriptions, mute) ||
+  !!flags.read[message.id];
 
 export const findFirstUnread = (
   messages: Message[],
@@ -101,6 +125,11 @@ export const findAnchor = (
   subscriptions: Subscription[],
   mute: MuteState,
 ) => {
-  const firstUnreadMessage = findFirstUnread(messages, flags, subscriptions, mute);
+  const firstUnreadMessage = findFirstUnread(
+    messages,
+    flags,
+    subscriptions,
+    mute,
+  );
   return firstUnreadMessage ? firstUnreadMessage.id : 0;
 };

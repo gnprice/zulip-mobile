@@ -11,5 +11,11 @@ type Props = {
 export default ({ text }: Props) => {
   const message = text.text || text;
 
-  return <FormattedMessage id={message} defaultMessage={message} values={text.values} />;
+  return (
+    <FormattedMessage
+      id={message}
+      defaultMessage={message}
+      values={text.values}
+    />
+  );
 };

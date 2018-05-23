@@ -96,12 +96,18 @@ const opToActionTyping = {
   stop: EVENT_TYPING_STOP,
 };
 
-const alertWords = (state: GlobalState, event: Object): EventAlertWordsAction => ({
+const alertWords = (
+  state: GlobalState,
+  event: Object,
+): EventAlertWordsAction => ({
   type: INIT_ALERT_WORDS,
   alertWords: event.alert_words,
 });
 
-const newMessage = (state: GlobalState, event: Object): EventNewMessageAction => ({
+const newMessage = (
+  state: GlobalState,
+  event: Object,
+): EventNewMessageAction => ({
   type: EVENT_NEW_MESSAGE,
   message: event.message,
   caughtUp: state.caughtUp,
@@ -109,17 +115,26 @@ const newMessage = (state: GlobalState, event: Object): EventNewMessageAction =>
   localMessageId: event.local_message_id,
 });
 
-const deleteMessage = (state: GlobalState, event: Object): EventMessageDeleteAction => ({
+const deleteMessage = (
+  state: GlobalState,
+  event: Object,
+): EventMessageDeleteAction => ({
   type: EVENT_MESSAGE_DELETE,
   messageId: event.message_id,
 });
 
-const updateMessage = (state: GlobalState, event: Object): EventUpdateMessageAction => ({
+const updateMessage = (
+  state: GlobalState,
+  event: Object,
+): EventUpdateMessageAction => ({
   ...event,
   type: EVENT_UPDATE_MESSAGE,
 });
 
-const subscription = (state: GlobalState, event: Object): EventSubscriptionAction => ({
+const subscription = (
+  state: GlobalState,
+  event: Object,
+): EventSubscriptionAction => ({
   ...event,
   type: opToActionSubscription[event.op],
   user: getUserById(state.users, event.user_id),
@@ -130,7 +145,10 @@ const realmUser = (state: GlobalState, event: Object): EventUserAction => ({
   type: opToActionUser[event.op],
 });
 
-const realmUserGroup = (state: GlobalState, event: Object): EventUserGroupAction => ({
+const realmUserGroup = (
+  state: GlobalState,
+  event: Object,
+): EventUserGroupAction => ({
   ...event,
   type: opToActionUserGroup[event.op],
 });
@@ -159,23 +177,35 @@ const typing = (state: GlobalState, event: Object): EventTypingAction => ({
   time: new Date().getTime(),
 });
 
-const updateMessageFlags = (state: GlobalState, event: Object): EventUpdateMessageFlagsAction => ({
+const updateMessageFlags = (
+  state: GlobalState,
+  event: Object,
+): EventUpdateMessageFlagsAction => ({
   ...event,
   type: EVENT_UPDATE_MESSAGE_FLAGS,
   allMessages: state.messages,
 });
 
-const updateMutedTopics = (state: GlobalState, event: Object): EventMutedTopicsAction => ({
+const updateMutedTopics = (
+  state: GlobalState,
+  event: Object,
+): EventMutedTopicsAction => ({
   ...event,
   type: EVENT_MUTED_TOPICS,
 });
 
-const realmEmojiUpdate = (state: GlobalState, event: Object): EventRealmEmojiUpdateAction => ({
+const realmEmojiUpdate = (
+  state: GlobalState,
+  event: Object,
+): EventRealmEmojiUpdateAction => ({
   ...event,
   type: EVENT_REALM_EMOJI_UPDATE,
 });
 
-const realmFilters = (state: GlobalState, event: Object): EventRealmFiltersAction => ({
+const realmFilters = (
+  state: GlobalState,
+  event: Object,
+): EventRealmFiltersAction => ({
   ...event,
   type: EVENT_REALM_FILTER_UPDATE,
 });

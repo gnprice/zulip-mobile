@@ -31,7 +31,9 @@ class StorageScreen extends PureComponent<Props> {
         <FlatList
           data={storageSizes}
           keyExtractor={item => item.key}
-          renderItem={({ item }) => <SizeItem text={item.key} size={item.size} />}
+          renderItem={({ item }) => (
+            <SizeItem text={item.key} size={item.size} />
+          )}
         />
       </Screen>
     );

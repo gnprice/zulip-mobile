@@ -9,7 +9,10 @@ export const timeout = (
   onTimeout: Function = nullFunction,
   timeoutMs: number = 10000,
 ): Promise<*> =>
-  Promise.race([func, new Promise(resolve => setTimeout(resolve, timeoutMs)).then(onTimeout)]);
+  Promise.race([
+    func,
+    new Promise(resolve => setTimeout(resolve, timeoutMs)).then(onTimeout),
+  ]);
 
 export const tryUntilSuccessful = async (
   func: any,

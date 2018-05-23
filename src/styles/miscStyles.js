@@ -2,7 +2,13 @@
 import { Platform } from 'react-native';
 
 import type { Style } from '../types';
-import { BORDER_COLOR, BRAND_COLOR, CONTROL_SIZE, SPACING, HALF_SPACING } from './';
+import {
+  BORDER_COLOR,
+  BRAND_COLOR,
+  CONTROL_SIZE,
+  SPACING,
+  HALF_SPACING,
+} from './';
 
 export type MiscStyles = {
   text: Style,
@@ -53,7 +59,13 @@ type Props = {
   dividerColor: string,
 };
 
-export default ({ color, backgroundColor, borderColor, cardColor, dividerColor }: Props) => ({
+export default ({
+  color,
+  backgroundColor,
+  borderColor,
+  cardColor,
+  dividerColor,
+}: Props) => ({
   text: {
     fontSize: 16,
   },

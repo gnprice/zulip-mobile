@@ -124,7 +124,16 @@ export default class ZulipButton extends PureComponent<Props> {
   };
 
   render() {
-    const { style, text, disabled, secondary, progress, fullSize, onPress, Icon } = this.props;
+    const {
+      style,
+      text,
+      disabled,
+      secondary,
+      progress,
+      fullSize,
+      onPress,
+      Icon,
+    } = this.props;
     const frameStyle = [
       styles.frame,
       secondary ? styles.secondaryFrame : styles.primaryFrame,
@@ -132,8 +141,14 @@ export default class ZulipButton extends PureComponent<Props> {
       disabled && styles.disabled,
       style,
     ];
-    const textStyle = [styles.text, secondary ? styles.secondaryText : styles.primaryText];
-    const iconStyle = [styles.icon, secondary ? styles.secondaryIcon : styles.primaryIcon];
+    const textStyle = [
+      styles.text,
+      secondary ? styles.secondaryText : styles.primaryText,
+    ];
+    const iconStyle = [
+      styles.icon,
+      secondary ? styles.secondaryIcon : styles.primaryIcon,
+    ];
 
     if (progress) {
       return <ButtonInProgress frameStyle={frameStyle} />;

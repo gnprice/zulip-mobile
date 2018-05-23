@@ -25,28 +25,45 @@ import {
 
 const initialState = getStateForRoute('loading') || NULL_NAV_STATE;
 
-const rehydrate = (state: NavigationState, action: RehydrateAction): NavigationState =>
-  getInitialNavState(action.payload) || state;
+const rehydrate = (
+  state: NavigationState,
+  action: RehydrateAction,
+): NavigationState => getInitialNavState(action.payload) || state;
 
-const accountSwitch = (state: NavigationState, action: AccountSwitchAction): NavigationState =>
-  getStateForRoute('loading') || state;
+const accountSwitch = (
+  state: NavigationState,
+  action: AccountSwitchAction,
+): NavigationState => getStateForRoute('loading') || state;
 
-const loginSuccess = (state: NavigationState, action: LoginSuccessAction): NavigationState =>
-  getStateForRoute('main') || state;
+const loginSuccess = (
+  state: NavigationState,
+  action: LoginSuccessAction,
+): NavigationState => getStateForRoute('main') || state;
 
-const logout = (state: NavigationState, action: LogoutAction): NavigationState =>
-  getStateForRoute('account') || state;
+const logout = (
+  state: NavigationState,
+  action: LogoutAction,
+): NavigationState => getStateForRoute('account') || state;
 
-const switchNarrow = (state: NavigationState, action: SwitchNarrowAction): NavigationState =>
-  AppNavigator.router.getStateForAction(navigateToChat(action.narrow), state) || state;
+const switchNarrow = (
+  state: NavigationState,
+  action: SwitchNarrowAction,
+): NavigationState =>
+  AppNavigator.router.getStateForAction(navigateToChat(action.narrow), state) ||
+  state;
 
 const initialFetchComplete = (
   state: NavigationState,
   action: InitialFetchCompleteAction,
 ): NavigationState =>
-  state.routes[0].routeName === 'main' ? state : getStateForRoute('main') || state;
+  state.routes[0].routeName === 'main'
+    ? state
+    : getStateForRoute('main') || state;
 
-export default (state: NavigationState = initialState, action: NavAction): NavigationState => {
+export default (
+  state: NavigationState = initialState,
+  action: NavAction,
+): NavigationState => {
   switch (action.type) {
     case REHYDRATE:
       return rehydrate(state, action);

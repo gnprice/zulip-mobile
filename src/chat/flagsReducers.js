@@ -61,7 +61,11 @@ const addFlagsForMessages = (
   };
 };
 
-const removeFlagForMessages = (state: FlagsState, messages: number[], flag: string): FlagsState => {
+const removeFlagForMessages = (
+  state: FlagsState,
+  messages: number[],
+  flag: string,
+): FlagsState => {
   const newStateForFlag = { ...(state[flag] || {}) };
   messages.forEach(message => {
     delete newStateForFlag[message];
@@ -72,7 +76,10 @@ const removeFlagForMessages = (state: FlagsState, messages: number[], flag: stri
   };
 };
 
-const processFlagsForMessages = (state: FlagsState, messages: Message[]): FlagsState => {
+const processFlagsForMessages = (
+  state: FlagsState,
+  messages: Message[],
+): FlagsState => {
   let stateChanged = false;
   const newState = {};
   messages.forEach(msg => {
@@ -92,15 +99,24 @@ const processFlagsForMessages = (state: FlagsState, messages: Message[]): FlagsS
 
 const rehydrate = (state: FlagsState, action: RehydrateAction): FlagsState => {
   // $FlowFixMe
-  const arrayOfMessageArrays: Array<Message[]> = Object.values(action.payload.messages || {});
-  const flattenedMessages: Message[] = Array.prototype.concat(...arrayOfMessageArrays);
+  const arrayOfMessageArrays: Array<Message[]> = Object.values(
+    action.payload.messages || {},
+  );
+  const flattenedMessages: Message[] = Array.prototype.concat(
+    ...arrayOfMessageArrays,
+  );
   return processFlagsForMessages(state, flattenedMessages);
 };
 
-const messageFetchComplete = (state: FlagsState, action: MessageFetchCompleteAction): FlagsState =>
-  processFlagsForMessages(state, action.messages);
+const messageFetchComplete = (
+  state: FlagsState,
+  action: MessageFetchCompleteAction,
+): FlagsState => processFlagsForMessages(state, action.messages);
 
-const eventNewMessage = (state: FlagsState, action: EventNewMessageAction): FlagsState =>
+const eventNewMessage = (
+  state: FlagsState,
+  action: EventNewMessageAction,
+): FlagsState =>
   addFlagsForMessages(state, [action.message.id], action.message.flags);
 
 const eventUpdateMessageFlags = (
@@ -109,7 +125,9 @@ const eventUpdateMessageFlags = (
 ): FlagsState => {
   if (action.all) {
     const allMessages: any[] = [].concat(...Object.values(action.allMessages));
-    return addFlagsForMessages(initialState, allMessages.map(msg => msg.id), ['read']);
+    return addFlagsForMessages(initialState, allMessages.map(msg => msg.id), [
+      'read',
+    ]);
   }
 
   if (action.operation === 'add') {
@@ -123,10 +141,15 @@ const eventUpdateMessageFlags = (
   return state;
 };
 
-const markMessagesRead = (state: FlagsState, action: MarkMessagesReadAction): FlagsState =>
-  addFlagsForMessages(state, action.messageIds, ['read']);
+const markMessagesRead = (
+  state: FlagsState,
+  action: MarkMessagesReadAction,
+): FlagsState => addFlagsForMessages(state, action.messageIds, ['read']);
 
-export default (state: FlagsState = initialState, action: FlagsAction): FlagsState => {
+export default (
+  state: FlagsState = initialState,
+  action: FlagsAction,
+): FlagsState => {
   switch (action.type) {
     case REHYDRATE:
       return rehydrate(state, action);

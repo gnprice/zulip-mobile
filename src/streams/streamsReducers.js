@@ -19,16 +19,32 @@ import { filterArray } from '../utils/immutability';
 
 const initialState: StreamsState = NULL_ARRAY;
 
-const initStreams = (state: StreamsState, action: InitStreamsAction): StreamsState =>
-  action.streams;
+const initStreams = (
+  state: StreamsState,
+  action: InitStreamsAction,
+): StreamsState => action.streams;
 
-const eventStreamAdd = (state: StreamsState, action: EventStreamAddAction): StreamsState =>
-  state.concat(action.streams.filter(x => !state.find(y => x.stream_id === y.stream_id)));
+const eventStreamAdd = (
+  state: StreamsState,
+  action: EventStreamAddAction,
+): StreamsState =>
+  state.concat(
+    action.streams.filter(x => !state.find(y => x.stream_id === y.stream_id)),
+  );
 
-const eventStreamRemove = (state: StreamsState, action: EventStreamRemoveAction): StreamsState =>
-  filterArray(state, x => !action.streams.find(y => x && x.stream_id === y.stream_id));
+const eventStreamRemove = (
+  state: StreamsState,
+  action: EventStreamRemoveAction,
+): StreamsState =>
+  filterArray(
+    state,
+    x => !action.streams.find(y => x && x.stream_id === y.stream_id),
+  );
 
-const eventStreamUpdate = (state: StreamsState, action: EventStreamUpdateAction): StreamsState =>
+const eventStreamUpdate = (
+  state: StreamsState,
+  action: EventStreamUpdateAction,
+): StreamsState =>
   state.map(
     stream =>
       stream.stream_id === action.stream_id
@@ -39,7 +55,10 @@ const eventStreamUpdate = (state: StreamsState, action: EventStreamUpdateAction)
         : stream,
   );
 
-export default (state: StreamsState = initialState, action: StreamAction): StreamsState => {
+export default (
+  state: StreamsState = initialState,
+  action: StreamAction,
+): StreamsState => {
   switch (action.type) {
     case INIT_STREAMS:
       return initStreams(state, action);

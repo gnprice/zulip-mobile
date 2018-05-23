@@ -110,7 +110,13 @@ type Props = {
 };
 
 export const handleScroll = (props: Props, event: MessageListEventScroll) => {
-  const { innerHeight, offsetHeight, scrollY, startMessageId, endMessageId } = event;
+  const {
+    innerHeight,
+    offsetHeight,
+    scrollY,
+    startMessageId,
+    endMessageId,
+  } = event;
   const { actions, narrow } = props;
 
   if (scrollY < config.messageListThreshold) {
@@ -137,7 +143,10 @@ export const handleAvatar = (props: Props, event: MessageListEventAvatar) => {
   props.actions.navigateToAccountDetails(event.fromEmail);
 };
 
-export const handleNarrow = ({ actions }: Props, event: MessageListEventNarrow) => {
+export const handleNarrow = (
+  { actions }: Props,
+  event: MessageListEventNarrow,
+) => {
   actions.doNarrow(parseNarrowString(event.narrow));
 };
 
@@ -151,7 +160,10 @@ export const handleImage = (props: Props, event: MessageListEventImage) => {
   }
 };
 
-export const handleLongPress = (props: Props, event: MessageListEventLongPress) => {
+export const handleLongPress = (
+  props: Props,
+  event: MessageListEventLongPress,
+) => {
   const { messageId, target } = event;
   props.onLongPress(messageId, target);
 };
@@ -160,7 +172,11 @@ export const handleUrl = (props: Props, event: MessageListEventUrl) => {
   const { actions } = props;
 
   if (isUrlAnImage(event.href)) {
-    const imageEvent = { type: 'image', src: event.href, messageId: event.messageId };
+    const imageEvent = {
+      type: 'image',
+      src: event.href,
+      messageId: event.messageId,
+    };
     handleImage(props, imageEvent);
     return;
   }
@@ -168,7 +184,10 @@ export const handleUrl = (props: Props, event: MessageListEventUrl) => {
   actions.messageLinkPress(event.href);
 };
 
-export const handleReaction = (props: Props, event: MessageListEventReaction) => {
+export const handleReaction = (
+  props: Props,
+  event: MessageListEventReaction,
+) => {
   const { code, messageId, name, reactionType, voted } = event;
 
   if (voted) {
@@ -183,5 +202,8 @@ export const handleDebug = (props: Props, event: MessageListEventDebug) => {
 };
 
 export const handleError = (props: Props, event: MessageListEventError) => {
-  logErrorRemotely(new Error(JSON.stringify(event.details)), 'WebView Exception');
+  logErrorRemotely(
+    new Error(JSON.stringify(event.details)),
+    'WebView Exception',
+  );
 };

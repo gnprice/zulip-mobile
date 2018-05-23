@@ -1,6 +1,12 @@
 /* @flow */
 import type { GetState, Dispatch, Stream, InitStreamsAction } from '../types';
-import { createStream, updateStream, getStreams, toggleMuteStream, togglePinStream } from '../api';
+import {
+  createStream,
+  updateStream,
+  getStreams,
+  toggleMuteStream,
+  togglePinStream,
+} from '../api';
 import { INIT_STREAMS } from '../actionConstants';
 import { getAuth } from '../selectors';
 
@@ -9,8 +15,10 @@ export const initStreams = (streams: Stream[]): InitStreamsAction => ({
   streams,
 });
 
-export const fetchStreams = () => async (dispatch: Dispatch, getState: GetState) =>
-  dispatch(initStreams(await getStreams(getAuth(getState()))));
+export const fetchStreams = () => async (
+  dispatch: Dispatch,
+  getState: GetState,
+) => dispatch(initStreams(await getStreams(getAuth(getState()))));
 
 export const createNewStream = (
   name: string,
@@ -18,7 +26,13 @@ export const createNewStream = (
   principals: string[],
   isPrivate: boolean,
 ) => async (dispatch: Dispatch, getState: GetState) => {
-  await createStream(getAuth(getState()), name, description, principals, isPrivate);
+  await createStream(
+    getAuth(getState()),
+    name,
+    description,
+    principals,
+    isPrivate,
+  );
 };
 
 export const updateExistingStream = (
@@ -28,7 +42,12 @@ export const updateExistingStream = (
 ) => async (dispatch: Dispatch, getState: GetState) => {
   if (initialValues.name !== newValues.name) {
     // Stream names might contain unsafe characters so we must encode it first.
-    await updateStream(getAuth(getState()), id, 'new_name', JSON.stringify(newValues.name));
+    await updateStream(
+      getAuth(getState()),
+      id,
+      'new_name',
+      JSON.stringify(newValues.name),
+    );
   }
   if (initialValues.description !== newValues.description) {
     // Description might contain unsafe characters so we must encode it first.
@@ -40,7 +59,12 @@ export const updateExistingStream = (
     );
   }
   if (initialValues.invite_only !== newValues.isPrivate) {
-    await updateStream(getAuth(getState()), id, 'is_private', newValues.isPrivate);
+    await updateStream(
+      getAuth(getState()),
+      id,
+      'is_private',
+      newValues.isPrivate,
+    );
   }
 };
 

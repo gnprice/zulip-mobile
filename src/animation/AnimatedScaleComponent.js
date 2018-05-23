@@ -15,7 +15,10 @@ type State = {
   visible: boolean,
 };
 
-export default class AnimatedScaleComponent extends PureComponent<Props, State> {
+export default class AnimatedScaleComponent extends PureComponent<
+  Props,
+  State,
+> {
   props: Props;
   state: State;
 
@@ -46,6 +49,8 @@ export default class AnimatedScaleComponent extends PureComponent<Props, State> 
       display: visible ? 'flex' : 'none',
     };
 
-    return <Animated.View style={[animatedStyle, style]}>{children}</Animated.View>;
+    return (
+      <Animated.View style={[animatedStyle, style]}>{children}</Animated.View>
+    );
   }
 }

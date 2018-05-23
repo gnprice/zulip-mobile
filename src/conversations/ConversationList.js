@@ -24,9 +24,11 @@ type Props = {
 export default class ConversationList extends PureComponent<Props> {
   props: Props;
 
-  handleUserNarrow = (email: string) => this.props.actions.doNarrow(privateNarrow(email));
+  handleUserNarrow = (email: string) =>
+    this.props.actions.doNarrow(privateNarrow(email));
 
-  handleGroupNarrow = (email: string) => this.props.actions.doNarrow(groupNarrow(email.split(',')));
+  handleGroupNarrow = (email: string) =>
+    this.props.actions.doNarrow(groupNarrow(email.split(',')));
 
   render() {
     const { conversations, presences, usersByEmail } = this.props;

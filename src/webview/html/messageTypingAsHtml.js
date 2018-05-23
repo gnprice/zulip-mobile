@@ -10,7 +10,9 @@ const typingAvatar = (realm: string, user: User): string => template`
     class="avatar-img"
     data-email="${user.email}"
     src="${
-      user.avatar_url ? getFullUrl(user.avatar_url, realm) : getGravatarFromEmail(user.email)
+      user.avatar_url
+        ? getFullUrl(user.avatar_url, realm)
+        : getGravatarFromEmail(user.email)
     }">
 </div>
 `;

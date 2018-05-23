@@ -48,7 +48,11 @@ export default class EditStreamCard extends PureComponent<Props, State> {
     if (streamId === -1) {
       actions.createNewStream(name, description, [ownEmail], isPrivate);
     } else {
-      actions.updateExistingStream(streamId, initialValues, { name, description, isPrivate });
+      actions.updateExistingStream(streamId, initialValues, {
+        name,
+        description,
+        isPrivate,
+      });
     }
     actions.navigateBack();
   };

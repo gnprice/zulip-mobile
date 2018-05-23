@@ -16,7 +16,10 @@ import { defaultNav, otherNav } from '../testHelpers';
 const themeNight = 'night';
 const themeDefault = 'default';
 
-const subscriptions = [{ name: 'all', color: '#fff' }, { name: 'announce', color: '#000' }];
+const subscriptions = [
+  { name: 'all', color: '#fff' },
+  { name: 'announce', color: '#000' },
+];
 
 describe('getStatusBarColor', () => {
   test('return bar color according to theme for screens other than chat', () => {
@@ -24,9 +27,12 @@ describe('getStatusBarColor', () => {
       nav: otherNav,
       subscriptions,
     });
-    expect(getStatusBarColor(getTitleBackgroundColor(homeNarrow)(state), themeDefault)).toEqual(
-      'white',
-    );
+    expect(
+      getStatusBarColor(
+        getTitleBackgroundColor(homeNarrow)(state),
+        themeDefault,
+      ),
+    ).toEqual('white');
   });
 
   test('return bar color according to stream color for stream narrow in chat screen', () => {
@@ -35,7 +41,10 @@ describe('getStatusBarColor', () => {
       subscriptions,
     });
     expect(
-      getStatusBarColor(getTitleBackgroundColor(streamNarrow('all'))(state), themeDefault),
+      getStatusBarColor(
+        getTitleBackgroundColor(streamNarrow('all'))(state),
+        themeDefault,
+      ),
     ).toEqual('#fff');
   });
 
@@ -64,7 +73,10 @@ describe('getStatusBarColor', () => {
       ),
     ).toEqual('white');
     expect(
-      getStatusBarColor(getTitleBackgroundColor('bob@example.com')(state), themeNight),
+      getStatusBarColor(
+        getTitleBackgroundColor('bob@example.com')(state),
+        themeNight,
+      ),
     ).toEqual('#212D3B');
   });
 
@@ -73,9 +85,12 @@ describe('getStatusBarColor', () => {
       nav: defaultNav,
       subscriptions,
     });
-    expect(getStatusBarColor(getTitleBackgroundColor(homeNarrow)(state), themeDefault)).toEqual(
-      'white',
-    );
+    expect(
+      getStatusBarColor(
+        getTitleBackgroundColor(homeNarrow)(state),
+        themeDefault,
+      ),
+    ).toEqual('white');
   });
 
   test('returns color according to theme for group narrow', () => {
@@ -85,7 +100,9 @@ describe('getStatusBarColor', () => {
     });
     expect(
       getStatusBarColor(
-        getTitleBackgroundColor(groupNarrow(['abc@zulip.com', 'def@zulip.com']))(state),
+        getTitleBackgroundColor(
+          groupNarrow(['abc@zulip.com', 'def@zulip.com']),
+        )(state),
         themeDefault,
       ),
     ).toEqual('white');
@@ -97,7 +114,10 @@ describe('getStatusBarColor', () => {
       subscriptions,
     });
     expect(
-      getStatusBarColor(getTitleBackgroundColor(specialNarrow('mentioned'))(state), themeDefault),
+      getStatusBarColor(
+        getTitleBackgroundColor(specialNarrow('mentioned'))(state),
+        themeDefault,
+      ),
     ).toEqual('white');
   });
 });

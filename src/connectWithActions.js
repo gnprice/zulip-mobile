@@ -19,11 +19,18 @@ const boundActions = (dispatch: Dispatch, ownProps: Object) => {
   return cachedBoundActions;
 };
 
-const connectWithActions = (mapStateToProps: MapStateToProps, mergeProps, options) => (
-  component: React$Component<*, *, *>,
-) => connect(mapStateToProps, boundActions, mergeProps, options)(component);
+const connectWithActions = (
+  mapStateToProps: MapStateToProps,
+  mergeProps,
+  options,
+) => (component: React$Component<*, *, *>) =>
+  connect(mapStateToProps, boundActions, mergeProps, options)(component);
 
-export const connectWithActionsPreserveOnBack = (mapStateToProps: MapStateToProps) =>
-  connectWithActions(mapStateToProps, null, { areStatesEqual: isStateGoingBack });
+export const connectWithActionsPreserveOnBack = (
+  mapStateToProps: MapStateToProps,
+) =>
+  connectWithActions(mapStateToProps, null, {
+    areStatesEqual: isStateGoingBack,
+  });
 
 export default connectWithActions;

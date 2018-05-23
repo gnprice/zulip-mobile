@@ -121,7 +121,9 @@ describe('getInitialNavState', () => {
 
   test('when default account has server and email set, redirect to welcome screen', () => {
     const state = deepFreeze({
-      accounts: [{ realm: 'https://example.com', email: 'johndoe@example.com' }],
+      accounts: [
+        { realm: 'https://example.com', email: 'johndoe@example.com' },
+      ],
       users: [],
       nav: {
         routes: [],
@@ -227,7 +229,10 @@ describe('getPreviousDifferentRoute', () => {
   test('if last route differs from  routes the last of same routes is the previous item', () => {
     const state = deepFreeze({
       nav: {
-        routes: [{ key: 'main-1', routeName: 'main' }, { key: 'chat-1', routeName: 'chat' }],
+        routes: [
+          { key: 'main-1', routeName: 'main' },
+          { key: 'chat-1', routeName: 'chat' },
+        ],
       },
     });
 
@@ -279,8 +284,16 @@ describe('getPreviousDifferentRouteAndParams', () => {
           { key: 'loading', routeName: 'login' },
           { key: 'main', routeName: 'main' },
           { key: 'chat-1', routeName: 'chat', params: { key: 'value' } },
-          { key: 'chat-2', routeName: 'chat', params: { key: 'another value' } },
-          { key: 'chat-3', routeName: 'chat', params: { anotherKey: 'some value' } },
+          {
+            key: 'chat-2',
+            routeName: 'chat',
+            params: { key: 'another value' },
+          },
+          {
+            key: 'chat-3',
+            routeName: 'chat',
+            params: { anotherKey: 'some value' },
+          },
         ],
       },
     });

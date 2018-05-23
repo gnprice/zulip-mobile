@@ -435,6 +435,10 @@ export default (theme: ThemeType, highlightUnreadMessages: boolean) => `
 ${defaultTheme}
 ${theme === 'night' ? darkTheme : ''}
 ${cssEmojis}
-${highlightUnreadMessages ? '.message:not([data-read="true"]) { background: red; }' : ''}
+${
+  highlightUnreadMessages
+    ? '.message:not([data-read="true"]) { background: red; }'
+    : ''
+}
 </style>
 `;

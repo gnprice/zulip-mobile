@@ -103,7 +103,10 @@ describe('typingReducers', () => {
       });
 
       const expectedState = {
-        'john@example.com,mark@example.com': { time: 123456789, userIds: [1, 2] },
+        'john@example.com,mark@example.com': {
+          time: 123456789,
+          userIds: [1, 2],
+        },
       };
 
       const newState = typingReducers(initialState, action);

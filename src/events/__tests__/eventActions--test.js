@@ -11,7 +11,9 @@ describe('responseToActions', () => {
   });
 
   test('filter out unknown event types and some known ones', () => {
-    const response = { events: [{ type: 'some unknown type' }, { type: 'heartbeat' }] };
+    const response = {
+      events: [{ type: 'some unknown type' }, { type: 'heartbeat' }],
+    };
     const actions = responseToActions({}, response);
 
     expect(actions).toEqual([]);

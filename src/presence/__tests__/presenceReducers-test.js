@@ -1,7 +1,11 @@
 /* @flow */
 import deepFreeze from 'deep-freeze';
 
-import { PRESENCE_RESPONSE, EVENT_PRESENCE, ACCOUNT_SWITCH } from '../../actionConstants';
+import {
+  PRESENCE_RESPONSE,
+  EVENT_PRESENCE,
+  ACCOUNT_SWITCH,
+} from '../../actionConstants';
 import presenceReducers from '../presenceReducers';
 
 const currentTimestamp = Date.now() / 1000;

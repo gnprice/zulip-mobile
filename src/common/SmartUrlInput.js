@@ -1,6 +1,11 @@
 /* @flow */
 import React, { PureComponent } from 'react';
-import { StyleSheet, TextInput, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  StyleSheet,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 
 import type { Context, Style } from '../types';
 import { autocompleteUrl, fixRealmUrl, hasProtocol } from '../utils/url';
@@ -57,7 +62,9 @@ export default class SmartUrlInput extends PureComponent<Props, State> {
     this.setState({ value });
 
     const { append, shortAppend, protocol, onChange } = this.props;
-    onChange(fixRealmUrl(autocompleteUrl(value, protocol, append, shortAppend)));
+    onChange(
+      fixRealmUrl(autocompleteUrl(value, protocol, append, shortAppend)),
+    );
   };
 
   urlPress = () => {
@@ -68,7 +75,10 @@ export default class SmartUrlInput extends PureComponent<Props, State> {
   renderPlaceholderPart = (text: string) => (
     <TouchableWithoutFeedback onPress={this.urlPress}>
       <RawLabel
-        style={[this.context.styles.realmInput, this.context.styles.realmPlaceholder]}
+        style={[
+          this.context.styles.realmInput,
+          this.context.styles.realmPlaceholder,
+        ]}
         text={text}
       />
     </TouchableWithoutFeedback>
@@ -98,7 +108,10 @@ export default class SmartUrlInput extends PureComponent<Props, State> {
       <View style={[componentStyles.wrapper, style]}>
         {!hasProtocol(value) && this.renderPlaceholderPart(protocol)}
         <TextInput
-          style={[styles.realmInput, value.length === 0 && styles.realmInputEmpty]}
+          style={[
+            styles.realmInput,
+            value.length === 0 && styles.realmInputEmpty,
+          ]}
           autoFocus
           autoCorrect={false}
           autoCapitalize="none"
@@ -115,7 +128,8 @@ export default class SmartUrlInput extends PureComponent<Props, State> {
           }}
         />
         {value.length === 0 && this.renderPlaceholderPart(defaultOrganization)}
-        {showAnyAppend && this.renderPlaceholderPart(useFullAppend ? append : shortAppend)}
+        {showAnyAppend &&
+          this.renderPlaceholderPart(useFullAppend ? append : shortAppend)}
       </View>
     );
   }

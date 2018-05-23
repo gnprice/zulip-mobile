@@ -30,7 +30,10 @@ export default class Popup extends PureComponent<Props> {
     const { height } = Dimensions.get('window');
 
     return (
-      <View style={[this.context.styles.backgroundColor, styles.popup]} maxHeight={height / 4}>
+      <View
+        style={[this.context.styles.backgroundColor, styles.popup]}
+        maxHeight={height / 4}
+      >
         {this.props.children}
       </View>
     );

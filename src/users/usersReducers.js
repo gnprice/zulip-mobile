@@ -20,17 +20,21 @@ import { NULL_ARRAY } from '../nullObjects';
 
 const initialState: UsersState = NULL_ARRAY;
 
-const initUsers = (state: UsersState, action: InitUsersAction): UsersState => action.users;
+const initUsers = (state: UsersState, action: InitUsersAction): UsersState =>
+  action.users;
 
 const realmInit = (state: UsersState, action: RealmInitAction): UsersState =>
   action.data.realm_users;
 
-const eventUserAdd = (state: UsersState, action: EventUserAddAction): UsersState => [
-  ...state,
-  action.person,
-];
+const eventUserAdd = (
+  state: UsersState,
+  action: EventUserAddAction,
+): UsersState => [...state, action.person];
 
-export default (state: UsersState = initialState, action: UsersAction): UsersState => {
+export default (
+  state: UsersState = initialState,
+  action: UsersAction,
+): UsersState => {
   switch (action.type) {
     case LOGOUT:
     case LOGIN_SUCCESS:

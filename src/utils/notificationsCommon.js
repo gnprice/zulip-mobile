@@ -1,16 +1,29 @@
 /* @flow */
 import type { Notification, NotificationGroup, UserIdMap } from '../types';
-import { homeNarrow, topicNarrow, privateNarrow, groupNarrow } from '../utils/narrow';
+import {
+  homeNarrow,
+  topicNarrow,
+  privateNarrow,
+  groupNarrow,
+} from '../utils/narrow';
 
-const getGroupNarrowFromNotificationData = (data: NotificationGroup, usersById: UserIdMap = {}) => {
+const getGroupNarrowFromNotificationData = (
+  data: NotificationGroup,
+  usersById: UserIdMap = {},
+) => {
   const userIds = data.pm_users.split(',');
   const users = userIds.map(id => usersById[id]);
   const doAllUsersExist = users.every(user => user);
 
-  return doAllUsersExist ? groupNarrow(users.map(user => user.email)) : homeNarrow;
+  return doAllUsersExist
+    ? groupNarrow(users.map(user => user.email))
+    : homeNarrow;
 };
 
-export const getNarrowFromNotificationData = (data: Notification, usersById: UserIdMap = {}) => {
+export const getNarrowFromNotificationData = (
+  data: Notification,
+  usersById: UserIdMap = {},
+) => {
   if (!data || !data.recipient_type) {
     return homeNarrow;
   }

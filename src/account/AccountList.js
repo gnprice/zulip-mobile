@@ -26,7 +26,9 @@ export default class AccountList extends PureComponent<Props> {
           renderItem={({ item, index }) => (
             <AccountItem
               index={index}
-              showDoneIcon={index === 0 && auth.apiKey !== '' && auth.apiKey === item.apiKey}
+              showDoneIcon={
+                index === 0 && auth.apiKey !== '' && auth.apiKey === item.apiKey
+              }
               {...item}
               onSelect={onAccountSelect}
               onRemove={onAccountRemove}

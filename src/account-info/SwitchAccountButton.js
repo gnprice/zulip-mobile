@@ -44,7 +44,12 @@ class SwitchAccountButton extends PureComponent<Props> {
 
   render() {
     return (
-      <ZulipButton style={styles.button} secondary text="Switch" onPress={this.switchAccount} />
+      <ZulipButton
+        style={styles.button}
+        secondary
+        text="Switch"
+        onPress={this.switchAccount}
+      />
     );
   }
 }

@@ -1,5 +1,9 @@
 /* @flow */
-import type { CaughtUpState, CaughtUpAction, MessageFetchCompleteAction } from '../types';
+import type {
+  CaughtUpState,
+  CaughtUpAction,
+  MessageFetchCompleteAction,
+} from '../types';
 import {
   APP_REFRESH,
   LOGOUT,
@@ -30,7 +34,9 @@ const messageFetchComplete = (
   let anchorIdx = -1;
 
   if (action.anchor === 0) {
-    anchorIdx = action.messages.findIndex(msg => msg.flags.indexOf('read') === -1);
+    anchorIdx = action.messages.findIndex(
+      msg => msg.flags.indexOf('read') === -1,
+    );
   } else {
     anchorIdx = action.messages.findIndex(msg => msg.id === action.anchor);
   }
@@ -49,7 +55,8 @@ const messageFetchComplete = (
       : 0;
 
   const caughtUpOlder = anchorIdx < action.numBefore;
-  const caughtUpNewer = action.messages.length - anchorIdx + adjustment < action.numAfter;
+  const caughtUpNewer =
+    action.messages.length - anchorIdx + adjustment < action.numAfter;
 
   const prevState = state[key] || NULL_CAUGHTUP;
 
@@ -62,7 +69,10 @@ const messageFetchComplete = (
   };
 };
 
-export default (state: CaughtUpState = initialState, action: CaughtUpAction): CaughtUpState => {
+export default (
+  state: CaughtUpState = initialState,
+  action: CaughtUpAction,
+): CaughtUpState => {
   switch (action.type) {
     case APP_REFRESH:
     case LOGOUT:

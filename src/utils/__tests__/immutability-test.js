@@ -1,6 +1,10 @@
 import deepFreeze from 'deep-freeze';
 
-import { removeItemsFromArray, filterArray, replaceItemInArray } from '../immutability';
+import {
+  removeItemsFromArray,
+  filterArray,
+  replaceItemInArray,
+} from '../immutability';
 
 describe('removeItemsFromArray', () => {
   test('return a new array with items removed, do not mutate input', () => {

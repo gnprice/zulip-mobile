@@ -18,7 +18,9 @@ export default (
 
   return template`
     <div class="reaction-list">
-      $!${aggregated.map(r => messageReactionAsHtml(messageId, r, realmEmoji)).join('')}
+      $!${aggregated
+        .map(r => messageReactionAsHtml(messageId, r, realmEmoji))
+        .join('')}
     </div>
   `;
 };

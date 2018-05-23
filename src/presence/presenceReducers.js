@@ -20,24 +20,38 @@ import { getAggregatedPresence } from '../utils/presence';
 
 const initialState: PresenceState = NULL_OBJECT;
 
-const realmInit = (state: PresenceState, action: RealmInitAction): PresenceState =>
-  action.data.presences;
+const realmInit = (
+  state: PresenceState,
+  action: RealmInitAction,
+): PresenceState => action.data.presences;
 
-const presenceResponse = (state: PresenceState, action: PresenceResponseAction): PresenceState => ({
+const presenceResponse = (
+  state: PresenceState,
+  action: PresenceResponseAction,
+): PresenceState => ({
   ...state,
   ...action.presence,
 });
 
-const eventPresence = (state: PresenceState, action: EventPresenceAction): PresenceState => ({
+const eventPresence = (
+  state: PresenceState,
+  action: EventPresenceAction,
+): PresenceState => ({
   ...state,
   [action.email]: {
     ...state[action.email],
     ...action.presence,
-    aggregated: getAggregatedPresence({ ...state[action.email], ...action.presence }),
+    aggregated: getAggregatedPresence({
+      ...state[action.email],
+      ...action.presence,
+    }),
   },
 });
 
-export default (state: PresenceState = initialState, action: PresenceAction): PresenceState => {
+export default (
+  state: PresenceState = initialState,
+  action: PresenceAction,
+): PresenceState => {
   switch (action.type) {
     case APP_REFRESH:
     case LOGOUT:

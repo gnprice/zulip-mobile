@@ -50,7 +50,10 @@ export default class PasswordInput extends PureComponent<Props, State> {
           autoCapitalize="none"
         />
         <Touchable style={styles.showPasswordButton} onPress={this.handleShow}>
-          <Label style={styles.showPasswordButtonText} text={isHidden ? 'show' : 'hide'} />
+          <Label
+            style={styles.showPasswordButtonText}
+            text={isHidden ? 'show' : 'hide'}
+          />
         </Touchable>
       </View>
     );

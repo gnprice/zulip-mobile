@@ -10,7 +10,11 @@ import type {
   ActionSheetButtonType,
   AuthGetStringAndMessageType,
 } from '../types';
-import { getNarrowFromMessage, isHomeNarrow, isSpecialNarrow } from '../utils/narrow';
+import {
+  getNarrowFromMessage,
+  isHomeNarrow,
+  isSpecialNarrow,
+} from '../utils/narrow';
 import { isTopicMuted } from '../utils/message';
 import {
   getMessageContentById,
@@ -93,7 +97,13 @@ type AuthMessageAndNarrow = {
 
 const isAnOutboxMessage = (message: Message): boolean => message.isOutbox;
 
-const reply = ({ message, actions, auth, currentRoute, onReplySelect }: ReplyOptionType) => {
+const reply = ({
+  message,
+  actions,
+  auth,
+  currentRoute,
+  onReplySelect,
+}: ReplyOptionType) => {
   if (currentRoute === 'search') {
     actions.navigateBack();
   }
@@ -101,7 +111,11 @@ const reply = ({ message, actions, auth, currentRoute, onReplySelect }: ReplyOpt
   if (onReplySelect) onReplySelect(); // focus message input
 };
 
-const copyToClipboard = async ({ getString, auth, message }: AuthGetStringAndMessageType) => {
+const copyToClipboard = async ({
+  getString,
+  auth,
+  message,
+}: AuthGetStringAndMessageType) => {
   const rawMessage = isAnOutboxMessage(message)
     ? message.markdownContent
     : await getMessageContentById(auth, message.id);
@@ -109,13 +123,18 @@ const copyToClipboard = async ({ getString, auth, message }: AuthGetStringAndMes
   showToast(getString('Message copied'));
 };
 
-const isSentMessage = ({ message }: { message: Message }): boolean => !isAnOutboxMessage(message);
+const isSentMessage = ({ message }: { message: Message }): boolean =>
+  !isAnOutboxMessage(message);
 
 const editMessage = async ({ message, actions }: MessageAuthAndActions) => {
   actions.startEditMessage(message.id, message.subject);
 };
 
-const doDeleteMessage = async ({ auth, message, actions }: MessageAuthAndActions) => {
+const doDeleteMessage = async ({
+  auth,
+  message,
+  actions,
+}: MessageAuthAndActions) => {
   if (isAnOutboxMessage(message)) {
     actions.deleteOutboxMessage(message.timestamp);
   } else {
@@ -131,27 +150,42 @@ const doMuteTopic = ({ auth, message }: AuthAndMessageType) => {
   muteTopic(auth, message.display_recipient, message.subject);
 };
 
-const doUnmuteStream = ({ auth, message, subscriptions }: AuthMessageAndSubscriptionsType) => {
+const doUnmuteStream = ({
+  auth,
+  message,
+  subscriptions,
+}: AuthMessageAndSubscriptionsType) => {
   const sub = subscriptions.find(x => x.name === message.display_recipient);
   if (sub) {
     toggleMuteStream(auth, sub.stream_id, false);
   }
 };
 
-const doMuteStream = ({ auth, message, subscriptions }: AuthMessageAndSubscriptionsType) => {
+const doMuteStream = ({
+  auth,
+  message,
+  subscriptions,
+}: AuthMessageAndSubscriptionsType) => {
   const sub = subscriptions.find(x => x.name === message.display_recipient);
   if (sub) {
     toggleMuteStream(auth, sub.stream_id, true);
   }
 };
 
-const isSentBySelfAndNarrowed = ({ message, auth, narrow }: AuthMessageAndNarrow): boolean =>
-  auth.email === message.sender_email && !isHomeNarrow(narrow) && !isSpecialNarrow(narrow);
+const isSentBySelfAndNarrowed = ({
+  message,
+  auth,
+  narrow,
+}: AuthMessageAndNarrow): boolean =>
+  auth.email === message.sender_email &&
+  !isHomeNarrow(narrow) &&
+  !isSpecialNarrow(narrow);
 
 const isSentBySelf = ({ message, auth }: AuthAndMessageType): boolean =>
   auth.email === message.sender_email;
 
-const isNotDeleted = ({ message }): boolean => message.content !== '<p>(deleted)</p>';
+const isNotDeleted = ({ message }): boolean =>
+  message.content !== '<p>(deleted)</p>';
 
 const starMessage = ({ auth, message }: AuthAndMessageType) => {
   toggleMessageStarred(auth, [message.id], true);
@@ -183,19 +217,30 @@ const resolveMultiple = (message, auth, narrow, functions) =>
 
 const actionSheetButtons: ActionSheetButtonType[] = [
   { title: 'Reply', onPress: reply, onlyIf: isSentMessage },
-  { title: 'Copy to clipboard', onPress: copyToClipboard, onlyIf: isNotDeleted },
+  {
+    title: 'Copy to clipboard',
+    onPress: copyToClipboard,
+    onlyIf: isNotDeleted,
+  },
   { title: 'Share', onPress: shareMessage, onlyIf: isNotDeleted },
   {
     title: 'Edit message',
     onPress: editMessage,
     onlyIf: ({ message, auth, narrow }) =>
-      resolveMultiple(message, auth, narrow, [isSentMessage, isSentBySelfAndNarrowed]),
+      resolveMultiple(message, auth, narrow, [
+        isSentMessage,
+        isSentBySelfAndNarrowed,
+      ]),
   },
   {
     title: 'Delete message',
     onPress: doDeleteMessage,
     onlyIf: ({ message, auth, narrow }) =>
-      resolveMultiple(message, auth, narrow, [isSentMessage, isSentBySelf, isNotDeleted]),
+      resolveMultiple(message, auth, narrow, [
+        isSentMessage,
+        isSentBySelf,
+        isNotDeleted,
+      ]),
   },
   // If skip then covered in constructMessageActionButtons
   { title: 'Star message', onPress: starMessage, onlyIf: skip },
@@ -268,7 +313,9 @@ export const executeActionSheetAction = ({
   ...props
 }: ExecuteActionSheetParams) => {
   if (header) {
-    const headerButton = actionHeaderSheetButtons.find(x => getString(x.title) === title);
+    const headerButton = actionHeaderSheetButtons.find(
+      x => getString(x.title) === title,
+    );
     if (headerButton) {
       headerButton.onPress({ ...props, getString });
     }
@@ -281,7 +328,9 @@ export const executeActionSheetAction = ({
 };
 
 export const constructActionButtons = (target: string) =>
-  target === 'header' ? constructHeaderActionButtons : constructMessageActionButtons;
+  target === 'header'
+    ? constructHeaderActionButtons
+    : constructMessageActionButtons;
 
 export type ShowActionSheetTypes = {
   options: Array<any>,

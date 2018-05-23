@@ -1,6 +1,10 @@
 import deepFreeze from 'deep-freeze';
 
-import { ACCOUNT_SWITCH, CANCEL_EDIT_MESSAGE, START_EDIT_MESSAGE } from '../../actionConstants';
+import {
+  ACCOUNT_SWITCH,
+  CANCEL_EDIT_MESSAGE,
+  START_EDIT_MESSAGE,
+} from '../../actionConstants';
 import sessionReducers from '../sessionReducers';
 
 describe('appReducers', () => {

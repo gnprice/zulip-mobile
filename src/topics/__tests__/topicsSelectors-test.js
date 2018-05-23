@@ -1,6 +1,10 @@
 import deepFreeze from 'deep-freeze';
 
-import { getTopicsForNarrow, getLastMessageTopic, getTopicsInScreen } from '../topicSelectors';
+import {
+  getTopicsForNarrow,
+  getLastMessageTopic,
+  getTopicsInScreen,
+} from '../topicSelectors';
 import { homeNarrow, streamNarrow } from '../../utils/narrow';
 
 describe('getTopicsForNarrow', () => {
@@ -99,7 +103,9 @@ describe('getTopicsInScreen', () => {
 
     const topics = getTopicsInScreen(state);
 
-    expect(topics).toEqual([{ name: 'topic', max_id: 456, isMuted: false, unreadCount: 0 }]);
+    expect(topics).toEqual([
+      { name: 'topic', max_id: 456, isMuted: false, unreadCount: 0 },
+    ]);
   });
 
   test('Return list of topic object with isMuted, unreadCount, topic name and max id in it.', () => {
@@ -123,7 +129,11 @@ describe('getTopicsInScreen', () => {
           { name: 'topic 5', max_id: 9 },
         ],
       },
-      mute: [['stream 1', 'topic 1'], ['stream 1', 'topic 3'], ['stream 2', 'topic 2']],
+      mute: [
+        ['stream 1', 'topic 1'],
+        ['stream 1', 'topic 3'],
+        ['stream 2', 'topic 2'],
+      ],
       unread: {
         streams: [
           {

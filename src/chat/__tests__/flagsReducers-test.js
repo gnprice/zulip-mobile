@@ -2,7 +2,11 @@ import deepFreeze from 'deep-freeze';
 import { REHYDRATE } from 'redux-persist/constants';
 
 import flagsReducers from '../flagsReducers';
-import { homeNarrowStr, allPrivateNarrowStr, streamNarrow } from '../../utils/narrow';
+import {
+  homeNarrowStr,
+  allPrivateNarrowStr,
+  streamNarrow,
+} from '../../utils/narrow';
 import {
   MESSAGE_FETCH_COMPLETE,
   EVENT_NEW_MESSAGE,
@@ -362,7 +366,11 @@ describe('flagsReducers', () => {
         allMessages: {
           [homeNarrowStr]: [{ id: 1 }],
           [allPrivateNarrowStr]: [{ id: 1 }, { id: 2 }, { id: 3 }],
-          [JSON.stringify(streamNarrow('some stream'))]: [{ id: 3 }, { id: 4 }, { id: 5 }],
+          [JSON.stringify(streamNarrow('some stream'))]: [
+            { id: 3 },
+            { id: 4 },
+            { id: 5 },
+          ],
         },
       });
 

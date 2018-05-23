@@ -92,7 +92,16 @@ const briefMessageAsHtml = ({
 }: BriefMessageProps) => template`
 $!${messageDiv(id, 'message-brief', flags)}
   <div class="content">
-    $!${messageBody({ content, flags, id, isOutbox, ownEmail, reactions, realmEmoji, timeEdited })}
+    $!${messageBody({
+      content,
+      flags,
+      id,
+      isOutbox,
+      ownEmail,
+      reactions,
+      realmEmoji,
+      timeEdited,
+    })}
   </div>
 </div>
 `;
@@ -118,7 +127,16 @@ $!${messageDiv(id, 'message-full', flags)}
   </div>
   <div class="content">
     $!${messageSubheader({ fromName, timestamp, twentyFourHourTime })}
-    $!${messageBody({ content, flags, id, isOutbox, ownEmail, reactions, realmEmoji, timeEdited })}
+    $!${messageBody({
+      content,
+      flags,
+      id,
+      isOutbox,
+      ownEmail,
+      reactions,
+      realmEmoji,
+      timeEdited,
+    })}
   </div>
 </div>
 `;

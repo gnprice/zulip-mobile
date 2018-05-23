@@ -1,7 +1,11 @@
 /* @flow */
 import type { InputSelectionType } from '../types';
 
-export default (text: string, autocompleteText: string, selection: InputSelectionType) => {
+export default (
+  text: string,
+  autocompleteText: string,
+  selection: InputSelectionType,
+) => {
   const { start, end } = selection;
   let residue = '';
   if (start === end && start !== text.length) {
@@ -16,5 +20,8 @@ export default (text: string, autocompleteText: string, selection: InputSelectio
   );
   const prefix = text[lastIndex] === ':' ? ':' : `${text[lastIndex]}**`;
   const suffix = text[lastIndex] === ':' ? ':' : '**';
-  return `${text.substring(0, lastIndex)}${prefix}${autocompleteText}${suffix} ${residue}`;
+  return `${text.substring(
+    0,
+    lastIndex,
+  )}${prefix}${autocompleteText}${suffix} ${residue}`;
 };

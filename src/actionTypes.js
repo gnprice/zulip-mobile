@@ -21,14 +21,19 @@ import type {
 
 export type RehydrateAction = any;
 
-export type AsyncActionCreator<A> = (dispatch: Dispatch, getState: GetState) => A;
+export type AsyncActionCreator<A> = (
+  dispatch: Dispatch,
+  getState: GetState,
+) => A;
 
 export type AppOnlineAction = {
   type: 'APP_ONLINE',
   isOnline: boolean,
 };
 
-export type AppOnlineActionCreator = (isOnline: boolean) => AsyncActionCreator<AppOnlineAction>;
+export type AppOnlineActionCreator = (
+  isOnline: boolean,
+) => AsyncActionCreator<AppOnlineAction>;
 
 export type AppStateAction = {
   type: 'APP_STATE',
@@ -57,7 +62,9 @@ export type AppOrientationAction = {
   orientation: Orientation,
 };
 
-export type AppOrientationActionCreator = (orientation: Orientation) => AppOrientationAction;
+export type AppOrientationActionCreator = (
+  orientation: Orientation,
+) => AppOrientationAction;
 
 export type StartEditMessageAction = {
   type: 'START_EDIT_MESSAGE',
@@ -83,18 +90,36 @@ export type DebugFlagToggleAction = {
   value: string,
 };
 
-export type DebugFlagToggleActionCreator = (key: string, value: any) => DebugFlagToggleAction;
+export type DebugFlagToggleActionCreator = (
+  key: string,
+  value: any,
+) => DebugFlagToggleAction;
 
 export type NavigateAction = Object;
 export type NavigateActionCreator = () => NavigateAction;
 export type NavigateToChatActionCreator = (narrow: Narrow) => NavigateAction;
-export type NavigateToAuthActionCreator = (serverSettings: ApiServerSettings) => NavigateAction;
-export type NavigateToPasswordActionCreator = (ldap?: boolean) => NavigateAction;
-export type NavigateToAccountDetailsActionCreator = (email: string) => NavigateAction;
-export type NavigateToGroupDetailsActionCreator = (recipients: string[]) => NavigateAction;
-export type NavigateToAddNewAccountActionCreator = (realm: string) => NavigateAction;
-export type NavigateToLightboxActionCreator = (src: string, message: Message) => NavigateAction;
-export type NavigateToStreamActionCreator = (streamId: number) => NavigateAction;
+export type NavigateToAuthActionCreator = (
+  serverSettings: ApiServerSettings,
+) => NavigateAction;
+export type NavigateToPasswordActionCreator = (
+  ldap?: boolean,
+) => NavigateAction;
+export type NavigateToAccountDetailsActionCreator = (
+  email: string,
+) => NavigateAction;
+export type NavigateToGroupDetailsActionCreator = (
+  recipients: string[],
+) => NavigateAction;
+export type NavigateToAddNewAccountActionCreator = (
+  realm: string,
+) => NavigateAction;
+export type NavigateToLightboxActionCreator = (
+  src: string,
+  message: Message,
+) => NavigateAction;
+export type NavigateToStreamActionCreator = (
+  streamId: number,
+) => NavigateAction;
 
 export type AccountSwitchAction = {
   type: 'ACCOUNT_SWITCH',
@@ -209,7 +234,9 @@ export type FetchMessagesAroundAnchorActionCreator = (
   anchor: number,
 ) => FetchMessagesAction;
 
-export type FetchMessagesAtFirstUnreadActionCreator = (narrow: Narrow) => FetchMessagesAction;
+export type FetchMessagesAtFirstUnreadActionCreator = (
+  narrow: Narrow,
+) => FetchMessagesAction;
 
 export type BackgroundFetchMessagesActionCreator = (
   narrow: Narrow,
@@ -224,7 +251,9 @@ export type MarkMessagesReadAction = {
   messageIds: number[],
 };
 
-export type MarkMessagesReadActionCreator = (messageIds: number[]) => MarkMessagesReadAction;
+export type MarkMessagesReadActionCreator = (
+  messageIds: number[],
+) => MarkMessagesReadAction;
 
 export type FetchOlderActionCreator = (narrow: Narrow) => FetchMessagesAction;
 export type FetchNewerActionCreator = (narrow: Narrow) => FetchMessagesAction;
@@ -246,7 +275,11 @@ export type FetchRestOfInitialDataActionCreator = () => void;
 
 export type DoInitialFetchActionCreator = () => void;
 
-export type UploadImageActionCreator = (narrow: Narrow, uri: string, name: string) => void;
+export type UploadImageActionCreator = (
+  narrow: Narrow,
+  uri: string,
+  name: string,
+) => void;
 
 export type EventAlertWordsAction = any;
 export type EventRealmFiltersAction = any;
@@ -323,7 +356,10 @@ export type EventStreamAction =
   | EventStreamUpdateAction
   | EventStreamOccupyAction;
 
-export type EventUserAction = EventUserAddAction | EventUserRemoveAction | EventUserUpdateAction;
+export type EventUserAction =
+  | EventUserAddAction
+  | EventUserRemoveAction
+  | EventUserUpdateAction;
 
 export type EventUserGroupAction =
   | EventUserGroupAddAction
@@ -332,7 +368,9 @@ export type EventUserGroupAction =
   | EventUserGroupAddMembersAction
   | EventUserGroupRemoveMembersAction;
 
-export type EventReactionAction = EventReactionAddAction | EventReactionRemoveAction;
+export type EventReactionAction =
+  | EventReactionAddAction
+  | EventReactionRemoveAction;
 
 export type EventTypingAction = EventTypingStartAction | EventTypingStopAction;
 
@@ -343,14 +381,18 @@ export type InitRealmEmojiAction = {
   emojis: RealmEmojiState,
 };
 
-export type InitRealmEmojiActionCreator = (emojis: Object) => InitRealmEmojiAction;
+export type InitRealmEmojiActionCreator = (
+  emojis: Object,
+) => InitRealmEmojiAction;
 
 export type InitRealmFilterAction = {
   type: 'INIT_REALM_FILTER',
   filters: RealmFilter[],
 };
 
-export type InitRealmFiltersActionCreator = (filters: RealmFilter[]) => InitRealmFilterAction;
+export type InitRealmFiltersActionCreator = (
+  filters: RealmFilter[],
+) => InitRealmFilterAction;
 
 export type RealmAction =
   | AppRefreshAction
@@ -378,8 +420,14 @@ export type FlagsAction =
   | EventUpdateMessageFlagsAction
   | MarkMessagesReadAction;
 
-export type DispatchOrBatchActionCreator = (dispatch: Dispatch, actions: EventAction[]) => void;
-export type StartEventPollingActionCreator = (queueId: number, eventId: number) => void;
+export type DispatchOrBatchActionCreator = (
+  dispatch: Dispatch,
+  actions: EventAction[],
+) => void;
+export type StartEventPollingActionCreator = (
+  queueId: number,
+  eventId: number,
+) => void;
 
 export type SettingsChangeAction = {
   type: 'SETTINGS_CHANGE',
@@ -387,7 +435,10 @@ export type SettingsChangeAction = {
   value: any,
 };
 
-export type SettingsChangeActionCreator = (key: string, value: any) => SettingsChangeAction;
+export type SettingsChangeActionCreator = (
+  key: string,
+  value: any,
+) => SettingsChangeAction;
 
 export type DraftAddAction = {
   type: 'DRAFT_ADD',
@@ -395,7 +446,10 @@ export type DraftAddAction = {
   content: string,
 };
 
-export type DraftAddActionCreator = (narrow: Narrow, content: string) => DraftAddAction;
+export type DraftAddActionCreator = (
+  narrow: Narrow,
+  content: string,
+) => DraftAddAction;
 
 export type DraftRemoveAction = {
   type: 'DRAFT_REMOVE',
@@ -422,14 +476,19 @@ export type PresenceResponseAction = {
   serverTimestamp: number,
 };
 
-export type PresenceAction = EventPresenceAction | PresenceResponseAction | RealmInitAction;
+export type PresenceAction =
+  | EventPresenceAction
+  | PresenceResponseAction
+  | RealmInitAction;
 
 export type MessageSendStartAction = {
   type: 'MESSAGE_SEND_START',
   outbox: Outbox,
 };
 
-export type MessageSendStartActionCreator = (params: Object) => MessageSendStartAction;
+export type MessageSendStartActionCreator = (
+  params: Object,
+) => MessageSendStartAction;
 
 export type MessageSendCompleteAction = {
   type: 'MESSAGE_SEND_COMPLETE',
@@ -442,7 +501,10 @@ export type MessageSendCompleteActionCreator = (
 
 export type TrySendMessagesActionCreator = () => void;
 
-export type AddToOutboxActionCreator = (narrow: Narrow, content: string) => void;
+export type AddToOutboxActionCreator = (
+  narrow: Narrow,
+  content: string,
+) => void;
 
 export type DeleteOutboxMessageAction = {
   type: 'DELETE_OUTBOX_MESSAGE',
@@ -458,7 +520,9 @@ export type ToggleOutboxSendingAction = {
   sending: boolean,
 };
 
-export type ToggleOutboxSendingActionCreator = (sending: boolean) => ToggleOutboxSendingAction;
+export type ToggleOutboxSendingActionCreator = (
+  sending: boolean,
+) => ToggleOutboxSendingAction;
 
 export type StartTypingAction = {
   type: 'EVENT_TYPING_START',
@@ -481,9 +545,14 @@ export type ClearTypingAction = {
   outdatedNotifications: string[],
 };
 
-export type ClearTypingActionCreator = (outdatedNotifications: Object[]) => ClearTypingAction;
+export type ClearTypingActionCreator = (
+  outdatedNotifications: Object[],
+) => ClearTypingAction;
 
-export type TypingAction = StartTypingAction | StopTypingAction | ClearTypingAction;
+export type TypingAction =
+  | StartTypingAction
+  | StopTypingAction
+  | ClearTypingAction;
 
 export type InitStreamsAction = {
   type: 'INIT_STREAMS',
@@ -507,9 +576,15 @@ export type UpdateExistingStreamActionCreator = (
   newValues: Object,
 ) => void;
 
-export type DoTogglePinStreamActionCreator = (streamId: number, value: boolean) => void;
+export type DoTogglePinStreamActionCreator = (
+  streamId: number,
+  value: boolean,
+) => void;
 
-export type DoToggleMuteStreamActionCreator = (streamId: number, value: boolean) => void;
+export type DoToggleMuteStreamActionCreator = (
+  streamId: number,
+  value: boolean,
+) => void;
 
 export type InitTopicsAction = {
   type: 'INIT_TOPICS',
@@ -517,7 +592,9 @@ export type InitTopicsAction = {
   streamId: number,
 };
 
-export type InitTopicsActionCreator = (outdatedNotifications: Object[]) => ClearTypingAction;
+export type InitTopicsActionCreator = (
+  outdatedNotifications: Object[],
+) => ClearTypingAction;
 
 export type FetchTopicsActionCreator = (streamId: number) => void;
 
@@ -535,9 +612,15 @@ export type InitSubscriptionsActionCreator = (
 ) => InitSubscriptionsAction;
 
 export type FetchSubscriptionsActionCreator = () => void;
-export type ToggleStreamNotificationActionCreator = (streamId: number, value: boolean) => void;
+export type ToggleStreamNotificationActionCreator = (
+  streamId: number,
+  value: boolean,
+) => void;
 
-export type SendFocusPingActionCreator = (hasFocus?: boolean, newUserInput?: boolean) => void;
+export type SendFocusPingActionCreator = (
+  hasFocus?: boolean,
+  newUserInput?: boolean,
+) => void;
 
 export type InitUsersAction = {
   type: 'INIT_USERS',
@@ -641,7 +724,10 @@ export type UnreadAction =
   | EventMessageDeleteAction
   | EventUpdateMessageFlagsAction;
 
-export type UsersAction = InitUsersAction | RealmInitAction | EventUserAddAction;
+export type UsersAction =
+  | InitUsersAction
+  | RealmInitAction
+  | EventUserAddAction;
 
 export type UserGroupsAction =
   | RealmInitAction

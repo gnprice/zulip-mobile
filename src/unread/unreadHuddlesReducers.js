@@ -22,7 +22,10 @@ import { NULL_ARRAY } from '../nullObjects';
 
 const initialState: UnreadHuddlesState = NULL_ARRAY;
 
-const realmInit = (state: UnreadHuddlesState, action: RealmInitAction): UnreadHuddlesState =>
+const realmInit = (
+  state: UnreadHuddlesState,
+  action: RealmInitAction,
+): UnreadHuddlesState =>
   (action.data.unread_msgs && action.data.unread_msgs.huddles) || NULL_ARRAY;
 
 const eventNewMessage = (

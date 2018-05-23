@@ -5,7 +5,14 @@ import { View, StyleSheet } from 'react-native';
 import type { Actions, Auth, Context } from '../types';
 import connectWithActions from '../connectWithActions';
 import { fetchApiKey } from '../api';
-import { ErrorMsg, Input, PasswordInput, Screen, WebLink, ZulipButton } from '../common';
+import {
+  ErrorMsg,
+  Input,
+  PasswordInput,
+  Screen,
+  WebLink,
+  ZulipButton,
+} from '../common';
 import { getAuth } from '../selectors';
 import { isValidEmailFormat } from '../utils/misc';
 
@@ -88,7 +95,12 @@ class PasswordAuthView extends PureComponent<Props, State> {
       (requireEmailFormat && !isValidEmailFormat(email));
 
     return (
-      <Screen title="Log in" centerContent padding keyboardShouldPersistTaps="always">
+      <Screen
+        title="Log in"
+        centerContent
+        padding
+        keyboardShouldPersistTaps="always"
+      >
         <Input
           autoFocus={email.length === 0}
           autoCapitalize="none"

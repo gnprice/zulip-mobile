@@ -30,22 +30,31 @@ export const messageSendStart = (outbox: Object): MessageSendStartAction => ({
   outbox,
 });
 
-export const toggleOutboxSending = (sending: boolean): ToggleOutboxSendingAction => ({
+export const toggleOutboxSending = (
+  sending: boolean,
+): ToggleOutboxSendingAction => ({
   type: TOGGLE_OUTBOX_SENDING,
   sending,
 });
 
-export const deleteOutboxMessage = (localMessageId: number): DeleteOutboxMessageAction => ({
+export const deleteOutboxMessage = (
+  localMessageId: number,
+): DeleteOutboxMessageAction => ({
   type: DELETE_OUTBOX_MESSAGE,
   localMessageId,
 });
 
-export const messageSendComplete = (localMessageId: number): MessageSendCompleteAction => ({
+export const messageSendComplete = (
+  localMessageId: number,
+): MessageSendCompleteAction => ({
   type: MESSAGE_SEND_COMPLETE,
   localMessageId,
 });
 
-export const trySendMessages = () => (dispatch: Dispatch, getState: GetState) => {
+export const trySendMessages = () => (
+  dispatch: Dispatch,
+  getState: GetState,
+) => {
   const state = getState();
   if (state.outbox.length > 0 && !state.session.outboxSending) {
     dispatch(toggleOutboxSending(true));
@@ -55,7 +64,9 @@ export const trySendMessages = () => (dispatch: Dispatch, getState: GetState) =>
         await sendMessage(
           auth,
           item.type,
-          isPrivateOrGroupNarrow(item.narrow) ? item.narrow[0].operand : item.display_recipient,
+          isPrivateOrGroupNarrow(item.narrow)
+            ? item.narrow[0].operand
+            : item.display_recipient,
           item.subject,
           item.markdownContent,
           item.timestamp,
@@ -77,14 +88,22 @@ const mapEmailsToUsers = (users, narrow, selfDetail) =>
       const user = getUserByEmail(users, item);
       return { email: item, id: user.user_id, full_name: user.full_name };
     })
-    .concat({ email: selfDetail.email, id: selfDetail.user_id, full_name: selfDetail.full_name });
+    .concat({
+      email: selfDetail.email,
+      id: selfDetail.user_id,
+      full_name: selfDetail.full_name,
+    });
 
 // TODO type: `string | NamedUser[]` is a bit confusing.
 const extractTypeToAndSubjectFromNarrow = (
   narrow: Narrow,
   users: User[],
   selfDetail: { email: string, user_id: number, full_name: string },
-): { type: 'private' | 'stream', display_recipient: string | NamedUser[], subject: string } => {
+): {
+  type: 'private' | 'stream',
+  display_recipient: string | NamedUser[],
+  subject: string,
+} => {
   if (isPrivateOrGroupNarrow(narrow)) {
     return {
       type: 'private',
@@ -92,9 +111,17 @@ const extractTypeToAndSubjectFromNarrow = (
       subject: '',
     };
   } else if (isStreamNarrow(narrow)) {
-    return { type: 'stream', display_recipient: narrow[0].operand, subject: '(no topic)' };
+    return {
+      type: 'stream',
+      display_recipient: narrow[0].operand,
+      subject: '(no topic)',
+    };
   }
-  return { type: 'stream', display_recipient: narrow[0].operand, subject: narrow[1].operand };
+  return {
+    type: 'stream',
+    display_recipient: narrow[0].operand,
+    subject: narrow[1].operand,
+  };
 };
 
 export const addToOutbox = (narrow: Narrow, content: string) => async (

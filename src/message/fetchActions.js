@@ -93,10 +93,21 @@ export const fetchMessages = (
   useFirstUnread: boolean = false,
 ): FetchMessagesAction => async (dispatch: Dispatch) => {
   dispatch(messageFetchStart(narrow, numBefore, numAfter));
-  dispatch(backgroundFetchMessages(narrow, anchor, numBefore, numAfter, useFirstUnread));
+  dispatch(
+    backgroundFetchMessages(
+      narrow,
+      anchor,
+      numBefore,
+      numAfter,
+      useFirstUnread,
+    ),
+  );
 };
 
-export const fetchMessagesAroundAnchor = (narrow: Narrow, anchor: number): FetchMessagesAction =>
+export const fetchMessagesAroundAnchor = (
+  narrow: Narrow,
+  anchor: number,
+): FetchMessagesAction =>
   fetchMessages(
     narrow,
     anchor,
@@ -105,10 +116,20 @@ export const fetchMessagesAroundAnchor = (narrow: Narrow, anchor: number): Fetch
     false,
   );
 
-export const fetchMessagesAtFirstUnread = (narrow: Narrow): FetchMessagesAction =>
-  fetchMessages(narrow, 0, config.messagesPerRequest / 2, config.messagesPerRequest / 2, true);
+export const fetchMessagesAtFirstUnread = (
+  narrow: Narrow,
+): FetchMessagesAction =>
+  fetchMessages(
+    narrow,
+    0,
+    config.messagesPerRequest / 2,
+    config.messagesPerRequest / 2,
+    true,
+  );
 
-export const markMessagesRead = (messageIds: number[]): MarkMessagesReadAction => ({
+export const markMessagesRead = (
+  messageIds: number[],
+): MarkMessagesReadAction => ({
   type: MARK_MESSAGES_READ,
   messageIds,
 });
@@ -123,8 +144,15 @@ export const fetchOlder = (narrow: Narrow): FetchMessagesAction => (
   const fetching = getFetchingForActiveNarrow(narrow)(state);
   const { needsInitialFetch } = getSession(state);
 
-  if (!needsInitialFetch && !fetching.older && !caughtUp.older && firstMessageId) {
-    dispatch(fetchMessages(narrow, firstMessageId, config.messagesPerRequest, 0));
+  if (
+    !needsInitialFetch &&
+    !fetching.older &&
+    !caughtUp.older &&
+    firstMessageId
+  ) {
+    dispatch(
+      fetchMessages(narrow, firstMessageId, config.messagesPerRequest, 0),
+    );
   }
 };
 
@@ -138,8 +166,15 @@ export const fetchNewer = (narrow: Narrow): FetchMessagesAction => (
   const fetching = getFetchingForActiveNarrow(narrow)(state);
   const { needsInitialFetch } = getSession(state);
 
-  if (!needsInitialFetch && !fetching.newer && !caughtUp.newer && lastMessageId) {
-    dispatch(fetchMessages(narrow, lastMessageId, 0, config.messagesPerRequest));
+  if (
+    !needsInitialFetch &&
+    !fetching.newer &&
+    !caughtUp.newer &&
+    lastMessageId
+  ) {
+    dispatch(
+      fetchMessages(narrow, lastMessageId, 0, config.messagesPerRequest),
+    );
   }
 };
 
@@ -151,7 +186,10 @@ export const initialFetchComplete = (): InitialFetchCompleteAction => ({
   type: INITIAL_FETCH_COMPLETE,
 });
 
-export const fetchEssentialInitialData = () => async (dispatch: Dispatch, getState: GetState) => {
+export const fetchEssentialInitialData = () => async (
+  dispatch: Dispatch,
+  getState: GetState,
+) => {
   dispatch(initialFetchStart());
   const auth = getAuth(getState());
   const halfCount = Math.trunc(config.messagesPerRequest / 2);
@@ -163,7 +201,9 @@ export const fetchEssentialInitialData = () => async (dispatch: Dispatch, getSta
   const [initData, messages] = await Promise.all([
     await tryUntilSuccessful(() => registerForEvents(auth)),
     narrow &&
-      (await tryUntilSuccessful(() => getMessages(auth, narrow, 0, halfCount, halfCount, true))),
+      (await tryUntilSuccessful(() =>
+        getMessages(auth, narrow, 0, halfCount, halfCount, true),
+      )),
   ]);
 
   timing.end('Essential server data');
@@ -177,7 +217,10 @@ export const fetchEssentialInitialData = () => async (dispatch: Dispatch, getSta
   dispatch(startEventPolling(initData.queue_id, initData.last_event_id));
 };
 
-export const fetchRestOfInitialData = () => async (dispatch: Dispatch, getState: GetState) => {
+export const fetchRestOfInitialData = () => async (
+  dispatch: Dispatch,
+  getState: GetState,
+) => {
   const auth = getAuth(getState());
   const pushToken = getPushToken(getState());
 
@@ -190,7 +233,15 @@ export const fetchRestOfInitialData = () => async (dispatch: Dispatch, getState:
   ]);
   timing.end('Rest of server data');
 
-  dispatch(messageFetchComplete(messages, allPrivateNarrow, Number.MAX_SAFE_INTEGER, 100, 0));
+  dispatch(
+    messageFetchComplete(
+      messages,
+      allPrivateNarrow,
+      Number.MAX_SAFE_INTEGER,
+      100,
+      0,
+    ),
+  );
   dispatch(initStreams(streams));
   if (auth.apiKey !== '' && (pushToken === '' || pushToken === undefined)) {
     refreshNotificationToken();
@@ -198,7 +249,10 @@ export const fetchRestOfInitialData = () => async (dispatch: Dispatch, getState:
   dispatch(trySendMessages());
 };
 
-export const doInitialFetch = () => async (dispatch: Dispatch, getState: GetState) => {
+export const doInitialFetch = () => async (
+  dispatch: Dispatch,
+  getState: GetState,
+) => {
   dispatch(fetchEssentialInitialData());
   dispatch(fetchRestOfInitialData());
 
@@ -209,10 +263,11 @@ export const doInitialFetch = () => async (dispatch: Dispatch, getState: GetStat
   setInterval(() => sendFocusPing(), 60 * 1000);
 };
 
-export const uploadImage = (narrow: Narrow, uri: string, name: string) => async (
-  dispatch: Dispatch,
-  getState: GetState,
-) => {
+export const uploadImage = (
+  narrow: Narrow,
+  uri: string,
+  name: string,
+) => async (dispatch: Dispatch, getState: GetState) => {
   const auth = getAuth(getState());
   const serverUri = await uploadFile(auth, uri, name);
   const messageToSend = `[${name}](${serverUri})`;

@@ -50,7 +50,9 @@ export default class StreamList extends PureComponent<Props> {
       return <SearchEmptyState text="No streams found" />;
     }
 
-    const sortedStreams: Subscription[] = streams.sort(caseInsensitiveCompareObjFunc('name'));
+    const sortedStreams: Subscription[] = streams.sort(
+      caseInsensitiveCompareObjFunc('name'),
+    );
     const sections = [
       {
         key: 'Pinned',

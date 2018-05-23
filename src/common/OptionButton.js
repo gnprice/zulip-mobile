@@ -27,7 +27,9 @@ export default class OptionButton extends PureComponent<Props> {
     return (
       <Touchable onPress={onPress}>
         <View style={styles.listItem}>
-          {Icon && <Icon size={18} style={[styles.icon, styles.settingsIcon]} />}
+          {Icon && (
+            <Icon size={18} style={[styles.icon, styles.settingsIcon]} />
+          )}
           <Label text={label} />
           <View style={styles.rightItem}>
             <IconRight size={18} style={[styles.icon, styles.settingsIcon]} />

@@ -2,13 +2,20 @@
 import type { Auth, ResponseExtractionFunc } from '../types';
 import { getAuthHeader, encodeAsURI, isValidUrl } from '../utils/url';
 import userAgent from '../utils/userAgent';
-import { networkActivityStart, networkActivityStop } from '../utils/networkActivity';
+import {
+  networkActivityStart,
+  networkActivityStop,
+} from '../utils/networkActivity';
 
 const apiVersion = 'api/v1';
 
 const defaultResFunc: ResponseExtractionFunc = res => res;
 
-export const fetchWithAuth = async (auth: Auth, url: string, params: Object = {}) => {
+export const fetchWithAuth = async (
+  auth: Auth,
+  url: string,
+  params: Object = {},
+) => {
   if (!isValidUrl(url)) {
     throw new Error(`Invalid url ${url}`);
   }
@@ -28,8 +35,11 @@ export const fetchWithAuth = async (auth: Auth, url: string, params: Object = {}
   return fetch(url, allParams);
 };
 
-export const apiFetch = async (auth: Auth, route: string, params: Object = {}) =>
-  fetchWithAuth(auth, `${auth.realm}/${apiVersion}/${route}`, params);
+export const apiFetch = async (
+  auth: Auth,
+  route: string,
+  params: Object = {},
+) => fetchWithAuth(auth, `${auth.realm}/${apiVersion}/${route}`, params);
 
 export const apiCall = async (
   auth: Auth,
