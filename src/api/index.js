@@ -1,4 +1,5 @@
 /* @flow */
+/* prettier-ignore-start */
 export { default as queueMarkAsRead } from './queueMarkAsRead';
 export { default as checkCompatibility } from './checkCompatibility';
 export { default as devFetchApiKey } from './devFetchApiKey';
@@ -15,9 +16,8 @@ export { default as pollForEvents } from './pollForEvents';
 export { default as registerForEvents } from './registerForEvents';
 export { default as uploadFile } from './uploadFile';
 
-export {
-  default as emojiReactionAdd,
-} from './emoji_reactions/emojiReactionAdd';
+// prettier-ignore
+export { default as emojiReactionAdd } from './emoji_reactions/emojiReactionAdd';
 export {
   default as emojiReactionRemove,
 } from './emoji_reactions/emojiReactionRemove';
@@ -71,3 +71,4 @@ export { default as getUserGroupById } from './user_groups/getUserGroupById';
 export { default as getUserGroups } from './user_groups/getUserGroups';
 
 export { default as getUsers } from './users/getUsers';
+/* prettier-ignore-end */
