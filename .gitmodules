@@ -1,0 +1,3 @@
+[submodule "node_modules/react-native"]
+	path = node_modules/react-native
+	url = git@github.com:facebook/react-native
