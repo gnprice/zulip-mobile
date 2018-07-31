@@ -140,6 +140,7 @@ export type Message = {
   sender_domain: string,
 
   /** The rest are believed to really appear in `message` events. */
+
   avatar_url: ?string,
   client: string,
   content: string,
@@ -157,7 +158,12 @@ export type Message = {
   sender_id: number,
   sender_realm_str: string,
   sender_short_name: string,
-  stream_id: number,
+
+  // TODO also display_recipient varies; controlled by same logic in
+  // `hydrate_recipient_info in zerver/lib/message.py.
+  /** Present just when `type` is `stream`. */
+  stream_id: ?number,
+
   subject: string,
   subject_links: string[],
   submessages: Message[],
