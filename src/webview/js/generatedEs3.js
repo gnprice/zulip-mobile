@@ -200,7 +200,7 @@ var appendAuthToImages = function appendAuthToImages(auth) {
     }
 
     var srcPath = img.src.substring(auth.realm.length);
-    if (!(srcPath.startsWith('/user_uploads/') || srcPath.startsWith('/thumbnail?'))) {
+    if (!srcPath.startsWith('/user_uploads/') && !srcPath.startsWith('/user_avatars/') && !srcPath.startsWith('/thumbnail?')) {
       return;
     }
     var delimiter = img.src.includes('?') ? '&' : '?';
