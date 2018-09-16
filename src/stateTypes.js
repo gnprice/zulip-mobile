@@ -11,13 +11,6 @@ import type {
 } from './api/apiTypes';
 import type {
   Account,
-  CaughtUp,
-  Debug,
-  Dimensions,
-  EditMessage,
-  Fetching,
-  MuteTuple,
-  Orientation,
   Outbox,
   Presence,
   RealmBot,
@@ -57,6 +50,22 @@ export type SubscriptionsState = Subscription[];
 
 export type AccountsState = Account[];
 
+export type EditMessage = {
+  id: number,
+  content: string,
+  topic: string,
+};
+export type Orientation = 'LANDSCAPE' | 'PORTRAIT';
+export type Dimensions = {
+  bottom: number,
+  left: number,
+  right: number,
+  top: number,
+};
+export type Debug = {
+  highlightUnreadMessages: boolean,
+  doNotMarkMessagesAsRead: boolean,
+};
 export type SessionState = {
   eventQueueId: number,
   editMessage: ?EditMessage,
@@ -71,11 +80,30 @@ export type SessionState = {
 };
 
 /**
+ * Info about how complete our knowledge is of the messages in some narrow.
+ *
+ * @prop older - true just if in some fetch we reached the oldest message
+ *   in the narrow.  No need to fetch more in that direction.
+ * @prop newer - true just if in some fetch we reached the newest message in
+ *   the narrow.  Of course their may always be new messages, but we should
+ *   learn about them through events; so again, no need to fetch more.
+ */
+export type CaughtUp = {
+  older: boolean,
+  newer: boolean,
+};
+
+/**
  * Info about how completely we know the messages in each narrow of
  * MessagesState.
  */
 export type CaughtUpState = {
   [narrow: string]: CaughtUp,
+};
+
+export type Fetching = {
+  older: boolean,
+  newer: boolean,
 };
 
 export type FetchingState = {
@@ -99,6 +127,8 @@ export type LoadingState = {
   unread: boolean,
   users: boolean,
 };
+
+export type MuteTuple = [string, string];
 
 export type MuteState = MuteTuple[];
 

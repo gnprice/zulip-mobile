@@ -15,7 +15,7 @@ import type {
   User,
 } from './api/apiTypes';
 import type { AppStyles } from './styles/theme';
-import type { GlobalState, PresenceState } from './stateTypes';
+import type { GlobalState, MuteTuple, PresenceState } from './stateTypes';
 
 export type { ChildrenArray } from 'react';
 export type React$Node = Node; // eslint-disable-line flowtype/type-id-match
@@ -32,15 +32,6 @@ export type ThunkDispatch<T> = ((Dispatch, GetState) => T) => T;
 export type Dispatch = ReduxDispatch<*> & ThunkDispatch<*>;
 
 export type Style = boolean | number | Array<Style> | ?{ [string]: any };
-
-export type Orientation = 'LANDSCAPE' | 'PORTRAIT';
-
-export type Dimensions = {
-  bottom: number,
-  left: number,
-  right: number,
-  top: number,
-};
 
 export type ObjectWithId = {
   id: number,
@@ -156,25 +147,6 @@ export type Presence = {
   [client: string]: ClientPresence,
 };
 
-/**
- * Info about how complete our knowledge is of the messages in some narrow.
- *
- * @prop older - true just if in some fetch we reached the oldest message
- *   in the narrow.  No need to fetch more in that direction.
- * @prop newer - true just if in some fetch we reached the newest message in
- *   the narrow.  Of course their may always be new messages, but we should
- *   learn about them through events; so again, no need to fetch more.
- */
-export type CaughtUp = {
-  older: boolean,
-  newer: boolean,
-};
-
-export type Fetching = {
-  older: boolean,
-  newer: boolean,
-};
-
 export type HeartbeatEvent = {
   type: 'heartbeat',
   id: number,
@@ -201,19 +173,6 @@ export type UpdateMessageFlagsEvent = {
   messages: number[],
   operation: 'add' | '???',
 };
-
-export type EditMessage = {
-  id: number,
-  content: string,
-  topic: string,
-};
-
-export type Debug = {
-  highlightUnreadMessages: boolean,
-  doNotMarkMessagesAsRead: boolean,
-};
-
-export type MuteTuple = [string, string];
 
 export type RealmBot = {
   email: string,
