@@ -79,3 +79,6 @@ android/keystores/debug.keystore
 /fastlane/Preview.html
 /fastlane/screenshots
 /fastlane/test_output
+
+.idea/modules.xml
+.idea/workspace.xml
