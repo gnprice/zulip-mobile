@@ -1,20 +1,5 @@
 /* @flow */
-import type {
-  DeleteTokenPushAction,
-  EventRealmEmojiUpdateAction,
-  EventRealmFilterUpdateAction,
-  InitRealmEmojiAction,
-  InitRealmFilterAction,
-  LoginSuccessAction,
-  LogoutAction,
-  RealmAction,
-  RealmBot,
-  RealmEmojiState,
-  RealmFilter,
-  RealmInitAction,
-  SaveTokenPushAction,
-  User
-} from '../types';
+import type { RealmAction, RealmBot, RealmEmojiState, RealmFilter, User } from '../types';
 import {
   ACCOUNT_SWITCH,
   DELETE_TOKEN_PUSH,
@@ -26,7 +11,7 @@ import {
   LOGIN_SUCCESS,
   LOGOUT,
   REALM_INIT,
-  SAVE_TOKEN_PUSH
+  SAVE_TOKEN_PUSH,
 } from '../actionConstants';
 
 /**
@@ -71,92 +56,70 @@ const initialState = {
   nonActiveUsers: [],
 };
 
-const realmInit = (state: RealmState, action: RealmInitAction): RealmState => ({
-  ...state,
-  canCreateStreams: action.data.can_create_streams,
-  crossRealmBots: action.data.cross_realm_bots,
-  emoji: action.data.realm_emoji,
-  filters: action.data.realm_filters,
-  isAdmin: action.data.is_admin,
-  nonActiveUsers: action.data.realm_non_active_users,
-  twentyFourHourTime: action.data.twenty_four_hour_time,
-});
-
-const saveTokenPush = (state: RealmState, action: SaveTokenPushAction): RealmState => ({
-  ...state,
-  pushToken: {
-    token: action.pushToken,
-    result: action.result,
-    msg: action.msg,
-  },
-});
-
-const deleteTokenPush = (state: RealmState, action: DeleteTokenPushAction): RealmState => ({
-  ...state,
-  pushToken: { token: '', result: '', msg: '' },
-});
-
-const loginChange = (state: RealmState, action: LoginSuccessAction | LogoutAction): RealmState => ({
-  ...state,
-  emoji: {},
-  pushToken: { token: '', result: '', msg: '' },
-});
-
-const initRealmEmoji = (state: RealmState, action: InitRealmEmojiAction): RealmState => ({
-  ...state,
-  emoji: action.emojis,
-});
-
-const initRealmFilter = (state: RealmState, action: InitRealmFilterAction): RealmState => ({
-  ...state,
-  filters: action.filters,
-});
-
-const eventRealmFilterUpdate = (
-  state: RealmState,
-  action: EventRealmFilterUpdateAction,
-): RealmState => ({
-  ...state,
-  filters: action.realm_filters,
-});
-
-const eventRealmEmojiUpdate = (
-  state: RealmState,
-  action: EventRealmEmojiUpdateAction,
-): RealmState => ({
-  ...state,
-  emoji: action.realm_emoji,
-});
-
 export const reducer = (state: RealmState = initialState, action: RealmAction): RealmState => {
   switch (action.type) {
     case ACCOUNT_SWITCH:
       return initialState;
 
     case REALM_INIT:
-      return realmInit(state, action);
+      return {
+        ...state,
+        canCreateStreams: action.data.can_create_streams,
+        crossRealmBots: action.data.cross_realm_bots,
+        emoji: action.data.realm_emoji,
+        filters: action.data.realm_filters,
+        isAdmin: action.data.is_admin,
+        nonActiveUsers: action.data.realm_non_active_users,
+        twentyFourHourTime: action.data.twenty_four_hour_time,
+      };
 
     case SAVE_TOKEN_PUSH:
-      return saveTokenPush(state, action);
+      return {
+        ...state,
+        pushToken: {
+          token: action.pushToken,
+          result: action.result,
+          msg: action.msg,
+        },
+      };
 
     case DELETE_TOKEN_PUSH:
-      return deleteTokenPush(state, action);
+      return {
+        ...state,
+        pushToken: { token: '', result: '', msg: '' },
+      };
 
     case LOGOUT:
     case LOGIN_SUCCESS:
-      return loginChange(state, action);
+      return {
+        ...state,
+        emoji: {},
+        pushToken: { token: '', result: '', msg: '' },
+      };
 
     case INIT_REALM_EMOJI:
-      return initRealmEmoji(state, action);
+      return {
+        ...state,
+        emoji: action.emojis,
+      };
 
     case INIT_REALM_FILTER:
-      return initRealmFilter(state, action);
+      return {
+        ...state,
+        filters: action.filters,
+      };
 
     case EVENT_REALM_FILTER_UPDATE:
-      return eventRealmFilterUpdate(state, action);
+      return {
+        ...state,
+        filters: action.realm_filters,
+      };
 
     case EVENT_REALM_EMOJI_UPDATE:
-      return eventRealmEmojiUpdate(state, action);
+      return {
+        ...state,
+        emoji: action.realm_emoji,
+      };
 
     case EVENT_UPDATE_DISPLAY_SETTINGS:
       switch (action.setting_name) {
