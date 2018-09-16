@@ -1,5 +1,20 @@
 /* @flow */
-import type { RealmAction, RealmBot, RealmEmojiState, RealmFilter, User } from '../types';
+import type {
+  AppRefreshAction,
+  DeleteTokenPushAction,
+  EventRealmEmojiUpdateAction,
+  EventRealmFilterUpdateAction,
+  InitRealmEmojiAction,
+  InitRealmFilterAction,
+  LoginSuccessAction,
+  LogoutAction,
+  RealmBot,
+  RealmEmojiState,
+  RealmFilter,
+  RealmInitAction,
+  SaveTokenPushAction,
+  User,
+} from '../types';
 import {
   ACCOUNT_SWITCH,
   DELETE_TOKEN_PUSH,
@@ -55,6 +70,18 @@ const initialState = {
   isAdmin: false,
   nonActiveUsers: [],
 };
+
+type RealmAction =
+  | AppRefreshAction
+  | RealmInitAction
+  | DeleteTokenPushAction
+  | SaveTokenPushAction
+  | LoginSuccessAction
+  | LogoutAction
+  | InitRealmEmojiAction
+  | InitRealmFilterAction
+  | EventRealmFilterUpdateAction
+  | EventRealmEmojiUpdateAction;
 
 export const reducer = (state: RealmState = initialState, action: RealmAction): RealmState => {
   switch (action.type) {

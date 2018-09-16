@@ -543,3 +543,4 @@ export type InitialData = InitialDataBase &
   InitialDataUpdateGlobalNotifications &
   InitialDataUpdateMessageFlags;
 export { RealmState } from './realm/realmState';
+export { RealmAction } from './realm/realmState';
