@@ -1,30 +1,63 @@
 /* @flow */
 import type {
-  RealmState,
-  RealmAction,
-  RealmInitAction,
-  SaveTokenPushAction,
   DeleteTokenPushAction,
-  LoginSuccessAction,
-  LogoutAction,
+  EventRealmEmojiUpdateAction,
+  EventRealmFilterUpdateAction,
   InitRealmEmojiAction,
   InitRealmFilterAction,
-  EventRealmFilterUpdateAction,
-  EventRealmEmojiUpdateAction,
+  LoginSuccessAction,
+  LogoutAction,
+  RealmAction,
+  RealmBot,
+  RealmEmojiState,
+  RealmFilter,
+  RealmInitAction,
+  SaveTokenPushAction,
+  User
 } from '../types';
 import {
-  REALM_INIT,
-  EVENT_REALM_EMOJI_UPDATE,
-  LOGOUT,
-  LOGIN_SUCCESS,
   ACCOUNT_SWITCH,
-  INIT_REALM_EMOJI,
-  EVENT_UPDATE_DISPLAY_SETTINGS,
-  SAVE_TOKEN_PUSH,
   DELETE_TOKEN_PUSH,
-  INIT_REALM_FILTER,
+  EVENT_REALM_EMOJI_UPDATE,
   EVENT_REALM_FILTER_UPDATE,
+  EVENT_UPDATE_DISPLAY_SETTINGS,
+  INIT_REALM_EMOJI,
+  INIT_REALM_FILTER,
+  LOGIN_SUCCESS,
+  LOGOUT,
+  REALM_INIT,
+  SAVE_TOKEN_PUSH
 } from '../actionConstants';
+
+/**
+ * State with general info about a Zulip organization; our state subtree `realm`.
+ *
+ * @prop twentyFourHourTime
+ * @prop canCreateStreams
+ * @prop crossRealmBots - The server's cross-realm bots; e.g., Welcome Bot.
+ *   Cross-realm bots should be treated like normal bots.
+ * @prop nonActiveUsers - All users in the organization with `is_active`
+ *   false; for normal users, this means they or an admin deactivated their
+ *   account.  See `User` and the linked documentation.
+ * @prop pushToken
+ * @prop filters
+ * @prop emoji
+ * @prop isAdmin
+ */
+export type RealmState = {
+  twentyFourHourTime: boolean,
+  canCreateStreams: boolean,
+  crossRealmBots: RealmBot[],
+  nonActiveUsers: User[],
+  pushToken: {
+    token: string,
+    msg: string,
+    result: string,
+  },
+  filters: RealmFilter[],
+  emoji: RealmEmojiState,
+  isAdmin: boolean,
+};
 
 // Initial state
 const initialState = {

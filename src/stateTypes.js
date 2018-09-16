@@ -1,26 +1,18 @@
 /* @flow */
 
-import type {
-  Message,
-  RealmEmojiState,
-  RealmFilter,
-  Stream,
-  Subscription,
-  Topic,
-  User,
-} from './api/apiTypes';
+import type { Message, Stream, Subscription, Topic, User } from './api/apiTypes';
 import type {
   Account,
   Outbox,
   Presence,
-  RealmBot,
   ThemeType,
   UnreadHuddlesState,
   UnreadMentionsState,
   UnreadPmsState,
   UnreadStreamsState,
-  UserGroup,
+  UserGroup
 } from './types';
+import type { RealmState } from './realm/realmState';
 
 /**
  * An index on `MessagesState`, listing messages in each narrow.
@@ -145,35 +137,6 @@ export type NavigationState = {
       narrow?: Narrow,
     },
   }>,
-};
-/**
- * State with general info about a Zulip organization; our state subtree `realm`.
- *
- * @prop twentyFourHourTime
- * @prop canCreateStreams
- * @prop crossRealmBots - The server's cross-realm bots; e.g., Welcome Bot.
- *   Cross-realm bots should be treated like normal bots.
- * @prop nonActiveUsers - All users in the organization with `is_active`
- *   false; for normal users, this means they or an admin deactivated their
- *   account.  See `User` and the linked documentation.
- * @prop pushToken
- * @prop filters
- * @prop emoji
- * @prop isAdmin
- */
-export type RealmState = {
-  twentyFourHourTime: boolean,
-  canCreateStreams: boolean,
-  crossRealmBots: RealmBot[],
-  nonActiveUsers: User[],
-  pushToken: {
-    token: string,
-    msg: string,
-    result: string,
-  },
-  filters: RealmFilter[],
-  emoji: RealmEmojiState,
-  isAdmin: boolean,
 };
 
 export type TopicsState = {
