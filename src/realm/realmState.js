@@ -95,7 +95,7 @@ const eventRealmEmojiUpdate = (
   emoji: action.realm_emoji,
 });
 
-export default (state: RealmState = initialState, action: RealmAction): RealmState => {
+export const reducer = (state: RealmState = initialState, action: RealmAction): RealmState => {
   switch (action.type) {
     case ACCOUNT_SWITCH:
       return initialState;

@@ -20,7 +20,7 @@ import mute from '../mute/muteReducers';
 import nav from '../nav/navReducers';
 import outbox from '../outbox/outboxReducers';
 import presence from '../presence/presenceReducers';
-import realm from '../realm/realmReducers';
+import * as realm from '../realm/realmState';
 import session from '../session/sessionReducers';
 import settings from '../settings/settingsReducers';
 import streams from '../streams/streamsReducers';
@@ -49,7 +49,7 @@ const reducers = {
   nav,
   outbox,
   presence,
-  realm,
+  realm: realm.reducer,
   session,
   settings,
   streams,

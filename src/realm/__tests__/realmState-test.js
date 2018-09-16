@@ -1,6 +1,6 @@
 import deepFreeze from 'deep-freeze';
 
-import realmReducers from '../realmReducers';
+import { reducer } from '../realmState';
 import {
   ACCOUNT_SWITCH,
   EVENT_REALM_EMOJI_UPDATE,
@@ -11,7 +11,7 @@ import {
 } from '../../actionConstants';
 import { NULL_OBJECT } from '../../nullObjects';
 
-describe('realmReducers', () => {
+describe('reducer', () => {
   describe('ACCOUNT_SWITCH', () => {
     test('resets state to initial state', () => {
       const initialState = NULL_OBJECT;
@@ -31,7 +31,7 @@ describe('realmReducers', () => {
         nonActiveUsers: [],
       };
 
-      const actualState = realmReducers(initialState, action);
+      const actualState = reducer(initialState, action);
 
       expect(actualState).toEqual(expectedState);
     });
@@ -58,7 +58,7 @@ describe('realmReducers', () => {
         emoji: { customEmoji1: {} },
       };
 
-      const actualState = realmReducers(initialState, action);
+      const actualState = reducer(initialState, action);
 
       expect(actualState).toEqual(expectedState);
     });
@@ -82,7 +82,7 @@ describe('realmReducers', () => {
         emoji: { customEmoji1: {} },
       };
 
-      const actualState = realmReducers(initialState, action);
+      const actualState = reducer(initialState, action);
 
       expect(actualState).toEqual(expectedState);
     });
@@ -111,7 +111,7 @@ describe('realmReducers', () => {
         emoji: { customEmoji1: {} },
       };
 
-      const actualState = realmReducers(initialState, action);
+      const actualState = reducer(initialState, action);
 
       expect(actualState).toEqual(expectedState);
     });
@@ -147,7 +147,7 @@ describe('realmReducers', () => {
         filter: [],
       };
 
-      const newState = realmReducers(prevState, action);
+      const newState = reducer(prevState, action);
 
       expect(newState).toEqual(expectedState);
     });
@@ -177,7 +177,7 @@ describe('realmReducers', () => {
         filters: [['#(?P<id>[0-9]+)', 'https://github.com/zulip/zulip/issues/%(id)s', 2]],
       };
 
-      const newState = realmReducers(prevState, action);
+      const newState = reducer(prevState, action);
 
       expect(newState).toEqual(expectedState);
     });
