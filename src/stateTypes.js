@@ -1,6 +1,14 @@
 /* @flow */
 
-import type { Message, RealmEmojiState, RealmFilter, Stream, Subscription, Topic, User } from './api/apiTypes';
+import type {
+  Message,
+  RealmEmojiState,
+  RealmFilter,
+  Stream,
+  Subscription,
+  Topic,
+  User,
+} from './api/apiTypes';
 import type {
   Account,
   CaughtUp,
@@ -18,7 +26,7 @@ import type {
   UnreadMentionsState,
   UnreadPmsState,
   UnreadStreamsState,
-  UserGroup
+  UserGroup,
 } from './types';
 
 /**
