@@ -2,15 +2,13 @@
 
 import React, { PureComponent } from 'react';
 import type { Node as React$Node } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-import type { Context, Dimensions, LocalizableText, Dispatch } from '../types';
-import { connect } from '../react-redux';
+import type { Context, LocalizableText } from '../types';
 import KeyboardAvoider from './KeyboardAvoider';
 import OfflineNotice from './OfflineNotice';
 import ZulipStatusBar from './ZulipStatusBar';
-import { getSession } from '../selectors';
 import ModalNavBar from '../nav/ModalNavBar';
 import ModalSearchNavBar from '../nav/ModalSearchNavBar';
 import styles from '../styles';
@@ -31,10 +29,8 @@ const componentStyles = StyleSheet.create({
 });
 
 type Props = {|
-  dispatch: Dispatch,
   centerContent: boolean,
   +children: React$Node,
-  safeAreaInsets: Dimensions,
   keyboardShouldPersistTaps: 'never' | 'always' | 'handled',
   padding: boolean,
   scrollEnabled: boolean,
@@ -69,7 +65,7 @@ type Props = {|
  * @prop [title] - Text shown as the title of the screen.
  *                 Required unless `search` is true.
  */
-class Screen extends PureComponent<Props> {
+export default class Screen extends PureComponent<Props> {
   context: Context;
 
   static contextTypes = {
@@ -98,7 +94,6 @@ class Screen extends PureComponent<Props> {
       children,
       keyboardShouldPersistTaps,
       padding,
-      safeAreaInsets,
       scrollEnabled,
       search,
       searchBarOnChange,
@@ -108,7 +103,7 @@ class Screen extends PureComponent<Props> {
     const { styles: contextStyles } = this.context;
 
     return (
-      <View style={[contextStyles.screen, { paddingBottom: safeAreaInsets.bottom }]}>
+      <SafeAreaView style={contextStyles.screen}>
         <ZulipStatusBar />
         {search ? (
           <ModalSearchNavBar autoFocus={autoFocus} searchBarOnChange={searchBarOnChange} />
@@ -130,11 +125,7 @@ class Screen extends PureComponent<Props> {
             {children}
           </ScrollView>
         </KeyboardAvoider>
-      </View>
+      </SafeAreaView>
     );
   }
 }
-
-export default connect(state => ({
-  safeAreaInsets: getSession(state).safeAreaInsets,
-}))(Screen);
