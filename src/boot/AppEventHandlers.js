@@ -3,7 +3,6 @@
 import React, { PureComponent } from 'react';
 import { AppState, View, StyleSheet, Platform, NativeModules } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
-import SafeArea from 'react-native-safe-area';
 import Orientation from 'react-native-orientation';
 
 import type { Node as React$Node } from 'react';
@@ -11,13 +10,7 @@ import type { Dispatch, Orientation as OrientationT } from '../types';
 import { connect } from '../react-redux';
 import { getUnreadByHuddlesMentionsAndPMs } from '../selectors';
 import { handleInitialNotification, NotificationListener } from '../notification';
-import {
-  appOnline,
-  appOrientation,
-  appState,
-  initSafeAreaInsets,
-  reportPresence,
-} from '../actions';
+import { appOnline, appOrientation, appState, reportPresence } from '../actions';
 
 /**
  * Part of the type of upstream's `NetInfo`.
@@ -81,9 +74,6 @@ class AppEventHandlers extends PureComponent<Props> {
     NetInfo.addEventListener('connectionChange', this.handleConnectivityChange);
     AppState.addEventListener('change', this.handleAppStateChange);
     AppState.addEventListener('memoryWarning', this.handleMemoryWarning);
-    SafeArea.getSafeAreaInsetsForRootView().then(params =>
-      dispatch(initSafeAreaInsets(params.safeAreaInsets)),
-    );
     // $FlowFixMe: libdef wrongly says callback's parameter is optional
     Orientation.addOrientationListener(this.handleOrientationChange);
     this.notificationListener.start();
