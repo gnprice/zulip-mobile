@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import type { Debug, Dimensions, EditMessage, Narrow, Orientation, Action } from '../types';
+import type { Debug, EditMessage, Narrow, Orientation, Action } from '../types';
 import {
   REHYDRATE,
   DEAD_QUEUE,
@@ -8,7 +8,6 @@ import {
   APP_ONLINE,
   ACCOUNT_SWITCH,
   REALM_INIT,
-  INIT_SAFE_AREA_INSETS,
   INITIAL_FETCH_COMPLETE,
   APP_ORIENTATION,
   APP_STATE,
@@ -54,9 +53,6 @@ export type SessionState = {|
    */
   pushToken: string | null,
 
-  /** For background, google [ios safe area]. */
-  safeAreaInsets: Dimensions,
-
   debug: Debug,
 |};
 
@@ -71,12 +67,6 @@ const initialState: SessionState = {
   orientation: 'PORTRAIT',
   outboxSending: false,
   pushToken: null,
-  safeAreaInsets: {
-    bottom: 0,
-    left: 0,
-    right: 0,
-    top: 0,
-  },
   debug: {
     doNotMarkMessagesAsRead: false,
   },
@@ -149,12 +139,6 @@ export default (state: SessionState = initialState, action: Action): SessionStat
       return {
         ...state,
         needsInitialFetch: false,
-      };
-
-    case INIT_SAFE_AREA_INSETS:
-      return {
-        ...state,
-        safeAreaInsets: action.safeAreaInsets,
       };
 
     case APP_ORIENTATION:
