@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { Platform, StatusBar, View } from 'react-native';
 import Color from 'color';
 
-import type { Dimensions, GlobalState, Narrow, Orientation, ThemeName, Dispatch } from '../types';
+import type { GlobalState, Narrow, Orientation, ThemeName, Dispatch } from '../types';
 import { connectFlowFixMe } from '../react-redux';
 import { DEFAULT_TITLE_BACKGROUND_COLOR, getTitleBackgroundColor } from '../title/titleSelectors';
 import { foregroundColorFromBackground } from '../utils/color';
@@ -29,7 +29,6 @@ type Props = {
   hidden: boolean,
   theme: ThemeName,
   backgroundColor: string,
-  safeAreaInsets: Dimensions,
   orientation: Orientation,
 };
 
@@ -47,8 +46,8 @@ class ZulipStatusBar extends PureComponent<Props> {
   };
 
   render() {
-    const { theme, backgroundColor, hidden, safeAreaInsets, orientation } = this.props;
-    const style = { height: hidden ? 0 : safeAreaInsets.top, backgroundColor };
+    const { theme, backgroundColor, hidden, orientation } = this.props;
+    const style = { backgroundColor };
     const statusBarColor = getStatusBarColor(backgroundColor, theme);
     return (
       orientation === 'PORTRAIT' && (
@@ -68,7 +67,6 @@ class ZulipStatusBar extends PureComponent<Props> {
 
 export default connectFlowFixMe(
   (state: GlobalState, props: { backgroundColor?: string, narrow?: Narrow }) => ({
-    safeAreaInsets: getSession(state).safeAreaInsets,
     theme: getSettings(state).theme,
     backgroundColor:
       props.backgroundColor !== undefined
