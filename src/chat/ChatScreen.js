@@ -1,15 +1,18 @@
 /* @flow strict-local */
 import React, { PureComponent } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { SafeAreaView, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 import type { NavigationScreenProp } from 'react-navigation';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 import type { Context, Narrow } from '../types';
 import { OfflineNotice, ZulipStatusBar } from '../common';
+import { getTitleBackgroundColor } from '../selectors';
 import Chat from './Chat';
 import ChatNavBar from '../nav/ChatNavBar';
 
 type Props = {|
+  backgroundColor: string,
   navigation: NavigationScreenProp<{ params: {| narrow: Narrow |} }>,
 |};
 
@@ -20,7 +23,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class ChatScreen extends PureComponent<Props> {
+class ChatScreen extends PureComponent<Props> {
   context: Context;
 
   static contextTypes = {
@@ -30,16 +33,21 @@ export default class ChatScreen extends PureComponent<Props> {
   render() {
     const { styles: contextStyles } = this.context;
     const { narrow } = this.props.navigation.state.params;
+    const { backgroundColor } = this.props;
 
     return (
       <ActionSheetProvider>
-        <View style={[contextStyles.screen, styles.reverse]}>
+        <SafeAreaView style={[contextStyles.screen, styles.reverse, { backgroundColor }]}>
           <Chat narrow={narrow} />
           <OfflineNotice />
           <ChatNavBar narrow={narrow} />
           <ZulipStatusBar narrow={narrow} />
-        </View>
+        </SafeAreaView>
       </ActionSheetProvider>
     );
   }
 }
+
+export default connect((state, props) => ({
+  backgroundColor: getTitleBackgroundColor(props.navigation.state.params.narrow)(state),
+}))(ChatScreen);
