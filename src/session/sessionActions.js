@@ -1,12 +1,11 @@
 /* @flow strict-local */
-import type { Action, Dimensions, Dispatch, GetState, Orientation } from '../types';
+import type { Action, Dispatch, GetState, Orientation } from '../types';
 import {
   APP_ONLINE,
   APP_ORIENTATION,
   APP_STATE,
   DEAD_QUEUE,
   DEBUG_FLAG_TOGGLE,
-  INIT_SAFE_AREA_INSETS,
   CANCEL_EDIT_MESSAGE,
   START_EDIT_MESSAGE,
 } from '../actionConstants';
@@ -25,11 +24,6 @@ export const appState = (isActive: boolean): Action => ({
 
 export const deadQueue = (): Action => ({
   type: DEAD_QUEUE,
-});
-
-export const initSafeAreaInsets = (safeAreaInsets: Dimensions): Action => ({
-  type: INIT_SAFE_AREA_INSETS,
-  safeAreaInsets,
 });
 
 export const appOrientation = (orientation: Orientation): Action => ({

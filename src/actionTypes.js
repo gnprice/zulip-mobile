@@ -4,7 +4,6 @@ import {
   APP_ONLINE,
   APP_STATE,
   DEAD_QUEUE,
-  INIT_SAFE_AREA_INSETS,
   APP_ORIENTATION,
   START_EDIT_MESSAGE,
   CANCEL_EDIT_MESSAGE,
@@ -64,7 +63,6 @@ import {
 import type { MessageEvent, PresenceEvent, StreamEvent, SubmessageEvent } from './api/eventTypes';
 
 import type {
-  Dimensions,
   Orientation,
   GlobalState,
   Message,
@@ -123,11 +121,6 @@ type AppStateAction = {|
 
 type DeadQueueAction = {|
   type: typeof DEAD_QUEUE,
-|};
-
-type InitSafeAreaInsetsAction = {|
-  type: typeof INIT_SAFE_AREA_INSETS,
-  safeAreaInsets: Dimensions,
 |};
 
 type AppOrientationAction = {|
@@ -596,7 +589,6 @@ type SessionAction =
   | RehydrateAction
   | AppStateAction
   | AppOnlineAction
-  | InitSafeAreaInsetsAction
   | AppOrientationAction
   | DoNarrowAction
   | GotPushTokenAction
