@@ -85,6 +85,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
+    "babel-core": "^7.0.0-bridge",
     "babel-eslint": "^8.2.3",
     "babel-jest": "^23.6.0",
     "babel-plugin-transform-remove-console": "^6.9.4",
