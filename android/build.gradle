@@ -22,27 +22,6 @@ buildscript {
     }
 }
 
-project(":app").afterEvaluate {
-    ext.buildToolsVersion = it.android.buildToolsVersion
-}
-allprojects {
-    if (it != rootProject && it.name != "app") {
-        print "${it.name} yep!\n"
-        it.evaluationDependsOn(":app")
-        print "${name} set\n"
-    }
-}
-
-allprojects {
-    afterEvaluate {
-        if (plugins.any { it.class.name == "com.android.build.gradle.api.AndroidBasePlugin" }) {
-            android.buildToolsVersion rootProject.ext.buildToolsVersion // "28.0.3"
-        }
-    }
-}
-
-print("root!\n")
-
 allprojects {
     repositories {
         mavenLocal()
@@ -55,15 +34,16 @@ allprojects {
     }
 }
 
-
-
-/*
-gradle.projectsEvaluated {
-    def buildToolsVersion = project(":app").android.buildToolsVersion
-    allprojects {
+project(":app").afterEvaluate {
+    ext.buildToolsVersion = it.android.buildToolsVersion
+}
+allprojects {
+    if (path != ":" && path != ":app") {
+        evaluationDependsOn(":app") // tricky -- this causes :app to be (sort of?) evaluated, so the afterEvaluate must come first
+    }
+    afterEvaluate {
         if (plugins.any { it.class.name == "com.android.build.gradle.api.AndroidBasePlugin" }) {
-            android.buildToolsVersion buildToolsVersion
+            android.buildToolsVersion rootProject.ext.buildToolsVersion
         }
     }
 }
-*/
