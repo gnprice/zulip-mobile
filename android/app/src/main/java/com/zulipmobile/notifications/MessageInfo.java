@@ -1,8 +1,8 @@
 package com.zulipmobile.notifications;
 
 public class MessageInfo {
-    private String content;
-    private int messageId;
+    private final String content;
+    private final int messageId;
 
     MessageInfo(String content, int messageId) {
         this.content = content;

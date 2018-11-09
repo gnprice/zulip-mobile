@@ -53,7 +53,7 @@ public class GCMPushNotifications extends PushNotification {
      * Each value is the messages in the conversation, in the order we
      * received them.
      */
-    private LinkedHashMap<String, List<MessageInfo>> conversations;
+    private final LinkedHashMap<String, List<MessageInfo>> conversations;
 
     /**
      * Same as {@link com.wix.reactnativenotifications.core.NotificationIntentAdapter#PUSH_NOTIFICATION_EXTRA_NAME}
