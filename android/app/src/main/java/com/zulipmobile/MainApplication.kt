@@ -74,9 +74,10 @@ class MainApplication : Application(), ReactApplication, INotificationsApplicati
         conversations = LinkedHashMap()
     }
 
-    override fun getPushNotification(context: Context, bundle: Bundle, defaultFacade: AppLifecycleFacade, defaultAppLaunchHelper: AppLaunchHelper): IPushNotification? {
+    override fun getPushNotification(context: Context, bundle: Bundle, defaultFacade: AppLifecycleFacade,
+                                     defaultAppLaunchHelper: AppLaunchHelper): IPushNotification? {
         bundle.keySet() // Has the side effect of making `bundle.toString` more informative.
-        Log.v(NotificationHelper.TAG, "getPushNotification: " + bundle.toString(), Throwable())
+        Log.v(NotificationHelper.TAG, "getPushNotification: ${bundle}", Throwable())
 
         if (ACTION_NOTIFICATIONS_DISMISS == bundle.getString(ACTION_NOTIFICATIONS_DISMISS)) {
             clearConversations(conversations!!)
@@ -84,7 +85,8 @@ class MainApplication : Application(), ReactApplication, INotificationsApplicati
             nMgr.cancelAll()
             return null
         } else {
-            return GCMPushNotifications(context, bundle, defaultFacade, defaultAppLaunchHelper, JsIOHelper(), conversations)
+            return GCMPushNotifications(context, bundle, defaultFacade,
+                    defaultAppLaunchHelper, JsIOHelper(), conversations)
         }
     }
 }
