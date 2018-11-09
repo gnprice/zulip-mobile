@@ -13,8 +13,7 @@ class ZulipNativePackage implements ReactPackage {
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-        List<ViewManager> managers = new ArrayList<>();
-        return managers;
+        return new ArrayList<>();
     }
 
     @Override
