@@ -8,16 +8,16 @@ import java.util.Arrays;
 
 public class PushNotificationsProp extends PushNotificationProps {
 
-    public PushNotificationsProp(Bundle bundle) {
+    PushNotificationsProp(Bundle bundle) {
         super(bundle);
     }
 
     /** Really "event type": one of a small fixed set of identifiers. */
-    public String getEvent() {
+    String getEvent() {
         return mBundle.getString("event");
     }
 
-    public String getRecipientType() {
+    String getRecipientType() {
         return mBundle.getString("recipient_type");
     }
 
@@ -25,20 +25,20 @@ public class PushNotificationsProp extends PushNotificationProps {
         return mBundle.getString("content");
     }
 
-    public String getSenderFullName() {
+    String getSenderFullName() {
         return mBundle.getString("sender_full_name");
     }
 
-    public String getAvatarURL() {
+    String getAvatarURL() {
         return mBundle.getString("sender_avatar_url");
 
     }
 
-    public String getStream() {
+    String getStream() {
         return mBundle.getString("stream");
     }
 
-    public String getTopic() {
+    String getTopic() {
         return mBundle.getString("topic");
     }
 
@@ -51,29 +51,29 @@ public class PushNotificationsProp extends PushNotificationProps {
         return new PushNotificationsProp((Bundle) mBundle.clone());
     }
 
-    public String getEmail() {
+    String getEmail() {
         return mBundle.getString("sender_email");
     }
 
-    public String getBaseURL() {
+    String getBaseURL() {
         return mBundle.getString("base_url");
     }
 
-    public int[] getPmUsers() {
+    private int[] getPmUsers() {
         if (mBundle.containsKey("pm_users")){
             return mBundle.getIntArray("pm_users");
         }
         return null;
     }
 
-    public boolean isGroupMessage() {
+    boolean isGroupMessage() {
         return getRecipientType().equals("private") && mBundle.containsKey("pm_users");
     }
-    public String getGroupRecipientString() {
+    String getGroupRecipientString() {
         return Arrays.toString(getPmUsers());
     }
 
-    public int getZulipMessageId() {
+    int getZulipMessageId() {
         return Integer.parseInt(mBundle.getString("zulip_message_id"));
     }
 }

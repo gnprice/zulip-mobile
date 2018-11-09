@@ -41,8 +41,8 @@ import static com.zulipmobile.notifications.NotificationHelper.TAG;
 
 public class GCMPushNotifications extends PushNotification {
 
-    public static final String CHANNEL_ID = "default";
-    public static final int NOTIFICATION_ID = 435;
+    private static final String CHANNEL_ID = "default";
+    private static final int NOTIFICATION_ID = 435;
     public static final String ACTION_NOTIFICATIONS_DISMISS = "ACTION_NOTIFICATIONS_DISMISS";
 
     /**
@@ -80,7 +80,7 @@ public class GCMPushNotifications extends PushNotification {
         return new PushNotificationsProp(bundle);
     }
 
-    protected PushNotificationsProp getProps() {
+    private PushNotificationsProp getProps() {
         return (PushNotificationsProp) mNotificationProps;
     }
 
@@ -100,7 +100,7 @@ public class GCMPushNotifications extends PushNotification {
     }
 
     @Override
-    public void onReceived() throws InvalidNotificationException {
+    public void onReceived() {
         final String eventType = getProps().getEvent();
         if (eventType.equals("message")) {
             addConversationToMap(getProps(), conversations);
@@ -167,11 +167,8 @@ public class GCMPushNotifications extends PushNotification {
             }
             builder.setContentText(content);
             if (type.equals("stream")) {
-                if (Build.VERSION.SDK_INT >= 16) {
-                    String displayTopic = stream + " > "
-                            + topic;
-                    builder.setSubText("Message on " + displayTopic);
-                }
+                String displayTopic = stream + " > " + topic;
+                builder.setSubText("Message on " + displayTopic);
             }
             if (avatarURL != null && avatarURL.startsWith("http")) {
                 Bitmap avatar = fetchAvatar(NotificationHelper.sizedURL(mContext,
@@ -204,7 +201,7 @@ public class GCMPushNotifications extends PushNotification {
         long[] vPattern = {0, 100, 200, 100};
         builder.setVibrate(vPattern);
 
-        /**
+        /*
          * Ideally, actions are sent using dismissIntent.setAction(String),
          * But here {@link com.wix.reactnativenotifications.core.NotificationIntentAdapter#extractPendingNotificationDataFromIntent(Intent)}
          * it checks in the bundle hence, An empty bundle is sent and checked in
