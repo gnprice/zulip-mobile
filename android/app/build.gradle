@@ -153,17 +153,6 @@ android {
     }
 }
 
-buildscript {
-  repositories {
-  }
-  dependencies {
-  }
-}
-repositories {
-    mavenCentral()
-}
-
-
 dependencies {
     implementation project(':react-native-text-input-reset')
     implementation project(':react-native-notifications')
