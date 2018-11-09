@@ -10,7 +10,7 @@ import com.facebook.react.bridge.ReactMethod;
  * Close all custom tabs.
  */
 
-public class CloseAllCustomTabsAndroid extends ReactContextBaseJavaModule {
+class CloseAllCustomTabsAndroid extends ReactContextBaseJavaModule {
     public CloseAllCustomTabsAndroid(ReactApplicationContext reactContext) {
         super(reactContext);
     }

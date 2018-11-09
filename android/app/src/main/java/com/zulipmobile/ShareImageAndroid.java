@@ -11,7 +11,7 @@ import com.facebook.react.bridge.ReactMethod;
  * Send Send Multiple Pieces of Content to other apps.
  */
 
-public class ShareImageAndroid extends ReactContextBaseJavaModule {
+class ShareImageAndroid extends ReactContextBaseJavaModule {
 
     public ShareImageAndroid(ReactApplicationContext reactContext) {
         super(reactContext);
