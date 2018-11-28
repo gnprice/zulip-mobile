@@ -2,6 +2,7 @@
 import type {
   AppOnlineAction,
   AppStateAction,
+  AppRefreshAction,
   CancelEditMessageAction,
   AppOrientationAction,
   DebugFlagToggleAction,
@@ -14,6 +15,7 @@ import {
   APP_ONLINE,
   APP_ORIENTATION,
   APP_STATE,
+  APP_REFRESH,
   DEBUG_FLAG_TOGGLE,
   INIT_SAFE_AREA_INSETS,
   CANCEL_EDIT_MESSAGE,
@@ -45,6 +47,10 @@ export const appState = (isActive: boolean) => (
     });
   }
 };
+
+export const appRefresh = (): AppRefreshAction => ({
+  type: APP_REFRESH,
+});
 
 export const initSafeAreaInsets = (safeAreaInsets: Dimensions): InitSafeAreaInsetsAction => ({
   type: INIT_SAFE_AREA_INSETS,
