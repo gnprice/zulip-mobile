@@ -27,7 +27,7 @@ export const getFetchParams = (auth: Auth, params: Object = {}) => {
   };
 };
 
-export const fetchWithAuth = async (auth: Auth, url: string, params: Object = {}) => {
+const fetchWithAuth = async (auth: Auth, url: string, params: Object = {}) => {
   if (!isValidUrl(url)) {
     throw new Error(`Invalid url ${url}`);
   }
@@ -47,7 +47,7 @@ const makeApiError = (httpStatus: number, data: ?Object) => {
   return error;
 };
 
-export const apiCall = async (
+const apiCall = async (
   auth: Auth,
   route: string,
   params: Object = {},

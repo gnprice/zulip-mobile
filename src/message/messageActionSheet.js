@@ -185,7 +185,7 @@ export const constructHeaderActionButtons = ({
   return buttons;
 };
 
-export const constructMessageActionButtons = ({
+const constructMessageActionButtons = ({
   backgroundData: { auth, flags },
   message,
   narrow,

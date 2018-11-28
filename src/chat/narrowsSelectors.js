@@ -26,7 +26,7 @@ import {
 import { shouldBeMuted } from '../utils/message';
 import { NULL_ARRAY, NULL_SUBSCRIPTION } from '../nullObjects';
 
-export const outboxMessagesForCurrentNarrow = (narrow: Narrow): Selector<Outbox[]> =>
+const outboxMessagesForCurrentNarrow = (narrow: Narrow): Selector<Outbox[]> =>
   createSelector(getCaughtUpForActiveNarrow(narrow), getOutbox, (caughtUp, outboxMessages) => {
     if (!caughtUp.newer) {
       return [];
@@ -47,7 +47,7 @@ export const outboxMessagesForCurrentNarrow = (narrow: Narrow): Selector<Outbox[
     });
   });
 
-export const getFetchedMessagesForNarrow = (narrow: Narrow): Selector<Message[]> =>
+const getFetchedMessagesForNarrow = (narrow: Narrow): Selector<Message[]> =>
   createSelector(getAllNarrows, getMessages, (allNarrows, messages) =>
     (allNarrows[JSON.stringify(narrow)] || NULL_ARRAY).map(id => messages[id]),
   );

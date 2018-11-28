@@ -15,7 +15,7 @@ import { transformToEncodedURI } from './string';
  */
 export type UrlParams = { [string]: string | boolean | number };
 
-export const getPathsFromUrl = (url: string = '', realm: string) => {
+const getPathsFromUrl = (url: string = '', realm: string) => {
   const paths = url
     .split(realm)
     .pop()

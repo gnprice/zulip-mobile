@@ -126,7 +126,7 @@ const initialFetchComplete = (): InitialFetchCompleteAction => ({
   type: INITIAL_FETCH_COMPLETE,
 });
 
-export const fetchEssentialInitialData = () => async (dispatch: Dispatch, getState: GetState) => {
+const fetchEssentialInitialData = () => async (dispatch: Dispatch, getState: GetState) => {
   dispatch(initialFetchStart());
   const auth = getAuth(getState());
 
@@ -142,7 +142,7 @@ export const fetchEssentialInitialData = () => async (dispatch: Dispatch, getSta
   dispatch(startEventPolling(initData.queue_id, initData.last_event_id));
 };
 
-export const fetchRestOfInitialData = () => async (dispatch: Dispatch, getState: GetState) => {
+const fetchRestOfInitialData = () => async (dispatch: Dispatch, getState: GetState) => {
   const auth = getAuth(getState());
   const pushToken = getPushToken(getState());
 

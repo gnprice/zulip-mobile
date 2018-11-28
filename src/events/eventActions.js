@@ -29,7 +29,7 @@ export const responseToActions = (state: GlobalState, response: Object): EventAc
       return true;
     });
 
-export const dispatchOrBatch = (dispatch: Dispatch, actions: EventAction[]) => {
+const dispatchOrBatch = (dispatch: Dispatch, actions: EventAction[]) => {
   if (actions.length > 1) {
     dispatch(batchActions(actions));
   } else if (actions.length === 1) {
