@@ -27,12 +27,12 @@ import { getSelfUserDetail } from '../users/userSelectors';
 import { getUserByEmail, getUsersAndWildcards } from '../users/userHelpers';
 import { isStreamNarrow, isPrivateOrGroupNarrow } from '../utils/narrow';
 
-export const messageSendStart = (outbox: Outbox): MessageSendStartAction => ({
+const messageSendStart = (outbox: Outbox): MessageSendStartAction => ({
   type: MESSAGE_SEND_START,
   outbox,
 });
 
-export const toggleOutboxSending = (sending: boolean): ToggleOutboxSendingAction => ({
+const toggleOutboxSending = (sending: boolean): ToggleOutboxSendingAction => ({
   type: TOGGLE_OUTBOX_SENDING,
   sending,
 });
@@ -42,7 +42,7 @@ export const deleteOutboxMessage = (localMessageId: number): DeleteOutboxMessage
   local_message_id: localMessageId,
 });
 
-export const messageSendComplete = (localMessageId: number): MessageSendCompleteAction => ({
+const messageSendComplete = (localMessageId: number): MessageSendCompleteAction => ({
   type: MESSAGE_SEND_COMPLETE,
   local_message_id: localMessageId,
 });

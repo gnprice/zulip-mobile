@@ -5,7 +5,7 @@ import { INIT_TOPICS } from '../actionConstants';
 import { isStreamNarrow } from '../utils/narrow';
 import { getAuth, getStreams } from '../selectors';
 
-export const initTopics = (topics: Topic[], streamId: number): InitTopicsAction => ({
+const initTopics = (topics: Topic[], streamId: number): InitTopicsAction => ({
   type: INIT_TOPICS,
   topics,
   streamId,

@@ -6,7 +6,6 @@ import type {
   Message,
   MessageFetchStartAction,
   MessageFetchCompleteAction,
-  MarkMessagesReadAction,
   InitialFetchStartAction,
   InitialFetchCompleteAction,
 } from '../types';
@@ -26,7 +25,6 @@ import {
   INITIAL_FETCH_COMPLETE,
   MESSAGE_FETCH_START,
   MESSAGE_FETCH_COMPLETE,
-  MARK_MESSAGES_READ,
 } from '../actionConstants';
 import { LAST_MESSAGE_ANCHOR } from '../constants';
 import timing from '../utils/timing';
@@ -39,7 +37,7 @@ import { initStreams } from '../streams/streamsActions';
 import { sendFocusPing } from '../users/usersActions';
 import { startEventPolling } from '../events/eventActions';
 
-export const messageFetchStart = (
+const messageFetchStart = (
   narrow: Narrow,
   numBefore: number,
   numAfter: number,
@@ -50,7 +48,7 @@ export const messageFetchStart = (
   numAfter,
 });
 
-export const messageFetchComplete = (
+const messageFetchComplete = (
   messages: Message[],
   narrow: Narrow,
   anchor: number,
@@ -96,11 +94,6 @@ export const fetchMessagesAroundAnchor = (narrow: Narrow, anchor: number) =>
 export const fetchMessagesAtFirstUnread = (narrow: Narrow) =>
   fetchMessages(narrow, 0, config.messagesPerRequest / 2, config.messagesPerRequest / 2, true);
 
-export const markMessagesRead = (messageIds: number[]): MarkMessagesReadAction => ({
-  type: MARK_MESSAGES_READ,
-  messageIds,
-});
-
 export const fetchOlder = (narrow: Narrow) => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const firstMessageId = getFirstMessageId(narrow)(state);
@@ -125,11 +118,11 @@ export const fetchNewer = (narrow: Narrow) => (dispatch: Dispatch, getState: Get
   }
 };
 
-export const initialFetchStart = (): InitialFetchStartAction => ({
+const initialFetchStart = (): InitialFetchStartAction => ({
   type: INITIAL_FETCH_START,
 });
 
-export const initialFetchComplete = (): InitialFetchCompleteAction => ({
+const initialFetchComplete = (): InitialFetchCompleteAction => ({
   type: INITIAL_FETCH_COMPLETE,
 });
 

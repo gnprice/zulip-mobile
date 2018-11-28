@@ -3,8 +3,6 @@ import type {
   Account,
   User,
   Subscription,
-  Presence,
-  PresenceAggregated,
   CaughtUp,
   Fetching,
   NavigationState,
