@@ -48,19 +48,3 @@ export const initNotifications = () => (dispatch: Dispatch, getState: GetState) 
     dispatch(saveTokenPush(token, result, msg));
   });
 };
-
-export const initRealmEmojis = (emojis: Object): InitRealmEmojiAction => ({
-  type: INIT_REALM_EMOJI,
-  emojis,
-});
-
-export const fetchRealmEmojis = (auth: Auth) => async (dispatch: Dispatch) =>
-  dispatch(initRealmEmojis(await getRealmEmojis(auth)));
-
-export const initRealmFilters = (filters: RealmFilter[]): InitRealmFilterAction => ({
-  type: INIT_REALM_FILTER,
-  filters,
-});
-
-export const fetchRealmFilters = (auth: Auth) => async (dispatch: Dispatch) =>
-  dispatch(initRealmFilters(await getRealmFilters(auth)));

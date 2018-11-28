@@ -61,18 +61,6 @@ export const NULL_SUBSCRIPTION: Subscription = {
 };
 
 /** DEPRECATED; don't add new uses.  See block comment above definition. */
-export const NULL_PRESENCE_AGGREGATED: PresenceAggregated = {
-  client: '',
-  status: 'offline',
-  timestamp: 0,
-};
-
-/** DEPRECATED; don't add new uses.  See block comment above definition. */
-export const NULL_PRESENCE: Presence = {
-  aggregated: NULL_PRESENCE_AGGREGATED,
-};
-
-/** DEPRECATED; don't add new uses.  See block comment above definition. */
 export const NULL_CAUGHTUP: CaughtUp = {
   older: false,
   newer: false,

@@ -8,8 +8,3 @@ export const initAlertWords = (alertWords: string[]) => ({
   type: INIT_ALERT_WORDS,
   alertWords,
 });
-
-export const fetchAlertWords = () => async (dispatch: Dispatch, getState: GetState) => {
-  const auth = getAuth(getState());
-  dispatch(initAlertWords(await getAlertWords(auth)));
-};
