@@ -490,14 +490,12 @@ export type LocalizableText = any; // string | { text: string, values: Object };
 
 export type RenderedTimeDescriptor = {|
   type: 'time',
-  key: number | string,
   timestamp: number,
   firstMessage: Message | Outbox,
 |};
 
 export type RenderedMessageDescriptor = {|
   type: 'message',
-  key: number | string,
   message: Message | Outbox,
   isBrief: boolean,
 |};
@@ -511,7 +509,6 @@ export type RecipientBarDescriptor = $ReadOnly<{
 }>;
 
 export type RenderedSectionDescriptor = {|
-  key: string | number,
   message: RecipientBarDescriptor | {||},
   data: $ReadOnlyArray<RenderedMessageDescriptor | RenderedTimeDescriptor>,
 |};
