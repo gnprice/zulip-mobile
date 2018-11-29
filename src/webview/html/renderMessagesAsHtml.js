@@ -15,7 +15,7 @@ export default (
   renderedMessages.forEach(item => {
     if (item.type === 'time') {
       pieces.push(timeRowAsHtml(item.timestamp, item.firstMessage));
-    } else if (item.type === 'recipient_bar') {
+    } else if (item.type === 'stream' || item.type === 'private') {
       pieces.push(messageHeaderAsHtml(backgroundData, narrow, item));
     } else {
       pieces.push(messageAsHtml(backgroundData, item.message, item.isBrief));

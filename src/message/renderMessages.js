@@ -21,7 +21,6 @@ export default (messages: $ReadOnlyArray<Message | Outbox>, narrow: Narrow): Ren
     const diffRecipient = !isSameRecipient(prevItem, item);
     if (showHeader && diffRecipient) {
       items.push({
-        type: 'recipient_bar',
         ...item,
       });
     }

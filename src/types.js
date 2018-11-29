@@ -501,7 +501,7 @@ export type RenderedMessageDescriptor = {|
 |};
 
 export type RecipientBarDescriptor = $ReadOnly<{
-  type: 'recipient_bar',
+  type: 'stream' | 'private',
   subject: string,
   match_subject?: string,
   display_recipient: $FlowFixMe,
