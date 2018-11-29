@@ -501,17 +501,19 @@ export type RenderedMessageDescriptor = {|
 |};
 
 export type RecipientBarDescriptor = $ReadOnly<{
-  type: 'stream' | 'private',
+  type: 'recipient_bar',
   subject: string,
   match_subject?: string,
   display_recipient: $FlowFixMe,
   id: number,
 }>;
 
-export type RenderedSectionDescriptor = {|
-  message: RecipientBarDescriptor | {||},
-  data: $ReadOnlyArray<RenderedMessageDescriptor | RenderedTimeDescriptor>,
-|};
+export type RenderedDescriptor =
+  | RenderedTimeDescriptor
+  | RecipientBarDescriptor
+  | RenderedMessageDescriptor;
+
+export type RenderedMessages = $ReadOnlyArray<RenderedDescriptor>;
 
 export type DraftState = {
   [narrow: string]: string,

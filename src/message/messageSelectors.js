@@ -1,7 +1,7 @@
 /* @flow strict-local */
 import { createSelector } from 'reselect';
 
-import type { Message, Narrow, RenderedSectionDescriptor, Selector } from '../types';
+import type { Message, Narrow, RenderedMessages, Selector } from '../types';
 import {
   getAllNarrows,
   getFlags,
@@ -21,7 +21,7 @@ export const getPrivateMessages: Selector<Message[]> = createSelector(
   (narrows, messages) => (narrows[ALL_PRIVATE_NARROW_STR] || NULL_ARRAY).map(id => messages[id]),
 );
 
-export const getRenderedMessages = (narrow: Narrow): Selector<RenderedSectionDescriptor[]> =>
+export const getRenderedMessages = (narrow: Narrow): Selector<RenderedMessages> =>
   createSelector(getShownMessagesForNarrow(narrow), messages => renderMessages(messages, narrow));
 
 export const getAnchorForActiveNarrow = (narrow: Narrow): Selector<number> =>

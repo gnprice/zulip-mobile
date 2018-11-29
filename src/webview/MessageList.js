@@ -18,7 +18,7 @@ import type {
   MuteState,
   Narrow,
   RealmEmojiType,
-  RenderedSectionDescriptor,
+  RenderedMessages,
   Subscription,
   User,
 } from '../types';
@@ -78,7 +78,7 @@ export type Props = {
   fetching: Fetching,
   messages: Message[],
   narrow: Narrow,
-  renderedMessages: RenderedSectionDescriptor[],
+  renderedMessages: RenderedMessages,
   showMessagePlaceholders: boolean,
   typingUsers: User[],
 
@@ -190,7 +190,7 @@ type OuterProps = {
   /* Remaining props are derived from `narrow` by default. */
 
   messages?: Message[],
-  renderedMessages?: RenderedSectionDescriptor[],
+  renderedMessages?: RenderedMessages,
   anchor?: number,
 
   /* Passing these three from the parent is kind of a hack; search uses it

@@ -1,21 +1,18 @@
 /* @flow strict-local */
-import type { Message, Narrow, Outbox, RenderedSectionDescriptor } from '../types';
+import type { Message, Narrow, Outbox, RenderedMessages } from '../types';
 import { isTopicNarrow, isPrivateOrGroupNarrow } from '../utils/narrow';
 import { isSameRecipient } from '../utils/recipient';
 import { isSameDay } from '../utils/date';
 
-export default (
-  messages: $ReadOnlyArray<Message | Outbox>,
-  narrow: Narrow,
-): RenderedSectionDescriptor[] => {
+export default (messages: $ReadOnlyArray<Message | Outbox>, narrow: Narrow): RenderedMessages => {
   let prevItem;
   const showHeader = !isPrivateOrGroupNarrow(narrow) && !isTopicNarrow(narrow);
-  const sections = [{ data: [], message: {} }];
+  const items = [];
   messages.forEach(item => {
     const diffDays =
       prevItem && !isSameDay(new Date(prevItem.timestamp * 1000), new Date(item.timestamp * 1000));
     if (!prevItem || diffDays) {
-      sections[sections.length - 1].data.push({
+      items.push({
         type: 'time',
         timestamp: item.timestamp,
         firstMessage: item,
@@ -23,9 +20,9 @@ export default (
     }
     const diffRecipient = !isSameRecipient(prevItem, item);
     if (showHeader && diffRecipient) {
-      sections.push({
-        message: item,
-        data: [],
+      items.push({
+        type: 'recipient_bar',
+        ...item,
       });
     }
     const shouldGroupWithPrev =
@@ -34,7 +31,7 @@ export default (
       && prevItem
       && prevItem.sender_full_name === item.sender_full_name;
 
-    sections[sections.length - 1].data.push({
+    items.push({
       type: 'message',
       isBrief: shouldGroupWithPrev,
       message: item,
@@ -42,5 +39,5 @@ export default (
 
     prevItem = item;
   });
-  return sections;
+  return items;
 };
