@@ -1,6 +1,6 @@
 /* @flow */
 import template from './template';
-import type { Message, Narrow, Outbox } from '../../types';
+import type { Narrow, RecipientBarDescriptor } from '../../types';
 import type { BackgroundData } from '../MessageList';
 import {
   isStreamNarrow,
@@ -17,7 +17,7 @@ import { foregroundColorFromBackground } from '../../utils/color';
 export default (
   { ownEmail, subscriptions }: BackgroundData,
   narrow: Narrow,
-  item: Message | Outbox | {||},
+  item: RecipientBarDescriptor | {||},
 ) => {
   if (!item.type) {
     return '';

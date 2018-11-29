@@ -502,9 +502,17 @@ export type RenderedMessageDescriptor = {|
   isBrief: boolean,
 |};
 
+export type RecipientBarDescriptor = $ReadOnly<{
+  type: 'stream' | 'private',
+  subject: string,
+  match_subject?: string,
+  display_recipient: $FlowFixMe,
+  id: number,
+}>;
+
 export type RenderedSectionDescriptor = {|
   key: string | number,
-  message: Message | Outbox | {||},
+  message: RecipientBarDescriptor | {||},
   data: $ReadOnlyArray<RenderedMessageDescriptor | RenderedTimeDescriptor>,
 |};
 
