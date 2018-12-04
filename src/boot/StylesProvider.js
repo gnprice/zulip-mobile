@@ -31,10 +31,6 @@ class StyleProvider extends PureComponent<Props> {
     styles: () => {},
   };
 
-  static defaultProps = {
-    theme: 'default',
-  };
-
   getChildContext() {
     const { theme } = this.props;
     const styles = StyleSheet.create(themeCreator(themeNameToObject[theme]));
