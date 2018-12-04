@@ -118,9 +118,13 @@ declare module "react-redux" {
     CP: $Diff<OmitDispatch<ElementConfig<Com>>, RSP>,
     ST: {[_: $Keys<Com>]: any}
     >(
-    mapStateToProps: MapStateToProps<S, SP, RSP>,
+    mapStateToProps: (S, SP) => RSP,
     mapDispatchToProps?: null
-  ): (component: Com) => ComponentType<CP & SP> & $Shape<ST>;
+  ): (component: Com) =>
+   ComponentType<
+     CP
+        & SP>
+         & $Shape<ST>;
 
   declare export function connect<
     Com: ComponentType<*>,
