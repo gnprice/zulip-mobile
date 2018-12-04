@@ -10,14 +10,14 @@ import store from '../boot/store';
 export const rendererWithStore = (WrappedComponent: React$Element<any>): ReactTestRenderer =>
   renderer.create(<Provider store={store}>{WrappedComponent}</Provider>);
 
+/*
 export const rendererWithStyle = (WrappedComponent: React$Element<any>): ReactTestRenderer =>
   renderer.create(<StylesProvider>{WrappedComponent}</StylesProvider>);
-
 export const rendererWithStoreAndStyle = (
   WrappedComponent: React$Element<any>,
 ): ReactTestRenderer =>
   renderer.create(
     <Provider store={store}>
-      <StylesProvider>{WrappedComponent}</StylesProvider>
     </Provider>,
   );
+*/

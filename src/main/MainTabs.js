@@ -2,6 +2,12 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { TabNavigator, TabBarBottom } from 'react-navigation';
+import type {
+  NavigationComponent,
+  NavigationScreenComponent,
+  NavigationRoute,
+} from 'react-navigation';
+import type { ComponentType } from 'react';
 
 import type { TabNavigationOptionsPropsType } from '../types';
 import tabsOptions from '../styles/tabs';
@@ -11,6 +17,10 @@ import PmConversationsCard from '../pm-conversations/PmConversationsCard';
 import SettingsCard from '../settings/SettingsCard';
 import { IconHome, IconStream, IconSettings } from '../common/Icons';
 import IconUnreadConversations from '../nav/IconUnreadConversations';
+
+const x: ComponentType<{}> = HomeTab;
+
+// const x: NavigationScreenComponent<NavigationRoute, {}, {||}> = PmConversationsCard;
 
 export default TabNavigator(
   {

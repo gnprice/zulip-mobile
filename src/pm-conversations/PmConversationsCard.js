@@ -2,6 +2,7 @@
 import { connect } from 'react-redux';
 
 import React, { PureComponent } from 'react';
+import type { ComponentType } from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import type { Context, Dispatch, GlobalState, PmConversationData, PresenceState } from '../types';
@@ -32,7 +33,7 @@ const componentStyles = StyleSheet.create({
 
 type Props = {
   dispatch: Dispatch,
-  conversations: PmConversationData[],
+  conversations: any, //PmConversationData[],
   isLoading: boolean,
   presences: PresenceState,
   usersByEmail: Object,
@@ -93,6 +94,25 @@ class PmConversationsCard extends PureComponent<Props> {
     );
   }
 }
+
+import type { ElementConfig } from 'react';
+// import type { OmitDispatch } from 'react-redux';
+
+declare type OmitDispatch<Component> = $Diff<Component, {dispatch?: Dispatch}>;
+
+const msp = (state: GlobalState) => ({
+  conversations: ['a'],
+  isLoading: getLoading(state).users,
+  presences: getPresence(state),
+  usersByEmail: getAllUsersByEmail(state),
+});
+
+
+const d: $Diff<OmitDispatch<ElementConfig<typeof PmConversationsCard>>,
+$Call<typeof msp, GlobalState>> = {};
+
+
+const x: ComponentType<{}> = connect(msp)(PmConversationsCard);
 
 export default connect((state: GlobalState) => ({
   conversations: getRecentConversations(state),
