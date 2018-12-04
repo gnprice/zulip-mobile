@@ -115,14 +115,13 @@ declare module "react-redux" {
     S: Object,
     SP: Object,
     RSP: Object,
-    CP: $Diff<OmitDispatch<ElementConfig<Com>>, RSP>,
     ST: {[_: $Keys<Com>]: any}
     >(
     mapStateToProps: (S, SP) => RSP,
     mapDispatchToProps?: null
   ): (component: Com) =>
    ComponentType<
-     CP
+    $Diff<OmitDispatch<ElementConfig<Com>>, RSP>
         & SP>
          & $Shape<ST>;
 
