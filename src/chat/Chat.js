@@ -10,8 +10,7 @@ import ComposeBox from '../compose/ComposeBox';
 import UnreadNotice from './UnreadNotice';
 
 type Props = {
-  /* $FlowFixMe: probably this shouldn't be optional */
-  narrow?: Narrow,
+  narrow: Narrow,
 };
 
 export default class Chat extends PureComponent<Props> {
