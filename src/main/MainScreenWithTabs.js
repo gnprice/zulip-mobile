@@ -18,7 +18,6 @@ export default class MainScreenWithTabs extends PureComponent<{}> {
 
     return (
       <View style={[styles.flexed, styles.backgroundColor]}>
-        {/* $FlowFixMe-56 Cannot create ZulipStatusBar element because ST is not a React component. */}
         <ZulipStatusBar />
         <OfflineNotice />
         <MainTabs />
