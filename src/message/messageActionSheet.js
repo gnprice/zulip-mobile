@@ -138,16 +138,10 @@ type ButtonCode = $Keys<typeof allButtonsRaw>;
 
 const allButtons: { [ButtonCode]: ButtonDescription } = allButtonsRaw;
 
-type ConstructSheetParams = {
-  backgroundData: BackgroundData,
+export const constructHeaderActionButtons = (
+  { mute, subscriptions }: BackgroundData,
   message: Message,
-  narrow: Narrow,
-};
-
-export const constructHeaderActionButtons = ({
-  backgroundData: { mute, subscriptions },
-  message,
-}: ConstructSheetParams): ButtonCode[] => {
+): ButtonCode[] => {
   const buttons: ButtonCode[] = [];
   if (message.type === 'stream') {
     if (isTopicMuted(message.display_recipient, message.subject, mute)) {
@@ -168,11 +162,11 @@ export const constructHeaderActionButtons = ({
 
 const messageNotDeleted = (message: Message): boolean => message.content !== '<p>(deleted)</p>';
 
-export const constructMessageActionButtons = ({
-  backgroundData: { auth, flags },
-  message,
-  narrow,
-}: ConstructSheetParams): ButtonCode[] => {
+export const constructMessageActionButtons = (
+  { auth, flags }: BackgroundData,
+  message: Message,
+  narrow: Narrow,
+): ButtonCode[] => {
   const buttons = [];
   if (!isAnOutboxMessage(message) && messageNotDeleted(message)) {
     buttons.push('addReaction');
@@ -214,15 +208,20 @@ export const showActionSheet = (
     { options: string[], cancelButtonIndex: number },
     (number) => void,
   ) => void,
-  params: ConstructSheetParams,
+  params: {
+    backgroundData: BackgroundData,
+    message: Message,
+    narrow: Narrow,
+  },
 ): void => {
+  const { backgroundData, message, narrow } = params;
   const optionCodes = isHeader
-    ? constructHeaderActionButtons(params)
-    : constructMessageActionButtons(params);
+    ? constructHeaderActionButtons(backgroundData, message)
+    : constructMessageActionButtons(backgroundData, message, narrow);
   const callback = buttonIndex => {
-    allButtons[optionCodes[buttonIndex]](params.message, dispatch, params.backgroundData);
+    allButtons[optionCodes[buttonIndex]](message, dispatch, backgroundData);
   };
-  const { _ } = params.backgroundData;
+  const { _ } = backgroundData;
   showActionSheetWithOptions(
     {
       options: optionCodes.map(code => _(allButtons[code].title)),

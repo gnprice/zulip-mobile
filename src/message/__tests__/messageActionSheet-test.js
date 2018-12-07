@@ -26,11 +26,11 @@ describe('constructActionButtons', () => {
       id: 3,
     });
 
-    const buttons = constructMessageActionButtons({
-      backgroundData: { auth, flags, mute, subscriptions },
+    const buttons = constructMessageActionButtons(
+      { auth, flags, mute, subscriptions },
       message,
       narrow,
-    });
+    );
 
     expect(buttons).toContain('starMessage');
   });
@@ -40,11 +40,11 @@ describe('constructActionButtons', () => {
       id: 1,
     });
 
-    const buttons = constructMessageActionButtons({
-      backgroundData: { auth, flags, mute, subscriptions },
+    const buttons = constructMessageActionButtons(
+      { auth, flags, mute, subscriptions },
       message,
       narrow,
-    });
+    );
 
     expect(buttons).toContain('unstarMessage');
   });
@@ -65,10 +65,7 @@ describe('constructHeaderActionButtons', () => {
 
     const mute = deepFreeze([['electron issues', 'issue #556']]);
 
-    const buttons = constructHeaderActionButtons({
-      backgroundData: { mute, subscriptions },
-      message,
-    });
+    const buttons = constructHeaderActionButtons({ mute, subscriptions }, message);
 
     expect(buttons).toContain('unmuteTopic');
   });
@@ -87,10 +84,7 @@ describe('constructHeaderActionButtons', () => {
 
     const mute = deepFreeze([]);
 
-    const buttons = constructHeaderActionButtons({
-      backgroundData: { mute, subscriptions },
-      message,
-    });
+    const buttons = constructHeaderActionButtons({ mute, subscriptions }, message);
 
     expect(buttons).toContain('muteTopic');
   });
@@ -110,10 +104,7 @@ describe('constructHeaderActionButtons', () => {
 
     const mute = deepFreeze([]);
 
-    const buttons = constructHeaderActionButtons({
-      backgroundData: { mute, subscriptions },
-      message,
-    });
+    const buttons = constructHeaderActionButtons({ mute, subscriptions }, message);
 
     expect(buttons).toContain('unmuteStream');
   });
@@ -130,10 +121,7 @@ describe('constructHeaderActionButtons', () => {
 
     const mute = deepFreeze([]);
 
-    const buttons = constructHeaderActionButtons({
-      backgroundData: { mute, subscriptions },
-      message,
-    });
+    const buttons = constructHeaderActionButtons({ mute, subscriptions }, message);
 
     expect(buttons).toContain('muteStream');
   });
