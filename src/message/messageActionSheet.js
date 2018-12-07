@@ -15,11 +15,11 @@ type ButtonDescription = {
   (
     message: Message,
     dispatch: Dispatch,
-    {
+    $ReadOnly<{
       auth: Auth,
       subscriptions: Subscription[],
       _: GetText,
-    },
+    }>,
   ): void | Promise<void>,
   title: string,
 };
@@ -222,8 +222,7 @@ export const showActionSheet = (
     : constructMessageActionButtons(params);
   const callback = buttonIndex => {
     allButtons[optionCodes[buttonIndex]](params.message, dispatch, {
-      subscriptions: params.backgroundData.subscriptions,
-      auth: params.backgroundData.auth,
+      ...params.backgroundData,
       _,
     });
   };
