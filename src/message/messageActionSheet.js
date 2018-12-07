@@ -214,18 +214,15 @@ export const showActionSheet = (
     { options: string[], cancelButtonIndex: number },
     (number) => void,
   ) => void,
-  _: GetText,
   params: ConstructSheetParams,
 ): void => {
   const optionCodes = isHeader
     ? constructHeaderActionButtons(params)
     : constructMessageActionButtons(params);
   const callback = buttonIndex => {
-    allButtons[optionCodes[buttonIndex]](params.message, dispatch, {
-      ...params.backgroundData,
-      _,
-    });
+    allButtons[optionCodes[buttonIndex]](params.message, dispatch, params.backgroundData);
   };
+  const { _ } = params.backgroundData;
   showActionSheetWithOptions(
     {
       options: optionCodes.map(code => _(allButtons[code].title)),

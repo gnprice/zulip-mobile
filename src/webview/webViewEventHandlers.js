@@ -1,7 +1,7 @@
 /* @flow */
 import { emojiReactionAdd, emojiReactionRemove, queueMarkAsRead } from '../api';
 import config from '../config';
-import type { Dispatch, GetText, Message, Narrow } from '../types';
+import type { Dispatch, Message, Narrow } from '../types';
 import type { BackgroundData } from './MessageList';
 import { isUrlAnImage } from '../utils/url';
 import { logErrorRemotely } from '../utils/logging';
@@ -151,20 +151,20 @@ const handleImage = (props: Props, src: string, messageId: number) => {
   }
 };
 
-const handleLongPress = (props: Props, _: GetText, isHeader: boolean, messageId: number) => {
+const handleLongPress = (props: Props, isHeader: boolean, messageId: number) => {
   const message = props.messages.find(x => x.id === messageId);
   if (!message) {
     return;
   }
   const { dispatch, showActionSheetWithOptions, backgroundData, narrow } = props;
-  showActionSheet(isHeader, dispatch, showActionSheetWithOptions, _, {
+  showActionSheet(isHeader, dispatch, showActionSheetWithOptions, {
     backgroundData,
     message,
     narrow,
   });
 };
 
-export const handleMessageListEvent = (props: Props, _: GetText, event: MessageListEvent) => {
+export const handleMessageListEvent = (props: Props, event: MessageListEvent) => {
   switch (event.type) {
     case 'ready':
       // handled by caller
@@ -188,7 +188,7 @@ export const handleMessageListEvent = (props: Props, _: GetText, event: MessageL
       break;
 
     case 'longPress':
-      handleLongPress(props, _, event.target === 'header', event.messageId);
+      handleLongPress(props, event.target === 'header', event.messageId);
       break;
 
     case 'url':

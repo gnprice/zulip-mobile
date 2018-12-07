@@ -60,6 +60,7 @@ import { base64Utf8Encode } from '../utils/encoding';
  * we're displaying; data about those goes elsewhere.
  */
 export type BackgroundData = $ReadOnly<{
+  _: GetText,
   alertWords: AlertWordsState,
   auth: Auth,
   debug: Debug,
@@ -136,8 +137,7 @@ class MessageList extends Component<Props> {
       this.sendMessagesIsReady = true;
       this.sendMessages(this.unsentMessages);
     } else {
-      const { _ } = this.props;
-      handleMessageListEvent(this.props, _, eventData);
+      handleMessageListEvent(this.props, eventData);
     }
   };
 
@@ -189,6 +189,7 @@ class MessageList extends Component<Props> {
 }
 
 type OuterProps = {
+  _: GetText,
   narrow: Narrow,
 
   /* Remaining props are derived from `narrow` by default. */
@@ -204,31 +205,34 @@ type OuterProps = {
   typingUsers?: User[],
 };
 
-export default connect((state: GlobalState, props: OuterProps) => {
-  // TODO Ideally this ought to be a caching selector that doesn't change
-  // when the inputs don't.  Doesn't matter in a practical way here, because
-  // we have a `shouldComponentUpdate` that doesn't look at this prop... but
-  // it'd be better to set an example of the right general pattern.
-  const backgroundData: BackgroundData = {
-    alertWords: state.alertWords,
-    auth: getAuth(state),
-    debug: getDebug(state),
-    flags: getFlags(state),
-    mute: getMute(state),
-    ownEmail: getOwnEmail(state),
-    allRealmEmojiById: getAllRealmEmojiById(state),
-    subscriptions: getSubscriptions(state),
-    twentyFourHourTime: getRealm(state).twentyFourHourTime,
-  };
+export default withGetText(
+  connect((state: GlobalState, props: OuterProps) => {
+    // TODO Ideally this ought to be a caching selector that doesn't change
+    // when the inputs don't.  Doesn't matter in a practical way here, because
+    // we have a `shouldComponentUpdate` that doesn't look at this prop... but
+    // it'd be better to set an example of the right general pattern.
+    const backgroundData: BackgroundData = {
+      _: props._,
+      alertWords: state.alertWords,
+      auth: getAuth(state),
+      debug: getDebug(state),
+      flags: getFlags(state),
+      mute: getMute(state),
+      ownEmail: getOwnEmail(state),
+      allRealmEmojiById: getAllRealmEmojiById(state),
+      subscriptions: getSubscriptions(state),
+      twentyFourHourTime: getRealm(state).twentyFourHourTime,
+    };
 
-  return {
-    backgroundData,
-    anchor: props.anchor || getAnchorForActiveNarrow(props.narrow)(state),
-    fetching: props.fetching || getFetchingForActiveNarrow(props.narrow)(state),
-    messages: props.messages || getShownMessagesForNarrow(props.narrow)(state),
-    renderedMessages: props.renderedMessages || getRenderedMessages(props.narrow)(state),
-    showMessagePlaceholders:
-      props.showMessagePlaceholders || getShowMessagePlaceholders(props.narrow)(state),
-    typingUsers: props.typingUsers || getCurrentTypingUsers(props.narrow)(state),
-  };
-})(connectActionSheet(withGetText(MessageList)));
+    return {
+      backgroundData,
+      anchor: props.anchor || getAnchorForActiveNarrow(props.narrow)(state),
+      fetching: props.fetching || getFetchingForActiveNarrow(props.narrow)(state),
+      messages: props.messages || getShownMessagesForNarrow(props.narrow)(state),
+      renderedMessages: props.renderedMessages || getRenderedMessages(props.narrow)(state),
+      showMessagePlaceholders:
+        props.showMessagePlaceholders || getShowMessagePlaceholders(props.narrow)(state),
+      typingUsers: props.typingUsers || getCurrentTypingUsers(props.narrow)(state),
+    };
+  })(connectActionSheet(MessageList)),
+);
