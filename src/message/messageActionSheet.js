@@ -12,13 +12,15 @@ import { doNarrow, startEditMessage, deleteOutboxMessage, navigateToEmojiPicker 
 /** Description of a possible option for the action sheet. */
 type ButtonDescription = {
   /** The callback. */
-  ({
-    auth: Auth,
+  (
     message: Message,
-    subscriptions: Subscription[],
-    dispatch: Dispatch,
-    _: GetText,
-  }): void | Promise<void>,
+    {
+      auth: Auth,
+      subscriptions: Subscription[],
+      dispatch: Dispatch,
+      _: GetText,
+    },
+  ): void | Promise<void>,
   title: string,
 };
 
@@ -28,12 +30,12 @@ const isAnOutboxMessage = (message: Message): boolean => message.isOutbox;
 // Options for the action sheet go below: ...
 //
 
-const reply = ({ message, dispatch, auth }) => {
+const reply = (message, { dispatch, auth }) => {
   dispatch(doNarrow(getNarrowFromMessage(message, auth.email), message.id));
 };
 reply.title = 'Reply';
 
-const copyToClipboard = async ({ _, auth, message }) => {
+const copyToClipboard = async (message, { _, auth }) => {
   const rawMessage = isAnOutboxMessage(message) /* $FlowFixMe: then really type Outbox */
     ? message.markdownContent
     : await getMessageContentById(auth, message.id);
@@ -42,12 +44,12 @@ const copyToClipboard = async ({ _, auth, message }) => {
 };
 copyToClipboard.title = 'Copy to clipboard';
 
-const editMessage = async ({ message, dispatch }) => {
+const editMessage = async (message, { dispatch }) => {
   dispatch(startEditMessage(message.id, message.subject));
 };
 editMessage.title = 'Edit message';
 
-const deleteMessage = async ({ auth, message, dispatch }) => {
+const deleteMessage = async (message, { auth, dispatch }) => {
   if (isAnOutboxMessage(message)) {
     dispatch(deleteOutboxMessage(message.timestamp));
   } else {
@@ -56,17 +58,17 @@ const deleteMessage = async ({ auth, message, dispatch }) => {
 };
 deleteMessage.title = 'Delete message';
 
-const unmuteTopic = ({ auth, message }) => {
+const unmuteTopic = (message, { auth }) => {
   api.unmuteTopic(auth, message.display_recipient, message.subject);
 };
 unmuteTopic.title = 'Unmute topic';
 
-const muteTopic = ({ auth, message }) => {
+const muteTopic = (message, { auth }) => {
   api.muteTopic(auth, message.display_recipient, message.subject);
 };
 muteTopic.title = 'Mute topic';
 
-const unmuteStream = ({ auth, message, subscriptions }) => {
+const unmuteStream = (message, { auth, subscriptions }) => {
   const sub = subscriptions.find(x => x.name === message.display_recipient);
   if (sub) {
     toggleMuteStream(auth, sub.stream_id, false);
@@ -74,7 +76,7 @@ const unmuteStream = ({ auth, message, subscriptions }) => {
 };
 unmuteStream.title = 'Unmute stream';
 
-const muteStream = ({ auth, message, subscriptions }) => {
+const muteStream = (message, { auth, subscriptions }) => {
   const sub = subscriptions.find(x => x.name === message.display_recipient);
   if (sub) {
     toggleMuteStream(auth, sub.stream_id, true);
@@ -82,24 +84,24 @@ const muteStream = ({ auth, message, subscriptions }) => {
 };
 muteStream.title = 'Mute stream';
 
-const starMessage = ({ auth, message }) => {
+const starMessage = (message, { auth }) => {
   toggleMessageStarred(auth, [message.id], true);
 };
 starMessage.title = 'Star message';
 
-const unstarMessage = ({ auth, message }) => {
+const unstarMessage = (message, { auth }) => {
   toggleMessageStarred(auth, [message.id], false);
 };
 unstarMessage.title = 'Unstar message';
 
-const shareMessage = ({ message }) => {
+const shareMessage = message => {
   Share.share({
     message: message.content.replace(/<(?:.|\n)*?>/gm, ''),
   });
 };
 shareMessage.title = 'Share message';
 
-const addReaction = ({ message, dispatch }) => {
+const addReaction = (message, { dispatch }) => {
   dispatch(navigateToEmojiPicker(message.id));
 };
 addReaction.title = 'Add reaction';
@@ -219,7 +221,7 @@ export const showActionSheet = (
     ? constructHeaderActionButtons(params)
     : constructMessageActionButtons(params);
   const callback = buttonIndex => {
-    allButtons[optionCodes[buttonIndex]]({
+    allButtons[optionCodes[buttonIndex]](params.message, {
       dispatch,
       subscriptions: params.backgroundData.subscriptions,
       auth: params.backgroundData.auth,
