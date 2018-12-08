@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 
-import languages from './languages';
+import languages from './languages.json'; // see flow-typed/src/settings/...
 import LanguagePickerItem from './LanguagePickerItem';
 
 const styles = StyleSheet.create({
