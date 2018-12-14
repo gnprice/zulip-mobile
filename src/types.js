@@ -510,10 +510,10 @@ export type MatchResult = Array<string> & { index: number, input: string };
 
 export type GetState = () => GlobalState;
 
-export type PlainDispatch = <A: Action | NavigateAction>(action: A) => A;
+export type PlainDispatch = <A: Action | NavigateAction>(action: $ReadOnly<A>) => A;
 
 export interface Dispatch {
-  <A: Action | NavigateAction>(action: A): A;
+  <A: Action | NavigateAction>(action: $ReadOnly<A>): A;
   <T>((Dispatch, GetState) => T): T;
 }
 
