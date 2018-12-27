@@ -12,6 +12,7 @@ import android.media.AudioAttributes;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
@@ -36,7 +37,7 @@ import static com.zulipmobile.notifications.NotificationHelper.TAG;
 
 public class GCMPushNotifications {
 
-    private static final String CHANNEL_ID = "default";
+    private static final String CHANNEL_ID = "default6";
     private static final int NOTIFICATION_ID = 435;
     static final String ACTION_CLEAR = "ACTION_CLEAR";
     static final String EXTRA_NOTIFICATION_DATA = "data";
@@ -47,7 +48,7 @@ public class GCMPushNotifications {
 
     public static void createNotificationChannel(Context context) {
         if (Build.VERSION.SDK_INT >= 26) {
-            CharSequence name = context.getString(R.string.notification_channel_name);
+            CharSequence name = context.getString(R.string.notification_channel_name) + " " + CHANNEL_ID;
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             long[] pat = {0, 50, 75, 50, 75, 75};
@@ -170,8 +171,12 @@ public class GCMPushNotifications {
             long timeMillis = Long.parseLong(time) * 1000;
             builder.setWhen(timeMillis);
         }
-        long[] vPattern = {0, 100, 200, 100};
+        long[] vPattern = {0, 50, 100, 50, 100, 100};
         builder.setVibrate(vPattern);
+
+        Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        // vibrator.vibrate(vPattern, -1);
+
 
         builder.setDefaults(Notification.DEFAULT_LIGHTS);
 
