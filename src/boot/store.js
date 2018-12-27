@@ -80,6 +80,18 @@ const migrations = {
       },
     },
   }),
+  '4': state => ({
+    ...state,
+    realm: {
+      ...state.realm,
+      pushToken: {
+        ...state.realm.pushToken,
+        // Previously we stored `token` only after successfully telling the server
+        // about it; so the same value belongs in `serverKnownToken` too.
+        serverKnownToken: state.realm.pushToken.token,
+      },
+    },
+  }),
 };
 
 const reduxPersistConfig: Config = {

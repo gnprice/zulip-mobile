@@ -351,8 +351,26 @@ export type RealmState = {|
   crossRealmBots: RealmBot[],
   nonActiveUsers: User[],
   pushToken: {|
-    /** `null` before we've gotten a token. */
+    /**
+     * Our actual device token, as most recently learned from the system.
+     *
+     * With GCM this is the "registration token"; with APNs the "device token".
+     *
+     * This is `null` before we've gotten a token.
+     *
+     * See upstream docs:
+     *   https://developers.google.com/cloud-messaging/android/client
+     *   https://developer.apple.com/documentation/usernotifications/registering_your_app_with_apns
+     */
     token: string | null,
+
+    /**
+     * The last device token value the server definitely heard from us.
+     *
+     * This is `null` until we make a successful request to the server to
+     * tell it the token.
+     */
+    serverKnownToken: string | null,
   |},
   filters: RealmFilter[],
   emoji: RealmEmojiState,

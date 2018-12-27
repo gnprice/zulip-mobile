@@ -26,12 +26,13 @@ import {
   EVENT_REALM_FILTER_UPDATE,
 } from '../actionConstants';
 
-// Initial state
+const initialPushToken = { token: null, serverKnownToken: null };
+
 const initialState = {
   canCreateStreams: true,
   crossRealmBots: [],
   twentyFourHourTime: false,
-  pushToken: { token: null },
+  pushToken: initialPushToken,
   emoji: {},
   filters: [],
   isAdmin: false,
@@ -52,19 +53,23 @@ const realmInit = (state: RealmState, action: RealmInitAction): RealmState => ({
 const saveTokenPush = (state: RealmState, action: SaveTokenPushAction): RealmState => ({
   ...state,
   pushToken: {
+    // At present we only dispatch this one action after the server has
+    // already acknowledged the new token.  So, save to both token and
+    // serverKnownToken.
     token: action.pushToken,
+    serverKnownToken: action.pushToken,
   },
 });
 
 const deleteTokenPush = (state: RealmState, action: DeleteTokenPushAction): RealmState => ({
   ...state,
-  pushToken: { token: null },
+  pushToken: initialPushToken,
 });
 
 const loginChange = (state: RealmState, action: LoginSuccessAction | LogoutAction): RealmState => ({
   ...state,
   emoji: {},
-  pushToken: { token: null },
+  pushToken: initialPushToken,
 });
 
 const initRealmEmoji = (state: RealmState, action: InitRealmEmojiAction): RealmState => ({
