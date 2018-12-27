@@ -171,12 +171,9 @@ public class GCMPushNotifications {
             builder.setWhen(timeMillis);
         }
         long[] vPattern = {0, 100, 200, 100};
-        // NB the DEFAULT_VIBRATE flag below causes this to have no effect.
-        // TODO: choose a vibration pattern we like, and unset DEFAULT_VIBRATE.
         builder.setVibrate(vPattern);
 
-        builder.setDefaults(Notification.DEFAULT_VIBRATE
-                | Notification.DEFAULT_LIGHTS);
+        builder.setDefaults(Notification.DEFAULT_LIGHTS);
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
             Intent dismissIntent = new Intent(context, NotificationIntentService.class);
