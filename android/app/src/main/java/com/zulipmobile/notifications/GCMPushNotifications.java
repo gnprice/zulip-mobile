@@ -50,6 +50,8 @@ public class GCMPushNotifications {
             CharSequence name = context.getString(R.string.notification_channel_name);
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            long[] pat = {0, 50, 75, 50, 75, 75};
+            channel.setVibrationPattern(pat);
             getNotificationManager(context).createNotificationChannel(channel);
         }
     }
