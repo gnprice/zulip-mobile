@@ -5,12 +5,16 @@ import createActionBuffer from 'redux-action-buffer';
 import { createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
 
 import config from '../config';
-import { REHYDRATE } from '../actionConstants';
+import { REHYDRATE, GOT_PUSH_TOKEN } from '../actionConstants';
 import { getNav } from '../selectors';
 
 const reactNavigationMiddleware = createReactNavigationReduxMiddleware('root', getNav);
 
-const middleware = [reactNavigationMiddleware, createActionBuffer(REHYDRATE), thunk];
+const middleware = [
+  reactNavigationMiddleware,
+  createActionBuffer({ breaker: REHYDRATE, passthrough: [GOT_PUSH_TOKEN] }),
+  thunk,
+];
 
 if (config.enableReduxLogging) {
   middleware.push(
