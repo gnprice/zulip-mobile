@@ -1,4 +1,8 @@
+/* @flow  */
 import { REHYDRATE } from 'redux-persist/constants';
+import { REHYDRATEE } from 'redux-persistt';
+import type { RehydrateAction } from 'redux-persist';
+import type { Reducer, Store, Dispatch } from 'redux';
 
 import { logErrorRemotely } from '../utils/logging';
 
@@ -10,11 +14,23 @@ const processKey = key => {
   return int;
 };
 
-export default function createMigration(manifest, versionSelector, versionSetter) {
+type InnerStoreCreator<S, A, D> = (Reducer<S, A>, S | void) => Store<S, A, D>;
+type StoreEnhancer<S, A, D> = (InnerStoreCreator<S, A, D>) => InnerStoreCreator<S, A, D>;
+
+export default function createMigration<
+  State,
+  Action: { type: $Subtype<string>, payload: empty } | { type: typeof REHYDRATE, payload: State },
+>(
+  manifest: { [number]: (State) => State },
+  versionSelector: string | (State => number | string | void),
+  versionSetter?: (State, number) => State,
+): StoreEnhancer<State, Action, Dispatch<Action>> {
   if (typeof versionSelector === 'string') {
     const reducerKey = versionSelector;
+    // $FlowFixMe This is still a complicated DWIM, inherited from upstream.
     versionSelector = state => state && state[reducerKey] && state[reducerKey].version;
     versionSetter = (state, version) => {
+      // $FlowFixMe state[reducerKey] isn't expressed in these types yet
       if (['undefined', 'object'].indexOf(typeof state[reducerKey]) === -1) {
         logErrorRemotely(
           new Error(
@@ -23,7 +39,9 @@ export default function createMigration(manifest, versionSelector, versionSetter
         );
         return state;
       }
+      // $FlowFixMe state[reducerKey] isn't expressed in these types yet
       state[reducerKey] = state[reducerKey] || {};
+      // $FlowFixMe state[reducerKey] isn't expressed in these types yet
       state[reducerKey].version = version;
       return state;
     };
@@ -42,19 +60,25 @@ export default function createMigration(manifest, versionSelector, versionSetter
       state = manifest[v](state);
     });
 
+    if (versionSetter === undefined) {
+      throw new Error('createMigration: bad arguments');
+    }
     state = versionSetter(state, currentVersion);
     return state;
   };
 
-  const migrationDispatch = next => action => {
+  const migrationDispatch = next => (action: Action) => {
+    if (versionSetter === undefined || typeof versionSelector === 'string') {
+      throw new Error('createMigration: bad arguments');
+    }
     if (action.type === REHYDRATE) {
       const incomingState = action.payload;
       const incomingVersion = parseInt(versionSelector(incomingState), 10);
       if (Number.isNaN(incomingVersion)) {
         // first launch after install, so incoming state is empty object
         // migration not required, just update version
-        action.payload = versionSetter(incomingState, currentVersion);
-        return next(action);
+        const payload = versionSetter(incomingState, currentVersion);
+        return next({ ...action, type: REHYDRATE, payload });
       }
 
       if (incomingVersion !== currentVersion) {
@@ -65,8 +89,8 @@ export default function createMigration(manifest, versionSelector, versionSetter
     return next(action);
   };
 
-  return next => (reducer, initialState, enhancer) => {
-    const store = next(reducer, initialState, enhancer);
+  return next => (reducer, initialState) => {
+    const store = next(reducer, initialState);
     return {
       ...store,
       dispatch: migrationDispatch(store.dispatch),
