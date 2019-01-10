@@ -20,6 +20,7 @@ import { objectFromEntries } from '../jsBackport';
 // reactions on the message.
 const getReactionsTabs = (
   aggregatedReactions: $ReadOnlyArray<AggregatedReaction>,
+  reactionName?: string,
   allUsersById: Map<number, UserOrBot>,
 ) => {
   // Each tab corresponds to an aggregated reaction, and has a user list.
@@ -44,6 +45,12 @@ const getReactionsTabs = (
 
   return TabNavigator(reactionsTabs, {
     backBehavior: 'none',
+
+    // there can be cases where reaction have been removed by the time user see this screen
+    // or on re-render
+    // so confirm reaction `reactionName` still exists
+    initialRouteName: reactionName !== undefined && reactionsTabs[reactionName] ? reactionName : '',
+
     tabBarComponent: TabBarTop,
     tabBarPosition: 'top',
     ...tabsOptions({
@@ -63,7 +70,7 @@ type SelectorProps = $ReadOnly<{|
 |}>;
 
 type Props = $ReadOnly<{|
-  navigation: NavigationScreenProp<{ params: {| messageId: number |} }>,
+  navigation: NavigationScreenProp<{ params: {| reactionName?: string, messageId: number |} }>,
 
   dispatch: Dispatch,
   ...SelectorProps,
@@ -71,7 +78,8 @@ type Props = $ReadOnly<{|
 
 class MessageReactionList extends PureComponent<Props> {
   render() {
-    const { message, ownUserId, allUsersById } = this.props;
+    const { message, navigation, ownUserId, allUsersById } = this.props;
+    const { reactionName } = navigation.state.params;
     const { reactions } = message;
 
     // useful when user is on this screen and reactions are revoked
@@ -87,7 +95,7 @@ class MessageReactionList extends PureComponent<Props> {
 
     const aggregatedReactions = aggregateReactions(reactions, ownUserId);
 
-    const TabView = getReactionsTabs(aggregatedReactions, allUsersById);
+    const TabView = getReactionsTabs(aggregatedReactions, reactionName, allUsersById);
 
     return (
       <Screen title="Reactions" scrollEnabled={false}>
