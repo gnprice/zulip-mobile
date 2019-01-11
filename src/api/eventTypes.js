@@ -119,13 +119,6 @@ export type ReactionEvent = {|
   ...Reaction,
 |};
 
-type StreamListEvent<Op> = {|
-  ...EventCommon,
-  type: typeof EventTypes.stream,
-  streams: Stream[],
-  op: Op,
-|};
-
 class Op {
   static create: 'create' = 'create';
   static delete1: 'delete' = 'delete';
@@ -136,10 +129,22 @@ class Op {
 
 // prettier-ignore
 export type StreamEvent =
-  | {| ...StreamListEvent<typeof Op.create> |}
-  | {| ...StreamListEvent<typeof Op.delete1> |}
-  | {| ...StreamListEvent<typeof Op.occupy> |}
-  | {| ...StreamListEvent<typeof Op.vacate> |}
+  | {| ...EventCommon,
+    type: typeof EventTypes.stream,
+    streams: Stream[],
+    op: typeof Op.create |}
+  | {| ...EventCommon,
+    type: typeof EventTypes.stream,
+    streams: Stream[],
+    op: typeof Op.delete1 |}
+  | {| ...EventCommon,
+    type: typeof EventTypes.stream,
+    streams: Stream[],
+    op: typeof Op.occupy |}
+  | {| ...EventCommon,
+    type: typeof EventTypes.stream,
+    streams: Stream[],
+    op: typeof Op.vacate |}
   | {|
       ...EventCommon,
       type: typeof EventTypes.stream,
@@ -158,3 +163,29 @@ export type UpdateMessageFlagsEvent = {|
   all: boolean,
   messages: number[],
 |};
+
+function f(event: StreamEvent) {
+  switch (event.type) {
+    case EventTypes.stream:
+      switch (event.op) {
+        case 'create':
+          break;
+
+        case 'delete':
+          break;
+
+        case 'update':
+          break;
+
+        case 'vacate':
+        case 'occupy':
+          break;
+
+        default:
+          (event: empty); // eslint-disable-line no-unused-expressions
+          break;
+      }
+    default:
+      break;
+  }
+}
