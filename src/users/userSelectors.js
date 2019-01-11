@@ -52,6 +52,12 @@ export const getUsersSansMe: Selector<User[]> = createSelector(
   (users, ownEmail) => users.filter(user => user.email !== ownEmail),
 );
 
+export const getOwnUser: Selector<User[]> = createSelector(
+  getAllUsersByEmail,
+  getOwnEmail,
+  (usersByEmail, ownEmail) => usersByEmail[ownEmail],
+);
+
 export const getAccountDetailsUserFromEmail: Selector<UserOrBot, string> = createSelector(
   (state, email) => email,
   state => getAllUsersByEmail(state),
