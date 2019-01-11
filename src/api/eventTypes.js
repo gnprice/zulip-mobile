@@ -119,36 +119,22 @@ export type ReactionEvent = {|
   ...Reaction,
 |};
 
-class Op {
-  static create: 'create' = 'create';
-  static delete1: 'delete' = 'delete';
-  static occupy: 'occupy' = 'occupy';
-  static vacate: 'vacate' = 'vacate';
-  static update: 'update' = 'update';
-}
+type StreamListEvent = {|
+  ...EventCommon,
+  type: typeof EventTypes.stream,
+  streams: Stream[],
+|};
 
 // prettier-ignore
 export type StreamEvent =
-  | {| ...EventCommon,
-    type: typeof EventTypes.stream,
-    streams: Stream[],
-    op: typeof Op.create |}
-  | {| ...EventCommon,
-    type: typeof EventTypes.stream,
-    streams: Stream[],
-    op: typeof Op.delete1 |}
-  | {| ...EventCommon,
-    type: typeof EventTypes.stream,
-    streams: Stream[],
-    op: typeof Op.occupy |}
-  | {| ...EventCommon,
-    type: typeof EventTypes.stream,
-    streams: Stream[],
-    op: typeof Op.vacate |}
+  | {| ...StreamListEvent, op: 'create', |}
+  | {| ...StreamListEvent, op: 'delete', |}
+  | {| ...StreamListEvent, op: 'occupy', |}
+  | {| ...StreamListEvent, op: 'vacate', |}
   | {|
       ...EventCommon,
       type: typeof EventTypes.stream,
-      op: typeof Op.update,
+      op: 'update',
       stream_id: number,
       name: string,
       property: string,
@@ -163,29 +149,3 @@ export type UpdateMessageFlagsEvent = {|
   all: boolean,
   messages: number[],
 |};
-
-function f(event: StreamEvent) {
-  switch (event.type) {
-    case EventTypes.stream:
-      switch (event.op) {
-        case 'create':
-          break;
-
-        case 'delete':
-          break;
-
-        case 'update':
-          break;
-
-        case 'vacate':
-        case 'occupy':
-          break;
-
-        default:
-          (event: empty); // eslint-disable-line no-unused-expressions
-          break;
-      }
-    default:
-      break;
-  }
-}
