@@ -119,18 +119,19 @@ export type ReactionEvent = {|
   ...Reaction,
 |};
 
-type StreamListEvent = {|
+type StreamListEvent<Op> = {|
   ...EventCommon,
   type: typeof EventTypes.stream,
   streams: Stream[],
+  op: Op,
 |};
 
 // prettier-ignore
 export type StreamEvent =
-  | {| ...StreamListEvent, op: 'create', |}
-  | {| ...StreamListEvent, op: 'delete', |}
-  | {| ...StreamListEvent, op: 'occupy', |}
-  | {| ...StreamListEvent, op: 'vacate', |}
+  | {| ...StreamListEvent<'create'> |}
+  | {| ...StreamListEvent<'delete'> |}
+  | {| ...StreamListEvent<'occupy'> |}
+  | {| ...StreamListEvent<'vacate'> |}
   | {|
       ...EventCommon,
       type: typeof EventTypes.stream,
