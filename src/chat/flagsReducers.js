@@ -34,7 +34,7 @@ const addFlagsForMessages = (
     return state;
   }
 
-  const newState = {};
+  const newState: $Shape<FlagsState> = {};
 
   flags.forEach(flag => {
     newState[flag] = { ...(state[flag] || {}) };
@@ -51,7 +51,7 @@ const addFlagsForMessages = (
 };
 
 const removeFlagForMessages = (state: FlagsState, messages: number[], flag: string): FlagsState => {
-  const newStateForFlag = { ...(state[flag] || {}) };
+  const newStateForFlag: { [number]: boolean } = { ...(state[flag] || {}) };
   messages.forEach(message => {
     delete newStateForFlag[message];
   });
@@ -63,7 +63,7 @@ const removeFlagForMessages = (state: FlagsState, messages: number[], flag: stri
 
 const processFlagsForMessages = (state: FlagsState, messages: Message[]): FlagsState => {
   let stateChanged = false;
-  const newState = {};
+  const newState: $Shape<FlagsState> = {};
   messages.forEach(msg => {
     (msg.flags || []).forEach(flag => {
       if (!state[flag] || !state[flag][msg.id]) {
