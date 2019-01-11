@@ -126,16 +126,24 @@ type StreamListEvent<Op> = {|
   op: Op,
 |};
 
+class Op {
+  static create: 'create' = 'create';
+  static delete1: 'delete' = 'delete';
+  static occupy: 'occupy' = 'occupy';
+  static vacate: 'vacate' = 'vacate';
+  static update: 'update' = 'update';
+}
+
 // prettier-ignore
 export type StreamEvent =
-  | {| ...StreamListEvent<'create'> |}
-  | {| ...StreamListEvent<'delete'> |}
-  | {| ...StreamListEvent<'occupy'> |}
-  | {| ...StreamListEvent<'vacate'> |}
+  | {| ...StreamListEvent<typeof Op.create> |}
+  | {| ...StreamListEvent<typeof Op.delete1> |}
+  | {| ...StreamListEvent<typeof Op.occupy> |}
+  | {| ...StreamListEvent<typeof Op.vacate> |}
   | {|
       ...EventCommon,
       type: typeof EventTypes.stream,
-      op: 'update',
+      op: typeof Op.update,
       stream_id: number,
       name: string,
       property: string,
