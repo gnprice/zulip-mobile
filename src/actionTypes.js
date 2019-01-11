@@ -66,7 +66,7 @@ import {
   EVENT,
 } from './actionConstants';
 
-import type { MessageEvent, PresenceEvent, StreamEvent } from './api/eventTypes';
+import type { MessageEvent, PresenceEvent, ReactionEvent, StreamEvent } from './api/eventTypes';
 
 import type {
   Dimensions,
@@ -76,7 +76,6 @@ import type {
   MessagesState,
   Outbox,
   Narrow,
-  Reaction,
   Identity,
   User,
   UserGroup,
@@ -334,22 +333,9 @@ type EventUpdateMessageAction = {|
   user_id: number,
 |};
 
-type EventReactionCommon = {|
-  ...ServerEvent,
-  ...$Exact<Reaction>,
-  message_id: number,
-|};
-
-type EventReactionAddAction = {|
-  ...ServerEvent,
-  ...EventReactionCommon,
-  type: typeof EVENT_REACTION_ADD,
-|};
-
-type EventReactionRemoveAction = {|
-  ...ServerEvent,
-  ...EventReactionCommon,
-  type: typeof EVENT_REACTION_REMOVE,
+type EventReactionAction = {|
+  ...ReactionEvent,
+  type: typeof EVENT_REACTION_ADD | typeof EVENT_REACTION_REMOVE,
 |};
 
 type EventPresenceAction = {|
@@ -464,8 +450,6 @@ type EventUpdateDisplaySettingsAction = {|
   type: typeof EVENT_UPDATE_DISPLAY_SETTINGS,
   [string]: any,
 |};
-
-type EventReactionAction = EventReactionAddAction | EventReactionRemoveAction;
 
 type EventSubscriptionAction =
   | EventSubscriptionAddAction

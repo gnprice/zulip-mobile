@@ -10,7 +10,7 @@
  * @flow strict-local
  */
 
-import type { Message, Stream } from './apiTypes';
+import type { Message, Reaction, Stream } from './apiTypes';
 
 //
 // First, types used inside events.
@@ -72,6 +72,7 @@ export class EventTypes {
   static heartbeat: 'heartbeat' = 'heartbeat';
   static message: 'message' = 'message';
   static presence: 'presence' = 'presence';
+  static reaction: 'reaction' = 'reaction';
   static stream: 'stream' = 'stream';
   static update_message_flags: 'update_message_flags' = 'update_message_flags';
 }
@@ -108,6 +109,14 @@ export type PresenceEvent = {|
   email: string,
   server_timestamp: number,
   presence: UserPresence,
+|};
+
+export type ReactionEvent = {|
+  ...EventCommon,
+  type: typeof EventTypes.reaction,
+  op: 'add' | 'remove',
+  message_id: number,
+  ...Reaction,
 |};
 
 type StreamListEvent = {|
