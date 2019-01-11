@@ -26,10 +26,10 @@ const initialState = {
 };
 
 const addFlagsForMessages = (
-  state: FlagsState,
+  state,
   messages: $ReadOnlyArray<number>,
   flags?: $ReadOnlyArray<string>,
-): FlagsState => {
+) => {
   if (!messages || messages.length === 0 || !flags || flags.length === 0) {
     return state;
   }
@@ -50,7 +50,7 @@ const addFlagsForMessages = (
   };
 };
 
-const removeFlagForMessages = (state: FlagsState, messages: number[], flag: string): FlagsState => {
+const removeFlagForMessages = (state, messages: number[], flag: string) => {
   const newStateForFlag: { [number]: boolean } = { ...(state[flag] || {}) };
   messages.forEach(message => {
     delete newStateForFlag[message];
@@ -61,7 +61,7 @@ const removeFlagForMessages = (state: FlagsState, messages: number[], flag: stri
   };
 };
 
-const processFlagsForMessages = (state: FlagsState, messages: Message[]): FlagsState => {
+const processFlagsForMessages = (state, messages: Message[]) => {
   let stateChanged = false;
   const newState: $Shape<FlagsState> = {};
   messages.forEach(msg => {
@@ -77,7 +77,7 @@ const processFlagsForMessages = (state: FlagsState, messages: Message[]): FlagsS
   });
 
   // $FlowFixMe: Flow can't follow this objects-as-maps logic.
-  return stateChanged ? deeperMerge(state, newState) : state;
+  return stateChanged ? (deeperMerge(state, newState): FlagsState) : state;
 };
 
 const eventUpdateMessageFlags = (state, action) => {
