@@ -50,12 +50,26 @@ import TopicAutocomplete from '../autocomplete/TopicAutocomplete';
 import AutocompleteView from '../autocomplete/AutocompleteView';
 
 class InputState {
-  isFocused = false;
   value: string;
-  selection: InputSelectionType = { start: 0, end: 0 };
+  isFocused: boolean;
+  selection: InputSelectionType;
 
-  constructor(value) {
+  constructor({
+    value,
+    isFocused,
+    selection,
+  }: {
+    value: string,
+    isFocused?: boolean,
+    selection?: InputSelectionType,
+  }) {
     this.value = value;
+    this.isFocused = isFocused !== undefined ? isFocused : false;
+    this.selection = selection || { start: 0, end: 0 };
+  }
+
+  extend(props: $Shape<InputState>): InputState {
+    return new InputState({ ...this, ...props });
   }
 }
 
@@ -115,7 +129,7 @@ class ComposeBox extends PureComponent<Props, State> {
   };
 
   state = {
-    messageState: new InputState(this.props.draft),
+    messageState: new InputState({ value: this.props.draft }),
     isTopicFocused: false,
     isFocused: false,
     isMenuExpanded: false,
@@ -178,9 +192,10 @@ class ComposeBox extends PureComponent<Props, State> {
 
   handleMessageChange = (message: string) => {
     this.closeComposeMenu();
-    this.setState(state => {
-      state.messageState.value = message;
-    });
+    this.setState(state => ({
+      ...state,
+      messageState: state.messageState.extend({ value: message }),
+    }));
     const { dispatch, narrow } = this.props;
     dispatch(sendTypingEvent(narrow));
     dispatch(draftUpdate(narrow, message));
@@ -192,17 +207,19 @@ class ComposeBox extends PureComponent<Props, State> {
 
   handleMessageSelectionChange = (event: { nativeEvent: { selection: InputSelectionType } }) => {
     const { selection } = event.nativeEvent;
-    this.setState(state => {
-      state.messageState.selection = selection;
-    });
+    this.setState(state => ({
+      ...state,
+      messageState: state.messageState.extend({ selection }),
+    }));
   };
 
   handleMessageFocus = () => {
     this.closeComposeMenu();
-    this.setState(state => {
-      state.messageState.isFocused = true;
-      state.isFocused = true;
-    });
+    this.setState(state => ({
+      ...state,
+      messageState: state.messageState.extend({ isFocused: true }),
+      isFocused: true,
+    }));
     this.setState((state, { lastMessageTopic }) => ({
       ...state,
       topic: state.topic || lastMessageTopic,
