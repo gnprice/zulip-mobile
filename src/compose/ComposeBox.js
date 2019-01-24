@@ -151,6 +151,10 @@ class ComposeBox extends PureComponent<Props, State> {
     }));
   };
 
+  closeComposeMenu = () => {
+    this.setState({ isMenuExpanded: false });
+  };
+
   handleLayoutChange = event => {
     this.setState({
       height: event.nativeEvent.layout.height,
@@ -158,7 +162,8 @@ class ComposeBox extends PureComponent<Props, State> {
   };
 
   handleTopicChange = (topic: string) => {
-    this.setState({ topic, isMenuExpanded: false });
+    this.closeComposeMenu();
+    this.setState({ topic });
   };
 
   handleTopicAutocomplete = (topic: string) => {
@@ -166,7 +171,8 @@ class ComposeBox extends PureComponent<Props, State> {
   };
 
   handleMessageChange = (message: string) => {
-    this.setState({ message, isMenuExpanded: false });
+    this.closeComposeMenu();
+    this.setState({ message });
     const { dispatch, narrow } = this.props;
     dispatch(sendTypingEvent(narrow));
     dispatch(draftUpdate(narrow, message));
@@ -182,43 +188,43 @@ class ComposeBox extends PureComponent<Props, State> {
   };
 
   handleMessageFocus = () => {
+    this.closeComposeMenu();
     this.setState((state, { lastMessageTopic }) => ({
       ...state,
       topic: state.topic || lastMessageTopic,
       isMessageFocused: true,
       isFocused: true,
-      isMenuExpanded: false,
     }));
   };
 
   handleMessageBlur = () => {
+    this.closeComposeMenu();
     this.setState({
       isMessageFocused: false,
-      isMenuExpanded: false,
     });
     setTimeout(this.updateIsFocused, 200); // give a chance to the topic input to get the focus
   };
 
   handleTopicFocus = () => {
     const { dispatch, narrow } = this.props;
+    this.closeComposeMenu();
     this.setState({
       isTopicFocused: true,
       isFocused: true,
-      isMenuExpanded: false,
     });
     dispatch(fetchTopicsForActiveStream(narrow));
   };
 
   handleTopicBlur = () => {
+    this.closeComposeMenu();
     this.setState({
       isTopicFocused: false,
-      isMenuExpanded: false,
     });
     setTimeout(this.updateIsFocused, 200); // give a chance to the message input to get the focus
   };
 
   handleInputTouchStart = () => {
-    this.setState({ isMenuExpanded: false });
+    this.closeComposeMenu();
   };
 
   getDestinationNarrow = (): Narrow => {
