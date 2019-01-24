@@ -49,6 +49,16 @@ import { getDraftForActiveNarrow } from '../drafts/draftsSelectors';
 import TopicAutocomplete from '../autocomplete/TopicAutocomplete';
 import AutocompleteView from '../autocomplete/AutocompleteView';
 
+class InputState {
+  isFocused = false;
+  value: string;
+  selection: InputSelectionType = { start: 0, end: 0 };
+
+  constructor(value) {
+    this.value = value;
+  }
+}
+
 type Props = {|
   auth: Auth,
   canSend: boolean,
@@ -65,7 +75,7 @@ type Props = {|
 |};
 
 type State = {|
-  isMessageFocused: boolean,
+  messageState: InputState,
   isTopicFocused: boolean,
 
   /** Almost the same as isMessageFocused || isTopicFocused ... except
@@ -75,9 +85,7 @@ type State = {|
 
   isMenuExpanded: boolean,
   topic: string,
-  message: string,
   height: number,
-  selection: InputSelectionType,
 |};
 
 export const updateTextInput = (textInput: ?TextInput, text: string): void => {
@@ -107,20 +115,18 @@ class ComposeBox extends PureComponent<Props, State> {
   };
 
   state = {
-    isMessageFocused: false,
+    messageState: new InputState(this.props.draft),
     isTopicFocused: false,
     isFocused: false,
     isMenuExpanded: false,
     height: 20,
     topic: this.props.lastMessageTopic,
-    message: this.props.draft,
-    selection: { start: 0, end: 0 },
   };
 
   updateIsFocused = () => {
     this.setState(state => ({
       ...state,
-      isFocused: state.isMessageFocused || state.isTopicFocused,
+      isFocused: state.messageState.isFocused || state.isTopicFocused,
     }));
   };
 
@@ -172,7 +178,9 @@ class ComposeBox extends PureComponent<Props, State> {
 
   handleMessageChange = (message: string) => {
     this.closeComposeMenu();
-    this.setState({ message });
+    this.setState(state => {
+      state.messageState.value = message;
+    });
     const { dispatch, narrow } = this.props;
     dispatch(sendTypingEvent(narrow));
     dispatch(draftUpdate(narrow, message));
@@ -184,23 +192,27 @@ class ComposeBox extends PureComponent<Props, State> {
 
   handleMessageSelectionChange = (event: { nativeEvent: { selection: InputSelectionType } }) => {
     const { selection } = event.nativeEvent;
-    this.setState({ selection });
+    this.setState(state => {
+      state.messageState.selection = selection;
+    });
   };
 
   handleMessageFocus = () => {
     this.closeComposeMenu();
+    this.setState(state => {
+      state.messageState.isFocused = true;
+      state.isFocused = true;
+    });
     this.setState((state, { lastMessageTopic }) => ({
       ...state,
       topic: state.topic || lastMessageTopic,
-      isMessageFocused: true,
-      isFocused: true,
     }));
   };
 
   handleMessageBlur = () => {
     this.closeComposeMenu();
-    this.setState({
-      isMessageFocused: false,
+    this.setState(state => {
+      state.messageState.isFocused = false;
     });
     setTimeout(this.updateIsFocused, 200); // give a chance to the topic input to get the focus
   };
@@ -235,16 +247,16 @@ class ComposeBox extends PureComponent<Props, State> {
 
   handleSend = () => {
     const { dispatch } = this.props;
-    const { message } = this.state;
 
-    dispatch(addToOutbox(this.getDestinationNarrow(), message));
+    dispatch(addToOutbox(this.getDestinationNarrow(), this.state.messageState.value));
 
     this.setMessageInputValue('');
   };
 
   handleEdit = () => {
     const { auth, editMessage, dispatch } = this.props;
-    const { message, topic } = this.state;
+    const { topic } = this.state;
+    const message = this.state.messageState.value;
     const content = editMessage.content !== message ? message : undefined;
     const subject = topic !== editMessage.topic ? topic : undefined;
     if ((content !== undefined && content !== '') || (subject !== undefined && subject !== '')) {
@@ -317,7 +329,7 @@ class ComposeBox extends PureComponent<Props, State> {
   };
 
   render() {
-    const { isTopicFocused, isMenuExpanded, height, message, topic, selection } = this.state;
+    const { isTopicFocused, isMenuExpanded, height, topic } = this.state;
     const {
       auth,
       canSend,
@@ -352,9 +364,9 @@ class ComposeBox extends PureComponent<Props, State> {
             onAutocomplete={this.handleTopicAutocomplete}
           />
           <AutocompleteView
-            isFocused={this.state.isMessageFocused}
-            selection={selection}
-            text={message}
+            isFocused={this.state.messageState.isFocused}
+            selection={this.state.messageState.selection}
+            text={this.state.messageState.value}
             onAutocomplete={this.handleMessageAutocomplete}
           />
         </View>
@@ -386,7 +398,7 @@ class ComposeBox extends PureComponent<Props, State> {
               style={this.styles.composeTextInput}
               underlineColorAndroid="transparent"
               placeholder={placeholder}
-              defaultValue={message}
+              defaultValue={this.state.messageState.value}
               textInputRef={component => {
                 this.messageInput = component;
               }}
@@ -401,7 +413,7 @@ class ComposeBox extends PureComponent<Props, State> {
             style={this.styles.composeSendButton}
             Icon={editMessage === null ? IconSend : IconDone}
             size={32}
-            disabled={message.trim().length === 0}
+            disabled={this.state.messageState.value.trim().length === 0}
             onPress={editMessage === null ? this.handleSend : this.handleEdit}
           />
         </View>
