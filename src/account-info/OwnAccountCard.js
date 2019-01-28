@@ -19,17 +19,16 @@ const componentStyles = StyleSheet.create({
 
 type Props = {|
   ownUser: User,
-  dispatch: Dispatch,
   presence: PresenceState,
 |};
 
 class OwnAccountCard extends PureComponent<Props> {
   render() {
-    const { dispatch, ownUser, presence } = this.props;
+    const { ownUser, presence } = this.props;
 
     return (
       <View>
-        <AccountDetails dispatch={dispatch} user={ownUser} presence={presence[ownUser.email]} />
+        <AccountDetails user={ownUser} presence={presence[ownUser.email]} />
         <View style={componentStyles.accountButtons}>
           <SwitchAccountButton />
           <LogoutButton />
