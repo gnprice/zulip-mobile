@@ -52,11 +52,8 @@ export const getUsersSansMe: Selector<User[]> = createSelector(
   (users, ownEmail) => users.filter(user => user.email !== ownEmail),
 );
 
-export const getOwnUser: Selector<User[]> = createSelector(
-  getAllUsersByEmail,
-  getOwnEmail,
-  (usersByEmail, ownEmail) => (usersByEmail.get(ownEmail): $FlowFixMe),
-);
+export const getOwnUser = (state: GlobalState): User[] =>
+  (getAllUsersByEmail(state).get(getOwnEmail(state)): $FlowFixMe);
 
 export const getAccountDetailsUserFromEmail: Selector<UserOrBot, string> = createSelector(
   (state, email) => email,
