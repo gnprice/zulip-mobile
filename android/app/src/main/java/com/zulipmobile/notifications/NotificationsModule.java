@@ -30,12 +30,11 @@ public class NotificationsModule extends ReactContextBaseJavaModule {
         // before React is ready.  With some more care we could hang on to it and emit
         // the event a bit later, but instead we just redundantly emit here when we
         // know things have started up.
-        emitToken((ReactApplication) getCurrentActivity().getApplication(),
-                getToken());
+        getAndEmitToken((ReactApplication) getCurrentActivity().getApplication());
     }
 
-    static String getToken() {
-        return FirebaseInstanceId.getInstance().getToken();
+    static void getAndEmitToken(ReactApplication application) {
+        emitToken(application, FirebaseInstanceId.getInstance().getToken());
     }
 
     static void emitToken(ReactApplication application, String token) {
