@@ -12,6 +12,7 @@ public class InstanceIDListenerService extends FirebaseInstanceIdService {
      */
     @Override
     public void onTokenRefresh() {
-        NotificationsModule.emitToken((ReactApplication) getApplication());
+        NotificationsModule.emitToken((ReactApplication) getApplication(),
+                NotificationsModule.getToken());
     }
 }
