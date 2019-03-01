@@ -5,6 +5,7 @@ import createActionBuffer from 'redux-action-buffer';
 import { createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
 
 import config from '../config';
+import type { GetState } from '../reduxTypes';
 import { REHYDRATE } from '../actionConstants';
 import { getNav } from '../selectors';
 
@@ -16,6 +17,9 @@ if (config.enableReduxLogging) {
   middleware.push(
     createLogger({
       duration: true,
+      predicate: (getState: GetState, action: mixed): boolean =>
+        getState().session.debug.logReduxData,
+
       // See docs/howto/debugging.md.
       // diff: true,
       // predicate: (getState, action) => action.type === 'MESSAGE_FETCH_COMPLETE',

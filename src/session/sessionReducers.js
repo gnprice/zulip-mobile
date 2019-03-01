@@ -19,6 +19,7 @@ import {
   GOT_PUSH_TOKEN,
 } from '../actionConstants';
 import { hasAuth } from '../account/accountsSelectors';
+import config from '../config';
 
 /**
  * Miscellaneous non-persistent state about this run of the app.
@@ -77,6 +78,7 @@ const initialState: SessionState = {
     top: 0,
   },
   debug: {
+    logReduxData: config.isDevelopment,
     highlightUnreadMessages: false,
     doNotMarkMessagesAsRead: false,
   },

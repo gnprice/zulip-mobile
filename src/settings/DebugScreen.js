@@ -8,6 +8,8 @@ import { getSession } from '../selectors';
 import { OptionRow, Screen } from '../common';
 import { debugFlagToggle } from '../actions';
 
+/* eslint-disable no-console */
+
 type Props = {|
   debug: Debug,
   dispatch: Dispatch,
@@ -33,6 +35,11 @@ class DebugScreen extends PureComponent<Props> {
           label="Do not mark messages read on scroll"
           defaultValue={debug.doNotMarkMessagesAsRead}
           onValueChange={() => this.handleSettingToggle('doNotMarkMessagesAsRead')}
+        />
+        <OptionRow
+          label="Log details about data (Redux state and actions)"
+          defaultValue={debug.logReduxData}
+          onValueChange={() => this.handleSettingToggle('logReduxData')}
         />
         <OptionRow
           label="Try console.error"

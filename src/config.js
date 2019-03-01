@@ -6,6 +6,7 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 const isEmulator = NativeModules.RNDeviceInfo ? DeviceInfo.isEmulator() : false;
 
 type Config = {|
+  isDevelopment: boolean,
   messagesPerRequest: number,
   scrollCallbackThrottle: number,
   messageListThreshold: number,
@@ -20,10 +21,11 @@ type Config = {|
 |};
 
 const config: Config = {
+  isDevelopment,
   messagesPerRequest: 50,
   scrollCallbackThrottle: 250,
   messageListThreshold: 250,
-  enableReduxLogging: isDevelopment && !!global.btoa,
+  enableReduxLogging: true,
   enableReduxSlowReducerWarnings: isDevelopment && !!global.btoa,
   enableSentry: !isDevelopment && !isEmulator,
   enableWebViewErrorDisplay: isDevelopment,
