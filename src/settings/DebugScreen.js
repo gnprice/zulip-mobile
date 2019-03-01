@@ -34,6 +34,31 @@ class DebugScreen extends PureComponent<Props> {
           defaultValue={debug.doNotMarkMessagesAsRead}
           onValueChange={() => this.handleSettingToggle('doNotMarkMessagesAsRead')}
         />
+        <OptionRow
+          label="Try console.error"
+          defaultValue={false}
+          onValueChange={() => console.error('hello error, from Zulip')}
+        />
+        <OptionRow
+          label="Try console.warn"
+          defaultValue={false}
+          onValueChange={() => console.warn('hello warn, from Zulip')}
+        />
+        <OptionRow
+          label="Try console.log"
+          defaultValue={false}
+          onValueChange={() => console.log('hello log, from Zulip')}
+        />
+        <OptionRow
+          label="Try console.info"
+          defaultValue={false}
+          onValueChange={() => console.info('hello info, from Zulip')}
+        />
+        <OptionRow
+          label="Try console.debug"
+          defaultValue={false}
+          onValueChange={() => console.debug('hello debug, from Zulip')}
+        />
       </Screen>
     );
   }
