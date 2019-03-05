@@ -270,15 +270,6 @@ class ComposeBox extends PureComponent<Props, State> {
   };
 
   styles = {
-    autocompleteWrapper: {
-      position: 'absolute',
-      bottom: 0,
-      width: '100%',
-    },
-    composeBox: {
-      flexDirection: 'row',
-      alignItems: 'flex-end',
-    },
     composeText: {
       flex: 1,
       paddingVertical: 8,
@@ -306,14 +297,28 @@ class ComposeBox extends PureComponent<Props, State> {
     ],
   };
 
+  makeStyles = {
+    autocompleteWrapper: () => ({
+      position: 'absolute',
+      bottom: 0,
+      width: '100%',
+      marginBottom: this.state.height,
+    }),
+    composeBox: () => ({
+      flexDirection: 'row',
+      alignItems: 'flex-end',
+      paddingBottom: this.props.safeAreaInsets.bottom,
+      backgroundColor: 'rgba(127, 127, 127, 0.1)',
+    }),
+  };
+
   render() {
-    const { isTopicFocused, isMenuExpanded, height, message, topic, selection } = this.state;
+    const { isTopicFocused, isMenuExpanded, message, topic, selection } = this.state;
     const {
       auth,
       narrow,
       usersByEmail,
       editMessage,
-      safeAreaInsets,
       isAdmin,
       isAnnouncementOnly,
       isSubscribed,
@@ -326,14 +331,10 @@ class ComposeBox extends PureComponent<Props, State> {
     }
 
     const placeholder = getComposeInputPlaceholder(narrow, auth.email, usersByEmail);
-    const style = {
-      paddingBottom: safeAreaInsets.bottom,
-      backgroundColor: 'rgba(127, 127, 127, 0.1)',
-    };
 
     return (
       <View>
-        <View style={[this.styles.autocompleteWrapper, { marginBottom: height }]}>
+        <View style={this.makeStyles.autocompleteWrapper()}>
           <TopicAutocomplete
             isFocused={isTopicFocused}
             narrow={narrow}
@@ -347,7 +348,7 @@ class ComposeBox extends PureComponent<Props, State> {
             onAutocomplete={this.handleMessageAutocomplete}
           />
         </View>
-        <View style={[this.styles.composeBox, style]} onLayout={this.handleLayoutChange}>
+        <View style={this.makeStyles.composeBox()} onLayout={this.handleLayoutChange}>
           <ComposeMenu
             destinationNarrow={this.getDestinationNarrow()}
             expanded={isMenuExpanded}
