@@ -40,7 +40,6 @@ const infoButtonHandlers: NarrowNavButtonCandidate[] = [
 
 class _ExtraNavButtonStream extends PureComponent<{|
   dispatch: Dispatch,
-  narrow: Narrow,
   color: string,
   stream: Stream,
 |}> {
@@ -57,17 +56,17 @@ class _ExtraNavButtonStream extends PureComponent<{|
 }
 
 const ExtraNavButtonStream = connect((state, props) => ({
-  stream: getStreamForName(state, props.narrow[0].operand),
+  stream: getStreamForName(state, props.streamName),
 }))(_ExtraNavButtonStream);
 
 class _ExtraNavButtonTopic extends PureComponent<{|
   dispatch: Dispatch,
-  narrow: Narrow,
+  streamName: string,
   color: string,
 |}> {
   handlePress = () => {
-    const { dispatch, narrow } = this.props;
-    dispatch(doNarrow(streamNarrow(narrow[0].operand)));
+    const { dispatch, streamName } = this.props;
+    dispatch(doNarrow(streamNarrow(streamName)));
   };
 
   render() {
@@ -91,8 +90,8 @@ export const ExtraButton = (props: Props) =>
   caseNarrowDefault(
     props.narrow,
     {
-      stream: () => <ExtraNavButtonStream {...props} />,
-      topic: () => <ExtraNavButtonTopic {...props} />,
+      stream: streamName => <ExtraNavButtonStream streamName={streamName} color={props.color} />,
+      topic: streamName => <ExtraNavButtonTopic streamName={streamName} color={props.color} />,
     },
     () => null,
   );
