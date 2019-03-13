@@ -57,7 +57,7 @@ const ExtraNavButtonStream = connect((state, props) => ({
   stream: getStreamForName(state, props.streamName),
 }))(_ExtraNavButtonStream);
 
-class _ExtraNavButtonTopic extends PureComponent<{|
+class ExtraNavButtonTopic extends PureComponent<{|
   dispatch: Dispatch,
   streamName: string,
   color: string,
@@ -72,8 +72,6 @@ class _ExtraNavButtonTopic extends PureComponent<{|
   }
 }
 
-const ExtraNavButtonTopic = connect()(_ExtraNavButtonTopic);
-
 const makeButton = (handlers): NarrowNavButton => props => {
   const handler = handlers.find(x => x.isFunc(props.narrow)) || null;
   const SpecificButton = handler && handler.ButtonComponent;
@@ -82,12 +80,16 @@ const makeButton = (handlers): NarrowNavButton => props => {
 
 export const InfoButton = makeButton(infoButtonHandlers);
 
-export const ExtraButton = (props: Props) =>
-  caseNarrowDefault(
-    props.narrow,
-    {
-      stream: streamName => <ExtraNavButtonStream streamName={streamName} color={props.color} />,
-      topic: streamName => <ExtraNavButtonTopic streamName={streamName} color={props.color} />,
-    },
-    () => null,
-  );
+export const ExtraButton = connect()(
+  ({ narrow, color, dispatch }: {| ...Props, dispatch: Dispatch |}) =>
+    caseNarrowDefault(
+      narrow,
+      {
+        stream: streamName => <ExtraNavButtonStream streamName={streamName} color={color} />,
+        topic: streamName => (
+          <ExtraNavButtonTopic streamName={streamName} color={color} dispatch={dispatch} />
+        ),
+      },
+      () => null,
+    ),
+);
