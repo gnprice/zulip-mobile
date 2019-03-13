@@ -13,7 +13,7 @@ import {
   isTopicNarrow,
   streamNarrow,
 } from '../utils/narrow';
-import { getStreams } from '../selectors';
+import { getStreamForName } from '../selectors';
 import NavButton from '../nav/NavButton';
 import { doNarrow, navigateToTopicList } from '../actions';
 
@@ -39,16 +39,12 @@ const infoButtonHandlers: NarrowNavButtonCandidate[] = [
 
 class _ExtraNavButtonStream extends PureComponent<{|
   dispatch: Dispatch,
-  narrow: Narrow,
   color: string,
-  streams: Stream[],
+  stream: Stream,
 |}> {
   handlePress = () => {
-    const { dispatch, narrow, streams } = this.props;
-    const stream = streams.find(x => x.name === narrow[0].operand);
-    if (stream) {
-      dispatch(navigateToTopicList(stream.stream_id));
-    }
+    const { dispatch, stream } = this.props;
+    dispatch(navigateToTopicList(stream.stream_id));
   };
 
   render() {
@@ -59,7 +55,7 @@ class _ExtraNavButtonStream extends PureComponent<{|
 }
 
 const ExtraNavButtonStream = connect((state, props) => ({
-  streams: getStreams(state),
+  stream: getStreamForName(state, props.narrow[0].operand),
 }))(_ExtraNavButtonStream);
 
 class _ExtraNavButtonTopic extends PureComponent<{|
