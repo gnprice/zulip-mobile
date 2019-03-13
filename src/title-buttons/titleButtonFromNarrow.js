@@ -49,9 +49,7 @@ class _ExtraNavButtonStream extends PureComponent<{|
   };
 
   render() {
-    const { color } = this.props;
-
-    return <NavButton name="list" color={color} onPress={this.handlePress} />;
+    return <NavButton name="list" color={this.props.color} onPress={this.handlePress} />;
   }
 }
 
@@ -70,9 +68,7 @@ class _ExtraNavButtonTopic extends PureComponent<{|
   };
 
   render() {
-    const { color } = this.props;
-
-    return <NavButton name="arrow-up" color={color} onPress={this.handlePress} />;
+    return <NavButton name="arrow-up" color={this.props.color} onPress={this.handlePress} />;
   }
 }
 
