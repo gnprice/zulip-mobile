@@ -12,6 +12,7 @@ import {
   isStreamNarrow,
   isTopicNarrow,
   streamNarrow,
+  caseNarrowDefault,
 } from '../utils/narrow';
 import { getStreamForName } from '../selectors';
 import NavButton from '../nav/NavButton';
@@ -39,6 +40,7 @@ const infoButtonHandlers: NarrowNavButtonCandidate[] = [
 
 class _ExtraNavButtonStream extends PureComponent<{|
   dispatch: Dispatch,
+  narrow: Narrow,
   color: string,
   stream: Stream,
 |}> {
@@ -77,15 +79,6 @@ class _ExtraNavButtonTopic extends PureComponent<{|
 
 const ExtraNavButtonTopic = connect()(_ExtraNavButtonTopic);
 
-const extraButtonHandlers: NarrowNavButtonCandidate[] = [
-  { isFunc: isHomeNarrow, ButtonComponent: null },
-  { isFunc: isSpecialNarrow, ButtonComponent: null },
-  { isFunc: isStreamNarrow, ButtonComponent: ExtraNavButtonStream },
-  { isFunc: isTopicNarrow, ButtonComponent: ExtraNavButtonTopic },
-  { isFunc: isPrivateNarrow, ButtonComponent: null },
-  { isFunc: isGroupNarrow, ButtonComponent: null },
-];
-
 const makeButton = (handlers): NarrowNavButton => props => {
   const handler = handlers.find(x => x.isFunc(props.narrow)) || null;
   const SpecificButton = handler && handler.ButtonComponent;
@@ -94,4 +87,12 @@ const makeButton = (handlers): NarrowNavButton => props => {
 
 export const InfoButton = makeButton(infoButtonHandlers);
 
-export const ExtraButton = makeButton(extraButtonHandlers);
+export const ExtraButton = (props: Props) =>
+  caseNarrowDefault(
+    props.narrow,
+    {
+      stream: () => <ExtraNavButtonStream {...props} />,
+      topic: () => <ExtraNavButtonTopic {...props} />,
+    },
+    () => null,
+  );
