@@ -66,14 +66,10 @@ class _ExtraNavButtonTopic extends PureComponent<{|
   dispatch: Dispatch,
   narrow: Narrow,
   color: string,
-  streams: Stream[],
 |}> {
   handlePress = () => {
-    const { dispatch, narrow, streams } = this.props;
-    const stream = streams.find(x => x.name === narrow[0].operand);
-    if (stream) {
-      dispatch(doNarrow(streamNarrow(stream.name)));
-    }
+    const { dispatch, narrow } = this.props;
+    dispatch(doNarrow(streamNarrow(narrow[0].operand)));
   };
 
   render() {
@@ -83,9 +79,7 @@ class _ExtraNavButtonTopic extends PureComponent<{|
   }
 }
 
-const ExtraNavButtonTopic = connect((state, props) => ({
-  streams: getStreams(state),
-}))(_ExtraNavButtonTopic);
+const ExtraNavButtonTopic = connect()(_ExtraNavButtonTopic);
 
 const extraButtonHandlers: NarrowNavButtonCandidate[] = [
   { isFunc: isHomeNarrow, ButtonComponent: null },
