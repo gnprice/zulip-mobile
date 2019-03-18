@@ -24,10 +24,10 @@ import { getCaughtUpForNarrow } from '../caughtup/caughtUpSelectors';
 import { getAllUsersByEmail } from '../users/userSelectors';
 import { getIsFetching } from './fetchingSelectors';
 import {
-  isPrivateNarrow,
-  isStreamOrTopicNarrow,
   emailsOfGroupNarrow,
   narrowContains,
+  streamNameFromNarrow,
+  caseNarrowDefault,
 } from '../utils/narrow';
 import { shouldBeMuted } from '../utils/message';
 import { NULL_ARRAY, NULL_SUBSCRIPTION } from '../nullObjects';
@@ -104,19 +104,20 @@ export const getRecipientsInGroupNarrow: Selector<UserOrBot[], Narrow> = createS
 
 // TODO: clean up what this returns.
 export const getStreamInNarrow = (
-  narrow: Narrow,
+  narrow: Narrow | void,
 ): Selector<Subscription | {| ...Stream, in_home_view: boolean |}> =>
   createSelector(getSubscriptions, getStreams, (subscriptions, streams) => {
-    if (!isStreamOrTopicNarrow(narrow)) {
+    const streamName = narrow && streamNameFromNarrow(narrow);
+    if (!narrow || streamName === null) {
       return NULL_SUBSCRIPTION;
     }
 
-    const subscription = subscriptions.find(x => x.name === narrow[0].operand);
+    const subscription = subscriptions.find(x => x.name === streamName);
     if (subscription) {
       return subscription;
     }
 
-    const stream = streams.find(x => x.name === narrow[0].operand);
+    const stream = streams.find(x => x.name === streamName);
     if (stream) {
       return {
         ...stream,
@@ -141,14 +142,14 @@ export const getShowMessagePlaceholders = (narrow: Narrow): Selector<boolean> =>
   );
 
 export const isNarrowValid = (narrow: Narrow): Selector<boolean> =>
-  createSelector(getStreams, getAllUsersByEmail, (streams, allUsersByEmail) => {
-    if (isStreamOrTopicNarrow(narrow)) {
-      return streams.find(s => s.name === narrow[0].operand) !== undefined;
-    }
-
-    if (isPrivateNarrow(narrow)) {
-      return allUsersByEmail.get(narrow[0].operand) !== undefined;
-    }
-
-    return true;
-  });
+  createSelector(getStreams, getAllUsersByEmail, (streams, allUsersByEmail) =>
+    caseNarrowDefault(
+      narrow,
+      {
+        stream: name => streams.find(s => s.name === name) !== undefined,
+        topic: streamName => streams.find(s => s.name === streamName) !== undefined,
+        pm: email => allUsersByEmail.get(email) !== undefined,
+      },
+      () => true,
+    ),
+  );

@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 
 import type { Narrow, Selector } from '../types';
 import { getSubscriptions } from '../directSelectors';
-import { isStreamOrTopicNarrow } from '../utils/narrow';
+import { streamNameFromNarrow } from '../utils/narrow';
 import { NULL_SUBSCRIPTION } from '../nullObjects';
 
 export const DEFAULT_TITLE_BACKGROUND_COLOR = 'transparent';
@@ -16,9 +16,9 @@ export const DEFAULT_TITLE_BACKGROUND_COLOR = 'transparent';
  */
 export const getTitleBackgroundColor = (narrow?: Narrow): Selector<string> =>
   createSelector(getSubscriptions, subscriptions => {
-    if (!narrow || !isStreamOrTopicNarrow(narrow)) {
+    const streamName = narrow && streamNameFromNarrow(narrow);
+    if (!narrow || streamName === null) {
       return DEFAULT_TITLE_BACKGROUND_COLOR;
     }
-    const streamName = narrow[0].operand;
     return (subscriptions.find(sub => streamName === sub.name) || NULL_SUBSCRIPTION).color;
   });
