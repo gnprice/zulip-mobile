@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import type { RealmState, Action, RealmEmojiById } from '../types';
+import type { RealmState, Action, ImageEmojiById } from '../types';
 import {
   REALM_INIT,
   EVENT_REALM_EMOJI_UPDATE,
@@ -22,10 +22,11 @@ const initialState = {
   nonActiveUsers: [],
 };
 
-const convertRealmEmoji = (data): RealmEmojiById => {
+const convertRealmEmojis = (data): ImageEmojiById => {
   const emojis = {};
   Object.keys(data).forEach(id => {
-    emojis[id] = { ...data[id], code: id.toString() };
+    const { name, deactivated, source_url } = data[id];
+    emojis[id] = { id, code: id, name, deactivated, source_url };
   });
   return emojis;
 };

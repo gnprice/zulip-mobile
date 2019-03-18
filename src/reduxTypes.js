@@ -19,7 +19,6 @@ import type {
   MuteTuple,
   PmsUnreadItem,
   CrossRealmBot,
-  RealmEmojiById,
   RealmFilter,
   Narrow,
   Stream,
@@ -155,6 +154,16 @@ export type PresenceState = {|
   [email: string]: UserPresence,
 |};
 
+export type ImageEmojiType = {|
+  id?: string,
+  code: string,
+  name: string,
+  deactivated: boolean,
+  source_url: string,
+|};
+
+export type ImageEmojiById = { [id: string]: ImageEmojiType };
+
 /**
  * State with general info about a Zulip organization; our state subtree `realm`.
  *
@@ -175,7 +184,7 @@ export type RealmState = {|
   crossRealmBots: CrossRealmBot[],
   nonActiveUsers: User[],
   filters: RealmFilter[],
-  emoji: RealmEmojiById,
+  emoji: ImageEmojiById,
   isAdmin: boolean,
 |};
 

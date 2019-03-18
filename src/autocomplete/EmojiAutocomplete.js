@@ -7,12 +7,12 @@ import { FlatList } from 'react-native';
 import { Popup } from '../common';
 import EmojiRow from '../emoji/EmojiRow';
 import { getFilteredEmojiNames } from '../emoji/data';
-import type { GlobalState, RealmEmojiById } from '../types';
+import type { GlobalState, ImageEmojiType } from '../types';
 import { getActiveImageEmojiByName } from '../selectors';
 
 type Props = {|
   filter: string,
-  activeImageEmojiByName: RealmEmojiById,
+  activeImageEmojiByName: { [name: string]: ImageEmojiType },
   onAutocomplete: (name: string) => void,
 |};
 
