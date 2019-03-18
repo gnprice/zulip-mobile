@@ -90,7 +90,6 @@ class UnreadCards extends PureComponent<Props> {
               name={item.topic}
               stream={section.streamName || ''}
               isMuted={section.isMuted || item.isMuted}
-              isSelected={false}
               unreadCount={item.unread}
               onPress={this.handleTopicPress}
             />

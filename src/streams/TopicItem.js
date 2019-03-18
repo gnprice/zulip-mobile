@@ -2,18 +2,12 @@
 import React, { PureComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import styles, { BRAND_COLOR } from '../styles';
+import styles from '../styles';
 import { RawLabel, Touchable, UnreadCount } from '../common';
 
 const componentStyles = StyleSheet.create({
-  selectedRow: {
-    backgroundColor: BRAND_COLOR,
-  },
   label: {
     flex: 1,
-  },
-  selectedText: {
-    color: 'white',
   },
   muted: {
     opacity: 0.5,
@@ -24,16 +18,14 @@ type Props = {|
   stream: string,
   name: string,
   isMuted: boolean,
-  isSelected: boolean,
   unreadCount: number,
   onPress: (topic: string, stream: string) => void,
 |};
 
-export default class StreamItem extends PureComponent<Props> {
+export default class TopicItem extends PureComponent<Props> {
   static defaultProps = {
     stream: '',
     isMuted: false,
-    isSelected: false,
     unreadCount: 0,
   };
 
@@ -43,24 +35,18 @@ export default class StreamItem extends PureComponent<Props> {
   };
 
   render() {
-    const { name, isMuted, isSelected, unreadCount } = this.props;
+    const { name, isMuted, unreadCount } = this.props;
 
     return (
       <Touchable onPress={this.handlePress}>
-        <View
-          style={[
-            styles.listItem,
-            isSelected && componentStyles.selectedRow,
-            isMuted && componentStyles.muted,
-          ]}
-        >
+        <View style={[styles.listItem, isMuted && componentStyles.muted]}>
           <RawLabel
-            style={[componentStyles.label, isSelected && componentStyles.selectedText]}
+            style={[componentStyles.label]}
             text={name}
             numberOfLines={1}
             ellipsizeMode="tail"
           />
-          <UnreadCount count={unreadCount} inverse={isSelected} />
+          <UnreadCount count={unreadCount} />
         </View>
       </Touchable>
     );
