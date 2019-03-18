@@ -82,9 +82,8 @@ export const sendOutbox = () => async (dispatch: Dispatch, getState: GetState) =
   dispatch(toggleOutboxSending(false));
 };
 
-const mapEmailsToUsers = (usersByEmail, narrow, selfDetail) =>
-  narrow[0].operand
-    .split(',')
+const mapEmailsToUsers = (usersByEmail, emails, selfDetail) =>
+  emails
     .map(item => {
       const user = usersByEmail.get(item) || NULL_USER;
       return { email: item, id: user.user_id, full_name: user.full_name };
@@ -97,15 +96,22 @@ const extractTypeToAndSubjectFromNarrow = (
   narrow: Narrow,
   usersByEmail: Map<string, User>,
   selfDetail: { email: string, user_id: number, full_name: string },
-): { type: 'private' | 'stream', display_recipient: string | NamedUser[], subject: string } => {
-  const ifPmOrGroupPm = () => ({
-    type: 'private',
-    display_recipient: mapEmailsToUsers(usersByEmail, narrow, selfDetail),
-    subject: '',
-  });
-  return caseNarrowPartial(narrow, {
-    pm: () => ifPmOrGroupPm(),
-    groupPm: () => ifPmOrGroupPm(),
+): {
+  type: 'private' | 'stream',
+  display_recipient: string | NamedUser[],
+  subject: string,
+} =>
+  caseNarrowPartial(narrow, {
+    pm: email => ({
+      type: 'private',
+      display_recipient: mapEmailsToUsers(usersByEmail, [email], selfDetail),
+      subject: '',
+    }),
+    groupPm: emails => ({
+      type: 'private',
+      display_recipient: mapEmailsToUsers(usersByEmail, emails, selfDetail),
+      subject: '',
+    }),
     stream: name => ({ type: 'stream', display_recipient: name, subject: '(no topic)' }),
     topic: (streamName, topic) => ({
       type: 'stream',
@@ -113,7 +119,6 @@ const extractTypeToAndSubjectFromNarrow = (
       subject: narrow[1].operand,
     }),
   });
-};
 
 const getContentPreview = (content: string, state: GlobalState): string => {
   try {
