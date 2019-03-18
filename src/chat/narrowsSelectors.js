@@ -31,6 +31,7 @@ import {
 } from '../utils/narrow';
 import { shouldBeMuted } from '../utils/message';
 import { NULL_ARRAY, NULL_SUBSCRIPTION } from '../nullObjects';
+import { tryGetStreamFromName } from '../subscriptions/subscriptionSelectors';
 
 export const outboxMessagesForNarrow: Selector<Outbox[], Narrow> = createSelector(
   (state, narrow) => narrow,
@@ -141,15 +142,13 @@ export const getShowMessagePlaceholders = (narrow: Narrow): Selector<boolean> =>
     (noMessages, isFetching) => isFetching && noMessages,
   );
 
-export const isNarrowValid = (narrow: Narrow): Selector<boolean> =>
-  createSelector(getStreams, getAllUsersByEmail, (streams, allUsersByEmail) =>
-    caseNarrowDefault(
-      narrow,
-      {
-        stream: name => streams.find(s => s.name === name) !== undefined,
-        topic: streamName => streams.find(s => s.name === streamName) !== undefined,
-        pm: email => allUsersByEmail.get(email) !== undefined,
-      },
-      () => true,
-    ),
+export const isNarrowValid = (state: GlobalState, narrow: Narrow): boolean =>
+  caseNarrowDefault(
+    narrow,
+    {
+      stream: name => tryGetStreamFromName(state, name) !== undefined,
+      topic: streamName => tryGetStreamFromName(state, streamName) !== undefined,
+      pm: email => getAllUsersByEmail(state).get(email) !== undefined,
+    },
+    () => true,
   );

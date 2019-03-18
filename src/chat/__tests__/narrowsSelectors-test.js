@@ -236,7 +236,7 @@ describe('isNarrowValid', () => {
     };
     const narrow = STARRED_NARROW;
 
-    const result = isNarrowValid(narrow)(state);
+    const result = isNarrowValid(state, narrow);
 
     expect(result).toBe(true);
   });
@@ -248,7 +248,7 @@ describe('isNarrowValid', () => {
     };
     const narrow = streamNarrow('some stream');
 
-    const result = isNarrowValid(narrow)(state);
+    const result = isNarrowValid(state, narrow);
 
     expect(result).toBe(true);
   });
@@ -260,7 +260,7 @@ describe('isNarrowValid', () => {
     };
     const narrow = streamNarrow('nonexisting');
 
-    const result = isNarrowValid(narrow)(state);
+    const result = isNarrowValid(state, narrow);
 
     expect(result).toBe(false);
   });
@@ -272,7 +272,7 @@ describe('isNarrowValid', () => {
     };
     const narrow = topicNarrow('some stream', 'topic does not matter');
 
-    const result = isNarrowValid(narrow)(state);
+    const result = isNarrowValid(state, narrow);
 
     expect(result).toBe(true);
   });
@@ -288,7 +288,7 @@ describe('isNarrowValid', () => {
     };
     const narrow = privateNarrow('bob@example.com');
 
-    const result = isNarrowValid(narrow)(state);
+    const result = isNarrowValid(state, narrow);
 
     expect(result).toBe(true);
   });
@@ -304,7 +304,7 @@ describe('isNarrowValid', () => {
     };
     const narrow = privateNarrow('bob@example.com');
 
-    const result = isNarrowValid(narrow)(state);
+    const result = isNarrowValid(state, narrow);
 
     expect(result).toBe(false);
   });
@@ -320,7 +320,7 @@ describe('isNarrowValid', () => {
     };
     const narrow = groupNarrow(['john@example.com', 'mark@example.com']);
 
-    const result = isNarrowValid(narrow)(state);
+    const result = isNarrowValid(state, narrow);
 
     expect(result).toBe(true);
   });
@@ -336,7 +336,7 @@ describe('isNarrowValid', () => {
     };
     const narrow = groupNarrow(['john@example.com', 'mark@example.com']);
 
-    const result = isNarrowValid(narrow)(state);
+    const result = isNarrowValid(state, narrow);
 
     expect(result).toBe(true);
   });
@@ -352,7 +352,7 @@ describe('isNarrowValid', () => {
     };
     const narrow = privateNarrow('some-bot@example.com');
 
-    const result = isNarrowValid(narrow)(state);
+    const result = isNarrowValid(state, narrow);
 
     expect(result).toBe(true);
   });
@@ -368,7 +368,7 @@ describe('isNarrowValid', () => {
     };
     const narrow = privateNarrow('not-active@example.com');
 
-    const result = isNarrowValid(narrow)(state);
+    const result = isNarrowValid(state, narrow);
 
     expect(result).toBe(true);
   });
