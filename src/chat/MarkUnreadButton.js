@@ -7,8 +7,8 @@ import { StyleSheet } from 'react-native';
 import type { Auth, GlobalState, Narrow, Stream, Dispatch } from '../types';
 import { ZulipButton } from '../common';
 import { markAllAsRead, markStreamAsRead, markTopicAsRead } from '../api';
-import { getAuth, getStreams } from '../selectors';
-import { caseNarrowDefault, caseNarrowPartial } from '../utils/narrow';
+import { getAuth, getStreamFromName } from '../selectors';
+import { caseNarrowDefault, caseNarrowPartial, streamNameFromNarrow } from '../utils/narrow';
 
 const styles = StyleSheet.create({
   button: {
@@ -23,7 +23,7 @@ type Props = {|
   dispatch: Dispatch,
   auth: Auth,
   narrow: Narrow,
-  streams: Stream[],
+  stream: Stream | null,
 |};
 
 class MarkUnreadButton extends PureComponent<Props> {
@@ -33,14 +33,15 @@ class MarkUnreadButton extends PureComponent<Props> {
       home: () => {
         markAllAsRead(auth);
       },
-      stream: name => {
-        const stream = this.props.streams.find(s => s.name === name);
+      stream: () => {
+        const { stream } = this.props;
+        // better, assert this -- should always be true
         if (stream) {
           markStreamAsRead(auth, stream.stream_id);
         }
       },
       topic: (streamName, topic) => {
-        const stream = this.props.streams.find(s => s.name === streamName);
+        const { stream } = this.props;
         if (stream) {
           markTopicAsRead(auth, stream.stream_id, topic);
         }
@@ -64,7 +65,10 @@ class MarkUnreadButton extends PureComponent<Props> {
   }
 }
 
-export default connect((state: GlobalState) => ({
-  auth: getAuth(state),
-  streams: getStreams(state),
-}))(MarkUnreadButton);
+export default connect((state: GlobalState, props) => {
+  const streamName = streamNameFromNarrow(props.narrow);
+  return {
+    auth: getAuth(state),
+    stream: streamName === null ? null : getStreamFromName(state, streamName),
+  };
+})(MarkUnreadButton);

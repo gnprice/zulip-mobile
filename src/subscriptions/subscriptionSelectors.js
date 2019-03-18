@@ -1,7 +1,7 @@
 /* @flow strict-local */
 import { createSelector } from 'reselect';
 
-import type { Narrow, Selector, Stream, Subscription } from '../types';
+import type { GlobalState, Narrow, Selector, Stream, Subscription } from '../types';
 import { NULL_SUBSCRIPTION } from '../nullObjects';
 import { streamNameFromNarrow } from '../utils/narrow';
 import { getSubscriptions, getStreams } from '../directSelectors';
@@ -55,6 +55,37 @@ export const getStreamFromId: Selector<Stream, number> = createSelector(
     return stream;
   },
 );
+
+/**
+ * The stream with this name, or undefined if none.
+ *
+ * For use in contexts where the UI doesn't already assume there is a valid,
+ * known stream with this name.
+ *
+ * See `getStreamFromName` for use in typical contexts.
+ */
+export const tryGetStreamFromName: Selector<Stream | void, string> = createSelector(
+  (state, name) => name,
+  state => getStreams(state),
+  (name, streams) => streams.find(x => x.name === name),
+);
+
+/**
+ * The stream with this name; throws if none.
+ *
+ * For use in all contexts in the app where a stream with this name is
+ * assumed; e.g. in a narrow to this stream, or to a topic within it, or the
+ * topic list or another screen located behind such a narrow.
+ *
+ * See `tryGetStreamFromName` for use where we don't assume a stream exists.
+ */
+export const getStreamFromName = (state: GlobalState, name: string): Stream => {
+  const stream = tryGetStreamFromName(state, name);
+  if (!stream) {
+    throw new Error(`getStreamFromName: missing stream: name ${name}`);
+  }
+  return stream;
+};
 
 export const getSubscriptionFromId: Selector<Subscription, number> = createSelector(
   (state, streamId) => streamId,
