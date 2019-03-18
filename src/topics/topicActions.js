@@ -17,18 +17,13 @@ export const fetchTopics = (streamId: number) => async (dispatch: Dispatch, getS
   dispatch(initTopics(topics, streamId));
 };
 
-export const fetchTopicsForActiveStream = (narrow: Narrow) => async (
+export const fetchTopicsByStreamName = (streamName: string) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
   const state = getState();
-
-  if (!isStreamNarrow(narrow)) {
-    return;
-  }
-
   const streams = getStreams(state);
-  const stream = streams.find(sub => narrow[0].operand === sub.name);
+  const stream = streams.find(sub => streamName === sub.name);
   if (!stream) {
     return;
   }

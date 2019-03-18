@@ -19,14 +19,19 @@ import {
   addToOutbox,
   cancelEditMessage,
   draftUpdate,
-  fetchTopicsForActiveStream,
+  fetchTopicsByStreamName,
   sendTypingEvent,
 } from '../actions';
 import { updateMessage } from '../api';
 import { FloatingActionButton, Input } from '../common';
 import { showErrorAlert } from '../utils/info';
 import { IconDone, IconSend } from '../common/Icons';
-import { isStreamNarrow, isStreamOrTopicNarrow, topicNarrow } from '../utils/narrow';
+import {
+  isStreamNarrow,
+  isStreamOrTopicNarrow,
+  topicNarrow,
+  streamNameFromNarrow,
+} from '../utils/narrow';
 import ComposeMenu from './ComposeMenu';
 import getComposeInputPlaceholder from './getComposeInputPlaceholder';
 import NotSubscribed from '../message/NotSubscribed';
@@ -203,7 +208,10 @@ class ComposeBox extends PureComponent<Props, State> {
       isFocused: true,
       isMenuExpanded: false,
     });
-    dispatch(fetchTopicsForActiveStream(narrow));
+    const streamName = streamNameFromNarrow(narrow);
+    if (streamName !== null) {
+      dispatch(fetchTopicsByStreamName(streamName));
+    }
   };
 
   handleTopicBlur = () => {
