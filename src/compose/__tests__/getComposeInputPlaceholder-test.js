@@ -4,7 +4,7 @@ import getComposeInputPlaceholder from '../getComposeInputPlaceholder';
 import { privateNarrow, streamNarrow, topicNarrow, groupNarrow } from '../../utils/narrow';
 
 describe('getComposeInputPlaceholder', () => {
-  test('returns "Message @ThisPerson" object for person narrow', () => {
+  test('returns "Message ThisPerson" object for person narrow', () => {
     const narrow = deepFreeze(privateNarrow('abc@zulip.com'));
 
     const ownEmail = 'hamlet@zulip.com';
@@ -15,7 +15,7 @@ describe('getComposeInputPlaceholder', () => {
         {
           id: 23,
           email: 'abc@zulip.com',
-          full_name: 'ABC',
+          full_name: 'Ab Cd',
         },
       ],
       [
@@ -29,7 +29,7 @@ describe('getComposeInputPlaceholder', () => {
     ]);
 
     const placeholder = getComposeInputPlaceholder(narrow, ownEmail, usersByEmail);
-    expect(placeholder).toEqual({ text: 'Message {recipient}', values: { recipient: '@ABC' } });
+    expect(placeholder).toEqual({ text: 'Message {recipient}', values: { recipient: 'Ab Cd' } });
   });
 
   test('returns "Jot down something" object for self narrow', () => {
