@@ -6,7 +6,6 @@ import { caseInsensitiveCompareFunc } from '../utils/misc';
 import {
   getMute,
   getReadFlags,
-  getStreams,
   getUnreadStreams,
   getUnreadPms,
   getUnreadHuddles,
@@ -14,7 +13,7 @@ import {
 } from '../directSelectors';
 import { getOwnEmail } from '../account/accountsSelectors';
 import { getPrivateMessages } from '../message/messageSelectors';
-import { getSubscriptionsById } from '../subscriptions/subscriptionSelectors';
+import { getSubscriptionsById, getStreamFromName } from '../subscriptions/subscriptionSelectors';
 import { countUnread } from '../utils/unread';
 import { isTopicMuted } from '../utils/message';
 import { caseNarrow } from '../utils/narrow';
@@ -173,12 +172,7 @@ export const getUnreadCountForNarrow = (state: GlobalState, narrow: Narrow): num
     home: () => getUnreadTotal(state),
     starred: () => 0,
     stream: name => {
-      const stream = getStreams(state).find(s => s.name === name);
-
-      if (!stream) {
-        return 0;
-      }
-
+      const stream = getStreamFromName(state, name);
       const mute = getMute(state);
       return getUnreadStreams(state)
         .filter(x => x.stream_id === stream.stream_id)
@@ -189,12 +183,7 @@ export const getUnreadCountForNarrow = (state: GlobalState, narrow: Narrow): num
         );
     },
     topic: (streamName, topic) => {
-      const stream = getStreams(state).find(s => s.name === streamName);
-
-      if (!stream) {
-        return 0;
-      }
-
+      const stream = getStreamFromName(state, streamName);
       return getUnreadStreams(state)
         .filter(x => x.stream_id === stream.stream_id && x.topic === topic)
         .reduce((sum, x) => sum + x.unread_message_ids.length, 0);
