@@ -1,7 +1,7 @@
 /* @flow strict-local */
 import { createSelector } from 'reselect';
 
-import type { Narrow, Selector, UnreadStreamItem } from '../types';
+import type { GlobalState, Narrow, Selector, UnreadStreamItem } from '../types';
 import { caseInsensitiveCompareFunc } from '../utils/misc';
 import {
   getMute,
@@ -163,76 +163,57 @@ export const getUnreadByHuddlesMentionsAndPMs: Selector<number> = createSelector
   (unreadPms, unreadHuddles, unreadMentions) => unreadPms + unreadHuddles + unreadMentions,
 );
 
-export const getUnreadCountForNarrow: Selector<number, Narrow> = createSelector(
-  (state, narrow) => narrow,
-  state => getStreams(state),
-  state => getAllUsersByEmail(state),
-  state => getOwnEmail(state),
-  state => getUnreadTotal(state),
-  state => getUnreadStreams(state),
-  state => getUnreadHuddles(state),
-  state => getUnreadPms(state),
-  state => getMute(state),
-  (
-    narrow,
-    streams,
-    usersByEmail,
-    ownEmail,
-    unreadTotal,
-    unreadStreams,
-    unreadHuddles,
-    unreadPms,
-    mute,
-  ) =>
-    caseNarrow(narrow, {
-      // TODO these three aren't actually right.
-      allPrivate: () => 0,
-      mentioned: () => 0,
-      search: () => 0,
+export const getUnreadCountForNarrow = (state: GlobalState, narrow: Narrow): number =>
+  caseNarrow(narrow, {
+    // TODO these three aren't actually right.
+    allPrivate: () => 0,
+    mentioned: () => 0,
+    search: () => 0,
 
-      home: () => unreadTotal,
-      starred: () => 0,
-      stream: name => {
-        const stream = streams.find(s => s.name === name);
+    home: () => getUnreadTotal(state),
+    starred: () => 0,
+    stream: name => {
+      const stream = getStreams(state).find(s => s.name === name);
 
-        if (!stream) {
-          return 0;
-        }
+      if (!stream) {
+        return 0;
+      }
 
-        return unreadStreams
-          .filter(x => x.stream_id === stream.stream_id)
-          .reduce(
-            (sum, x) =>
-              sum + (isTopicMuted(stream.name, x.topic, mute) ? 0 : x.unread_message_ids.length),
-            0,
-          );
-      },
-      topic: (streamName, topic) => {
-        const stream = streams.find(s => s.name === streamName);
+      const mute = getMute(state);
+      return getUnreadStreams(state)
+        .filter(x => x.stream_id === stream.stream_id)
+        .reduce(
+          (sum, x) =>
+            sum + (isTopicMuted(stream.name, x.topic, mute) ? 0 : x.unread_message_ids.length),
+          0,
+        );
+    },
+    topic: (streamName, topic) => {
+      const stream = getStreams(state).find(s => s.name === streamName);
 
-        if (!stream) {
-          return 0;
-        }
+      if (!stream) {
+        return 0;
+      }
 
-        return unreadStreams
-          .filter(x => x.stream_id === stream.stream_id && x.topic === topic)
-          .reduce((sum, x) => sum + x.unread_message_ids.length, 0);
-      },
-      groupPm: emails => {
-        const userIds = [...emails, ownEmail]
-          .map(email => (usersByEmail.get(email) || NULL_USER).user_id)
-          .sort((a, b) => a - b)
-          .join(',');
-        const unread = unreadHuddles.find(x => x.user_ids_string === userIds);
-        return unread ? unread.unread_message_ids.length : 0;
-      },
-      pm: email => {
-        const sender = usersByEmail.get(email);
-        if (!sender) {
-          return 0;
-        }
-        const unread = unreadPms.find(x => x.sender_id === sender.user_id);
-        return unread ? unread.unread_message_ids.length : 0;
-      },
-    }),
-);
+      return getUnreadStreams(state)
+        .filter(x => x.stream_id === stream.stream_id && x.topic === topic)
+        .reduce((sum, x) => sum + x.unread_message_ids.length, 0);
+    },
+    groupPm: emails => {
+      const allUsersByEmail = getAllUsersByEmail(state);
+      const userIds = [...emails, getOwnEmail(state)]
+        .map(email => (allUsersByEmail.get(email) || NULL_USER).user_id)
+        .sort((a, b) => a - b)
+        .join(',');
+      const unread = getUnreadHuddles(state).find(x => x.user_ids_string === userIds);
+      return unread ? unread.unread_message_ids.length : 0;
+    },
+    pm: email => {
+      const sender = getAllUsersByEmail(state).get(email);
+      if (!sender) {
+        return 0;
+      }
+      const unread = getUnreadPms(state).find(x => x.sender_id === sender.user_id);
+      return unread ? unread.unread_message_ids.length : 0;
+    },
+  });
