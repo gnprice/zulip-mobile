@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import type { RealmState, Action, RealmEmojiById } from '../types';
+import type { ImageEmojiType, RealmState, Action } from '../types';
 import {
   REALM_INIT,
   EVENT_REALM_EMOJI_UPDATE,
@@ -15,19 +15,14 @@ const initialState = {
   canCreateStreams: true,
   crossRealmBots: [],
   twentyFourHourTime: false,
-  emoji: {},
+  emoji: new Map(),
   filters: [],
   isAdmin: false,
   nonActiveUsers: [],
 };
 
-const convertRealmEmoji = (data): RealmEmojiById => {
-  const emojis = {};
-  Object.keys(data).forEach(id => {
-    emojis[id] = { ...data[id], code: id.toString() };
-  });
-  return emojis;
-};
+const convertRealmEmojis = (data): Map<string, ImageEmojiType> =>
+  new Map(Object.keys(data).map(id => [id, { ...data[id], code: id.toString() }]));
 
 export default (state: RealmState = initialState, action: Action): RealmState => {
   switch (action.type) {
@@ -51,7 +46,7 @@ export default (state: RealmState = initialState, action: Action): RealmState =>
     case LOGIN_SUCCESS:
       return {
         ...state,
-        emoji: {},
+        emoji: new Map(),
       };
 
     case EVENT_REALM_FILTERS:
