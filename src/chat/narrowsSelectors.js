@@ -17,7 +17,6 @@ import {
   getSubscriptions,
   getMessages,
   getMute,
-  getStreams,
   getOutbox,
 } from '../directSelectors';
 import { getCaughtUpForNarrow } from '../caughtup/caughtUpSelectors';
@@ -105,29 +104,29 @@ export const getRecipientsInGroupNarrow: Selector<UserOrBot[], Narrow> = createS
 
 // TODO: clean up what this returns.
 export const getStreamInNarrow = (
+  state: GlobalState,
   narrow: Narrow | void,
-): Selector<Subscription | {| ...Stream, in_home_view: boolean |}> =>
-  createSelector(getSubscriptions, getStreams, (subscriptions, streams) => {
-    const streamName = narrow && streamNameFromNarrow(narrow);
-    if (!narrow || streamName === null) {
-      return NULL_SUBSCRIPTION;
-    }
-
-    const subscription = subscriptions.find(x => x.name === streamName);
-    if (subscription) {
-      return subscription;
-    }
-
-    const stream = streams.find(x => x.name === streamName);
-    if (stream) {
-      return {
-        ...stream,
-        in_home_view: true,
-      };
-    }
-
+): Subscription | {| ...Stream, in_home_view: boolean |} => {
+  const streamName = narrow && streamNameFromNarrow(narrow);
+  if (streamName === undefined || streamName === null) {
     return NULL_SUBSCRIPTION;
-  });
+  }
+
+  const subscription = getSubscriptions(state).find(x => x.name === streamName);
+  if (subscription) {
+    return subscription;
+  }
+
+  const stream = tryGetStreamFromName(state, streamName);
+  if (stream) {
+    return {
+      ...stream,
+      in_home_view: true,
+    };
+  }
+
+  return NULL_SUBSCRIPTION;
+};
 
 export const getIfNoMessages = (narrow: Narrow): Selector<boolean> =>
   createSelector(

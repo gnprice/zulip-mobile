@@ -42,5 +42,5 @@ class NotSubscribed extends PureComponent<Props> {
 
 export default connect((state, props) => ({
   auth: getAuth(state),
-  stream: getStreamInNarrow(props.narrow)(state),
+  stream: getStreamInNarrow(state, props.narrow),
 }))(NotSubscribed);
