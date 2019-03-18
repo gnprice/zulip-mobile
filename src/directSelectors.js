@@ -4,6 +4,7 @@ import type {
   DraftsState,
   FetchingState,
   FlagsState,
+  ImageEmojiType,
   LoadingState,
   MessagesState,
   MuteState,
@@ -11,7 +12,6 @@ import type {
   TopicsState,
   PresenceState,
   CrossRealmBot,
-  RealmEmojiById,
   RealmState,
   SettingsState,
   StreamUnreadItem,
@@ -91,7 +91,8 @@ export const getRealm = (state: GlobalState): RealmState => state.realm;
 export const getCrossRealmBots = (state: GlobalState): CrossRealmBot[] =>
   state.realm.crossRealmBots;
 
-export const getRawRealmEmoji = (state: GlobalState): RealmEmojiById => state.realm.emoji;
+export const getRawRealmEmoji = (state: GlobalState): Map<string, ImageEmojiType> =>
+  state.realm.emoji;
 
 export const getNonActiveUsers = (state: GlobalState): User[] => state.realm.nonActiveUsers;
 

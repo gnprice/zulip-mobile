@@ -117,7 +117,7 @@ const getContentPreview = (content: string, state: GlobalState): string => {
       state.streams,
       getAuth(state),
       state.realm.filters,
-      state.realm.emoji,
+      state.realm.emoji, // ??? TODO
     );
   } catch (e) {
     return content;

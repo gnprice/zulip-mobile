@@ -10,6 +10,7 @@ export const getAllImageEmojiById: Selector<RealmEmojiById> = createSelector(
   getIdentity,
   getRawRealmEmoji,
   (identity, realmEmoji) => {
+    // TODO HERE
     const result = {};
     [realmEmoji, zulipExtraEmojiMap].forEach(emojis => {
       Object.keys(emojis).forEach(id => {

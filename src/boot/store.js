@@ -100,13 +100,10 @@ const migrations: { [string]: (GlobalState) => GlobalState } = {
     ...state,
     realm: {
       ...state.realm,
-      emoji: (data => {
-        const emojis = {};
-        Object.keys(data).forEach(id => {
-          emojis[id] = { ...data[id], code: id.toString() };
-        });
-        return emojis;
-      })(state.realm.emoji),
+      emoji: (data =>
+        new Map(Object.keys(data).map(id => [id, { ...data[id], code: id.toString() }])))(
+        state.realm.emoji,
+      ),
     },
   }),
 };
