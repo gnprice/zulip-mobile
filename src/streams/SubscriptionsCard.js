@@ -35,7 +35,6 @@ class SubscriptionsCard extends PureComponent<Props> {
       <View style={styles.container}>
         <StreamList
           streams={subscriptions}
-          selected={false}
           unreadByStream={unreadByStream}
           onPress={this.handleNarrow}
         />

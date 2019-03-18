@@ -3,15 +3,12 @@ import React, { PureComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import type { Context } from '../types';
-import styles, { BRAND_COLOR } from '../styles';
+import styles from '../styles';
 import { RawLabel, Touchable, UnreadCount, ZulipSwitch } from '../common';
 import { foregroundColorFromBackground } from '../utils/color';
 import StreamIcon from './StreamIcon';
 
 const componentStyles = StyleSheet.create({
-  selectedRow: {
-    backgroundColor: BRAND_COLOR,
-  },
   description: {
     opacity: 0.75,
     fontSize: 12,
@@ -32,7 +29,6 @@ type Props = {|
   iconSize: number,
   isMuted: boolean,
   isPrivate: boolean,
-  isSelected: boolean,
   showSwitch: boolean,
   color?: string,
   backgroundColor?: string,
@@ -52,7 +48,6 @@ export default class StreamItem extends PureComponent<Props> {
   static defaultProps = {
     isMuted: false,
     isPrivate: false,
-    isSelected: false,
     showSwitch: false,
     isSwitchedOn: false,
   };
@@ -76,31 +71,23 @@ export default class StreamItem extends PureComponent<Props> {
       isPrivate,
       isMuted,
       iconSize,
-      isSelected,
       showSwitch,
       isSwitchedOn,
       unreadCount,
     } = this.props;
 
-    const wrapperStyle = [
-      styles.listItem,
-      { backgroundColor },
-      isSelected && componentStyles.selectedRow,
-      isMuted && componentStyles.muted,
-    ];
+    const wrapperStyle = [styles.listItem, { backgroundColor }, isMuted && componentStyles.muted];
     // TODO: confirm these '' cases are irrelevant, and remove.
-    const iconColor = isSelected
-      ? 'white'
-      : color !== undefined && color !== ''
+    const iconColor =
+      color !== undefined && color !== ''
         ? color
         : foregroundColorFromBackground(
             backgroundColor !== undefined && backgroundColor !== ''
               ? backgroundColor
               : (StyleSheet.flatten(contextStyles.backgroundColor) || {}).backgroundColor || null,
           );
-    const textColorStyle = isSelected
-      ? { color: 'white' }
-      : backgroundColor !== undefined && backgroundColor !== ''
+    const textColorStyle =
+      backgroundColor !== undefined && backgroundColor !== ''
         ? { color: (foregroundColorFromBackground(backgroundColor): string) }
         : contextStyles.color;
 
@@ -120,7 +107,7 @@ export default class StreamItem extends PureComponent<Props> {
                 />
               )}
           </View>
-          <UnreadCount color={iconColor} count={unreadCount} inverse={isSelected} />
+          <UnreadCount color={iconColor} count={unreadCount} />
           {showSwitch && (
             <ZulipSwitch
               defaultValue={!!isSwitchedOn}
