@@ -22,7 +22,7 @@ import { getAuth } from '../selectors';
 import { sendMessage } from '../api';
 import { getSelfUserDetail, getUsersByEmail } from '../users/userSelectors';
 import { getUsersAndWildcards } from '../users/userHelpers';
-import { isStreamNarrow, isPrivateOrGroupNarrow } from '../utils/narrow';
+import { isPrivateOrGroupNarrow, caseNarrowPartial } from '../utils/narrow';
 import progressiveTimeout from '../utils/progressiveTimeout';
 import { NULL_USER } from '../nullObjects';
 
@@ -91,22 +91,28 @@ const mapEmailsToUsers = (usersByEmail, narrow, selfDetail) =>
     })
     .concat({ email: selfDetail.email, id: selfDetail.user_id, full_name: selfDetail.full_name });
 
+/** NB: `canSendToNarrow(narrow)` must be true. */
 // TODO type: `string | NamedUser[]` is a bit confusing.
 const extractTypeToAndSubjectFromNarrow = (
   narrow: Narrow,
   usersByEmail: Map<string, User>,
   selfDetail: { email: string, user_id: number, full_name: string },
 ): { type: 'private' | 'stream', display_recipient: string | NamedUser[], subject: string } => {
-  if (isPrivateOrGroupNarrow(narrow)) {
-    return {
-      type: 'private',
-      display_recipient: mapEmailsToUsers(usersByEmail, narrow, selfDetail),
-      subject: '',
-    };
-  } else if (isStreamNarrow(narrow)) {
-    return { type: 'stream', display_recipient: narrow[0].operand, subject: '(no topic)' };
-  }
-  return { type: 'stream', display_recipient: narrow[0].operand, subject: narrow[1].operand };
+  const ifPmOrGroupPm = () => ({
+    type: 'private',
+    display_recipient: mapEmailsToUsers(usersByEmail, narrow, selfDetail),
+    subject: '',
+  });
+  return caseNarrowPartial(narrow, {
+    pm: () => ifPmOrGroupPm(),
+    groupPm: () => ifPmOrGroupPm(),
+    stream: name => ({ type: 'stream', display_recipient: name, subject: '(no topic)' }),
+    topic: (streamName, topic) => ({
+      type: 'stream',
+      display_recipient: narrow[0].operand,
+      subject: narrow[1].operand,
+    }),
+  });
 };
 
 const getContentPreview = (content: string, state: GlobalState): string => {
@@ -124,6 +130,7 @@ const getContentPreview = (content: string, state: GlobalState): string => {
   }
 };
 
+/** NB: `canSendToNarrow(narrow)` must be true. */
 export const addToOutbox = (narrow: Narrow, content: string) => async (
   dispatch: Dispatch,
   getState: GetState,

@@ -98,6 +98,9 @@ export const updateTextInput = (textInput: ?TextInput, text: string): void => {
   }
 };
 
+/**
+ * NB: `canSendToNarrow(props.narrow)` must be true.
+ */
 class ComposeBox extends PureComponent<Props, State> {
   context: Context;
 
