@@ -12,15 +12,15 @@ export default (
     {
       groupPm: () => ({ text: 'Message group' }),
       pm: email => {
-        if (ownEmail && email === ownEmail) {
+        if (email === ownEmail) {
           return { text: 'Jot down something' };
         }
 
-        if (!usersByEmail) {
+        const user = usersByEmail.get(email);
+        if (!user) {
           return { text: 'Type a message' };
         }
 
-        const user = usersByEmail.get(email) || {};
         return {
           text: 'Message {recipient}',
           values: { recipient: `@${user.full_name}` },
