@@ -8,7 +8,7 @@ import type { Auth, GlobalState, Narrow, Stream, Dispatch } from '../types';
 import { ZulipButton } from '../common';
 import { markAllAsRead, markStreamAsRead, markTopicAsRead } from '../api';
 import { getAuth, getStreams } from '../selectors';
-import { isHomeNarrow, isStreamNarrow, isTopicNarrow } from '../utils/narrow';
+import { caseNarrowDefault } from '../utils/narrow';
 
 const styles = StyleSheet.create({
   button: {
@@ -49,39 +49,21 @@ class MarkUnreadButton extends PureComponent<Props> {
   };
 
   render() {
-    const { narrow } = this.props;
+    const type = caseNarrowDefault(
+      this.props.narrow,
+      {
+        home: () => ({ text: 'Mark all as read', handler: this.handleMarkAllAsRead }),
+        stream: () => ({ text: 'Mark stream as read', handler: this.handleMarkStreamAsRead }),
+        topic: () => ({ text: 'Mark topic as read', handler: this.handleMarkTopicAsRead }),
+      },
+      () => null,
+    );
 
-    if (isHomeNarrow(narrow)) {
-      return (
-        <ZulipButton
-          style={styles.button}
-          text="Mark all as read"
-          onPress={this.handleMarkAllAsRead}
-        />
-      );
+    if (type === null) {
+      return null;
     }
-
-    if (isStreamNarrow(narrow)) {
-      return (
-        <ZulipButton
-          style={styles.button}
-          text="Mark stream as read"
-          onPress={this.handleMarkStreamAsRead}
-        />
-      );
-    }
-
-    if (isTopicNarrow(narrow)) {
-      return (
-        <ZulipButton
-          style={styles.button}
-          text="Mark topic as read"
-          onPress={this.handleMarkTopicAsRead}
-        />
-      );
-    }
-
-    return null;
+    const { text, handler } = type;
+    return <ZulipButton style={styles.button} text={text} onPress={handler} />;
   }
 }
 
