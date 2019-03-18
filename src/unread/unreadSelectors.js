@@ -17,13 +17,7 @@ import { getPrivateMessages } from '../message/messageSelectors';
 import { getSubscriptionsById } from '../subscriptions/subscriptionSelectors';
 import { countUnread } from '../utils/unread';
 import { isTopicMuted } from '../utils/message';
-import {
-  isHomeNarrow,
-  isStreamNarrow,
-  isTopicNarrow,
-  isGroupNarrow,
-  isPrivateNarrow,
-} from '../utils/narrow';
+import { caseNarrowDefault } from '../utils/narrow';
 import { NULL_SUBSCRIPTION, NULL_USER } from '../nullObjects';
 import { getAllUsersByEmail } from '../users/userSelectors';
 
@@ -189,57 +183,54 @@ export const getUnreadCountForNarrow: Selector<number, Narrow> = createSelector(
     unreadHuddles,
     unreadPms,
     mute,
-  ) => {
-    if (isHomeNarrow(narrow)) {
-      return unreadTotal;
-    }
+  ) =>
+    caseNarrowDefault(
+      narrow,
+      {
+        home: () => unreadTotal,
+        stream: name => {
+          const stream = streams.find(s => s.name === name);
 
-    if (isStreamNarrow(narrow)) {
-      const stream = streams.find(s => s.name === narrow[0].operand);
+          if (!stream) {
+            return 0;
+          }
 
-      if (!stream) {
-        return 0;
-      }
+          return unreadStreams
+            .filter(x => x.stream_id === stream.stream_id)
+            .reduce(
+              (sum, x) =>
+                sum + (isTopicMuted(stream.name, x.topic, mute) ? 0 : x.unread_message_ids.length),
+              0,
+            );
+        },
+        topic: (streamName, topic) => {
+          const stream = streams.find(s => s.name === streamName);
 
-      return unreadStreams
-        .filter(x => x.stream_id === stream.stream_id)
-        .reduce(
-          (sum, x) =>
-            sum + (isTopicMuted(stream.name, x.topic, mute) ? 0 : x.unread_message_ids.length),
-          0,
-        );
-    }
+          if (!stream) {
+            return 0;
+          }
 
-    if (isTopicNarrow(narrow)) {
-      const stream = streams.find(s => s.name === narrow[0].operand);
-
-      if (!stream) {
-        return 0;
-      }
-
-      return unreadStreams
-        .filter(x => x.stream_id === stream.stream_id && x.topic === narrow[1].operand)
-        .reduce((sum, x) => sum + x.unread_message_ids.length, 0);
-    }
-
-    if (isGroupNarrow(narrow)) {
-      const userIds = [...narrow[0].operand.split(','), ownEmail]
-        .map(email => (usersByEmail.get(email) || NULL_USER).user_id)
-        .sort((a, b) => a - b)
-        .join(',');
-      const unread = unreadHuddles.find(x => x.user_ids_string === userIds);
-      return unread ? unread.unread_message_ids.length : 0;
-    }
-
-    if (isPrivateNarrow(narrow)) {
-      const sender = usersByEmail.get(narrow[0].operand);
-      if (!sender) {
-        return 0;
-      }
-      const unread = unreadPms.find(x => x.sender_id === sender.user_id);
-      return unread ? unread.unread_message_ids.length : 0;
-    }
-
-    return 0;
-  },
+          return unreadStreams
+            .filter(x => x.stream_id === stream.stream_id && x.topic === topic)
+            .reduce((sum, x) => sum + x.unread_message_ids.length, 0);
+        },
+        groupPm: emails => {
+          const userIds = [...emails, ownEmail]
+            .map(email => (usersByEmail.get(email) || NULL_USER).user_id)
+            .sort((a, b) => a - b)
+            .join(',');
+          const unread = unreadHuddles.find(x => x.user_ids_string === userIds);
+          return unread ? unread.unread_message_ids.length : 0;
+        },
+        pm: email => {
+          const sender = usersByEmail.get(email);
+          if (!sender) {
+            return 0;
+          }
+          const unread = unreadPms.find(x => x.sender_id === sender.user_id);
+          return unread ? unread.unread_message_ids.length : 0;
+        },
+      },
+      () => 0,
+    ),
 );
