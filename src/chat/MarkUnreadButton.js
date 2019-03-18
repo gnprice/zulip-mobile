@@ -8,7 +8,7 @@ import type { Auth, GlobalState, Narrow, Stream, Dispatch } from '../types';
 import { ZulipButton } from '../common';
 import { markAllAsRead, markStreamAsRead, markTopicAsRead } from '../api';
 import { getAuth, getStreams } from '../selectors';
-import { caseNarrowDefault } from '../utils/narrow';
+import { caseNarrowDefault, caseNarrowPartial } from '../utils/narrow';
 
 const styles = StyleSheet.create({
   button: {
@@ -27,43 +27,40 @@ type Props = {|
 |};
 
 class MarkUnreadButton extends PureComponent<Props> {
-  handleMarkAllAsRead = () => {
+  onPress = () => {
     const { auth } = this.props;
-    markAllAsRead(auth);
-  };
-
-  handleMarkStreamAsRead = () => {
-    const { auth, narrow, streams } = this.props;
-    const stream = streams.find(s => s.name === narrow[0].operand);
-    if (stream) {
-      markStreamAsRead(auth, stream.stream_id);
-    }
-  };
-
-  handleMarkTopicAsRead = () => {
-    const { auth, narrow, streams } = this.props;
-    const stream = streams.find(s => s.name === narrow[0].operand);
-    if (stream) {
-      markTopicAsRead(auth, stream.stream_id, narrow[1].operand);
-    }
+    caseNarrowPartial(this.props.narrow, {
+      home: () => {
+        markAllAsRead(auth);
+      },
+      stream: name => {
+        const stream = this.props.streams.find(s => s.name === name);
+        if (stream) {
+          markStreamAsRead(auth, stream.stream_id);
+        }
+      },
+      topic: (streamName, topic) => {
+        const stream = this.props.streams.find(s => s.name === streamName);
+        if (stream) {
+          markTopicAsRead(auth, stream.stream_id, topic);
+        }
+      },
+    });
   };
 
   render() {
-    const type = caseNarrowDefault(
+    const text = caseNarrowDefault(
       this.props.narrow,
       {
-        home: () => ({ text: 'Mark all as read', handler: this.handleMarkAllAsRead }),
-        stream: () => ({ text: 'Mark stream as read', handler: this.handleMarkStreamAsRead }),
-        topic: () => ({ text: 'Mark topic as read', handler: this.handleMarkTopicAsRead }),
+        home: () => 'Mark all as read',
+        stream: () => 'Mark stream as read',
+        topic: () => 'Mark topic as read',
       },
       () => null,
     );
-
-    if (type === null) {
-      return null;
-    }
-    const { text, handler } = type;
-    return <ZulipButton style={styles.button} text={text} onPress={handler} />;
+    return text === null ? null : (
+      <ZulipButton style={styles.button} text={text} onPress={this.onPress} />
+    );
   }
 }
 
