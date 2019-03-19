@@ -1,18 +1,18 @@
 import deepFreeze from 'deep-freeze';
 
-import { getTopicsForNarrow, getLastMessageTopic, getTopicsForStream } from '../topicSelectors';
+import { getAllTopicsForStream, getLastMessageTopic, getTopicsForStream } from '../topicSelectors';
 import { HOME_NARROW, streamNarrow } from '../../utils/narrow';
 
-describe('getTopicsForNarrow', () => {
+describe('getAllTopicsForStream', () => {
   test('when no topics return an empty list', () => {
-    const state = deepFreeze({});
+    const state = deepFreeze({ streams: [] });
 
-    const topics = getTopicsForNarrow(HOME_NARROW)(state);
+    const topics = getAllTopicsForStream(null)(state);
 
     expect(topics).toEqual([]);
   });
 
-  test('when there are topics in the active narrow, return them as string array', () => {
+  test('when there are topics in the stream, return them as string array', () => {
     const state = deepFreeze({
       streams: [{ stream_id: 123, name: 'hello' }],
       topics: {
@@ -20,7 +20,7 @@ describe('getTopicsForNarrow', () => {
       },
     });
 
-    const topics = getTopicsForNarrow(streamNarrow('hello'))(state);
+    const topics = getAllTopicsForStream('hello')(state);
 
     expect(topics).toEqual(['hi', 'wow']);
   });

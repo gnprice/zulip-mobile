@@ -5,9 +5,10 @@ import React, { PureComponent } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 
 import type { GlobalState, Dispatch } from '../types';
-import { getTopicsForNarrow } from '../selectors';
+import { getAllTopicsForStream } from '../selectors';
 import { Popup, RawLabel, Touchable } from '../common';
 import AnimatedScaleComponent from '../animation/AnimatedScaleComponent';
+import { streamNameFromNarrow } from '../utils/narrow';
 
 const styles = StyleSheet.create({
   topic: {
@@ -56,5 +57,5 @@ class TopicAutocomplete extends PureComponent<Props> {
 }
 
 export default connect((state: GlobalState, props) => ({
-  topics: getTopicsForNarrow(props.narrow)(state),
+  topics: getAllTopicsForStream(streamNameFromNarrow(props.narrow))(state),
 }))(TopicAutocomplete);
