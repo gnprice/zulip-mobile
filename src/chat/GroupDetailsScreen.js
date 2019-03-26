@@ -2,14 +2,15 @@
 import { connect } from 'react-redux';
 import React, { PureComponent } from 'react';
 import { FlatList } from 'react-native';
+import type { NavigationScreenProp } from 'react-navigation';
 
-import type { Dispatch } from '../types';
+import type { Dispatch, UserOrBot } from '../types';
 import { Screen } from '../common';
 import UserItem from '../users/UserItem';
 import { navigateToAccountDetails } from '../actions';
 
 type Props = $ReadOnly<{|
-  navigation: Object,
+  navigation: NavigationScreenProp<{ params: {| recipients: UserOrBot[] |} }>,
   dispatch: Dispatch,
 |}>;
 
@@ -30,7 +31,7 @@ class GroupDetailsScreen extends PureComponent<Props> {
             <UserItem
               key={item.email}
               fullName={item.full_name}
-              avatarUrl={item.avatar_url}
+              avatarUrl={item.avatar_url || null}
               email={item.email}
               showEmail
               onPress={this.handlePress}
