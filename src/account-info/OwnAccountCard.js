@@ -3,11 +3,9 @@ import React, { PureComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
-import type { Dispatch, GlobalState, User, PresenceState } from '../types';
-import { getOwnUser, getPresence } from '../selectors';
+import type { Dispatch, GlobalState, User } from '../types';
+import { getOwnUser } from '../selectors';
 import AccountDetails from './AccountDetails';
-import SwitchAccountButton from '../account-info/SwitchAccountButton';
-import LogoutButton from '../account-info/LogoutButton';
 
 const componentStyles = StyleSheet.create({
   accountButtons: {
@@ -19,20 +17,16 @@ const componentStyles = StyleSheet.create({
 
 type Props = {|
   ownUser: User,
-  presence: PresenceState,
 |};
 
 class OwnAccountCard extends PureComponent<Props> {
   render() {
-    const { ownUser, presence } = this.props;
+    const { ownUser } = this.props;
 
     return (
       <View>
-        <AccountDetails user={ownUser} presence={presence[ownUser.email]} />
-        <View style={componentStyles.accountButtons}>
-          <SwitchAccountButton />
-          <LogoutButton />
-        </View>
+        <AccountDetails user={ownUser} />
+        <View style={componentStyles.accountButtons} />
       </View>
     );
   }
@@ -40,5 +34,4 @@ class OwnAccountCard extends PureComponent<Props> {
 
 export default connect((state: GlobalState, props: Object) => ({
   ownUser: getOwnUser(state),
-  presence: getPresence(state),
 }))(OwnAccountCard);
