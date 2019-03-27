@@ -110,6 +110,17 @@ declare module "react-redux" {
     connectAdvancedOptions: ?(ConnectAdvancedOptions & EFO),
   ): (component: Com) => ComponentType<OP> & $Shape<ST>;
 
+  /*
+  declare export function connect<
+    Com: ComponentType<*>,
+    P: $Shape<ElementConfig<Com>>,
+    S: {},
+    >(
+    mapStateToProps: S => $ReadOnly<P>,
+    mapDispatchToProps?: null,
+  ): (component: Com) => ComponentType<$Diff<ElementConfig<Com>, P>>;
+  */
+
   declare export function connect<
     Com: ComponentType<*>,
     S: Object,
