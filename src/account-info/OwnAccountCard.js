@@ -37,6 +37,9 @@ class OwnAccountCard extends PureComponent<Props> {
 type MapStateToProps<S: {}, SP: {}, RSP: {}> = (state: S, props: SP) => $ReadOnly<RSP>;
 type OmitDispatch<Component> = $Diff<Component, { dispatch?: mixed }>;
 
+// From the first one in the libdef (the relevant one for this callsite),
+// but (a) replacing all pseudotypes `any` and `Object`; (b) giving a name
+// to the `*` generic parameter.
 function connect2<
   P: {},
   Com: ComponentType<P>,
@@ -81,8 +84,21 @@ function connect5<P: $Shape<Props>>(
 */
 
 // Still fails, yay -- and generic again!
+// Still to do:
+//  * all the other overloads
+//  * permit null/undefined mDP on this same overload
+//  * handle statics
+//  * ??
+function connect6<S: {}, Com: ComponentType<*>, P: $Shape<ElementConfig<Com>>>(
+  mapStateToProps: S => $ReadOnly<P>,
+): (component: Com) => ComponentType<$Diff<ElementConfig<Com>, P>> {
+  return connect1(mapStateToProps);
+}
+
+// [x] allow null/undef mDP
 function connect<S: {}, Com: ComponentType<*>, P: $Shape<ElementConfig<Com>>>(
   mapStateToProps: S => $ReadOnly<P>,
+  mapDispatchToProps?: null,
 ): (component: Com) => ComponentType<$Diff<ElementConfig<Com>, P>> {
   return connect1(mapStateToProps);
 }
