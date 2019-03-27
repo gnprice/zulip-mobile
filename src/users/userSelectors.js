@@ -55,7 +55,7 @@ export const getUsersSansMe: Selector<User[]> = createSelector(
 export const getOwnUser: Selector<User[]> = createSelector(
   getAllUsersByEmail,
   getOwnEmail,
-  (usersByEmail, ownEmail) => usersByEmail[ownEmail],
+  (usersByEmail, ownEmail) => (usersByEmail.get(ownEmail): $FlowFixMe),
 );
 
 export const getAccountDetailsUserFromEmail: Selector<UserOrBot, string> = createSelector(
