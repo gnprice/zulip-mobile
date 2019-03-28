@@ -63,22 +63,38 @@ declare module "react-redux" {
     ownProps: OP,
   ) => SP;
 
-  declare class ConnectedComponent<-S, -D, OP, +WC> extends React$Component<OP> {
+  declare class ConnectedComponent<OP, +WC> extends React$Component<OP> {
     static +WrappedComponent: WC;
     getWrappedInstance(): React$ElementRef<WC>;
   }
+  // The connection of the Wrapped Component and the Connected Component
+  // happens here in `MP: P`. It means that type wise MP belongs to P,
+  // so to say MP >= P.
+  declare type Connector<P, OP, MP: P> = <WC: React$ComponentType<P>>(
+    WC,
+  ) => Class<ConnectedComponent<OP, WC>> & WC;
 
-  declare type Connector<-S, -D, OP, WC> = WC => Class<ConnectedComponent<S, D, OP, WC>>;
+  // No `mergeProps` argument
 
-  declare export function connect<S, D, OP, SP, DP>(
-    mapStateToProps?: null,
-    mapDispatchToProps?: null,
-  ): Connector<S, D, OP, React$ComponentType<{|...OP, dispatch: D|}>>;
+  // Got error like inexact OwnProps is incompatible with exact object type?
+  // Just make the OP parameter for `connect()` an exact object.
+  declare type MergeOP<OP, D> = {| ...$Exact<OP>, dispatch: D |};
+  declare type MergeOPSP<OP, SP, D> = {| ...$Exact<OP>, ...SP, dispatch: D |};
+  declare type MergeOPDP<OP, DP> = {| ...$Exact<OP>, ...DP |};
+  declare type MergeOPSPDP<OP, SP, DP> = {| ...$Exact<OP>, ...SP, ...DP |};
 
-  declare export function connect<S, D, OP, SP, DP>(
+  declare export function connect<-P, -OP, -SP, -DP, -S, -D>(
+    mapStateToProps?: null | void,
+    mapDispatchToProps?: null | void,
+    mergeProps?: null | void,
+  ): Connector<P, OP, MergeOP<OP, D>>;
+
+  declare export function connect<-P, -OP, -SP, -DP, -S, -D>(
+    // If you get error here try adding return type to your mapStateToProps function
     mapStateToProps: MapStateToProps<S, OP, SP>,
-    mapDispatchToProps?: null,
-  ): Connector<S, D, OP, React$ComponentType<{|...OP, ...SP|}>>;
+    mapDispatchToProps?: null | void,
+    mergeProps?: null | void,
+  ): Connector<P, OP, MergeOPSP<OP, SP, D>>;
 
   declare export default {
     Provider: typeof Provider,
