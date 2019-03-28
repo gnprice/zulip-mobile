@@ -48,7 +48,7 @@ declare module "react-redux" {
     mapStateToProps: MapStateToProps1<S, SP, RSP>,
     mapDispatchToProps?: null
   ): (component: Com) => ComponentType<CP & SP> & $Shape<ST>;
-*/
+
   declare export function connect<
     Com: ComponentType<*>,
     ST: {[_: $Keys<Com>]: any}
@@ -56,7 +56,7 @@ declare module "react-redux" {
     mapStateToProps?: null,
     mapDispatchToProps?: null
   ): (component: Com) => ComponentType<OmitDispatch<ElementConfig<Com>>> & $Shape<ST>;
-
+*/
 
   declare type MapStateToProps<-S, -OP, +SP> = (
     state: S,
@@ -69,6 +69,11 @@ declare module "react-redux" {
   }
 
   declare type Connector<-S, -D, OP, WC> = WC => Class<ConnectedComponent<S, D, OP, WC>>;
+
+  declare export function connect<S, D, OP, SP, DP>(
+    mapStateToProps?: null,
+    mapDispatchToProps?: null,
+  ): Connector<S, D, OP, React$ComponentType<{|...OP, dispatch: D|}>>;
 
   declare export function connect<S, D, OP, SP, DP>(
     mapStateToProps: MapStateToProps<S, OP, SP>,
