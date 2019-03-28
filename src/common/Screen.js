@@ -29,11 +29,9 @@ const componentStyles = StyleSheet.create({
   },
 });
 
-type Props = $ReadOnly<{|
-  dispatch: Dispatch,
+type OwnProps = $ReadOnly<{|
   centerContent: boolean,
   children: React$Node,
-  safeAreaInsets: Dimensions,
   keyboardShouldPersistTaps: 'never' | 'always' | 'handled',
   padding: boolean,
   scrollEnabled: boolean,
@@ -45,6 +43,12 @@ type Props = $ReadOnly<{|
 
   canGoBack: boolean,
   title: LocalizableText,
+|}>;
+
+type Props = $ReadOnly<{|
+  ...OwnProps,
+  dispatch: Dispatch,
+  safeAreaInsets: Dimensions,
 |}>;
 
 /**
@@ -137,6 +141,8 @@ class Screen extends PureComponent<Props> {
   }
 }
 
-export default connect((state: GlobalState) => ({
-  safeAreaInsets: getSession(state).safeAreaInsets,
-}))(Screen);
+export default connect(
+  ((state: GlobalState) => ({
+    safeAreaInsets: getSession(state).safeAreaInsets,
+  }): (GlobalState, OwnProps) => *),
+)(Screen);
