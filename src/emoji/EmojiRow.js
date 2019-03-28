@@ -20,12 +20,12 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {|
+type Props = $ReadOnly<{|
   dispatch: Dispatch,
   name: string,
   imageEmoji: ImageEmojiType | void,
   onPress: (name: string) => void,
-|};
+|}>;
 
 class EmojiRow extends PureComponent<Props> {
   handlePress = () => {

@@ -47,7 +47,7 @@ import { getDraftForNarrow } from '../drafts/draftsSelectors';
 import TopicAutocomplete from '../autocomplete/TopicAutocomplete';
 import AutocompleteView from '../autocomplete/AutocompleteView';
 
-type Props = {|
+type Props = $ReadOnly<{|
   auth: Auth,
   narrow: Narrow,
   usersByEmail: Map<string, UserOrBot>,
@@ -59,7 +59,7 @@ type Props = {|
   editMessage: ?EditMessage,
   safeAreaInsets: Dimensions,
   dispatch: Dispatch,
-|};
+|}>;
 
 type State = {|
   isMessageFocused: boolean,

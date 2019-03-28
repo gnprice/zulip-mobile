@@ -9,11 +9,11 @@ const styles = StyleSheet.create({
   list: {},
 });
 
-type Props = {|
+type Props = $ReadOnly<{|
   users: User[],
   listRef: (component: FlatList<*> | null) => void,
   onPress: (email: string) => void,
-|};
+|}>;
 
 export default class AvatarList extends PureComponent<Props> {
   render() {

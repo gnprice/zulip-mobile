@@ -8,11 +8,11 @@ import { getRecipientsInGroupNarrow } from '../selectors';
 import NavButton from '../nav/NavButton';
 import { navigateToGroupDetails } from '../actions';
 
-type Props = {|
+type Props = $ReadOnly<{|
   dispatch: Dispatch,
   color: string,
   recipients: UserOrBot[],
-|};
+|}>;
 
 class InfoNavButtonGroup extends PureComponent<Props> {
   handlePress = () => {

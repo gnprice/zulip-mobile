@@ -17,11 +17,11 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {|
+type Props = $ReadOnly<{|
   accounts: AccountStatus[],
   dispatch: Dispatch,
   hasAuth: boolean,
-|};
+|}>;
 
 class AccountPickScreen extends PureComponent<Props> {
   handleAccountSelect = (index: number) => {

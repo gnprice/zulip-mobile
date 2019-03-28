@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {|
+type Props = $ReadOnly<{|
   children: React$Node,
   accessibilityLabel?: string,
   overlay: React$Node,
@@ -46,7 +46,7 @@ type Props = {|
   overlayPosition: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left',
   style?: Style,
   onPress?: () => void,
-|};
+|}>;
 
 /**
  * Layout component that streamlines how we

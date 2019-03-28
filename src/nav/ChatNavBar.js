@@ -13,11 +13,11 @@ import { foregroundColorFromBackground } from '../utils/color';
 import { navigateBack } from '../actions';
 import { ExtraButton, InfoButton } from '../title-buttons/titleButtonFromNarrow';
 
-type Props = {|
+type Props = $ReadOnly<{|
   dispatch: Dispatch,
   backgroundColor: string,
   narrow: Narrow,
-|};
+|}>;
 
 class ChatNavBar extends PureComponent<Props> {
   render() {

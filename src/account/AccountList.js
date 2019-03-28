@@ -5,11 +5,11 @@ import { View, FlatList } from 'react-native';
 import type { AccountStatus } from './accountsSelectors';
 import AccountItem from './AccountItem';
 
-type Props = {|
+type Props = $ReadOnly<{|
   accounts: AccountStatus[],
   onAccountSelect: number => void,
   onAccountRemove: number => void,
-|};
+|}>;
 
 export default class AccountList extends PureComponent<Props> {
   render() {

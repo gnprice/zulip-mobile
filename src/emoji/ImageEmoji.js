@@ -12,9 +12,9 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {|
+type Props = $ReadOnly<{|
   emoji: ImageEmojiType,
-|};
+|}>;
 
 export default class ImageEmoji extends PureComponent<Props> {
   render() {

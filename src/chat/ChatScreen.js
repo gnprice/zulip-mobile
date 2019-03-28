@@ -9,7 +9,7 @@ import { OfflineNotice, ZulipStatusBar } from '../common';
 import Chat from '../chat/Chat';
 import ChatNavBar from '../nav/ChatNavBar';
 
-type Props = {|
+type Props = $ReadOnly<{|
   navigation: NavigationScreenProp<*> & {
     state: {
       params: {
@@ -17,7 +17,7 @@ type Props = {|
       },
     },
   },
-|};
+|}>;
 
 const styles = StyleSheet.create({
   /** A workaround for #3089, by letting us put Chat (with MessageList) first. */

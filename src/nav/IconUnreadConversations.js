@@ -15,12 +15,12 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {|
+type Props = $ReadOnly<{|
   dispatch: Dispatch,
   unreadHuddlesTotal: number,
   unreadPmsTotal: number,
   color: string,
-|};
+|}>;
 
 class IconUnreadConversations extends PureComponent<Props> {
   render() {

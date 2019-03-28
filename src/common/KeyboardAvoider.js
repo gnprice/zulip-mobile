@@ -5,12 +5,12 @@ import { KeyboardAvoidingView, Platform, View } from 'react-native';
 
 import type { Style } from '../types';
 
-type Props = {|
+type Props = $ReadOnly<{|
   behavior?: ?('height' | 'position' | 'padding'),
   children: React$Node,
   style?: Style,
   contentContainerStyle?: Style,
-|};
+|}>;
 
 export default class KeyboardAvoider extends PureComponent<Props> {
   render() {

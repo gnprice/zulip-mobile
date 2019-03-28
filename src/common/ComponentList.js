@@ -5,13 +5,13 @@ import { View } from 'react-native';
 import type { Node as React$Node } from 'react';
 import type { Style } from '../types';
 
-type Props = {|
+type Props = $ReadOnly<{|
   children: $ReadOnlyArray<React$Node>,
   spacing?: number,
   outerSpacing: boolean,
   style?: Style,
   itemStyle?: Style,
-|};
+|}>;
 
 /**
  * A convenience component that uniformly styles and spaces its children.

@@ -21,10 +21,10 @@ const componentStyles = StyleSheet.create({
   },
 });
 
-type Props = {|
+type Props = $ReadOnly<{|
   stream: Stream,
   subscription: Subscription,
-|};
+|}>;
 
 export default class StreamCard extends PureComponent<Props> {
   render() {

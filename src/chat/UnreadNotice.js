@@ -30,12 +30,12 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {|
+type Props = $ReadOnly<{|
   dispatch: Dispatch,
   limited: boolean,
   narrow: Narrow,
   unreadCount: number,
-|};
+|}>;
 
 class UnreadNotice extends PureComponent<Props> {
   static defaultProps = {

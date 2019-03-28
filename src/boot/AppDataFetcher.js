@@ -8,11 +8,11 @@ import type { Dispatch, GlobalState } from '../types';
 import { getSession } from '../directSelectors';
 import { doInitialFetch } from '../actions';
 
-type Props = {|
+type Props = $ReadOnly<{|
   needsInitialFetch: boolean,
   dispatch: Dispatch,
   children: React$Node,
-|};
+|}>;
 
 class AppDataFetcher extends PureComponent<Props> {
   componentDidUpdate = () => {

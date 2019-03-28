@@ -23,10 +23,10 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {|
+type Props = $ReadOnly<{|
   dispatch: Dispatch,
   isOnline: boolean,
-|};
+|}>;
 
 /**
  * Displays a notice that the app is working in offline mode.

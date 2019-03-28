@@ -10,12 +10,12 @@ import { getFilteredEmojiNames } from '../emoji/data';
 import type { GlobalState, RealmEmojiById, Dispatch } from '../types';
 import { getActiveImageEmojiByName } from '../selectors';
 
-type Props = {|
+type Props = $ReadOnly<{|
   dispatch: Dispatch,
   filter: string,
   activeImageEmojiByName: RealmEmojiById,
   onAutocomplete: (name: string) => void,
-|};
+|}>;
 
 const MAX_CHOICES = 30;
 

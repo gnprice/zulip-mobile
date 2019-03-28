@@ -30,12 +30,12 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {|
+type Props = $ReadOnly<{|
   dispatch: Dispatch,
   conversations: PmConversationData[],
   isLoading: boolean,
   usersByEmail: Map<string, UserOrBot>,
-|};
+|}>;
 
 /**
  * The "PMs" page in the main tabs navigation.

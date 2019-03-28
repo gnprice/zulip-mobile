@@ -5,11 +5,11 @@ import TranslatedText from './TranslatedText';
 
 import type { Context, LocalizableText, Style } from '../types';
 
-type Props = {|
+type Props = $ReadOnly<{|
   ...$Exact<$PropertyType<Text, 'props'>>,
   text: LocalizableText,
   style?: Style,
-|};
+|}>;
 
 /**
  * A component that on top of a standard Text component

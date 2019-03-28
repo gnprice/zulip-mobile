@@ -13,12 +13,12 @@ import styles from '../styles';
 import { canSendToNarrow } from '../utils/narrow';
 import { getShowMessagePlaceholders } from '../selectors';
 
-type Props = {|
+type Props = $ReadOnly<{|
   dispatch: Dispatch,
   /* $FlowFixMe: probably this shouldn't be optional */
   narrow?: Narrow,
   canSend: boolean,
-|};
+|}>;
 
 const componentStyles = StyleSheet.create({
   /** A workaround for #3089, by letting us put MessageList first. */

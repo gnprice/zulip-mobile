@@ -22,11 +22,11 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {|
+type Props = $ReadOnly<{|
   dispatch: Dispatch,
   auth: Auth,
   query: string,
-|};
+|}>;
 
 type State = {|
   messages: Message[],

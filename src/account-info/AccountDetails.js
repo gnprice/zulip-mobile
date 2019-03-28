@@ -27,12 +27,12 @@ const componentStyles = StyleSheet.create({
 
 const AVATAR_SIZE = 200;
 
-type Props = {|
+type Props = $ReadOnly<{|
   dispatch: Dispatch,
   realm: string,
   user: User,
   userStatusText: string | void,
-|};
+|}>;
 
 class AccountDetails extends PureComponent<Props, void> {
   render() {

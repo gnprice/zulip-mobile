@@ -4,11 +4,11 @@ import { Text } from 'react-native';
 
 import type { Context, Style } from '../types';
 
-type Props = {|
+type Props = $ReadOnly<{|
   ...$Exact<$PropertyType<Text, 'props'>>,
   text: string,
   style?: Style,
-|};
+|}>;
 
 /**
  * A component that on top of a standard Text component

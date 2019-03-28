@@ -5,7 +5,7 @@ import { Screen } from '../common';
 import SearchMessagesCard from './SearchMessagesCard';
 import styles from '../styles';
 
-type Props = {||};
+type Props = $ReadOnly<{||}>;
 
 type State = {|
   query: string,

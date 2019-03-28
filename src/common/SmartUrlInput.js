@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {|
+type Props = $ReadOnly<{|
   defaultValue: string,
   defaultOrganization: string,
   protocol: string,
@@ -33,7 +33,7 @@ type Props = {|
   onChangeText: (value: string) => void,
   onSubmitEditing: () => Promise<void>,
   enablesReturnKeyAutomatically: boolean,
-|};
+|}>;
 
 type State = {|
   value: string,

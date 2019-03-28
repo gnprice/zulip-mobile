@@ -81,12 +81,12 @@ type PropsFromConnect = {|
   userStatus: UserStatusMapObject,
 |};
 
-type Props = {|
+type Props = $ReadOnly<{|
   ...PropsFromConnect,
   style?: Style,
   email: string,
   hideIfOffline: boolean,
-|};
+|}>;
 
 /**
  * A colored dot indicating user online status.

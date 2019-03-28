@@ -26,11 +26,11 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {|
+type Props = $ReadOnly<{|
   dispatch: Dispatch,
   children: React$Node,
   unreadCount: number,
-|};
+|}>;
 
 class AppEventHandlers extends PureComponent<Props> {
   handleOrientationChange = (orientation: OrientationT) => {
