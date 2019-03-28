@@ -32,10 +32,11 @@ declare module "react-redux" {
   ST = Static properties of Com
   */
 
-  declare type MapStateToProps<S: Object, SP: Object, RSP: Object> = (state: S, props: SP) => RSP;
+  declare type MapStateToProps1<S: Object, SP: Object, RSP: Object> = (state: S, props: SP) => RSP;
 
   declare type OmitDispatch<Component> = $Diff<Component, {dispatch?: Dispatch<*>}>;
 
+  /*
   declare export function connect<
     Com: ComponentType<*>,
     S: Object,
@@ -44,10 +45,10 @@ declare module "react-redux" {
     CP: $Diff<OmitDispatch<ElementConfig<Com>>, RSP>,
     ST: {[_: $Keys<Com>]: any}
     >(
-    mapStateToProps: MapStateToProps<S, SP, RSP>,
+    mapStateToProps: MapStateToProps1<S, SP, RSP>,
     mapDispatchToProps?: null
   ): (component: Com) => ComponentType<CP & SP> & $Shape<ST>;
-
+*/
   declare export function connect<
     Com: ComponentType<*>,
     ST: {[_: $Keys<Com>]: any}
@@ -55,6 +56,24 @@ declare module "react-redux" {
     mapStateToProps?: null,
     mapDispatchToProps?: null
   ): (component: Com) => ComponentType<OmitDispatch<ElementConfig<Com>>> & $Shape<ST>;
+
+
+  declare type MapStateToProps<-S, -OP, +SP> = (
+    state: S,
+    ownProps: OP,
+  ) => SP;
+
+  declare class ConnectedComponent<-S, -D, OP, +WC> extends React$Component<OP> {
+    static +WrappedComponent: WC;
+    getWrappedInstance(): React$ElementRef<WC>;
+  }
+
+  declare type Connector<-S, -D, OP, WC> = WC => Class<ConnectedComponent<S, D, OP, WC>>;
+
+  declare export function connect<S, D, OP, SP, DP>(
+    mapStateToProps: MapStateToProps<S, OP, SP>,
+    mapDispatchToProps?: null,
+  ): Connector<S, D, OP, React$ComponentType<{|...OP, ...SP|}>>;
 
   declare export default {
     Provider: typeof Provider,
