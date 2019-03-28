@@ -21,48 +21,18 @@ declare module "react-redux" {
     children?: any
   }> {}
 
-  declare export function createProvider(
-    storeKey?: string,
-    subKey?: string
-  ): Provider<*, *, *>;
-
   /*
-
   S = State
   A = Action
-  OP = OwnProps
   SP = StateProps
-  DP = DispatchProps
-  MP = Merge props
-  MDP = Map dispatch to props object
   RSP = Returned state props
-  RDP = Returned dispatch props
   RMP = Returned merge props
   CP = Props for returned component
   Com = React Component
   ST = Static properties of Com
-  EFO = Extra factory options (used only in connectAdvanced)
   */
 
   declare type MapStateToProps<S: Object, SP: Object, RSP: Object> = (state: S, props: SP) => RSP;
-
-  declare type MapDispatchToProps<A, OP: Object, RDP: Object> = (dispatch: Dispatch<A>, ownProps: OP) => RDP;
-
-  declare type MergeProps<SP: Object, DP: Object, MP: Object, RMP: Object> = (
-    stateProps: SP,
-    dispatchProps: DP,
-    ownProps: MP
-  ) => RMP;
-
-  declare type ConnectOptions<S: Object, OP: Object, RSP: Object, RMP: Object> = {|
-    pure?: boolean,
-    withRef?: boolean,
-    areStatesEqual?: (next: S, prev: S) => boolean,
-    areOwnPropsEqual?: (next: OP, prev: OP) => boolean,
-    areStatePropsEqual?: (next: RSP, prev: RSP) => boolean,
-    areMergedPropsEqual?: (next: RMP, prev: RMP) => boolean,
-    storeKey?: string
-  |};
 
   declare type OmitDispatch<Component> = $Diff<Component, {dispatch?: Dispatch<*>}>;
 
@@ -88,7 +58,6 @@ declare module "react-redux" {
 
   declare export default {
     Provider: typeof Provider,
-    createProvider: typeof createProvider,
     connect: typeof connect,
   };
 }
