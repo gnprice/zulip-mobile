@@ -29,10 +29,10 @@ const componentStyles = StyleSheet.create({
   },
 });
 
-type Props = {|
+type Props = $ReadOnly<{|
   dispatch: Dispatch,
   centerContent: boolean,
-  +children: React$Node,
+  children: React$Node,
   safeAreaInsets: Dimensions,
   keyboardShouldPersistTaps: 'never' | 'always' | 'handled',
   padding: boolean,
@@ -44,8 +44,8 @@ type Props = {|
   searchBarOnChange: (text: string) => void,
 
   canGoBack: boolean,
-  +title: LocalizableText,
-|};
+  title: LocalizableText,
+|}>;
 
 /**
  * Wrapper component for each screen of the app, for consistent look-and-feel.
