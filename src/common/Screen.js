@@ -29,7 +29,7 @@ const componentStyles = StyleSheet.create({
   },
 });
 
-type DefaultedProps = {|
+type OwnProps = {|
   centerContent: boolean,
   keyboardShouldPersistTaps: 'never' | 'always' | 'handled',
   padding: boolean,
@@ -40,9 +40,7 @@ type DefaultedProps = {|
 
   canGoBack: boolean,
   +title: LocalizableText,
-|};
 
-type DirectProps = {|
   +children: React$Node,
   style?: Style,
 |};
@@ -54,9 +52,7 @@ type ReduxProps = {|
 
 type Partial<T> = $Rest<T, {}>;
 
-type OuterProps = {| ...Partial<DefaultedProps>, ...DirectProps |};
-
-type Props = {| ...DefaultedProps, ...DirectProps, ...ReduxProps |};
+type Props = {| ...OwnProps, ...ReduxProps |};
 
 /**
  * Wrapper component for each screen of the app, for consistent look-and-feel.
@@ -147,6 +143,8 @@ class Screen extends PureComponent<Props> {
     );
   }
 }
+
+type OuterProps = $Rest<OwnProps, $PropertyType<Screen, 'defaultProps'>>;
 
 export default connect<_, OuterProps, _, _, _, _>((state: GlobalState) => ({
   safeAreaInsets: getSession(state).safeAreaInsets,
