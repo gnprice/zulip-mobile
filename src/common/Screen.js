@@ -29,16 +29,11 @@ const componentStyles = StyleSheet.create({
   },
 });
 
-type Props = {|
-  dispatch: Dispatch,
+type DefaultedProps = {|
   centerContent: boolean,
-  +children: React$Node,
-  safeAreaInsets: Dimensions,
   keyboardShouldPersistTaps: 'never' | 'always' | 'handled',
   padding: boolean,
   scrollEnabled: boolean,
-  style?: Style,
-
   search: boolean,
   autoFocus: boolean,
   searchBarOnChange: (text: string) => void,
@@ -46,6 +41,22 @@ type Props = {|
   canGoBack: boolean,
   +title: LocalizableText,
 |};
+
+type DirectProps = {|
+  +children: React$Node,
+  style?: Style,
+|};
+
+type ReduxProps = {|
+  dispatch: Dispatch,
+  safeAreaInsets: Dimensions,
+|};
+
+type Partial<T> = $Rest<T, {}>;
+
+type OuterProps = {| ...Partial<DefaultedProps>, ...DirectProps |};
+
+type Props = {| ...DefaultedProps, ...DirectProps, ...ReduxProps |};
 
 /**
  * Wrapper component for each screen of the app, for consistent look-and-feel.
@@ -137,6 +148,6 @@ class Screen extends PureComponent<Props> {
   }
 }
 
-export default connect((state: GlobalState) => ({
+export default connect<_, OuterProps, _, _, _, _>((state: GlobalState) => ({
   safeAreaInsets: getSession(state).safeAreaInsets,
 }))(Screen);
