@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 
 import React, { PureComponent } from 'react';
-import type { Node as React$Node } from 'react';
+import type { ComponentType, ElementConfig, Node as React$Node } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 
 import type { Context, Dimensions, GlobalState, LocalizableText, Style, Dispatch } from '../types';
@@ -29,7 +29,7 @@ const componentStyles = StyleSheet.create({
   },
 });
 
-type OwnProps = {|
+type Props = {|
   centerContent: boolean,
   keyboardShouldPersistTaps: 'never' | 'always' | 'handled',
   padding: boolean,
@@ -43,16 +43,10 @@ type OwnProps = {|
 
   +children: React$Node,
   style?: Style,
-|};
 
-type ReduxProps = {|
   dispatch: Dispatch,
   safeAreaInsets: Dimensions,
 |};
-
-type Partial<T> = $Rest<T, {}>;
-
-type Props = {| ...OwnProps, ...ReduxProps |};
 
 /**
  * Wrapper component for each screen of the app, for consistent look-and-feel.
@@ -144,8 +138,11 @@ class Screen extends PureComponent<Props> {
   }
 }
 
-type OuterProps = $Rest<OwnProps, $PropertyType<Screen, 'defaultProps'>>;
+function connect1<SP, P, C: ComponentType<P>>(mapStateToProps: GlobalState => SP): C => * {
+  const cc = connect<_, $Diff<ElementConfig<C>, SP>, _, _, _, Dispatch>(mapStateToProps);
+  return cc;
+}
 
-export default connect<_, OuterProps, _, _, _, _>((state: GlobalState) => ({
+export default connect1((state: GlobalState) => ({
   safeAreaInsets: getSession(state).safeAreaInsets,
 }))(Screen);
