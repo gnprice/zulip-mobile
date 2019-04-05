@@ -138,11 +138,47 @@ class Screen extends PureComponent<Props> {
   }
 }
 
-function connect1<SP, P, C: ComponentType<P>>(mapStateToProps: GlobalState => SP): C => ComponentType<$Diff<ElementConfig<C>, SP>> {
+// CAUTION: These only function when actually forced to be instantiated.
+// E.g. a hoped-for
+//   type With<S, P> = S;
+// utters not a peep at
+//   const x: With<null, IsEqual<string, number>> = null;
+// Still, probably handy if used cleverly.
+type IsSupertype<S, T: S> = S;
+type IsSupertype2<S, T: S> = T; // a helper
+type IsSubtype<S, T> = IsSupertype2<T, S>; // i.e. S, if true
+type IsEqual<S, T: S> = IsSupertype2<T, S>; // i.e. S (== T), if true
+
+/*
+ * Has type T, but only if T <= T1 -- and T, T1 both instantiable.
+ *
+ * E.g. Chain<S, IsEqual<S, T>> is S, but additionally requires S == T.
+ */
+type Chain<T1, T: T1> = T;
+type And1<T1, T: T1> = T;
+type And2<T2, T1: T2, T: T1> = T;
+
+type IsElementwiseSubtype<S, T> =
+  $ObjMapi<S,
+    <K, V>(K, V) => IsSubtype<V, $ElementType<T, K>>
+  >;
+
+function connect1<
+  SP1: {},
+  P,
+  C: ComponentType<P>,
+  SP: IsElementwiseSubtype<$Exact<SP1>, ElementConfig<C>>,
+  >(mapStateToProps: GlobalState => SP): C => ComponentType<$Diff<ElementConfig<C>, SP>> {
   const cc = connect<_, $Diff<ElementConfig<C>, SP>, _, _, _, Dispatch>(mapStateToProps);
   return cc;
 }
 
-export default connect1((state: GlobalState) => ({
-  safeAreaInsets: (32: mixed),
-}))(Screen);
+const msp = (state: GlobalState) => ({
+  safeAreaInsets: ((32: $FlowFixMe): mixed),
+});
+
+const cr = connect1<_, _, _, _>(msp);
+
+const c = cr(Screen);
+
+export default c;
