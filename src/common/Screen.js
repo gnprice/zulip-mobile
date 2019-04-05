@@ -144,5 +144,5 @@ function connect1<SP, P, C: ComponentType<P>>(mapStateToProps: GlobalState => SP
 }
 
 export default connect1((state: GlobalState) => ({
-  safeAreaInsets: getSession(state).safeAreaInsets,
+  safeAreaInsets: 32,
 }))(Screen);
