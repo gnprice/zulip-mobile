@@ -138,7 +138,7 @@ class Screen extends PureComponent<Props> {
   }
 }
 
-function connect1<SP, P, C: ComponentType<P>>(mapStateToProps: GlobalState => SP): C => * {
+function connect1<SP, P, C: ComponentType<P>>(mapStateToProps: GlobalState => SP): C => ComponentType<$Diff<ElementConfig<C>, SP>> {
   const cc = connect<_, $Diff<ElementConfig<C>, SP>, _, _, _, Dispatch>(mapStateToProps);
   return cc;
 }
