@@ -169,12 +169,14 @@ type BoundedDiff<-U, -L> = $Diff<
   $ObjMap<L, () => mixed>,
 >;
 
+type OwnProps<-C, -SP> = $Diff<BoundedDiff<ElementConfig<C>, SP>, {| dispatch: Dispatch |}>;
+
 function connect1<
   SP,
   P,
   C: ComponentType<P>,
   //</P>SP: IsElementwiseSubtype<$Exact<SP1>, ElementConfig<C>>,
-  >(mapStateToProps: GlobalState => SP): C => ComponentType<$Diff<BoundedDiff<ElementConfig<C>, SP>, {| dispatch: Dispatch |}>> {
+  >(mapStateToProps: GlobalState => SP): C => ComponentType<OwnProps<C, SP>> {
   return connect(mapStateToProps);
 }
 
