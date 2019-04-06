@@ -138,8 +138,6 @@ class Screen extends PureComponent<Props> {
   }
 }
 
-const msp = (state: GlobalState) => ({
-  safeAreaInsets: ((32: $FlowFixMe): Dimensions),
-});
-
-export default connect(msp)(Screen);
+export default connect((state: GlobalState) => ({
+  safeAreaInsets: getSession(state).safeAreaInsets,
+}))(Screen);
