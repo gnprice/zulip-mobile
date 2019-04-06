@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import { connect } from 'react-redux';
+import { connect } from '../react-redux';
 
 import React, { PureComponent } from 'react';
 import type { ComponentType, ElementConfig, Node as React$Node } from 'react';
@@ -184,7 +184,7 @@ const msp = (state: GlobalState) => ({
   safeAreaInsets: ((32: $FlowFixMe): Dimensions),
 });
 
-const cr = connect1(msp);
+const cr = connect(msp);
 
 const c = cr(Screen);
 
