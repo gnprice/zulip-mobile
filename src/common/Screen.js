@@ -163,7 +163,8 @@ type IsElementwiseSubtype<+S, +T> =
     <K, V>(K, V) => IsSubtype<V, $ElementType<T, K>>
   >;
 
-type BoundedDiff<U, L> = $Diff<
+// Oddly, Flow accepts this declaration with <-U, -L> but also with <+U, +L>.
+type BoundedDiff<-U, -L> = $Diff<
   IsSupertype<U, $ReadOnly<{| ...U, ...L |}>>,
   $ObjMap<L, () => mixed>,
 >;
@@ -182,7 +183,7 @@ const msp = (state: GlobalState) => ({
   safeAreaInsets: ((32: $FlowFixMe): mixed),
 });
 
-const cr = connect1<{| safeAreaInsets: mixed |}, _, _>(msp);
+const cr = connect1(msp);
 
 const c = cr(Screen);
 
