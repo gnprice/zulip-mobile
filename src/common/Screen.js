@@ -174,13 +174,12 @@ function connect1<
   P,
   C: ComponentType<P>,
   //</P>SP: IsElementwiseSubtype<$Exact<SP1>, ElementConfig<C>>,
-  >(mapStateToProps: GlobalState => SP): C => ComponentType<BoundedDiff<ElementConfig<C>, SP>> {
-  const cc = connect<_, BoundedDiff<ElementConfig<C>, SP>, _, _, _, Dispatch>(mapStateToProps);
-  return cc;
+  >(mapStateToProps: GlobalState => SP): C => ComponentType<$Diff<BoundedDiff<ElementConfig<C>, SP>, {| dispatch: Dispatch |}>> {
+  return connect(mapStateToProps);
 }
 
 const msp = (state: GlobalState) => ({
-  safeAreaInsets: ((32: $FlowFixMe): mixed),
+  safeAreaInsets: ((32: $FlowFixMe): Dimensions),
 });
 
 const cr = connect1(msp);
