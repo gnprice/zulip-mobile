@@ -14,5 +14,6 @@ export type BoundedDiff<-U, -L> = $Diff<
 
 export type OwnProps<-C, -SP> = $Diff<BoundedDiff<ElementConfig<C>, SP>, {| dispatch: Dispatch |}>;
 
-export const connect: <SP, P, C: ComponentType<P>>(GlobalState => SP) =>
-   C => ComponentType<OwnProps<C, SP>> = (msp) => connectInner(msp);
+export const connect: <SP, P, C: ComponentType<P>>
+  (GlobalState => SP) => C => ComponentType<OwnProps<C, SP>> =
+    (msp) => connectInner(msp);
