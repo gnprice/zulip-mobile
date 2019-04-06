@@ -31,14 +31,16 @@ type IsElementwiseSubtype<+S, +T> =
   >;
 
 // Oddly, Flow accepts this declaration with <-U, -L> but also with <+U, +L>.
-type BoundedDiff<-U, -L> = $Diff<
+export type BoundedDiff<-U, -L> = $Diff<
   IsSupertype<U, $ReadOnly<{| ...U, ...L |}>>,
   $ObjMap<L, () => mixed>,
 >;
 
-type OwnProps<-C, -SP> = $Diff<BoundedDiff<ElementConfig<C>, SP>, {| dispatch: Dispatch |}>;
+export type OwnProps<-C, -SP> = $Diff<BoundedDiff<ElementConfig<C>, SP>, {| dispatch: Dispatch |}>;
 
-export function connect<
+export type Connected<MSP, C> = ComponentType<OwnProps<C, $Call<MSP, empty>>>;
+
+function connect1<
   SP,
   P,
   C: ComponentType<P>,
@@ -46,3 +48,15 @@ export function connect<
   >(mapStateToProps: GlobalState => SP): C => ComponentType<OwnProps<C, SP>> {
   return connectInner(mapStateToProps);
 }
+
+//export const connect = connectInner;
+
+type Connect<SP, P, C: ComponentType<P>> =
+  (GlobalState => SP) =>
+     C => ComponentType<OwnProps<C, SP>>;
+
+// export const connect2: <SP, P, C: ComponentType<P>>(GlobalState => SP) =>
+//   C => ComponentType<OwnProps<C, SP>> = connectInner;
+
+export const connect: <SP, P, C: ComponentType<P>>(GlobalState => SP) =>
+   C => ComponentType<OwnProps<C, SP>> = (msp) => connectInner(msp);

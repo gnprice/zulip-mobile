@@ -1,5 +1,6 @@
 /* @flow strict-local */
 import { connect } from '../react-redux';
+import type { Connected, OwnProps } from '../react-redux';
 
 import React, { PureComponent } from 'react';
 import type { ComponentType, ElementConfig, Node as React$Node } from 'react';
@@ -169,7 +170,7 @@ type BoundedDiff<-U, -L> = $Diff<
   $ObjMap<L, () => mixed>,
 >;
 
-type OwnProps<-C, -SP> = $Diff<BoundedDiff<ElementConfig<C>, SP>, {| dispatch: Dispatch |}>;
+//type OwnProps<-C, -SP> = $Diff<BoundedDiff<ElementConfig<C>, SP>, {| dispatch: Dispatch |}>;
 
 function connect1<
   SP,
@@ -186,6 +187,14 @@ const msp = (state: GlobalState) => ({
 
 const cr = connect(msp);
 
+//const c: ComponentType<OwnProps<typeof Screen, $Call<typeof msp, empty>>> = cr(Screen);
 const c = cr(Screen);
 
 export default c;
+
+export const foo: Connected<typeof msp, typeof Screen> = connect(msp)(Screen);
+
+// bad -- infers empty
+// export const cr2: <C: ComponentType<*>>(C) => Connected<typeof msp, C> = connect(msp);
+
+export const c3 = connect(msp)(Screen);
