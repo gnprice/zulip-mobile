@@ -1,8 +1,6 @@
 /* @flow strict-local */
 import React, { Component } from 'react';
 import { WebView } from 'react-native-webview';
-import { connect } from 'react-redux';
-
 import { connectActionSheet } from '@expo/react-native-action-sheet';
 
 import type {
@@ -24,6 +22,7 @@ import type {
   ThemeName,
   User,
 } from '../types';
+import { connect } from '../react-redux';
 import {
   getAuth,
   getAllImageEmojiById,
