@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
 export default TabNavigator(
   {
     subscribed: {
+      // $FlowFixMe react-navigation types :-/
       screen: SubscriptionsCard,
       navigationOptions: {
         tabBarLabel: (props: TabNavigationOptionsPropsType) => (
@@ -29,6 +30,7 @@ export default TabNavigator(
       },
     },
     allStreams: {
+      // $FlowFixMe react-navigation types :-/
       screen: StreamListCard,
       navigationOptions: {
         tabBarLabel: (props: TabNavigationOptionsPropsType) => (
