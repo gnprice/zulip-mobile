@@ -15,7 +15,7 @@ import { fetchTopics, doNarrow } from '../actions';
 type Props = {|
   dispatch: Dispatch,
   stream: Stream,
-  topics: TopicExtended[],
+  topics: ?TopicExtended[],
   navigation: NavigationScreenProp<{ params: {| streamId: number |} }>,
 |};
 
