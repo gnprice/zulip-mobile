@@ -12,7 +12,7 @@ export type * from './api/apiTypes';
  * TODO as the name suggests, this should be broken down more specifically.
  * Each use should be one of ViewStyleProp, TextStyleProp, ImageStyleProp.
  */
-export type Style = DangerouslyImpreciseStyleProp;
+export type Style = $FlowFixMe; // DangerouslyImpreciseStyleProp;
 
 export type Orientation = 'LANDSCAPE' | 'PORTRAIT';
 
