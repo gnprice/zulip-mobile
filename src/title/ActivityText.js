@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import type { TextStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-import type { UserPresence, UserStatus, Dispatch } from '../types';
+import type { User, UserPresence, UserStatus, Dispatch } from '../types';
 import { connectFlowFixMe } from '../react-redux';
 import { getPresence, getUserStatus } from '../selectors';
 import { presenceToHumanTime } from '../utils/presence';
@@ -14,6 +14,7 @@ type Props = {|
   presence: UserPresence,
   style: TextStyleProp,
   userStatus: UserStatus,
+  user: User,
 |};
 
 class ActivityText extends PureComponent<Props> {
