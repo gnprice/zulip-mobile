@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import { connect } from 'react-redux';
+import { connect } from '../react-redux';
 
 import React, { PureComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -66,5 +66,5 @@ class UnreadNotice extends PureComponent<Props> {
 }
 
 export default connect((state, props) => ({
-  unreadCount: getUnreadCountForNarrow(state, props.narrow),
+  unreadCount: (getUnreadCountForNarrow(state, props.narrow): number),
 }))(UnreadNotice);
