@@ -1,7 +1,7 @@
 /* @flow strict-local */
 import React, { PureComponent } from 'react';
 import { View } from 'react-native';
-import { connect } from 'react-redux';
+import { connect } from '../react-redux';
 
 import type { Dispatch, Context } from '../types';
 import SearchInput from '../common/SearchInput';

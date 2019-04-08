@@ -1,7 +1,7 @@
 /* @flow strict-local */
 import React, { PureComponent } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { connect } from 'react-redux';
+import { connect } from '../react-redux';
 
 import type { GlobalState, User, Dispatch } from '../types';
 import { UserAvatar, ComponentList, RawLabel } from '../common';

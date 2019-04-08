@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import { connect } from 'react-redux';
+import { connect } from '../react-redux';
 
 import React, { PureComponent } from 'react';
 import { AppState, NetInfo, View, StyleSheet, Platform, NativeModules } from 'react-native';

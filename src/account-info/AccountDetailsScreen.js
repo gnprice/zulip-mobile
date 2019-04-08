@@ -1,7 +1,7 @@
 /* @flow strict-local */
 import React, { PureComponent } from 'react';
 import { StyleSheet } from 'react-native';
-import { connect } from 'react-redux';
+import { connect } from '../react-redux';
 
 import type { Dispatch, GlobalState, User } from '../types';
 import { getAccountDetailsUserFromEmail } from '../selectors';

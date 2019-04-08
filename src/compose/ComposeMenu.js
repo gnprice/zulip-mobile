@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 // $FlowFixMe
 import ImagePicker from 'react-native-image-picker';
-import { connect } from 'react-redux';
+import { connect } from '../react-redux';
 
 import type { Dispatch, Narrow } from '../types';
 import { showErrorAlert } from '../utils/info';

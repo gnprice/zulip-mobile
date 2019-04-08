@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import { connect } from 'react-redux';
+import { connect } from '../react-redux';
 
 import React, { PureComponent } from 'react';
 import { Platform, StatusBar, View } from 'react-native';

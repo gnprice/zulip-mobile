@@ -1,6 +1,6 @@
 /* @flow strict-local */
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
+import { connect } from '../react-redux';
 
 import type { Dispatch, GlobalState } from '../types';
 import { OptionRow } from '../common';

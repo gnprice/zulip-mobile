@@ -1,7 +1,7 @@
 /* @flow strict-local */
 import React, { PureComponent } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { connect } from 'react-redux';
+import { connect } from '../react-redux';
 
 import type { Dispatch, GlobalState } from '../types';
 import { Input, OptionButton, Screen, ZulipButton } from '../common';

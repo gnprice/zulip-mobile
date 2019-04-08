@@ -1,7 +1,7 @@
 /* @flow strict-local */
 import React, { PureComponent } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { connect } from 'react-redux';
+import { connect } from '../react-redux';
 
 import type { Dispatch, GlobalState, User } from '../types';
 import { getSelfUserDetail } from '../selectors';

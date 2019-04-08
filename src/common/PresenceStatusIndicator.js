@@ -2,7 +2,7 @@
 /* eslint-disable react-native/no-unused-styles */
 import React, { PureComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { connect } from 'react-redux';
+import { connect } from '../react-redux';
 
 import type {
   GlobalState,

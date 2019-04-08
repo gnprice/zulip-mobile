@@ -1,6 +1,6 @@
 /* @flow strict-local */
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
+import { connect } from '../react-redux';
 import { StyleSheet, View } from 'react-native';
 
 import type { GlobalState, ImageEmojiType, Dispatch } from '../types';

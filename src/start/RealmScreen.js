@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import { connect } from 'react-redux';
+import { connect } from '../react-redux';
 import React, { PureComponent } from 'react';
 import { ScrollView, Keyboard } from 'react-native';
 import type { NavigationScreenProp } from 'react-navigation';
