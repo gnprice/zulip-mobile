@@ -137,6 +137,11 @@ const store: Store<*, Action> = createStore(
 // and enabled here:
 //   https://github.com/zalmoxisus/remotedev-serialize/blob/master/constants/options.js
 // Anyway, that also looks like a good-quality implementation.
+//
+// More candidates for data structure:
+//   https://github.com/immerjs/immer
+// (via random web-search hit https://github.com/ianstormtaylor/slate/issues/2345 ,
+// though that does not look like a well-aligned source)
 export const restore = (onFinished?: () => void) =>
   persistStore(store, reduxPersistConfig, onFinished);
 
