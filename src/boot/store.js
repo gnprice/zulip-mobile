@@ -124,6 +124,19 @@ const store: Store<*, Action> = createStore(
   ),
 );
 
+// TODO transform
+// see https://github.com/rt2zz/redux-persist#transforms
+//
+// For Immutable.js, `remotedev-serialize` seems good quality:
+//   https://github.com/zalmoxisus/remotedev-serialize/blob/master/immutable/serialize.js
+//   https://github.com/zalmoxisus/remotedev-serialize/blob/master/helpers/index.js
+//
+// Oh hey, and it supports built-in `Map` and `Set` too!  That's doc'd;
+// the implementation is less transparent, but it seems to be here:
+//   https://github.com/kolodny/jsan/blob/master/lib/cycle.js
+// and enabled here:
+//   https://github.com/zalmoxisus/remotedev-serialize/blob/master/constants/options.js
+// Anyway, that also looks like a good-quality implementation.
 export const restore = (onFinished?: () => void) =>
   persistStore(store, reduxPersistConfig, onFinished);
 
