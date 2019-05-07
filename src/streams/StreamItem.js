@@ -38,6 +38,11 @@ type Props = {|
   onSwitch?: (name: string, newValue: boolean) => void,
 |};
 
+/**
+ * A stream, in some list.
+ *
+ * The two props `color` and `backgroundColor` are incompatible.
+ */
 export default class StreamItem extends PureComponent<Props> {
   static contextType = ThemeContext;
   context: ThemeColors;
@@ -56,6 +61,42 @@ export default class StreamItem extends PureComponent<Props> {
     if (onSwitch) {
       onSwitch(name, newValue);
     }
+  };
+
+  colors = () => {
+    const { color, backgroundColor } = this.props;
+    if (
+      backgroundColor !== undefined
+      && backgroundColor !== ''
+      && color !== undefined
+      && color !== ''
+    ) {
+      throw new Error('StreamItem received both `color` and `backgroundColor`');
+    }
+    if (backgroundColor !== undefined && backgroundColor !== '') {
+      const foregroundColor = foregroundColorFromBackground(backgroundColor);
+      return {
+        backgroundColor,
+        textColor: foregroundColor,
+        iconColor: foregroundColor,
+      };
+    }
+    if (color !== undefined && color !== '') {
+      return {
+        backgroundColor: undefined,
+        textColor: this.context.color,
+        iconColor: color,
+      };
+    }
+    // TODO WORK HERE: I think this is impossible too.
+    // Better yet: replace `color` and `backgroundColor` with one `streamColor`,
+    // and a prop like `coloring: 'highlights' | 'background'` to control
+    // where it's used.
+    return {
+      backgroundColor: undefined,
+      textColor: this.context.color,
+      iconColor: foregroundColorFromBackground(this.context.backgroundColor),
+    };
   };
 
   render() {
