@@ -84,7 +84,7 @@ export default class StreamItem extends PureComponent<Props> {
         : foregroundColorFromBackground(
             backgroundColor !== undefined && backgroundColor !== ''
               ? backgroundColor
-              : (StyleSheet.flatten(contextStyles.backgroundColor) || {}).backgroundColor || null,
+              : contextStyles.backgroundColor.backgroundColor,
           );
     const textColorStyle =
       backgroundColor !== undefined && backgroundColor !== ''
