@@ -463,46 +463,54 @@ const scrollToPreserve = (msgId: number, prevBoundTop: number) => {
   window.scrollBy(0, newBoundRect.top - prevBoundTop);
 };
 
+/**
+ * Add the user's credentials to the URL, if applicable.
+ *
+ * This applies only to URLs on the Zulip server, and only for the small
+ * number of routes that accept this form of authentication.
+ *
+ * When not applicable, return null.
+ */
+const maybeAppendAuth = (url, auth): string | null => {
+  if (!url.startsWith(auth.realm)) {
+    return null;
+  }
+
+  // This unusual form of authentication is only accepted by the server
+  // for a small number of routes.  Rather than append the API key to all
+  // kinds of URLs on the server, do so only for those routes.
+  const urlPath = url.substring(auth.realm.length);
+  if (
+    !(
+      urlPath.startsWith('/user_uploads/')
+      || urlPath.startsWith('/thumbnail?')
+      || urlPath.startsWith('/avatar/')
+    )
+  ) {
+    return null;
+  }
+
+  const delimiter = url.includes('?') ? '&' : '?';
+  return `${url}${delimiter}api_key=${auth.apiKey}`;
+};
+
 const appendAuthToImages = auth => {
   const imageTags = document.getElementsByTagName('img');
   arrayFrom(imageTags).forEach(img => {
-    if (!img.src.startsWith(auth.realm)) {
-      return;
+    const url = maybeAppendAuth(img.src, auth);
+    if (url != null) {
+      img.src = url;
     }
-
-    // This unusual form of authentication is only accepted by the server
-    // for a small number of routes.  Rather than append the API key to all
-    // kinds of URLs on the server, do so only for those routes.
-    const srcPath = img.src.substring(auth.realm.length);
-    if (
-      !(
-        srcPath.startsWith('/user_uploads/')
-        || srcPath.startsWith('/thumbnail?')
-        || srcPath.startsWith('/avatar/')
-      )
-    ) {
-      return;
-    }
-
-    const delimiter = img.src.includes('?') ? '&' : '?';
-    img.src += `${delimiter}api_key=${auth.apiKey}`;
   });
 };
 
 const appendAuthToFileLinks = auth => {
   const aTags = document.getElementsByTagName('a');
   arrayFrom(aTags).forEach(a => {
-    if (!(a.href && a.href.startsWith(auth.realm))) {
-      return;
+    const url = maybeAppendAuth(a.href, auth);
+    if (url != null) {
+      a.href = url;
     }
-
-    const hrefPath = a.href.substring(auth.realm.length);
-    if (!hrefPath.startsWith('/user_uploads/')) {
-      return;
-    }
-
-    const delimiter = a.href.includes('?') ? '&' : '?';
-    a.href += `${delimiter}api_key=${auth.apiKey}`;
   });
 };
 
