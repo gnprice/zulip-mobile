@@ -146,15 +146,21 @@ type InitialDataRealmUserGroups = {|
   realm_user_groups: UserGroup[],
 |};
 
-/** Despite the name, mostly about *this* user. */
+/** Despite the name, most properties are about *this* user. */
 type InitialDataRealmUser = {|
-  // raw_users
+  // Lists of other users.
+  // The two named realm_*users are made after `fetch_initial_state_data`,
+  // from the `raw_users` added there.
+  realm_users: User[],
+  realm_non_active_users: User[],
+  cross_realm_bots: CrossRealmBot[],
+
+  // Info about this user.
   avatar_source: 'G',
   avatar_url_medium: string,
   avatar_url: string | null,
   can_create_streams: boolean,
   // can_subscribe_other_users
-  cross_realm_bots: CrossRealmBot[], // About other users.
   is_admin: boolean,
   // is_guest
   user_id: number,
@@ -162,9 +168,6 @@ type InitialDataRealmUser = {|
   email: string,
   // delivery_email
   full_name: string,
-
-  realm_non_active_users: User[], // TODO ??
-  realm_users: User[], // TODO ??
 |};
 
 // TODO realm_bots
