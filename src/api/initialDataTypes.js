@@ -223,7 +223,6 @@ type InitialDataUpdateDisplaySettings = {|
 
 // NB most of these come from `notification_setting_types`.
 type InitialDataUpdateGlobalNotifications = {|
-  default_desktop_notifications: boolean, // TODO ??
   enable_desktop_notifications: boolean,
   enable_digest_emails: boolean,
   // enable_login_emails
