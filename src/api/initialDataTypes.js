@@ -233,8 +233,7 @@ type InitialDataUpdateGlobalNotifications = {|
   enable_stream_desktop_notifications: boolean,
   enable_stream_email_notifications: boolean,
   enable_stream_push_notifications: boolean,
-  // enable_stream_audible_notifications
-  enable_stream_sounds: boolean, // TODO ??
+  // enable_stream_audible_notifications: boolean, // since 2.0.0-1258-g8e269b465
   message_content_in_email_notifications: boolean,
   // notification_sound
   pm_content_in_desktop_notifications: boolean,
