@@ -12,31 +12,31 @@ import type {
   UserStatusMapObject,
 } from './apiTypes';
 
-export type InitialDataBase = {|
+type InitialDataBase = {|
   last_event_id: number,
   msg: string,
   queue_id: number,
 |};
 
-export type InitialDataAlertWords = {|
+type InitialDataAlertWords = {|
   alert_words: string[],
 |};
 
-export type InitialDataMessage = {|
+type InitialDataMessage = {|
   max_message_id: number,
 |};
 
 export type MuteTuple = [string, string];
 
-export type InitialDataMutedTopics = {|
+type InitialDataMutedTopics = {|
   muted_topics: MuteTuple[],
 |};
 
-export type InitialDataPresence = {|
+type InitialDataPresence = {|
   presences: {| [email: string]: UserPresence |},
 |};
 
-export type InitialDataRealm = {|
+type InitialDataRealm = {|
   max_icon_file_size: number,
   realm_add_emoji_by_admins_only: boolean,
   realm_allow_community_topic_editing: boolean,
@@ -80,15 +80,15 @@ export type InitialDataRealm = {|
   realm_waiting_period_threshold: number,
 |};
 
-export type InitialDataRealmEmoji = {|
+type InitialDataRealmEmoji = {|
   realm_emoji: RealmEmojiById,
 |};
 
-export type InitialDataRealmFilters = {|
+type InitialDataRealmFilters = {|
   realm_filters: RealmFilter[],
 |};
 
-export type InitialDataRealmUser = {|
+type InitialDataRealmUser = {|
   avatar_source: 'G',
   avatar_url: string | null,
   avatar_url_medium: string,
@@ -103,7 +103,7 @@ export type InitialDataRealmUser = {|
   user_id: number,
 |};
 
-export type InitialDataRealmUserGroups = {|
+type InitialDataRealmUserGroups = {|
   realm_user_groups: UserGroup[],
 |};
 
@@ -115,17 +115,17 @@ type NeverSubscribedStream = {|
   stream_id: number,
 |};
 
-export type InitialDataStream = {|
+type InitialDataStream = {|
   streams: Stream[],
 |};
 
-export type InitialDataSubscription = {|
+type InitialDataSubscription = {|
   never_subscribed: NeverSubscribedStream[],
   subscriptions: Subscription[],
   unsubscribed: Subscription[],
 |};
 
-export type InitialDataUpdateDisplaySettings = {|
+type InitialDataUpdateDisplaySettings = {|
   default_language: string,
   emojiset: string,
   emojiset_choices: { [string]: string },
@@ -137,7 +137,7 @@ export type InitialDataUpdateDisplaySettings = {|
   twenty_four_hour_time: boolean,
 |};
 
-export type InitialDataUpdateGlobalNotifications = {|
+type InitialDataUpdateGlobalNotifications = {|
   default_desktop_notifications: boolean,
   enable_desktop_notifications: boolean,
   enable_digest_emails: boolean,
@@ -170,7 +170,7 @@ export type PmsUnreadItem = {|
   unread_message_ids: number[],
 |};
 
-export type InitialDataUpdateMessageFlags = {|
+type InitialDataUpdateMessageFlags = {|
   unread_msgs: {
     streams: StreamUnreadItem[],
     huddles: HuddlesUnreadItem[],
@@ -180,7 +180,7 @@ export type InitialDataUpdateMessageFlags = {|
   },
 |};
 
-export type InitialDataUserStatus = {|
+type InitialDataUserStatus = {|
   /**
    * Older servers (through at least 1.9.1) don't send this.
    * A missing value is equivalent to empty.
