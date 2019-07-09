@@ -12,6 +12,32 @@ import type {
   UserStatusMapObject,
 } from './apiTypes';
 
+export type MuteTuple = [string, string];
+
+type NeverSubscribedStream = {|
+  description: string,
+  invite_only: boolean,
+  is_old_stream: boolean,
+  name: string,
+  stream_id: number,
+|};
+
+export type StreamUnreadItem = {|
+  stream_id: number,
+  topic: string,
+  unread_message_ids: number[],
+|};
+
+export type HuddlesUnreadItem = {|
+  user_ids_string: string,
+  unread_message_ids: number[],
+|};
+
+export type PmsUnreadItem = {|
+  sender_id: number,
+  unread_message_ids: number[],
+|};
+
 type InitialDataBase = {|
   last_event_id: number,
   msg: string,
@@ -25,8 +51,6 @@ type InitialDataAlertWords = {|
 type InitialDataMessage = {|
   max_message_id: number,
 |};
-
-export type MuteTuple = [string, string];
 
 type InitialDataMutedTopics = {|
   muted_topics: MuteTuple[],
@@ -107,14 +131,6 @@ type InitialDataRealmUserGroups = {|
   realm_user_groups: UserGroup[],
 |};
 
-type NeverSubscribedStream = {|
-  description: string,
-  invite_only: boolean,
-  is_old_stream: boolean,
-  name: string,
-  stream_id: number,
-|};
-
 type InitialDataStream = {|
   streams: Stream[],
 |};
@@ -152,22 +168,6 @@ type InitialDataUpdateGlobalNotifications = {|
   message_content_in_email_notifications: boolean,
   pm_content_in_desktop_notifications: boolean,
   realm_name_in_notifications: boolean,
-|};
-
-export type StreamUnreadItem = {|
-  stream_id: number,
-  topic: string,
-  unread_message_ids: number[],
-|};
-
-export type HuddlesUnreadItem = {|
-  user_ids_string: string,
-  unread_message_ids: number[],
-|};
-
-export type PmsUnreadItem = {|
-  sender_id: number,
-  unread_message_ids: number[],
 |};
 
 type InitialDataUpdateMessageFlags = {|
