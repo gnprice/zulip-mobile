@@ -22,6 +22,11 @@ const initialState = {
   nonActiveUsers: [],
 };
 
+const fakeBlankState = {
+  ...initialState,
+  email: '',
+};
+
 const convertRealmEmoji = (data): RealmEmojiById => {
   const emojis = {};
   Object.keys(data).forEach(id => {
@@ -33,7 +38,7 @@ const convertRealmEmoji = (data): RealmEmojiById => {
 export default (state: RealmState = initialState, action: Action): RealmState => {
   switch (action.type) {
     case ACCOUNT_SWITCH:
-      return initialState;
+      return fakeBlankState;
 
     case REALM_INIT: {
       return {
