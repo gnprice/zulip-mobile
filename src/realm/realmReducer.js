@@ -22,6 +22,14 @@ const initialState = {
   nonActiveUsers: [],
 };
 
+/**
+ * A version of `initialState` with some made-up blank data.
+ *
+ * On `ACCOUNT_SWITCH`, some old components can still be mounted from the UI
+ * for the previous account that make no sense without server data...
+ *
+ * TODO `LOGIN_SUCCESS`
+ */
 const fakeBlankState = {
   ...initialState,
   email: '',
