@@ -106,7 +106,7 @@ const migrations: { [string]: (GlobalState) => GlobalState } = {
   }),
 
   // $FlowMigrationFudge
-  '7': dropCache,
+  '16': dropCache,
 };
 
 const reduxPersistConfig: Config = {

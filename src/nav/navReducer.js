@@ -9,6 +9,7 @@ import {
   ACCOUNT_SWITCH,
   LOGIN_SUCCESS,
   LOGOUT,
+  REALM_INIT,
 } from '../actionConstants';
 import { hasAuth } from '../account/accountsSelectors';
 
@@ -66,10 +67,11 @@ export default (state: NavigationState = initialState, action: Action): Navigati
     case REHYDRATE:
       return rehydrate(state, action);
 
+    case LOGIN_SUCCESS:
     case ACCOUNT_SWITCH:
       return getStateForRoute('loading');
 
-    case LOGIN_SUCCESS:
+    case REALM_INIT:
       return getStateForRoute('main');
 
     case INITIAL_FETCH_COMPLETE:

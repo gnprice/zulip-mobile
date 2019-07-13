@@ -44,9 +44,13 @@ class RealmScreen extends PureComponent<Props, State> {
     const { dispatch } = this.props;
 
     try {
+      console.log('tryRealm: will getServerSettings', realm);
       const serverSettings: ApiResponseServerSettings = await getServerSettings(realm);
+      console.log('tryRealm: did getServerSettings');
       dispatch(realmAdd(realm));
+      console.log('tryRealm: did realmAdd');
       dispatch(navigateToAuth(serverSettings));
+      console.log('tryRealm: did navigateToAuth');
       Keyboard.dismiss();
     } catch (err) {
       this.setState({ error: 'Cannot connect to server' });
@@ -58,8 +62,10 @@ class RealmScreen extends PureComponent<Props, State> {
   handleRealmChange = (value: string) => this.setState({ realm: value });
 
   componentDidMount() {
+    console.log('RealmScreen didMount');
     const { initialRealm } = this.props;
     if (initialRealm && initialRealm.length > 0) {
+      console.log('RealmScreen didMount: tryRealm', initialRealm);
       this.tryRealm();
     }
   }
