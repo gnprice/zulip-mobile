@@ -18,12 +18,15 @@ export const getRecentConversations: Selector<PmConversationData[]> = createSele
     unreadPms: { [number]: number },
     unreadHuddles: { [string]: number },
   ): PmConversationData[] => {
+    console.log('getRecent', ownEmail);
     const recipients = messages.map(msg => ({
       ids: getRecipientsIds(msg.display_recipient, ownEmail),
       emails: normalizeRecipientsSansMe(msg.display_recipient, ownEmail),
       timestamp: msg.timestamp,
       msgId: msg.id,
     }));
+    console.log('getRecent pms', messages);
+    console.log('getRecent recip', recipients);
 
     const groupedRecipients = recipients.reduce((uniqueMap, recipient) => {
       const prev = uniqueMap.get(recipient.emails);
