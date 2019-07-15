@@ -46,6 +46,7 @@ const convertRealmEmoji = (data): RealmEmojiById => {
 export default (state: RealmState = initialState, action: Action): RealmState => {
   switch (action.type) {
     case ACCOUNT_SWITCH:
+    case LOGIN_SUCCESS:
       return fakeBlankState;
 
     case REALM_INIT: {
@@ -63,7 +64,6 @@ export default (state: RealmState = initialState, action: Action): RealmState =>
     }
 
     case LOGOUT:
-    case LOGIN_SUCCESS:
       return {
         ...state,
         emoji: {},
