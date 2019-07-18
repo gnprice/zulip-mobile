@@ -151,8 +151,20 @@ type InitialDataRealmUser = {|
   // Lists of other users.
   // The two named realm_*users are made after `fetch_initial_state_data`,
   // from the `raw_users` added there.
+
   realm_users: User[],
+
+  /**
+   * All users in the organization with `is_active` false; for normal users,
+   * this means they or an admin deactivated their account.  See `User` and
+   * the linked documentation.
+   */
   realm_non_active_users: User[],
+
+  /**
+   * The server's cross-realm bots; e.g., Welcome Bot.
+   * Cross-realm bots should be treated like normal bots.
+   */
   cross_realm_bots: CrossRealmBot[],
 
   // Info about this user.

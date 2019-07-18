@@ -201,22 +201,22 @@ export type PresenceState = {|
  * Zulip organization/realm; some properties do, but others are per-user,
  * and others are per-server.
  *
+ * Each property corresponds to a property of the `/register` response.
+ * See `InitialData` for more; especially `InitialDataRealmUser`.
+ *
  * About the server:
- * @prop crossRealmBots - The server's cross-realm bots; e.g., Welcome Bot.
- *   Cross-realm bots should be treated like normal bots.
+ * @prop crossRealmBots - `cross_realm_bots`
  *
  * About the org/realm:
- * @prop nonActiveUsers - All users in the organization with `is_active`
- *   false; for normal users, this means they or an admin deactivated their
- *   account.  See `User` and the linked documentation.
- * @prop filters
- * @prop emoji
+ * @prop nonActiveUsers - `realm_non_active_users`
+ * @prop filters - `realm_filters`
+ * @prop emoji - `realm_emoji`, but adjusted (see `realmReducer`)
  *
  * About the user:
- * @prop email
- * @prop twentyFourHourTime
- * @prop canCreateStreams
- * @prop isAdmin
+ * @prop email - `email`
+ * @prop twentyFourHourTime - `twenty_four_hour_time`
+ * @prop canCreateStreams - `can_create_streams`
+ * @prop isAdmin - `is_admin`
  */
 export type RealmState = {|
   crossRealmBots: CrossRealmBot[],
