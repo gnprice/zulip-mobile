@@ -54,7 +54,7 @@ get_rn_deps_by_ref() {
 # regardless of which kind of dependency it is.
 set_version() {
     local dep=$1 version=$2
-    local subst=$(printf 's/"%s":\ "\K .*? (?= " )/%s/x' \
+    local subst=$(printf 's{"%s":\ "\K .*? (?= " )}{%s}x' \
                          "${dep}" "${version}")
     perl -i -0pe "${subst}" "${root}"/package.json
 }
