@@ -15,7 +15,7 @@ rn_key_dependencies=(
     react
     @babel/core
     jest
-    metro-react-native-babel-preset
+    # metro-react-native-babel-preset
     react-test-renderer
     flow-bin
 )
