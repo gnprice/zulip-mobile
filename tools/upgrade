@@ -11,6 +11,15 @@ root=${this_file%/*/*}
 
 rn_gh_base_url=https://raw.githubusercontent.com/facebook/react-native
 
+rn_key_dependencies=(
+    react
+    @babel/core
+    jest
+    metro-react-native-babel-preset
+    react-test-renderer
+    flow-bin
+)
+
 # Fetch the package.json of the given RN version.
 get_rn_pjson() {
     local version=$1
@@ -62,7 +71,7 @@ cmd_rn() {
     echo "Versions:"
     printf "  %-20s %s\n" react-native "${version_git#v}"
     set_version react-native "${version_git#v}"
-    for dep in react react-test-renderer flow-bin; do
+    for dep in "${rn_key_dependencies[@]}"; do
         version=${rn_deps["${dep}"]}
         printf "  %-20s %s\n" "${dep}" "${version}"
         set_version "${dep}" "${version}"
