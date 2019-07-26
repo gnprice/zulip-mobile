@@ -62,7 +62,7 @@
     "react-native-webview": "^5.0.0",
     "react-navigation": "^1.5.12",
     "react-navigation-redux-helpers": "^1.1.1",
-    "react-redux": "^7.1.0",
+    "react-redux": "^5.0.7",
     "react-test-renderer": "16.8.6",
     "redux": "^4.0.0",
     "redux-action-buffer": "^1.2.0",
