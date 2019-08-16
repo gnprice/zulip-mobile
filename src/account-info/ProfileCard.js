@@ -81,7 +81,6 @@ class ProfileCard extends PureComponent<Props> {
     return (
       <ScrollView>
         <AccountDetails user={selfUserDetail} />
-        <AwayStatusSwitch />
         <View style={styles.buttonRow}>
           <SetStatusButton dispatch={this.props.dispatch} />
         </View>
