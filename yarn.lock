@@ -7908,9 +7908,9 @@ react-native-webview@^5.0.0:
     escape-string-regexp "1.0.5"
     invariant "2.2.4"
 
-react-native@facebook/react-native#78fcf7c55:
+react-native@facebook/react-native#6796e62bb:
   version "1000.0.0"
-  resolved "https://codeload.github.com/facebook/react-native/tar.gz/78fcf7c5598ce7f5d0d62110eb34fe5a4b962e71"
+  resolved "https://codeload.github.com/facebook/react-native/tar.gz/6796e62bb399ec8ff4ebb3456a4113cd1e5a03a2"
   dependencies:
     "@babel/runtime" "^7.0.0"
     absolute-path "^0.0.0"
