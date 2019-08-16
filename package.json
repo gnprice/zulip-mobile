@@ -46,7 +46,7 @@
     "lodash.uniqby": "^4.4.0",
     "react": "16.8.3",
     "react-intl": "^2.4.0",
-    "react-native": "facebook/react-native#f85692cf8",
+    "react-native": "facebook/react-native#e8cbc4f89",
     "react-native-device-info": "^0.21.5",
     "react-native-image-picker": "^0.26.10",
     "react-native-notifications": "^1.2.0",
