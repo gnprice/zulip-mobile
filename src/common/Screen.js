@@ -107,14 +107,13 @@ class Screen extends PureComponent<Props> {
     } = this.props;
     const { styles: contextStyles } = this.context;
 
+      const realms = this.props.accounts.map(a => a.realm);
+    const info = `[${realms.join(', ')}]`;
+
     return (
       <View style={[contextStyles.screen, { paddingBottom: safeAreaInsets.bottom }]}>
         <ZulipStatusBar />
-        {search ? (
-          <ModalSearchNavBar autoFocus={autoFocus} searchBarOnChange={searchBarOnChange} />
-        ) : (
-          <ModalNavBar canGoBack={canGoBack} title={title} />
-        )}
+        <ModalNavBar canGoBack={canGoBack} title={`${title} ${info}`} />
         <OfflineNotice />
         <KeyboardAvoider
           behavior="padding"
@@ -136,5 +135,6 @@ class Screen extends PureComponent<Props> {
 }
 
 export default connect(state => ({
+    accounts: state.accounts,
   safeAreaInsets: getSession(state).safeAreaInsets,
 }))(Screen);
