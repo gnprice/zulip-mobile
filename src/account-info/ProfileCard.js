@@ -1,19 +1,13 @@
 /* @flow strict-local */
 import React, { PureComponent } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-import type { Dispatch, User } from '../types';
+import type { Dispatch } from '../types';
 import { connect } from '../react-redux';
-import { getSelfUserDetail } from '../selectors';
 import { ZulipButton } from '../common';
 import {
   logout,
-  tryStopNotifications,
-  navigateToAccountPicker,
-  navigateToUserStatus,
 } from '../actions';
-import AccountDetails from './AccountDetails';
-import AwayStatusSwitch from './AwayStatusSwitch';
 
 const styles = StyleSheet.create({
   buttonRow: {
@@ -25,31 +19,6 @@ const styles = StyleSheet.create({
     margin: 8,
   },
 });
-
-class SetStatusButton extends PureComponent<{| dispatch: Dispatch |}> {
-  onPress = () => {
-    const { dispatch } = this.props;
-    dispatch(navigateToUserStatus());
-  };
-
-  render() {
-    return (
-      <ZulipButton style={styles.button} secondary text="Set a status" onPress={this.onPress} />
-    );
-  }
-}
-
-class SwitchAccountButton extends PureComponent<{| dispatch: Dispatch |}> {
-  onPress = () => {
-    this.props.dispatch(navigateToAccountPicker());
-  };
-
-  render() {
-    return (
-      <ZulipButton style={styles.button} secondary text="Switch account" onPress={this.onPress} />
-    );
-  }
-}
 
 class LogoutButton extends PureComponent<{| dispatch: Dispatch |}> {
   onPress = () => {
@@ -75,9 +44,9 @@ type Props = {|
 class ProfileCard extends PureComponent<Props> {
   render() {
     return (
-        <View style={styles.buttonRow}>
-          <LogoutButton dispatch={this.props.dispatch} />
-        </View>
+      <View style={styles.buttonRow}>
+        <LogoutButton dispatch={this.props.dispatch} />
+      </View>
     );
   }
 }

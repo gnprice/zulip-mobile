@@ -15,13 +15,13 @@ import './sentry';
 console.disableYellowBox = true; // eslint-disable-line
 
 export default () => (
-    <StoreProvider>
-          <TranslationProvider>
-            <StylesProvider>
-              <BackNavigationHandler>
-                <AppWithNavigation />
-              </BackNavigationHandler>
-            </StylesProvider>
-          </TranslationProvider>
-    </StoreProvider>
+  <StoreProvider>
+    <TranslationProvider>
+      <StylesProvider>
+        <BackNavigationHandler>
+          <AppWithNavigation />
+        </BackNavigationHandler>
+      </StylesProvider>
+    </TranslationProvider>
+  </StoreProvider>
 );

@@ -101,4 +101,3 @@ export default class TranslationProvider extends PureComponent<Props> {
     );
   }
 }
-

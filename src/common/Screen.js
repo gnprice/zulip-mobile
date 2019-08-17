@@ -12,7 +12,6 @@ import OfflineNotice from './OfflineNotice';
 import ZulipStatusBar from './ZulipStatusBar';
 import { getSession } from '../selectors';
 import ModalNavBar from '../nav/ModalNavBar';
-import ModalSearchNavBar from '../nav/ModalSearchNavBar';
 import styles from '../styles';
 
 const componentStyles = StyleSheet.create({
@@ -93,7 +92,6 @@ class Screen extends PureComponent<Props> {
 
   render() {
     const {
-      autoFocus,
       canGoBack,
       centerContent,
       children,
@@ -101,8 +99,6 @@ class Screen extends PureComponent<Props> {
       padding,
       safeAreaInsets,
       scrollEnabled,
-      search,
-      searchBarOnChange,
       style,
       title,
     } = this.props;
