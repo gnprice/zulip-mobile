@@ -10,6 +10,7 @@ import type { AccountStatus } from './accountsSelectors';
 import { Centerer, ZulipButton, Logo, Screen } from '../common';
 import { navigateToRealmScreen, removeAccount } from '../actions';
 import AccountItem from './AccountItem';
+import { RealmInput } from '../start/RealmScreen';
 
 type Props = {|
   accounts: AccountStatus[],
@@ -27,7 +28,9 @@ class AccountPickScreen extends PureComponent<Props> {
     return (
       <Screen title="Pick account" centerContent padding canGoBack={false}>
         <Centerer>
-            {accounts.length === 0 && <Logo />}
+
+	<RealmInput />
+
       <View>
         <FlatList
           data={accounts}

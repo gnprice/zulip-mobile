@@ -1,6 +1,6 @@
 /* @flow strict-local */
 import React, { PureComponent } from 'react';
-import { ScrollView, TextInput, Keyboard } from 'react-native';
+import { ScrollView, TextInput, Keyboard, View } from 'react-native';
 
 import type { Dispatch } from '../types';
 import { connect } from '../react-redux';
@@ -16,7 +16,7 @@ type State = {|
   realm: string,
 |};
 
-class RealmScreen extends PureComponent<Props, State> {
+class RealmInputInner extends PureComponent<Props, State> {
   state = {
     realm: '',
   };
@@ -37,8 +37,8 @@ class RealmScreen extends PureComponent<Props, State> {
   render() {
     const { realm } = this.state;
 
-    return (
-      <Screen title="Welcome" padding centerContent keyboardShouldPersistTaps="always">
+      return (
+	  <View>
 	    <TextInput
 	autoFocus
 	autoCapitalize="none"
@@ -53,9 +53,20 @@ class RealmScreen extends PureComponent<Props, State> {
           onPress={this.tryRealm}
       disabled={false}
         />
+	      </View>
+      )
+  }
+}
+
+export const RealmInput = connect()(RealmInputInner);
+
+export default class RealmScreen extends PureComponent<{||}> {
+
+  render() {
+    return (
+	    <Screen title="Welcome" padding centerContent keyboardShouldPersistTaps="always">
+	    <RealmInput />
       </Screen>
     );
   }
 }
-
-export default connect()(RealmScreen);
