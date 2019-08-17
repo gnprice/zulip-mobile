@@ -5,7 +5,6 @@ import type { TextStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet
 
 import { BRAND_COLOR, NAVBAR_SIZE } from '../styles';
 import ComponentWithOverlay from '../common/ComponentWithOverlay';
-import UnreadCount from '../common/UnreadCount';
 import { Icon } from '../common/Icons';
 
 type Props = {|
@@ -43,7 +42,7 @@ export default class NavButton extends PureComponent<Props> {
         style={this.styles.navButtonFrame}
         showOverlay={unreadCount > 0}
         overlaySize={20}
-        overlay={<UnreadCount count={unreadCount} />}
+        overlay={null}
         onPress={onPress}
       >
         <Icon style={[this.styles.navButtonIcon, style]} color={color} name={name} />
