@@ -5,7 +5,6 @@ import { StyleSheet } from 'react-native';
 
 import type { Dispatch } from '../types';
 import { connect } from '../react-redux';
-import { getSession } from '../selectors';
 import Label from './Label';
 
 import AnimatedComponent from '../animation/AnimatedComponent';
@@ -25,7 +24,6 @@ const styles = StyleSheet.create({
 
 type Props = {|
   dispatch: Dispatch,
-  isOnline: boolean,
 |};
 
 /**
@@ -36,7 +34,7 @@ type Props = {|
  */
 class OfflineNotice extends PureComponent<Props> {
   render() {
-    const { isOnline } = this.props;
+      const isOnline = true;
     return (
       <AnimatedComponent
         stylePropertyName="height"
@@ -53,5 +51,4 @@ class OfflineNotice extends PureComponent<Props> {
 }
 
 export default connect(state => ({
-  isOnline: getSession(state).isOnline,
 }))(OfflineNotice);

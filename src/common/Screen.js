@@ -10,7 +10,6 @@ import { connect } from '../react-redux';
 import KeyboardAvoider from './KeyboardAvoider';
 import OfflineNotice from './OfflineNotice';
 import ZulipStatusBar from './ZulipStatusBar';
-import { getSession } from '../selectors';
 import ModalNavBar from '../nav/ModalNavBar';
 import styles from '../styles';
 
@@ -34,7 +33,6 @@ type Props = {|
   centerContent: boolean,
 	      +children: React$Node,
 	      accounts: AccountsState,
-  safeAreaInsets: Dimensions,
   keyboardShouldPersistTaps: 'never' | 'always' | 'handled',
   padding: boolean,
   scrollEnabled: boolean,
@@ -97,7 +95,6 @@ class Screen extends PureComponent<Props> {
       children,
       keyboardShouldPersistTaps,
       padding,
-      safeAreaInsets,
       scrollEnabled,
       style,
       title,
@@ -110,7 +107,7 @@ class Screen extends PureComponent<Props> {
       const bigtitle = `${title} ${info}`;
 
     return (
-      <View style={[contextStyles.screen, { paddingBottom: safeAreaInsets.bottom }]}>
+      <View style={[contextStyles.screen, { paddingBottom: 0 }]}>
         <ZulipStatusBar />
         <ModalNavBar canGoBack={canGoBack} title={bigtitle} />
         <OfflineNotice />
@@ -135,5 +132,4 @@ class Screen extends PureComponent<Props> {
 
 export default connect(state => ({
     accounts: state.accounts,
-  safeAreaInsets: getSession(state).safeAreaInsets,
 }))(Screen);

@@ -20,8 +20,7 @@ import createMigration from '../redux-persist-migrate/index';
  */
 // prettier-ignore
 export const discardKeys: Array<$Keys<GlobalState>> = [
-  'alertWords', 'caughtUp', 'fetching', 'loading',
-  'nav', 'presence', 'session', 'topics', 'typing', 'userStatus',
+  'nav',
 ];
 
 /**
@@ -33,7 +32,7 @@ export const discardKeys: Array<$Keys<GlobalState>> = [
  */
 // prettier-ignore
 export const storeKeys: Array<$Keys<GlobalState>> = [
-  'migrations', 'accounts', 'drafts', 'outbox', 'settings',
+  'migrations', 'accounts',
 ];
 
 /**
@@ -45,8 +44,6 @@ export const storeKeys: Array<$Keys<GlobalState>> = [
  */
 // prettier-ignore
 export const cacheKeys: Array<$Keys<GlobalState>> = [
-  'flags', 'messages', 'mute', 'narrows', 'realm', 'streams',
-  'subscriptions', 'unread', 'userGroups', 'users',
 ];
 
 /**

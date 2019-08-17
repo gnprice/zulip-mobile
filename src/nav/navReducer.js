@@ -45,15 +45,6 @@ const rehydrate = (state, action) => {
     return getStateForRoute(accounts && accounts.length > 1 ? 'account' : 'welcome');
   }
 
-  // If there's an active, logged-in account but no server data, then behave
-  // like `ACCOUNT_SWITCH`: show loading screen.  Crucially, `sessionReducer`
-  // will have set `needsInitialFetch`, too, so we really will be loading.
-  //
-  // (Valid server data must have a user: the self user, at a minimum.)
-  if (rehydratedState.users === undefined) {
-    return getStateForRoute('loading');
-  }
-
   // Great: we have an active, logged-in account, and server data for it.
   // Show the main UI.
   return getStateForRoute('main');

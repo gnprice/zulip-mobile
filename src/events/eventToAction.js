@@ -31,7 +31,6 @@ import {
   EVENT_SUBSCRIPTION,
   EVENT,
 } from '../actionConstants';
-import { getOwnEmail } from '../account/accountsSelectors';
 
 const opToActionUser = {
   add: EVENT_USER_ADD,
@@ -80,14 +79,6 @@ export default (state: GlobalState, event: $FlowFixMe): EventAction => {
         alertWords: event.alert_words,
       };
 
-    case 'message':
-      return {
-        ...event,
-        type: EVENT_NEW_MESSAGE,
-        caughtUp: state.caughtUp,
-        ownEmail: getOwnEmail(state),
-      };
-
     case 'delete_message':
       return {
         type: EVENT_MESSAGE_DELETE,
@@ -132,21 +123,6 @@ export default (state: GlobalState, event: $FlowFixMe): EventAction => {
 
     case 'heartbeat':
       return { type: 'ignore' };
-
-    case 'update_message_flags':
-      return {
-        ...event,
-        type: EVENT_UPDATE_MESSAGE_FLAGS,
-        allMessages: state.messages,
-      };
-
-    case 'typing':
-      return {
-        ...event,
-        ownEmail: getOwnEmail(state),
-        type: opToActionTyping[event.op],
-        time: new Date().getTime(),
-      };
 
     case 'user_group':
       return {

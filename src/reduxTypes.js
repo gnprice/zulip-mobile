@@ -287,30 +287,8 @@ export type UsersState = User[];
  */
 export type GlobalState = {|
   accounts: AccountsState,
-  alertWords: AlertWordsState,
-  caughtUp: CaughtUpState,
-  drafts: DraftsState,
-  fetching: FetchingState,
-  flags: FlagsState,
-  loading: LoadingState,
-  messages: MessagesState,
   migrations: MigrationsState,
-  mute: MuteState,
-  narrows: NarrowsState,
   nav: NavigationState,
-  outbox: OutboxState,
-  presence: PresenceState,
-  realm: RealmState,
-  session: SessionState,
-  settings: SettingsState,
-  streams: StreamsState,
-  subscriptions: SubscriptionsState,
-  topics: TopicsState,
-  typing: TypingState,
-  unread: UnreadState,
-  userGroups: UserGroupsState,
-  userStatus: UserStatusState,
-  users: UsersState,
 |};
 
 /** A selector returning TResult, with extra parameter TParam. */
