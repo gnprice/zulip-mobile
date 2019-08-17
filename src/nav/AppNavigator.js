@@ -3,7 +3,6 @@ import { StackNavigator } from 'react-navigation';
 
 import AccountPickScreen from '../account/AccountPickScreen';
 import RealmScreen from '../start/RealmScreen';
-import MainScreenWithTabs from '../main/MainScreenWithTabs';
 import LoadingScreen from '../start/LoadingScreen';
 
 export default StackNavigator(
@@ -11,11 +10,10 @@ export default StackNavigator(
   {
     account: { screen: AccountPickScreen },
     loading: { screen: LoadingScreen },
-    main: { screen: MainScreenWithTabs },
     realm: { screen: RealmScreen },
   },
   {
-    initialRouteName: 'main',
+    initialRouteName: 'account',
     headerMode: 'none',
     cardStyle: {
       backgroundColor: 'white',

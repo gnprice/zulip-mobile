@@ -25,7 +25,7 @@ export default class AccountList extends PureComponent<Props> {
           renderItem={({ item, index }) => (
             <AccountItem
               index={index}
-              showDoneIcon={index === 0 && item.isLoggedIn}
+              showDoneIcon={false}
               email={item.email}
               realm={item.realm}
               onSelect={onAccountSelect}
