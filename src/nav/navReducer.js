@@ -5,12 +5,8 @@ import type { NavigationState, Action } from '../types';
 import AppNavigator from './AppNavigator';
 import {
   REHYDRATE,
-  INITIAL_FETCH_COMPLETE,
-  ACCOUNT_SWITCH,
   LOGIN_SUCCESS,
-  LOGOUT,
 } from '../actionConstants';
-import { hasAuth } from '../account/accountsSelectors';
 
 /**
  * Get the initial state for the given route.
@@ -31,27 +27,12 @@ export const getStateForRoute = (route: string): NavigationState => {
   return state;
 };
 
-const rehydrate = (state, action) => {
-  return getStateForRoute('account');
-};
-
 const initialState = getStateForRoute('loading');
 
 export default (state: NavigationState = initialState, action: Action): NavigationState => {
   switch (action.type) {
     case REHYDRATE:
-      return rehydrate(state, action);
-
-    case ACCOUNT_SWITCH:
-      return getStateForRoute('loading');
-
     case LOGIN_SUCCESS:
-      return getStateForRoute('account');
-
-    case INITIAL_FETCH_COMPLETE:
-      return getStateForRoute('account');
-
-    case LOGOUT:
       return getStateForRoute('account');
 
     default: {
