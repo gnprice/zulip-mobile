@@ -37,8 +37,6 @@ export const navigateToEmojiPicker = (messageId: number): NavigateAction =>
 export const navigateToAuth = (): NavigateAction =>
   NavigationActions.navigate({ routeName: 'auth' });
 
-export const navigateToDev = (): NavigateAction => NavigationActions.navigate({ routeName: 'dev' });
-
 export const navigateToPassword = (requireEmailFormat: boolean): NavigateAction =>
   NavigationActions.navigate({ routeName: 'password', params: { requireEmailFormat } });
 
