@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 
 import type { Context } from '../types';
-import { OfflineNotice, ZulipStatusBar } from '../common';
+import { Screen } from '../common';
 import MainTabs from './MainTabs';
 import styles from '../styles';
 
@@ -18,11 +18,9 @@ export default class MainScreenWithTabs extends PureComponent<{}> {
     const { styles: contextStyles } = this.context;
 
     return (
-      <View style={[styles.flexed, contextStyles.backgroundColor]}>
-        <ZulipStatusBar />
-        <OfflineNotice />
+      <Screen>
         <MainTabs />
-      </View>
+      </Screen>
     );
   }
 }
