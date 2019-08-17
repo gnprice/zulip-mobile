@@ -5,7 +5,7 @@ import type { Node as React$Node } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-import type { Context, Dimensions, LocalizableText, Dispatch } from '../types';
+import type { Context, AccountsState, Dimensions, LocalizableText, Dispatch } from '../types';
 import { connect } from '../react-redux';
 import KeyboardAvoider from './KeyboardAvoider';
 import OfflineNotice from './OfflineNotice';
@@ -33,7 +33,8 @@ const componentStyles = StyleSheet.create({
 type Props = {|
   dispatch: Dispatch,
   centerContent: boolean,
-  +children: React$Node,
+	      +children: React$Node,
+	      accounts: AccountsState,
   safeAreaInsets: Dimensions,
   keyboardShouldPersistTaps: 'never' | 'always' | 'handled',
   padding: boolean,
@@ -108,12 +109,14 @@ class Screen extends PureComponent<Props> {
     const { styles: contextStyles } = this.context;
 
       const realms = this.props.accounts.map(a => a.realm);
-    const info = `[${realms.join(', ')}]`;
+      const info = `[${realms.join(', ')}]`;
+      // $FlowFixMe
+      const bigtitle = `${title} ${info}`;
 
     return (
       <View style={[contextStyles.screen, { paddingBottom: safeAreaInsets.bottom }]}>
         <ZulipStatusBar />
-        <ModalNavBar canGoBack={canGoBack} title={`${title} ${info}`} />
+        <ModalNavBar canGoBack={canGoBack} title={bigtitle} />
         <OfflineNotice />
         <KeyboardAvoider
           behavior="padding"
