@@ -6,13 +6,12 @@ import Color from 'color';
 
 import type { GlobalState, Narrow, ThemeName, Dispatch } from '../types';
 import { connectFlowFixMe } from '../react-redux';
-import { DEFAULT_TITLE_BACKGROUND_COLOR } from '../title/titleSelectors';
 import { foregroundColorFromBackground } from '../utils/color';
 
 type BarStyle = $PropertyType<$PropertyType<StatusBar, 'props'>, 'barStyle'>;
 
 export const getStatusBarColor = (backgroundColor: string, theme: ThemeName): string =>
-  backgroundColor === DEFAULT_TITLE_BACKGROUND_COLOR
+  backgroundColor === 'transparent'
     ? theme === 'night'
       ? 'hsl(212, 28%, 18%)'
       : 'white'
