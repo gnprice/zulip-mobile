@@ -39,7 +39,8 @@ class RealmInputInner extends PureComponent<Props, State> {
 
       return (
 	  <View>
-	    <TextInput
+	      <TextInput
+	  style={{borderWidth: 1, padding: 8}}
 	autoFocus
 	autoCapitalize="none"
           onChangeText={this.handleRealmChange}
@@ -48,7 +49,7 @@ class RealmInputInner extends PureComponent<Props, State> {
 />
         <ZulipButton
           style={styles.halfMarginTop}
-          text="Enter"
+          text="Add"
           progress={false}
           onPress={this.tryRealm}
       disabled={false}
@@ -59,14 +60,3 @@ class RealmInputInner extends PureComponent<Props, State> {
 }
 
 export const RealmInput = connect()(RealmInputInner);
-
-export default class RealmScreen extends PureComponent<{||}> {
-
-  render() {
-    return (
-	    <Screen title="Welcome" padding centerContent keyboardShouldPersistTaps="always">
-	    <RealmInput />
-      </Screen>
-    );
-  }
-}

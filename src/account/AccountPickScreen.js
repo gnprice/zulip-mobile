@@ -8,7 +8,7 @@ import { connect } from '../react-redux';
 import { getAccountStatuses } from '../selectors';
 import type { AccountStatus } from './accountsSelectors';
 import { Centerer, ZulipButton, Logo, Screen } from '../common';
-import { navigateToRealmScreen, removeAccount } from '../actions';
+import { removeAccount } from '../actions';
 import AccountItem from './AccountItem';
 import { RealmInput } from '../start/RealmScreen';
 
@@ -26,12 +26,12 @@ class AccountPickScreen extends PureComponent<Props> {
     const { accounts, dispatch } = this.props;
 
     return (
-      <Screen title="Pick account" centerContent padding canGoBack={false}>
+      <Screen title="Items" centerContent padding canGoBack={false}>
         <Centerer>
 
 	<RealmInput />
 
-      <View>
+	    <View style={{marginTop: 16}}>
         <FlatList
           data={accounts}
           keyExtractor={item => item.realm}
@@ -44,13 +44,6 @@ class AccountPickScreen extends PureComponent<Props> {
           )}
         />
       </View>
-            <ZulipButton
-	style={{marginTop: 16}}
-            text="Add new account"
-            onPress={() => {
-              dispatch(navigateToRealmScreen());
-            }}
-          />
         </Centerer>
       </Screen>
     );

@@ -2,7 +2,6 @@
 import { StackNavigator } from 'react-navigation';
 
 import AccountPickScreen from '../account/AccountPickScreen';
-import RealmScreen from '../start/RealmScreen';
 import LoadingScreen from '../start/LoadingScreen';
 
 export default StackNavigator(
@@ -10,7 +9,6 @@ export default StackNavigator(
   {
     account: { screen: AccountPickScreen },
     loading: { screen: LoadingScreen },
-    realm: { screen: RealmScreen },
   },
   {
     initialRouteName: 'account',

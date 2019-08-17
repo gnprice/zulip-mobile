@@ -32,19 +32,6 @@ export const getStateForRoute = (route: string): NavigationState => {
 };
 
 const rehydrate = (state, action) => {
-  // If there's no data to rehydrate, or no account data, show welcome screen.
-  if (!action.payload || !action.payload.accounts) {
-    return getStateForRoute('realm');
-  }
-
-  // If there are accounts but the active account is not logged in,
-  // show account screen.
-  const rehydratedState = action.payload;
-  if (!hasAuth(rehydratedState)) {
-    const { accounts } = rehydratedState;
-    return getStateForRoute(accounts && accounts.length > 1 ? 'account' : 'realm');
-  }
-
   return getStateForRoute('account');
 };
 
