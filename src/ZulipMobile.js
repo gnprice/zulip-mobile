@@ -17,7 +17,7 @@ export default () => (
   <StoreProvider>
     <TranslationProvider>
       <StylesProvider>
-          <AppWithNavigation />
+        <AppWithNavigation />
       </StylesProvider>
     </TranslationProvider>
   </StoreProvider>

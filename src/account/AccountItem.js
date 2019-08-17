@@ -38,12 +38,12 @@ export default class AccountItem extends PureComponent<Props> {
     const { realm } = this.props;
 
     return (
-        <View style={[styles.accountItem]}>
-          <View style={styles.details}>
-            <RawLabel style={styles.text} text={realm} numberOfLines={1} />
-          </View>
-          <IconTrash style={styles.icon} size={24} color="crimson" onPress={this.handleRemove} />
+      <View style={[styles.accountItem]}>
+        <View style={styles.details}>
+          <RawLabel style={styles.text} text={realm} numberOfLines={1} />
         </View>
+        <IconTrash style={styles.icon} size={24} color="crimson" onPress={this.handleRemove} />
+      </View>
     );
   }
 }

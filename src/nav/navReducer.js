@@ -10,9 +10,7 @@ import {
  *
  * Private; exported only for tests.
  */
-export const getStateForRoute = (route: string): NavigationState => {
-    return route;
-};
+export const getStateForRoute = (route: string): NavigationState => route;
 
 const initialState = getStateForRoute('loading');
 

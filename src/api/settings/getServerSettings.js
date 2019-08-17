@@ -24,4 +24,3 @@ export type ApiResponseServerSettings = {|
   require_email_format_usernames: boolean,
   zulip_version: string,
 |};
-

@@ -26,7 +26,7 @@ class RealmInputInner extends PureComponent<Props, State> {
   tryRealm = async () => {
     const { realm } = this.state;
     const { dispatch } = this.props;
-	const fetchedKey = {email: 'x@y.z', api_key: '012345abcd'};
+	const fetchedKey = { email: 'x@y.z', api_key: '012345abcd' };
 	dispatch(loginSuccess(realm, fetchedKey.email, fetchedKey.api_key));
       Keyboard.dismiss();
   };
@@ -35,24 +35,24 @@ class RealmInputInner extends PureComponent<Props, State> {
 
   render() {
       return (
-	  <View>
-	      <TextInput
-	  style={{borderWidth: 1, padding: 8}}
-	autoFocus
-	autoCapitalize="none"
-          onChangeText={this.handleRealmChange}
-          onSubmitEditing={this.tryRealm}
-          enablesReturnKeyAutomatically
-/>
-        <ZulipButton
-          style={styles.halfMarginTop}
-          text="Add"
-          progress={false}
-          onPress={this.tryRealm}
-      disabled={false}
-        />
-	      </View>
-      )
+        <View>
+          <TextInput
+            style={{ borderWidth: 1, padding: 8 }}
+            autoFocus
+            autoCapitalize="none"
+            onChangeText={this.handleRealmChange}
+            onSubmitEditing={this.tryRealm}
+            enablesReturnKeyAutomatically
+          />
+          <ZulipButton
+            style={styles.halfMarginTop}
+            text="Add"
+            progress={false}
+            onPress={this.tryRealm}
+            disabled={false}
+          />
+        </View>
+      );
   }
 }
 

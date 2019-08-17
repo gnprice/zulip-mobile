@@ -27,21 +27,21 @@ class AccountPickScreen extends PureComponent<Props> {
       <Screen title="Items" centerContent padding>
         <Centerer>
 
-	<RealmInput />
+          <RealmInput />
 
-	    <View style={{marginTop: 16}}>
-        <FlatList
-          data={accounts}
-          keyExtractor={item => item}
-          renderItem={({ item, index }) => (
-            <AccountItem
-              index={index}
-              realm={item}
-              onRemove={this.handleAccountRemove}
-            />
+          <View style={{ marginTop: 16 }}>
+            <FlatList
+              data={accounts}
+              keyExtractor={item => item}
+              renderItem={({ item, index }) => (
+                <AccountItem
+                  index={index}
+                  realm={item}
+                  onRemove={this.handleAccountRemove}
+                />
           )}
-        />
-      </View>
+            />
+          </View>
         </Centerer>
       </Screen>
     );
