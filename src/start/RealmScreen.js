@@ -5,7 +5,7 @@ import { ScrollView, TextInput, Keyboard, View } from 'react-native';
 import type { Dispatch } from '../types';
 import { connect } from '../react-redux';
 import { Screen, ZulipButton } from '../common';
-import { realmAdd, loginSuccess } from '../actions';
+import { loginSuccess } from '../actions';
 import styles from '../styles';
 
 type Props = {|
@@ -26,7 +26,6 @@ class RealmInputInner extends PureComponent<Props, State> {
   tryRealm = async () => {
     const { realm } = this.state;
     const { dispatch } = this.props;
-	dispatch(realmAdd(realm));
 	const fetchedKey = {email: 'x@y.z', api_key: '012345abcd'};
 	dispatch(loginSuccess(realm, fetchedKey.email, fetchedKey.api_key));
       Keyboard.dismiss();
