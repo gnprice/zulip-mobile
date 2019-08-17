@@ -17,9 +17,6 @@ type Props = {|
 |};
 
 class AccountPickScreen extends PureComponent<Props> {
-  handleAccountSelect = (index: number) => {
-  };
-
   handleAccountRemove = (index: number) => {
     this.props.dispatch(removeAccount(index));
   };
@@ -39,7 +36,6 @@ class AccountPickScreen extends PureComponent<Props> {
             <AccountItem
               index={index}
               realm={item.realm}
-              onSelect={this.handleAccountSelect}
               onRemove={this.handleAccountRemove}
             />
           )}
