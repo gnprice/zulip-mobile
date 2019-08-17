@@ -3,20 +3,17 @@
 import React, { PureComponent } from 'react';
 
 import type { Node as React$Node } from 'react';
-import type { ThemeName, Dispatch } from '../types';
-import { connect } from '../react-redux';
-import { getSettings } from '../directSelectors';
+import type { ThemeName } from '../types';
 import { stylesFromTheme, themeColors, ThemeContext } from '../styles/theme';
 
 const Dummy = props => props.children;
 
 type Props = {|
-  dispatch: Dispatch,
   theme: ThemeName,
   children: React$Node,
 |};
 
-class StyleProvider extends PureComponent<Props> {
+export default class StyleProvider extends PureComponent<Props> {
   static childContextTypes = {
     styles: () => {},
   };
@@ -41,7 +38,3 @@ class StyleProvider extends PureComponent<Props> {
     );
   }
 }
-
-export default connect(state => ({
-  theme: getSettings(state).theme,
-}))(StyleProvider);
