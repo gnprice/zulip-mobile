@@ -1,8 +1,7 @@
 /* @flow strict-local */
 import urlRegex from 'url-regex';
 
-import type { Auth, Narrow, User } from '../types';
-import { HOME_NARROW, topicNarrow, streamNarrow, groupNarrow, specialNarrow } from './narrow';
+import type { Auth, User } from '../types';
 import { transformToEncodedURI } from './string';
 import { NULL_USER } from '../nullObjects';
 
@@ -91,34 +90,6 @@ export const isEmojiUrl = (url: string, realm: string): boolean =>
 
 export const getEmojiUrl = (unicode: string): string =>
   `/static/generated/emoji/images/emoji/unicode/${unicode}.png`;
-
-export const getNarrowFromLink = (
-  url: string,
-  realm: string,
-  usersById: Map<number, User>,
-): Narrow => {
-  const paths = getPathsFromUrl(url, realm);
-
-  if (isGroupLink(url, realm)) {
-    const recipients = paths[1].split('-')[0].split(',');
-    return groupNarrow(
-      recipients.map(
-        (recipient: string) => (usersById.get(parseInt(recipient, 10)) || NULL_USER).email,
-      ),
-    );
-  } else if (isTopicLink(url, realm)) {
-    return topicNarrow(
-      decodeURIComponent(transformToEncodedURI(paths[1])),
-      decodeURIComponent(transformToEncodedURI(paths[3])),
-    );
-  } else if (isStreamLink(url, realm)) {
-    return streamNarrow(decodeURIComponent(transformToEncodedURI(paths[1])));
-  } else if (isSpecialLink(url, realm)) {
-    return specialNarrow(paths[1]);
-  }
-
-  return HOME_NARROW;
-};
 
 export const getMessageIdFromLink = (url: string, realm: string): number => {
   const paths = getPathsFromUrl(url, realm);
