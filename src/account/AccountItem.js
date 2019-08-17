@@ -17,10 +17,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     height: 72,
   },
-  selectedAccountItem: {
-    borderColor: BRAND_COLOR,
-    borderWidth: 1,
-  },
   details: {
     flex: 1,
     marginLeft: 16,
@@ -38,11 +34,9 @@ const styles = StyleSheet.create({
 
 type Props = {|
   index: number,
-  email: string,
   realm: string,
   onSelect: (index: number) => void,
   onRemove: (index: number) => void,
-  showDoneIcon: boolean,
 |};
 
 export default class AccountItem extends PureComponent<Props> {
@@ -51,20 +45,15 @@ export default class AccountItem extends PureComponent<Props> {
   handleRemove = () => this.props.onRemove(this.props.index);
 
   render() {
-    const { email, realm, showDoneIcon } = this.props;
+    const { realm } = this.props;
 
     return (
       <Touchable style={styles.wrapper} onPress={this.handleSelect}>
-        <View style={[styles.accountItem, showDoneIcon && styles.selectedAccountItem]}>
+        <View style={[styles.accountItem]}>
           <View style={styles.details}>
-            <RawLabel style={styles.text} text={email} numberOfLines={1} />
             <RawLabel style={styles.text} text={realm} numberOfLines={1} />
           </View>
-          {!showDoneIcon ? (
-            <IconTrash style={styles.icon} size={24} color="crimson" onPress={this.handleRemove} />
-          ) : (
-            <IconDone style={styles.icon} size={24} color={BRAND_COLOR} />
-          )}
+          <IconTrash style={styles.icon} size={24} color="crimson" onPress={this.handleRemove} />
         </View>
       </Touchable>
     );
