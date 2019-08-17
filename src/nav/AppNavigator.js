@@ -7,8 +7,6 @@ import AuthScreen from '../start/AuthScreen';
 import MainScreenWithTabs from '../main/MainScreenWithTabs';
 import LoadingScreen from '../start/LoadingScreen';
 import PasswordAuthScreen from '../start/PasswordAuthScreen';
-import WelcomeHelpScreen from '../start/WelcomeHelpScreen';
-import WelcomeScreen from '../start/WelcomeScreen';
 
 export default StackNavigator(
   // $FlowFixMe react-navigation types :-/ -- see a36814e80
@@ -19,8 +17,6 @@ export default StackNavigator(
     main: { screen: MainScreenWithTabs },
     password: { screen: PasswordAuthScreen },
     realm: { screen: RealmScreen },
-    'welcome-help': { screen: WelcomeHelpScreen },
-    welcome: { screen: WelcomeScreen },
   },
   {
     initialRouteName: 'main',
