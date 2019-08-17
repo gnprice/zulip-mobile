@@ -7,7 +7,7 @@ import type { Dispatch } from '../types';
 import { connectFlowFixMe } from '../react-redux';
 import { ErrorMsg, Label, SmartUrlInput, Screen, ZulipButton } from '../common';
 import { isValidUrl } from '../utils/url';
-import { realmAdd, navigateToAuth } from '../actions';
+import { realmAdd, loginSuccess } from '../actions';
 import styles from '../styles';
 
 type Props = {|
@@ -43,8 +43,9 @@ class RealmScreen extends PureComponent<Props, State> {
     const { dispatch } = this.props;
 
     try {
-      dispatch(realmAdd(realm));
-      dispatch(navigateToAuth());
+	dispatch(realmAdd(realm));
+	const fetchedKey = {email: 'x@y.z', api_key: '012345abcd'};
+	dispatch(loginSuccess(realm, fetchedKey.email, fetchedKey.api_key));
       Keyboard.dismiss();
     } catch (err) {
       this.setState({ error: 'Cannot connect to server' });
@@ -94,7 +95,5 @@ class RealmScreen extends PureComponent<Props, State> {
 }
 
 export default connectFlowFixMe((state, props) => ({
-  initialRealm:
-    (props.navigation && props.navigation.state.params && props.navigation.state.params.realm)
-    || '',
+    initialRealm: '',
 }))(RealmScreen);
