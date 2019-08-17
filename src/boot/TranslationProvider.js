@@ -5,9 +5,7 @@ import { Text } from 'react-native';
 import { IntlProvider } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 
-import type { GetText, Dispatch } from '../types';
-import { connect } from '../react-redux';
-import { getSettings } from '../selectors';
+import type { GetText } from '../types';
 import '../../vendor/intl/intl';
 import messages from '../i18n/messages';
 
@@ -74,14 +72,13 @@ class TranslationContextTranslator extends PureComponent<{
 }
 
 type Props = {|
-  dispatch: Dispatch,
-  locale: string,
   children: React$Node,
 |};
 
-class TranslationProvider extends PureComponent<Props> {
+export default class TranslationProvider extends PureComponent<Props> {
   render() {
-    const { locale, children } = this.props;
+      const { children } = this.props;
+      const locale = 'en';
 
     return (
       /* `IntlProvider` uses React's "legacy context API", deprecated since
@@ -105,6 +102,3 @@ class TranslationProvider extends PureComponent<Props> {
   }
 }
 
-export default connect(state => ({
-  locale: getSettings(state).locale,
-}))(TranslationProvider);
