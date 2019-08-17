@@ -5,7 +5,6 @@ import '../vendor/intl/intl';
 import StoreProvider from './boot/StoreProvider';
 import TranslationProvider from './boot/TranslationProvider';
 import StylesProvider from './boot/StylesProvider';
-import BackNavigationHandler from './nav/BackNavigationHandler';
 import AppWithNavigation from './nav/AppWithNavigation';
 
 import './i18n/locale';
@@ -18,9 +17,7 @@ export default () => (
   <StoreProvider>
     <TranslationProvider>
       <StylesProvider>
-        <BackNavigationHandler>
           <AppWithNavigation />
-        </BackNavigationHandler>
       </StylesProvider>
     </TranslationProvider>
   </StoreProvider>

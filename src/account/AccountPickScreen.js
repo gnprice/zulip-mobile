@@ -26,7 +26,7 @@ class AccountPickScreen extends PureComponent<Props> {
     const { accounts, dispatch } = this.props;
 
     return (
-      <Screen title="Items" centerContent padding canGoBack={false}>
+      <Screen title="Items" centerContent padding>
         <Centerer>
 
 	<RealmInput />

@@ -42,7 +42,6 @@ type Props = {|
   autoFocus: boolean,
   searchBarOnChange: (text: string) => void,
 
-  canGoBack: boolean,
   +title: LocalizableText,
 |};
 
@@ -63,7 +62,6 @@ type Props = {|
  * @prop [autoFocus] - If search bar enabled, should it be focused initially.
  * @prop [searchBarOnChange] - Event called on search query change.
  *
- * @prop [canGoBack] - If true (the default), show UI for "navigate back".
  * @prop [title] - Text shown as the title of the screen.
  *                 Required unless `search` is true.
  */
@@ -84,13 +82,11 @@ class Screen extends PureComponent<Props> {
     autoFocus: false,
     searchBarOnChange: (text: string) => {},
 
-    canGoBack: true,
     title: '',
   };
 
   render() {
     const {
-      canGoBack,
       centerContent,
       children,
       keyboardShouldPersistTaps,
@@ -109,7 +105,7 @@ class Screen extends PureComponent<Props> {
     return (
       <View style={[contextStyles.screen, { paddingBottom: 0 }]}>
         <ZulipStatusBar />
-        <ModalNavBar canGoBack={canGoBack} title={bigtitle} />
+        <ModalNavBar title={bigtitle} />
         <OfflineNotice />
         <KeyboardAvoider
           behavior="padding"
