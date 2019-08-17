@@ -8,7 +8,6 @@ import type {
   Message,
   Narrow,
   UserOrBot,
-  ApiResponseServerSettings,
 } from '../types';
 import { getSameRoutesCount } from '../selectors';
 
@@ -35,8 +34,8 @@ export const navigateToSettings = (): NavigateAction =>
 export const navigateToEmojiPicker = (messageId: number): NavigateAction =>
   NavigationActions.navigate({ routeName: 'emoji-picker', params: { messageId } });
 
-export const navigateToAuth = (serverSettings: ApiResponseServerSettings): NavigateAction =>
-  NavigationActions.navigate({ routeName: 'auth', params: { serverSettings } });
+export const navigateToAuth = (): NavigateAction =>
+  NavigationActions.navigate({ routeName: 'auth' });
 
 export const navigateToDev = (): NavigateAction => NavigationActions.navigate({ routeName: 'dev' });
 

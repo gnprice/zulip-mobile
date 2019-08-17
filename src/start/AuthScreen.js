@@ -3,15 +3,12 @@
 import React, { PureComponent } from 'react';
 import { Linking } from 'react-native';
 import parseURL from 'url-parse';
-import type { NavigationScreenProp } from 'react-navigation';
 
-import type { Dispatch, ApiResponseServerSettings } from '../types';
+import type { Dispatch } from '../types';
 import { connect } from '../react-redux';
 import { Centerer, Screen } from '../common';
 import { getCurrentRealm } from '../selectors';
-import RealmInfo from './RealmInfo';
 import AuthButton from './AuthButton';
-import { getFullUrl } from '../utils/url';
 import { extractApiKey } from '../utils/encoding';
 import { generateOtp, openBrowser, closeBrowser } from './oauth';
 import { activeAuthentications } from './authentications';
@@ -20,7 +17,6 @@ import { loginSuccess, navigateToDev, navigateToPassword } from '../actions';
 type Props = {|
   dispatch: Dispatch,
   realm: string,
-  navigation: NavigationScreenProp<{ params: {| serverSettings: ApiResponseServerSettings |} }>,
 |};
 
 let otp = '';
@@ -46,9 +42,7 @@ class AuthScreen extends PureComponent<Props> {
       }
     });
 
-    const authList = activeAuthentications(
-      this.props.navigation.state.params.serverSettings.authentication_methods,
-    );
+      const authList = activeAuthentications({password: true});
     if (authList.length === 1) {
       // $FlowFixMe
       this[authList[0].handler]();
@@ -89,8 +83,7 @@ class AuthScreen extends PureComponent<Props> {
   };
 
   handlePassword = () => {
-    const { serverSettings } = this.props.navigation.state.params;
-    this.props.dispatch(navigateToPassword(serverSettings.require_email_format_usernames));
+      this.props.dispatch(navigateToPassword(true));
   };
 
   handleGoogle = () => {
@@ -110,16 +103,10 @@ class AuthScreen extends PureComponent<Props> {
   };
 
   render() {
-    const { serverSettings } = this.props.navigation.state.params;
-
     return (
       <Screen title="Log in" centerContent padding>
         <Centerer>
-          <RealmInfo
-            name={serverSettings.realm_name}
-            iconUrl={getFullUrl(serverSettings.realm_icon, this.props.realm)}
-          />
-          {activeAuthentications(serverSettings.authentication_methods).map(auth => (
+            {activeAuthentications({password: true}).map(auth => (
             <AuthButton
               key={auth.method}
               name={auth.name}

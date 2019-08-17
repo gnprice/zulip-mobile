@@ -3,11 +3,10 @@ import React, { PureComponent } from 'react';
 import { ScrollView, Keyboard } from 'react-native';
 import type { NavigationScreenProp } from 'react-navigation';
 
-import type { ApiResponseServerSettings, Dispatch } from '../types';
+import type { Dispatch } from '../types';
 import { connectFlowFixMe } from '../react-redux';
 import { ErrorMsg, Label, SmartUrlInput, Screen, ZulipButton } from '../common';
 import { isValidUrl } from '../utils/url';
-import { getServerSettings } from '../api';
 import { realmAdd, navigateToAuth } from '../actions';
 import styles from '../styles';
 
@@ -44,9 +43,8 @@ class RealmScreen extends PureComponent<Props, State> {
     const { dispatch } = this.props;
 
     try {
-      const serverSettings: ApiResponseServerSettings = await getServerSettings(realm);
       dispatch(realmAdd(realm));
-      dispatch(navigateToAuth(serverSettings));
+      dispatch(navigateToAuth());
       Keyboard.dismiss();
     } catch (err) {
       this.setState({ error: 'Cannot connect to server' });

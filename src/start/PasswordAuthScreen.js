@@ -48,7 +48,7 @@ class PasswordAuthScreen extends PureComponent<Props, State> {
   tryPasswordLogin = async () => {
     const { dispatch, partialAuth, navigation } = this.props;
     const { requireEmailFormat } = navigation.state.params;
-    const { email, password } = this.state;
+    const { email } = this.state;
 
     this.setState({ progress: true, error: undefined });
 

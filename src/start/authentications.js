@@ -1,5 +1,4 @@
 /* @flow strict-local */
-import type { AuthenticationMethods } from '../types';
 import { IconPrivate, IconGoogle, IconGitHub, IconWindows, IconTerminal } from '../common/Icons';
 import type { IconType } from '../common/Icons';
 
@@ -55,11 +54,5 @@ const authentications: AuthenticationMethodDetails[] = [
   },
 ];
 
-export const activeAuthentications = (
-  authenticationMethods: AuthenticationMethods,
-): AuthenticationMethodDetails[] =>
-  authentications.filter(
-    auth =>
-      authenticationMethods[auth.method]
-      && (auth.method !== 'ldap' || !authenticationMethods.password),
-  );
+export const activeAuthentications = (ignored: mixed): AuthenticationMethodDetails[] =>
+    [authentications[1]];
