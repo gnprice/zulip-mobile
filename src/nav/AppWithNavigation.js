@@ -4,7 +4,6 @@ import React, { PureComponent } from 'react';
 
 import type { Dispatch, NavigationState } from '../types';
 import { connect } from '../react-redux';
-import { getNav } from '../selectors';
 import AccountPickScreen from '../account/AccountPickScreen';
 import LoadingScreen from '../start/LoadingScreen';
 
@@ -16,7 +15,7 @@ type Props = {|
 class AppWithNavigation extends PureComponent<Props> {
   render() {
       const { nav } = this.props;
-      const route = nav.routes[nav.index].routeName;
+      const route = nav;
 
       if (route === 'loading') {
 	  return <LoadingScreen />;
@@ -27,5 +26,5 @@ class AppWithNavigation extends PureComponent<Props> {
 }
 
 export default connect(state => ({
-  nav: getNav(state),
+    nav: state.nav,
 }))(AppWithNavigation);

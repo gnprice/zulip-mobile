@@ -164,21 +164,7 @@ export type NarrowsState = {
   [narrow: string]: number[],
 };
 
-export type NavigationRouteState = {
-  key: string,
-  routeName: string,
-  /** The fields in `params` vary by route; see `navActions.js`. */
-  params?: {
-    narrow?: Narrow,
-  },
-};
-
-export type NavigationState = {|
-  index: number,
-  isTransitioning: boolean,
-  key: string,
-  routes: NavigationRouteState[],
-|};
+export type NavigationState = string;
 
 export type OutboxState = Outbox[];
 

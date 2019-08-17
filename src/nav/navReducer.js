@@ -13,7 +13,7 @@ import {
  * Private; exported only for tests.
  */
 export const getStateForRoute = (route: string): NavigationState => {
-    return {index: 0, routes: [{routeName: route, key: route}], isTransitioning: false, key: route };
+    return route;
 };
 
 const initialState = getStateForRoute('loading');
