@@ -1,6 +1,5 @@
 /* @flow strict-local */
 export { default as Arc } from './Arc';
-export { default as UserAvatarWithPresence } from './UserAvatarWithPresence';
 export { default as Centerer } from './Centerer';
 export { default as Circle } from './Circle';
 export { default as ComponentList } from './ComponentList';
@@ -19,7 +18,6 @@ export { default as OfflineNotice } from './OfflineNotice';
 export { default as OptionButton } from './OptionButton';
 export { default as OptionDivider } from './OptionDivider';
 export { default as OptionRow } from './OptionRow';
-export { default as OwnAvatar } from './OwnAvatar';
 export { default as PasswordInput } from './PasswordInput';
 export { default as Popup } from './Popup';
 export { default as RawLabel } from './RawLabel';
@@ -35,7 +33,6 @@ export { default as SpinningProgress } from './SpinningProgress';
 export { default as GroupAvatar } from './GroupAvatar';
 export { default as Touchable } from './Touchable';
 export { default as UnreadCount } from './UnreadCount';
-export { default as PresenceStatusIndicator } from './PresenceStatusIndicator';
 export { default as ViewPlaceholder } from './ViewPlaceholder';
 export { default as WebLink } from './WebLink';
 export { default as ZulipButton } from './ZulipButton';
