@@ -4,7 +4,7 @@ import { View } from 'react-native';
 
 import type { Context } from '../types';
 import { Screen } from '../common';
-import MainTabs from './MainTabs';
+import ProfileCard from '../account-info/ProfileCard';
 import styles from '../styles';
 
 export default class MainScreenWithTabs extends PureComponent<{}> {
@@ -19,7 +19,7 @@ export default class MainScreenWithTabs extends PureComponent<{}> {
 
     return (
       <Screen>
-        <MainTabs />
+        <ProfileCard />
       </Screen>
     );
   }

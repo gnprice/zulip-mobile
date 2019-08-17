@@ -54,7 +54,6 @@ class SwitchAccountButton extends PureComponent<{| dispatch: Dispatch |}> {
 class LogoutButton extends PureComponent<{| dispatch: Dispatch |}> {
   onPress = () => {
     const { dispatch } = this.props;
-    dispatch(tryStopNotifications());
     dispatch(logout());
   };
 
@@ -65,7 +64,6 @@ class LogoutButton extends PureComponent<{| dispatch: Dispatch |}> {
 
 type Props = {|
   dispatch: Dispatch,
-  selfUserDetail: User,
 |};
 
 /**
@@ -76,8 +74,6 @@ type Props = {|
  */
 class ProfileCard extends PureComponent<Props> {
   render() {
-    const { selfUserDetail } = this.props;
-
     return (
         <View style={styles.buttonRow}>
           <LogoutButton dispatch={this.props.dispatch} />
@@ -86,6 +82,4 @@ class ProfileCard extends PureComponent<Props> {
   }
 }
 
-export default connect(state => ({
-  selfUserDetail: getSelfUserDetail(state),
-}))(ProfileCard);
+export default connect()(ProfileCard);
