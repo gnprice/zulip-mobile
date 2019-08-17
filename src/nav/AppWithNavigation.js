@@ -1,13 +1,12 @@
 /* @flow strict-local */
 
 import React, { PureComponent } from 'react';
-import { addNavigationHelpers } from 'react-navigation';
-import { createReduxBoundAddListener } from 'react-navigation-redux-helpers';
 
-import type { Dispatch, NavigationState, PlainDispatch } from '../types';
+import type { Dispatch, NavigationState } from '../types';
 import { connect } from '../react-redux';
 import { getNav } from '../selectors';
-import AppNavigator from './AppNavigator';
+import AccountPickScreen from '../account/AccountPickScreen';
+import LoadingScreen from '../start/LoadingScreen';
 
 type Props = {|
   dispatch: Dispatch,
@@ -16,21 +15,14 @@ type Props = {|
 
 class AppWithNavigation extends PureComponent<Props> {
   render() {
-    const { nav } = this.props;
-    const dispatch = (this.props.dispatch: PlainDispatch);
-    const addListener = createReduxBoundAddListener('root');
+      const { nav } = this.props;
+      const route = nav.routes[nav.index].routeName;
 
-    return (
-      // $FlowFixMe-56 flow-typed object type is incompatible with statics of React.Component
-      <AppNavigator
-        navigation={addNavigationHelpers({
-          state: nav,
-          // $FlowFixMe flow-typed says react-navigation expects `dispatch` to return boolean
-          dispatch,
-          addListener,
-        })}
-      />
-    );
+      if (route === 'loading') {
+	  return <LoadingScreen />;
+      } else {
+	  return <AccountPickScreen />;
+      }
   }
 }
 
