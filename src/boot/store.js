@@ -96,9 +96,6 @@ const migrations: { [string]: (GlobalState) => GlobalState } = {
     ...dropCache(state),
     accounts: state.accounts.map(a => ({
       ...a,
-      // but in the case of `ackedPushToken` let's be a bit more precise,
-      // and avoid clobbering it if present.
-      ackedPushToken: a.ackedPushToken !== undefined ? a.ackedPushToken : null,
     })),
   }),
 

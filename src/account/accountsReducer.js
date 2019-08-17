@@ -10,8 +10,8 @@ import { NULL_ARRAY } from '../nullObjects';
 const initialState = NULL_ARRAY;
 
 const loginSuccess = (state, action) => {
-  const { realm, email, apiKey } = action;
-  return [{ realm, email, apiKey, ackedPushToken: null }, ...state];
+  const { realm } = action;
+  return [{ realm }, ...state];
 };
 
 const accountRemove = (state, action) => {

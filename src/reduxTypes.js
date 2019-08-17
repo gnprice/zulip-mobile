@@ -33,7 +33,7 @@ import type {
 
 export type * from './actionTypes';
 
-export type AccountsState = Account[];
+export type AccountsState = {| realm: string |}[];
 
 export type AlertWordsState = string[];
 
