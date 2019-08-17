@@ -5,15 +5,13 @@ import { View, FlatList } from 'react-native';
 
 import type { Dispatch } from '../types';
 import { connect } from '../react-redux';
-import { getAccountStatuses } from '../selectors';
-import type { AccountStatus } from './accountsSelectors';
 import { Centerer, ZulipButton, Logo, Screen } from '../common';
 import { removeAccount } from '../actions';
 import AccountItem from './AccountItem';
 import { RealmInput } from '../start/RealmScreen';
 
 type Props = {|
-  accounts: AccountStatus[],
+  accounts: string[],
   dispatch: Dispatch,
 |};
 
@@ -34,11 +32,11 @@ class AccountPickScreen extends PureComponent<Props> {
 	    <View style={{marginTop: 16}}>
         <FlatList
           data={accounts}
-          keyExtractor={item => item.realm}
+          keyExtractor={item => item}
           renderItem={({ item, index }) => (
             <AccountItem
               index={index}
-              realm={item.realm}
+              realm={item}
               onRemove={this.handleAccountRemove}
             />
           )}
@@ -51,5 +49,5 @@ class AccountPickScreen extends PureComponent<Props> {
 }
 
 export default connect(state => ({
-  accounts: getAccountStatuses(state),
+    accounts: state.accounts.map<string>(({ realm }) => realm),
 }))(AccountPickScreen);
