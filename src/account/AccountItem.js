@@ -15,7 +15,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'hsla(177, 70%, 47%, 0.1)',
     borderRadius: 4,
-    height: 72,
+      height: 72,
+      margin: 8,
   },
   details: {
     flex: 1,

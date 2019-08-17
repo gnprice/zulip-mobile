@@ -3,7 +3,6 @@ import React, { PureComponent } from 'react';
 import { View, FlatList } from 'react-native';
 
 import type { AccountStatus } from './accountsSelectors';
-import { ViewPlaceholder } from '../common';
 import AccountItem from './AccountItem';
 
 type Props = {|
@@ -21,7 +20,6 @@ export default class AccountList extends PureComponent<Props> {
         <FlatList
           data={accounts}
           keyExtractor={item => item.realm}
-          ItemSeparatorComponent={() => <ViewPlaceholder height={8} />}
           renderItem={({ item, index }) => (
             <AccountItem
               index={index}
