@@ -5,7 +5,7 @@ import { View, FlatList } from 'react-native';
 
 import type { Dispatch } from '../types';
 import { connect } from '../react-redux';
-import { Centerer, ZulipButton, Logo, Screen } from '../common';
+import { Centerer, Screen } from '../common';
 import { removeAccount } from '../actions';
 import AccountItem from './AccountItem';
 import { RealmInput } from '../start/RealmScreen';
@@ -21,7 +21,7 @@ class AccountPickScreen extends PureComponent<Props> {
   };
 
   render() {
-    const { accounts, dispatch } = this.props;
+    const { accounts } = this.props;
 
     return (
       <Screen title="Items" centerContent padding>

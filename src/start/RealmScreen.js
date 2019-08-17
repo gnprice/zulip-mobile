@@ -4,7 +4,7 @@ import { ScrollView, TextInput, Keyboard, View } from 'react-native';
 
 import type { Dispatch } from '../types';
 import { connect } from '../react-redux';
-import { Screen, ZulipButton } from '../common';
+import { ZulipButton } from '../common';
 import { loginSuccess } from '../actions';
 import styles from '../styles';
 
@@ -34,8 +34,6 @@ class RealmInputInner extends PureComponent<Props, State> {
   handleRealmChange = (value: string) => this.setState({ realm: value });
 
   render() {
-    const { realm } = this.state;
-
       return (
 	  <View>
 	      <TextInput

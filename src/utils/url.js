@@ -1,10 +1,6 @@
 /* @flow strict-local */
 import urlRegex from 'url-regex';
 
-import type { Auth, User } from '../types';
-import { transformToEncodedURI } from './string';
-import { NULL_USER } from '../nullObjects';
-
 /**
  * An object `encodeParamsForUrl` can flatten.
  *

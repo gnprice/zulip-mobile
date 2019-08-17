@@ -1,6 +1,4 @@
 /* @flow strict-local */
-import type { NavigationAction } from 'react-navigation';
-
 import type { NavigationState, Action } from '../types';
 import {
   REHYDRATE,

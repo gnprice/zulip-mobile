@@ -4,7 +4,7 @@ import {
   ACCOUNT_REMOVE,
 } from '../actionConstants';
 
-import type { AccountsState, Identity, Action } from '../types';
+import type { AccountsState, Action } from '../types';
 import { NULL_ARRAY } from '../nullObjects';
 
 const initialState = NULL_ARRAY;

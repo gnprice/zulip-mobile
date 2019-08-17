@@ -3,17 +3,15 @@
 import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 
-import type { Dispatch, Context, LocalizableText } from '../types';
-import { connect } from '../react-redux';
-import styles, { NAVBAR_SIZE } from '../styles';
+import type { Context, LocalizableText } from '../types';
+import styles from '../styles';
 import Label from '../common/Label';
 
 type Props = {|
-  dispatch: Dispatch,
   title: LocalizableText,
 |};
 
-class ModalNavBar extends PureComponent<Props> {
+export default class ModalNavBar extends PureComponent<Props> {
   context: Context;
 
   static contextTypes = {
@@ -22,7 +20,7 @@ class ModalNavBar extends PureComponent<Props> {
 
   render() {
     const { styles: contextStyles } = this.context;
-    const { dispatch, title } = this.props;
+    const { title } = this.props;
     const textStyle = [
       styles.navTitle,
 	{ marginLeft: 16 },
@@ -37,5 +35,3 @@ class ModalNavBar extends PureComponent<Props> {
     );
   }
 }
-
-export default connect()(ModalNavBar);

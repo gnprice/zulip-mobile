@@ -2,7 +2,6 @@
 import React, { PureComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { BRAND_COLOR } from '../styles';
 import { RawLabel } from '../common';
 import { IconTrash } from '../common/Icons';
 

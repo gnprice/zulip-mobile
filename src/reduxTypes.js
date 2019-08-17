@@ -10,26 +10,7 @@
 
 import type { InputSelector } from 'reselect';
 
-import type { Account, Outbox } from './types';
 import type { Action, NavigateAction } from './actionTypes';
-import type {
-  Topic,
-  HuddlesUnreadItem,
-  Message,
-  MuteTuple,
-  PmsUnreadItem,
-  CrossRealmBot,
-  RealmEmojiById,
-  RealmFilter,
-  Narrow,
-  Stream,
-  StreamUnreadItem,
-  Subscription,
-  User,
-  UserGroup,
-  UserPresence,
-  UserStatusMapObject,
-} from './api/apiTypes';
 
 export type * from './actionTypes';
 
