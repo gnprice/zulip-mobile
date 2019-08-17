@@ -31,8 +31,6 @@ import type {
   UserStatusMapObject,
 } from './api/apiTypes';
 
-import type { SessionState } from './session/sessionReducer';
-
 export type * from './actionTypes';
 
 export type AccountsState = Account[];

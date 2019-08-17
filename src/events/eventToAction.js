@@ -4,16 +4,12 @@ import { EventTypes } from '../api/eventTypes';
 import type { GlobalState, EventAction } from '../types';
 import {
   EVENT_ALERT_WORDS,
-  EVENT_NEW_MESSAGE,
   EVENT_PRESENCE,
   EVENT_REACTION_ADD,
   EVENT_REACTION_REMOVE,
-  EVENT_TYPING_START,
-  EVENT_TYPING_STOP,
   EVENT_SUBMESSAGE,
   EVENT_MESSAGE_DELETE,
   EVENT_UPDATE_MESSAGE,
-  EVENT_UPDATE_MESSAGE_FLAGS,
   EVENT_USER_ADD,
   EVENT_USER_REMOVE,
   EVENT_USER_UPDATE,
@@ -49,11 +45,6 @@ const opToActionUserGroup = {
 const opToActionReaction = {
   add: EVENT_REACTION_ADD,
   remove: EVENT_REACTION_REMOVE,
-};
-
-const opToActionTyping = {
-  start: EVENT_TYPING_START,
-  stop: EVENT_TYPING_STOP,
 };
 
 const actionTypeOfEventType = {

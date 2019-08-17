@@ -5,7 +5,7 @@ import type { Node as React$Node } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-import type { Context, AccountsState, Dimensions, LocalizableText, Dispatch } from '../types';
+import type { Context, AccountsState, LocalizableText, Dispatch } from '../types';
 import { connect } from '../react-redux';
 import KeyboardAvoider from './KeyboardAvoider';
 import OfflineNotice from './OfflineNotice';
