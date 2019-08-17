@@ -16,45 +16,6 @@ import ProfileCard from '../account-info/ProfileCard';
 
 export default TabNavigator(
   {
-    home: {
-      // $FlowFixMe react-navigation types are twisty and seem wrong
-      screen: HomeTab,
-      navigationOptions: {
-        tabBarLabel: 'Home',
-        tabBarIcon: (props: TabNavigationOptionsPropsType) => (
-          <IconInbox size={24} color={props.tintColor} />
-        ),
-      },
-    },
-    streams: {
-      screen: StreamTabs,
-      navigationOptions: {
-        tabBarLabel: 'Streams',
-        tabBarIcon: (props: TabNavigationOptionsPropsType) => (
-          <IconStream size={24} color={props.tintColor} />
-        ),
-      },
-    },
-    conversations: {
-      // $FlowFixMe react-navigation types are twisty and seem wrong
-      screen: PmConversationsCard,
-      navigationOptions: {
-        tabBarLabel: 'Conversations',
-        tabBarIcon: (props: TabNavigationOptionsPropsType) => (
-          <IconUnreadConversations color={props.tintColor} />
-        ),
-      },
-    },
-    settings: {
-      // $FlowFixMe react-navigation types are twisty and seem wrong
-      screen: SettingsCard,
-      navigationOptions: {
-        tabBarLabel: 'Settings',
-        tabBarIcon: (props: TabNavigationOptionsPropsType) => (
-          <IconSettings size={24} color={props.tintColor} />
-        ),
-      },
-    },
     profile: {
       // $FlowFixMe react-navigation types are twisty and seem wrong
       screen: ProfileCard,

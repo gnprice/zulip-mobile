@@ -79,17 +79,9 @@ class ProfileCard extends PureComponent<Props> {
     const { selfUserDetail } = this.props;
 
     return (
-      <ScrollView>
-        <AccountDetails user={selfUserDetail} />
-        <AwayStatusSwitch />
         <View style={styles.buttonRow}>
-          <SetStatusButton dispatch={this.props.dispatch} />
-        </View>
-        <View style={styles.buttonRow}>
-          <SwitchAccountButton dispatch={this.props.dispatch} />
           <LogoutButton dispatch={this.props.dispatch} />
         </View>
-      </ScrollView>
     );
   }
 }
