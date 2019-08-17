@@ -1,11 +1,11 @@
 /* @flow strict-local */
 import React, { PureComponent } from 'react';
-import { ScrollView, Keyboard } from 'react-native';
+import { ScrollView, TextInput, Keyboard } from 'react-native';
 import type { NavigationScreenProp } from 'react-navigation';
 
 import type { Dispatch } from '../types';
 import { connectFlowFixMe } from '../react-redux';
-import { ErrorMsg, Label, SmartUrlInput, Screen, ZulipButton } from '../common';
+import { ErrorMsg, Label, Screen, ZulipButton } from '../common';
 import { isValidUrl } from '../utils/url';
 import { realmAdd, loginSuccess } from '../actions';
 import styles from '../styles';
@@ -56,38 +56,26 @@ class RealmScreen extends PureComponent<Props, State> {
 
   handleRealmChange = (value: string) => this.setState({ realm: value });
 
-  componentDidMount() {
-    const { initialRealm } = this.props;
-    if (initialRealm && initialRealm.length > 0) {
-      this.tryRealm();
-    }
-  }
-
   render() {
     const { initialRealm, navigation } = this.props;
     const { progress, error, realm } = this.state;
 
     return (
       <Screen title="Welcome" padding centerContent keyboardShouldPersistTaps="always">
-        <Label text="Organization URL" />
-        <SmartUrlInput
-          style={styles.marginVertical}
-          navigation={navigation}
-          defaultOrganization="your-org"
-          protocol="https://"
-          append=".zulipchat.com"
-          defaultValue={initialRealm}
+	    <TextInput
+	autoFocus
+	autoCapitalize="none"
           onChangeText={this.handleRealmChange}
           onSubmitEditing={this.tryRealm}
           enablesReturnKeyAutomatically
-        />
+/>
         {error !== null && <ErrorMsg error={error} />}
         <ZulipButton
           style={styles.halfMarginTop}
           text="Enter"
           progress={progress}
           onPress={this.tryRealm}
-          disabled={!isValidUrl(realm)}
+      disabled={false}
         />
       </Screen>
     );
