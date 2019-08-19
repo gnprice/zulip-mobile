@@ -1,7 +1,7 @@
 /* @flow strict-local */
 import { applyMiddleware, compose, createStore } from 'redux';
 import type { Store } from 'redux';
-import { persistStore, autoRehydrate } from 'redux-persist';
+import { createPersistor, autoRehydrate } from 'redux-persist';
 import type { Config } from 'redux-persist';
 
 import type { Action, GlobalState } from '../types';
@@ -60,7 +60,43 @@ const store: Store<*, Action> = createStore(
   ),
 );
 
-export const restore = (onFinished?: () => void) =>
-  persistStore(store, reduxPersistConfig, onFinished);
+export const restore = (onFinished?: () => void) => {
+    //persistStore(store, reduxPersistConfig, onFinished);
+
+    ZulipAsyncStorage.getItem("reduxPersist:accounts", (err, v) => console.log(v));
+
+    const persistor = createPersistor(store, reduxPersistConfig);
+    persistor.pause()
+
+    function complete () {
+	persistor.resume();
+	onFinished && onFinished();
+    }
+
+    setTimeout(() => {
+	const key = 'reduxPersist:accounts';
+	ZulipAsyncStorage.getItem(key, (err, serialized) => {
+	    if (err || serialized == null) {
+		console.warn('error in restoring:', key, err, serialized);
+		complete();
+		return;
+	    } else {
+		const data = JSON.parse(serialized);
+		const state = {accounts: data};
+		try {
+		    store.dispatch({
+			type: 'persist/REHYDRATE',
+			payload: state,
+			error: null,
+		    });
+		} finally {
+		    complete();
+		}
+	    }
+	});
+    });
+
+    return persistor;
+}
 
 export default store;
