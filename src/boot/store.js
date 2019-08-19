@@ -1,8 +1,6 @@
 /* @flow strict-local */
 import { applyMiddleware, compose, createStore } from 'redux';
 import type { Store } from 'redux';
-import { autoRehydrate } from 'redux-persist';
-import type { Config } from 'redux-persist';
 
 import type { Action, GlobalState } from '../types';
 import rootReducer from './reducers';
@@ -45,18 +43,11 @@ export const storeKeys: Array<$Keys<GlobalState>> = [
 export const cacheKeys: Array<$Keys<GlobalState>> = [
 ];
 
-const reduxPersistConfig: Config = {
-  whitelist: [...storeKeys, ...cacheKeys],
-  // $FlowFixMe: https://github.com/rt2zz/redux-persist/issues/823
-  storage: ZulipAsyncStorage,
-};
-
 const store: Store<*, Action> = createStore(
   rootReducer,
   undefined,
   compose(
     applyMiddleware(...middleware),
-    autoRehydrate(),
   ),
 );
 

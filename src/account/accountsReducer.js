@@ -2,6 +2,7 @@
 import {
   LOGIN_SUCCESS,
   ACCOUNT_REMOVE,
+    REHYDRATE,
 } from '../actionConstants';
 
 import type { AccountsState, Action } from '../types';
@@ -27,6 +28,10 @@ export default (state: AccountsState = initialState, action: Action): AccountsSt
 
     case ACCOUNT_REMOVE:
       return accountRemove(state, action);
+
+  case REHYDRATE:
+      return (action.payload && action.payload.accounts
+	      ? action.payload.accounts : state);
 
     default:
       return state;
