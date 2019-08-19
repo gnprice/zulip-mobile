@@ -65,10 +65,9 @@ export const restore = (onFinished?: () => void) => {
 	const key = 'reduxPersist:accounts';
 	const value = store.getState().accounts;
 	const serialized = JSON.stringify(value);
-	ZulipAsyncStorage.setItem(key, serialized, (err) => {
-	    if (err) {
-		console.warn('error in saving:', key, err);
-	    }
+	ZulipAsyncStorage.setItem(key, serialized).catch((e) => {
+	    console.warn('error in saving:', key, e);
+	    throw e;
 	});
     });
 
@@ -79,27 +78,33 @@ export const restore = (onFinished?: () => void) => {
 	onFinished && onFinished();
     }
 
-    setTimeout(() => {
+    setTimeout(async () => {
 	const key = 'reduxPersist:accounts';
-	ZulipAsyncStorage.getItem(key, (err, serialized) => {
-	    if (err || serialized == null) {
-		console.warn('error in restoring:', key, err, serialized);
-		complete();
-		return;
-	    } else {
-		const data = JSON.parse(serialized);
-		const state = {accounts: data};
-		try {
-		    store.dispatch({
-			type: 'persist/REHYDRATE',
-			payload: state,
-			error: null,
-		    });
-		} finally {
-		    complete();
-		}
-	    }
-	});
+	let serialized;
+	try {
+	    serialized = await ZulipAsyncStorage.getItem(key);
+	} catch (e) {
+	    console.warn('error in restoring:', key, e);
+	    complete();
+	    throw e;
+	}
+	if (serialized == null) {
+	    console.warn('error in restoring:', key, 'got', serialized);
+	    complete();
+	    return;
+	}
+
+	const data = JSON.parse(serialized);
+	const state = {accounts: data};
+	try {
+	    store.dispatch({
+		type: 'persist/REHYDRATE',
+		payload: state,
+		error: null,
+	    });
+	} finally {
+	    complete();
+	}
     });
 }
 
