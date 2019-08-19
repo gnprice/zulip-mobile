@@ -3,7 +3,7 @@ import { AsyncStorage, NativeModules } from 'react-native';
 import { logErrorRemotely } from '../utils/logging';
 
 export default class ZulipAsyncStorage {
-  static async getItem(key: string, callback: (error: ?Error, result: ?string) => void) {
+  static async getItem(key: string, callback: ?(error: ?Error, result: ?string) => void) {
     let result = await AsyncStorage.getItem(key);
     // It's possible that getItem() is called on uncompressed state, for
     // example when a user updates their app from a version without
