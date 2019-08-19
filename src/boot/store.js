@@ -1,11 +1,11 @@
 /* @flow strict-local */
-import { AsyncStorage } from 'react-native';
 import { applyMiddleware, compose, createStore } from 'redux';
 import type { Store } from 'redux';
 
 import type { Action, GlobalState } from '../types';
 import rootReducer from './reducers';
 import middleware from './middleware';
+import ZulipAsyncStorage from './ZulipAsyncStorage';
 
 // AsyncStorage.clear(); // use to reset storage during development
 
@@ -54,7 +54,7 @@ const store: Store<*, Action> = createStore(
 export const restore = (onFinished?: () => void) => {
     //persistStore(store, reduxPersistConfig, onFinished);
 
-    AsyncStorage.getItem("reduxPersist:accounts", (err, v) => console.log(v));
+    ZulipAsyncStorage.getItem("reduxPersist:accounts", (err, v) => console.log(v));
 
     //const persistor = createPersistor(store, reduxPersistConfig);
     let paused = false;
@@ -65,7 +65,7 @@ export const restore = (onFinished?: () => void) => {
 	const key = 'reduxPersist:accounts';
 	const value = store.getState().accounts;
 	const serialized = JSON.stringify(value);
-	AsyncStorage.setItem(key, serialized).catch((e) => {
+	ZulipAsyncStorage.setItem(key, serialized).catch((e) => {
 	    console.warn('error in saving:', key, e);
 	    throw e;
 	});
@@ -82,7 +82,7 @@ export const restore = (onFinished?: () => void) => {
 	const key = 'reduxPersist:accounts';
 	let serialized;
 	try {
-	    serialized = await AsyncStorage.getItem(key);
+	    serialized = await ZulipAsyncStorage.getItem(key);
 	} catch (e) {
 	    console.warn('error in restoring:', key, e);
 	    complete();
