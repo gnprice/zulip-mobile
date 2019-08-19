@@ -1,7 +1,7 @@
 /* @flow strict-local */
 import { applyMiddleware, compose, createStore } from 'redux';
 import type { Store } from 'redux';
-import { createPersistor, autoRehydrate } from 'redux-persist';
+import { autoRehydrate } from 'redux-persist';
 import type { Config } from 'redux-persist';
 
 import type { Action, GlobalState } from '../types';
@@ -65,11 +65,26 @@ export const restore = (onFinished?: () => void) => {
 
     ZulipAsyncStorage.getItem("reduxPersist:accounts", (err, v) => console.log(v));
 
-    const persistor = createPersistor(store, reduxPersistConfig);
-    persistor.pause()
+    //const persistor = createPersistor(store, reduxPersistConfig);
+    let paused = false;
+    store.subscribe(() => {
+	if (paused)
+	    return;
+
+	const key = 'reduxPersist:accounts';
+	const value = store.getState().accounts;
+	const serialized = JSON.stringify(value);
+	ZulipAsyncStorage.setItem(key, serialized, (err) => {
+	    if (err) {
+		console.warn('error in saving:', key, err);
+	    }
+	});
+    });
+
+    paused = true;
 
     function complete () {
-	persistor.resume();
+	paused = false;
 	onFinished && onFinished();
     }
 
@@ -95,8 +110,6 @@ export const restore = (onFinished?: () => void) => {
 	    }
 	});
     });
-
-    return persistor;
 }
 
 export default store;
