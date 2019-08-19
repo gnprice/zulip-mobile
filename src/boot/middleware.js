@@ -1,11 +1,9 @@
 /* @flow strict-local */
 import { createLogger } from 'redux-logger';
-import createActionBuffer from 'redux-action-buffer';
 
 import config from '../config';
-import { REHYDRATE } from '../actionConstants';
 
-const middleware = [createActionBuffer(REHYDRATE)];
+const middleware = [];
 
 if (config.enableReduxLogging) {
   middleware.push(
