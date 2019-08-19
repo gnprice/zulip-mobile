@@ -1,11 +1,11 @@
 /* @flow strict-local */
 
 import React, { PureComponent } from 'react';
-import { View, FlatList } from 'react-native';
+import { Text, View, FlatList, NativeModules } from 'react-native';
 
 import type { Dispatch } from '../types';
 import { connect } from '../react-redux';
-import { Centerer, Screen } from '../common';
+import { Centerer, RawLabel, Screen } from '../common';
 import { removeAccount } from '../actions';
 import AccountItem from './AccountItem';
 import { RealmInput } from '../start/RealmScreen';
@@ -23,9 +23,17 @@ class AccountPickScreen extends PureComponent<Props> {
   render() {
     const { accounts } = this.props;
 
+      const info = NativeModules.TextCompressionModule === undefined
+	    ? 'undefined'
+	    : NativeModules.TextCompressionModule === null
+	    ? 'null'
+	    : 'other';
+
     return (
       <Screen title="Items" centerContent padding>
         <Centerer>
+
+	    <Text style={{margin: 16}}>{info}</Text>
 
           <RealmInput />
 
