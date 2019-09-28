@@ -41,10 +41,12 @@ export type Notification =
   | {| recipient_type: 'private', sender_email: string |};
 
 export const getNarrowFromNotificationData = (
-  data: ?Notification,
+  data: Notification,
   usersById: Map<number, User>,
 ): Narrow | null => {
-  if (!data || !data.recipient_type) {
+  if (!data.recipient_type) {
+    // TODO this condition is impossible if values rightly-typed;
+    //      why is it here? can it really happen?
     return null;
   }
 
