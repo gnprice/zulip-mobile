@@ -4,11 +4,23 @@ import * as api from './api';
 import { getAuth } from './account/accountsSelectors';
 import { objectFromEntries } from './jsBackport';
 
+type Fn0<R> = (...empty[]) => R;
+type Fn1<A, R> = (A, ...empty[]) => R;
+type Fn2<A, B, R> = (A, B, ...empty[]) => R;
+
+// eslint-disable no-redeclare
+declare function applyAuth<R>(auth: Auth, f: Fn1<Auth, R>): Fn0<R>;
+declare function applyAuth<A, R>(auth: Auth, f: Fn2<Auth, A, R>): Fn1<A, R>;
+
+function applyAuth(auth, f) {
+  return (...args) => f(auth, args);
+}
+
+declare function afterAuth<R>(f: Fn1<Auth, R>): Fn0<R>;
+declare function afterAuth<A, R>(f: Fn2<Auth, A, R>): Fn1<A, R>;
+
 // prettier-ignore
-type ApplyAuth =
- & <R>((Auth, ...Array<empty>) => R) => () => R
- & <T1, R>((Auth, T1, ...Array<empty>) => R) => (T1) => R
- ;
+type ApplyAuth = typeof afterAuth;
 
 type AuthedApi = $ObjMap<typeof api, ApplyAuth>;
 
