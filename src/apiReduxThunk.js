@@ -9,15 +9,9 @@ type Fn1<A, R> = (A, ...mixed[]) => R;
 type Fn2<A, B, R> = (A, B, ...mixed[]) => R;
 
 // eslint-disable no-redeclare
-declare function applyAuth<R>(auth: Auth, f: Fn1<Auth, R>): Fn0<R>;
-declare function applyAuth<A, R>(auth: Auth, f: Fn2<Auth, A, R>): Fn1<A, R>;
-
-function applyAuth(auth, f) {
-  return (...args) => f(auth, args);
-}
-
 declare function afterAuth<R>(f: Fn1<Auth, R>): Fn0<R>;
 declare function afterAuth<A, R>(f: Fn2<Auth, A, R>): Fn1<A, R>;
+declare function afterAuth<A, B, R>(f: (Auth, A, B) => R): (A, B) => R;
 
 // prettier-ignore
 type ApplyAuth = typeof afterAuth;
@@ -33,6 +27,8 @@ const r2 = x.deleteStream(3, 4);
 // const r3 = x.deleteStream({ a: 1 });
 // and result types get appropriately inferred
 r1.then(v => v.members[0].user_id);
+
+const r4 = x.muteTopic('x', 'y');
 
 /*
 const wrapApi = (auth: Auth): $ObjMap<typeof api, ApplyAuth> =>
