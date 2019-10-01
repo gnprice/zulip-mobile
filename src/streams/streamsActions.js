@@ -7,7 +7,6 @@ export const createNewStream = (
   description: string,
   principals: string[],
   isPrivate: boolean,
-  // TODO $FlowFixMe perhaps because of optional params on createStream
 ) => withApi(api => api.createStream(name, description, principals, isPrivate));
 
 export const updateExistingStream = (
