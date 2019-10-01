@@ -1,9 +1,9 @@
 /* @flow strict-local */
 import type { GetState, Dispatch, Narrow, Topic, Action } from '../types';
-import * as api from '../api';
 import { INIT_TOPICS } from '../actionConstants';
 import { isStreamNarrow } from '../utils/narrow';
-import { getAuth, getStreams } from '../selectors';
+import { getStreams } from '../selectors';
+import { withApi } from '../apiReduxThunk';
 
 export const initTopics = (topics: Topic[], streamId: number): Action => ({
   type: INIT_TOPICS,
@@ -11,11 +11,11 @@ export const initTopics = (topics: Topic[], streamId: number): Action => ({
   streamId,
 });
 
-export const fetchTopics = (streamId: number) => async (dispatch: Dispatch, getState: GetState) => {
-  const auth = getAuth(getState());
-  const { topics } = await api.getTopics(auth, streamId);
-  dispatch(initTopics(topics, streamId));
-};
+export const fetchTopics = (streamId: number) =>
+  withApi(async (api, auth, dispatch) => {
+    const { topics } = await api.getTopics(auth, streamId);
+    dispatch(initTopics(topics, streamId));
+  });
 
 export const fetchTopicsForActiveStream = (narrow: Narrow) => async (
   dispatch: Dispatch,

@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import type { Action, Dimensions, Dispatch, GetState, Orientation } from '../types';
+import type { Action, Dimensions, Orientation } from '../types';
 import {
   APP_ONLINE,
   APP_ORIENTATION,
@@ -10,8 +10,7 @@ import {
   CANCEL_EDIT_MESSAGE,
   START_EDIT_MESSAGE,
 } from '../actionConstants';
-import * as api from '../api';
-import { getAuth } from '../selectors';
+import { withApi } from '../apiReduxThunk';
 
 export const appOnline = (isOnline: boolean): Action => ({
   type: APP_ONLINE,
@@ -37,18 +36,16 @@ export const appOrientation = (orientation: Orientation): Action => ({
   orientation,
 });
 
-export const startEditMessage = (messageId: number, topic: string) => async (
-  dispatch: Dispatch,
-  getState: GetState,
-) => {
-  const { raw_content } = await api.getRawMessageContent(getAuth(getState()), messageId);
-  dispatch({
-    type: START_EDIT_MESSAGE,
-    messageId,
-    message: raw_content,
-    topic,
+export const startEditMessage = (messageId: number, topic: string) =>
+  withApi(async (api, auth, dispatch) => {
+    const { raw_content } = await api.getRawMessageContent(auth, messageId);
+    dispatch({
+      type: START_EDIT_MESSAGE,
+      messageId,
+      message: raw_content,
+      topic,
+    });
   });
-};
 
 export const cancelEditMessage = (): Action => ({
   type: CANCEL_EDIT_MESSAGE,

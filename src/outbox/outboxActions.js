@@ -19,12 +19,12 @@ import {
   MESSAGE_SEND_COMPLETE,
 } from '../actionConstants';
 import { getAuth } from '../selectors';
-import * as api from '../api';
 import { getSelfUserDetail, getUsersByEmail } from '../users/userSelectors';
 import { getUsersAndWildcards } from '../users/userHelpers';
 import { isStreamNarrow, isPrivateOrGroupNarrow } from '../utils/narrow';
 import progressiveTimeout from '../utils/progressiveTimeout';
 import { NULL_USER } from '../nullObjects';
+import { withApi } from '../apiReduxThunk';
 
 export const messageSendStart = (outbox: Outbox): Action => ({
   type: MESSAGE_SEND_START,
@@ -46,9 +46,7 @@ export const messageSendComplete = (localMessageId: number): Action => ({
   local_message_id: localMessageId,
 });
 
-export const trySendMessages = (dispatch: Dispatch, getState: GetState): boolean => {
-  const state = getState();
-  const auth = getAuth(state);
+export const trySendMessages = withApi(async (api, auth, dispatch, state): Promise<boolean> => {
   const outboxToSend = state.outbox.filter(outbox => !outbox.isSent);
   try {
     outboxToSend.forEach(async item => {
@@ -68,7 +66,7 @@ export const trySendMessages = (dispatch: Dispatch, getState: GetState): boolean
     logging.warn(e);
     return false;
   }
-};
+});
 
 export const sendOutbox = () => async (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
