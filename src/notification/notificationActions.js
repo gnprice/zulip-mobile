@@ -4,13 +4,14 @@ import type { Account, Dispatch, GetState, Identity, Action } from '../types';
 import * as api from '../api';
 import { getNotificationToken, getNarrowFromNotificationData } from '.';
 import type { Notification } from '.';
-import { getAuth, getActiveAccount } from '../selectors';
+import { getActiveAccount } from '../selectors';
 import { getSession, getAccounts } from '../directSelectors';
 import { GOT_PUSH_TOKEN, ACK_PUSH_TOKEN, UNACK_PUSH_TOKEN } from '../actionConstants';
 import { identityOfAccount, authOfAccount, identityOfAuth } from '../account/accountMisc';
 import { getUsersById } from '../users/userSelectors';
 import { doNarrow } from '../message/messagesActions';
 import * as logging from '../utils/logging';
+import { withApi } from '../apiReduxThunk';
 
 export const gotPushToken = (pushToken: string): Action => ({
   type: GOT_PUSH_TOKEN,
@@ -87,15 +88,16 @@ export const initNotifications = () => async (dispatch: Dispatch, getState: GetS
   await sendPushToken(dispatch, account, pushToken);
 };
 
-export const tryStopNotifications = () => async (dispatch: Dispatch, getState: GetState) => {
-  const auth = getAuth(getState());
-  const { ackedPushToken: token } = getActiveAccount(getState());
-  if (token !== null) {
-    dispatch(unackPushToken(identityOfAuth(auth)));
-    try {
-      await api.forgetPushToken(auth, Platform.OS, token);
-    } catch (e) {
-      logging.warn(e);
+export const tryStopNotifications = () =>
+  // eslint-disable-next-line no-shadow
+  withApi(async (api, auth, dispatch, state) => {
+    const { ackedPushToken: token } = getActiveAccount(state);
+    if (token !== null) {
+      dispatch(unackPushToken(identityOfAuth(auth)));
+      try {
+        await api.forgetPushToken(auth, Platform.OS, token);
+      } catch (e) {
+        logging.warn(e);
+      }
     }
-  }
-};
+  });
