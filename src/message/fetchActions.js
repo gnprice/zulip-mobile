@@ -1,8 +1,6 @@
 /* @flow strict-local */
 import type { Narrow, Dispatch, GetState, GlobalState, Message, Action } from '../types';
-import * as api from '../api';
 import {
-  getAuth,
   getSession,
   getFirstMessageId,
   getLastMessageId,
@@ -26,6 +24,7 @@ import { realmInit } from '../realm/realmActions';
 import { reportPresence } from '../users/usersActions';
 import { startEventPolling } from '../events/eventActions';
 import { logout } from '../account/accountActions';
+import { withApi } from '../apiReduxThunk';
 
 const messageFetchStart = (narrow: Narrow, numBefore: number, numAfter: number): Action => ({
   type: MESSAGE_FETCH_START,
@@ -60,20 +59,29 @@ export const fetchMessages = (
   numBefore: number,
   numAfter: number,
   useFirstUnread: boolean = false,
-) => async (dispatch: Dispatch, getState: GetState) => {
-  dispatch(messageFetchStart(narrow, numBefore, numAfter));
-  const { messages, found_newest, found_oldest } = await api.getMessages(
-    getAuth(getState()),
-    narrow,
-    anchor,
-    numBefore,
-    numAfter,
-    useFirstUnread,
-  );
-  dispatch(
-    messageFetchComplete(messages, narrow, anchor, numBefore, numAfter, found_newest, found_oldest),
-  );
-};
+) =>
+  withApi(async (api, auth, dispatch) => {
+    dispatch(messageFetchStart(narrow, numBefore, numAfter));
+    const { messages, found_newest, found_oldest } = await api.getMessages(
+      auth,
+      narrow,
+      anchor,
+      numBefore,
+      numAfter,
+      useFirstUnread,
+    );
+    dispatch(
+      messageFetchComplete(
+        messages,
+        narrow,
+        anchor,
+        numBefore,
+        numAfter,
+        found_newest,
+        found_oldest,
+      ),
+    );
+  });
 
 export const fetchOlder = (narrow: Narrow) => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
@@ -163,23 +171,23 @@ export const fetchMessagesInNarrow = (
  *
  * See `fetchMessagesInNarrow` for further background.
  */
-const fetchPrivateMessages = () => async (dispatch: Dispatch, getState: GetState) => {
-  const auth = getAuth(getState());
-  const { messages, found_newest, found_oldest } = await tryUntilSuccessful(() =>
-    api.getMessages(auth, ALL_PRIVATE_NARROW, LAST_MESSAGE_ANCHOR, 100, 0),
-  );
-  dispatch(
-    messageFetchComplete(
-      messages,
-      ALL_PRIVATE_NARROW,
-      LAST_MESSAGE_ANCHOR,
-      100,
-      0,
-      found_newest,
-      found_oldest,
-    ),
-  );
-};
+const fetchPrivateMessages = () =>
+  withApi(async (api, auth, dispatch) => {
+    const { messages, found_newest, found_oldest } = await tryUntilSuccessful(() =>
+      api.getMessages(auth, ALL_PRIVATE_NARROW, LAST_MESSAGE_ANCHOR, 100, 0),
+    );
+    dispatch(
+      messageFetchComplete(
+        messages,
+        ALL_PRIVATE_NARROW,
+        LAST_MESSAGE_ANCHOR,
+        100,
+        0,
+        found_newest,
+        found_oldest,
+      ),
+    );
+  });
 
 /**
  * If we're navigated to a narrow, fetch messages for it.
@@ -218,52 +226,49 @@ const fetchTopMostNarrow = () => async (dispatch: Dispatch, getState: GetState) 
  * Also fetch some messages eagerly, and do some miscellaneous other work
  * we want to do when starting up, or regaining a network connection.
  */
-export const doInitialFetch = () => async (dispatch: Dispatch, getState: GetState) => {
-  dispatch(initialFetchStart());
-  const auth = getAuth(getState());
+export const doInitialFetch = () =>
+  withApi(async (api, auth, dispatch, state) => {
+    dispatch(initialFetchStart());
 
-  let initData;
-  try {
-    initData = await tryUntilSuccessful(() =>
-      api.registerForEvents(auth, {
-        fetch_event_types: config.serverDataOnStartup,
-        apply_markdown: true,
-        include_subscribers: false,
-        client_gravatar: true,
-      }),
-    );
-  } catch (e) {
-    // This should only happen on a 4xx HTTP status, which should only
-    // happen when `auth` is no longer valid.  No use retrying; just log out.
-    dispatch(logout());
-    return;
-  }
+    let initData;
+    try {
+      initData = await tryUntilSuccessful(() =>
+        api.registerForEvents(auth, {
+          fetch_event_types: config.serverDataOnStartup,
+          apply_markdown: true,
+          include_subscribers: false,
+          client_gravatar: true,
+        }),
+      );
+    } catch (e) {
+      // This should only happen on a 4xx HTTP status, which should only
+      // happen when `auth` is no longer valid.  No use retrying; just log out.
+      dispatch(logout());
+      return;
+    }
 
-  dispatch(realmInit(initData));
-  dispatch(fetchTopMostNarrow());
-  dispatch(initialFetchComplete());
-  dispatch(startEventPolling(initData.queue_id, initData.last_event_id));
+    dispatch(realmInit(initData));
+    dispatch(fetchTopMostNarrow());
+    dispatch(initialFetchComplete());
+    dispatch(startEventPolling(initData.queue_id, initData.last_event_id));
 
-  dispatch(fetchPrivateMessages());
+    dispatch(fetchPrivateMessages());
 
-  const session = getSession(getState());
-  if (session.lastNarrow) {
-    dispatch(fetchMessagesInNarrow(session.lastNarrow));
-  }
+    const session = getSession(state);
+    if (session.lastNarrow) {
+      dispatch(fetchMessagesInNarrow(session.lastNarrow));
+    }
 
-  dispatch(sendOutbox());
-  dispatch(initNotifications());
-  dispatch(reportPresence());
-  setInterval(() => dispatch(reportPresence()), 60 * 1000);
-};
+    dispatch(sendOutbox());
+    dispatch(initNotifications());
+    dispatch(reportPresence());
+    setInterval(() => dispatch(reportPresence()), 60 * 1000);
+  });
 
-export const uploadFile = (narrow: Narrow, uri: string, name: string) => async (
-  dispatch: Dispatch,
-  getState: GetState,
-) => {
-  const auth = getAuth(getState());
-  const response = await api.uploadFile(auth, uri, name);
-  const messageToSend = `[${name}](${response.uri})`;
+export const uploadFile = (narrow: Narrow, uri: string, name: string) =>
+  withApi(async (api, auth, dispatch) => {
+    const response = await api.uploadFile(auth, uri, name);
+    const messageToSend = `[${name}](${response.uri})`;
 
-  dispatch(addToOutbox(narrow, messageToSend));
-};
+    dispatch(addToOutbox(narrow, messageToSend));
+  });
