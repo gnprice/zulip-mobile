@@ -48,14 +48,22 @@ const r4 = x.muteTopic('x', 'y');
 // This probably *should* cause an error, but doesn't
 const r6 = x.checkCompatibility();
 
-/*
-const wrapApi = (auth: Auth): $ObjMap<typeof api, ApplyAuth> =>
-  objectFromEntries(Object.keys(api).map(name => [name, (...args) => api[name](auth, ...args)]));
-*/
+// TODO probably memoize this on `auth` object
+const wrapApi = (auth: Auth): AuthedApi =>
+  (objectFromEntries(
+    Object.keys(api).map(name => [name, (...args) => api[name](auth, ...args)]),
+  ): $FlowFixMe);
 
 export function withApi(
   f: (api: typeof api, auth: Auth, dispatch: Dispatch, state: GlobalState) => Promise<mixed>,
 ) {
   return (dispatch: Dispatch, getState: GetState) =>
     f(api, getAuth(getState()), dispatch, getState());
+}
+
+export function withApiWrapped(
+  f: (api: AuthedApi, dispatch: Dispatch, state: GlobalState) => Promise<mixed>,
+) {
+  return (dispatch: Dispatch, getState: GetState) =>
+    f(wrapApi(getAuth(getState())), dispatch, getState());
 }
