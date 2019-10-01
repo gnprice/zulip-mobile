@@ -45,6 +45,9 @@ const r4 = x.muteTopic('x', 'y');
 // This rightly causes an error, though the message is unhelpful
 // const r5 = x.getServerSettings('https://chat.example.com');
 
+// This probably *should* cause an error, but doesn't
+const r6 = x.checkCompatibility();
+
 /*
 const wrapApi = (auth: Auth): $ObjMap<typeof api, ApplyAuth> =>
   objectFromEntries(Object.keys(api).map(name => [name, (...args) => api[name](auth, ...args)]));
