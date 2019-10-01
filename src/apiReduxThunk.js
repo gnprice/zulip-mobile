@@ -12,6 +12,18 @@ type Fn2<A, B, R> = (A, B, ...mixed[]) => R;
 declare function afterAuth<R>(f: Fn1<Auth, R>): Fn0<R>;
 declare function afterAuth<A, R>(f: Fn2<Auth, A, R>): Fn1<A, R>;
 declare function afterAuth<A, B, R>(f: (Auth, A, B) => R): (A, B) => R;
+declare function afterAuth<A, B, C, R>(f: (Auth, A, B, C) => R): (A, B, C) => R;
+declare function afterAuth<A, B, C, D, R>(f: (Auth, A, B, C, D) => R): (A, B, C, D) => R;
+declare function afterAuth<A, B, C, D, E, R>(f: (Auth, A, B, C, D, E) => R): (A, B, C, D, E) => R;
+declare function afterAuth<A, B, C, D, E, F, R>(
+  f: (Auth, A, B, C, D, E, F) => R,
+): (A, B, C, D, E, F) => R;
+declare function afterAuth<A, B, C, D, E, F, G, R>(
+  f: (Auth, A, B, C, D, E, F, G) => R,
+): (A, B, C, D, E, F, G) => R;
+declare function afterAuth<A, B, C, D, E, F, G, H, R>(
+  f: (Auth, A, B, C, D, E, F, G, H) => R,
+): (A, B, C, D, E, F, G, H) => R;
 
 // prettier-ignore
 type ApplyAuth = typeof afterAuth;
@@ -29,6 +41,9 @@ const r2 = x.deleteStream(3, 4);
 r1.then(v => v.members[0].user_id);
 
 const r4 = x.muteTopic('x', 'y');
+
+// This rightly causes an error, though the message is unhelpful
+// const r5 = x.getServerSettings('https://chat.example.com');
 
 /*
 const wrapApi = (auth: Auth): $ObjMap<typeof api, ApplyAuth> =>
