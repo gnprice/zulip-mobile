@@ -40,6 +40,7 @@ import subscriptionAdd from './subscriptions/subscriptionAdd';
 import subscriptionRemove from './subscriptions/subscriptionRemove';
 import toggleMuteStream from './subscriptions/toggleMuteStream';
 import togglePinStream from './subscriptions/togglePinStream';
+import toggleStreamNotifications from './subscriptions/toggleStreamNotifications';
 import unmuteTopic from './subscriptions/unmuteTopic';
 import createUserGroup from './user_groups/createUserGroup';
 import deleteUserGroup from './user_groups/deleteUserGroup';
@@ -94,6 +95,7 @@ export {
   subscriptionRemove,
   toggleMuteStream,
   togglePinStream,
+  toggleStreamNotifications,
   unmuteTopic,
   createUserGroup,
   deleteUserGroup,

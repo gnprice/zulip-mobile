@@ -1,9 +1,5 @@
 /* @flow strict-local */
-import type { GetState, Dispatch } from '../types';
-import { getAuth } from '../selectors';
-import toggleStreamNotifications from '../api/subscriptions/toggleStreamNotifications';
+import { withApi } from '../apiReduxThunk';
 
-export const toggleStreamNotification = (streamId: number, value: boolean) => (
-  dispatch: Dispatch,
-  getState: GetState,
-) => toggleStreamNotifications(getAuth(getState()), streamId, value);
+export const toggleStreamNotification = (streamId: number, value: boolean) =>
+  withApi((api, auth) => api.toggleStreamNotifications(auth, streamId, value));
