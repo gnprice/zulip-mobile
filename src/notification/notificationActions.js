@@ -1,7 +1,6 @@
 /* @flow strict-local */
 import { Platform } from 'react-native';
 import type { Account, Dispatch, GetState, Identity, Action } from '../types';
-import * as api from '../api';
 import { getNotificationToken, getNarrowFromNotificationData } from '.';
 import type { Notification } from '.';
 import { getActiveAccount } from '../selectors';
@@ -44,7 +43,7 @@ export const narrowToNotification = (data: ?Notification) => (
 };
 
 /** Tell the given server about this device token, if it doesn't already know. */
-const sendPushToken = async (dispatch: Dispatch, account: Account | void, pushToken: string) => {
+const sendPushToken = async (api, dispatch, account: Account | void, pushToken: string) => {
   if (!account || account.apiKey === '') {
     // We've logged out of the account and/or forgotten it.  Shrug.
     return;
@@ -59,37 +58,38 @@ const sendPushToken = async (dispatch: Dispatch, account: Account | void, pushTo
 };
 
 /** Tell all logged-in accounts' servers about our device token, as needed. */
-export const sendAllPushToken = () => async (dispatch: Dispatch, getState: GetState) => {
-  const { pushToken } = getSession(getState());
-  if (pushToken === null) {
-    return;
-  }
-  const accounts = getAccounts(getState());
-  await Promise.all(accounts.map(account => sendPushToken(dispatch, account, pushToken)));
-};
+export const sendAllPushToken = () =>
+  withApi(async (api, auth, dispatch, state) => {
+    const { pushToken } = getSession(state);
+    if (pushToken === null) {
+      return;
+    }
+    const accounts = getAccounts(state);
+    await Promise.all(accounts.map(account => sendPushToken(api, dispatch, account, pushToken)));
+  });
 
 /** Tell the active account's server about our device token, if needed. */
-export const initNotifications = () => async (dispatch: Dispatch, getState: GetState) => {
-  const { pushToken } = getSession(getState());
-  if (pushToken === null) {
-    // We don't have the token yet.  When we learn it, the listener will
-    // update this and all other logged-in servers.  Try to learn it.
-    //
-    // On Android this shouldn't happen -- our Android-native code requests
-    // the token early in startup and fires the event that tells it to our
-    // JS code -- but it's harmless to try again.
-    //
-    // On iOS this is normal because getting the token may involve showing
-    // the user a permissions modal, so we defer that until this point.
-    getNotificationToken();
-    return;
-  }
-  const account = getActiveAccount(getState());
-  await sendPushToken(dispatch, account, pushToken);
-};
+export const initNotifications = () =>
+  withApi(async (api, auth, dispatch, state) => {
+    const { pushToken } = getSession(state);
+    if (pushToken === null) {
+      // We don't have the token yet.  When we learn it, the listener will
+      // update this and all other logged-in servers.  Try to learn it.
+      //
+      // On Android this shouldn't happen -- our Android-native code requests
+      // the token early in startup and fires the event that tells it to our
+      // JS code -- but it's harmless to try again.
+      //
+      // On iOS this is normal because getting the token may involve showing
+      // the user a permissions modal, so we defer that until this point.
+      getNotificationToken();
+      return;
+    }
+    const account = getActiveAccount(state);
+    await sendPushToken(api, dispatch, account, pushToken);
+  });
 
 export const tryStopNotifications = () =>
-  // eslint-disable-next-line no-shadow
   withApi(async (api, auth, dispatch, state) => {
     const { ackedPushToken: token } = getActiveAccount(state);
     if (token !== null) {
