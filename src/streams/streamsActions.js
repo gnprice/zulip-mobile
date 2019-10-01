@@ -2,6 +2,7 @@
 import type { GetState, Dispatch, Stream } from '../types';
 import * as api from '../api';
 import { getAuth } from '../selectors';
+import { withApi } from '../apiReduxThunk';
 
 export const createNewStream = (
   name: string,
@@ -42,9 +43,5 @@ export const togglePinStream = (streamId: number, value: boolean) => async (
   await api.togglePinStream(getAuth(getState()), streamId, value);
 };
 
-export const toggleMuteStream = (streamId: number, value: boolean) => async (
-  dispatch: Dispatch,
-  getState: GetState,
-) => {
-  await api.toggleMuteStream(getAuth(getState()), streamId, value);
-};
+export const toggleMuteStream = (streamId: number, value: boolean) =>
+  withApi((api, auth) => api.toggleMuteStream(auth, streamId, value));
