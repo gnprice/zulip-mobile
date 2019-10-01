@@ -18,13 +18,13 @@ import {
   DELETE_OUTBOX_MESSAGE,
   MESSAGE_SEND_COMPLETE,
 } from '../actionConstants';
-import { getAuth } from '../selectors';
 import { getSelfUserDetail, getUsersByEmail } from '../users/userSelectors';
 import { getUsersAndWildcards } from '../users/userHelpers';
 import { isStreamNarrow, isPrivateOrGroupNarrow } from '../utils/narrow';
 import progressiveTimeout from '../utils/progressiveTimeout';
 import { NULL_USER } from '../nullObjects';
 import { withApi } from '../apiReduxThunk';
+import { getIdentity } from '../account/accountsSelectors';
 
 export const messageSendStart = (outbox: Outbox): Action => ({
   type: MESSAGE_SEND_START,
@@ -113,7 +113,7 @@ const getContentPreview = (content: string, state: GlobalState): string => {
       content,
       getUsersAndWildcards(state.users),
       state.streams,
-      getAuth(state),
+      getIdentity(state),
       state.realm.filters,
       state.realm.emoji,
     );
