@@ -4,9 +4,9 @@ import * as api from './api';
 import { getAuth } from './account/accountsSelectors';
 import { objectFromEntries } from './jsBackport';
 
-type Fn0<R> = (...empty[]) => R;
-type Fn1<A, R> = (A, ...empty[]) => R;
-type Fn2<A, B, R> = (A, B, ...empty[]) => R;
+type Fn0<R> = (...mixed[]) => R;
+type Fn1<A, R> = (A, ...mixed[]) => R;
+type Fn2<A, B, R> = (A, B, ...mixed[]) => R;
 
 // eslint-disable no-redeclare
 declare function applyAuth<R>(auth: Auth, f: Fn1<Auth, R>): Fn0<R>;
@@ -26,8 +26,13 @@ type AuthedApi = $ObjMap<typeof api, ApplyAuth>;
 
 const x = ((null: $FlowFixMe): AuthedApi);
 
-const u = x.getUsers();
-const r2 = x.deleteStream(); // TODO no error -- should require number arg
+// TODO extra args don't get rejected
+const r1 = x.getUsers(5);
+const r2 = x.deleteStream(3, 4);
+// but yay, arg types do get checked!
+// const r3 = x.deleteStream({ a: 1 });
+// and result types get appropriately inferred
+r1.then(v => v.members[0].user_id);
 
 /*
 const wrapApi = (auth: Auth): $ObjMap<typeof api, ApplyAuth> =>
