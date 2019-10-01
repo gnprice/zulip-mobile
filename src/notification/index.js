@@ -188,18 +188,3 @@ export const getNotificationToken = () => {
     // On Android, we do this at application startup.
   }
 };
-
-export const tryStopNotifications = async (
-  auth: Auth,
-  token: string | null,
-  dispatch: Dispatch,
-) => {
-  if (token !== null) {
-    dispatch(unackPushToken(identityOfAuth(auth)));
-    try {
-      await api.forgetPushToken(auth, Platform.OS, token);
-    } catch (e) {
-      logging.warn(e);
-    }
-  }
-};

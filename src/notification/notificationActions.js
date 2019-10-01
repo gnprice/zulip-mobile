@@ -2,18 +2,15 @@
 import { Platform } from 'react-native';
 import type { Account, Dispatch, GetState, Identity, Action } from '../types';
 import * as api from '../api';
-import {
-  getNotificationToken,
-  tryStopNotifications as innerStopNotifications,
-  getNarrowFromNotificationData,
-} from '.';
+import { getNotificationToken, getNarrowFromNotificationData } from '.';
 import type { Notification } from '.';
 import { getAuth, getActiveAccount } from '../selectors';
 import { getSession, getAccounts } from '../directSelectors';
 import { GOT_PUSH_TOKEN, ACK_PUSH_TOKEN, UNACK_PUSH_TOKEN } from '../actionConstants';
-import { identityOfAccount, authOfAccount } from '../account/accountMisc';
+import { identityOfAccount, authOfAccount, identityOfAuth } from '../account/accountMisc';
 import { getUsersById } from '../users/userSelectors';
 import { doNarrow } from '../message/messagesActions';
+import * as logging from '../utils/logging';
 
 export const gotPushToken = (pushToken: string): Action => ({
   type: GOT_PUSH_TOKEN,
@@ -92,6 +89,13 @@ export const initNotifications = () => async (dispatch: Dispatch, getState: GetS
 
 export const tryStopNotifications = () => async (dispatch: Dispatch, getState: GetState) => {
   const auth = getAuth(getState());
-  const { ackedPushToken } = getActiveAccount(getState());
-  innerStopNotifications(auth, ackedPushToken, dispatch);
+  const { ackedPushToken: token } = getActiveAccount(getState());
+  if (token !== null) {
+    dispatch(unackPushToken(identityOfAuth(auth)));
+    try {
+      await api.forgetPushToken(auth, Platform.OS, token);
+    } catch (e) {
+      logging.warn(e);
+    }
+  }
 };
