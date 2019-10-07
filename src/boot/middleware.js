@@ -18,7 +18,7 @@ if (config.enableReduxLogging) {
       duration: true,
       // See docs/howto/debugging.md.
       // diff: true,
-      // predicate: (getState, action) => action.type === 'MESSAGE_FETCH_COMPLETE',
+      predicate: (getState, action) => action.type !== 'DRAFT_UPDATE',
     }),
   );
 }
