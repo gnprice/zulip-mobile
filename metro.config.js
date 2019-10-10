@@ -45,6 +45,8 @@ function arrayFlatMap(a, f) {
 }
 
 module.exports = {
+  resetCache: true, // TODO temporary hack
+
   // This causes Metro to even look outside the zulip-mobile tree in
   // the first place.
   watchFolders: linkablePackages.map(packagePath),
