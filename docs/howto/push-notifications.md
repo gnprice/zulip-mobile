@@ -167,7 +167,7 @@ about this name, styling it without an article and with the
 idiosyncratic capitalization shown.
 
 
-### Current workaround
+### Workaround: alpha release
 
 Make a release build of the app, and upload it [as an alpha][].
 Update your device to the alpha from TestFlight, and test there.
@@ -205,6 +205,11 @@ the user-facing [version number][].
 
 [iOS build number]: https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleversion
 [version number]: https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring
+
+
+### Possible better workaround: run a release-signed build
+
+Greg has experimented with trying to run a 
 
 
 ### Possible future solution
