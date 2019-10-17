@@ -6,7 +6,7 @@ import type { Dispatch, GetState, Narrow } from '../types';
 import * as api from '../api';
 import { PRESENCE_RESPONSE } from '../actionConstants';
 import { getAuth, tryGetAuth } from '../selectors';
-import { isPrivateOrGroupNarrow, caseNarrowPartial } from '../utils/narrow';
+import { isPrivateOrGroupNarrow, caseNarrowDefault } from '../utils/narrow';
 import { getAllUsersByEmail } from './userSelectors';
 
 let lastReportPresence = new Date(0);
@@ -105,25 +105,28 @@ const maybeNotifyTyping = (auth, recipientIds: number[] | null) => {
   }
 };
 
-function liftMaybe<T>(xs: T[]): $NonMaybeType<T>[] | null {
-  return xs.every(x => x != null) ? xs : null;
+function liftMaybe<T>(xs: T[] | null): $NonMaybeType<T>[] | null {
+  return xs && xs.every(x => x != null) ? xs : null;
 }
 
 export const sendTypingStart = (narrow: Narrow) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
-  if (!isPrivateOrGroupNarrow(narrow)) {
-    return;
-  }
-
   const usersByEmail = getAllUsersByEmail(getState());
-  const recipientIds = liftMaybe(
-    caseNarrowPartial(narrow, {
+  const recipientEmails = caseNarrowDefault(
+    narrow,
+    {
       pm: email => [email],
       groupPm: emails => emails,
-    }).map(email => usersByEmail.get(email)?.user_id),
+    },
+    () => null,
   );
+  const recipientIds =
+    recipientEmails && liftMaybe(recipientEmails.map(email => usersByEmail.get(email)?.user_id));
+  if (!recipientIds) {
+    return;
+  }
 
   const auth = getAuth(getState());
   maybeNotifyTyping(auth, recipientIds);
