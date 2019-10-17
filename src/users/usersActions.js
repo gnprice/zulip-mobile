@@ -105,6 +105,10 @@ const maybeNotifyTyping = (auth, recipientIds: number[] | null) => {
   }
 };
 
+function liftMaybe<T>(xs: T[]): $NonMaybeType<T>[] | null {
+  return xs.every(x => x != null) ? xs : null;
+}
+
 export const sendTypingStart = (narrow: Narrow) => async (
   dispatch: Dispatch,
   getState: GetState,
@@ -114,16 +118,12 @@ export const sendTypingStart = (narrow: Narrow) => async (
   }
 
   const usersByEmail = getAllUsersByEmail(getState());
-  const recipientIds = caseNarrowPartial(narrow, {
-    pm: email => [email],
-    groupPm: emails => emails,
-  }).map(email => {
-    const user = usersByEmail.get(email);
-    if (!user) {
-      throw new Error('unknown user');
-    }
-    return user.user_id;
-  });
+  const recipientIds = liftMaybe(
+    caseNarrowPartial(narrow, {
+      pm: email => [email],
+      groupPm: emails => emails,
+    }).map(email => usersByEmail.get(email)?.user_id),
+  );
 
   const auth = getAuth(getState());
   maybeNotifyTyping(auth, recipientIds);
