@@ -109,11 +109,7 @@ function liftMaybe<T>(xs: T[] | null): $NonMaybeType<T>[] | null {
   return xs && xs.every(x => x != null) ? xs : null;
 }
 
-export const sendTypingStart = (narrow: Narrow) => async (
-  dispatch: Dispatch,
-  getState: GetState,
-) => {
-  const usersByEmail = getAllUsersByEmail(getState());
+const pmRecipients = (narrow, usersByEmail): number[] | null => {
   const recipientEmails = caseNarrowDefault(
     narrow,
     {
@@ -122,8 +118,17 @@ export const sendTypingStart = (narrow: Narrow) => async (
     },
     () => null,
   );
-  const recipientIds =
-    recipientEmails && liftMaybe(recipientEmails.map(email => usersByEmail.get(email)?.user_id));
+  return (
+    recipientEmails && liftMaybe(recipientEmails.map(email => usersByEmail.get(email)?.user_id))
+  );
+};
+
+export const sendTypingStart = (narrow: Narrow) => async (
+  dispatch: Dispatch,
+  getState: GetState,
+) => {
+  const usersByEmail = getAllUsersByEmail(getState());
+  const recipientIds = pmRecipients(narrow, usersByEmail);
 
   const auth = getAuth(getState());
   maybeNotifyTyping(auth, recipientIds);
