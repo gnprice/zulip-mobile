@@ -6,7 +6,7 @@ import type { Dispatch, GetState, Narrow } from '../types';
 import * as api from '../api';
 import { PRESENCE_RESPONSE } from '../actionConstants';
 import { getAuth, tryGetAuth } from '../selectors';
-import { isPrivateOrGroupNarrow, caseNarrowDefault } from '../utils/narrow';
+import { caseNarrowDefault } from '../utils/narrow';
 import { getAllUsersByEmail } from './userSelectors';
 
 let lastReportPresence = new Date(0);
@@ -124,9 +124,6 @@ export const sendTypingStart = (narrow: Narrow) => async (
   );
   const recipientIds =
     recipientEmails && liftMaybe(recipientEmails.map(email => usersByEmail.get(email)?.user_id));
-  if (!recipientIds) {
-    return;
-  }
 
   const auth = getAuth(getState());
   maybeNotifyTyping(auth, recipientIds);
@@ -137,10 +134,6 @@ export const sendTypingStop = (narrow: Narrow) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
-  if (!isPrivateOrGroupNarrow(narrow)) {
-    return;
-  }
-
   const auth = getAuth(getState());
   maybeNotifyTyping(auth, null);
 };
