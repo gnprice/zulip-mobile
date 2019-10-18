@@ -9,7 +9,7 @@ import type { Context, Dimensions, LocalizableText, Dispatch } from '../types';
 import { connect } from '../react-redux';
 import KeyboardAvoider from './KeyboardAvoider';
 import OfflineNotice from './OfflineNotice';
-import ZulipStatusBar from './ZulipStatusBar';
+import { StatusBarConfig, TopInsetSpacer } from './ZulipStatusBar';
 import { getSession } from '../selectors';
 import ModalNavBar from '../nav/ModalNavBar';
 import ModalSearchNavBar from '../nav/ModalSearchNavBar';
@@ -109,7 +109,8 @@ class Screen extends PureComponent<Props> {
 
     return (
       <View style={[contextStyles.screen, { paddingBottom: safeAreaInsets.bottom }]}>
-        <ZulipStatusBar />
+	<StatusBarConfig />
+	<TopInsetSpacer />
         {search ? (
           <ModalSearchNavBar autoFocus={autoFocus} searchBarOnChange={searchBarOnChange} />
         ) : (

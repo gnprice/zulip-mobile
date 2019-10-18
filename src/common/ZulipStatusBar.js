@@ -46,7 +46,7 @@ class StatusBarConfigImpl extends PureComponent<StatusBarConfigProps> {
   }
 }
 
-const StatusBarConfig = connectFlowFixMe(
+export const StatusBarConfig = connectFlowFixMe(
   (state: GlobalState, props: { backgroundColor?: string, narrow?: Narrow }) => ({
     theme: getSettings(state).theme,
     backgroundColor:
@@ -74,7 +74,7 @@ class TopInsetSpacerImpl extends PureComponent<TopInsetSpacerProps> {
   }
 }
 
-const TopInsetSpacer = connectFlowFixMe(
+export const TopInsetSpacer = connectFlowFixMe(
   (state: GlobalState, props: { backgroundColor?: string, narrow?: Narrow }) => ({
     safeAreaInsets: getSession(state).safeAreaInsets,
     backgroundColor:
@@ -85,6 +85,22 @@ const TopInsetSpacer = connectFlowFixMe(
   }),
 )(TopInsetSpacerImpl);
 
+
+export const MaybeHideStatusBar = connectFlowFixMe(
+  state => ({
+    orientation: getSession(state).orientation,
+  }),
+)(class extends PureComponent<{| orientation: Orientation |}> {
+
+  render() {
+    const { orientation } = this.props;
+    return (
+      orientation === 'PORTRAIT' && Platform.OS !== 'android' && (
+        <StatusBar hidden />
+      )
+    );
+  }
+});
 
 type Props = {
   dispatch: Dispatch,
@@ -108,19 +124,7 @@ class ZulipStatusBar extends PureComponent<Props> {
   };
 
   render() {
-    const { narrow, backgroundColor, hidden, orientation } = this.props;
-    return (
-      <View>
-        <StatusBarConfig narrow={narrow} backgroundColor={backgroundColor} />
-        {hidden ? (
-          orientation === 'PORTRAIT' && Platform.OS !== 'android' && (
-            <StatusBar hidden />
-          )
-        ) : (
-          <TopInsetSpacer narrow={narrow} backgroundColor={backgroundColor} />
-        )}
-      </View>
-    );
+    throw new Error("should be unreachable");
   }
 }
 

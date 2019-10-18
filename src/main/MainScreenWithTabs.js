@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native';
 
 import type { Context } from '../types';
 import { OfflineNotice, ZulipStatusBar } from '../common';
+import { StatusBarConfig, TopInsetSpacer } from '../common/ZulipStatusBar';
 import MainTabs from './MainTabs';
 import styles from '../styles';
 
@@ -19,7 +20,8 @@ export default class MainScreenWithTabs extends PureComponent<{}> {
 
     return (
       <SafeAreaView style={[styles.flexed, contextStyles.backgroundColor]}>
-        <ZulipStatusBar />
+	<StatusBarConfig />
+	<TopInsetSpacer />
         <OfflineNotice />
         <MainTabs />
       </SafeAreaView>
