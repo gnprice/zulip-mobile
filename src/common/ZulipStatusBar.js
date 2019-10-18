@@ -61,7 +61,7 @@ class ZulipStatusBar extends PureComponent<Props> {
         {orientation === 'PORTRAIT' && hidden && Platform.OS !== 'android' && (
           <StatusBar hidden />
         )}
-        {(
+        {orientation === 'PORTRAIT' && (
           <View style={style} />
         )}
       </View>
