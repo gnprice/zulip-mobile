@@ -62,7 +62,8 @@ export default createBottomTabNavigator(
   },
   {
     backBehavior: 'none',
-    ...tabsOptions({
+      ...tabsOptions({
+	  safeAreaInset: {bottom: 'never'},
       showLabel: !!Platform.isPad,
       showIcon: true,
     }),

@@ -6,7 +6,7 @@ type Props = {|
   showIcon: boolean,
 |};
 
-export default ({ showLabel, showIcon }: Props) => ({
+export default ({ showLabel, showIcon, ...restOptions }: Props) => ({
   swipeEnabled: false,
   animationEnabled: false,
   tabBarOptions: {
@@ -34,5 +34,6 @@ export default ({ showLabel, showIcon }: Props) => ({
       borderWidth: 0,
       elevation: 0,
     },
+      ...restOptions,
   },
 });
