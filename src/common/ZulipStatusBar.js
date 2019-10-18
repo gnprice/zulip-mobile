@@ -52,7 +52,7 @@ class ZulipStatusBar extends PureComponent<Props> {
     const statusBarColor = getStatusBarColor(backgroundColor, theme);
     return (
       orientation === 'PORTRAIT' && (
-        <View style={style}>
+        <View>
           <StatusBar
             animated
             showHideTransition="slide"
@@ -60,6 +60,7 @@ class ZulipStatusBar extends PureComponent<Props> {
             backgroundColor={Color(statusBarColor).darken(0.1)}
             barStyle={getStatusBarStyle(statusBarColor)}
           />
+          <View style={style} />
         </View>
       )
     );
