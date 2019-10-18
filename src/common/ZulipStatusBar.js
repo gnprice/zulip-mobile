@@ -24,12 +24,73 @@ export const getStatusBarStyle = (statusBarColor: string): BarStyle =>
     ? 'light-content'
     : 'dark-content';
 
-type Props = {
+type StatusBarConfigProps = {|
   dispatch: Dispatch,
-  hidden: boolean,
+  narrow: Narrow,
   theme: ThemeName,
   backgroundColor: string,
+|};
+
+class StatusBarConfigImpl extends PureComponent<StatusBarConfigProps> {
+  render() {
+    const { theme, backgroundColor } = this.props;
+    const statusBarColor = getStatusBarColor(backgroundColor, theme);
+    return (
+      <StatusBar
+        animated
+        showHideTransition="slide"
+        backgroundColor={Color(statusBarColor).darken(0.1)}
+        barStyle={getStatusBarStyle(statusBarColor)}
+      />
+    );
+  }
+}
+
+const StatusBarConfig = connectFlowFixMe(
+  (state: GlobalState, props: { backgroundColor?: string, narrow?: Narrow }) => ({
+    theme: getSettings(state).theme,
+    backgroundColor:
+      props.backgroundColor !== undefined
+        ? props.backgroundColor
+        : getTitleBackgroundColor(props.narrow)(state),
+  }),
+)(StatusBarConfigImpl);
+
+
+type TopInsetSpacerProps = {|
+  dispatch: Dispatch,
+  backgroundColor: string,
   safeAreaInsets: Dimensions,
+  orientation: Orientation,
+|};
+
+class TopInsetSpacerImpl extends PureComponent<TopInsetSpacerProps> {
+  render() {
+    const { backgroundColor, safeAreaInsets, orientation } = this.props;
+    const style = { height: safeAreaInsets.top, backgroundColor };
+    return orientation === 'PORTRAIT' && (
+      <View style={style} />
+    );
+  }
+}
+
+const TopInsetSpacer = connectFlowFixMe(
+  (state: GlobalState, props: { backgroundColor?: string, narrow?: Narrow }) => ({
+    safeAreaInsets: getSession(state).safeAreaInsets,
+    backgroundColor:
+      props.backgroundColor !== undefined
+        ? props.backgroundColor
+        : getTitleBackgroundColor(props.narrow)(state),
+    orientation: getSession(state).orientation,
+  }),
+)(TopInsetSpacerImpl);
+
+
+type Props = {
+  dispatch: Dispatch,
+  narrow: Narrow,
+  hidden: boolean,
+  backgroundColor: string,
   orientation: Orientation,
 };
 
@@ -47,22 +108,16 @@ class ZulipStatusBar extends PureComponent<Props> {
   };
 
   render() {
-    const { theme, backgroundColor, hidden, safeAreaInsets, orientation } = this.props;
-    const style = { height: hidden ? 0 : safeAreaInsets.top, backgroundColor };
-    const statusBarColor = getStatusBarColor(backgroundColor, theme);
+    const { narrow, backgroundColor, hidden, orientation } = this.props;
     return (
       <View>
-        <StatusBar
-          animated
-          showHideTransition="slide"
-          backgroundColor={Color(statusBarColor).darken(0.1)}
-          barStyle={getStatusBarStyle(statusBarColor)}
-        />
-        {orientation === 'PORTRAIT' && hidden && Platform.OS !== 'android' && (
-          <StatusBar hidden />
-        )}
-        {orientation === 'PORTRAIT' && (
-          <View style={style} />
+        <StatusBarConfig narrow={narrow} backgroundColor={backgroundColor} />
+        {hidden ? (
+          orientation === 'PORTRAIT' && Platform.OS !== 'android' && (
+            <StatusBar hidden />
+          )
+        ) : (
+          <TopInsetSpacer narrow={narrow} backgroundColor={backgroundColor} />
         )}
       </View>
     );
@@ -70,13 +125,7 @@ class ZulipStatusBar extends PureComponent<Props> {
 }
 
 export default connectFlowFixMe(
-  (state: GlobalState, props: { backgroundColor?: string, narrow?: Narrow }) => ({
-    safeAreaInsets: getSession(state).safeAreaInsets,
-    theme: getSettings(state).theme,
-    backgroundColor:
-      props.backgroundColor !== undefined
-        ? props.backgroundColor
-        : getTitleBackgroundColor(props.narrow)(state),
+  (state: GlobalState) => ({
     orientation: getSession(state).orientation,
   }),
 )(ZulipStatusBar);
