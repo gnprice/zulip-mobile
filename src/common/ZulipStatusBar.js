@@ -51,18 +51,20 @@ class ZulipStatusBar extends PureComponent<Props> {
     const style = { height: hidden ? 0 : safeAreaInsets.top, backgroundColor };
     const statusBarColor = getStatusBarColor(backgroundColor, theme);
     return (
-      orientation === 'PORTRAIT' && (
-        <View>
-          <StatusBar
-            animated
-            showHideTransition="slide"
-            hidden={hidden && Platform.OS !== 'android'}
-            backgroundColor={Color(statusBarColor).darken(0.1)}
-            barStyle={getStatusBarStyle(statusBarColor)}
-          />
+      <View>
+        <StatusBar
+          animated
+          showHideTransition="slide"
+          backgroundColor={Color(statusBarColor).darken(0.1)}
+          barStyle={getStatusBarStyle(statusBarColor)}
+        />
+        {orientation === 'PORTRAIT' && hidden && Platform.OS !== 'android' && (
+          <StatusBar hidden />
+        )}
+        {orientation === 'PORTRAIT' && (
           <View style={style} />
-        </View>
-      )
+        )}
+      </View>
     );
   }
 }
