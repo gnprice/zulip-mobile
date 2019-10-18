@@ -1,6 +1,6 @@
 /* @flow strict-local */
 import React, { PureComponent } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { SafeAreaView, StyleSheet } from 'react-native';
 import type { NavigationScreenProp } from 'react-navigation';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
@@ -34,13 +34,12 @@ export default class ChatScreen extends PureComponent<Props> {
 
     return (
       <ActionSheetProvider>
-        <View style={[contextStyles.screen, styles.reverse]}>
+        <SafeAreaView style={[contextStyles.screen, styles.reverse]}>
           <Chat narrow={narrow} />
           <OfflineNotice />
           <ChatNavBar narrow={narrow} />
           <StatusBarConfig narrow={narrow} />
-          <TopInsetSpacer narrow={narrow} />
-        </View>
+        </SafeAreaView>
       </ActionSheetProvider>
     );
   }
