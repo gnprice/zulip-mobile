@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import { SafeAreaView } from 'react-native';
 
 import type { Context } from '../types';
-import { OfflineNotice, ZulipStatusBar } from '../common';
+import { OfflineNotice } from '../common';
 import { StatusBarConfig } from '../common/ZulipStatusBar';
 import MainTabs from './MainTabs';
 import styles from '../styles';
