@@ -39,6 +39,7 @@ export default class ChatScreen extends PureComponent<Props> {
           <OfflineNotice />
           <ChatNavBar narrow={narrow} />
           <StatusBarConfig narrow={narrow} />
+
         </SafeAreaView>
       </ActionSheetProvider>
     );
