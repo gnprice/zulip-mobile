@@ -101,35 +101,3 @@ export const MaybeHideStatusBar = connectFlowFixMe(
     );
   }
 });
-
-type Props = {
-  dispatch: Dispatch,
-  narrow: Narrow,
-  hidden: boolean,
-  backgroundColor: string,
-  orientation: Orientation,
-};
-
-/**
- * Controls the status bar settings depending on platform
- * and current navigation position.
- * If narrowed to a stream or topic the color of the status bar
- * matches that of the stream.
- *
- * @prop [narrow] - Currently active narrow.
- */
-class ZulipStatusBar extends PureComponent<Props> {
-  static defaultProps = {
-    hidden: false,
-  };
-
-  render() {
-    throw new Error("should be unreachable");
-  }
-}
-
-export default connectFlowFixMe(
-  (state: GlobalState) => ({
-    orientation: getSession(state).orientation,
-  }),
-)(ZulipStatusBar);
