@@ -71,6 +71,23 @@ var compiledWebviewJs = (function (exports) {
     });
   };
 
+  var makeDiv = function makeDiv(className) {
+    var element = document.createElement('div');
+    element.classList.add(className);
+    return element;
+  };
+
+  var fixupKatex = function fixupKatex(root) {
+    Array.from(root.querySelectorAll('.katex-display')).forEach(function (kd) {
+      var parent = kd.parentNode;
+      var outer = makeDiv('zulip-katex-outer');
+      var inner = makeDiv('zulip-katex-inner');
+      outer.appendChild(inner);
+      parent.replaceChild(outer, kd);
+      inner.appendChild(kd);
+    });
+  };
+
   var platformOS = window.navigator.userAgent.match(/iPhone|iPad|iPod/) ? 'ios' : 'android';
 
   if (!Array.from) {
@@ -406,7 +423,14 @@ var compiledWebviewJs = (function (exports) {
     window.scrollBy(0, newBoundRect.top - prevBoundTop);
   };
 
+  var processIncomingHtml = function processIncomingHtml(root) {
+    fixupKatex(root);
+  };
+
   var handleUpdateEventContent = function handleUpdateEventContent(uevent) {
+    var contentNode = document.createElement('span');
+    contentNode.innerHTML = uevent.content;
+    processIncomingHtml(contentNode);
     var target;
 
     if (uevent.updateStrategy === 'replace') {
@@ -426,7 +450,10 @@ var compiledWebviewJs = (function (exports) {
       target = findPreserveTarget();
     }
 
-    documentBody.innerHTML = uevent.content;
+    documentBody.innerHTML = '';
+    Array.from(contentNode.children).forEach(function (node) {
+      documentBody.appendChild(node);
+    });
     rewriteImageUrls(uevent.auth);
 
     if (target.type === 'bottom') {
@@ -445,6 +472,7 @@ var compiledWebviewJs = (function (exports) {
     rewriteImageUrls(auth);
     sendScrollMessageIfListShort();
     scrollEventsDisabled = false;
+    processIncomingHtml(documentBody);
   };
 
   var handleUpdateEventFetching = function handleUpdateEventFetching(uevent) {

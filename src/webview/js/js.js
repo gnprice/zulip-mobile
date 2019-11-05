@@ -12,6 +12,7 @@ import type {
 import type { MessageListEvent } from '../webViewEventHandlers';
 
 import rewriteImageUrls from './rewriteImageUrls';
+import fixupKatex from './fixup-katex';
 
 /*
  * Supported platforms:
@@ -479,7 +480,21 @@ const scrollToPreserve = (msgId: number, prevBoundTop: number) => {
   window.scrollBy(0, newBoundRect.top - prevBoundTop);
 };
 
+/**
+ * Fix up supplied HTML as needed for display.
+ *
+ * The root itself must not need fixups.
+ */
+const processIncomingHtml = (root: Element) => {
+  fixupKatex(root);
+};
+
 const handleUpdateEventContent = (uevent: WebViewUpdateEventContent) => {
+  // Perform preprocessing on the webview content.
+  const contentNode: HTMLSpanElement = document.createElement('span');
+  contentNode.innerHTML = uevent.content;
+  processIncomingHtml(contentNode);
+
   let target: ScrollTarget;
   if (uevent.updateStrategy === 'replace') {
     target = { type: 'none' };
@@ -495,7 +510,12 @@ const handleUpdateEventContent = (uevent: WebViewUpdateEventContent) => {
     target = findPreserveTarget();
   }
 
-  documentBody.innerHTML = uevent.content;
+  documentBody.innerHTML = '';
+  // documentBody.appendChild(contentNode) would be cleaner here, but currently
+  // breaks our event handlers.
+  Array.from(contentNode.children).forEach(node => {
+    documentBody.appendChild(node);
+  });
 
   rewriteImageUrls(uevent.auth);
 
@@ -516,6 +536,8 @@ export const handleInitialLoad = /* eslint-disable-line */ (anchor: number, auth
   rewriteImageUrls(auth);
   sendScrollMessageIfListShort();
   scrollEventsDisabled = false;
+
+  processIncomingHtml(documentBody);
 };
 
 /*
