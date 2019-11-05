@@ -12,6 +12,8 @@ type InitOptionsType = {|
 |};
 
 export default (content: string, theme: ThemeName, initOptions: InitOptionsType) => template`
+<!DOCTYPE html>
+<html>
 $!${script(initOptions.anchor, initOptions.auth)}
 $!${css(theme)}
 
@@ -19,4 +21,5 @@ $!${css(theme)}
 <body style="overflow-x: hidden;">
 $!${htmlBody(content, initOptions.showMessagePlaceholders)}
 </body>
+</html>
 `;
