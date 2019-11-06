@@ -33,10 +33,15 @@ err() {
 # Parameters and environment
 ################################################################################
 
-# chdir to the current git repo's root
+# Get the auxiliary script directory.
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+AUX_SCRIPT_DIR=${SCRIPT_DIR}/${BASH_SOURCE[0]##*/}.d/
+
+# Chdir to the current git repo's root.
 ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT"
 
+# Ensure that we have access to a functional `readlink -f`.
 . "$ROOT"/tools/lib/ensure-coreutils.sh
 
 # Parse arguments. Sloppy, but sufficient for now.
@@ -112,18 +117,28 @@ if [ ! -d "$SRC" ]; then
 fi
 
 
+
 ################################################################################
-# Pre-sync: platform-agnostic build steps
+# Pre-sync: additional build steps
 ################################################################################
 
-# Currently none, but this is where they'll go.
-#
 # TODO: Use something like `make -f src/webview/static.Makefile`, to ensure that
 #   complicated build steps are not run unconditionally.
 #
 # TODO: split assets into build-time-generated and build-time-static?
 #   - rsync can sync from multiple directories, but has no collision-detection
 #   - might be too many layers of abstraction
+
+
+# Run each pre-sync auxiliary script.
+#
+# Each script gets a few selected parameters as environment variables. Note that
+# $SRC is renamed to $BUILD: most pre-sync scripts will probably consider it
+# their destination-directory.
+for script in "${AUX_SCRIPT_DIR}"/*.{all,${TARGET}}.pre; do
+    [ -f "$script" ] || continue
+    bash -euc "ROOT=\"$ROOT\" TARGET=\"$TARGET\" BUILD=\"$SRC\" . $script"
+done
 
 
 
