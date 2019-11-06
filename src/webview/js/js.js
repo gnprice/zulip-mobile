@@ -485,7 +485,8 @@ const scrollToPreserve = (msgId: number, prevBoundTop: number) => {
  *
  * The root itself must not need fixups.
  */
-const processIncomingHtml = (root: Element) => {
+const processIncomingHtml = (auth: Auth, root: Element) => {
+  rewriteImageUrls(auth, root);
   fixupKatex(root);
 };
 
@@ -493,7 +494,7 @@ const handleUpdateEventContent = (uevent: WebViewUpdateEventContent) => {
   // Perform preprocessing on the webview content.
   const contentNode: HTMLSpanElement = document.createElement('span');
   contentNode.innerHTML = uevent.content;
-  processIncomingHtml(contentNode);
+  processIncomingHtml(uevent.auth, contentNode);
 
   let target: ScrollTarget;
   if (uevent.updateStrategy === 'replace') {
@@ -517,8 +518,6 @@ const handleUpdateEventContent = (uevent: WebViewUpdateEventContent) => {
     documentBody.appendChild(node);
   });
 
-  rewriteImageUrls(uevent.auth);
-
   if (target.type === 'bottom') {
     scrollToBottom();
   } else if (target.type === 'anchor') {
@@ -532,12 +531,10 @@ const handleUpdateEventContent = (uevent: WebViewUpdateEventContent) => {
 
 // We call this when the webview's content first loads.
 export const handleInitialLoad = /* eslint-disable-line */ (anchor: number, auth: Auth) => {
+  processIncomingHtml(auth, documentBody);
   scrollToAnchor(anchor);
-  rewriteImageUrls(auth);
   sendScrollMessageIfListShort();
   scrollEventsDisabled = false;
-
-  processIncomingHtml(documentBody);
 };
 
 /*
