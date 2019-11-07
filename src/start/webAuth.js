@@ -43,6 +43,7 @@ export const generateOtp = async () => {
 };
 
 export const openBrowser = (url: string, otp: string) => {
+  console.log(`starting web auth; otp: ${otp}`);
   openLink(`${url}?mobile_flow_otp=${otp}`);
 };
 
@@ -66,6 +67,7 @@ export const authFromCallbackUrl = (
   otp: string,
   realm: string,
 ): Auth | null => {
+  console.log(`end web auth; otp ${otp}, callbackUrl ${callbackUrl}`);
   const url = parseURL(callbackUrl, true);
 
   // callback format expected: zulip://login?realm={}&email={}&otp_encrypted_api_key={}
