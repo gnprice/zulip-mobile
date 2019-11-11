@@ -130,15 +130,17 @@ fi
 #   - might be too many layers of abstraction
 
 
-# Run each pre-sync auxiliary script.
-#
-# Each script gets a few selected parameters as environment variables. Note that
-# $SRC is renamed to $BUILD: most pre-sync scripts will probably consider it
-# their destination-directory.
-for script in "${AUX_SCRIPT_DIR}"/*.{all,${TARGET}}.pre; do
-    [ -f "$script" ] || continue
-    bash -euc "ROOT=\"$ROOT\" TARGET=\"$TARGET\" BUILD=\"$SRC\" . $script"
-done
+katex_font_type=woff2
+mkdir -p "${SRC}/katex"
+rsync -aR --no-D --delete --delete-excluded \
+    "${ROOT}/node_modules/katex/dist/./" "${SRC}/katex/." \
+    --filter='. /dev/stdin' <<EOF
++ katex.css
++ katex.js
++ *.${katex_font_type}
++ fonts/
+- *
+EOF
 
 
 
