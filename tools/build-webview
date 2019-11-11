@@ -151,8 +151,21 @@ sync() {
           --filter='. /dev/stdin'
 }
 
-# Sync the directory structure, preserving metadata.
+# Copy over files from KaTeX.
+katex_font_type=woff2  # Supported since Safari 10 and Chrome 36.
+sync "${root}/node_modules/katex/dist" "${dest}/katex" <<EOF
++ katex.css
++ katex.js
++ *.${katex_font_type}
++ fonts/
+- *
+EOF
+
+# Copy over our own files.
 sync "${root}/src/webview/static" "${dest}" <<EOF
+# Leave alone the katex directory we just made.
+-,r /katex
+
 # Ignore files that won't be needed at runtime.
 - README.md
 
