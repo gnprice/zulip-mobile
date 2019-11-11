@@ -139,7 +139,7 @@ sync() {
 
 
 katex_font_type=woff2
-sync "${ROOT}/node_modules/katex/dist" "${SRC}/katex" <<EOF
+sync "${ROOT}/node_modules/katex/dist" "${DEST}/katex" <<EOF
 + katex.css
 + katex.js
 + *.${katex_font_type}
@@ -158,6 +158,7 @@ EOF
 #
 # We use `rsync` here, as it will skip unchanged files.
 sync "${SRC}" "${DEST}" <<EOF
+-r /katex
 - README.md
 - .gitignore
 + *
