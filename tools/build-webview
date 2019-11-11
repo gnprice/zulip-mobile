@@ -111,6 +111,17 @@ if [[ "$DEST" != *"/webview" ]]; then
 fi
 
 
+
+################################################################################
+# (Build and) sync
+################################################################################
+
+# Sync files from src to dest, reading rsync filter rules from stdin.
+#
+# Both src and dest should be directories.
+#
+# Files in dest not mentioned will be deleted by default.  A rule
+# like `-r /foo` will override this to leave `foo` in place.
 sync() {
     local src="$1" dest="$2"
     mkdir -p "${dest}"
@@ -119,20 +130,8 @@ sync() {
           --filter='. /dev/stdin'
 }
 
-
-################################################################################
-# Pre-sync: additional build steps
-################################################################################
-
-# TODO: Use something like `make -f src/webview/static.Makefile`, to ensure that
-#   complicated build steps are not run unconditionally.
-#
-# TODO: split assets into build-time-generated and build-time-static?
-#   - rsync can sync from multiple directories, but has no collision-detection
-#   - might be too many layers of abstraction
-
-
-katex_font_type=woff2
+# Copy over files from KaTeX.
+katex_font_type=woff2  # Supported since Safari 10 and Chrome 36.
 sync "${ROOT}/node_modules/katex/dist" "${DEST}/katex" <<EOF
 + katex.css
 + katex.js
@@ -141,27 +140,14 @@ sync "${ROOT}/node_modules/katex/dist" "${DEST}/katex" <<EOF
 - *
 EOF
 
-
-
-################################################################################
-# Sync
-################################################################################
-
-# Sync the directory structure, preserving metadata. (We ignore certain files
-# whose names imply they won't be needed at runtime.)
-#
-# We use `rsync` here, as it will skip unchanged files.
+# Copy over our own files.
 sync "${ROOT}/src/webview/static" "${DEST}" <<EOF
+# Leave the katex directory we just made.
 -r /katex
+
+# Ignore certain files that won't be needed at runtime.
 - README.md
 - .gitignore
+
 + *
 EOF
-
-
-
-################################################################################
-# Post-sync: platform-specific build steps
-################################################################################
-
-# None yet.
