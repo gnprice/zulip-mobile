@@ -157,10 +157,11 @@ EOF
 # whose names imply they won't be needed at runtime.)
 #
 # We use `rsync` here, as it will skip unchanged files.
-mkdir -p "$DEST"
-rsync -a --no-D --delete --delete-excluded \
-    --exclude=README.md --exclude=.gitignore \
-    "$SRC/." "$DEST"
+sync "${SRC}" "${DEST}" <<EOF
+- README.md
+- .gitignore
++ *
+EOF
 
 
 
