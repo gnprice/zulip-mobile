@@ -117,6 +117,14 @@ if [ ! -d "$SRC" ]; then
 fi
 
 
+sync() {
+    local src="$1" dest="$2"
+    mkdir -p "${dest}"
+    rsync -aR --no-D --delete --delete-excluded \
+          "${src}/./" "${dest}/." \
+          --filter='. /dev/stdin'
+}
+
 
 ################################################################################
 # Pre-sync: additional build steps
@@ -131,10 +139,7 @@ fi
 
 
 katex_font_type=woff2
-mkdir -p "${SRC}/katex"
-rsync -aR --no-D --delete --delete-excluded \
-    "${ROOT}/node_modules/katex/dist/./" "${SRC}/katex/." \
-    --filter='. /dev/stdin' <<EOF
+sync "${ROOT}/node_modules/katex/dist" "${SRC}/katex" <<EOF
 + katex.css
 + katex.js
 + *.${katex_font_type}
