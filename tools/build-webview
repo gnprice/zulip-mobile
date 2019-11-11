@@ -110,12 +110,6 @@ if [[ "$DEST" != *"/webview" ]]; then
     err "unexpected destination directory '$DEST'"
 fi
 
-# Set SRC.
-SRC=src/webview/static
-if [ ! -d "$SRC" ]; then
-    err "cannot find asset source directory '$SRC'";
-fi
-
 
 sync() {
     local src="$1" dest="$2"
@@ -157,7 +151,7 @@ EOF
 # whose names imply they won't be needed at runtime.)
 #
 # We use `rsync` here, as it will skip unchanged files.
-sync "${SRC}" "${DEST}" <<EOF
+sync "${ROOT}/src/webview/static" "${DEST}" <<EOF
 -r /katex
 - README.md
 - .gitignore
