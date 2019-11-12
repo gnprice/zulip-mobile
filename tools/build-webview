@@ -121,7 +121,7 @@ fi
 # Both src and dest should be directories.
 #
 # Files in dest not mentioned will be deleted by default.  A rule
-# like `-r /foo` will override this to leave `foo` in place.
+# like `-,r /foo` will override this to leave `foo` in place.
 sync() {
     local src="$1" dest="$2"
     mkdir -p "${dest}"
@@ -142,8 +142,8 @@ EOF
 
 # Copy over our own files.
 sync "${ROOT}/src/webview/static" "${DEST}" <<EOF
-# Leave the katex directory we just made.
--r /katex
+# Leave alone the katex directory we just made.
+-,r /katex
 
 # Ignore certain files that won't be needed at runtime.
 - README.md
