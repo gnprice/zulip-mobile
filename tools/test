@@ -29,10 +29,12 @@ Suites:
   lint
   jest
   prettier
+  shellcheck
   deps
   spell
 
-By default, all suites but \`spell\` are run.
+By default, all suites will be run except:
+  shellcheck spell
 EOF
     exit 2
 }
@@ -47,7 +49,7 @@ while (( $# )); do
         --diff) shift; files=diff:"$1"; shift;;
         --full) files=full; shift;;
         --fix) fix=1; shift;;
-        android|flow|lint|jest|prettier|deps|spell)
+        android|flow|lint|jest|prettier|shellcheck|deps|spell)
             suites+=("$1"); shift;;
         *) usage;;
     esac
@@ -171,6 +173,20 @@ run_prettier() {
       "${patterns[@]}"
 }
 
+run_shellcheck() {
+    files_check tools/ \
+        || return 0
+
+    # Shellcheck is fast, <1s; so if we touched tools/ at all,
+    # just run on the full list of targets.
+    targets=(
+        $(git grep -l '^#!.*sh\b' tools/)
+        $(git ls-files tools/ | grep '\.sh$')
+    )
+
+    shellcheck -x -- "${targets[@]}"
+}
+
 run_deps() {
     files_check package.json yarn.lock \
         || return 0
@@ -210,6 +226,9 @@ for suite in "${suites[@]}"; do
             ;;
         prettier)
             run_prettier $(files_js)
+            ;;
+        shellcheck)
+            run_shellcheck
             ;;
         deps)
             run_deps
