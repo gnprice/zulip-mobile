@@ -55,7 +55,7 @@ while (( $# )); do
     esac
 done
 
-if [ -z "$suites" ]; then
+if ! (( ${#suites[@]} )); then
     suites=(android flow lint jest prettier deps)
 fi
 
@@ -120,8 +120,10 @@ run_android() {
 }
 
 run_lint() {
-    (( $# )) || return 0
-    eslint ${fix:+--fix} --max-warnings=0 "$@"
+    # shellcheck disable=SC2207  # filenames in our own tree
+    file_list=( $(files_js) )
+    (( ${#file_list[@]} )) || return 0
+    eslint ${fix:+--fix} --max-warnings=0 "${file_list[@]}"
 }
 
 check_node() {
@@ -153,6 +155,7 @@ run_jest() {
             jest_args+=( --changedSince "$(tools/info upstream-ref)" )
             ;;
         diff:*)
+            # shellcheck disable=SC2207  # filenames in our own tree
             file_list=( $(files_js) )
             (( ${#file_list[@]} )) || return 0
             jest_args+=( --findRelatedTests "${file_list[@]}" )
@@ -164,8 +167,10 @@ run_jest() {
 }
 
 run_prettier() {
-    (( $# )) || return 0
-    patterns=( "${@/%\///**/*.js}" ) # replace trailing `/` with `/**/*.js`
+    # shellcheck disable=SC2207  # filenames in our own tree
+    file_list=( $(files_js) )
+    (( ${#file_list[@]} )) || return 0
+    patterns=( "${file_list/%\///**/*.js}" ) # replace trailing `/` with `/**/*.js`
     prettier-eslint \
        ${fix:+--write} \
       --list-different \
@@ -179,6 +184,7 @@ run_shellcheck() {
 
     # Shellcheck is fast, <1s; so if we touched tools/ at all,
     # just run on the full list of targets.
+    # shellcheck disable=SC2207  # filenames in our own tree
     targets=(
         $(git grep -l '^#!.*sh\b' tools/)
         $(git ls-files tools/ | grep '\.sh$')
@@ -204,8 +210,10 @@ EOF
 }
 
 run_spell() {
-    (( $# )) || return 0
-    eslint --no-eslintrc -c tools/spellcheck.eslintrc.yaml "$@"
+    # shellcheck disable=SC2207  # filenames in our own tree
+    file_list=( $(files_js) )
+    (( ${#file_list[@]} )) || return 0
+    eslint --no-eslintrc -c tools/spellcheck.eslintrc.yaml "${file_list[@]}"
 }
 
 failed=()
@@ -219,13 +227,13 @@ for suite in "${suites[@]}"; do
             flow
             ;;
         lint)
-            run_lint $(files_js)
+            run_lint
             ;;
         jest)
             run_jest
             ;;
         prettier)
-            run_prettier $(files_js)
+            run_prettier
             ;;
         shellcheck)
             run_shellcheck
@@ -234,12 +242,12 @@ for suite in "${suites[@]}"; do
             run_deps
             ;;
         spell)
-            run_spell $(files_js)
+            run_spell
             ;;
-    esac || failed+=($suite)
+    esac || failed+=( "${suite}" )
 done
 
-if [ -n "$failed" ]; then
+if (( "${#failed[@]}" )); then
     cat >&2 <<EOF
 
 FAILED: ${failed[*]}
