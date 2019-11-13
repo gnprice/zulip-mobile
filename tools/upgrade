@@ -7,6 +7,7 @@ shopt -s extglob
 this_file=$(readlink -f "${BASH_SOURCE[0]}")
 root=${this_file%/*/*}
 
+# shellcheck source=tools/lib/ensure-coreutils.sh
 . "${root}"/tools/lib/ensure-coreutils.sh
 
 rn_gh_base_url=https://raw.githubusercontent.com/facebook/react-native
@@ -27,13 +28,13 @@ get_rn_pjson() {
 # @param $2 out      The name of an associative array.
 get_rn_deps_by_ref() {
     local version_git=$1 out=$2
-    local rn_deps_txt=$( \
+    local rn_deps_txt
+    rn_deps_txt=$( \
       get_rn_pjson "${version_git}" \
           | jq '.devDependencies + .dependencies + .peerDependencies
                 | to_entries | .[] | "\(.key) \(.value)"' \
                -r)
     {
-        local ref
         IFS=$'\n'
         for line in ${rn_deps_txt}; do
             printf -v "${out}[${line% *}]" %s "${line#* }"
@@ -45,8 +46,9 @@ get_rn_deps_by_ref() {
 # regardless of which kind of dependency it is.
 set_version() {
     local dep=$1 version=$2
-    local subst=$(printf 's/"%s":\ "\K .*? (?= " )/%s/x' \
-                         "${dep}" "${version}")
+    local subst
+    subst=$(printf 's/"%s":\ "\K .*? (?= " )/%s/x' \
+                   "${dep}" "${version}")
     perl -i -0pe "${subst}" "${root}"/package.json
 }
 
@@ -69,8 +71,9 @@ cmd_rn() {
     done
     echo
 
-    local subst=$(printf 's/\\[version\\]\\n \\K .*? $/%s/xms' \
-                         "${rn_deps[flow-bin]}" )
+    local subst
+    subst=$(printf 's/\\[version\\]\\n \\K .*? $/%s/xms' \
+                   "${rn_deps[flow-bin]}" )
     perl -i -0pe "${subst}" "${root}"/.flowconfig
 
     yarn

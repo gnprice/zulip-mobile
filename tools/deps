@@ -1,8 +1,5 @@
 #!/bin/bash
 
-this_file=$(readlink -f "${BASH_SOURCE[0]}")
-root=${this_file%/*/*}
-
 # List all direct dependencies, as package names.
 direct_dep_names() {
     <package.json \

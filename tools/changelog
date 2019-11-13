@@ -4,6 +4,7 @@ this_file=$(readlink -f "${BASH_SOURCE[0]}")
 root=${this_file%/*/*}
 changelog_file=${root}/docs/changelog.md
 
+# shellcheck source=tools/lib/ensure-coreutils.sh
 . "${root}"/tools/lib/ensure-coreutils.sh
 
 # Extract the most recent changelog entry.
@@ -57,7 +58,11 @@ EOF"
 # Print release notes suitable for posting on e.g. GitHub.
 cmd_notes() {
     cmd_unwrap
-    echo '```'; show_hash; echo '```'
+    # shellcheck disable=SC2016
+    echo '```'
+    show_hash
+    # shellcheck disable=SC2016
+    echo '```'
 }
 
 usage() {

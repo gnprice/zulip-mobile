@@ -37,6 +37,7 @@ err() {
 ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT"
 
+# shellcheck source=tools/lib/ensure-coreutils.sh
 . "$ROOT"/tools/lib/ensure-coreutils.sh
 
 # Parse arguments. Sloppy, but sufficient for now.

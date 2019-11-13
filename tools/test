@@ -184,7 +184,7 @@ run_shellcheck() {
         $(git ls-files tools/ | grep '\.sh$')
     )
 
-    shellcheck -x -- "${targets[@]}"
+    shellcheck -x --shell=bash -- "${targets[@]}"
 }
 
 run_deps() {
