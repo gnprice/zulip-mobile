@@ -23,12 +23,14 @@ sorted_files()
 
 sorted_ourfiles()
 {
-    grep -l '@flow' -- $(sorted_files | grep ^src/.*js$)
+    # shellcheck disable=SC2046  # filenames in our own tree
+    grep -l '@flow' -- $(sorted_files | grep '^src/.*js$')
 }
 
 with_flow()
 {
-    grep '@flow' -- $(sorted_files | grep ^src/.*js$)
+    # shellcheck disable=SC2046  # filenames in our own tree
+    grep '@flow' -- $(sorted_files | grep '^src/.*js$')
 }
 
 todo()
