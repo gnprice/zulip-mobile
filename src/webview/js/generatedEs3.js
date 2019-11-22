@@ -160,10 +160,16 @@ var compiledWebviewJs = (function (exports) {
     }
   };
 
+  var initialCallbackDone = false;
   var viewportHeight = documentBody.clientHeight;
   window.addEventListener('resize', function (event) {
     if (viewportHeight === 0) {
       viewportHeight = documentBody.clientHeight;
+
+      if (initialCallbackDone) {
+        throw new Error("clientHeight was 0, now ".concat(documentBody.clientHeight));
+      }
+
       return;
     }
 
@@ -454,6 +460,7 @@ var compiledWebviewJs = (function (exports) {
     rewriteImageUrls(auth);
     sendScrollMessageIfListShort();
     scrollEventsDisabled = false;
+    initialCallbackDone = true;
   };
 
   var handleUpdateEventFetching = function handleUpdateEventFetching(uevent) {

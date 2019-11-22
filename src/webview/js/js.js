@@ -163,12 +163,17 @@ const showHideElement = (elementId: string, show: boolean) => {
   }
 };
 
+let initialCallbackDone = false;
+
 /* Cached to avoid re-looking it up all the time. */
 let viewportHeight = documentBody.clientHeight;
 
 window.addEventListener('resize', event => {
   if (viewportHeight === 0) {
     viewportHeight = documentBody.clientHeight;
+    if (initialCallbackDone) {
+      throw new Error(`clientHeight was 0, now ${documentBody.clientHeight}`);
+    }
     return;
   }
   const difference = viewportHeight - documentBody.clientHeight;
@@ -527,6 +532,7 @@ export const handleInitialLoad = (platformOS: string, anchor: number, auth: Auth
   rewriteImageUrls(auth);
   sendScrollMessageIfListShort();
   scrollEventsDisabled = false;
+  initialCallbackDone = true;
 };
 
 /*
