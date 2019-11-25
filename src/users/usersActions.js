@@ -9,6 +9,7 @@ import { getAuth, tryGetAuth } from '../selectors';
 import { isPrivateOrGroupNarrow, caseNarrowPartial } from '../utils/narrow';
 import { getAllUsersByEmail } from './userSelectors';
 
+let lastHasFocus = null;
 let lastReportPresence = new Date(0);
 
 export const reportPresence = (hasFocus: boolean = true) => async (
@@ -21,10 +22,13 @@ export const reportPresence = (hasFocus: boolean = true) => async (
   }
 
   const now = new Date();
-  if (differenceInSeconds(now, lastReportPresence) < 60) {
+  // prettier-ignore
+  if (hasFocus === lastHasFocus
+      && differenceInSeconds(now, lastReportPresence) < 60) {
     // TODO throttle properly; probably fold setInterval logic in here
     return;
   }
+  lastHasFocus = hasFocus;
   lastReportPresence = now;
 
   const response = await api.reportPresence(auth, hasFocus, false);
