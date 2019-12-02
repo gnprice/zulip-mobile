@@ -177,6 +177,7 @@ class AuthScreen extends PureComponent<Props> {
   componentDidMount = () => {
     Linking.addEventListener('url', this.endWebAuth);
     Linking.getInitialURL().then((initialUrl: ?string) => {
+      console.log(`mounted AuthScreen; initialUrl ${initialUrl}`);
       if (initialUrl !== null && initialUrl !== undefined) {
         this.endWebAuth({ url: initialUrl });
       }
