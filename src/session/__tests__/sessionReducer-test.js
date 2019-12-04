@@ -24,53 +24,36 @@ import { privateNarrow } from '../../utils/narrow';
 describe('sessionReducer', () => {
   const baseState = eg.baseReduxState.session;
 
-  test('ACCOUNT_SWITCH', () => {
-    const state = deepFreeze({
-      ...baseState,
-      lastNarrow: [],
-      needsInitialFetch: false,
-      loading: true,
-    });
-    const newState = sessionReducer(state, eg.action.account_switch);
-    expect(newState).toEqual({
-      ...baseState,
-      lastNarrow: null,
-      needsInitialFetch: true,
-      loading: false,
-    });
-  });
+  const data = [
+    [
+      { ...baseState, lastNarrow: [], needsInitialFetch: false, loading: true },
+      eg.action.account_switch,
+      { ...baseState, lastNarrow: null, needsInitialFetch: true, loading: false },
+    ],
+    [
+      baseState,
+      { type: START_EDIT_MESSAGE, messageId: 12, message: 'test', topic: 'test topic' },
+      { ...baseState, editMessage: { id: 12, content: 'test', topic: 'test topic' } },
+    ],
+    [
+      { ...baseState, editMessage: { id: 12, content: 'test', topic: 'test topic' } },
+      { type: CANCEL_EDIT_MESSAGE },
+      baseState,
+    ],
+    [baseState, eg.action.login_success, { ...baseState, needsInitialFetch: true }],
+    [
+      { ...baseState, needsInitialFetch: false, loading: true },
+      { type: DEAD_QUEUE },
+      { ...baseState, needsInitialFetch: true, loading: false },
+    ],
+  ];
 
-  test('START_EDIT_MESSAGE', () => {
-    const action = deepFreeze({
-      type: START_EDIT_MESSAGE,
-      messageId: 12,
-      message: 'test',
-      topic: 'test topic',
+  // eslint-disable-next-line no-restricted-syntax
+  for (const [prevState, action, expectedState] of data) {
+    test(`${action.type}`, () => {
+      expect(sessionReducer(deepFreeze(prevState), deepFreeze(action))).toEqual(expectedState);
     });
-    expect(sessionReducer(baseState, action)).toEqual({
-      ...baseState,
-      editMessage: { id: 12, content: 'test', topic: 'test topic' },
-    });
-  });
-
-  test('CANCEL_EDIT_MESSAGE', () => {
-    const state = deepFreeze({
-      ...baseState,
-      editMessage: { id: 12, content: 'test', topic: 'test topic' },
-    });
-    expect(sessionReducer(state, deepFreeze({ type: CANCEL_EDIT_MESSAGE }))).toEqual(baseState);
-  });
-
-  test('LOGIN_SUCCESS', () => {
-    const newState = sessionReducer(baseState, eg.action.login_success);
-    expect(newState).toEqual({ ...baseState, needsInitialFetch: true });
-  });
-
-  test('DEAD_QUEUE', () => {
-    const state = deepFreeze({ ...baseState, needsInitialFetch: false, loading: true });
-    const newState = sessionReducer(state, deepFreeze({ type: DEAD_QUEUE }));
-    expect(newState).toEqual({ ...baseState, needsInitialFetch: true, loading: false });
-  });
+  }
 
   test('LOGOUT', () => {
     const state = deepFreeze({
