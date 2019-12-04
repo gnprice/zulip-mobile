@@ -24,61 +24,53 @@ import { privateNarrow } from '../../utils/narrow';
 describe('sessionReducer', () => {
   const baseState = eg.baseReduxState.session;
 
-  const data = [
-    [
-      { ...baseState, lastNarrow: [], needsInitialFetch: false, loading: true },
-      eg.action.account_switch,
-      { ...baseState, lastNarrow: null, needsInitialFetch: true, loading: false },
-    ],
-    [
-      baseState,
-      { type: START_EDIT_MESSAGE, messageId: 12, message: 'test', topic: 'test topic' },
-      { ...baseState, editMessage: { id: 12, content: 'test', topic: 'test topic' } },
-    ],
-    [
-      { ...baseState, editMessage: { id: 12, content: 'test', topic: 'test topic' } },
-      { type: CANCEL_EDIT_MESSAGE },
-      baseState,
-    ],
-    [baseState, eg.action.login_success, { ...baseState, needsInitialFetch: true }],
-    [
-      { ...baseState, needsInitialFetch: false, loading: true },
-      { type: DEAD_QUEUE },
-      { ...baseState, needsInitialFetch: true, loading: false },
-    ],
-  ];
+  function expectReducer(prevState, action, expectedState) {
+    expect(sessionReducer(deepFreeze(prevState), deepFreeze(action))).toEqual(expectedState);
+  }
 
-  // eslint-disable-next-line no-restricted-syntax
-  for (const [prevState, action, expectedState] of data) {
+  function testReducer(prevState, action, expectedState) {
     test(`${action.type}`, () => {
-      expect(sessionReducer(deepFreeze(prevState), deepFreeze(action))).toEqual(expectedState);
+      expectReducer(prevState, action, expectedState);
     });
   }
 
-  test('LOGOUT', () => {
-    const state = deepFreeze({
-      ...baseState,
-      lastNarrow: [],
-      needsInitialFetch: true,
-      loading: true,
-    });
-    const newState = sessionReducer(state, deepFreeze({ type: LOGOUT }));
-    expect(newState).toEqual({
-      ...baseState,
-      lastNarrow: null,
-      needsInitialFetch: false,
-      loading: false,
-    });
-  });
+  testReducer(
+    { ...baseState, lastNarrow: [], needsInitialFetch: false, loading: true },
+    eg.action.account_switch,
+    { ...baseState, lastNarrow: null, needsInitialFetch: true, loading: false },
+  );
 
-  test('REALM_INIT', () => {
-    const action = deepFreeze({
-      ...eg.action.realm_init,
-      data: { ...eg.action.realm_init.data, queue_id: 100 },
-    });
-    const newState = sessionReducer(baseState, action);
-    expect(newState).toEqual({ ...baseState, eventQueueId: 100 });
-  });
+  testReducer(
+    baseState,
+    { type: START_EDIT_MESSAGE, messageId: 12, message: 'test', topic: 'test topic' },
+    { ...baseState, editMessage: { id: 12, content: 'test', topic: 'test topic' } },
+  );
+
+  testReducer(
+    { ...baseState, editMessage: { id: 12, content: 'test', topic: 'test topic' } },
+    { type: CANCEL_EDIT_MESSAGE },
+    baseState,
+  );
+
+  testReducer(baseState, eg.action.login_success, { ...baseState, needsInitialFetch: true });
+
+  testReducer(
+    { ...baseState, needsInitialFetch: false, loading: true },
+    { type: DEAD_QUEUE },
+    { ...baseState, needsInitialFetch: true, loading: false },
+  );
+
+  testReducer(
+    { ...baseState, lastNarrow: [], needsInitialFetch: true, loading: true },
+    { type: LOGOUT },
+    { ...baseState, lastNarrow: null, needsInitialFetch: false, loading: false },
+  );
+
+  testReducer(
+    baseState,
+    { ...eg.action.realm_init, data: { ...eg.action.realm_init.data, queue_id: 100 } },
+    { ...baseState, eventQueueId: 100 },
+  );
 
   test('DO_NARROW', () => {
     const state = deepFreeze({ ...baseState, lastNarrow: [] });
