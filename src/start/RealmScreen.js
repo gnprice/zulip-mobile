@@ -9,7 +9,6 @@ import { ErrorMsg, Label, SmartUrlInput, Screen, ZulipButton } from '../common';
 import { isValidUrl } from '../utils/url';
 import * as api from '../api';
 import { realmAdd, navigateToAuth } from '../actions';
-import styles from '../styles';
 
 type Props = $ReadOnly<{|
   dispatch: Dispatch,
@@ -71,11 +70,24 @@ class RealmScreen extends PureComponent<Props, State> {
     const { initialRealm, navigation } = this.props;
     const { progress, error, realm } = this.state;
 
+    const styles = {
+      label: {
+        marginBottom: 16,
+      },
+      hintText: {
+        marginTop: 8,
+        paddingLeft: 2,
+        fontSize: 12,
+      },
+      button: {
+        marginTop: 8,
+      },
+    };
+
     return (
       <Screen title="Welcome" padding centerContent keyboardShouldPersistTaps="always">
-        <Label text="Organization URL" />
+        <Label text="Zulip server URL" style={styles.label} />
         <SmartUrlInput
-          style={styles.marginVertical}
           navigation={navigation}
           defaultProtocol="https://"
           defaultOrganization="your-org"
@@ -85,9 +97,13 @@ class RealmScreen extends PureComponent<Props, State> {
           onSubmitEditing={this.tryRealm}
           enablesReturnKeyAutomatically
         />
-        {error !== null && <ErrorMsg error={error} />}
+        {error !== null ? (
+          <ErrorMsg error={error} />
+        ) : (
+          <Label text="e.g. zulip.example.com" style={styles.hintText} />
+        )}
         <ZulipButton
-          style={styles.halfMarginTop}
+          style={styles.button}
           text="Enter"
           progress={progress}
           onPress={this.tryRealm}
