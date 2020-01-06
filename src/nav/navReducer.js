@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import type { NavigationAction } from 'react-navigation';
+import type { NavigationAction, NavigationParams } from 'react-navigation';
 
 import type { NavigationState, Action } from '../types';
 import AppNavigator from './AppNavigator';
@@ -18,7 +18,9 @@ import { hasAuth } from '../account/accountsSelectors';
  * Private; exported only for tests.
  */
 export const getStateForRoute = (route: string): NavigationState => {
-  const action = AppNavigator.router.getActionForPathAndParams(route);
+  const params = route === 'realm' ? { initial: true } : undefined;
+
+  const action = AppNavigator.router.getActionForPathAndParams(route, params);
   if (!action) {
     // The argument should be a constant string that is a genuine nav route;
     // so this condition can only happen if we've gotten that wrong.

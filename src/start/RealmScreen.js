@@ -12,7 +12,7 @@ import { realmAdd, navigateToAuth } from '../actions';
 
 type Props = $ReadOnly<{|
   dispatch: Dispatch,
-  navigation: NavigationScreenProp<mixed>,
+  navigation: NavigationScreenProp<mixed>, // WORK HERE
   initialRealm: string,
 |}>;
 
