@@ -40,6 +40,9 @@ Register at https://developer.apple.com. Then use your Apple ID in Xcode
 and choose it as your `Signing > Team` for both ZulipMobile and ZulipMobileTests.
 
 ### Tips when running on your iOS device
+
+<!-- TODO is any of this true, and relevant? -->
+
 When you change the BundleIdentifier and Team (required in order to run on a device),
 it **will** modify your `.pbxproj` file, which you do **not** want unless you intend
 to. For instance, if you linking a new dependency, your `.pbxproj` will be modified to
