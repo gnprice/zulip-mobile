@@ -127,6 +127,11 @@ The term was introduced in the LLVM community: [docs][nfc-docs],
 [nfc-tweet]: https://twitter.com/clattner_llvm/status/1045548372134846464
 
 
+### notification
+
+See [push notification](#push-notification).
+
+
 ### prod
 
 Or "production"; as in sending a release to prod.
@@ -136,6 +141,27 @@ See [docs](howto/release.md#terminology).
 ### pure refactor
 
 See [NFC](#nfc).
+
+
+### push message
+
+A blob of data that gets pushed to the device, through a service that
+can do so even when the app is in the background or the whole device
+is asleep.  Might or might not result in a [UI
+notification](#ui-notification).  See our [architecture doc on push
+notifications][notif-arch].
+
+[notif-arch]: ../architecture/notifications.md
+
+
+### push notification
+
+Ambiguous term for a [push message](#push-message) or a [UI
+notification](#ui-notification).
+
+Prefer one of the more-specific terms, unless referring to the system
+of push messages and UI notifications as a whole.  See [architecture
+doc][notif-arch].
 
 
 ### realm
@@ -168,3 +194,11 @@ See the Zulip project's [Git style guide][style-commit-messages] for
 discussion of how to write a good summary line.
 
 [style-commit-messages]: https://zulip.readthedocs.io/en/latest/contributing/version-control.html#commit-messages
+
+
+### UI notification
+
+An item of UI that appears in the system's notification area, and that
+may pop up or make sound to attract the user's attention.  Might or
+might not correspond to a [push message](#push-message).  See our
+[architecture doc on push notifications][notif-arch].

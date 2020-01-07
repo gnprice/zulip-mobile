@@ -3,6 +3,10 @@
 This doc describes how to test and develop changes to Zulip's mobile
 push notifications.
 
+See also [our architecture doc on push notifications][notif-arch].
+
+[notif-arch]: ../architecture/notifications.md
+
 
 ## General tips
 
