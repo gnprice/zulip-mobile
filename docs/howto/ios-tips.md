@@ -23,6 +23,14 @@ supported device (currently iPhone X)
 device name in package.json
 
 ## Running on an iOS device
+
+<!--
+  TODO (a) this is relevant only if you don't have an Apple ID that
+           is part of the Zulip "team" -- i.e. if not an employee;
+       (b) this procedure is kind of a mess :-/ and it'd be nice to
+           clean it up for the benefit of outside contributors.
+-->
+
 1. Connect your iOS device
 2. Within the repo, `$ open ios/ZulipMobile.xcworkspace/` to open Xcode
 3. Change BundleIdentifier for both ZulipMobile and ZulipMobileTests to a
@@ -40,9 +48,6 @@ Register at https://developer.apple.com. Then use your Apple ID in Xcode
 and choose it as your `Signing > Team` for both ZulipMobile and ZulipMobileTests.
 
 ### Tips when running on your iOS device
-
-<!-- TODO is any of this true, and relevant? -->
-
 When you change the BundleIdentifier and Team (required in order to run on a device),
 it **will** modify your `.pbxproj` file, which you do **not** want unless you intend
 to. For instance, if you linking a new dependency, your `.pbxproj` will be modified to
