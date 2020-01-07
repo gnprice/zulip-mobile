@@ -34,6 +34,12 @@ For suggested clients, see [the Zulip
 docs](https://zulip.readthedocs.io/en/latest/git/setup.html#get-a-graphical-client).
 
 
+<!-- TODO discuss editors for commit messages?
+     In particular: if you don't routinely use vim for other things,
+     don't use it here.  Use either an editor you routinely use and
+     know well, or nano. -->
+
+
 ## Reading history
 
 One of the things that makes Git so valuable is its facilities for
