@@ -135,29 +135,17 @@ V ZulipNotif: getPushNotification: Bundle[{sender_full_name=Greg 試し, pm_user
     zulip_message_id=157914854, recipient_type=private, time=1549686858, user=greg+t2@zulipchat.com,
     sender_id=101712, alert=New private group message from Greg 試し, event=message, content=C,
     sender_email=greg+t1@zulipchat.com}]
-V ZulipNotif: java.lang.Throwable
-V ZulipNotif: 	at com.zulipmobile.notifications.FCMPushNotifications.logNotificationData(FCMPushNotifications.java:61)
-V ZulipNotif: 	at com.zulipmobile.notifications.FCMPushNotifications.onReceived(FCMPushNotifications.java:70)
-V ZulipNotif: 	at com.zulipmobile.notifications.FcmListenerService.onMessageReceived(FcmListenerService.java:18)
-V ZulipNotif: 	at com.google.firebase.messaging.FirebaseMessagingService.zzd(Unknown Source:60)
-V ZulipNotif: 	at com.google.firebase.iid.zzg.run(Unknown Source:4)
-V ZulipNotif: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
-V ZulipNotif: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
-V ZulipNotif: 	at com.google.android.gms.common.util.concurrent.zza.run(Unknown Source:6)
-V ZulipNotif: 	at java.lang.Thread.run(Thread.java:764)
 ```
 
-The spew in this example is from this line in our code:
+The log message in this example is from this line in our code:
 ```
-    Log.v(TAG, "getPushNotification: " + data.toString(), new Throwable());
+    Log.v(TAG, "$msg: $data")
 ```
-(The stack trace is just for information; it doesn't represent an
-error.)
 
 You can do print-debugging by adding similar lines, even if they don't
-make it into the final code you send in a PR.  Here's another example:
+make it into the final code you send in a PR.  For example:
 ```
-    Log.v(TAG, String.format("update: %d", conversations.size()));
+    Log.v(TAG, "update: ${conversations.size}")
 ```
 
 
