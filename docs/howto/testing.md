@@ -131,6 +131,8 @@ mention it in chat!  We'll be interested to learn about it, and to see
 what we can do to support it.
 
 
+<a id="flow" />
+
 ## Type checking with Flow
 
 We use the [Flow][] type-checker on our JS code, and [flow-typed][]

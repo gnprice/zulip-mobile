@@ -256,6 +256,22 @@ pick just one, and that's the one we use.
 [gh-close-issue-keywords]: https://help.github.com/en/github/managing-your-work-on-github/closing-issues-using-keywords
 
 
+## JavaScript
+
+### Type-checking with Flow
+
+All our JS files should be marked `@flow strict-local`, so that they
+get fully type-checked by Flow.  See [here][doc-flow] in our docs for
+more discussion.
+
+We didn't always have this standard, but we've brought all 
+
+WORK HERE
+
+[doc-flow]: howto/testing.md#flow
+
+
+
 ## WebView: HTML, CSS, JS
 
 ### Styling/CSS
