@@ -365,17 +365,6 @@ describe('getNarrowFromMessage', () => {
     expect(actualNarrow).toEqual(expectedNarrow);
   });
 
-  test('if recipient of a message is string, returns a stream narrow', () => {
-    const message = {
-      display_recipient: 'stream',
-    };
-    const expectedNarrow = streamNarrow('stream');
-
-    const actualNarrow = getNarrowFromMessage(message);
-
-    expect(actualNarrow).toEqual(expectedNarrow);
-  });
-
   test('if recipient is a string and there is a subject returns a topic narrow', () => {
     const message = {
       display_recipient: 'stream',

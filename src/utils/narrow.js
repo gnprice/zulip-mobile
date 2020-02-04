@@ -271,9 +271,5 @@ export const getNarrowFromMessage = (message: Message | Outbox, ownEmail: string
     return groupNarrow(recipient.map(x => x.email));
   }
 
-  if (message.subject && message.subject.length) {
-    return topicNarrow(message.display_recipient, message.subject);
-  }
-
-  return streamNarrow(message.display_recipient);
+  return topicNarrow(message.display_recipient, message.subject);
 };
