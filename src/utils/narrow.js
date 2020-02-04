@@ -329,9 +329,6 @@ export const getNarrowFromMessage = (message: Message | Outbox, ownUser: User) =
   } else {
     const streamName = streamNameOfStreamMessage(message);
     const topic = message.subject;
-    if (topic && topic.length) {
-      return topicNarrow(streamName, topic);
-    }
-    return streamNarrow(streamName);
+    return topicNarrow(streamName, topic);
   }
 };
