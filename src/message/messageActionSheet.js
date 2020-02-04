@@ -6,7 +6,7 @@ import {
   getNarrowFromMessage,
   isPrivateOrGroupNarrow,
   isStreamOrTopicNarrow,
-  isTopicNarrow,
+  caseNarrowDefault,
 } from '../utils/narrow';
 import { isTopicMuted } from '../utils/message';
 import * as api from '../api';
@@ -204,6 +204,14 @@ export const constructHeaderActionButtons = ({
 const messageNotDeleted = (message: Message | Outbox): boolean =>
   message.content !== '<p>(deleted)</p>';
 
+/** True just if the narrow represents a specific, whole, conversation. */
+const isSingleConversation = (narrow: Narrow): boolean =>
+  caseNarrowDefault(
+    narrow,
+    { topic: () => true, pm: () => true, groupPm: () => true },
+    () => false,
+  );
+
 export const constructMessageActionButtons = ({
   backgroundData: { ownUser, flags },
   message,
@@ -216,7 +224,7 @@ export const constructMessageActionButtons = ({
   if (!isAnOutboxMessage(message) && messageNotDeleted(message)) {
     buttons.push('addReaction');
   }
-  if (!isAnOutboxMessage(message) && !isTopicNarrow(narrow) && !isPrivateOrGroupNarrow(narrow)) {
+  if (!isAnOutboxMessage(message) && !isSingleConversation(narrow)) {
     buttons.push('reply');
   }
   if (messageNotDeleted(message)) {
