@@ -6,9 +6,9 @@ import { getPrivateMessages } from '../message/messageSelectors';
 import { getOwnUser } from '../users/userSelectors';
 import { getUnreadByPms, getUnreadByHuddles } from '../unread/unreadSelectors';
 import {
-  normalizeRecipientsSansMe,
   pmUnreadsKeyFromMessage,
   recipientsOfPrivateMessage,
+  pmEmailString,
 } from '../utils/recipient';
 
 export const getRecentConversations: Selector<PmConversationData[]> = createSelector(
@@ -27,7 +27,7 @@ export const getRecentConversations: Selector<PmConversationData[]> = createSele
       ids: pmUnreadsKeyFromMessage(msg, ownUser.user_id),
 
       // The users represented in this `emails` string are sorted by email address.
-      emails: normalizeRecipientsSansMe(recipientsOfPrivateMessage(msg), ownUser.email),
+      emails: pmEmailString(recipientsOfPrivateMessage(msg).map(r => r.email), ownUser.email),
 
       msgId: msg.id,
     }));
