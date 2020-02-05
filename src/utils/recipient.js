@@ -39,13 +39,30 @@ const filterRecipients = (
 ): $ReadOnlyArray<PmRecipientUser> =>
   recipients.length === 1 ? recipients : recipients.filter(r => r.id !== ownUserId);
 
-/** PRIVATE -- exported only for tests. */
-export const normalizeRecipients = (recipients: $ReadOnlyArray<{ +email: string, ... }>) =>
-  recipients
-    .map(s => s.email.trim())
+/**
+ * The canonical string identifying a PM conversation, in email-based form.
+ *
+ * The use of emails here is deprecated; where possible, prefer a format
+ * using user IDs.  See #3764 for more on this migration.
+ *
+ * For the quirks of the underlying format in the Zulip API, see:
+ *   https://zulipchat.com/api/construct-narrow
+ *   https://github.com/zulip/zulip/issues/13167
+ *
+ * @param emails WARNING: This must not include the self user, except as the
+ *   only member.  (Otherwise the result may differ from other references to
+ *   the same conversation.)
+ */
+export const pmEmailStringUnsafe = (emails: $ReadOnlyArray<string>): string =>
+  emails
+    .map(e => e.trim())
     .filter(x => x.length > 0)
     .sort()
     .join(',');
+
+/** PRIVATE -- exported only for tests. */
+export const normalizeRecipients = (recipients: $ReadOnlyArray<{ +email: string, ... }>) =>
+  pmEmailStringUnsafe(recipients.map(s => s.email));
 
 /**
  * The same set of users as pmKeyRecipientsFromMessage, in quirkier form.
@@ -61,7 +78,7 @@ export const normalizeRecipientsSansMe = (
 ) =>
   recipients.length === 1
     ? recipients[0].email
-    : normalizeRecipients(recipients.filter(r => r.email !== ownEmail));
+    : pmEmailStringUnsafe(recipients.map(r => r.email).filter(e => e !== ownEmail));
 
 export const normalizeRecipientsAsUserIds = (
   recipients: $ReadOnlyArray<{ +user_id: number, ... }>,

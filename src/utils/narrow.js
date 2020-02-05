@@ -24,10 +24,6 @@ export const HOME_NARROW_STR: string = '[]';
  *
  * Private to this module because the input format is kind of odd.
  * Use `pmNarrowFromEmail` or `pmNarrowFromEmails` instead.
- *
- * For the quirks of the underlying format in the Zulip API, see:
- *   https://zulipchat.com/api/construct-narrow
- *   https://github.com/zulip/zulip/issues/13167
  */
 const pmNarrowByString = (emails: string): Narrow => [
   {
