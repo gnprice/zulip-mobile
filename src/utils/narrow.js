@@ -8,6 +8,7 @@ import {
   pmKeyRecipientsFromMessage,
   recipientsOfPrivateMessage,
   streamNameOfStreamMessage,
+  pmEmailStringUnsafe,
 } from './recipient';
 
 export const isSameNarrow = (narrow1: Narrow, narrow2: Narrow): boolean =>
@@ -33,6 +34,8 @@ const pmNarrowByString = (emails: string): Narrow => [
 ];
 
 /**
+ * TODO: merge these jsdocs
+ *
  * A group PM narrow.
  *
  * The users represented in `emails` should agree, as a (multi)set, with
@@ -72,7 +75,15 @@ const pmNarrowByString = (emails: string): Narrow => [
 //      notification's pm_users, which is sorted.
 //  * Good: messageHeaderAsHtml: comes from pmKeyRecipientsFromMessage,
 //      which filters and sorts by ID
-export const pmNarrowFromEmails = (emails: string[]): Narrow => pmNarrowByString(emails.join());
+/**
+ * A PM narrow -- either 1:1 or group.
+ *
+ * @param emails WARNING: This must not include the self user, except as the
+ *   only member.  (Otherwise the result may differ from other references to
+ *   the same narrow.)
+ */
+export const pmNarrowFromEmails = (emails: string[]): Narrow =>
+  pmNarrowByString(pmEmailStringUnsafe(emails));
 
 /** Convenience wrapper for `pmNarrowFromEmails`. */
 export const pmNarrowFromEmail = (email: string): Narrow => pmNarrowFromEmails([email]);
