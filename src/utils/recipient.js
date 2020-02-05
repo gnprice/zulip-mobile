@@ -40,14 +40,9 @@ const filterRecipients = (
   recipients.length === 1 ? recipients : recipients.filter(r => r.id !== ownUserId);
 
 /**
- * The canonical string identifying a PM conversation, in email-based form.
+ * Like `pmEmailString` but with an extra assumption the caller must ensure.
  *
- * The use of emails here is deprecated; where possible, prefer a format
- * using user IDs.  See #3764 for more on this migration.
- *
- * For the quirks of the underlying format in the Zulip API, see:
- *   https://zulipchat.com/api/construct-narrow
- *   https://github.com/zulip/zulip/issues/13167
+ * See `pmEmailString` for more information.
  *
  * @param emails WARNING: This must not include the self user, except as the
  *   only member.  (Otherwise the result may differ from other references to
@@ -65,6 +60,8 @@ export const normalizeRecipients = (recipients: $ReadOnlyArray<{ +email: string,
   pmEmailStringUnsafe(recipients.map(s => s.email));
 
 /**
+ * TODO merge jsdocs
+ *
  * The same set of users as pmKeyRecipientsFromMessage, in quirkier form.
  *
  * Prefer normalizeRecipientsAsUserIdsSansMe over this; see #3764.
@@ -72,13 +69,28 @@ export const normalizeRecipients = (recipients: $ReadOnlyArray<{ +email: string,
  *
  * Users are sorted by email address.
  */
+/**
+ * The canonical string identifying a PM conversation, in email-based form.
+ *
+ * The use of emails here is deprecated; where possible, prefer a format
+ * using user IDs.  See #3764 for more on this migration.
+ *
+ * For the quirks of the underlying format in the Zulip API, see:
+ *   https://zulipchat.com/api/construct-narrow
+ *   https://github.com/zulip/zulip/issues/13167
+ *
+ * See also `pmEmailStringUnsafe`.
+ */
+export const pmEmailString = (emails: $ReadOnlyArray<string>, ownEmail: string): string =>
+  emails.length === 1
+    ? pmEmailStringUnsafe(emails)
+    : pmEmailStringUnsafe(emails.map(e => e.trim()).filter(e => e !== ownEmail));
+
+/** Legacy convenience wrapper around `pmEmailString`; prefer using that. */
 export const normalizeRecipientsSansMe = (
   recipients: $ReadOnlyArray<{ +email: string, ... }>,
   ownEmail: string,
-) =>
-  recipients.length === 1
-    ? recipients[0].email
-    : pmEmailStringUnsafe(recipients.map(r => r.email).filter(e => e !== ownEmail));
+) => pmEmailString(recipients.map(r => r.email), ownEmail);
 
 export const normalizeRecipientsAsUserIds = (
   recipients: $ReadOnlyArray<{ +user_id: number, ... }>,
