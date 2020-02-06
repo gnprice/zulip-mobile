@@ -5,7 +5,7 @@ import type { Auth, Dispatch, GetState, GlobalState } from '../types';
 import * as api from '../api';
 import { PRESENCE_RESPONSE } from '../actionConstants';
 import { getAuth, tryGetAuth, getServerVersion } from '../selectors';
-import { DualNarrow, PmNarrow } from '../utils/narrow';
+import { PmNarrow, CleanNarrow } from '../utils/narrow';
 import { getUserForId } from './userSelectors';
 import { ZulipVersion } from '../utils/zulipVersion';
 
@@ -56,11 +56,10 @@ const typingWorker = (state: GlobalState) => {
   };
 };
 
-export const sendTypingStart = (dualNarrow: DualNarrow<>) => async (
+export const sendTypingStart = (narrow: CleanNarrow) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
-  const narrow = dualNarrow.clean;
   if (!(narrow instanceof PmNarrow)) {
     return;
   }
@@ -70,11 +69,11 @@ export const sendTypingStart = (dualNarrow: DualNarrow<>) => async (
 
 // TODO call this on more than send: blur, navigate away,
 //   delete all contents, etc.
-export const sendTypingStop = (narrow: DualNarrow<>) => async (
+export const sendTypingStop = (narrow: CleanNarrow) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
-  if (!(narrow.clean instanceof PmNarrow)) {
+  if (!(narrow instanceof PmNarrow)) {
     return;
   }
 
