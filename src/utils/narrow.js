@@ -26,6 +26,8 @@ export class CleanNarrow {
   }
 }
 
+export type DualNarrow<T: CleanNarrow = CleanNarrow> = { clean: T, strings: Narrow };
+
 export class StreamOrTopicNarrow extends CleanNarrow {
   streamId: number;
 
@@ -83,6 +85,10 @@ export class PmNarrow extends CleanNarrow {
 
   static fromUser(user: UserOrBot): PmNarrow {
     return PmNarrow.fromUsers([user]);
+  }
+
+  static dualFromUser(user: UserOrBot): DualNarrow<PmNarrow> {
+    return { clean: PmNarrow.fromUser(user), strings: privateNarrow(user.email) };
   }
 
   key() {
