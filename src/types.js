@@ -8,6 +8,7 @@ import type { ZulipVersion } from './utils/zulipVersion';
 export type * from './generics';
 export type * from './reduxTypes';
 export type * from './api/apiTypes';
+export type { NarrowBridge } from './utils/narrow';
 
 export { ensureUnreachable } from './generics';
 
