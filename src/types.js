@@ -157,7 +157,6 @@ export type Outbox = {|
   isSent: boolean,
 
   markdownContent: string,
-  narrow: Narrow,
 
   /** For the `to` field of the POST /messages request. */
   sendTo: string,
