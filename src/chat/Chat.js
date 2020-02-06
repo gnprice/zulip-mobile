@@ -18,8 +18,7 @@ type SelectorProps = {|
 |};
 
 type Props = $ReadOnly<{|
-  /* $FlowFixMe: probably this shouldn't be optional */
-  narrow?: Narrow,
+  narrow: Narrow,
 
   dispatch: Dispatch,
   ...SelectorProps,
