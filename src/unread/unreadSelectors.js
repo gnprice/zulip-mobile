@@ -5,14 +5,13 @@ import type { Selector, UnreadStreamItem } from '../types';
 import { caseInsensitiveCompareFunc } from '../utils/misc';
 import {
   getMute,
-  getStreams,
   getUnreadStreams,
   getUnreadPms,
   getUnreadHuddles,
   getUnreadMentions,
 } from '../directSelectors';
 import { getOwnUserId } from '../users/userSelectors';
-import { getSubscriptionsById } from '../subscriptions/subscriptionSelectors';
+import { getSubscriptionsById, getStreamsById } from '../subscriptions/subscriptionSelectors';
 import { isTopicMuted } from '../utils/message';
 import {
   CleanNarrow,
@@ -225,26 +224,23 @@ export const getUnreadByHuddlesMentionsAndPMs: Selector<number> = createSelector
  */
 export const getUnreadCountForNarrow: Selector<number, CleanNarrow> = createSelector(
   (state, narrow: CleanNarrow) => narrow,
-  state => getStreams(state),
+  state => getStreamsById(state),
   state => getOwnUserId(state),
   state => getUnreadTotal(state),
   state => getUnreadStreams(state),
   state => getUnreadHuddles(state),
   state => getUnreadPms(state),
   state => getMute(state),
-  (narrow, streams, ownUserId, unreadTotal, unreadStreams, unreadHuddles, unreadPms, mute) => {
+  (narrow, streamsById, ownUserId, unreadTotal, unreadStreams, unreadHuddles, unreadPms, mute) => {
     if (narrow instanceof AllMessagesNarrow) {
       return unreadTotal;
     }
 
     let unreads: $ReadOnlyArray<{ +unread_message_ids: $ReadOnlyArray<mixed>, ... }> = [];
     if (narrow instanceof StreamNarrow) {
-      const stream = streams.find(s => s.stream_id === narrow.streamId);
-      if (stream) {
-        unreads = unreadStreams.filter(
-          x => x.stream_id === narrow.streamId && !isTopicMuted(stream.name, x.topic, mute),
-        );
-      }
+      const streamName = streamsById.get(narrow.streamId)?.name;
+      const isMuted = topic => streamName !== undefined && isTopicMuted(streamName, topic, mute);
+      unreads = unreadStreams.filter(x => x.stream_id === narrow.streamId && !isMuted(x.topic));
     } else if (narrow instanceof TopicNarrow) {
       unreads = unreadStreams.filter(
         x => x.stream_id === narrow.streamId && x.topic === narrow.topic,
