@@ -9,7 +9,7 @@ import { compose } from 'redux';
 import { connect } from '../react-redux';
 import type { ThemeData } from '../styles';
 import styles, { ThemeContext } from '../styles';
-import type { Dispatch, Fetching, NarrowBridge, EditMessage } from '../types';
+import type { Dispatch, Fetching, EditMessage } from '../types';
 import { KeyboardAvoider, OfflineNotice, ZulipStatusBar } from '../common';
 import ChatNavBar from '../nav/ChatNavBar';
 
@@ -20,7 +20,7 @@ import InvalidNarrow from './InvalidNarrow';
 import { fetchMessagesInNarrow } from '../message/fetchActions';
 import ComposeBox from '../compose/ComposeBox';
 import UnreadNotice from './UnreadNotice';
-import { asApiStringNarrow, canSendToNarrow } from '../utils/narrow';
+import { DualNarrow, asApiStringNarrow, canSendToNarrow } from '../utils/narrow';
 import { getLoading, getSession } from '../directSelectors';
 import { getFetchingForNarrow } from './fetchingSelectors';
 import { getShownMessagesForNarrow, isNarrowValid } from './narrowsSelectors';
@@ -40,7 +40,7 @@ type Props = $ReadOnly<{|
   // `navigation` prop for free, with the stack-nav shape.
   navigation: NavigationStackProp<{|
     ...NavigationStateRoute,
-    params: {| narrow: NarrowBridge |},
+    params: {| narrow: DualNarrow<> |},
   |}>,
   dispatch: Dispatch,
 
@@ -134,13 +134,13 @@ class ChatScreen extends PureComponent<Props, State> {
 
   render() {
     const { fetching, haveNoMessages, loading, navigation } = this.props;
-    const narrow = asApiStringNarrow(navigation.state.params.narrow);
+    const narrow = navigation.state.params.narrow;
     const { editMessage } = this.state;
 
     const isFetching = fetching.older || fetching.newer || loading;
     const showMessagePlaceholders = haveNoMessages && isFetching;
     const sayNoMessages = haveNoMessages && !isFetching;
-    const showComposeBox = canSendToNarrow(narrow) && !showMessagePlaceholders;
+    const showComposeBox = canSendToNarrow(narrow.strings) && !showMessagePlaceholders;
 
     return (
       <ActionSheetProvider>
@@ -152,11 +152,11 @@ class ChatScreen extends PureComponent<Props, State> {
             <UnreadNotice narrow={narrow} />
             {(() => {
               if (!this.props.isNarrowValid) {
-                return <InvalidNarrow narrow={narrow} />;
+                return <InvalidNarrow narrow={narrow.strings} />;
               } else if (this.state.fetchError !== null) {
-                return <FetchError narrow={narrow} error={this.state.fetchError} />;
+                return <FetchError narrow={narrow.strings} error={this.state.fetchError} />;
               } else if (sayNoMessages) {
-                return <NoMessages narrow={narrow} />;
+                return <NoMessages narrow={narrow.strings} />;
               } else {
                 return (
                   <MessageList

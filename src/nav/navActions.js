@@ -4,11 +4,11 @@ import { StackActions, NavigationActions } from 'react-navigation';
 import type {
   NavigationAction,
   Message,
-  NarrowBridge,
   UserOrBot,
   ApiResponseServerSettings,
   SharedData,
 } from '../types';
+import { DualNarrow } from '../utils/narrow';
 import { getSameRoutesCount } from '../selectors';
 
 export const navigateBack = (): NavigationAction => StackActions.pop({ n: getSameRoutesCount() });
@@ -44,7 +44,7 @@ export const resetToMainTabs = (): NavigationAction =>
  */
 
 /** Only call this via `doNarrow`.  See there for details. */
-export const navigateToChat = (narrow: NarrowBridge): NavigationAction =>
+export const navigateToChat = (narrow: DualNarrow<>): NavigationAction =>
   StackActions.push({ routeName: 'chat', params: { narrow } });
 
 export const navigateToUsersScreen = (): NavigationAction =>
