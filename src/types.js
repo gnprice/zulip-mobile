@@ -16,6 +16,7 @@ import type { AppStyles } from './styles/theme';
 
 export type * from './reduxTypes';
 export type * from './api/apiTypes';
+export type { NarrowBridge } from './utils/narrow';
 
 /**
  * Assert a contradiction, statically.  Do nothing at runtime.
