@@ -3,12 +3,12 @@
 import React, { PureComponent } from 'react';
 import { StyleSheet } from 'react-native';
 
-import type { Auth, Narrow, Stream, Dispatch } from '../types';
+import type { Auth, Dispatch } from '../types';
 import { connect } from '../react-redux';
 import { ZulipButton } from '../common';
 import * as api from '../api';
-import { getAuth, getStreams } from '../selectors';
-import { isHomeNarrow, isStreamNarrow, isTopicNarrow } from '../utils/narrow';
+import { getAuth } from '../selectors';
+import { CleanNarrow, StreamNarrow, TopicNarrow, AllMessagesNarrow } from '../utils/narrow';
 
 const styles = StyleSheet.create({
   button: {
@@ -22,8 +22,7 @@ const styles = StyleSheet.create({
 type Props = $ReadOnly<{|
   dispatch: Dispatch,
   auth: Auth,
-  narrow: Narrow,
-  streams: Stream[],
+  narrow: CleanNarrow,
 |}>;
 
 class MarkUnreadButton extends PureComponent<Props> {
@@ -33,31 +32,31 @@ class MarkUnreadButton extends PureComponent<Props> {
   };
 
   markStreamAsRead = () => {
-    const { auth, narrow, streams } = this.props;
-    const stream = streams.find(s => s.name === narrow[0].operand);
-    if (stream) {
-      api.markStreamAsRead(auth, stream.stream_id);
+    const { auth, narrow } = this.props;
+    if (!(narrow instanceof StreamNarrow)) {
+      throw new Error('expected stream narrow');
     }
+    api.markStreamAsRead(auth, narrow.streamId);
   };
 
   markTopicAsRead = () => {
-    const { auth, narrow, streams } = this.props;
-    const stream = streams.find(s => s.name === narrow[0].operand);
-    if (stream) {
-      api.markTopicAsRead(auth, stream.stream_id, narrow[1].operand);
+    const { auth, narrow } = this.props;
+    if (!(narrow instanceof TopicNarrow)) {
+      throw new Error('expected topic narrow');
     }
+    api.markTopicAsRead(auth, narrow.streamId, narrow.topic);
   };
 
   render() {
     const { narrow } = this.props;
 
-    if (isHomeNarrow(narrow)) {
+    if (narrow instanceof AllMessagesNarrow) {
       return (
         <ZulipButton style={styles.button} text="Mark all as read" onPress={this.markAllAsRead} />
       );
     }
 
-    if (isStreamNarrow(narrow)) {
+    if (narrow instanceof StreamNarrow) {
       return (
         <ZulipButton
           style={styles.button}
@@ -67,7 +66,7 @@ class MarkUnreadButton extends PureComponent<Props> {
       );
     }
 
-    if (isTopicNarrow(narrow)) {
+    if (narrow instanceof TopicNarrow) {
       return (
         <ZulipButton
           style={styles.button}
@@ -83,5 +82,4 @@ class MarkUnreadButton extends PureComponent<Props> {
 
 export default connect(state => ({
   auth: getAuth(state),
-  streams: getStreams(state),
 }))(MarkUnreadButton);
