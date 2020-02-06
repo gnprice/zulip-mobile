@@ -2,7 +2,7 @@
 import type { IntlShape } from 'react-intl';
 import type { DangerouslyImpreciseStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-import type { Auth, Topic, Message, Reaction, ReactionType, Narrow } from './api/apiTypes';
+import type { Auth, Topic, Message, Reaction, ReactionType } from './api/apiTypes';
 import type { ZulipVersion } from './utils/zulipVersion';
 
 export type * from './generics';
@@ -175,7 +175,6 @@ export type Outbox = {|
   // These fields don't exist in `Message`.
   // They're used for sending the message to the server.
   markdownContent: string,
-  narrow: Narrow,
 
   /** For the `to` field of the POST /messages request. */
   sendTo: string,

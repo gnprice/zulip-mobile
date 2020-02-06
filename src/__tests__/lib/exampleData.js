@@ -365,7 +365,6 @@ const outboxMessageBase: $Diff<Outbox, {| id: mixed, timestamp: mixed |}> = deep
   display_recipient: 'test',
   // id: ...,
   markdownContent: 'Test.',
-  narrow: [{ operator: 'stream', operand: 'test' }],
   reactions: [],
   sender_email: selfUser.email,
   sender_full_name: selfUser.full_name,
