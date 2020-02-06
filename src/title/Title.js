@@ -2,10 +2,10 @@
 
 import React, { PureComponent } from 'react';
 
-import { caseNarrow } from '../utils/narrow';
+import { caseNarrow, asApiStringNarrow } from '../utils/narrow';
 import { getSession } from '../selectors';
 
-import type { EditMessage, Narrow, Dispatch } from '../types';
+import type { EditMessage, NarrowBridge, Dispatch } from '../types';
 import { connect } from '../react-redux';
 import TitlePrivate from './TitlePrivate';
 import TitleGroup from './TitleGroup';
@@ -15,17 +15,18 @@ import TitlePlain from './TitlePlain';
 
 type Props = $ReadOnly<{|
   dispatch: Dispatch,
-  narrow: Narrow,
+  narrow: NarrowBridge,
   editMessage: ?EditMessage,
   color: string,
 |}>;
 
 class Title extends PureComponent<Props> {
   render() {
-    const { narrow, color, editMessage } = this.props;
+    const { narrow: narrowBridge, color, editMessage } = this.props;
     if (editMessage != null) {
       return <TitlePlain text="Edit message" color={color} />;
     }
+    const narrow = asApiStringNarrow(narrowBridge);
     return caseNarrow(narrow, {
       stream: () => <TitleStream narrow={narrow} color={color} />,
       topic: () => <TitleStream narrow={narrow} color={color} />,

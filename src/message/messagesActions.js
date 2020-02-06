@@ -46,7 +46,7 @@ export const doNarrow = (narrow: NarrowBridge, anchor: number = FIRST_UNREAD_ANC
 
   dispatch({ type: DO_NARROW, narrow: stringsNarrow });
   dispatch(fetchMessagesInNarrow(stringsNarrow, anchor));
-  dispatch(navigateToChat(stringsNarrow));
+  dispatch(navigateToChat(narrow));
 };
 
 export const messageLinkPress = (href: string) => (dispatch: Dispatch, getState: GetState) => {

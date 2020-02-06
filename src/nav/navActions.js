@@ -6,7 +6,7 @@ import type {
   NavigationAction,
   GetState,
   Message,
-  Narrow,
+  NarrowBridge,
   UserOrBot,
   ApiResponseServerSettings,
 } from '../types';
@@ -22,7 +22,7 @@ export const navigateBack = () => (dispatch: Dispatch, getState: GetState): Navi
 //    StackActions.push({ routeName: 'main' });
 
 /** Only call this via `doNarrow`.  See there for details. */
-export const navigateToChat = (narrow: Narrow): NavigationAction =>
+export const navigateToChat = (narrow: NarrowBridge): NavigationAction =>
   StackActions.push({ routeName: 'chat', params: { narrow } });
 
 export const navigateToUsersScreen = (): NavigationAction =>

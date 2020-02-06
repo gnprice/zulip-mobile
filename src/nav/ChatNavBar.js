@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 
-import type { Dispatch, Narrow } from '../types';
+import type { Dispatch, NarrowBridge } from '../types';
 import { connect } from '../react-redux';
 import styles, { BRAND_COLOR } from '../styles';
 import Title from '../title/Title';
@@ -12,13 +12,14 @@ import { DEFAULT_TITLE_BACKGROUND_COLOR, getTitleBackgroundColor } from '../titl
 import { foregroundColorFromBackground } from '../utils/color';
 import { navigateBack } from '../actions';
 import { ExtraButton, InfoButton } from '../title-buttons/titleButtonFromNarrow';
+import { asApiStringNarrow } from '../utils/narrow';
 
 type SelectorProps = {|
   backgroundColor: string,
 |};
 
 type Props = $ReadOnly<{|
-  narrow: Narrow,
+  narrow: NarrowBridge,
 
   dispatch: Dispatch,
   ...SelectorProps,
@@ -26,12 +27,13 @@ type Props = $ReadOnly<{|
 
 class ChatNavBar extends PureComponent<Props> {
   render() {
-    const { dispatch, backgroundColor, narrow } = this.props;
+    const { dispatch, backgroundColor, narrow: narrowBridge } = this.props;
     const color =
       backgroundColor === DEFAULT_TITLE_BACKGROUND_COLOR
         ? BRAND_COLOR
         : foregroundColorFromBackground(backgroundColor);
 
+    const narrow = asApiStringNarrow(narrowBridge);
     return (
       <View style={[styles.navBar, { backgroundColor }]}>
         <NavButton

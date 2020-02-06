@@ -1,9 +1,9 @@
 /* @flow strict-local */
 import { createSelector } from 'reselect';
 
-import type { Narrow, Selector } from '../types';
+import type { NarrowBridge, Selector } from '../types';
 import { getSubscriptions } from '../directSelectors';
-import { isStreamOrTopicNarrow } from '../utils/narrow';
+import { isStreamOrTopicNarrow, asApiStringNarrow } from '../utils/narrow';
 import { NULL_SUBSCRIPTION } from '../nullObjects';
 
 export const DEFAULT_TITLE_BACKGROUND_COLOR = 'transparent';
@@ -14,10 +14,11 @@ export const DEFAULT_TITLE_BACKGROUND_COLOR = 'transparent';
  * If `narrow` is a stream or topic narrow, this is based on the stream color.
  * Otherwise, it takes a default value.
  */
-export const getTitleBackgroundColor = (narrow?: Narrow): Selector<string> =>
+export const getTitleBackgroundColor = (narrowBridge?: NarrowBridge): Selector<string> =>
   createSelector(
     getSubscriptions,
     subscriptions => {
+      const narrow = narrowBridge && asApiStringNarrow(narrowBridge);
       if (!narrow || !isStreamOrTopicNarrow(narrow)) {
         return DEFAULT_TITLE_BACKGROUND_COLOR;
       }
