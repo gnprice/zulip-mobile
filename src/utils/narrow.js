@@ -55,7 +55,14 @@ class TopicNarrow extends StreamOrTopicNarrow {
 }
 
 class PmNarrow extends CleanNarrow {
-  // We never include the self user; so the list may be empty.
+  /**
+   * IDs of the slightly quirky set of users we identify the PM thread with.
+   *
+   * This is all the users in the conversation... except the self user...
+   * except that in the self-1:1 thread, it has the self user after all.
+   *
+   * In particular always nonempty.
+   */
   userIds: number[];
 
   /** Best-effort only, for e.g. debugging. */
@@ -73,11 +80,13 @@ class PmNarrow extends CleanNarrow {
    *
    * Throws if a user can't be found.
    */
+  // This happens to be the same set of users we use internally, but that
+  // might change.
   getDisplayUsers(
     allUsersById: Map<number, UserOrBot>,
     ownUserId: number,
   ): $ReadOnlyArray<UserOrBot> {
-    const userIds = this.userIds.length ? this.userIds : [ownUserId];
+    const { userIds } = this;
     const users = userIds.map(id => allUsersById.get(id)).filter(Boolean);
     if (users.length !== userIds.length) {
       throw new Error('missing user'); // TODO etc
