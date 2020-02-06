@@ -8,16 +8,19 @@ import { FIRST_UNREAD_ANCHOR } from '../anchor';
 import { getStreamsById } from '../subscriptions/subscriptionSelectors';
 import * as api from '../api';
 import { isUrlOnRealm } from '../utils/url';
+import { type DualNarrow, asApiStringNarrow } from '../utils/narrow';
 
 /**
  * Navigate to the given narrow.
  */
-export const doNarrow = (narrow: Narrow, anchor: number = FIRST_UNREAD_ANCHOR) => (
+export const doNarrow = (narrow: Narrow | DualNarrow<>, anchor: number = FIRST_UNREAD_ANCHOR) => (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
+  const stringsNarrow = asApiStringNarrow(narrow);
+
   // TODO: Use `anchor` to open the message list to a particular message.
-  dispatch(navigateToChat(narrow));
+  dispatch(navigateToChat(stringsNarrow));
 };
 
 export const messageLinkPress = (href: string) => async (
