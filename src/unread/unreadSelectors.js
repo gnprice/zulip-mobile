@@ -236,7 +236,7 @@ export const getUnreadCountForNarrow: Selector<number, CleanNarrow> = createSele
       return unreadTotal;
     }
 
-    let unreads: $ReadOnlyArray<{ +unread_message_ids: $ReadOnlyArray<mixed>, ... }> = [];
+    let unreads;
     if (narrow instanceof StreamNarrow) {
       const streamName = streamsById.get(narrow.streamId)?.name;
       const isMuted = topic => streamName !== undefined && isTopicMuted(streamName, topic, mute);
@@ -254,6 +254,8 @@ export const getUnreadCountForNarrow: Selector<number, CleanNarrow> = createSele
         const unread = unreadPms.find(x => x.sender_id === narrow.userIds[0]);
         unreads = unread ? [unread] : [];
       }
+    } else {
+      unreads = [];
     }
 
     // Unread starred messages are impossible, so 0 is correct for the
