@@ -26,57 +26,29 @@ type Props = $ReadOnly<{|
 |}>;
 
 class MarkUnreadButton extends PureComponent<Props> {
-  markAllAsRead = () => {
-    const { auth } = this.props;
-    api.markAllAsRead(auth);
-  };
-
-  markStreamAsRead = () => {
+  onPress = () => {
     const { auth, narrow } = this.props;
-    if (!(narrow instanceof StreamNarrow)) {
-      throw new Error('expected stream narrow');
+    if (narrow instanceof AllMessagesNarrow) {
+      api.markAllAsRead(auth);
+    } else if (narrow instanceof StreamNarrow) {
+      api.markStreamAsRead(auth, narrow.streamId);
+    } else if (narrow instanceof TopicNarrow) {
+      api.markTopicAsRead(auth, narrow.streamId, narrow.topic);
     }
-    api.markStreamAsRead(auth, narrow.streamId);
-  };
-
-  markTopicAsRead = () => {
-    const { auth, narrow } = this.props;
-    if (!(narrow instanceof TopicNarrow)) {
-      throw new Error('expected topic narrow');
-    }
-    api.markTopicAsRead(auth, narrow.streamId, narrow.topic);
   };
 
   render() {
     const { narrow } = this.props;
+    const text =
+      narrow instanceof AllMessagesNarrow
+        ? 'Mark all as read'
+        : narrow instanceof StreamNarrow
+        ? 'Mark stream as read'
+        : narrow instanceof TopicNarrow
+        ? 'Mark topic as read'
+        : null;
 
-    if (narrow instanceof AllMessagesNarrow) {
-      return (
-        <ZulipButton style={styles.button} text="Mark all as read" onPress={this.markAllAsRead} />
-      );
-    }
-
-    if (narrow instanceof StreamNarrow) {
-      return (
-        <ZulipButton
-          style={styles.button}
-          text="Mark stream as read"
-          onPress={this.markStreamAsRead}
-        />
-      );
-    }
-
-    if (narrow instanceof TopicNarrow) {
-      return (
-        <ZulipButton
-          style={styles.button}
-          text="Mark topic as read"
-          onPress={this.markTopicAsRead}
-        />
-      );
-    }
-
-    return null;
+    return text && <ZulipButton text={text} style={styles.button} onPress={this.onPress} />;
   }
 }
 
