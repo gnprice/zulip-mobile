@@ -5,13 +5,65 @@ import unescape from 'lodash.unescape';
 import type { Narrow, Message, Outbox, Stream, UserOrBot } from '../types';
 import { normalizeRecipients } from './recipient';
 
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-use-before-define */
+
 class CleanNarrow {
-  data: | {| type: 'stream', streamId: number, streamName?: string |}
-    | {| type: 'topic', streamId: number, streamName?: string, topic: string |}
-    // In the PM case, we never include the self user; so the list may be empty.
-    | {| type: 'pm', userIds: number[], emails?: string[] |}
-    | {| type: 'home' | 'starred' | 'mentioned' | 'allPrivate' |}
-    | {| type: 'search', query: string |};
+  /** A unique canonical name for the narrow, suitable for use as a map key. */
+  key(): string {
+    throw new Error('must implement');
+  }
+
+  /** Convert into an old-style API narrow object, with user emails and stream names. */
+  apiStringsNarrow(data: {
+    allUsersById: Map<number, UserOrBot>,
+    streamsById: Map<number, Stream>,
+  }): Narrow | null {
+    throw new Error('must implement');
+  }
+}
+
+class StreamOrTopicNarrow extends CleanNarrow {
+  streamId: number;
+
+  /** Best-effort only, for e.g. debugging. */
+  streamName: string | void;
+}
+
+class StreamNarrow extends StreamOrTopicNarrow {
+  key() {
+    return `stream:${this.streamId}`;
+  }
+
+  apiStringsNarrow({ streamsById }) {
+    const stream = streamsById.get(this.streamId);
+    return stream ? streamNarrow(stream.name) : null;
+  }
+}
+
+class TopicNarrow extends StreamOrTopicNarrow {
+  topic: string;
+
+  key() {
+    return `topic:${this.streamId}:${this.topic}`;
+  }
+
+  apiStringsNarrow({ streamsById }): Narrow | null {
+    const stream = streamsById.get(this.streamId);
+    return stream ? topicNarrow(stream.name, this.topic) : null;
+  }
+}
+
+class PmNarrow extends CleanNarrow {
+  // We never include the self user; so the list may be empty.
+  userIds: number[];
+
+  /** Best-effort only, for e.g. debugging. */
+  emails: string[] | void;
+
+  key() {
+    return `pm:${this.userIds.join(',')}`;
+  }
 
   /**
    * The users that identify a PM narrow in the UI.
@@ -19,38 +71,33 @@ class CleanNarrow {
    * This is all users except the self user... except on the self-1:1
    * conversation, for which it includes the self user after all.
    *
-   * Returns null if this isn't in fact a PM narrow.  Throws if a user can't be found.
+   * Throws if a user can't be found.
    */
-  tryGetPmDisplayUsers(
+  getDisplayUsers(
     allUsersById: Map<number, UserOrBot>,
     ownUserId: number,
-  ): $ReadOnlyArray<UserOrBot> | null {
-    if (this.data.type !== 'pm') {
-      return null;
-    }
-    const userIds = this.data.userIds.length ? this.data.userIds : [ownUserId];
+  ): $ReadOnlyArray<UserOrBot> {
+    const userIds = this.userIds.length ? this.userIds : [ownUserId];
     const users = userIds.map(id => allUsersById.get(id)).filter(Boolean);
     if (users.length !== userIds.length) {
       throw new Error('missing user'); // TODO etc
     }
     return users;
   }
+}
 
-  /** Convert into an old-style API narrow object, with user emails and stream names. */
-  apiStringsNarrow(
-    allUsersById: Map<number, UserOrBot>,
-    streamsById: Map<number, Stream>,
-  ): Narrow | null {
-    switch (this.data.type) {
-      case 'stream': {
-        const stream = streamsById.get(this.data.streamId);
-        return stream ? streamNarrow(stream.name) : null;
-      }
-      // WIP TODO
-      default:
-        return null; // WIP TODO NOMERGE -- make exhaustive
-    }
-  }
+class UniqueNarrow extends CleanNarrow {}
+
+class AllMessagesNarrow extends UniqueNarrow {}
+
+class StarredNarrow extends UniqueNarrow {}
+
+class MentionedNarrow extends UniqueNarrow {}
+
+class AllPmsNarrow extends UniqueNarrow {}
+
+class SearchNarrow extends CleanNarrow {
+  query: string;
 }
 
 export const isSameNarrow = (narrow1: Narrow, narrow2: Narrow): boolean =>
