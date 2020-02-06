@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import { SectionList } from 'react-native';
 
-import type { User, UserGroup, Dispatch } from '../types';
+import type { User, UserGroup, UserOrBot, Dispatch } from '../types';
 import { connect } from '../react-redux';
 import { getOwnEmail, getSortedUsers, getUserGroups } from '../selectors';
 import {
@@ -28,12 +28,8 @@ class PeopleAutocomplete extends PureComponent<Props> {
     this.props.onAutocomplete(`*${name}*`);
   };
 
-  handleUserItemAutocomplete = (email: string): void => {
-    const { users, onAutocomplete } = this.props;
-    const user = users.find(x => x.email === email);
-    if (user) {
-      onAutocomplete(`**${user.full_name}**`);
-    }
+  handleUserItemAutocomplete = (user: UserOrBot): void => {
+    this.props.onAutocomplete(`**${user.full_name}**`);
   };
 
   render() {
