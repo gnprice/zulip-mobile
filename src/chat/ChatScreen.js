@@ -149,7 +149,7 @@ class ChatScreen extends PureComponent<Props, State> {
             <ZulipStatusBar narrow={narrow} />
             <ChatNavBar narrow={narrow} editMessage={editMessage} />
             <OfflineNotice />
-            <UnreadNotice narrow={narrow} />
+            <UnreadNotice narrow={narrow.clean} />
             {(() => {
               if (!this.props.isNarrowValid) {
                 return <InvalidNarrow narrow={narrow.strings} />;

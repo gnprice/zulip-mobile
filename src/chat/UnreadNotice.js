@@ -10,7 +10,7 @@ import { getUnreadCountForNarrow } from '../selectors';
 import { Label, RawLabel } from '../common';
 import MarkUnreadButton from './MarkUnreadButton';
 import AnimatedScaleComponent from '../animation/AnimatedScaleComponent';
-import { DualNarrow } from '../utils/narrow';
+import { CleanNarrow } from '../utils/narrow';
 
 const styles = createStyleSheet({
   unreadContainer: {
@@ -41,7 +41,7 @@ type SelectorProps = {|
 |};
 
 type Props = $ReadOnly<{|
-  narrow: DualNarrow<>,
+  narrow: CleanNarrow,
 
   dispatch: Dispatch,
   ...SelectorProps,
@@ -60,12 +60,12 @@ class UnreadNotice extends PureComponent<Props> {
             text={unreadCount === 1 ? 'unread message' : 'unread messages'}
           />
         </View>
-        <MarkUnreadButton narrow={narrow.clean} />
+        <MarkUnreadButton narrow={narrow} />
       </AnimatedScaleComponent>
     );
   }
 }
 
 export default connect<SelectorProps, _, _>((state, props) => ({
-  unreadCount: getUnreadCountForNarrow(state, props.narrow.clean),
+  unreadCount: getUnreadCountForNarrow(state, props.narrow),
 }))(UnreadNotice);
