@@ -31,6 +31,9 @@ type ButtonDescription = {
     dispatch: Dispatch,
     _: GetText,
   }): void | Promise<void>,
+
+  allow: (BackgroundData, Message | Outbox, Narrow) => boolean,
+
   title: string,
 
   /** The title of the alert-box that will be displayed if the callback throws. */
@@ -41,13 +44,27 @@ type ButtonDescription = {
 
 const isAnOutboxMessage = (message: Message | Outbox): boolean => message.isOutbox;
 
+const messageNotDeleted = (message: Message | Outbox): boolean =>
+  message.content !== '<p>(deleted)</p>';
+
+/** True just if the narrow represents a specific, whole, conversation. */
+const isSingleConversation = (narrow: Narrow): boolean =>
+  caseNarrowDefault(
+    narrow,
+    { topic: () => true, pm: () => true, groupPm: () => true },
+    () => false,
+  );
+
 //
 // Options for the action sheet go below: ...
 //
 
+/* eslint-disable no-empty-pattern */
+
 const reply = ({ message, dispatch, ownEmail }) => {
   dispatch(doNarrow(getNarrowFromMessage(message, ownEmail), message.id));
 };
+reply.allow = ({}, message, narrow) => !isAnOutboxMessage(message) && !isSingleConversation(narrow);
 reply.title = 'Reply';
 reply.errorMessage = 'Failed to reply';
 
@@ -58,12 +75,18 @@ const copyToClipboard = async ({ _, auth, message }) => {
   Clipboard.setString(rawMessage);
   showToast(_('Message copied'));
 };
+copyToClipboard.allow = ({}, message) => messageNotDeleted(message);
 copyToClipboard.title = 'Copy to clipboard';
 copyToClipboard.errorMessage = 'Failed to copy message to clipboard';
 
 const editMessage = async ({ message, dispatch }) => {
   dispatch(startEditMessage(message.id, message.subject));
 };
+editMessage.allow = ({ ownUser }, message, narrow) =>
+  !isAnOutboxMessage(message)
+  && message.sender_email === ownUser.email
+  // Our "edit message" UI only works in certain kinds of narrows.
+  && (isStreamOrTopicNarrow(narrow) || isPrivateOrGroupNarrow(narrow));
 editMessage.title = 'Edit message';
 editMessage.errorMessage = 'Failed to edit message';
 
@@ -74,6 +97,8 @@ const deleteMessage = async ({ auth, message, dispatch }) => {
     await api.deleteMessage(auth, message.id);
   }
 };
+deleteMessage.allow = ({ ownUser }, message, narrow) =>
+  message.sender_email === ownUser.email && messageNotDeleted(message);
 deleteMessage.title = 'Delete message';
 deleteMessage.errorMessage = 'Failed to delete message';
 
@@ -110,12 +135,16 @@ muteStream.errorMessage = 'Failed to mute stream';
 const starMessage = async ({ auth, message }) => {
   await api.toggleMessageStarred(auth, [message.id], true);
 };
+starMessage.allow = ({ flags }, message) =>
+  !isAnOutboxMessage(message) && !(message.id in flags.starred);
 starMessage.title = 'Star message';
 starMessage.errorMessage = 'Failed to star message';
 
 const unstarMessage = async ({ auth, message }) => {
   await api.toggleMessageStarred(auth, [message.id], false);
 };
+unstarMessage.allow = ({ flags }, message) =>
+  !isAnOutboxMessage(message) && message.id in flags.starred;
 unstarMessage.title = 'Unstar message';
 unstarMessage.errorMessage = 'Failed to unstar message';
 
@@ -124,18 +153,21 @@ const shareMessage = ({ message }) => {
     message: message.content.replace(/<(?:.|\n)*?>/gm, ''),
   });
 };
+shareMessage.allow = ({}, message) => messageNotDeleted(message);
 shareMessage.title = 'Share';
 shareMessage.errorMessage = 'Failed to share message';
 
 const addReaction = ({ message, dispatch }) => {
   dispatch(navigateToEmojiPicker(message.id));
 };
+addReaction.allow = ({}, message) => !isAnOutboxMessage(message) && messageNotDeleted(message);
 addReaction.title = 'Add a reaction';
 addReaction.errorMessage = 'Failed to add reaction';
 
 const showReactions = ({ message, dispatch }) => {
   dispatch(navigateToMessageReactionScreen(message.id));
 };
+showReactions.allow = ({}, message) => message.reactions.length > 0;
 showReactions.title = 'See who reacted';
 showReactions.errorMessage = 'Failed to show reactions';
 
@@ -201,53 +233,38 @@ export const constructHeaderActionButtons = ({
   return buttons;
 };
 
-const messageNotDeleted = (message: Message | Outbox): boolean =>
-  message.content !== '<p>(deleted)</p>';
-
-/** True just if the narrow represents a specific, whole, conversation. */
-const isSingleConversation = (narrow: Narrow): boolean =>
-  caseNarrowDefault(
-    narrow,
-    { topic: () => true, pm: () => true, groupPm: () => true },
-    () => false,
-  );
-
 export const constructMessageActionButtons = ({
-  backgroundData: { ownUser, flags },
+  backgroundData,
   message,
   narrow,
 }: ConstructSheetParams): ButtonCode[] => {
   const buttons = [];
-  if (message.reactions.length > 0) {
+  if (showReactions.allow(backgroundData, message, narrow)) {
     buttons.push('showReactions');
   }
-  if (!isAnOutboxMessage(message) && messageNotDeleted(message)) {
+  if (addReaction.allow(backgroundData, message, narrow)) {
     buttons.push('addReaction');
   }
-  if (!isAnOutboxMessage(message) && !isSingleConversation(narrow)) {
+  if (reply.allow(backgroundData, message, narrow)) {
     buttons.push('reply');
   }
-  if (messageNotDeleted(message)) {
+  if (copyToClipboard.allow(backgroundData, message, narrow)) {
     buttons.push('copyToClipboard');
+  }
+  if (shareMessage.allow(backgroundData, message, narrow)) {
     buttons.push('shareMessage');
   }
-  if (
-    !isAnOutboxMessage(message)
-    && message.sender_email === ownUser.email
-    // Our "edit message" UI only works in certain kinds of narrows.
-    && (isStreamOrTopicNarrow(narrow) || isPrivateOrGroupNarrow(narrow))
-  ) {
+  if (editMessage.allow(backgroundData, message, narrow)) {
     buttons.push('editMessage');
   }
-  if (message.sender_email === ownUser.email && messageNotDeleted(message)) {
+  if (deleteMessage.allow(backgroundData, message, narrow)) {
     buttons.push('deleteMessage');
   }
-  if (!isAnOutboxMessage(message)) {
-    if (message.id in flags.starred) {
-      buttons.push('unstarMessage');
-    } else {
-      buttons.push('starMessage');
-    }
+  if (unstarMessage.allow(backgroundData, message, narrow)) {
+    buttons.push('unstarMessage');
+  }
+  if (starMessage.allow(backgroundData, message, narrow)) {
+    buttons.push('starMessage');
   }
   buttons.push('cancel');
   return buttons;
