@@ -5,8 +5,8 @@ import type { Auth, Dispatch, GetState, GlobalState } from '../types';
 import * as api from '../api';
 import { PRESENCE_RESPONSE } from '../actionConstants';
 import { getAuth, tryGetAuth, getServerVersion } from '../selectors';
-import { caseNarrowPartial, DualNarrow, PmNarrow } from '../utils/narrow';
-import { getAllUsersByEmail, getUserForId } from './userSelectors';
+import { DualNarrow, PmNarrow } from '../utils/narrow';
+import { getUserForId } from './userSelectors';
 import { ZulipVersion } from '../utils/zulipVersion';
 
 export const reportPresence = (isActive: boolean = true, newUserInput: boolean = false) => async (
@@ -56,26 +56,16 @@ const typingWorker = (state: GlobalState) => {
   };
 };
 
-export const sendTypingStart = (narrow: DualNarrow<>) => async (
+export const sendTypingStart = (dualNarrow: DualNarrow<>) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
-  if (!(narrow.clean instanceof PmNarrow)) {
+  const narrow = dualNarrow.clean;
+  if (!(narrow instanceof PmNarrow)) {
     return;
   }
 
-  const usersByEmail = getAllUsersByEmail(getState());
-  const recipientIds = caseNarrowPartial(narrow.strings, {
-    pm: email => [email],
-    groupPm: emails => emails,
-  }).map(email => {
-    const user = usersByEmail.get(email);
-    if (!user) {
-      throw new Error('unknown user');
-    }
-    return user.user_id;
-  });
-  typing_status.update(typingWorker(getState()), recipientIds);
+  typing_status.update(typingWorker(getState()), narrow.userIds);
 };
 
 // TODO call this on more than send: blur, navigate away,
