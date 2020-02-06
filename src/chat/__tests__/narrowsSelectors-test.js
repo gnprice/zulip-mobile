@@ -309,7 +309,7 @@ describe('isNarrowValid', () => {
     expect(result).toBe(false);
   });
 
-  test('narrowing to a group chat with non-existing user is not valid', () => {
+  test('narrowing to a group chat with existing users is valid', () => {
     const state = {
       realm: {
         crossRealmBots: [],
@@ -325,20 +325,20 @@ describe('isNarrowValid', () => {
     expect(result).toBe(true);
   });
 
-  test('narrowing to a group chat with non-existing users is also valid', () => {
+  test('narrowing to a group chat with non-existing users is not valid', () => {
     const state = {
       realm: {
         crossRealmBots: [],
         nonActiveUsers: [],
       },
       streams: [],
-      users: [],
+      users: [{ email: 'john@example.com' }],
     };
     const narrow = groupNarrow(['john@example.com', 'mark@example.com']);
 
     const result = isNarrowValid(narrow)(state);
 
-    expect(result).toBe(true);
+    expect(result).toBe(false);
   });
 
   test('narrowing to a PM with bots is valid', () => {
