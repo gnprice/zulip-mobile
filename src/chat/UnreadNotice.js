@@ -3,13 +3,14 @@
 import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 
-import type { Narrow, Dispatch } from '../types';
+import type { Dispatch } from '../types';
 import { createStyleSheet } from '../styles';
 import { connect } from '../react-redux';
 import { getUnreadCountForNarrow } from '../selectors';
 import { Label, RawLabel } from '../common';
 import MarkUnreadButton from './MarkUnreadButton';
 import AnimatedScaleComponent from '../animation/AnimatedScaleComponent';
+import { DualNarrow } from '../utils/narrow';
 
 const styles = createStyleSheet({
   unreadContainer: {
@@ -40,7 +41,7 @@ type SelectorProps = {|
 |};
 
 type Props = $ReadOnly<{|
-  narrow: Narrow,
+  narrow: DualNarrow<>,
 
   dispatch: Dispatch,
   ...SelectorProps,
@@ -59,12 +60,12 @@ class UnreadNotice extends PureComponent<Props> {
             text={unreadCount === 1 ? 'unread message' : 'unread messages'}
           />
         </View>
-        <MarkUnreadButton narrow={narrow} />
+        <MarkUnreadButton narrow={narrow.strings} />
       </AnimatedScaleComponent>
     );
   }
 }
 
 export default connect<SelectorProps, _, _>((state, props) => ({
-  unreadCount: getUnreadCountForNarrow(state, props.narrow),
+  unreadCount: getUnreadCountForNarrow(state, props.narrow.clean),
 }))(UnreadNotice);
