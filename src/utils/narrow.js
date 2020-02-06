@@ -84,6 +84,12 @@ export class StreamOrTopicNarrow extends CleanNarrow {
 }
 
 export class StreamNarrow extends StreamOrTopicNarrow {
+  constructor(streamId: number, streamName?: string) {
+    super();
+    this.streamId = streamId;
+    this.streamName = streamName;
+  }
+
   key() {
     return `stream:${this.streamId}`;
   }
