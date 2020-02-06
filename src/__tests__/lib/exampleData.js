@@ -358,6 +358,8 @@ const outboxMessageBase: $Diff<Outbox, {| id: mixed, timestamp: mixed |}> = deep
   isOutbox: true,
   isSent: false,
 
+  sendTo: 'test',
+
   avatar_url: selfUser.avatar_url,
   content: '<p>Test.</p>',
   display_recipient: 'test',

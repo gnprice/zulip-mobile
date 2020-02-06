@@ -177,6 +177,9 @@ export type Outbox = {|
   markdownContent: string,
   narrow: Narrow,
 
+  /** For the `to` field of the POST /messages request. */
+  sendTo: string,
+
   // These fields are modeled on `Message`.
   avatar_url: string | null,
   content: string,

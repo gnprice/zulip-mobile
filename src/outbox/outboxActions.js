@@ -64,21 +64,9 @@ export const trySendMessages = (dispatch: Dispatch, getState: GetState): boolean
         return; // i.e., continue
       }
 
-      const to = ((): string => {
-        const { narrow } = item;
-        // TODO: can this test be `if (item.type === private)`?
-        if (isPrivateOrGroupNarrow(narrow)) {
-          return narrow[0].operand;
-        } else {
-          // HACK: the server attempts to interpret this argument as JSON, then
-          // CSV, then a literal. To avoid misparsing, always use JSON.
-          return JSON.stringify([item.display_recipient]);
-        }
-      })();
-
       await api.sendMessage(auth, {
         type: item.type,
-        to,
+        to: item.sendTo,
         subject: item.subject,
         content: item.markdownContent,
         localId: item.timestamp,
@@ -120,6 +108,7 @@ type DataFromNarrow = {|
   type: 'private' | 'stream',
   display_recipient: string | NamedUser[],
   subject: string,
+  sendTo: string,
 |};
 
 const extractTypeToAndSubjectFromNarrow = (
@@ -127,16 +116,43 @@ const extractTypeToAndSubjectFromNarrow = (
   usersByEmail: Map<string, User>,
   selfDetail: { email: string, user_id: number, full_name: string },
 ): DataFromNarrow => {
+  /* TODO merge:
+
+        const to = ((): string => {
+        const { narrow } = item;
+        // TODO: can this test be `if (item.type === private)`?
+        if (isPrivateOrGroupNarrow(narrow)) {
+          return narrow[0].operand;
+        } else {
+          // HACK: the server attempts to interpret this argument as JSON, then
+          // CSV, then a literal. To avoid misparsing, always use JSON.
+          return JSON.stringify([item.display_recipient]);
+        }
+      })();
+
+   */
+
   if (isPrivateOrGroupNarrow(narrow)) {
     return {
       type: 'private',
       display_recipient: mapEmailsToUsers(usersByEmail, narrow, selfDetail),
       subject: '',
+      sendTo: narrow[0].operand,
     };
   } else if (isStreamNarrow(narrow)) {
-    return { type: 'stream', display_recipient: narrow[0].operand, subject: '(no topic)' };
+    return {
+      type: 'stream',
+      display_recipient: narrow[0].operand,
+      subject: '(no topic)',
+      sendTo: narrow[0].operand,
+    };
   }
-  return { type: 'stream', display_recipient: narrow[0].operand, subject: narrow[1].operand };
+  return {
+    type: 'stream',
+    display_recipient: narrow[0].operand,
+    subject: narrow[1].operand,
+    sendTo: narrow[0].operand,
+  };
 };
 
 const getContentPreview = (content: string, state: GlobalState): string => {
