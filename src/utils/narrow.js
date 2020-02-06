@@ -68,6 +68,20 @@ class PmNarrow extends CleanNarrow {
   /** Best-effort only, for e.g. debugging. */
   emails: string[] | void;
 
+  constructor(userIds: number[], emails?: string[]) {
+    super();
+    this.userIds = userIds;
+    this.emails = emails;
+  }
+
+  static fromUsers(users: $ReadOnlyArray<UserOrBot>): PmNarrow {
+    return new PmNarrow(users.map(u => u.user_id), users.map(u => u.email));
+  }
+
+  static fromUser(user: UserOrBot): PmNarrow {
+    return PmNarrow.fromUsers([user]);
+  }
+
   key() {
     return `pm:${this.userIds.join(',')}`;
   }
