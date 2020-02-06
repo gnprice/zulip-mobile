@@ -60,7 +60,7 @@ class UnreadNotice extends PureComponent<Props> {
             text={unreadCount === 1 ? 'unread message' : 'unread messages'}
           />
         </View>
-        <MarkUnreadButton narrow={narrow.strings} />
+        <MarkUnreadButton narrow={narrow.clean} />
       </AnimatedScaleComponent>
     );
   }
