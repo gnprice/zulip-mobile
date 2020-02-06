@@ -26,7 +26,7 @@ import { getIsFetching } from './fetchingSelectors';
 import {
   isStreamOrTopicNarrow,
   emailsOfGroupNarrow,
-  narrowContains,
+  narrowContainsOutbox,
   caseNarrowDefault,
 } from '../utils/narrow';
 import { shouldBeMuted } from '../utils/message';
@@ -40,7 +40,7 @@ export const outboxMessagesForNarrow: Selector<Outbox[], Narrow> = createSelecto
     if (!caughtUp.newer) {
       return NULL_ARRAY;
     }
-    const filtered = outboxMessages.filter(item => narrowContains(narrow, item.narrow));
+    const filtered = outboxMessages.filter(item => narrowContainsOutbox(narrow, item));
     return isEqual(filtered, outboxMessages) ? outboxMessages : filtered;
   },
 );
