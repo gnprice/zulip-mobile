@@ -11,11 +11,12 @@ import { BRAND_COLOR } from '../styles';
 import { IconPlus, IconLeft, IconPeople, IconImage, IconCamera, IconFile } from '../common/Icons';
 import AnimatedComponent from '../animation/AnimatedComponent';
 import { navigateToCreateGroup, uploadFile } from '../actions';
+import { DualNarrow } from '../utils/narrow';
 
 type Props = $ReadOnly<{|
   dispatch: Dispatch,
   expanded: boolean,
-  destinationNarrow: Narrow,
+  destinationNarrow: DualNarrow<>,
   onExpandContract: () => void,
 |}>;
 

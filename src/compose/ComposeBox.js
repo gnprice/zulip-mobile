@@ -7,7 +7,6 @@ import TextInputReset from 'react-native-text-input-reset';
 import type {
   Auth,
   Context,
-  Narrow,
   EditMessage,
   InputSelection,
   UserOrBot,
@@ -28,12 +27,11 @@ import { FloatingActionButton, Input } from '../common';
 import { showErrorAlert } from '../utils/info';
 import { IconDone, IconSend } from '../common/Icons';
 import {
-  isStreamNarrow,
-  isStreamOrTopicNarrow,
-  topicNarrow,
   DualNarrow,
   StreamNarrow,
   StreamOrTopicNarrow,
+  TopicNarrow,
+  CleanNarrow,
 } from '../utils/narrow';
 import ComposeMenu from './ComposeMenu';
 import getComposeInputPlaceholder from './getComposeInputPlaceholder';
@@ -233,12 +231,12 @@ class ComposeBox extends PureComponent<Props, State> {
     this.setState({ isMenuExpanded: false });
   };
 
-  getDestinationNarrow = (): Narrow => {
-    const { narrow } = this.props;
+  getDestinationNarrow = (): CleanNarrow => {
+    const narrow = this.props.narrow.clean;
     const topic = this.state.topic.trim();
-    return isStreamNarrow(narrow.strings)
-      ? topicNarrow(narrow.strings[0].operand, topic || '(no topic)')
-      : narrow.strings;
+    return narrow instanceof StreamNarrow
+      ? new TopicNarrow(narrow.streamId, topic || '(no topic)')
+      : narrow;
   };
 
   handleSend = () => {
