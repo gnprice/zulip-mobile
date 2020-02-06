@@ -1,6 +1,7 @@
 /* @flow strict-local */
 import type {
   Narrow,
+  NarrowBridge,
   Dispatch,
   GetState,
   GlobalState,
@@ -30,7 +31,7 @@ import {
   MESSAGE_FETCH_COMPLETE,
 } from '../actionConstants';
 import { FIRST_UNREAD_ANCHOR, LAST_MESSAGE_ANCHOR } from '../anchor';
-import { ALL_PRIVATE_NARROW } from '../utils/narrow';
+import { ALL_PRIVATE_NARROW, asApiStringNarrow } from '../utils/narrow';
 import { BackoffMachine } from '../utils/async';
 import { initNotifications } from '../notification/notificationActions';
 import { addToOutbox, sendOutbox } from '../outbox/outboxActions';
@@ -85,20 +86,25 @@ const messageFetchComplete = (args: {|
  * stored in Redux. If it rejects, it tells Redux about it.
  */
 export const fetchMessages = (fetchArgs: {|
-  narrow: Narrow,
+  narrow: NarrowBridge,
   anchor: number,
   numBefore: number,
   numAfter: number,
 |}) => async (dispatch: Dispatch, getState: GetState): Promise<Message[]> => {
-  dispatch(messageFetchStart(fetchArgs.narrow, fetchArgs.numBefore, fetchArgs.numAfter));
+  const stringsNarrow = asApiStringNarrow(fetchArgs.narrow);
+  dispatch(messageFetchStart(stringsNarrow, fetchArgs.numBefore, fetchArgs.numAfter));
   try {
+    // api.getMessages is one spot that really does want an API-style
+    // narrow... though for new enough servers, it can take IDs.
     const { messages, found_newest, found_oldest } = await api.getMessages(getAuth(getState()), {
       ...fetchArgs,
+      narrow: stringsNarrow,
       useFirstUnread: fetchArgs.anchor === FIRST_UNREAD_ANCHOR, // TODO: don't use this; see #4203
     });
     dispatch(
       messageFetchComplete({
         ...fetchArgs,
+        narrow: stringsNarrow,
         messages,
         foundNewest: found_newest,
         foundOldest: found_oldest,
@@ -108,7 +114,7 @@ export const fetchMessages = (fetchArgs: {|
   } catch (e) {
     dispatch(
       messageFetchError({
-        narrow: fetchArgs.narrow,
+        narrow: stringsNarrow,
         error: e,
       }),
     );
@@ -181,13 +187,13 @@ export const initialFetchComplete = () => async (dispatch: Dispatch, getState: G
 /** Private; exported only for tests. */
 export const isFetchNeededAtAnchor = (
   state: GlobalState,
-  narrow: Narrow,
+  narrow: NarrowBridge,
   anchor: number,
 ): boolean => {
   // Ideally this would detect whether, even if we don't have *all* the
   // messages in the narrow, we have enough of them around the anchor
   // to show a message list already.  For now it's simple and cautious.
-  const caughtUp = getCaughtUpForNarrow(state, narrow);
+  const caughtUp = getCaughtUpForNarrow(state, asApiStringNarrow(narrow));
   return !(caughtUp.newer && caughtUp.older);
 };
 
@@ -212,7 +218,7 @@ export const isFetchNeededAtAnchor = (
  * dispatches with the data it receives from the server.
  */
 export const fetchMessagesInNarrow = (
-  narrow: Narrow,
+  narrow: NarrowBridge,
   anchor: number = FIRST_UNREAD_ANCHOR,
 ) => async (dispatch: Dispatch, getState: GetState): Promise<Message[] | void> => {
   if (!isFetchNeededAtAnchor(getState(), narrow, anchor)) {

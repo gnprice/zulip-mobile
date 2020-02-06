@@ -1,11 +1,11 @@
 /* @flow strict-local */
 import * as typing_status from '@zulip/shared/js/typing_status';
 
-import type { Auth, Dispatch, GetState, GlobalState, Narrow } from '../types';
+import type { Auth, Dispatch, GetState, GlobalState, NarrowBridge } from '../types';
 import * as api from '../api';
 import { PRESENCE_RESPONSE } from '../actionConstants';
 import { getAuth, tryGetAuth, getServerVersion } from '../selectors';
-import { isPrivateOrGroupNarrow, caseNarrowPartial } from '../utils/narrow';
+import { isPrivateOrGroupNarrow, caseNarrowPartial, asApiStringNarrow } from '../utils/narrow';
 import { getAllUsersByEmail, getUserForId } from './userSelectors';
 import { ZulipVersion } from '../utils/zulipVersion';
 
@@ -56,10 +56,11 @@ const typingWorker = (state: GlobalState) => {
   };
 };
 
-export const sendTypingStart = (narrow: Narrow) => async (
+export const sendTypingStart = (narrowBridge: NarrowBridge) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
+  const narrow = asApiStringNarrow(narrowBridge);
   if (!isPrivateOrGroupNarrow(narrow)) {
     return;
   }
@@ -80,10 +81,12 @@ export const sendTypingStart = (narrow: Narrow) => async (
 
 // TODO call this on more than send: blur, navigate away,
 //   delete all contents, etc.
-export const sendTypingStop = (narrow: Narrow) => async (
+export const sendTypingStop = (narrowBridge: NarrowBridge) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
+  const narrow = asApiStringNarrow(narrowBridge);
+
   if (!isPrivateOrGroupNarrow(narrow)) {
     return;
   }
