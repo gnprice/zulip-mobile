@@ -1,5 +1,13 @@
 /* @flow strict-local */
-import type { Narrow, Dispatch, GetState, GlobalState, Message, Action } from '../types';
+import type {
+  Narrow,
+  NarrowBridge,
+  Dispatch,
+  GetState,
+  GlobalState,
+  Message,
+  Action,
+} from '../types';
 import * as api from '../api';
 import {
   getAuth,
@@ -18,7 +26,7 @@ import {
   MESSAGE_FETCH_COMPLETE,
 } from '../actionConstants';
 import { FIRST_UNREAD_ANCHOR, LAST_MESSAGE_ANCHOR } from '../constants';
-import { ALL_PRIVATE_NARROW } from '../utils/narrow';
+import { ALL_PRIVATE_NARROW, asApiStringNarrow } from '../utils/narrow';
 import { tryUntilSuccessful } from '../utils/async';
 import { initNotifications } from '../notification/notificationActions';
 import { addToOutbox, sendOutbox } from '../outbox/outboxActions';
@@ -55,13 +63,16 @@ const messageFetchComplete = (
 
 /** PRIVATE: exported for tests only. */
 export const fetchMessages = (
-  narrow: Narrow,
+  narrowBridge: NarrowBridge,
   anchor: number,
   numBefore: number,
   numAfter: number,
   useFirstUnread: boolean = false,
 ) => async (dispatch: Dispatch, getState: GetState) => {
+  const narrow = asApiStringNarrow(narrowBridge);
   dispatch(messageFetchStart(narrow, numBefore, numAfter));
+  // api.getMessages is one spot that really does want an API-style
+  // narrow... though for new enough servers, it can take IDs.
   const { messages, found_newest, found_oldest } = await api.getMessages(
     getAuth(getState()),
     narrow,
@@ -107,11 +118,15 @@ const initialFetchComplete = (): Action => ({
   type: INITIAL_FETCH_COMPLETE,
 });
 
-const isFetchNeededAtAnchor = (state: GlobalState, narrow: Narrow, anchor: number): boolean => {
+const isFetchNeededAtAnchor = (
+  state: GlobalState,
+  narrow: NarrowBridge,
+  anchor: number,
+): boolean => {
   // Ideally this would detect whether, even if we don't have *all* the
   // messages in the narrow, we have enough of them around the anchor
   // to show a message list already.  For now it's simple and cautious.
-  const caughtUp = getCaughtUpForNarrow(state, narrow);
+  const caughtUp = getCaughtUpForNarrow(state, asApiStringNarrow(narrow));
   return !(caughtUp.newer && caughtUp.older);
 };
 
@@ -136,7 +151,7 @@ const isFetchNeededAtAnchor = (state: GlobalState, narrow: Narrow, anchor: numbe
  * dispatches with the data it receives from the server.
  */
 export const fetchMessagesInNarrow = (
-  narrow: Narrow,
+  narrow: NarrowBridge,
   anchor: number = FIRST_UNREAD_ANCHOR,
 ) => async (dispatch: Dispatch, getState: GetState) => {
   if (!isFetchNeededAtAnchor(getState(), narrow, anchor)) {
