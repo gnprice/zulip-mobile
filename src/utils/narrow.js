@@ -73,13 +73,14 @@ export const SEARCH_NARROW = (query: string): Narrow => [
 ];
 
 type NarrowCases<T> = {|
-  home: () => T,
+  stream: (name: string) => T,
+  topic: (streamName: string, topic: string) => T,
   pm: (emails: string[]) => T,
+
+  home: () => T,
   starred: () => T,
   mentioned: () => T,
   allPrivate: () => T,
-  stream: (name: string) => T,
-  topic: (streamName: string, topic: string) => T,
   search: (query: string) => T,
 |};
 
@@ -121,13 +122,13 @@ export function caseNarrowPartial<T>(narrow: Narrow, cases: $Shape<NarrowCases<T
     narrow,
     Object.assign(
       ({
-        home: err('home'),
+        stream: err('stream'),
+        topic: err('topic'),
         pm: err('PM'),
+        home: err('home'),
         starred: err('starred'),
         mentioned: err('mentions'),
         allPrivate: err('all-private'),
-        stream: err('stream'),
-        topic: err('topic'),
         search: err('search'),
       }: NarrowCases<T>),
       cases,
@@ -144,13 +145,13 @@ export function caseNarrowDefault<T>(
     narrow,
     Object.assign(
       ({
-        home: defaultCase,
+        stream: defaultCase,
+        topic: defaultCase,
         pm: defaultCase,
+        home: defaultCase,
         starred: defaultCase,
         mentioned: defaultCase,
         allPrivate: defaultCase,
-        stream: defaultCase,
-        topic: defaultCase,
         search: defaultCase,
       }: NarrowCases<T>),
       cases,
@@ -223,11 +224,12 @@ export const isMessageInNarrow = (message: Message, narrow: Narrow, ownEmail: st
   }
 
   return caseNarrow(narrow, {
-    home: () => true,
     stream: name => name === message.display_recipient,
     topic: (streamName, topic) =>
       streamName === message.display_recipient && topic === message.subject,
     pm: matchRecipients,
+
+    home: () => true,
     starred: () => flags.includes('starred'),
     mentioned: () => flags.includes('mentioned') || flags.includes('wildcard_mentioned'),
     allPrivate: () => message.type === 'private',
@@ -237,9 +239,10 @@ export const isMessageInNarrow = (message: Message, narrow: Narrow, ownEmail: st
 
 export const canSendToNarrow = (narrow: Narrow): boolean =>
   caseNarrow(narrow, {
-    pm: () => true,
     stream: () => true,
     topic: () => true,
+    pm: () => true,
+
     home: () => false,
     starred: () => false,
     mentioned: () => false,

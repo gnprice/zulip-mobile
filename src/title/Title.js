@@ -27,10 +27,6 @@ class Title extends PureComponent<Props> {
       return <TitlePlain text="Edit message" color={color} />;
     }
     return caseNarrow(narrow, {
-      home: () => <TitleSpecial code="home" color={color} />,
-      starred: () => <TitleSpecial code="starred" color={color} />,
-      mentioned: () => <TitleSpecial code="mentioned" color={color} />,
-      allPrivate: () => <TitleSpecial code="private" color={color} />,
       stream: () => <TitleStream narrow={narrow} color={color} />,
       topic: () => <TitleStream narrow={narrow} color={color} />,
       pm: emails =>
@@ -39,6 +35,11 @@ class Title extends PureComponent<Props> {
         ) : (
           <TitleGroup narrow={narrow} color={color} />
         ),
+
+      home: () => <TitleSpecial code="home" color={color} />,
+      starred: () => <TitleSpecial code="starred" color={color} />,
+      mentioned: () => <TitleSpecial code="mentioned" color={color} />,
+      allPrivate: () => <TitleSpecial code="private" color={color} />,
       search: () => null,
     });
   }
