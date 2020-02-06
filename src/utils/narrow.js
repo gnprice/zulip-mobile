@@ -11,7 +11,7 @@ import { normalizeRecipients } from './recipient';
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-use-before-define */
 
-class CleanNarrow {
+export class CleanNarrow {
   /** A unique canonical name for the narrow, suitable for use as a map key. */
   key(): string {
     throw new Error('must implement');
@@ -26,38 +26,38 @@ class CleanNarrow {
   }
 }
 
-class StreamOrTopicNarrow extends CleanNarrow {
+export class StreamOrTopicNarrow extends CleanNarrow {
   streamId: number;
 
   /** Best-effort only, for e.g. debugging. */
   streamName: string | void;
 }
 
-class StreamNarrow extends StreamOrTopicNarrow {
+export class StreamNarrow extends StreamOrTopicNarrow {
   key() {
     return `stream:${this.streamId}`;
   }
 
-  apiStringsNarrow({ streamsById }) {
-    const stream = streamsById.get(this.streamId);
+  apiStringsNarrow(data: { streamsById: Map<number, Stream> }) {
+    const stream = data.streamsById.get(this.streamId);
     return stream ? streamNarrow(stream.name) : null;
   }
 }
 
-class TopicNarrow extends StreamOrTopicNarrow {
+export class TopicNarrow extends StreamOrTopicNarrow {
   topic: string;
 
   key() {
     return `topic:${this.streamId}:${this.topic}`;
   }
 
-  apiStringsNarrow({ streamsById }): Narrow | null {
-    const stream = streamsById.get(this.streamId);
+  apiStringsNarrow(data: { streamsById: Map<number, Stream> }): Narrow | null {
+    const stream = data.streamsById.get(this.streamId);
     return stream ? topicNarrow(stream.name, this.topic) : null;
   }
 }
 
-class PmNarrow extends CleanNarrow {
+export class PmNarrow extends CleanNarrow {
   /**
    * IDs of the slightly quirky set of users we identify the PM thread with.
    *
@@ -112,17 +112,17 @@ class PmNarrow extends CleanNarrow {
   }
 }
 
-class UniqueNarrow extends CleanNarrow {}
+export class UniqueNarrow extends CleanNarrow {}
 
-class AllMessagesNarrow extends UniqueNarrow {}
+export class AllMessagesNarrow extends UniqueNarrow {}
 
-class StarredNarrow extends UniqueNarrow {}
+export class StarredNarrow extends UniqueNarrow {}
 
-class MentionedNarrow extends UniqueNarrow {}
+export class MentionedNarrow extends UniqueNarrow {}
 
-class AllPmsNarrow extends UniqueNarrow {}
+export class AllPmsNarrow extends UniqueNarrow {}
 
-class SearchNarrow extends CleanNarrow {
+export class SearchNarrow extends CleanNarrow {
   query: string;
 }
 
