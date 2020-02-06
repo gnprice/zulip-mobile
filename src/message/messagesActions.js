@@ -10,7 +10,7 @@ import { navigateToChat } from '../nav/navActions';
 import { FIRST_UNREAD_ANCHOR } from '../constants';
 import { getStreamsById } from '../subscriptions/subscriptionSelectors';
 import * as logging from '../utils/logging';
-import { type NarrowBridge, asApiStringNarrow } from '../utils/narrow';
+import { type NarrowBridge, asApiStringNarrow, asDualNarrow, DualNarrow } from '../utils/narrow';
 
 /**
  * Navigate to the given narrow, while fetching any data needed.
@@ -23,7 +23,7 @@ import { type NarrowBridge, asApiStringNarrow } from '../utils/narrow';
  * is nearly the only navigation in the app where additional data fetching
  * is required.  See `fetchMessagesInNarrow` for more details.
  */
-export const doNarrow = (narrow: NarrowBridge, anchor: number = FIRST_UNREAD_ANCHOR) => (
+export const doNarrow = (narrowBridge: NarrowBridge, anchor: number = FIRST_UNREAD_ANCHOR) => (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
@@ -36,15 +36,14 @@ export const doNarrow = (narrow: NarrowBridge, anchor: number = FIRST_UNREAD_ANC
     return;
   }
 
-  const stringsNarrow = asApiStringNarrow(narrow);
-
-  if (!isNarrowValid(stringsNarrow)(state)) {
+  const narrow = asDualNarrow(narrowBridge, (undefined: $FlowFixMe)); // TODO add needed selectors
+  if (!narrow || !isNarrowValid(narrow.strings)(state)) {
     // If this condition happens, the user will experience it as a bug.
-    logging.warn('doNarrow: skipped because missing data for narrow', { narrow });
+    logging.warn('doNarrow: skipped because missing data for narrow', { narrow: narrowBridge });
     return;
   }
 
-  dispatch({ type: DO_NARROW, narrow: stringsNarrow });
+  dispatch({ type: DO_NARROW, narrow: narrow.strings });
   dispatch(fetchMessagesInNarrow(narrow, anchor));
   dispatch(navigateToChat(narrow));
 };
