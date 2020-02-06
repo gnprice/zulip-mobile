@@ -7,8 +7,8 @@ import type {
   GetState,
   GlobalState,
   NamedUser,
-  Narrow,
   Outbox,
+  Stream,
   User,
   Action,
 } from '../types';
@@ -20,11 +20,12 @@ import {
 } from '../actionConstants';
 import { getAuth } from '../selectors';
 import * as api from '../api';
-import { getSelfUserDetail, getUsersByEmail } from '../users/userSelectors';
+import { getSelfUserDetail, getUsersById } from '../users/userSelectors';
 import { getUsersAndWildcards } from '../users/userHelpers';
-import { isStreamNarrow, isPrivateOrGroupNarrow } from '../utils/narrow';
+import { PmNarrow, CleanNarrow, TopicNarrow, StreamOrTopicNarrow } from '../utils/narrow';
 import { BackoffMachine } from '../utils/async';
 import { NULL_USER } from '../nullObjects';
+import { getStreamsById } from '../subscriptions/subscriptionSelectors';
 
 export const messageSendStart = (outbox: Outbox): Action => ({
   type: MESSAGE_SEND_START,
@@ -94,12 +95,11 @@ export const sendOutbox = () => async (dispatch: Dispatch, getState: GetState) =
   dispatch(toggleOutboxSending(false));
 };
 
-const mapEmailsToUsers = (usersByEmail, narrow, selfDetail) =>
-  narrow[0].operand
-    .split(',')
-    .map(item => {
-      const user = usersByEmail.get(item) || NULL_USER;
-      return { email: item, id: user.user_id, full_name: user.full_name };
+const mapEmailsToUsers = (usersById, userIds, selfDetail) =>
+  userIds
+    .map(id => {
+      const user = usersById.get(id) || NULL_USER;
+      return { email: user.email, id: user.user_id, full_name: user.full_name };
     })
     .concat({ email: selfDetail.email, id: selfDetail.user_id, full_name: selfDetail.full_name });
 
@@ -112,8 +112,9 @@ type DataFromNarrow = {|
 |};
 
 const extractTypeToAndSubjectFromNarrow = (
-  narrow: Narrow,
-  usersByEmail: Map<string, User>,
+  narrow: CleanNarrow,
+  usersById: Map<number, User>,
+  streamsById: Map<number, Stream>,
   selfDetail: { email: string, user_id: number, full_name: string },
 ): DataFromNarrow => {
   /* TODO merge:
@@ -132,27 +133,31 @@ const extractTypeToAndSubjectFromNarrow = (
 
    */
 
-  if (isPrivateOrGroupNarrow(narrow)) {
+  if (narrow instanceof PmNarrow) {
+    const recipients = mapEmailsToUsers(usersById, narrow.userIds, selfDetail);
     return {
       type: 'private',
-      display_recipient: mapEmailsToUsers(usersByEmail, narrow, selfDetail),
+      display_recipient: recipients,
       subject: '',
-      sendTo: narrow[0].operand,
+      sendTo: recipients
+        .map(r => r.email)
+        .sort()
+        .join(','),
     };
-  } else if (isStreamNarrow(narrow)) {
+  } else if (narrow instanceof StreamOrTopicNarrow) {
+    const streamName = streamsById.get(narrow.streamId)?.name;
+    if (streamName === undefined) {
+      throw new Error(`unknown stream ${narrow.streamId}`);
+    }
+    const topic = narrow instanceof TopicNarrow ? narrow.topic : '(no topic)';
     return {
       type: 'stream',
-      display_recipient: narrow[0].operand,
-      subject: '(no topic)',
-      sendTo: narrow[0].operand,
+      display_recipient: streamName,
+      subject: topic,
+      sendTo: streamName,
     };
   }
-  return {
-    type: 'stream',
-    display_recipient: narrow[0].operand,
-    subject: narrow[1].operand,
-    sendTo: narrow[0].operand,
-  };
+  throw new Error('expected PM, stream, or topic narrow');
 };
 
 const getContentPreview = (content: string, state: GlobalState): string => {
@@ -170,7 +175,7 @@ const getContentPreview = (content: string, state: GlobalState): string => {
   }
 };
 
-export const addToOutbox = (narrow: Narrow, content: string) => async (
+export const addToOutbox = (narrow: CleanNarrow, content: string) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
@@ -181,7 +186,12 @@ export const addToOutbox = (narrow: Narrow, content: string) => async (
   dispatch(
     messageSendStart({
       isSent: false,
-      ...extractTypeToAndSubjectFromNarrow(narrow, getUsersByEmail(state), userDetail),
+      ...extractTypeToAndSubjectFromNarrow(
+        narrow,
+        getUsersById(state),
+        getStreamsById(state),
+        userDetail,
+      ),
       markdownContent: content,
       content: getContentPreview(content, state),
       timestamp: localTime,

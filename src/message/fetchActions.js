@@ -31,7 +31,7 @@ import {
   MESSAGE_FETCH_COMPLETE,
 } from '../actionConstants';
 import { FIRST_UNREAD_ANCHOR, LAST_MESSAGE_ANCHOR } from '../anchor';
-import { ALL_PRIVATE_NARROW, asApiStringNarrow } from '../utils/narrow';
+import { ALL_PRIVATE_NARROW, asApiStringNarrow, DualNarrow } from '../utils/narrow';
 import { BackoffMachine } from '../utils/async';
 import { initNotifications } from '../notification/notificationActions';
 import { addToOutbox, sendOutbox } from '../outbox/outboxActions';
@@ -354,7 +354,7 @@ export const doInitialFetch = () => async (dispatch: Dispatch, getState: GetStat
   dispatch(initNotifications());
 };
 
-export const uploadFile = (narrow: Narrow, uri: string, name: string) => async (
+export const uploadFile = (narrow: DualNarrow<>, uri: string, name: string) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
@@ -362,5 +362,5 @@ export const uploadFile = (narrow: Narrow, uri: string, name: string) => async (
   const response = await api.uploadFile(auth, uri, name);
   const messageToSend = `[${name}](${response.uri})`;
 
-  dispatch(addToOutbox(narrow, messageToSend));
+  dispatch(addToOutbox(narrow.clean, messageToSend));
 };

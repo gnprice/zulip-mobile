@@ -4,7 +4,7 @@ import { Platform, View } from 'react-native';
 import type { DocumentPickerResponse } from 'react-native-document-picker';
 import ImagePicker from 'react-native-image-picker';
 
-import type { Dispatch, Narrow } from '../types';
+import type { Dispatch } from '../types';
 import { connect } from '../react-redux';
 import { showErrorAlert } from '../utils/info';
 import { BRAND_COLOR, createStyleSheet } from '../styles';
@@ -19,11 +19,12 @@ import {
 } from '../common/Icons';
 import AnimatedComponent from '../animation/AnimatedComponent';
 import { navigateToCreateGroup, uploadFile } from '../actions';
+import { DualNarrow } from '../utils/narrow';
 
 type Props = $ReadOnly<{|
   dispatch: Dispatch,
   expanded: boolean,
-  destinationNarrow: Narrow,
+  destinationNarrow: DualNarrow<>,
   insertVideoCallLink: (() => void) | null,
   onExpandContract: () => void,
 |}>;
