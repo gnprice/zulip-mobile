@@ -42,7 +42,7 @@ class Chat extends PureComponent<Props> {
           <View style={componentStyles.reverse}>
             <MessageList narrow={narrow.strings} />
             <NoMessages narrow={narrow.strings} />
-            <UnreadNotice narrow={narrow.strings} />
+            <UnreadNotice narrow={narrow} />
           </View>
           {canSend && <ComposeBox narrow={narrow} />}
         </View>
