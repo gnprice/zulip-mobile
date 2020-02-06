@@ -3,6 +3,7 @@ import mockStore from 'redux-mock-store'; // eslint-disable-line
 import { doNarrow } from '../messagesActions';
 import { streamNarrow, HOME_NARROW, privateNarrow } from '../../utils/narrow';
 import { navStateWithNarrow } from '../../utils/testHelpers';
+import * as logging from '../../utils/logging';
 
 const streamNarrowObj = streamNarrow('some stream');
 const streamNarrowStr = JSON.stringify(streamNarrowObj);
@@ -120,9 +121,14 @@ describe('messageActions', () => {
         ],
       });
 
-      store.dispatch(doNarrow(streamNarrowObj));
-      const actions = store.getActions();
+      logging.warn.mockReturnValue();
 
+      store.dispatch(doNarrow(streamNarrowObj));
+
+      expect(logging.warn.mock.calls).toHaveLength(1);
+      logging.warn.mockReset();
+
+      const actions = store.getActions();
       expect(actions).toHaveLength(0);
     });
 
@@ -148,9 +154,14 @@ describe('messageActions', () => {
         ],
       });
 
-      store.dispatch(doNarrow(privateNarrow('a@a.com')));
-      const actions = store.getActions();
+      logging.warn.mockReturnValue();
 
+      store.dispatch(doNarrow(privateNarrow('a@a.com')));
+
+      expect(logging.warn.mock.calls).toHaveLength(1);
+      logging.warn.mockReset();
+
+      const actions = store.getActions();
       expect(actions).toHaveLength(0);
     });
   });

@@ -9,6 +9,7 @@ import { fetchMessagesInNarrow } from './fetchActions';
 import { navigateToChat } from '../nav/navActions';
 import { FIRST_UNREAD_ANCHOR } from '../constants';
 import { getStreamsById } from '../subscriptions/subscriptionSelectors';
+import * as logging from '../utils/logging';
 
 /**
  * Navigate to the given narrow, while fetching any data needed.
@@ -27,7 +28,16 @@ export const doNarrow = (narrow: Narrow, anchor: number = FIRST_UNREAD_ANCHOR) =
 ) => {
   const state = getState();
 
-  if (!isNarrowValid(narrow)(state) || !getIsHydrated(state)) {
+  if (!getIsHydrated(state)) {
+    // It should be impossible to get here before rehydrating; that's what
+    // we use `redux-action-buffer` for.
+    logging.warn('doNarrow: skipped because not yet hydrated');
+    return;
+  }
+
+  if (!isNarrowValid(narrow)(state)) {
+    // If this condition happens, the user will experience it as a bug.
+    logging.warn('doNarrow: skipped because missing data for narrow', { narrow });
     return;
   }
 
