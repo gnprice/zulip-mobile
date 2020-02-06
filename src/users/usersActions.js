@@ -6,8 +6,7 @@ import type { Dispatch, GetState } from '../types';
 import * as api from '../api';
 import { PRESENCE_RESPONSE } from '../actionConstants';
 import { getAuth, tryGetAuth } from '../selectors';
-import { caseNarrowPartial, DualNarrow, PmNarrow } from '../utils/narrow';
-import { getAllUsersByEmail } from './userSelectors';
+import { DualNarrow, PmNarrow } from '../utils/narrow';
 
 let lastReportPresence = new Date(0);
 
@@ -47,27 +46,17 @@ const typingWorker = auth => ({
   },
 });
 
-export const sendTypingStart = (narrow: DualNarrow<>) => async (
+export const sendTypingStart = (dualNarrow: DualNarrow<>) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
-  if (!(narrow.clean instanceof PmNarrow)) {
+  const narrow = dualNarrow.clean;
+  if (!(narrow instanceof PmNarrow)) {
     return;
   }
 
-  const usersByEmail = getAllUsersByEmail(getState());
-  const recipientIds = caseNarrowPartial(narrow.strings, {
-    pm: emails => emails,
-  }).map(email => {
-    const user = usersByEmail.get(email);
-    if (!user) {
-      throw new Error('unknown user');
-    }
-    return user.user_id;
-  });
-
   const auth = getAuth(getState());
-  typing_status.update(typingWorker(auth), recipientIds);
+  typing_status.update(typingWorker(auth), narrow.userIds);
 };
 
 // TODO call this on more than send: blur, navigate away,
