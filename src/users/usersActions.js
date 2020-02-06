@@ -2,11 +2,11 @@
 import differenceInSeconds from 'date-fns/difference_in_seconds';
 import * as typing_status from '@zulip/shared/js/typing_status';
 
-import type { Dispatch, GetState, NarrowBridge } from '../types';
+import type { Dispatch, GetState } from '../types';
 import * as api from '../api';
 import { PRESENCE_RESPONSE } from '../actionConstants';
 import { getAuth, tryGetAuth } from '../selectors';
-import { isPrivateOrGroupNarrow, caseNarrowPartial, asApiStringNarrow } from '../utils/narrow';
+import { caseNarrowPartial, DualNarrow, PmNarrow } from '../utils/narrow';
 import { getAllUsersByEmail } from './userSelectors';
 
 let lastReportPresence = new Date(0);
@@ -47,17 +47,16 @@ const typingWorker = auth => ({
   },
 });
 
-export const sendTypingStart = (narrowBridge: NarrowBridge) => async (
+export const sendTypingStart = (narrow: DualNarrow<>) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
-  const narrow = asApiStringNarrow(narrowBridge);
-  if (!isPrivateOrGroupNarrow(narrow)) {
+  if (!(narrow.clean instanceof PmNarrow)) {
     return;
   }
 
   const usersByEmail = getAllUsersByEmail(getState());
-  const recipientIds = caseNarrowPartial(narrow, {
+  const recipientIds = caseNarrowPartial(narrow.strings, {
     pm: emails => emails,
   }).map(email => {
     const user = usersByEmail.get(email);
@@ -73,13 +72,11 @@ export const sendTypingStart = (narrowBridge: NarrowBridge) => async (
 
 // TODO call this on more than send: blur, navigate away,
 //   delete all contents, etc.
-export const sendTypingStop = (narrowBridge: NarrowBridge) => async (
+export const sendTypingStop = (narrow: DualNarrow<>) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
-  const narrow = asApiStringNarrow(narrowBridge);
-
-  if (!isPrivateOrGroupNarrow(narrow)) {
+  if (!(narrow.clean instanceof PmNarrow)) {
     return;
   }
 
