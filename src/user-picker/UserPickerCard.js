@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
 import type { FlatList } from 'react-native';
 
-import type { User, PresenceState, Dispatch } from '../types';
+import type { User, UserOrBot, PresenceState, Dispatch } from '../types';
 import { connect } from '../react-redux';
 import { FloatingActionButton, LineSeparator } from '../common';
 import { IconDone } from '../common/Icons';
@@ -58,13 +58,12 @@ class UserPickerCard extends PureComponent<Props, State> {
     }
   };
 
-  handleUserPress = (email: string) => {
+  handleUserPress = (user: UserOrBot) => {
     const { selected } = this.state;
-
-    if (selected.find(x => x.email === email)) {
-      this.handleUserDeselect(email);
+    if (selected.find(x => x.email === user.email)) {
+      this.handleUserDeselect(user.email);
     } else {
-      this.handleUserSelect(email);
+      this.handleUserSelect(user.email);
     }
   };
 
