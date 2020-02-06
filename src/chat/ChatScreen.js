@@ -9,7 +9,7 @@ import { compose } from 'redux';
 import { connect } from '../react-redux';
 import type { ThemeData } from '../styles';
 import styles, { ThemeContext } from '../styles';
-import type { Dispatch, Fetching, Narrow, EditMessage } from '../types';
+import type { Dispatch, Fetching, NarrowBridge, EditMessage } from '../types';
 import { KeyboardAvoider, OfflineNotice, ZulipStatusBar } from '../common';
 import ChatNavBar from '../nav/ChatNavBar';
 
@@ -20,7 +20,7 @@ import InvalidNarrow from './InvalidNarrow';
 import { fetchMessagesInNarrow } from '../message/fetchActions';
 import ComposeBox from '../compose/ComposeBox';
 import UnreadNotice from './UnreadNotice';
-import { canSendToNarrow } from '../utils/narrow';
+import { asApiStringNarrow, canSendToNarrow } from '../utils/narrow';
 import { getLoading, getSession } from '../directSelectors';
 import { getFetchingForNarrow } from './fetchingSelectors';
 import { getShownMessagesForNarrow, isNarrowValid } from './narrowsSelectors';
@@ -38,7 +38,10 @@ type Props = $ReadOnly<{|
   // don't invoke it without type-checking anywhere else (in fact, we
   // don't invoke it anywhere else at all), we know it gets the
   // `navigation` prop for free, with the stack-nav shape.
-  navigation: NavigationStackProp<{| ...NavigationStateRoute, params: {| narrow: Narrow |} |}>,
+  navigation: NavigationStackProp<{|
+    ...NavigationStateRoute,
+    params: {| narrow: NarrowBridge |},
+  |}>,
   dispatch: Dispatch,
 
   // From React Navigation's `withNavigationFocus` HOC. Type copied
@@ -113,7 +116,7 @@ class ChatScreen extends PureComponent<Props, State> {
    * whole process.
    */
   fetch = async () => {
-    const { narrow } = this.props.navigation.state.params;
+    const narrow = asApiStringNarrow(this.props.navigation.state.params.narrow);
     try {
       await this.props.dispatch(fetchMessagesInNarrow(narrow));
     } catch (e) {
@@ -131,7 +134,7 @@ class ChatScreen extends PureComponent<Props, State> {
 
   render() {
     const { fetching, haveNoMessages, loading, navigation } = this.props;
-    const { narrow } = navigation.state.params;
+    const narrow = asApiStringNarrow(navigation.state.params.narrow);
     const { editMessage } = this.state;
 
     const isFetching = fetching.older || fetching.newer || loading;
@@ -182,7 +185,7 @@ export default compose(
   // https://reactnavigation.org/docs/4.x/function-after-focusing-screen/#triggering-an-action-with-the-withnavigationfocus-higher-order-component
   withNavigationFocus,
   connect<SelectorProps, _, _>((state, props) => {
-    const { narrow } = props.navigation.state.params;
+    const narrow = asApiStringNarrow(props.navigation.state.params.narrow);
     return {
       isNarrowValid: isNarrowValid(state, narrow),
       loading: getLoading(state),

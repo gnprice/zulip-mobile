@@ -4,7 +4,7 @@ import { StackActions, NavigationActions } from 'react-navigation';
 import type {
   NavigationAction,
   Message,
-  Narrow,
+  NarrowBridge,
   UserOrBot,
   ApiResponseServerSettings,
   SharedData,
@@ -44,7 +44,7 @@ export const resetToMainTabs = (): NavigationAction =>
  */
 
 /** Only call this via `doNarrow`.  See there for details. */
-export const navigateToChat = (narrow: Narrow): NavigationAction =>
+export const navigateToChat = (narrow: NarrowBridge): NavigationAction =>
   StackActions.push({ routeName: 'chat', params: { narrow } });
 
 export const navigateToUsersScreen = (): NavigationAction =>

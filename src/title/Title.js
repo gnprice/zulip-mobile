@@ -2,9 +2,9 @@
 
 import React, { PureComponent } from 'react';
 
-import { caseNarrow } from '../utils/narrow';
+import { caseNarrow, asApiStringNarrow } from '../utils/narrow';
 
-import type { Narrow, EditMessage } from '../types';
+import type { NarrowBridge, EditMessage } from '../types';
 import TitlePrivate from './TitlePrivate';
 import TitleGroup from './TitleGroup';
 import TitleSpecial from './TitleSpecial';
@@ -12,17 +12,18 @@ import TitleStream from './TitleStream';
 import TitlePlain from './TitlePlain';
 
 type Props = $ReadOnly<{|
-  narrow: Narrow,
+  narrow: NarrowBridge,
   color: string,
   editMessage: EditMessage | null,
 |}>;
 
 export default class Title extends PureComponent<Props> {
   render() {
-    const { narrow, color, editMessage } = this.props;
+    const { narrow: narrowBridge, color, editMessage } = this.props;
     if (editMessage != null) {
       return <TitlePlain text="Edit message" color={color} />;
     }
+    const narrow = asApiStringNarrow(narrowBridge);
     return caseNarrow(narrow, {
       home: () => <TitleSpecial code="home" color={color} />,
       starred: () => <TitleSpecial code="starred" color={color} />,
