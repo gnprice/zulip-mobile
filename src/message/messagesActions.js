@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import type { Narrow, Dispatch, GetState } from '../types';
+import type { Dispatch, GetState } from '../types';
 import { getAuth, getUsersById, isNarrowValid, getIsHydrated } from '../selectors';
 import { DO_NARROW } from '../actionConstants';
 import { getFullUrl } from '../utils/url';
@@ -10,7 +10,7 @@ import { navigateToChat } from '../nav/navActions';
 import { FIRST_UNREAD_ANCHOR } from '../constants';
 import { getStreamsById } from '../subscriptions/subscriptionSelectors';
 import * as logging from '../utils/logging';
-import { CleanNarrow, type DualNarrow, asApiStringNarrow } from '../utils/narrow';
+import { type NarrowBridge, asApiStringNarrow } from '../utils/narrow';
 
 /**
  * Navigate to the given narrow, while fetching any data needed.
@@ -23,7 +23,7 @@ import { CleanNarrow, type DualNarrow, asApiStringNarrow } from '../utils/narrow
  * is nearly the only navigation in the app where additional data fetching
  * is required.  See `fetchMessagesInNarrow` for more details.
  */
-export const doNarrow = (narrow: Narrow | DualNarrow<>, anchor: number = FIRST_UNREAD_ANCHOR) => (
+export const doNarrow = (narrow: NarrowBridge, anchor: number = FIRST_UNREAD_ANCHOR) => (
   dispatch: Dispatch,
   getState: GetState,
 ) => {

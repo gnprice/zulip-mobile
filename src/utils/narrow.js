@@ -23,6 +23,13 @@ export class CleanNarrow {
   }
 }
 
+/**
+ * A CleanNarrow plus an old strings-style Narrow, combined.
+ *
+ * Useful for migrating from old Narrow to CleanNarrow; see NarrowBridge.
+ *
+ * For fresh code, prefer plain CleanNarrow and its subclasses.
+ */
 export class DualNarrow<T: CleanNarrow = CleanNarrow> {
   clean: T;
   strings: Narrow;
@@ -33,7 +40,37 @@ export class DualNarrow<T: CleanNarrow = CleanNarrow> {
   }
 }
 
-export const asApiStringNarrow = (narrow: Narrow | DualNarrow<>): Narrow =>
+/**
+ * A narrow expressed in either old, or old + new, style.
+ *
+ * Useful for migrating from old Narrow to CleanNarrow, along a path
+ *    Narrow -> NarrowBridge -> DualNarrow<> -> CleanNarrow (or subclass)
+ *
+ * Specifically:
+ *
+ *  * Code that takes a Narrow can immediately start taking NarrowBridge
+ *    instead.  Where the layers below already take NarrowBridge, it can
+ *    pass that; elsewhere, convert back to Narrow with `asApiStringNarrow`.
+ *
+ *  * Code that constructs a Narrow can construct a DualNarrow instead,
+ *    where it has the appropriate data on hand.  Where it doesn't, some
+ *    other layer may need to migrate first.
+ *
+ *  * Once all the callers of a given function (etc.) are passing DualNarrow
+ *    rather than Narrow, the signature can be tightened from NarrowBridge
+ *    to DualNarrow.  This propagates downward to its callees.
+ *
+ *  * Once a given piece of code takes DualNarrow, anything it does to
+ *    inspect the value itself, it can switch to doing on the CleanNarrow
+ *    copy rather than the old Narrow copy.
+ *
+ *  * Code that takes DualNarrow and no longer uses the old-Narrow part of
+ *    it can tighten the signature again, to CleanNarrow (or a subclass).
+ *    This propagates upward to callers.
+ */
+export type NarrowBridge = Narrow | DualNarrow<>;
+
+export const asApiStringNarrow = (narrow: NarrowBridge): Narrow =>
   narrow instanceof DualNarrow ? narrow.strings : narrow;
 
 export class StreamOrTopicNarrow extends CleanNarrow {
