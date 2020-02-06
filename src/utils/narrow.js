@@ -159,12 +159,17 @@ export function caseNarrowDefault<T>(
   );
 }
 
-export const isHomeNarrow = (narrow?: Narrow): boolean =>
-  !!narrow && caseNarrowDefault(narrow, { home: () => true }, () => false);
+export const isStreamNarrow = (narrow?: Narrow): boolean =>
+  !!narrow && caseNarrowDefault(narrow, { stream: () => true }, () => false);
+export const isTopicNarrow = (narrow?: Narrow): boolean =>
+  !!narrow && caseNarrowDefault(narrow, { topic: () => true }, () => false);
+export const isStreamOrTopicNarrow = (narrow?: Narrow): boolean =>
+  !!narrow && caseNarrowDefault(narrow, { stream: () => true, topic: () => true }, () => false);
 
+export const isPrivateOrGroupNarrow = (narrow?: Narrow): boolean =>
+  !!narrow && caseNarrowDefault(narrow, { pm: () => true }, () => false);
 export const isPrivateNarrow = (narrow?: Narrow): boolean =>
   !!narrow && caseNarrowDefault(narrow, { pm: emails => emails.length === 1 }, () => false);
-
 export const isGroupNarrow = (narrow?: Narrow): boolean =>
   !!narrow && caseNarrowDefault(narrow, { pm: emails => emails.length > 1 }, () => false);
 
@@ -184,9 +189,8 @@ export const emailsOfGroupNarrow = (narrow: Narrow): string[] =>
     },
   });
 
-export const isPrivateOrGroupNarrow = (narrow?: Narrow): boolean =>
-  !!narrow && caseNarrowDefault(narrow, { pm: () => true }, () => false);
-
+export const isHomeNarrow = (narrow?: Narrow): boolean =>
+  !!narrow && caseNarrowDefault(narrow, { home: () => true }, () => false);
 export const isSpecialNarrow = (narrow?: Narrow): boolean =>
   !!narrow
   && caseNarrowDefault(
@@ -194,19 +198,8 @@ export const isSpecialNarrow = (narrow?: Narrow): boolean =>
     { starred: () => true, mentioned: () => true, allPrivate: () => true },
     () => false,
   );
-
 export const isAllPrivateNarrow = (narrow?: Narrow): boolean =>
   !!narrow && caseNarrowDefault(narrow, { allPrivate: () => true }, () => false);
-
-export const isStreamNarrow = (narrow?: Narrow): boolean =>
-  !!narrow && caseNarrowDefault(narrow, { stream: () => true }, () => false);
-
-export const isTopicNarrow = (narrow?: Narrow): boolean =>
-  !!narrow && caseNarrowDefault(narrow, { topic: () => true }, () => false);
-
-export const isStreamOrTopicNarrow = (narrow?: Narrow): boolean =>
-  !!narrow && caseNarrowDefault(narrow, { stream: () => true, topic: () => true }, () => false);
-
 export const isSearchNarrow = (narrow?: Narrow): boolean =>
   !!narrow && caseNarrowDefault(narrow, { search: () => true }, () => false);
 
