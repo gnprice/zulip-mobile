@@ -55,7 +55,7 @@ export const trySendMessages = (dispatch: Dispatch, getState: GetState): boolean
       await api.sendMessage(
         auth,
         item.type,
-        isPrivateOrGroupNarrow(item.narrow) ? item.narrow[0].operand : item.display_recipient,
+        item.sendTo,
         item.subject,
         item.markdownContent,
         item.timestamp,
@@ -96,6 +96,7 @@ type DataFromNarrow = {|
   type: 'private' | 'stream',
   display_recipient: string | NamedUser[],
   subject: string,
+  sendTo: string,
 |};
 
 const extractTypeToAndSubjectFromNarrow = (
@@ -108,11 +109,22 @@ const extractTypeToAndSubjectFromNarrow = (
       type: 'private',
       display_recipient: mapEmailsToUsers(usersByEmail, narrow, selfDetail),
       subject: '',
+      sendTo: narrow[0].operand,
     };
   } else if (isStreamNarrow(narrow)) {
-    return { type: 'stream', display_recipient: narrow[0].operand, subject: '(no topic)' };
+    return {
+      type: 'stream',
+      display_recipient: narrow[0].operand,
+      subject: '(no topic)',
+      sendTo: narrow[0].operand,
+    };
   }
-  return { type: 'stream', display_recipient: narrow[0].operand, subject: narrow[1].operand };
+  return {
+    type: 'stream',
+    display_recipient: narrow[0].operand,
+    subject: narrow[1].operand,
+    sendTo: narrow[0].operand,
+  };
 };
 
 const getContentPreview = (content: string, state: GlobalState): string => {
