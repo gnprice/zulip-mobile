@@ -24,10 +24,10 @@ import { getCaughtUpForNarrow } from '../caughtup/caughtUpSelectors';
 import { getAllUsersByEmail } from '../users/userSelectors';
 import { getIsFetching } from './fetchingSelectors';
 import {
-  isPrivateNarrow,
   isStreamOrTopicNarrow,
   emailsOfGroupNarrow,
   narrowContains,
+  caseNarrowDefault,
 } from '../utils/narrow';
 import { shouldBeMuted } from '../utils/message';
 import { NULL_ARRAY, NULL_SUBSCRIPTION } from '../nullObjects';
@@ -150,15 +150,14 @@ export const isNarrowValid = (narrow: Narrow): Selector<boolean> =>
   createSelector(
     getStreams,
     getAllUsersByEmail,
-    (streams, allUsersByEmail) => {
-      if (isStreamOrTopicNarrow(narrow)) {
-        return streams.find(s => s.name === narrow[0].operand) !== undefined;
-      }
-
-      if (isPrivateNarrow(narrow)) {
-        return allUsersByEmail.get(narrow[0].operand) !== undefined;
-      }
-
-      return true;
-    },
+    (streams, allUsersByEmail) =>
+      caseNarrowDefault(
+        narrow,
+        {
+          stream: streamName => streams.find(s => s.name === streamName) !== undefined,
+          topic: streamName => streams.find(s => s.name === streamName) !== undefined,
+          pm: email => allUsersByEmail.get(email) !== undefined,
+        },
+        () => true,
+      ),
   );
