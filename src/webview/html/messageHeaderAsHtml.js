@@ -86,12 +86,12 @@ export default (
   if (item.type === 'private' && headerStyle === 'full') {
     const keyRecipients = pmKeyRecipientsFromMessage(item, ownUser);
     const narrowObj = pmNarrowFromEmails(keyRecipients.map(r => r.email));
-    const privateNarrowStr = JSON.stringify(narrowObj);
+    const narrowStr = JSON.stringify(narrowObj);
 
     const uiRecipients = pmUiRecipientsFromMessage(item, ownUser);
     return template`
 <div class="header-wrapper private-header header"
-     data-narrow="${privateNarrowStr}"
+     data-narrow="${narrowStr}"
      data-msg-id="${item.id}">
   ${uiRecipients
     .map(r => r.full_name)
