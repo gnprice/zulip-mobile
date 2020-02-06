@@ -4,13 +4,14 @@ import { View, StyleSheet } from 'react-native';
 import type { NavigationScreenProp } from 'react-navigation';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
-import type { Context, NarrowBridge } from '../types';
+import type { Context } from '../types';
 import { OfflineNotice, ZulipStatusBar } from '../common';
 import Chat from './Chat';
 import ChatNavBar from '../nav/ChatNavBar';
+import { DualNarrow } from '../utils/narrow';
 
 type Props = $ReadOnly<{|
-  navigation: NavigationScreenProp<{ params: {| narrow: NarrowBridge |} }>,
+  navigation: NavigationScreenProp<{ params: {| narrow: DualNarrow<> |} }>,
 |}>;
 
 const styles = StyleSheet.create({

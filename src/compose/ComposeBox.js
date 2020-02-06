@@ -27,7 +27,14 @@ import * as api from '../api';
 import { FloatingActionButton, Input } from '../common';
 import { showErrorAlert } from '../utils/info';
 import { IconDone, IconSend } from '../common/Icons';
-import { isStreamNarrow, isStreamOrTopicNarrow, topicNarrow } from '../utils/narrow';
+import {
+  isStreamNarrow,
+  isStreamOrTopicNarrow,
+  topicNarrow,
+  DualNarrow,
+  StreamNarrow,
+  StreamOrTopicNarrow,
+} from '../utils/narrow';
 import ComposeMenu from './ComposeMenu';
 import getComposeInputPlaceholder from './getComposeInputPlaceholder';
 import NotSubscribed from '../message/NotSubscribed';
@@ -63,7 +70,7 @@ type SelectorProps = {|
 |};
 
 type Props = $ReadOnly<{|
-  narrow: Narrow,
+  narrow: DualNarrow<>,
 
   dispatch: Dispatch,
   ...SelectorProps,
@@ -132,9 +139,9 @@ class ComposeBox extends PureComponent<Props, State> {
   getCanSelectTopic = () => {
     const { editMessage, narrow } = this.props;
     if (editMessage) {
-      return isStreamOrTopicNarrow(narrow);
+      return narrow.clean instanceof StreamOrTopicNarrow;
     }
-    if (!isStreamNarrow(narrow)) {
+    if (!(narrow.clean instanceof StreamNarrow)) {
       return false;
     }
     return this.state.isFocused;
@@ -174,7 +181,7 @@ class ComposeBox extends PureComponent<Props, State> {
     this.setState({ message, isMenuExpanded: false });
     const { dispatch, narrow } = this.props;
     dispatch(sendTypingStart(narrow));
-    dispatch(draftUpdate(narrow, message));
+    dispatch(draftUpdate(narrow.strings, message));
   };
 
   handleMessageAutocomplete = (message: string) => {
@@ -211,7 +218,7 @@ class ComposeBox extends PureComponent<Props, State> {
       isFocused: true,
       isMenuExpanded: false,
     });
-    dispatch(fetchTopicsForActiveStream(narrow));
+    dispatch(fetchTopicsForActiveStream(narrow.strings));
   };
 
   handleTopicBlur = () => {
@@ -229,7 +236,9 @@ class ComposeBox extends PureComponent<Props, State> {
   getDestinationNarrow = (): Narrow => {
     const { narrow } = this.props;
     const topic = this.state.topic.trim();
-    return isStreamNarrow(narrow) ? topicNarrow(narrow[0].operand, topic || '(no topic)') : narrow;
+    return isStreamNarrow(narrow.strings)
+      ? topicNarrow(narrow.strings[0].operand, topic || '(no topic)')
+      : narrow.strings;
   };
 
   handleSend = () => {
@@ -261,7 +270,7 @@ class ComposeBox extends PureComponent<Props, State> {
   componentWillReceiveProps(nextProps: Props) {
     if (nextProps.editMessage !== this.props.editMessage) {
       const topic =
-        isStreamNarrow(nextProps.narrow) && nextProps.editMessage
+        nextProps.narrow.clean instanceof StreamNarrow && nextProps.editMessage
           ? nextProps.editMessage.topic
           : '';
       const message = nextProps.editMessage ? nextProps.editMessage.content : '';
@@ -338,7 +347,7 @@ class ComposeBox extends PureComponent<Props, State> {
       return <AnnouncementOnly />;
     }
 
-    const placeholder = getComposeInputPlaceholder(narrow, ownEmail, usersByEmail);
+    const placeholder = getComposeInputPlaceholder(narrow.strings, ownEmail, usersByEmail);
     const style = {
       paddingBottom: safeAreaInsets.bottom,
       backgroundColor: 'hsla(0, 0%, 50%, 0.1)',
@@ -418,9 +427,9 @@ export default connect<SelectorProps, _, _>((state, props) => ({
   usersByEmail: getActiveUsersByEmail(state),
   safeAreaInsets: getSession(state).safeAreaInsets,
   isAdmin: getIsAdmin(state),
-  isAnnouncementOnly: getIsActiveStreamAnnouncementOnly(state, props.narrow),
-  isSubscribed: getIsActiveStreamSubscribed(state, props.narrow),
+  isAnnouncementOnly: getIsActiveStreamAnnouncementOnly(state, props.narrow.strings),
+  isSubscribed: getIsActiveStreamSubscribed(state, props.narrow.strings),
   editMessage: getSession(state).editMessage,
-  draft: getDraftForNarrow(props.narrow)(state),
-  lastMessageTopic: getLastMessageTopic(props.narrow)(state),
+  draft: getDraftForNarrow(props.narrow.strings)(state),
+  lastMessageTopic: getLastMessageTopic(props.narrow.strings)(state),
 }))(ComposeBox);

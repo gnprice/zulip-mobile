@@ -6,10 +6,10 @@ import type {
   NavigationAction,
   GetState,
   Message,
-  NarrowBridge,
   UserOrBot,
   ApiResponseServerSettings,
 } from '../types';
+import { DualNarrow } from '../utils/narrow';
 import { getSameRoutesCount } from '../selectors';
 
 export const navigateBack = () => (dispatch: Dispatch, getState: GetState): NavigationAction =>
@@ -22,7 +22,7 @@ export const navigateBack = () => (dispatch: Dispatch, getState: GetState): Navi
 //    StackActions.push({ routeName: 'main' });
 
 /** Only call this via `doNarrow`.  See there for details. */
-export const navigateToChat = (narrow: NarrowBridge): NavigationAction =>
+export const navigateToChat = (narrow: DualNarrow<>): NavigationAction =>
   StackActions.push({ routeName: 'chat', params: { narrow } });
 
 export const navigateToUsersScreen = (): NavigationAction =>
