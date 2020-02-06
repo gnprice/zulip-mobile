@@ -74,8 +74,7 @@ export const SEARCH_NARROW = (query: string): Narrow => [
 
 type NarrowCases<T> = {|
   home: () => T,
-  pm: (email: string) => T,
-  groupPm: (emails: string[]) => T,
+  pm: (emails: string[]) => T,
   starred: () => T,
   mentioned: () => T,
   allPrivate: () => T,
@@ -94,12 +93,9 @@ export function caseNarrow<T>(narrow: Narrow, cases: NarrowCases<T>): T {
     case 0: return cases.home();
     case 1:
       switch (narrow[0].operator) {
-        case 'pm-with':
-          if (narrow[0].operand.indexOf(',') < 0) {
-            return cases.pm(narrow[0].operand);
-          } else { /* eslint-disable-line */
+        case 'pm-with': {
             const emails = narrow[0].operand.split(',');
-            return cases.groupPm(emails);
+            return cases.pm(emails);
           }
         case 'is':
           switch (narrow[0].operand) {
@@ -127,7 +123,6 @@ export function caseNarrowPartial<T>(narrow: Narrow, cases: $Shape<NarrowCases<T
       ({
         home: err('home'),
         pm: err('PM'),
-        groupPm: err('group PM'),
         starred: err('starred'),
         mentioned: err('mentions'),
         allPrivate: err('all-private'),
@@ -151,7 +146,6 @@ export function caseNarrowDefault<T>(
       ({
         home: defaultCase,
         pm: defaultCase,
-        groupPm: defaultCase,
         starred: defaultCase,
         mentioned: defaultCase,
         allPrivate: defaultCase,
@@ -168,10 +162,10 @@ export const isHomeNarrow = (narrow?: Narrow): boolean =>
   !!narrow && caseNarrowDefault(narrow, { home: () => true }, () => false);
 
 export const isPrivateNarrow = (narrow?: Narrow): boolean =>
-  !!narrow && caseNarrowDefault(narrow, { pm: () => true }, () => false);
+  !!narrow && caseNarrowDefault(narrow, { pm: emails => emails.length === 1 }, () => false);
 
 export const isGroupNarrow = (narrow?: Narrow): boolean =>
-  !!narrow && caseNarrowDefault(narrow, { groupPm: () => true }, () => false);
+  !!narrow && caseNarrowDefault(narrow, { pm: emails => emails.length > 1 }, () => false);
 
 /**
  * The recipients' emails if a group PM narrow; else error.
@@ -180,10 +174,17 @@ export const isGroupNarrow = (narrow?: Narrow): boolean =>
  * to use caseNarrow.
  */
 export const emailsOfGroupNarrow = (narrow: Narrow): string[] =>
-  caseNarrowPartial(narrow, { groupPm: emails => emails });
+  caseNarrowPartial(narrow, {
+    pm: emails => {
+      if (emails.length === 1) {
+        throw new Error('emailsOfGroupPmNarrow: got 1:1 narrow');
+      }
+      return emails;
+    },
+  });
 
 export const isPrivateOrGroupNarrow = (narrow?: Narrow): boolean =>
-  !!narrow && caseNarrowDefault(narrow, { pm: () => true, groupPm: () => true }, () => false);
+  !!narrow && caseNarrowDefault(narrow, { pm: () => true }, () => false);
 
 export const isSpecialNarrow = (narrow?: Narrow): boolean =>
   !!narrow
@@ -226,8 +227,7 @@ export const isMessageInNarrow = (message: Message, narrow: Narrow, ownEmail: st
     stream: name => name === message.display_recipient,
     topic: (streamName, topic) =>
       streamName === message.display_recipient && topic === message.subject,
-    pm: email => matchRecipients([email]),
-    groupPm: matchRecipients,
+    pm: matchRecipients,
     starred: () => flags.includes('starred'),
     mentioned: () => flags.includes('mentioned') || flags.includes('wildcard_mentioned'),
     allPrivate: () => message.type === 'private',
@@ -238,7 +238,6 @@ export const isMessageInNarrow = (message: Message, narrow: Narrow, ownEmail: st
 export const canSendToNarrow = (narrow: Narrow): boolean =>
   caseNarrow(narrow, {
     pm: () => true,
-    groupPm: () => true,
     stream: () => true,
     topic: () => true,
     home: () => false,

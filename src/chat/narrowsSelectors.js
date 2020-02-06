@@ -156,8 +156,7 @@ export const isNarrowValid = (narrow: Narrow): Selector<boolean> =>
         {
           stream: streamName => streams.find(s => s.name === streamName) !== undefined,
           topic: streamName => streams.find(s => s.name === streamName) !== undefined,
-          pm: email => allUsersByEmail.get(email) !== undefined,
-          groupPm: emails => emails.every(email => allUsersByEmail.get(email) !== undefined),
+          pm: emails => emails.every(email => allUsersByEmail.get(email) !== undefined),
         },
         () => true,
       ),

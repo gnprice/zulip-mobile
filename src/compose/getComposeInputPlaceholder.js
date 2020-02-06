@@ -10,8 +10,12 @@ export default (
   caseNarrowDefault(
     narrow,
     {
-      groupPm: () => ({ text: 'Message group' }),
-      pm: email => {
+      pm: emails => {
+        if (emails.length > 1) {
+          return { text: 'Message group' };
+        }
+        const email = emails[0];
+
         if (ownEmail && email === ownEmail) {
           return { text: 'Jot down something' };
         }
@@ -19,8 +23,8 @@ export default (
         if (!usersByEmail) {
           return { text: 'Type a message' };
         }
-
         const user = usersByEmail.get(email) || {};
+
         return {
           text: 'Message {recipient}',
           values: { recipient: `@${user.full_name}` },
