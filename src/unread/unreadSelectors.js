@@ -14,13 +14,7 @@ import {
 import { getOwnEmail, getAllUsersByEmail } from '../users/userSelectors';
 import { getSubscriptionsById } from '../subscriptions/subscriptionSelectors';
 import { isTopicMuted } from '../utils/message';
-import {
-  isHomeNarrow,
-  isStreamNarrow,
-  isTopicNarrow,
-  isGroupPmNarrow,
-  is1to1PmNarrow,
-} from '../utils/narrow';
+import { isHomeNarrow, caseNarrowDefault } from '../utils/narrow';
 import { NULL_SUBSCRIPTION, NULL_USER } from '../nullObjects';
 
 /** The number of unreads in each stream, excluding muted topics, by stream ID. */
@@ -248,56 +242,60 @@ export const getUnreadCountForNarrow: Selector<number, Narrow> = createSelector(
       return unreadTotal;
     }
 
-    if (isStreamNarrow(narrow)) {
-      const stream = streams.find(s => s.name === narrow[0].operand);
+    const unreads: $ReadOnlyArray<{
+      +unread_message_ids: $ReadOnlyArray<mixed>,
+      ...
+    }> = caseNarrowDefault(
+      narrow,
+      {
+        stream: name => {
+          const stream = streams.find(s => s.name === name);
+          if (!stream) {
+            return [];
+          }
+          return unreadStreams.filter(
+            x => x.stream_id === stream.stream_id && !isTopicMuted(name, x.topic, mute),
+          );
+        },
 
-      if (!stream) {
-        return 0;
-      }
+        topic: (streamName, topic) => {
+          const stream = streams.find(s => s.name === streamName);
+          if (!stream) {
+            return [];
+          }
+          return unreadStreams.filter(x => x.stream_id === stream.stream_id && x.topic === topic);
+        },
 
-      return unreadStreams
-        .filter(x => x.stream_id === stream.stream_id && !isTopicMuted(stream.name, x.topic, mute))
-        .reduce((sum, x) => sum + x.unread_message_ids.length, 0);
-    }
+        pm: emails => {
+          if (emails.length > 1) {
+            const userIds = [...emails, ownEmail]
+              .map(email => (usersByEmail.get(email) || NULL_USER).user_id)
+              .sort((a, b) => a - b)
+              .join(',');
+            const unread = unreadHuddles.find(x => x.user_ids_string === userIds);
+            return unread ? [unread] : [];
+          } else {
+            const sender = usersByEmail.get(emails[0]);
+            if (!sender) {
+              return [];
+            }
+            const unread = unreadPms.find(x => x.sender_id === sender.user_id);
+            return unread ? [unread] : [];
+          }
+        },
+      },
 
-    if (isTopicNarrow(narrow)) {
-      const stream = streams.find(s => s.name === narrow[0].operand);
+      // Unread starred messages are impossible, so 0 is correct for the
+      // starred-messages narrow.
+      // TODO: fact-check that.
 
-      if (!stream) {
-        return 0;
-      }
+      // TODO: give a correct answer for the @-mentions narrow.
 
-      return unreadStreams
-        .filter(x => x.stream_id === stream.stream_id && x.topic === narrow[1].operand)
-        .reduce((sum, x) => sum + x.unread_message_ids.length, 0);
-    }
+      // For search narrows, shrug, a bogus answer of 0 is fine.
 
-    if (isGroupPmNarrow(narrow)) {
-      const userIds = [...narrow[0].operand.split(','), ownEmail]
-        .map(email => (usersByEmail.get(email) || NULL_USER).user_id)
-        .sort((a, b) => a - b)
-        .join(',');
-      const unread = unreadHuddles.find(x => x.user_ids_string === userIds);
-      return unread ? unread.unread_message_ids.length : 0;
-    }
+      () => [],
+    );
 
-    if (is1to1PmNarrow(narrow)) {
-      const sender = usersByEmail.get(narrow[0].operand);
-      if (!sender) {
-        return 0;
-      }
-      const unread = unreadPms.find(x => x.sender_id === sender.user_id);
-      return unread ? unread.unread_message_ids.length : 0;
-    }
-
-    // Unread starred messages are impossible, so 0 is correct for the
-    // starred-messages narrow.
-    // TODO: fact-check that.
-
-    // TODO: give a correct answer for the @-mentions narrow.
-
-    // For search narrows, shrug, a bogus answer of 0 is fine.
-
-    return 0;
+    return unreads.reduce((sum, x) => sum + x.unread_message_ids.length, 0);
   },
 );
