@@ -41,6 +41,20 @@ export class DualNarrow<+T: CleanNarrow = CleanNarrow> {
     this.clean = clean;
     this.strings = strings;
   }
+
+  static fromApiStringsNarrow(
+    strings: Narrow,
+    data: { allUsersByName: Map<string, UserOrBot>, streamsByName: Map<string, Stream> },
+  ): DualNarrow<> | null {
+    const clean: CleanNarrow | null = caseNarrowPartial(strings, {
+      stream: name => {
+        const stream = data.streamsByName.get(name);
+        return stream ? new StreamNarrow(stream.stream_id, name) : null;
+      },
+      // TODO WIP finish other cases
+    });
+    return clean && new DualNarrow(clean, strings);
+  }
 }
 
 /**
@@ -59,6 +73,11 @@ export class DualNarrow<+T: CleanNarrow = CleanNarrow> {
  *    where it has the appropriate data on hand.  Where it doesn't, some
  *    other layer may need to migrate first.
  *
+ *    * Also, code that has a Narrow can upgrade it to a DualNarrow using
+ *      `asDualNarrow`, where it has the appropriate data on hand.  This can
+ *      be helpful for code that has many call sites, to let it and the
+ *      layers under it press onward before the last call site migrates.
+ *
  *  * Once all the callers of a given function (etc.) are passing DualNarrow
  *    rather than Narrow, the signature can be tightened from NarrowBridge
  *    to DualNarrow.  This propagates downward to its callees.
@@ -75,6 +94,13 @@ export type NarrowBridge = Narrow | DualNarrow<>;
 
 export const asApiStringNarrow = (narrow: NarrowBridge): Narrow =>
   narrow instanceof DualNarrow ? narrow.strings : narrow;
+
+/** Part of the migration strategy described at NarrowBridge. */
+export const asDualNarrow = (
+  narrow: NarrowBridge,
+  data: { allUsersByName: Map<string, UserOrBot>, streamsByName: Map<string, Stream> },
+): DualNarrow<> | null =>
+  narrow instanceof DualNarrow ? narrow : DualNarrow.fromApiStringsNarrow(narrow, data);
 
 export class StreamOrTopicNarrow extends CleanNarrow {
   streamId: number;
