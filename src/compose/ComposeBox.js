@@ -180,7 +180,7 @@ class ComposeBox extends PureComponent<Props, State> {
   handleMessageChange = (message: string) => {
     this.setState({ message, isMenuExpanded: false });
     const { dispatch, narrow } = this.props;
-    dispatch(sendTypingStart(narrow));
+    dispatch(sendTypingStart(narrow.clean));
     dispatch(draftUpdate(narrow.strings, message));
   };
 
@@ -248,7 +248,7 @@ class ComposeBox extends PureComponent<Props, State> {
     dispatch(addToOutbox(this.getDestinationNarrow(), message));
 
     this.setMessageInputValue('');
-    dispatch(sendTypingStop(narrow));
+    dispatch(sendTypingStop(narrow.clean));
   };
 
   handleEdit = () => {
