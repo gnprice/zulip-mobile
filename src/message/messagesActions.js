@@ -8,15 +8,20 @@ import { FIRST_UNREAD_ANCHOR } from '../anchor';
 import { getStreamsById } from '../subscriptions/subscriptionSelectors';
 import * as api from '../api';
 import { isUrlOnRealm } from '../utils/url';
-import { type NarrowBridge } from '../utils/narrow';
+import { type NarrowBridge, asDualNarrow } from '../utils/narrow';
 
 /**
  * Navigate to the given narrow.
  */
-export const doNarrow = (narrow: NarrowBridge, anchor: number = FIRST_UNREAD_ANCHOR) => (
+export const doNarrow = (narrowBridge: NarrowBridge, anchor: number = FIRST_UNREAD_ANCHOR) => (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
+  const narrow = asDualNarrow(narrowBridge, (undefined: $FlowFixMe)); // TODO add needed selectors
+  if (!narrow) {
+    throw new Error('oops bad narrow');
+  }
+
   // TODO: Use `anchor` to open the message list to a particular message.
   dispatch(navigateToChat(narrow));
 };
