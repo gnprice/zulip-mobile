@@ -2,8 +2,56 @@
 import isEqual from 'lodash.isequal';
 import unescape from 'lodash.unescape';
 
-import type { Narrow, Message, Outbox } from '../types';
+import type { Narrow, Message, Outbox, Stream, UserOrBot } from '../types';
 import { normalizeRecipients } from './recipient';
+
+class CleanNarrow {
+  data: | {| type: 'stream', streamId: number, streamName?: string |}
+    | {| type: 'topic', streamId: number, streamName?: string, topic: string |}
+    // In the PM case, we never include the self user; so the list may be empty.
+    | {| type: 'pm', userIds: number[], emails?: string[] |}
+    | {| type: 'home' | 'starred' | 'mentioned' | 'allPrivate' |}
+    | {| type: 'search', query: string |};
+
+  /**
+   * The users that identify a PM narrow in the UI.
+   *
+   * This is all users except the self user... except on the self-1:1
+   * conversation, for which it includes the self user after all.
+   *
+   * Returns null if this isn't in fact a PM narrow.  Throws if a user can't be found.
+   */
+  tryGetPmDisplayUsers(
+    allUsersById: Map<number, UserOrBot>,
+    ownUserId: number,
+  ): $ReadOnlyArray<UserOrBot> | null {
+    if (this.data.type !== 'pm') {
+      return null;
+    }
+    const userIds = this.data.userIds.length ? this.data.userIds : [ownUserId];
+    const users = userIds.map(id => allUsersById.get(id)).filter(Boolean);
+    if (users.length !== userIds.length) {
+      throw new Error('missing user'); // TODO etc
+    }
+    return users;
+  }
+
+  /** Convert into an old-style API narrow object, with user emails and stream names. */
+  apiStringsNarrow(
+    allUsersById: Map<number, UserOrBot>,
+    streamsById: Map<number, Stream>,
+  ): Narrow | null {
+    switch (this.data.type) {
+      case 'stream': {
+        const stream = streamsById.get(this.data.streamId);
+        return stream ? streamNarrow(stream.name) : null;
+      }
+      // WIP TODO
+      default:
+        return null; // WIP TODO NOMERGE -- make exhaustive
+    }
+  }
+}
 
 export const isSameNarrow = (narrow1: Narrow, narrow2: Narrow): boolean =>
   Array.isArray(narrow1) && Array.isArray(narrow2) && isEqual(narrow1, narrow2);
