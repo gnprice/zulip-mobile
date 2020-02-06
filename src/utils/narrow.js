@@ -26,7 +26,18 @@ export class CleanNarrow {
   }
 }
 
-export type DualNarrow<T: CleanNarrow = CleanNarrow> = { clean: T, strings: Narrow };
+export class DualNarrow<T: CleanNarrow = CleanNarrow> {
+  clean: T;
+  strings: Narrow;
+
+  constructor(clean: T, strings: Narrow) {
+    this.clean = clean;
+    this.strings = strings;
+  }
+}
+
+export const asApiStringNarrow = (narrow: Narrow | DualNarrow<>): Narrow =>
+  narrow instanceof DualNarrow ? narrow.strings : narrow;
 
 export class StreamOrTopicNarrow extends CleanNarrow {
   streamId: number;
@@ -88,7 +99,7 @@ export class PmNarrow extends CleanNarrow {
   }
 
   static dualFromUser(user: UserOrBot): DualNarrow<PmNarrow> {
-    return { clean: PmNarrow.fromUser(user), strings: privateNarrow(user.email) };
+    return new DualNarrow(PmNarrow.fromUser(user), privateNarrow(user.email));
   }
 
   key() {
