@@ -51,7 +51,7 @@ export default class UserList extends PureComponent<Props> {
         keyExtractor={item => item.email}
         renderItem={({ item }) => (
           <UserItem
-            key={item.email}
+            key={item.user_id}
             user={item}
             onPress={onPress}
             isSelected={!!selected.find(user => user.user_id === item.user_id)}

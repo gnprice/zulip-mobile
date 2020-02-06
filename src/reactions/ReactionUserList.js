@@ -36,16 +36,7 @@ class ReactionUserList extends PureComponent<Props> {
           if (!user) {
             return null;
           }
-          return (
-            <UserItem
-              key={user.user_id}
-              fullName={user.full_name}
-              avatarUrl={user.avatar_url}
-              email={user.email}
-              showEmail
-              onPress={this.handlePress}
-            />
-          );
+          return <UserItem key={user.user_id} user={user} showEmail onPress={this.handlePress} />;
         }}
       />
     );
