@@ -11,6 +11,7 @@ import {
   EVENT_REACTION_ADD,
   EVENT_REACTION_REMOVE,
 } from '../../actionConstants';
+import { Anchor } from '../../api/modelTypes';
 
 describe('messagesReducer', () => {
   test('handles unknown action and no previous state by returning initial state', () => {
@@ -350,7 +351,7 @@ describe('messagesReducer', () => {
       expect(newState).toEqual(expectedState);
     });
 
-    test('when anchor is FIRST_UNREAD_ANCHOR common messages are not replaced', () => {
+    test('when anchor is Anchor.first_unread common messages are not replaced', () => {
       const commonMessages = { 2: { id: 2, timestamp: 4 }, 3: { id: 3, timestamp: 5 } };
       const initialState = deepFreeze({
         1: { id: 1, timestamp: 3 },
@@ -359,7 +360,7 @@ describe('messagesReducer', () => {
 
       const action = deepFreeze({
         type: MESSAGE_FETCH_COMPLETE,
-        anchor: FIRST_UNREAD_ANCHOR,
+        anchor: Anchor.first_unread,
         narrow: [],
         messages: [{ id: 2, timestamp: 4 }, { id: 3, timestamp: 5 }],
       });
@@ -370,7 +371,7 @@ describe('messagesReducer', () => {
       expect(newState['3']).toEqual(commonMessages['3']);
     });
 
-    test('when anchor is FIRST_UNREAD_ANCHOR deep equal is performed to separate common messages', () => {
+    test('when anchor is Anchor.first_unread deep equal is performed to separate common messages', () => {
       const commonMessages = { 2: { id: 2, timestamp: 4 }, 3: { id: 3, timestamp: 5 } };
       const changedMessages = { 4: { id: 4, timestamp: 6, subject: 'new topic' } };
       const initialState = deepFreeze({
@@ -381,7 +382,7 @@ describe('messagesReducer', () => {
 
       const action = deepFreeze({
         type: MESSAGE_FETCH_COMPLETE,
-        anchor: FIRST_UNREAD_ANCHOR,
+        anchor: Anchor.first_unread,
         narrow: [],
         messages: [{ id: 2, timestamp: 4 }, { id: 3, timestamp: 5 }, changedMessages['4']],
       });

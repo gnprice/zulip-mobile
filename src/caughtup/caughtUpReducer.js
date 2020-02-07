@@ -10,12 +10,13 @@ import {
 import { LAST_MESSAGE_ANCHOR, FIRST_UNREAD_ANCHOR } from '../anchor';
 import { NULL_OBJECT } from '../nullObjects';
 import { DEFAULT_CAUGHTUP } from './caughtUpSelectors';
+import { Anchor } from '../api/modelTypes';
 
 const initialState: CaughtUpState = NULL_OBJECT;
 
 /** Try to infer the caught-up state, when the server didn't tell us. */
 const legacyInferCaughtUp = (prevCaughtUp: CaughtUp | void, action) => {
-  if (action.anchor === LAST_MESSAGE_ANCHOR) {
+  if (action.anchor === Anchor.newest) {
     return {
       older: action.numBefore > action.messages.length,
       newer: true,
@@ -24,7 +25,7 @@ const legacyInferCaughtUp = (prevCaughtUp: CaughtUp | void, action) => {
 
   let anchorIdx = -1;
 
-  if (action.anchor === FIRST_UNREAD_ANCHOR) {
+  if (action.anchor === Anchor.first_unread) {
     anchorIdx = action.messages.findIndex(msg => !msg.flags || msg.flags.indexOf('read') === -1);
   } else {
     anchorIdx = action.messages.findIndex(msg => msg.id === action.anchor);

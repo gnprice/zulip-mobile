@@ -16,14 +16,14 @@ import {
 import { LAST_MESSAGE_ANCHOR, FIRST_UNREAD_ANCHOR } from '../anchor';
 import { isMessageInNarrow, MENTIONED_NARROW_STR, STARRED_NARROW_STR } from '../utils/narrow';
 import { NULL_OBJECT } from '../nullObjects';
+import { Anchor } from '../api/modelTypes';
 
 const initialState: NarrowsState = NULL_OBJECT;
 
 const messageFetchComplete = (state, action) => {
   const key = JSON.stringify(action.narrow);
   const fetchedMessageIds = action.messages.map(message => message.id);
-  const replaceExisting =
-    action.anchor === FIRST_UNREAD_ANCHOR || action.anchor === LAST_MESSAGE_ANCHOR;
+  const replaceExisting = action.anchor === Anchor.first_unread || action.anchor === Anchor.newest;
   return {
     ...state,
     [key]: replaceExisting

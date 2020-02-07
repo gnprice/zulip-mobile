@@ -17,6 +17,7 @@ import {
   EVENT_UPDATE_MESSAGE_FLAGS,
 } from '../../actionConstants';
 import { LAST_MESSAGE_ANCHOR, FIRST_UNREAD_ANCHOR } from '../../anchor';
+import { Anchor } from '../../api/modelTypes';
 
 describe('narrowsReducer', () => {
   const privateNarrowStr = JSON.stringify(privateNarrow('mark@example.com'));
@@ -412,13 +413,13 @@ describe('narrowsReducer', () => {
       expect(newState).not.toBe(initialState);
     });
 
-    test('when anchor is FIRST_UNREAD_ANCHOR previous messages are replaced', () => {
+    test('when anchor is Anchor.first_unread previous messages are replaced', () => {
       const initialState = deepFreeze({
         [HOME_NARROW_STR]: [1, 2],
       });
 
       const action = deepFreeze({
-        anchor: FIRST_UNREAD_ANCHOR,
+        anchor: Anchor.first_unread,
         type: MESSAGE_FETCH_COMPLETE,
         narrow: [],
         messages: [{ id: 3, timestamp: 2 }, { id: 4, timestamp: 1 }],
@@ -433,13 +434,13 @@ describe('narrowsReducer', () => {
       expect(newState).toEqual(expectedState);
     });
 
-    test('when anchor is LAST_MESSAGE_ANCHOR previous messages are replaced', () => {
+    test('when anchor is Anchor.newest previous messages are replaced', () => {
       const initialState = deepFreeze({
         [HOME_NARROW_STR]: [1, 2],
       });
 
       const action = deepFreeze({
-        anchor: LAST_MESSAGE_ANCHOR,
+        anchor: Anchor.newest,
         type: MESSAGE_FETCH_COMPLETE,
         narrow: [],
         messages: [{ id: 3, timestamp: 2 }, { id: 4, timestamp: 1 }],

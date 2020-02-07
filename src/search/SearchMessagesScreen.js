@@ -10,6 +10,7 @@ import { SEARCH_NARROW } from '../utils/narrow';
 import { LAST_MESSAGE_ANCHOR } from '../anchor';
 import { connect } from '../react-redux';
 import { getAuth } from '../account/accountsSelectors';
+import { Anchor } from '../api/modelTypes';
 
 type Props = $ReadOnly<{|
   auth: Auth,
@@ -39,13 +40,7 @@ class SearchMessagesScreen extends PureComponent<Props, State> {
    */
   performQueryRaw = async (query: string): Promise<Message[]> => {
     const { auth } = this.props;
-    const { messages } = await api.getMessages(
-      auth,
-      SEARCH_NARROW(query),
-      LAST_MESSAGE_ANCHOR,
-      20,
-      0,
-    );
+    const { messages } = await api.getMessages(auth, SEARCH_NARROW(query), Anchor.newest, 20, 0);
     return messages;
   };
 

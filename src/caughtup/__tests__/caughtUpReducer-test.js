@@ -10,6 +10,7 @@ import {
   ALL_PRIVATE_NARROW,
   ALL_PRIVATE_NARROW_STR,
 } from '../../utils/narrow';
+import { Anchor } from '../../api/modelTypes';
 
 describe('caughtUpReducer', () => {
   describe('MESSAGE_FETCH_START', () => {
@@ -137,7 +138,7 @@ describe('caughtUpReducer', () => {
     const action = deepFreeze({
       type: MESSAGE_FETCH_COMPLETE,
       narrow: HOME_NARROW,
-      anchor: FIRST_UNREAD_ANCHOR,
+      anchor: Anchor.first_unread,
       messages: [
         { id: 1, flags: ['read'] },
         { id: 2, flags: ['read'] },
@@ -170,7 +171,7 @@ describe('caughtUpReducer', () => {
     const action = deepFreeze({
       type: MESSAGE_FETCH_COMPLETE,
       narrow: HOME_NARROW,
-      anchor: FIRST_UNREAD_ANCHOR,
+      anchor: Anchor.first_unread,
       messages: [
         { id: 1, flags: ['read'] },
         { id: 2, flags: ['read'] },
@@ -202,7 +203,7 @@ describe('caughtUpReducer', () => {
     const action = deepFreeze({
       type: MESSAGE_FETCH_COMPLETE,
       narrow: HOME_NARROW,
-      anchor: FIRST_UNREAD_ANCHOR,
+      anchor: Anchor.first_unread,
       messages: [
         { id: 1, flags: ['read'] },
         { id: 2, flags: ['read'] },
@@ -234,7 +235,7 @@ describe('caughtUpReducer', () => {
     const action = deepFreeze({
       type: MESSAGE_FETCH_COMPLETE,
       narrow: HOME_NARROW,
-      anchor: FIRST_UNREAD_ANCHOR,
+      anchor: Anchor.first_unread,
       messages: [
         { id: 1, flags: ['read'] },
         { id: 2, flags: ['read'] },
@@ -265,7 +266,7 @@ describe('caughtUpReducer', () => {
     const action = deepFreeze({
       type: MESSAGE_FETCH_COMPLETE,
       narrow: ALL_PRIVATE_NARROW,
-      anchor: LAST_MESSAGE_ANCHOR.raw,
+      anchor: Anchor.newest.raw,
       // $FlowFixMe bogus messages in action
       messages: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }],
       numBefore: 10,

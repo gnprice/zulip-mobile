@@ -22,7 +22,7 @@ import { Anchor } from '../api/modelTypes';
  * is nearly the only navigation in the app where additional data fetching
  * is required.  See `fetchMessagesInNarrow` for more details.
  */
-export const doNarrow = (narrow: Narrow, anchor: Anchor = FIRST_UNREAD_ANCHOR) => (
+export const doNarrow = (narrow: Narrow, anchor: Anchor = Anchor.first_unread) => (
   dispatch: Dispatch,
   getState: GetState,
 ) => {

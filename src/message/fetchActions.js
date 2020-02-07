@@ -136,7 +136,7 @@ const isFetchNeededAtAnchor = (state: GlobalState, narrow: Narrow, anchor: Ancho
  */
 export const fetchMessagesInNarrow = (
   narrow: Narrow,
-  anchor: Anchor = FIRST_UNREAD_ANCHOR,
+  anchor: Anchor = Anchor.first_unread,
 ) => async (dispatch: Dispatch, getState: GetState) => {
   if (!isFetchNeededAtAnchor(getState(), narrow, anchor)) {
     return;
@@ -159,13 +159,13 @@ export const fetchMessagesInNarrow = (
 const fetchPrivateMessages = () => async (dispatch: Dispatch, getState: GetState) => {
   const auth = getAuth(getState());
   const { messages, found_newest, found_oldest } = await tryUntilSuccessful(() =>
-    api.getMessages(auth, ALL_PRIVATE_NARROW, LAST_MESSAGE_ANCHOR, 100, 0),
+    api.getMessages(auth, ALL_PRIVATE_NARROW, Anchor.newest, 100, 0),
   );
   dispatch(
     messageFetchComplete(
       messages,
       ALL_PRIVATE_NARROW,
-      LAST_MESSAGE_ANCHOR,
+      Anchor.newest,
       100,
       0,
       found_newest,
