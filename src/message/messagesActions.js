@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import type { Narrow, Dispatch, GetState } from '../types';
+import type { Anchor, Narrow, Dispatch, GetState } from '../types';
 import { getAuth, getUsersById, isNarrowValid, getIsHydrated } from '../selectors';
 import { DO_NARROW } from '../actionConstants';
 import { getFullUrl } from '../utils/url';
@@ -21,7 +21,7 @@ import { getStreamsById } from '../subscriptions/subscriptionSelectors';
  * is nearly the only navigation in the app where additional data fetching
  * is required.  See `fetchMessagesInNarrow` for more details.
  */
-export const doNarrow = (narrow: Narrow, anchor: number = FIRST_UNREAD_ANCHOR) => (
+export const doNarrow = (narrow: Narrow, anchor: Anchor = FIRST_UNREAD_ANCHOR) => (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
