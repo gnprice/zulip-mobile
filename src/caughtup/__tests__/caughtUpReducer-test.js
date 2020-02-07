@@ -265,7 +265,7 @@ describe('caughtUpReducer', () => {
     const action = deepFreeze({
       type: MESSAGE_FETCH_COMPLETE,
       narrow: ALL_PRIVATE_NARROW,
-      anchor: LAST_MESSAGE_ANCHOR,
+      anchor: LAST_MESSAGE_ANCHOR.raw,
       // $FlowFixMe bogus messages in action
       messages: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }],
       numBefore: 10,

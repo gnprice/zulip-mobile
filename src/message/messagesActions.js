@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import type { Anchor, Narrow, Dispatch, GetState } from '../types';
+import type { Narrow, Dispatch, GetState } from '../types';
 import { getAuth, getUsersById, isNarrowValid, getIsHydrated } from '../selectors';
 import { DO_NARROW } from '../actionConstants';
 import { getFullUrl } from '../utils/url';
@@ -9,6 +9,7 @@ import { fetchMessagesInNarrow } from './fetchActions';
 import { navigateToChat } from '../nav/navActions';
 import { FIRST_UNREAD_ANCHOR } from '../anchor';
 import { getStreamsById } from '../subscriptions/subscriptionSelectors';
+import { Anchor } from '../api/modelTypes';
 
 /**
  * Navigate to the given narrow, while fetching any data needed.
@@ -43,7 +44,7 @@ export const messageLinkPress = (href: string) => (dispatch: Dispatch, getState:
   const streamsById = getStreamsById(state);
   const narrow = getNarrowFromLink(href, auth.realm, usersById, streamsById);
   if (narrow) {
-    const anchor = getMessageIdFromLink(href, auth.realm);
+    const anchor = new Anchor(getMessageIdFromLink(href, auth.realm));
     dispatch(doNarrow(narrow, anchor));
     return;
   }

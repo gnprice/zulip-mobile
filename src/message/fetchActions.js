@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import type { Anchor, Narrow, Dispatch, GetState, GlobalState, Message, Action } from '../types';
+import type { Narrow, Dispatch, GetState, GlobalState, Message, Action } from '../types';
 import * as api from '../api';
 import {
   getAuth,
@@ -26,6 +26,7 @@ import { realmInit } from '../realm/realmActions';
 import { reportPresence } from '../users/usersActions';
 import { startEventPolling } from '../events/eventActions';
 import { logout } from '../account/accountActions';
+import { Anchor } from '../api/modelTypes';
 
 const messageFetchStart = (narrow: Narrow, numBefore: number, numAfter: number): Action => ({
   type: MESSAGE_FETCH_START,
@@ -46,7 +47,7 @@ const messageFetchComplete = (
   type: MESSAGE_FETCH_COMPLETE,
   messages,
   narrow,
-  anchor,
+  anchor: anchor.raw,
   numBefore,
   numAfter,
   foundNewest,
@@ -81,7 +82,7 @@ export const fetchOlder = (narrow: Narrow) => (dispatch: Dispatch, getState: Get
   const { needsInitialFetch } = getSession(state);
 
   if (!needsInitialFetch && !fetching.older && !caughtUp.older && firstMessageId !== undefined) {
-    dispatch(fetchMessages(narrow, firstMessageId, config.messagesPerRequest, 0));
+    dispatch(fetchMessages(narrow, new Anchor(firstMessageId), config.messagesPerRequest, 0));
   }
 };
 
@@ -93,7 +94,7 @@ export const fetchNewer = (narrow: Narrow) => (dispatch: Dispatch, getState: Get
   const { needsInitialFetch } = getSession(state);
 
   if (!needsInitialFetch && !fetching.newer && !caughtUp.newer && lastMessageId !== undefined) {
-    dispatch(fetchMessages(narrow, lastMessageId, 0, config.messagesPerRequest));
+    dispatch(fetchMessages(narrow, new Anchor(lastMessageId), 0, config.messagesPerRequest));
   }
 };
 

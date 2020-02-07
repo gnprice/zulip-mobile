@@ -289,7 +289,19 @@ export type Narrow = $ReadOnlyArray<NarrowElement>;
  * Before Zulip v2.2 (zulip/zulip#13747), only a numeric message ID is
  * accepted.
  */
-export type Anchor = number | 'oldest' | 'newest' | 'first_unread';
+export type AnchorRaw = number | 'oldest' | 'newest' | 'first_unread';
+
+export class Anchor {
+  raw: AnchorRaw;
+
+  constructor(messageId: number) {
+    this.raw = messageId;
+  }
+
+  static oldest = new Anchor(('oldest': $FlowFixMe));
+  static newest = new Anchor(('newest': $FlowFixMe));
+  static first_unread = new Anchor(('first_unread': $FlowFixMe));
+}
 
 //
 //

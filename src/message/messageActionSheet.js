@@ -13,6 +13,7 @@ import * as api from '../api';
 import { showToast } from '../utils/info';
 import { doNarrow, startEditMessage, deleteOutboxMessage, navigateToEmojiPicker } from '../actions';
 import { navigateToMessageReactionScreen } from '../nav/navActions';
+import { Anchor } from '../api/modelTypes';
 
 // TODO really this belongs in a libdef.
 export type ShowActionSheetWithOptions = (
@@ -46,7 +47,7 @@ const isAnOutboxMessage = (message: Message | Outbox): boolean => message.isOutb
 //
 
 const reply = ({ message, dispatch, ownEmail }) => {
-  dispatch(doNarrow(getNarrowFromMessage(message, ownEmail), message.id));
+  dispatch(doNarrow(getNarrowFromMessage(message, ownEmail), new Anchor(message.id)));
 };
 reply.title = 'Reply';
 reply.errorMessage = 'Failed to reply';

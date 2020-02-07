@@ -69,7 +69,7 @@ const migrateResponse = response => {
 const LARGER_THAN_MAX_MESSAGE_ID = 10000000000000000; // sixteen zeroes
 
 const anchorAsNum = (anchor: Anchor): [number, boolean] => {
-  switch (anchor) {
+  switch (anchor.raw) {
     case 'newest':
       return [LARGER_THAN_MAX_MESSAGE_ID, false];
     case 'oldest':
@@ -77,7 +77,7 @@ const anchorAsNum = (anchor: Anchor): [number, boolean] => {
     case 'first_unread':
       return [0, true];
     default:
-      return [anchor, false];
+      return [anchor.raw, false];
   }
 };
 

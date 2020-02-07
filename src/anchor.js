@@ -1,9 +1,9 @@
 /* @flow strict-local */
 
-import type { Anchor } from './types';
+import { Anchor } from './types';
 
 /** See `Anchor`. */
-export const FIRST_UNREAD_ANCHOR: Anchor = 'first_unread';
+export const FIRST_UNREAD_ANCHOR: Anchor = Anchor.first_unread;
 
 /** See `Anchor`. */
-export const LAST_MESSAGE_ANCHOR: Anchor = 'newest';
+export const LAST_MESSAGE_ANCHOR: Anchor = Anchor.newest;
