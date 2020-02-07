@@ -64,10 +64,25 @@ const migrateResponse = response => {
   };
 };
 
+// This special value is understood by the server, corresponding to
+// LARGER_THAN_MAX_MESSAGE_ID there.  See #3654.
+const LARGER_THAN_MAX_MESSAGE_ID = 10000000000000000; // sixteen zeroes
+
+const anchorAsNum = (anchor: Anchor): [number, boolean] => {
+  switch (anchor) {
+    case 'newest':
+      return [LARGER_THAN_MAX_MESSAGE_ID, false];
+    case 'oldest':
+      return [0, false];
+    case 'first_unread':
+      return [0, true];
+    default:
+      return [anchor, false];
+  }
+};
+
 /**
  * See https://zulipchat.com/api/get-messages
- *
- * Before Zulip 2.2, `anchor` must be a number; see `Anchor`.
  *
  * These values exist only in Zulip 1.8 or newer:
  *   * found_anchor
@@ -77,18 +92,20 @@ const migrateResponse = response => {
 export default async (
   auth: Auth,
   narrow: Narrow,
-  anchor: number, // or Anchor, for Zulip 2.2+
+  anchor: Anchor,
   numBefore: number,
   numAfter: number,
-  useFirstUnread: boolean = false,
 ): Promise<ApiResponseMessages> => {
+  // Before Zulip 2.2, `anchor` must be a number; see `Anchor`.
+  const [anchorNum, use_first_unread_anchor] = anchorAsNum(anchor);
+
   const response: ServerApiResponseMessages = await apiGet(auth, 'messages', {
     narrow: JSON.stringify(narrow),
-    anchor,
+    anchor: anchorNum,
     num_before: numBefore,
     num_after: numAfter,
     apply_markdown: true,
-    use_first_unread_anchor: useFirstUnread,
+    use_first_unread_anchor,
   });
   return migrateResponse(response);
 };

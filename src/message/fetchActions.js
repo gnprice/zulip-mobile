@@ -17,7 +17,7 @@ import {
   MESSAGE_FETCH_START,
   MESSAGE_FETCH_COMPLETE,
 } from '../actionConstants';
-import { FIRST_UNREAD_ANCHOR, LAST_MESSAGE_ANCHOR, anchorAsNum } from '../anchor';
+import { FIRST_UNREAD_ANCHOR, LAST_MESSAGE_ANCHOR } from '../anchor';
 import { ALL_PRIVATE_NARROW } from '../utils/narrow';
 import { tryUntilSuccessful } from '../utils/async';
 import { initNotifications } from '../notification/notificationActions';
@@ -60,15 +60,13 @@ export const fetchMessages = (
   numBefore: number,
   numAfter: number,
 ) => async (dispatch: Dispatch, getState: GetState) => {
-  const [anchorNum, useFirstUnread] = anchorAsNum(anchor);
   dispatch(messageFetchStart(narrow, numBefore, numAfter));
   const { messages, found_newest, found_oldest } = await api.getMessages(
     getAuth(getState()),
     narrow,
-    anchorNum,
+    anchor,
     numBefore,
     numAfter,
-    useFirstUnread,
   );
   dispatch(
     messageFetchComplete(messages, narrow, anchor, numBefore, numAfter, found_newest, found_oldest),
@@ -159,9 +157,8 @@ export const fetchMessagesInNarrow = (
  */
 const fetchPrivateMessages = () => async (dispatch: Dispatch, getState: GetState) => {
   const auth = getAuth(getState());
-  const [anchorNum, useFirstUnread] = anchorAsNum(LAST_MESSAGE_ANCHOR);
   const { messages, found_newest, found_oldest } = await tryUntilSuccessful(() =>
-    api.getMessages(auth, ALL_PRIVATE_NARROW, anchorNum, 100, 0, useFirstUnread),
+    api.getMessages(auth, ALL_PRIVATE_NARROW, LAST_MESSAGE_ANCHOR, 100, 0),
   );
   dispatch(
     messageFetchComplete(
