@@ -1,6 +1,6 @@
 /* @flow strict-local */
 import type { Auth, ApiResponseSuccess } from '../transportTypes';
-import type { Message, Narrow } from '../apiTypes';
+import type { Anchor, Message, Narrow } from '../apiTypes';
 import type { Reaction } from '../modelTypes';
 import { apiGet } from '../apiFetch';
 
@@ -67,6 +67,8 @@ const migrateResponse = response => {
 /**
  * See https://zulipchat.com/api/get-messages
  *
+ * Before Zulip 2.2, `anchor` must be a number; see `Anchor`.
+ *
  * These values exist only in Zulip 1.8 or newer:
  *   * found_anchor
  *   * found_newest
@@ -75,7 +77,7 @@ const migrateResponse = response => {
 export default async (
   auth: Auth,
   narrow: Narrow,
-  anchor: number,
+  anchor: number, // or Anchor, for Zulip 2.2+
   numBefore: number,
   numAfter: number,
   useFirstUnread: boolean = false,

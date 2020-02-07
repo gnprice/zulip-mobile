@@ -64,6 +64,7 @@ import {
 import type { MessageEvent, PresenceEvent, StreamEvent, SubmessageEvent } from './api/eventTypes';
 
 import type {
+  Anchor,
   Dimensions,
   Orientation,
   GlobalState,
@@ -213,7 +214,7 @@ type MessageFetchCompleteAction = {|
   type: typeof MESSAGE_FETCH_COMPLETE,
   messages: Message[],
   narrow: Narrow,
-  anchor: number,
+  anchor: Anchor,
   numBefore: number,
   numAfter: number,
   foundNewest: boolean | void,

@@ -37,7 +37,7 @@ const messageFetchStart = (narrow: Narrow, numBefore: number, numAfter: number):
 const messageFetchComplete = (
   messages: Message[],
   narrow: Narrow,
-  anchor: number,
+  anchor: Anchor,
   numBefore: number,
   numAfter: number,
   foundNewest?: boolean,
@@ -71,15 +71,7 @@ export const fetchMessages = (
     useFirstUnread,
   );
   dispatch(
-    messageFetchComplete(
-      messages,
-      narrow,
-      anchorNum,
-      numBefore,
-      numAfter,
-      found_newest,
-      found_oldest,
-    ),
+    messageFetchComplete(messages, narrow, anchor, numBefore, numAfter, found_newest, found_oldest),
   );
 };
 
