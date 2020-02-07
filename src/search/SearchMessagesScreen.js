@@ -7,7 +7,7 @@ import { Screen } from '../common';
 import SearchMessagesCard from './SearchMessagesCard';
 import styles from '../styles';
 import { SEARCH_NARROW } from '../utils/narrow';
-import { LAST_MESSAGE_ANCHOR } from '../anchor';
+import { LAST_MESSAGE_ANCHOR, anchorAsNum } from '../anchor';
 import { connect } from '../react-redux';
 import { getAuth } from '../account/accountsSelectors';
 
@@ -39,13 +39,14 @@ class SearchMessagesScreen extends PureComponent<Props, State> {
    */
   performQueryRaw = async (query: string): Promise<Message[]> => {
     const { auth } = this.props;
+    const [anchorNum, useFirstUnread] = anchorAsNum(LAST_MESSAGE_ANCHOR);
     const { messages } = await api.getMessages(
       auth,
       SEARCH_NARROW(query),
-      LAST_MESSAGE_ANCHOR,
+      anchorNum,
       20,
       0,
-      false,
+      useFirstUnread,
     );
     return messages;
   };

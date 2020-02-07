@@ -159,8 +159,9 @@ export const fetchMessagesInNarrow = (
  */
 const fetchPrivateMessages = () => async (dispatch: Dispatch, getState: GetState) => {
   const auth = getAuth(getState());
+  const [anchorNum, useFirstUnread] = anchorAsNum(LAST_MESSAGE_ANCHOR);
   const { messages, found_newest, found_oldest } = await tryUntilSuccessful(() =>
-    api.getMessages(auth, ALL_PRIVATE_NARROW, LAST_MESSAGE_ANCHOR, 100, 0),
+    api.getMessages(auth, ALL_PRIVATE_NARROW, anchorNum, 100, 0, useFirstUnread),
   );
   dispatch(
     messageFetchComplete(
