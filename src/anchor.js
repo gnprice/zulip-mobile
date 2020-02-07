@@ -1,5 +1,7 @@
 /* @flow strict-local */
 
+import type { Anchor } from './types';
+
 /**
  * A special value we internally take to mean "first unread message".
  *
@@ -24,3 +26,17 @@ export const FIRST_UNREAD_ANCHOR = 0;
 // This special value is understood by the server, corresponding to
 // LARGER_THAN_MAX_MESSAGE_ID there.  See #3654.
 export const LAST_MESSAGE_ANCHOR = 10000000000000000; // sixteen zeroes
+
+export const anchorAsNum = (anchor: Anchor): [number, boolean] => {
+  switch (anchor) {
+    case 'newest':
+      return [LAST_MESSAGE_ANCHOR, false];
+    case 'oldest':
+      return [0, false];
+    case 'first_unread':
+    case FIRST_UNREAD_ANCHOR:
+      return [0, true];
+    default:
+      return [anchor, false];
+  }
+};

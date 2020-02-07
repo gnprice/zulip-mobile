@@ -257,7 +257,7 @@ export type Topic = {|
 //
 //
 // ===================================================================
-// Narrows.
+// Narrows, and anchors within them.
 //
 //
 
@@ -278,6 +278,18 @@ export type NarrowElement = $ReadOnly<{|
 |}>;
 
 export type Narrow = $ReadOnlyArray<NarrowElement>;
+
+/**
+ * Describes a point in the stream of messages found in a narrow.
+ *
+ * This is either a message ID or an enumerated string value, as accepted
+ * for the `anchor` parameter when fetching messages:
+ *   https://zulipchat.com/api/get-messages
+ *
+ * Before Zulip v2.2 (zulip/zulip#13747), only a numeric message ID is
+ * accepted.
+ */
+export type Anchor = number | 'oldest' | 'newest' | 'first_unread';
 
 //
 //
