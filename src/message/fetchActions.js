@@ -17,7 +17,6 @@ import {
   MESSAGE_FETCH_START,
   MESSAGE_FETCH_COMPLETE,
 } from '../actionConstants';
-import { FIRST_UNREAD_ANCHOR, LAST_MESSAGE_ANCHOR } from '../anchor';
 import { ALL_PRIVATE_NARROW } from '../utils/narrow';
 import { tryUntilSuccessful } from '../utils/async';
 import { initNotifications } from '../notification/notificationActions';

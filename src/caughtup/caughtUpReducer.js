@@ -7,7 +7,6 @@ import {
   ACCOUNT_SWITCH,
   MESSAGE_FETCH_COMPLETE,
 } from '../actionConstants';
-import { LAST_MESSAGE_ANCHOR, FIRST_UNREAD_ANCHOR } from '../anchor';
 import { NULL_OBJECT } from '../nullObjects';
 import { DEFAULT_CAUGHTUP } from './caughtUpSelectors';
 import { Anchor } from '../api/modelTypes';

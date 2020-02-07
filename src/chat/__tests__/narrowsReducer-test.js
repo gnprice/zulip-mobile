@@ -16,7 +16,6 @@ import {
   EVENT_MESSAGE_DELETE,
   EVENT_UPDATE_MESSAGE_FLAGS,
 } from '../../actionConstants';
-import { LAST_MESSAGE_ANCHOR, FIRST_UNREAD_ANCHOR } from '../../anchor';
 import { Anchor } from '../../api/modelTypes';
 
 describe('narrowsReducer', () => {

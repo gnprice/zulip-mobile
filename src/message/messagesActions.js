@@ -7,7 +7,6 @@ import { getMessageIdFromLink, getNarrowFromLink } from '../utils/internalLinks'
 import openLink from '../utils/openLink';
 import { fetchMessagesInNarrow } from './fetchActions';
 import { navigateToChat } from '../nav/navActions';
-import { FIRST_UNREAD_ANCHOR } from '../anchor';
 import { getStreamsById } from '../subscriptions/subscriptionSelectors';
 import { Anchor } from '../api/modelTypes';
 
