@@ -206,7 +206,13 @@ const onShouldStartLoadWithRequest: (event: WebViewNavigation) => boolean = (() 
   };
 })();
 
-const renderWebView = ({ html, style, renderLoading, ref, onMessage, onError }) => (
+/**
+ * Render a WebView that shows the given HTML, and stays at our base URL.
+ */
+// TODO: This should ideally be a proper React component of its own.  The
+//       thing that may require care when doing that is our use of
+//       `shouldComponentUpdate`.
+const renderWebView = (html, moreProps) => (
   // The `originWhitelist` and `onShouldStartLoadWithRequest` props are
   // meant to mitigate possible XSS bugs, by interrupting an attempted
   // exploit if it tries to navigate to a new URL by e.g. setting
@@ -220,15 +226,10 @@ const renderWebView = ({ html, style, renderLoading, ref, onMessage, onError }) 
   // https://github.com/react-native-community/react-native-webview/pull/697
   <WebView
     useWebKit
-    startInLoadingState
-    renderLoading={renderLoading}
     source={{ baseUrl, html }}
     originWhitelist={['file://']}
     onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
-    style={style}
-    ref={ref}
-    onMessage={onMessage}
-    onError={onError}
+    {...moreProps}
   />
 );
 
@@ -325,9 +326,9 @@ class MessageList extends Component<Props> {
       showMessagePlaceholders,
     });
 
-    return renderWebView({
-      html,
+    return renderWebView(html, {
       style: { backgroundColor: this.context.backgroundColor },
+      startInLoadingState: true,
       renderLoading: this.renderLoading,
       ref: webview => {
         this.webview = webview;
