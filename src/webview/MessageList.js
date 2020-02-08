@@ -163,7 +163,7 @@ const baseUrl = `${assetsPath}/index.html`;
 
 // Paranoia^WSecurity: only load `baseUrl`, and only load it once. Any other
 // requests should be handed off to the OS, not loaded inside the WebView.
-const onShouldStartLoadWithRequest: (event: WebViewNavigation) => boolean = (() => {
+function makeOnShouldStartLoadWithRequest(): (event: WebViewNavigation) => boolean {
   // Inner closure to actually test the URL.
   const urlTester: (url: string) => boolean = (() => {
     // On Android this function is documented to be skipped on first load:
@@ -204,7 +204,7 @@ const onShouldStartLoadWithRequest: (event: WebViewNavigation) => boolean = (() 
     }
     return ok;
   };
-})();
+}
 
 /**
  * Render a WebView that shows the given HTML, and stays at our base URL.
@@ -228,7 +228,7 @@ const renderWebView = (html, moreProps) => (
     useWebKit
     source={{ baseUrl, html }}
     originWhitelist={['file://']}
-    onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
+    onShouldStartLoadWithRequest={makeOnShouldStartLoadWithRequest()}
     {...moreProps}
   />
 );
