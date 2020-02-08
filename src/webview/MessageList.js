@@ -206,6 +206,32 @@ const onShouldStartLoadWithRequest: (event: WebViewNavigation) => boolean = (() 
   };
 })();
 
+const renderWebView = ({ html, style, renderLoading, ref, onMessage, onError }) => (
+  // The `originWhitelist` and `onShouldStartLoadWithRequest` props are
+  // meant to mitigate possible XSS bugs, by interrupting an attempted
+  // exploit if it tries to navigate to a new URL by e.g. setting
+  // `window.location`.
+  //
+  // Note that neither of them is a hard security barrier; they're checked
+  // only against the URL of the document itself.  They cannot be used to
+  // validate the URL of other resources the WebView loads.
+  //
+  // Worse, the `originWhitelist` parameter is completely broken. See:
+  // https://github.com/react-native-community/react-native-webview/pull/697
+  <WebView
+    useWebKit
+    startInLoadingState
+    renderLoading={renderLoading}
+    source={{ baseUrl, html }}
+    originWhitelist={['file://']}
+    onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
+    style={style}
+    ref={ref}
+    onMessage={onMessage}
+    onError={onError}
+  />
+);
+
 class MessageList extends Component<Props> {
   static contextType = ThemeContext;
   context: ThemeColors;
@@ -299,34 +325,16 @@ class MessageList extends Component<Props> {
       showMessagePlaceholders,
     });
 
-    // The `originWhitelist` and `onShouldStartLoadWithRequest` props are
-    // meant to mitigate possible XSS bugs, by interrupting an attempted
-    // exploit if it tries to navigate to a new URL by e.g. setting
-    // `window.location`.
-    //
-    // Note that neither of them is a hard security barrier; they're checked
-    // only against the URL of the document itself.  They cannot be used to
-    // validate the URL of other resources the WebView loads.
-    //
-    // Worse, the `originWhitelist` parameter is completely broken. See:
-    // https://github.com/react-native-community/react-native-webview/pull/697
-    return (
-      <WebView
-        useWebKit
-        startInLoadingState
-        renderLoading={this.renderLoading}
-        source={{ baseUrl, html }}
-        originWhitelist={['file://']}
-        onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
-        /* eslint-disable react-native/no-inline-styles */
-        style={{ backgroundColor: this.context.backgroundColor }}
-        ref={webview => {
-          this.webview = webview;
-        }}
-        onMessage={this.handleMessage}
-        onError={this.handleError}
-      />
-    );
+    return renderWebView({
+      html,
+      style: { backgroundColor: this.context.backgroundColor },
+      renderLoading: this.renderLoading,
+      ref: webview => {
+        this.webview = webview;
+      },
+      onMessage: this.handleMessage,
+      onError: this.handleError,
+    });
   }
 }
 
