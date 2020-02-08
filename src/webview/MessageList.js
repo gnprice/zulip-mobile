@@ -164,34 +164,44 @@ const baseUrl = `${assetsPath}/index.html`;
 // Paranoia^WSecurity: only load `baseUrl`, and only load it once. Any other
 // requests should be handed off to the OS, not loaded inside the WebView.
 function makeOnShouldStartLoadWithRequest(): (event: WebViewNavigation) => boolean {
-  // Inner closure to actually test the URL.
-  const urlTester: (url: string) => boolean = (() => {
-    // On Android this function is documented to be skipped on first load:
-    // therefore, simply never return true.
+  // True just if the URL looks like what we expect.
+  function urlIsOk(url: string): boolean {
     if (Platform.OS === 'android') {
-      return (url: string) => false;
+      // The pattern would be different on Android from on iOS, and we don't
+      // actually call this there.
+      throw new Error('urlIsOk: unexpected call on Android');
     }
 
-    // Otherwise (for iOS), return a closure that evaluates to `true` _exactly
-    // once_, and even then only if the URL looks like what we're expecting.
-    let loaded_once = false;
     // The baseUrl, with its relative portion (if any) stripped.
     const baseUrlTail = baseUrl.replace(/^\.\//, '');
     // Disallow such monstrosities as `evilsite.com/?./webview/index.html`.
     const unsafeUrlRegex = /[&?]/;
-    return (url: string) => {
-      if (!loaded_once) {
-        // The exact URL that will be loaded could be determined statically on
-        // Android. On iOS, though, it involves some unpredictable UUIDs which
-        // RN provides no good interface to. (`react-native-fs` is awful.)
-        if (url.startsWith('file://') && url.endsWith(baseUrlTail) && !unsafeUrlRegex.test(url)) {
-          loaded_once = true;
-          return true;
-        }
-      }
+    // The exact URL that will be loaded could be determined statically on
+    // Android. On iOS, though, it involves some unpredictable UUIDs which
+    // RN provides no good interface to. (`react-native-fs` is awful.)
+    return url.startsWith('file://') && url.endsWith(baseUrlTail) && !unsafeUrlRegex.test(url);
+  }
+
+  let loaded_once = false;
+
+  // Inner closure to actually test the URL.
+  const urlTester = (url: string): boolean => {
+    // On Android this function is documented to be skipped on first load:
+    // therefore, simply never return true.
+    if (Platform.OS === 'android') {
       return false;
-    };
-  })();
+    }
+
+    // Otherwise (for iOS), return `true` _exactly once_, and even then only
+    // if the URL looks like what we're expecting.
+    if (!loaded_once) {
+      if (urlIsOk(url)) {
+        loaded_once = true;
+        return true;
+      }
+    }
+    return false;
+  };
 
   // Outer closure to perform logging.
   return (event: WebViewNavigation) => {
