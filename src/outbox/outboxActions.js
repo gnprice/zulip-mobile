@@ -104,14 +104,14 @@ export const sendOutbox = () => async (dispatch: Dispatch, getState: GetState) =
   dispatch(toggleOutboxSending(false));
 };
 
-const mapEmailsToUsers = (usersByEmail, narrow, ownEmail) =>
+const mapEmailsToUsers = (usersByEmail, narrow, ownUser) =>
   narrow[0].operand
     .split(',')
-    .concat(ownEmail)
     .map(item => {
       const user = usersByEmail.get(item) || NULL_USER;
       return { email: item, id: user.user_id, full_name: user.full_name };
-    });
+    })
+    .concat({ email: ownUser.email, id: ownUser.user_id, full_name: ownUser.full_name });
 
 // TODO type: `string | NamedUser[]` is a bit confusing.
 type DataFromNarrow = {|
@@ -123,12 +123,12 @@ type DataFromNarrow = {|
 const extractTypeToAndSubjectFromNarrow = (
   narrow: Narrow,
   usersByEmail: Map<string, User>,
-  ownEmail: string,
+  ownUser: User,
 ): DataFromNarrow => {
   if (isPrivateOrGroupNarrow(narrow)) {
     return {
       type: 'private',
-      display_recipient: mapEmailsToUsers(usersByEmail, narrow, ownEmail),
+      display_recipient: mapEmailsToUsers(usersByEmail, narrow, ownUser),
       subject: '',
     };
   } else if (isStreamNarrow(narrow)) {
@@ -163,7 +163,7 @@ export const addToOutbox = (narrow: Narrow, content: string) => async (
   dispatch(
     messageSendStart({
       isSent: false,
-      ...extractTypeToAndSubjectFromNarrow(narrow, getUsersByEmail(state), ownUser.email),
+      ...extractTypeToAndSubjectFromNarrow(narrow, getUsersByEmail(state), ownUser),
       markdownContent: content,
       content: getContentPreview(content, state),
       timestamp: localTime,
