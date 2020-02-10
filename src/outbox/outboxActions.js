@@ -104,14 +104,16 @@ export const sendOutbox = () => async (dispatch: Dispatch, getState: GetState) =
   dispatch(toggleOutboxSending(false));
 };
 
-const mapEmailsToUsers = (usersByEmail, narrow, ownUser) =>
-  narrow[0].operand
-    .split(',')
-    .map(item => {
-      const user = usersByEmail.get(item) || NULL_USER;
-      return { email: item, id: user.user_id, full_name: user.full_name };
-    })
-    .concat({ email: ownUser.email, id: ownUser.user_id, full_name: ownUser.full_name });
+const mapEmailsToUsers = (usersByEmail, narrow, ownUser) => {
+  const emails = narrow[0].operand.split(',');
+  const result = [];
+  for (const email of emails) {
+    const user = usersByEmail.get(email) || NULL_USER;
+    result.push({ email, id: user.user_id, full_name: user.full_name });
+  }
+  result.push({ email: ownUser.email, id: ownUser.user_id, full_name: ownUser.full_name });
+  return result;
+};
 
 // TODO type: `string | NamedUser[]` is a bit confusing.
 type DataFromNarrow = {|
