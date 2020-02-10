@@ -24,7 +24,6 @@ import { getUsersByEmail, getOwnUser } from '../users/userSelectors';
 import { getUsersAndWildcards } from '../users/userHelpers';
 import { isStreamNarrow, isPrivateOrGroupNarrow } from '../utils/narrow';
 import progressiveTimeout from '../utils/progressiveTimeout';
-import { NULL_USER } from '../nullObjects';
 
 export const messageSendStart = (outbox: Outbox): Action => ({
   type: MESSAGE_SEND_START,
@@ -160,28 +159,31 @@ const getContentPreview = (content: string, state: GlobalState): string => {
   }
 };
 
+const constructOutboxMessage = (narrow: Narrow, content: string, state: GlobalState): Outbox => {
+  const localTime = Math.round(new Date().getTime() / 1000);
+  const ownUser = getOwnUser(state);
+  const usersByEmail = getUsersByEmail(state);
+  return {
+    isSent: false,
+    ...extractTypeToAndSubjectFromNarrow(narrow, usersByEmail, ownUser),
+    markdownContent: content,
+    content: getContentPreview(content, state),
+    timestamp: localTime,
+    id: localTime,
+    sender_full_name: ownUser.full_name,
+    sender_email: ownUser.email,
+    avatar_url: ownUser.avatar_url,
+    isOutbox: true,
+    reactions: [],
+  };
+};
+
 export const addToOutbox = (narrow: Narrow, content: string) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
   const state = getState();
-  const ownUser = getOwnUser(state);
-
-  const localTime = Math.round(new Date().getTime() / 1000);
-  dispatch(
-    messageSendStart({
-      isSent: false,
-      ...extractTypeToAndSubjectFromNarrow(narrow, getUsersByEmail(state), ownUser),
-      markdownContent: content,
-      content: getContentPreview(content, state),
-      timestamp: localTime,
-      id: localTime,
-      sender_full_name: ownUser.full_name,
-      sender_email: ownUser.email,
-      avatar_url: ownUser.avatar_url,
-      isOutbox: true,
-      reactions: [],
-    }),
-  );
+  const message = constructOutboxMessage(narrow, content, state);
+  dispatch(messageSendStart(message));
   dispatch(sendOutbox());
 };
