@@ -20,7 +20,7 @@ import {
 } from '../actionConstants';
 import { getAuth } from '../selectors';
 import * as api from '../api';
-import { getSelfUserDetail, getUsersByEmail } from '../users/userSelectors';
+import { getUsersByEmail, getOwnUser } from '../users/userSelectors';
 import { getUsersAndWildcards } from '../users/userHelpers';
 import { isStreamNarrow, isPrivateOrGroupNarrow } from '../utils/narrow';
 import progressiveTimeout from '../utils/progressiveTimeout';
@@ -157,20 +157,20 @@ export const addToOutbox = (narrow: Narrow, content: string) => async (
   getState: GetState,
 ) => {
   const state = getState();
-  const userDetail = getSelfUserDetail(state);
+  const ownUser = getOwnUser(state);
 
   const localTime = Math.round(new Date().getTime() / 1000);
   dispatch(
     messageSendStart({
       isSent: false,
-      ...extractTypeToAndSubjectFromNarrow(narrow, getUsersByEmail(state), userDetail.email),
+      ...extractTypeToAndSubjectFromNarrow(narrow, getUsersByEmail(state), ownUser.email),
       markdownContent: content,
       content: getContentPreview(content, state),
       timestamp: localTime,
       id: localTime,
-      sender_full_name: userDetail.full_name,
-      sender_email: userDetail.email,
-      avatar_url: userDetail.avatar_url,
+      sender_full_name: ownUser.full_name,
+      sender_email: ownUser.email,
+      avatar_url: ownUser.avatar_url,
       isOutbox: true,
       reactions: [],
     }),
