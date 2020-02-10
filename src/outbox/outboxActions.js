@@ -108,7 +108,13 @@ const mapEmailsToUsers = (usersByEmail, narrow, ownUser) => {
   const emails = narrow[0].operand.split(',');
   const result = [];
   for (const email of emails) {
-    const user = usersByEmail.get(email) || NULL_USER;
+    const user = usersByEmail.get(email);
+    if (!user) {
+      // If we have the user on a PMs screen where we don't actually know
+      // about one of the users in the conversation, nothing good can
+      // happen; bail.  (The most likely way this could happen is #3764.)
+      throw new Error('missing user for recipient, skipping send');
+    }
     result.push({ email, id: user.user_id, full_name: user.full_name });
   }
   result.push({ email: ownUser.email, id: ownUser.user_id, full_name: ownUser.full_name });
