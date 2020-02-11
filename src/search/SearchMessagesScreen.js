@@ -49,6 +49,9 @@ class SearchMessagesScreen extends PureComponent<Props, State> {
       0,
       false,
     );
+
+    // TODO: on rebasing atop #3868, messageFetchComplete etc. will go here
+
     return messages;
   };
 
