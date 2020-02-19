@@ -8,13 +8,13 @@ import { connect } from '../react-redux';
 import styles, { BRAND_COLOR } from '../styles';
 import Title from '../title/Title';
 import NavButton from './NavButton';
-import { DEFAULT_TITLE_BACKGROUND_COLOR, getTitleBackgroundColor } from '../title/titleSelectors';
 import { foregroundColorFromBackground } from '../utils/color';
 import { navigateBack } from '../actions';
 import { ExtraButton, InfoButton } from '../title-buttons/titleButtonFromNarrow';
+import { getSubscriptionColorForNarrow } from '../subscriptions/subscriptionSelectors';
 
 type SelectorProps = {|
-  backgroundColor: string,
+  subscriptionColor: string | null,
 |};
 
 type Props = $ReadOnly<{|
@@ -26,11 +26,10 @@ type Props = $ReadOnly<{|
 
 class ChatNavBar extends PureComponent<Props> {
   render() {
-    const { dispatch, backgroundColor, narrow } = this.props;
+    const { dispatch, subscriptionColor, narrow } = this.props;
+    const backgroundColor = subscriptionColor ?? 'transparent';
     const color =
-      backgroundColor === DEFAULT_TITLE_BACKGROUND_COLOR
-        ? BRAND_COLOR
-        : foregroundColorFromBackground(backgroundColor);
+      subscriptionColor !== null ? foregroundColorFromBackground(subscriptionColor) : BRAND_COLOR;
 
     return (
       <View style={[styles.navBar, { backgroundColor }]}>
@@ -50,5 +49,5 @@ class ChatNavBar extends PureComponent<Props> {
 }
 
 export default connect<SelectorProps, _, _>((state, props) => ({
-  backgroundColor: getTitleBackgroundColor(state, props.narrow),
+  subscriptionColor: getSubscriptionColorForNarrow(state, props.narrow),
 }))(ChatNavBar);
