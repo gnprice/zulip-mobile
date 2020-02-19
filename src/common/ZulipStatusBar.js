@@ -4,17 +4,16 @@ import React, { PureComponent } from 'react';
 import { Platform, StatusBar, View } from 'react-native';
 import Color from 'color';
 
-import type { Dimensions, Narrow, Orientation, Subscription, ThemeName, Dispatch } from '../types';
+import type { Dimensions, Narrow, Orientation, ThemeName, Dispatch } from '../types';
 import { connect } from '../react-redux';
-import { DEFAULT_TITLE_BACKGROUND_COLOR, titleBackgroundColor } from '../title/titleSelectors';
 import { foregroundColorFromBackground } from '../utils/color';
 import { getSession, getSettings } from '../selectors';
-import { getSubscriptionsByName } from '../subscriptions/subscriptionSelectors';
+import { getSubscriptionColorForNarrow } from '../subscriptions/subscriptionSelectors';
 
 type BarStyle = $PropertyType<$PropertyType<StatusBar, 'props'>, 'barStyle'>;
 
 export const getStatusBarColor = (backgroundColor: string, theme: ThemeName): string =>
-  backgroundColor === DEFAULT_TITLE_BACKGROUND_COLOR
+  backgroundColor === 'transparent'
     ? theme === 'night'
       ? 'hsl(212, 28%, 18%)'
       : 'white'
@@ -28,7 +27,8 @@ export const getStatusBarStyle = (statusBarColor: string): BarStyle =>
 type SelectorProps = $ReadOnly<{|
   orientation: Orientation,
   safeAreaInsets: Dimensions,
-  subscriptionsByName: Map<string, Subscription>,
+  subscriptionColor: string | null,
+
   theme: ThemeName,
 |}>;
 
@@ -55,9 +55,8 @@ class ZulipStatusBar extends PureComponent<Props> {
   };
 
   render() {
-    const { theme, hidden, narrow, subscriptionsByName, safeAreaInsets, orientation } = this.props;
-    const backgroundColor =
-      this.props.backgroundColor ?? titleBackgroundColor(narrow, subscriptionsByName);
+    const { theme, hidden, subscriptionColor, safeAreaInsets, orientation } = this.props;
+    const backgroundColor = this.props.backgroundColor ?? subscriptionColor ?? 'transparent';
     const style = { height: hidden ? 0 : safeAreaInsets.top, backgroundColor };
     const statusBarColor = getStatusBarColor(backgroundColor, theme);
     return (
@@ -79,6 +78,6 @@ class ZulipStatusBar extends PureComponent<Props> {
 export default connect<SelectorProps, _, _>((state, props) => ({
   orientation: getSession(state).orientation,
   safeAreaInsets: getSession(state).safeAreaInsets,
-  subscriptionsByName: getSubscriptionsByName(state),
+  subscriptionColor: props.narrow ? getSubscriptionColorForNarrow(state, props.narrow) : null,
   theme: getSettings(state).theme,
 }))(ZulipStatusBar);
