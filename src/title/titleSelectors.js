@@ -1,7 +1,10 @@
 /* @flow strict-local */
 import type { Narrow, GlobalState, Subscription } from '../types';
 import { isStreamOrTopicNarrow } from '../utils/narrow';
-import { getSubscriptionsByName } from '../subscriptions/subscriptionSelectors';
+import {
+  getSubscriptionsByName,
+  getSubscriptionForNarrow,
+} from '../subscriptions/subscriptionSelectors';
 
 export const DEFAULT_TITLE_BACKGROUND_COLOR = 'transparent';
 
@@ -23,6 +26,7 @@ export const titleBackgroundColor = (
  * Otherwise, it takes a default value.
  */
 export const getTitleBackgroundColor = (state: GlobalState, narrow?: Narrow) => {
+  const subscription = narrow && getSubscriptionForNarrow(state, narrow);
   const subscriptionsByName = getSubscriptionsByName(state);
   return titleBackgroundColor(narrow, subscriptionsByName);
 };

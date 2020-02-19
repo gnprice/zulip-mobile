@@ -9,7 +9,10 @@ import { connect } from '../react-redux';
 import { DEFAULT_TITLE_BACKGROUND_COLOR, titleBackgroundColor } from '../title/titleSelectors';
 import { foregroundColorFromBackground } from '../utils/color';
 import { getSession, getSettings } from '../selectors';
-import { getSubscriptionsByName } from '../subscriptions/subscriptionSelectors';
+import {
+  getSubscriptionsByName,
+  getSubscriptionForNarrow,
+} from '../subscriptions/subscriptionSelectors';
 
 type BarStyle = $PropertyType<$PropertyType<StatusBar, 'props'>, 'barStyle'>;
 
@@ -28,7 +31,7 @@ export const getStatusBarStyle = (statusBarColor: string): BarStyle =>
 type SelectorProps = $ReadOnly<{|
   orientation: Orientation,
   safeAreaInsets: Dimensions,
-  subscriptionsByName: Map<string, Subscription>,
+  subscription: Subscription | void,
   theme: ThemeName,
 |}>;
 
@@ -79,6 +82,6 @@ class ZulipStatusBar extends PureComponent<Props> {
 export default connect<SelectorProps, _, _>((state, props) => ({
   orientation: getSession(state).orientation,
   safeAreaInsets: getSession(state).safeAreaInsets,
-  subscriptionsByName: getSubscriptionsByName(state),
+  subscription: props.narrow && getSubscriptionForNarrow(state, props.narrow),
   theme: getSettings(state).theme,
 }))(ZulipStatusBar);
