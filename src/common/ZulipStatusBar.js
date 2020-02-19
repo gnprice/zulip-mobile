@@ -4,11 +4,12 @@ import React, { PureComponent } from 'react';
 import { Platform, StatusBar, View } from 'react-native';
 import Color from 'color';
 
-import type { Dimensions, GlobalState, Narrow, Orientation, ThemeName, Dispatch } from '../types';
-import { connectFlowFixMe } from '../react-redux';
-import { DEFAULT_TITLE_BACKGROUND_COLOR, getTitleBackgroundColor } from '../title/titleSelectors';
+import type { Dimensions, Narrow, Orientation, Subscription, ThemeName, Dispatch } from '../types';
+import { connect } from '../react-redux';
+import { DEFAULT_TITLE_BACKGROUND_COLOR, titleBackgroundColor } from '../title/titleSelectors';
 import { foregroundColorFromBackground } from '../utils/color';
 import { getSession, getSettings } from '../selectors';
+import { getSubscriptionsByName } from '../subscriptions/subscriptionSelectors';
 
 type BarStyle = $PropertyType<$PropertyType<StatusBar, 'props'>, 'barStyle'>;
 
@@ -28,7 +29,9 @@ type Props = $ReadOnly<{
   dispatch: Dispatch,
   hidden: boolean,
   theme: ThemeName,
-  backgroundColor: string,
+  backgroundColor?: string,
+  narrow?: Narrow,
+  subscriptionsByName: Map<string, Subscription>,
   safeAreaInsets: Dimensions,
   orientation: Orientation,
 }>;
@@ -47,7 +50,9 @@ class ZulipStatusBar extends PureComponent<Props> {
   };
 
   render() {
-    const { theme, backgroundColor, hidden, safeAreaInsets, orientation } = this.props;
+    const { theme, hidden, narrow, subscriptionsByName, safeAreaInsets, orientation } = this.props;
+    const backgroundColor =
+      this.props.backgroundColor ?? titleBackgroundColor(narrow, subscriptionsByName);
     const style = { height: hidden ? 0 : safeAreaInsets.top, backgroundColor };
     const statusBarColor = getStatusBarColor(backgroundColor, theme);
     return (
@@ -66,14 +71,9 @@ class ZulipStatusBar extends PureComponent<Props> {
   }
 }
 
-export default connectFlowFixMe(
-  (state: GlobalState, props: { backgroundColor?: string, narrow?: Narrow }) => ({
-    safeAreaInsets: getSession(state).safeAreaInsets,
-    theme: getSettings(state).theme,
-    backgroundColor:
-      props.backgroundColor !== undefined
-        ? props.backgroundColor
-        : getTitleBackgroundColor(state, props.narrow),
-    orientation: getSession(state).orientation,
-  }),
-)(ZulipStatusBar);
+export default connect(state => ({
+  safeAreaInsets: getSession(state).safeAreaInsets,
+  theme: getSettings(state).theme,
+  subscriptionsByName: getSubscriptionsByName(state),
+  orientation: getSession(state).orientation,
+}))(ZulipStatusBar);
