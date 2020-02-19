@@ -25,15 +25,20 @@ export const getStatusBarStyle = (statusBarColor: string): BarStyle =>
     ? 'light-content'
     : 'dark-content';
 
-type Props = $ReadOnly<{
-  dispatch: Dispatch,
-  hidden: boolean,
+type SelectorProps = $ReadOnly<{|
+  orientation: Orientation,
+  safeAreaInsets: Dimensions,
+  subscriptionsByName: Map<string, Subscription>,
   theme: ThemeName,
+|}>;
+
+type Props = $ReadOnly<{
   backgroundColor?: string,
   narrow?: Narrow,
-  subscriptionsByName: Map<string, Subscription>,
-  safeAreaInsets: Dimensions,
-  orientation: Orientation,
+  hidden: boolean,
+
+  dispatch: Dispatch,
+  ...SelectorProps,
 }>;
 
 /**
@@ -71,9 +76,9 @@ class ZulipStatusBar extends PureComponent<Props> {
   }
 }
 
-export default connect(state => ({
-  safeAreaInsets: getSession(state).safeAreaInsets,
-  theme: getSettings(state).theme,
-  subscriptionsByName: getSubscriptionsByName(state),
+export default connect<SelectorProps, _, _>((state, props) => ({
   orientation: getSession(state).orientation,
+  safeAreaInsets: getSession(state).safeAreaInsets,
+  subscriptionsByName: getSubscriptionsByName(state),
+  theme: getSettings(state).theme,
 }))(ZulipStatusBar);
