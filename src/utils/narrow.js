@@ -205,6 +205,12 @@ export const isTopicNarrow = (narrow?: Narrow): boolean =>
 export const isStreamOrTopicNarrow = (narrow?: Narrow): boolean =>
   !!narrow && caseNarrowDefault(narrow, { stream: () => true, topic: () => true }, () => false);
 
+/** The stream name if a stream or topic narrow; else null. */
+export const tryStreamNameOfNarrow = (narrow?: Narrow): string | null =>
+  narrow
+    ? caseNarrowDefault(narrow, { stream: name => name, topic: name => name }, () => null)
+    : null;
+
 export const isSearchNarrow = (narrow?: Narrow): boolean =>
   !!narrow && caseNarrowDefault(narrow, { search: () => true }, () => false);
 

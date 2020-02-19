@@ -1,6 +1,6 @@
 /* @flow strict-local */
 import type { Narrow, GlobalState, Subscription } from '../types';
-import { isStreamOrTopicNarrow } from '../utils/narrow';
+import { tryStreamNameOfNarrow } from '../utils/narrow';
 import { getSubscriptionsByName } from '../subscriptions/subscriptionSelectors';
 
 export const DEFAULT_TITLE_BACKGROUND_COLOR = 'transparent';
@@ -9,10 +9,10 @@ export const titleBackgroundColor = (
   narrow: Narrow | void,
   subscriptionsByName: Map<string, Subscription>,
 ) => {
-  if (!narrow || !isStreamOrTopicNarrow(narrow)) {
+  const streamName = tryStreamNameOfNarrow(narrow);
+  if (streamName === null) {
     return DEFAULT_TITLE_BACKGROUND_COLOR;
   }
-  const streamName = narrow[0].operand;
   return subscriptionsByName.get(streamName)?.color ?? 'gray';
 };
 
