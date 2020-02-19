@@ -8,24 +8,22 @@ import { connect } from '../react-redux';
 import styles, { BRAND_COLOR } from '../styles';
 import Title from '../title/Title';
 import NavButton from './NavButton';
-import { DEFAULT_TITLE_BACKGROUND_COLOR } from '../title/titleSelectors';
 import { foregroundColorFromBackground } from '../utils/color';
 import { navigateBack } from '../actions';
 import { ExtraButton, InfoButton } from '../title-buttons/titleButtonFromNarrow';
 
 type Props = $ReadOnly<{|
   narrow: Narrow,
-  backgroundColor: string,
+  subscriptionColor: string | null,
   dispatch: Dispatch,
 |}>;
 
 class ChatNavBar extends PureComponent<Props> {
   render() {
-    const { dispatch, backgroundColor, narrow } = this.props;
+    const { dispatch, subscriptionColor, narrow } = this.props;
+    const backgroundColor = subscriptionColor ?? 'transparent';
     const color =
-      backgroundColor === DEFAULT_TITLE_BACKGROUND_COLOR
-        ? BRAND_COLOR
-        : foregroundColorFromBackground(backgroundColor);
+      subscriptionColor === null ? BRAND_COLOR : foregroundColorFromBackground(backgroundColor);
 
     return (
       <View style={[styles.navBar, { backgroundColor }]}>
