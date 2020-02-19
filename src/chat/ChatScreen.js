@@ -13,7 +13,7 @@ import { DEFAULT_TITLE_BACKGROUND_COLOR } from '../title/titleSelectors';
 import { getSubscriptionColorForNarrow } from '../subscriptions/subscriptionSelectors';
 
 type SelectorProps = $ReadOnly<{|
-  titleBackgroundColor: string,
+  subscriptionColor: string | null,
 |}>;
 
 type Props = $ReadOnly<{|
@@ -39,7 +39,7 @@ class ChatScreen extends PureComponent<Props> {
 
   render() {
     const { styles: contextStyles } = this.context;
-    const { titleBackgroundColor } = this.props;
+    const { subscriptionColor } = this.props;
     const { narrow } = this.props.navigation.state.params;
 
     return (
@@ -47,8 +47,11 @@ class ChatScreen extends PureComponent<Props> {
         <View style={[contextStyles.screen, styles.reverse]}>
           <Chat narrow={narrow} />
           <OfflineNotice />
-          <ChatNavBar narrow={narrow} backgroundColor={titleBackgroundColor} />
-          <ZulipStatusBar backgroundColor={titleBackgroundColor} />
+          <ChatNavBar
+            narrow={narrow}
+            backgroundColor={subscriptionColor ?? DEFAULT_TITLE_BACKGROUND_COLOR}
+          />
+          <ZulipStatusBar backgroundColor={subscriptionColor ?? undefined} />
         </View>
       </ActionSheetProvider>
     );
@@ -56,7 +59,5 @@ class ChatScreen extends PureComponent<Props> {
 }
 
 export default connect<SelectorProps, _, _>((state, props) => ({
-  titleBackgroundColor:
-    getSubscriptionColorForNarrow(state, props.navigation.state.params.narrow)
-    ?? DEFAULT_TITLE_BACKGROUND_COLOR,
+  subscriptionColor: getSubscriptionColorForNarrow(state, props.navigation.state.params.narrow),
 }))(ChatScreen);
