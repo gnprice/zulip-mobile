@@ -26,11 +26,19 @@ type Props = $ReadOnly<{|
 |}>;
 
 class ChatNavBar extends PureComponent<Props> {
+  getBackgroundColor(): string {
+    const streamName = tryStreamNameOfNarrow(this.props.narrow);
+    if (streamName === null) {
+      return 'transparent';
+    }
+
+    const subscription = this.props.subscriptionsByName.get(streamName);
+    return subscription?.color ?? 'gray';
+  }
+
   render() {
-    const { dispatch, subscriptionsByName, narrow } = this.props;
-    const streamName = tryStreamNameOfNarrow(narrow);
-    const backgroundColor =
-      streamName === null ? 'transparent' : subscriptionsByName.get(streamName)?.color ?? 'gray';
+    const { dispatch, narrow } = this.props;
+    const backgroundColor = this.getBackgroundColor();
     const color =
       backgroundColor === 'transparent'
         ? BRAND_COLOR
