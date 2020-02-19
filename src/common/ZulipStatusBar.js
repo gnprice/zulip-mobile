@@ -6,14 +6,13 @@ import Color from 'color';
 
 import type { Dimensions, Orientation, ThemeName, Dispatch } from '../types';
 import { connect } from '../react-redux';
-import { DEFAULT_TITLE_BACKGROUND_COLOR } from '../title/titleSelectors';
 import { foregroundColorFromBackground } from '../utils/color';
 import { getSession, getSettings } from '../selectors';
 
 type BarStyle = $PropertyType<$PropertyType<StatusBar, 'props'>, 'barStyle'>;
 
 export const getStatusBarColor = (backgroundColor: string, theme: ThemeName): string =>
-  backgroundColor === DEFAULT_TITLE_BACKGROUND_COLOR
+  backgroundColor === 'transparent'
     ? theme === 'night'
       ? 'hsl(212, 28%, 18%)'
       : 'white'
@@ -53,7 +52,7 @@ class ZulipStatusBar extends PureComponent<Props> {
 
   render() {
     const { theme, hidden, safeAreaInsets, orientation } = this.props;
-    const backgroundColor = this.props.backgroundColor ?? DEFAULT_TITLE_BACKGROUND_COLOR;
+    const backgroundColor = this.props.backgroundColor ?? 'transparent';
     const style = { height: hidden ? 0 : safeAreaInsets.top, backgroundColor };
     const statusBarColor = getStatusBarColor(backgroundColor, theme);
     return (
