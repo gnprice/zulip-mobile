@@ -8,20 +8,15 @@ import { connect } from '../react-redux';
 import styles, { BRAND_COLOR } from '../styles';
 import Title from '../title/Title';
 import NavButton from './NavButton';
-import { DEFAULT_TITLE_BACKGROUND_COLOR, getTitleBackgroundColor } from '../title/titleSelectors';
+import { DEFAULT_TITLE_BACKGROUND_COLOR } from '../title/titleSelectors';
 import { foregroundColorFromBackground } from '../utils/color';
 import { navigateBack } from '../actions';
 import { ExtraButton, InfoButton } from '../title-buttons/titleButtonFromNarrow';
 
-type SelectorProps = {|
-  backgroundColor: string,
-|};
-
 type Props = $ReadOnly<{|
   narrow: Narrow,
-
+  backgroundColor: string,
   dispatch: Dispatch,
-  ...SelectorProps,
 |}>;
 
 class ChatNavBar extends PureComponent<Props> {
@@ -49,6 +44,4 @@ class ChatNavBar extends PureComponent<Props> {
   }
 }
 
-export default connect<SelectorProps, _, _>((state, props) => ({
-  backgroundColor: getTitleBackgroundColor(state, props.narrow),
-}))(ChatNavBar);
+export default connect<{||}, _, _>()(ChatNavBar);
