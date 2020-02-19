@@ -2,7 +2,7 @@
 import { createSelector } from 'reselect';
 
 import type { GlobalState, Narrow, Selector, Stream, Subscription } from '../types';
-import { isStreamOrTopicNarrow } from '../utils/narrow';
+import { isStreamOrTopicNarrow, tryStreamNameOfNarrow } from '../utils/narrow';
 import { getSubscriptions, getStreams } from '../directSelectors';
 
 /**
@@ -35,6 +35,17 @@ export const getSubscriptionsByName: Selector<Map<string, Subscription>> = creat
 export const getSubscriptionColorForName = (state: GlobalState, streamName: string): string => {
   const subscription = getSubscriptionsByName(state).get(streamName);
   return subscription?.color ?? 'gray';
+};
+
+export const getSubscriptionColorForNarrow = (
+  state: GlobalState,
+  narrow: Narrow,
+): string | null => {
+  const streamName = tryStreamNameOfNarrow(narrow);
+  if (streamName === null) {
+    return null;
+  }
+  return getSubscriptionColorForName(state, streamName);
 };
 
 export const getIsActiveStreamSubscribed: Selector<boolean, Narrow> = createSelector(
