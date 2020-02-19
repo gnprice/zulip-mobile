@@ -6,15 +6,15 @@ import Color from 'color';
 
 import type { Dimensions, Narrow, Orientation, Subscription, ThemeName, Dispatch } from '../types';
 import { connect } from '../react-redux';
-import { DEFAULT_TITLE_BACKGROUND_COLOR, titleBackgroundColor } from '../title/titleSelectors';
 import { foregroundColorFromBackground } from '../utils/color';
 import { getSession, getSettings } from '../selectors';
 import { getSubscriptionsByName } from '../subscriptions/subscriptionSelectors';
+import { tryStreamNameOfNarrow } from '../utils/narrow';
 
 type BarStyle = $PropertyType<$PropertyType<StatusBar, 'props'>, 'barStyle'>;
 
 export const getStatusBarColor = (backgroundColor: string, theme: ThemeName): string =>
-  backgroundColor === DEFAULT_TITLE_BACKGROUND_COLOR
+  backgroundColor === 'transparent'
     ? theme === 'night'
       ? 'hsl(212, 28%, 18%)'
       : 'white'
@@ -49,10 +49,23 @@ class ZulipStatusBar extends PureComponent<Props> {
     hidden: false,
   };
 
+  getBackgroundColor(): string {
+    if (this.props.backgroundColor !== undefined) {
+      return this.props.backgroundColor;
+    }
+
+    const streamName = tryStreamNameOfNarrow(this.props.narrow);
+    if (streamName === null) {
+      return 'transparent';
+    }
+
+    const subscription = this.props.subscriptionsByName.get(streamName);
+    return subscription?.color ?? 'gray';
+  }
+
   render() {
-    const { theme, hidden, narrow, subscriptionsByName, safeAreaInsets, orientation } = this.props;
-    const backgroundColor =
-      this.props.backgroundColor ?? titleBackgroundColor(narrow, subscriptionsByName);
+    const { theme, hidden, safeAreaInsets, orientation } = this.props;
+    const backgroundColor = this.getBackgroundColor();
     const style = { height: hidden ? 0 : safeAreaInsets.top, backgroundColor };
     const statusBarColor = getStatusBarColor(backgroundColor, theme);
     return (
