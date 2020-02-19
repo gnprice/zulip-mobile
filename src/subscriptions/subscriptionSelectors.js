@@ -32,6 +32,11 @@ export const getSubscriptionsByName: Selector<Map<string, Subscription>> = creat
   subscriptions => new Map(subscriptions.map(subscription => [subscription.name, subscription])),
 );
 
+export const getSubscriptionColorForName = (state: GlobalState, streamName: string): string => {
+  const subscription = getSubscriptionsByName(state).get(streamName);
+  return subscription?.color ?? 'gray';
+};
+
 export const getIsActiveStreamSubscribed: Selector<boolean, Narrow> = createSelector(
   (state, narrow) => narrow,
   state => getSubscriptions(state),
