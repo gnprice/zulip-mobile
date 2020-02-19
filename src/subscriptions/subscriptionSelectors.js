@@ -2,7 +2,7 @@
 import { createSelector } from 'reselect';
 
 import type { GlobalState, Narrow, Selector, Stream, Subscription } from '../types';
-import { isStreamOrTopicNarrow } from '../utils/narrow';
+import { isStreamOrTopicNarrow, caseNarrowDefault } from '../utils/narrow';
 import { getSubscriptions, getStreams } from '../directSelectors';
 
 /**
@@ -31,6 +31,28 @@ export const getSubscriptionsByName: Selector<Map<string, Subscription>> = creat
   getSubscriptions,
   subscriptions => new Map(subscriptions.map(subscription => [subscription.name, subscription])),
 );
+
+/**
+ * The corresponding subscription for a narrow's stream, if any.
+ *
+ * Returns void if the narrow isn't a stream or topic narrow, or if we have
+ * no subscription for the narrow's stream -- which is normal if the user is
+ * narrowed to a stream they're not subscribed to.
+ */
+export const getSubscriptionForNarrow = (
+  state: GlobalState,
+  narrow: Narrow,
+): Subscription | void => {
+  const subscriptionsByName = getSubscriptionsByName(state);
+  return caseNarrowDefault(
+    narrow,
+    {
+      stream: name => subscriptionsByName.get(name),
+      topic: name => subscriptionsByName.get(name),
+    },
+    () => undefined,
+  );
+};
 
 export const getIsActiveStreamSubscribed: Selector<boolean, Narrow> = createSelector(
   (state, narrow) => narrow,
