@@ -25,9 +25,7 @@ export type ImageEmojiType = $ReadOnly<{|
   source_url: string,
 |}>;
 
-export type RealmEmojiById = $ReadOnly<{
-  [id: string]: ImageEmojiType,
-}>;
+export type RealmEmojiById = $ReadOnly<{ [id: string]: ImageEmojiType, ... }>;
 
 export type RealmFilter = [string, string, number];
 
@@ -441,17 +439,14 @@ export type Submessage = $ReadOnly<{|
 export type Message = $ReadOnly<{
   /** Our own flag; if true, really type `Outbox`. */
   isOutbox: false,
-
   /**
    * These don't appear in `message` events, but they appear in a `/message`
    * response when a search is involved.
    */
   match_content?: string,
   match_subject?: string,
-
   /** Obsolete? Gone in server commit 1.6.0~1758 . */
   sender_domain: string,
-
   /**
    * The `flags` story is a bit complicated:
    *  * Absent in `event.message` for a `message` event... but instead
@@ -463,13 +458,13 @@ export type Message = $ReadOnly<{
    *    separate subtree `state.flags`.
    */
   flags?: $ReadOnlyArray<string>,
-
   /** The rest are believed to really appear in `message` events. */
   avatar_url: string | null,
   client: string,
   content: string,
   content_type: 'text/html' | 'text/markdown',
-  display_recipient: $FlowFixMe, // `string` for type stream, else PmRecipientUser[].
+  // `string` for type stream, else PmRecipientUser[].
+  display_recipient: $FlowFixMe,
   edit_history: $ReadOnlyArray<MessageEdit>,
   gravatar_hash: string,
   id: number,
@@ -482,13 +477,13 @@ export type Message = $ReadOnly<{
   sender_id: number,
   sender_realm_str: string,
   sender_short_name: string,
-  stream_id: number, // FixMe: actually only for type `stream`, else absent.
+  // FixMe: actually only for type `stream`, else absent.
+  stream_id: number,
   subject: string,
   subject_links: $ReadOnlyArray<string>,
-
   /** Older servers omit this; when omitted, equivalent to empty array. */
   submessages?: $ReadOnlyArray<Submessage>,
-
   timestamp: number,
   type: 'stream' | 'private',
+  ...
 }>;

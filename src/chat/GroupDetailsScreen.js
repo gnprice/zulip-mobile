@@ -10,7 +10,7 @@ import UserItem from '../users/UserItem';
 import { navigateToAccountDetails } from '../actions';
 
 type Props = $ReadOnly<{|
-  navigation: NavigationScreenProp<{ params: {| recipients: UserOrBot[] |} }>,
+  navigation: NavigationScreenProp<{ params: {| recipients: UserOrBot[] |}, ... }>,
   dispatch: Dispatch,
 |}>;
 

@@ -5,6 +5,7 @@ export type Language = {
   locale: string,
   name: string,
   nativeName: string,
+  ...
 };
 
 /**

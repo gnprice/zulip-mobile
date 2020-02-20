@@ -16,7 +16,7 @@ type SelectorProps = $ReadOnly<{|
 |}>;
 
 type Props = $ReadOnly<{|
-  navigation: NavigationScreenProp<{ params: {| streamId: number |} }>,
+  navigation: NavigationScreenProp<{ params: {| streamId: number |}, ... }>,
 
   dispatch: Dispatch,
   ...SelectorProps,

@@ -99,6 +99,7 @@ type MessageListEventError = {|
     line: number,
     column: number,
     error: mixed,
+    ...
   },
 |};
 
@@ -127,6 +128,7 @@ type Props = $ReadOnly<{
   messages: $ReadOnlyArray<Message | Outbox>,
   narrow: Narrow,
   showActionSheetWithOptions: ShowActionSheetWithOptions,
+  ...
 }>;
 
 const fetchMore = (props: Props, event: MessageListEventScroll) => {

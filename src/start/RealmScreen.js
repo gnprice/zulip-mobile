@@ -15,12 +15,10 @@ type SelectorProps = {|
 |};
 
 type Props = $ReadOnly<{|
-  navigation: NavigationScreenProp<{
-    params: ?{|
-      realm: string | void,
-      initial?: boolean,
-    |},
-  }>,
+  navigation: NavigationScreenProp<{ params: ?{|
+    realm: string | void,
+    initial?: boolean,
+  |}, ... }>,
 
   dispatch: Dispatch,
   ...SelectorProps,

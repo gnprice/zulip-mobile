@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
 type Props = $ReadOnly<{|
   partialAuth: Auth,
   dispatch: Dispatch,
-  navigation: NavigationScreenProp<{ params: {| requireEmailFormat: boolean |} }>,
+  navigation: NavigationScreenProp<{ params: {| requireEmailFormat: boolean |}, ... }>,
 |}>;
 
 type State = {|

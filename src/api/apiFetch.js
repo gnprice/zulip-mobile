@@ -10,7 +10,7 @@ import { makeErrorFromApi } from './apiErrors';
 
 const apiVersion = 'api/v1';
 
-export const objectToParams = (obj: {}) => {
+export const objectToParams = (obj: {...}) => {
   const newObj = {};
   Object.keys(obj).forEach(key => {
     if (Array.isArray(obj[key])) {
@@ -26,7 +26,7 @@ export const objectToParams = (obj: {}) => {
 
 export const getFetchParams = (auth: Auth, params: { ... } = {}): { ... } => {
   // $FlowFixMe This is purely a no-op, and Flow even knows that. :-/
-  const { body } = (params: { body?: mixed });
+  const { body } = (params: { body?: mixed, ... });
   const contentType =
     body instanceof FormData
       ? 'multipart/form-data'
@@ -42,7 +42,7 @@ export const getFetchParams = (auth: Auth, params: { ... } = {}): { ... } => {
   };
 };
 
-export const fetchWithAuth = async (auth: Auth, url: string, params: {} = {}) => {
+export const fetchWithAuth = async (auth: Auth, url: string, params: {...} = {}) => {
   if (!isValidUrl(url)) {
     throw new Error(`Invalid url ${url}`);
   }
@@ -50,13 +50,13 @@ export const fetchWithAuth = async (auth: Auth, url: string, params: {} = {}) =>
   return fetch(url, getFetchParams(auth, params));
 };
 
-export const apiFetch = async (auth: Auth, route: string, params: {} = {}) =>
+export const apiFetch = async (auth: Auth, route: string, params: {...} = {}) =>
   fetchWithAuth(auth, `${auth.realm}/${apiVersion}/${route}`, params);
 
 export const apiCall = async (
   auth: Auth,
   route: string,
-  params: {} = {},
+  params: {...} = {},
   isSilent: boolean = false,
 ) => {
   try {

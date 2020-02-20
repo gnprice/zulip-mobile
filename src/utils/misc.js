@@ -8,7 +8,7 @@ export const caseInsensitiveCompareFunc = (a: string, b: string): number =>
 export const numberWithSeparators = (value: number | string): string =>
   value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-export function deeperMerge<K, V>(obj1: { [K]: V }, obj2: { [K]: V }): { [K]: V } {
+export function deeperMerge<K, V>(obj1: { [K]: V, ... }, obj2: { [K]: V, ... }): { [K]: V, ... } {
   const mergedKeys = Array.from(new Set([...Object.keys(obj1), ...Object.keys(obj2)]));
   return objectFromEntries(
     mergedKeys.map(key =>
@@ -27,7 +27,7 @@ export function deeperMerge<K, V>(obj1: { [K]: V }, obj2: { [K]: V }): { [K]: V 
 export const initialsFromString = (name: string): string =>
   (name.match(/\S+\s*/g) || []).map(x => x[0].toUpperCase()).join('');
 
-export function groupItemsById<T: { +id: number }>(items: T[]): { [id: number]: T } {
+export function groupItemsById<T: { +id: number, ... }>(items: T[]): { [id: number]: T, ... } {
   return objectFromEntries(items.map(item => [item.id, item]));
 }
 

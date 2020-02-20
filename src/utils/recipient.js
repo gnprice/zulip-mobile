@@ -2,7 +2,7 @@
 import type { PmRecipientUser, Message, Outbox } from '../types';
 
 // TODO types: this union is confusing
-export const normalizeRecipients = (recipients: $ReadOnlyArray<{ email: string }> | string) =>
+export const normalizeRecipients = (recipients: $ReadOnlyArray<{ email: string, ... }> | string) =>
   !Array.isArray(recipients)
     ? recipients
     : recipients
@@ -12,7 +12,7 @@ export const normalizeRecipients = (recipients: $ReadOnlyArray<{ email: string }
         .join(',');
 
 export const normalizeRecipientsSansMe = (
-  recipients: $ReadOnlyArray<{ email: string }>,
+  recipients: $ReadOnlyArray<{ email: string, ... }>,
   ownEmail: string,
 ) =>
   recipients.length === 1

@@ -43,7 +43,12 @@ export type InitialDataRealm = {|
   realm_allow_edit_history: boolean,
   realm_allow_message_deleting: boolean,
   realm_allow_message_editing: boolean,
-  realm_authentication_methods: { GitHub: true, Email: true, Google: true },
+  realm_authentication_methods: {
+    GitHub: true,
+    Email: true,
+    Google: true,
+    ...
+  },
   realm_available_video_chat_providers: string[],
   realm_bot_creation_policy: number,
   realm_bot_domain: string,
@@ -128,7 +133,7 @@ export type InitialDataSubscription = {|
 export type InitialDataUpdateDisplaySettings = {|
   default_language: string,
   emojiset: string,
-  emojiset_choices: { [string]: string },
+  emojiset_choices: { [string]: string, ... },
   high_contrast_mode: boolean,
   left_side_userlist: boolean,
   night_mode: boolean,
@@ -177,6 +182,7 @@ export type InitialDataUpdateMessageFlags = {|
     count: number,
     pms: PmsUnreadItem[],
     mentions: number[],
+    ...
   },
 |};
 

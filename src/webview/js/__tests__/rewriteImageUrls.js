@@ -14,7 +14,12 @@ describe('rewriteImageUrls', () => {
     email: 'rosencrantz+guildenstern@zulipchat.com',
   };
 
-  const rewrite = (src: string): { input: string, before: string, after: string } => {
+  const rewrite = (src: string): {
+    input: string,
+    before: string,
+    after: string,
+    ...
+  } => {
     const img = document.createElement('img');
     img.setAttribute('src', src);
     const before = img.src;

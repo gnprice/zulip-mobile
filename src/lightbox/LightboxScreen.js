@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 });
 
 type Props = $ReadOnly<{|
-  navigation: NavigationScreenProp<{ params: {| src: string, message: Message |} }>,
+  navigation: NavigationScreenProp<{ params: {| src: string, message: Message |}, ... }>,
 |}>;
 
 export default class LightboxScreen extends PureComponent<Props> {

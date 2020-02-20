@@ -23,12 +23,12 @@ import {
 } from '../utils/narrow';
 import { NULL_SUBSCRIPTION, NULL_USER } from '../nullObjects';
 
-export const getUnreadByStream: Selector<{ [number]: number }> = createSelector(
+export const getUnreadByStream: Selector<{ [number]: number, ... }> = createSelector(
   getUnreadStreams,
   getSubscriptionsById,
   getMute,
   (unreadStreams, subscriptionsById, mute) => {
-    const totals = ({}: { [number]: number });
+    const totals = ({}: { [number]: number, ... });
     unreadStreams.forEach(stream => {
       if (!totals[stream.stream_id]) {
         totals[stream.stream_id] = 0;
@@ -49,10 +49,10 @@ export const getUnreadStreamTotal: Selector<number> = createSelector(
   unreadByStream => Object.values(unreadByStream).reduce((total, x) => +x + total, 0),
 );
 
-export const getUnreadByPms: Selector<{ [number]: number }> = createSelector(
+export const getUnreadByPms: Selector<{ [number]: number, ... }> = createSelector(
   getUnreadPms,
   unreadPms => {
-    const totals = ({}: { [number]: number });
+    const totals = ({}: { [number]: number, ... });
     unreadPms.forEach(pm => {
       totals[pm.sender_id] = totals[pm.sender_id] || 0 + pm.unread_message_ids.length;
     });
@@ -65,10 +65,10 @@ export const getUnreadPmsTotal: Selector<number> = createSelector(
   unreadPms => unreadPms.reduce((total, pm) => total + pm.unread_message_ids.length, 0),
 );
 
-export const getUnreadByHuddles: Selector<{ [string]: number }> = createSelector(
+export const getUnreadByHuddles: Selector<{ [string]: number, ... }> = createSelector(
   getUnreadHuddles,
   unreadHuddles => {
-    const totals = ({}: { [string]: number });
+    const totals = ({}: { [string]: number, ... });
     unreadHuddles.forEach(huddle => {
       totals[huddle.user_ids_string] =
         totals[huddle.user_ids_string] || 0 + huddle.unread_message_ids.length;

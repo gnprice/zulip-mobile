@@ -156,7 +156,7 @@ export const activeAuthentications = (
 type Props = $ReadOnly<{|
   dispatch: Dispatch,
   realm: string,
-  navigation: NavigationScreenProp<{ params: {| serverSettings: ApiResponseServerSettings |} }>,
+  navigation: NavigationScreenProp<{ params: {| serverSettings: ApiResponseServerSettings |}, ... }>,
 |}>;
 
 let otp = '';
@@ -169,9 +169,7 @@ let otp = '';
  *
  * TODO move this to a libdef, and/or get an explicit type into upstream.
  */
-type LinkingEvent = {
-  url: string,
-};
+type LinkingEvent = { url: string, ... };
 
 class AuthScreen extends PureComponent<Props> {
   componentDidMount = () => {

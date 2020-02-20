@@ -70,7 +70,7 @@ const userOrBotProperties = ({ name: _name }) => {
 };
 
 /** Beware! These values may not be representative. */
-export const makeUser = (args: { name?: string } = {}): User =>
+export const makeUser = (args: { name?: string, ... } = {}): User =>
   deepFreeze({
     ...userOrBotProperties(args),
 
@@ -84,7 +84,7 @@ export const makeUser = (args: { name?: string } = {}): User =>
   });
 
 /** Beware! These values may not be representative. */
-export const makeCrossRealmBot = (args: { name?: string } = {}): CrossRealmBot =>
+export const makeCrossRealmBot = (args: { name?: string, ... } = {}): CrossRealmBot =>
   deepFreeze({
     ...userOrBotProperties(args),
     is_bot: true,
@@ -107,7 +107,11 @@ export const otherUser: User = makeUser({ name: 'other' });
 export const crossRealmBot: CrossRealmBot = makeCrossRealmBot({ name: 'bot' });
 
 const randStreamId: () => number = makeUniqueRandInt('stream IDs', 1000);
-export const makeStream = (args: { name?: string, description?: string } = {}): Stream => {
+export const makeStream = (args: {
+  name?: string,
+  description?: string,
+  ...
+} = {}): Stream => {
   const name = args.name !== undefined ? args.name : randString();
   const description =
     args.description !== undefined ? args.description : `On the ${randString()} of ${name}`;
@@ -177,7 +181,7 @@ const messagePropertiesFromSender = (user: User) => {
 };
 
 /** Beware! These values may not be representative. */
-export const pmMessage = (extra?: $Rest<Message, {}>): Message => {
+export const pmMessage = (extra?: $Rest<Message, {...}>): Message => {
   const baseMessage: Message = {
     ...messagePropertiesBase,
     ...messagePropertiesFromSender(otherUser),
@@ -206,7 +210,7 @@ const messagePropertiesFromStream = (stream1: Stream) => {
 };
 
 /** Beware! These values may not be representative. */
-export const streamMessage = (extra?: $Rest<Message, {}>): Message => {
+export const streamMessage = (extra?: $Rest<Message, {...}>): Message => {
   const baseMessage: Message = {
     ...messagePropertiesBase,
     ...messagePropertiesFromSender(otherUser),
@@ -227,13 +231,13 @@ const privateReduxStore = createStore(rootReducer);
 
 export const baseReduxState: GlobalState = deepFreeze(privateReduxStore.getState());
 
-export const reduxState = (extra?: $Rest<GlobalState, {}>): GlobalState =>
+export const reduxState = (extra?: $Rest<GlobalState, {...}>): GlobalState =>
   deepFreeze({
     ...baseReduxState,
     ...extra,
   });
 
-export const realmState = (extra?: $Rest<RealmState, {}>): RealmState =>
+export const realmState = (extra?: $Rest<RealmState, {...}>): RealmState =>
   deepFreeze({
     ...baseReduxState.realm,
     ...extra,
@@ -359,4 +363,4 @@ export const action = deepFreeze({
 // annotate `action` itself, because we want to keep the information of
 // which one has which specific type.)
 /* eslint-disable-next-line no-unused-expressions */
-(action: { [string]: Action });
+(action: { [string]: Action, ... });

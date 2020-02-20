@@ -19,7 +19,7 @@ export type AppStyles = $ReadOnly<{|
   ...$Call<typeof miscStyles, ThemeColors>,
 |}>;
 
-export const themeColors: { [string]: ThemeColors } = {
+export const themeColors: { [string]: ThemeColors, ... } = {
   night: {
     color: 'hsl(210, 11%, 85%)',
     backgroundColor: 'hsl(212, 28%, 18%)',

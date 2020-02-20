@@ -31,6 +31,7 @@ type Props = $ReadOnly<{
   backgroundColor: string,
   safeAreaInsets: Dimensions,
   orientation: Orientation,
+  ...
 }>;
 
 /**
@@ -67,7 +68,11 @@ class ZulipStatusBar extends PureComponent<Props> {
 }
 
 export default connectFlowFixMe(
-  (state: GlobalState, props: { backgroundColor?: string, narrow?: Narrow }) => ({
+  (state: GlobalState, props: {
+    backgroundColor?: string,
+    narrow?: Narrow,
+    ...
+  }) => ({
     safeAreaInsets: getSession(state).safeAreaInsets,
     theme: getSettings(state).theme,
     backgroundColor:

@@ -19,9 +19,9 @@ type SelectorProps = $ReadOnly<{|
 type Props = $ReadOnly<{
   email: string,
   color: string,
-
   dispatch: Dispatch,
   ...SelectorProps,
+  ...
 }>;
 
 class TitlePrivate extends PureComponent<Props> {

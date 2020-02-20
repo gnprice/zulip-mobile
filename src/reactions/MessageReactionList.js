@@ -70,7 +70,7 @@ type SelectorProps = $ReadOnly<{|
 |}>;
 
 type Props = $ReadOnly<{|
-  navigation: NavigationScreenProp<{ params: {| reactionName?: string, messageId: number |} }>,
+  navigation: NavigationScreenProp<{ params: {| reactionName?: string, messageId: number |}, ... }>,
 
   dispatch: Dispatch,
   ...SelectorProps,

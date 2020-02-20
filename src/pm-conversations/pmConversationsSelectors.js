@@ -15,8 +15,8 @@ export const getRecentConversations: Selector<PmConversationData[]> = createSele
   (
     ownEmail: string,
     messages: Message[],
-    unreadPms: { [number]: number },
-    unreadHuddles: { [string]: number },
+    unreadPms: { [number]: number, ... },
+    unreadHuddles: { [string]: number, ... },
   ): PmConversationData[] => {
     const recipients = messages.map(msg => ({
       ids: getRecipientsIds(msg.display_recipient, ownEmail),

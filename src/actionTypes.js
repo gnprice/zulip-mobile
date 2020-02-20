@@ -107,7 +107,7 @@ export type { NavigationAction } from 'react-navigation';
  */
 type RehydrateAction = {|
   type: typeof REHYDRATE,
-  payload: GlobalState | { accounts: null } | {||} | void,
+  payload: GlobalState | { accounts: null, ... } | {||} | void,
   error: mixed,
 |};
 
@@ -265,6 +265,7 @@ type EventSubscriptionRemoveAction = {|
   subscriptions: Array<{
     name: string,
     stream_id: number,
+    ...
   }>,
 |};
 
@@ -301,7 +302,7 @@ type GenericEventAction = {|
 |};
 
 type EventNewMessageAction = {|
-  ...$Diff<MessageEvent, { flags: mixed }>,
+  ...$Diff<MessageEvent, { flags: mixed, ... }>,
   type: typeof EVENT_NEW_MESSAGE,
   caughtUp: CaughtUpState,
   ownEmail: string,
@@ -362,10 +363,12 @@ type EventTypingCommon = {|
   recipients: Array<{
     user_id: number,
     email: string,
+    ...
   }>,
   sender: {
     user_id: number,
     email: string,
+    ...
   },
   time: number,
 |};
@@ -518,7 +521,7 @@ export type EventAction =
   | EventUserStatusUpdateAction
   // Dummy actions.
   | {| type: 'ignore' |}
-  | {| type: 'unknown', event: {} |};
+  | {| type: 'unknown', event: {...} |};
 
 type SettingsChangeAction = {|
   type: typeof SETTINGS_CHANGE,

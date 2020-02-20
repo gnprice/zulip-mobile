@@ -134,7 +134,7 @@ type NotificationMuddle =
   | Notification
   | null
   | void
-  | { getData: () => Notification | { zulip: Notification } };
+  | { getData: () => Notification | { zulip: Notification, ... }, ... };
 
 /** Extract the actual notification data from the wix library's wrapping (iOS only). */
 // exported for tests

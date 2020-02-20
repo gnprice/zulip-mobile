@@ -124,7 +124,12 @@ type DataFromNarrow = {|
 const extractTypeToAndSubjectFromNarrow = (
   narrow: Narrow,
   usersByEmail: Map<string, User>,
-  selfDetail: { email: string, user_id: number, full_name: string },
+  selfDetail: {
+    email: string,
+    user_id: number,
+    full_name: string,
+    ...
+  },
 ): DataFromNarrow => {
   if (isPrivateOrGroupNarrow(narrow)) {
     return {

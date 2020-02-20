@@ -36,6 +36,7 @@ export type WebViewUpdateEventReady = {|
 export type WebViewUpdateEventMessagesRead = {
   type: 'read',
   messageIds: number[],
+  ...
 };
 
 export type WebViewUpdateEvent =

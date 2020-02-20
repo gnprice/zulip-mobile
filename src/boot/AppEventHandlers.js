@@ -36,24 +36,21 @@ type NetInfoStateType =
   | 'vpn'
   | 'other';
 
-type NetInfoConnectedDetails = {
-  isConnectionExpensive: boolean,
-};
+type NetInfoConnectedDetails = { isConnectionExpensive: boolean, ... };
 
 type NetInfoState = {
   /** The type of the current connection. */
   type: NetInfoStateType,
-
   /** Whether there is an active network connection. Note that this DOES NOT
       mean that the Internet is reachable. */
   isConnected: boolean,
-
   /**
    * This actually has a more complicated type whose exact shape is dependent on
    * the value of `type`, above. (Flow could describe it, but we don't have a
    * use for it yet.)
    */
   details: null | NetInfoConnectedDetails,
+  ...
 };
 
 const styles = StyleSheet.create({

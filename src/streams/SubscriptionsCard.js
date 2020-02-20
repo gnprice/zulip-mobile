@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
 
 type SelectorProps = $ReadOnly<{|
   subscriptions: Subscription[],
-  unreadByStream: $ReadOnly<{ [number]: number }>,
+  unreadByStream: $ReadOnly<{ [number]: number, ... }>,
 |}>;
 
 type Props = $ReadOnly<{|

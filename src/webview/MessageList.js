@@ -69,7 +69,7 @@ import * as logging from '../utils/logging';
  */
 export type BackgroundData = $ReadOnly<{|
   alertWords: AlertWordsState,
-  allImageEmojiById: $ReadOnly<{ [id: string]: ImageEmojiType }>,
+  allImageEmojiById: $ReadOnly<{ [id: string]: ImageEmojiType, ... }>,
   auth: Auth,
   debug: Debug,
   flags: FlagsState,
@@ -190,12 +190,12 @@ class MessageList extends Component<Props> {
   sendUpdateEvents = (uevents: WebViewUpdateEvent[]): void => {
     if (this.webview && uevents.length > 0) {
       // $FlowFixMe This `postMessage` is undocumented; tracking as #3572.
-      const secretWebView: { postMessage: (string, string) => void } = this.webview;
+      const secretWebView: { postMessage: (string, string) => void, ... } = this.webview;
       secretWebView.postMessage(base64Utf8Encode(JSON.stringify(uevents)), '*');
     }
   };
 
-  handleMessage = (event: { +nativeEvent: { +data: string } }) => {
+  handleMessage = (event: { +nativeEvent: { +data: string, ... }, ... }) => {
     const eventData: MessageListEvent = JSON.parse(event.nativeEvent.data);
     if (eventData.type === 'ready') {
       this.sendUpdateEventsIsReady = true;

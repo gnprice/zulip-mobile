@@ -13,13 +13,13 @@ const getNavigationIndex = (state: GlobalState): number => state.nav.index;
 export const getCurrentRouteName = (state: GlobalState): string =>
   state.nav.routes[state.nav.index].routeName;
 
-export const getCurrentRouteParams: Selector<void | { narrow?: Narrow }> = createSelector(
+export const getCurrentRouteParams: Selector<void | { narrow?: Narrow, ... }> = createSelector(
   getNavigationRoutes,
   getNavigationIndex,
   (routes, index) => routes[index] && routes[index].params,
 );
 
-export const getChatScreenParams: Selector<{ narrow?: Narrow }> = createSelector(
+export const getChatScreenParams: Selector<{ narrow?: Narrow, ... }> = createSelector(
   getCurrentRouteParams,
   params => params || { narrow: undefined },
 );

@@ -10,7 +10,7 @@ import Chat from './Chat';
 import ChatNavBar from '../nav/ChatNavBar';
 
 type Props = $ReadOnly<{|
-  navigation: NavigationScreenProp<{ params: {| narrow: Narrow |} }>,
+  navigation: NavigationScreenProp<{ params: {| narrow: Narrow |}, ... }>,
 |}>;
 
 const styles = StyleSheet.create({

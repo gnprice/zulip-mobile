@@ -39,7 +39,11 @@ class UnreadCards extends PureComponent<Props> {
     const { isLoading, conversations, unreadStreamsAndTopics, ...restProps } = this.props;
     type Card =
       | UnreadStreamItem
-      | { key: 'private', data: Array<$PropertyType<PmConversationList, 'props'>> };
+      | {
+      key: 'private',
+      data: Array<$PropertyType<PmConversationList, 'props'>>,
+      ...
+    };
     const unreadCards: Array<Card> = [
       {
         key: 'private',

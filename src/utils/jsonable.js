@@ -17,7 +17,7 @@ export type JSONable =
   | string
   | number
   | boolean
-  | { +[string]: JSONable } /* [α] */
+  | { +[string]: JSONable, ... } /* [α] */
   | $ReadOnlyArray<JSONable>;
 
 // [α]: This should really be an exact type, `{| +[string]: JSONable |}`.

@@ -29,8 +29,9 @@ type EventCommon = {|
 /** A common supertype of all events, known or unknown. */
 export type GeneralEvent = {
   ...EventCommon,
-  type: string,
   // Note this is an inexact object type!  There will be more properties.
+  type: string,
+  ...
 };
 
 export type HeartbeatEvent = {|

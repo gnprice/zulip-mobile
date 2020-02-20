@@ -283,7 +283,11 @@ function idFromMessage(element: Element): number {
  *
  * If no messages are visible, the return value has first > last.
  */
-function visibleMessageIds(): { first: number, last: number } {
+function visibleMessageIds(): {
+  first: number,
+  last: number,
+  ...
+} {
   // Algorithm: We find some message that's visible; then walk both up and
   // down from there to find all the visible messages.
 
@@ -422,10 +426,19 @@ window.addEventListener('scroll', handleScrollEvent);
  */
 
 type ScrollTarget =
-  | { type: 'none' }
-  | { type: 'bottom' }
-  | { type: 'anchor', messageId: number | null }
-  | { type: 'preserve', msgId: number, prevBoundTop: number };
+  | { type: 'none', ... }
+  | { type: 'bottom', ... }
+  | {
+  type: 'anchor',
+  messageId: number | null,
+  ...
+}
+  | {
+  type: 'preserve',
+  msgId: number,
+  prevBoundTop: number,
+  ...
+};
 
 const scrollToBottom = () => {
   window.scroll({ left: 0, top: documentBody.scrollHeight, behavior: 'smooth' });

@@ -31,7 +31,7 @@ type SelectorProps = $ReadOnly<{|
 |}>;
 
 type Props = $ReadOnly<{|
-  navigation: NavigationScreenProp<{ params: {| email: string |} }>,
+  navigation: NavigationScreenProp<{ params: {| email: string |}, ... }>,
 
   dispatch: Dispatch,
   ...SelectorProps,

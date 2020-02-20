@@ -19,7 +19,7 @@ type Props = $ReadOnly<{|
   activeImageEmojiByName: RealmEmojiById,
   auth: Auth,
   dispatch: Dispatch,
-  navigation: NavigationScreenProp<{ params: {| messageId: number |} }>,
+  navigation: NavigationScreenProp<{ params: {| messageId: number |}, ... }>,
 |}>;
 
 type State = {|
@@ -39,7 +39,11 @@ class EmojiPickerScreen extends PureComponent<Props, State> {
 
   getReactionTypeAndCode = (
     emojiName: string,
-  ): { reactionType: ReactionType, emojiCode: string } => {
+  ): {
+    reactionType: ReactionType,
+    emojiCode: string,
+    ...
+  } => {
     const { activeImageEmojiByName } = this.props;
     const imageEmoji = activeImageEmojiByName[emojiName];
     if (imageEmoji) {

@@ -49,21 +49,21 @@ const styles = StyleSheet.create({
   },
 });
 
-const PresenceStatusIndicatorActive = ({ style }: { style: ViewStyleProp }) => (
+const PresenceStatusIndicatorActive = ({ style }: { style: ViewStyleProp, ... }) => (
   <View style={[styles.active, styles.common, style]} />
 );
 
-const PresenceStatusIndicatorIdle = ({ style }: { style: ViewStyleProp }) => (
+const PresenceStatusIndicatorIdle = ({ style }: { style: ViewStyleProp, ... }) => (
   <View style={[styles.idleWrapper, styles.common, style]}>
     <View style={styles.idleHalfCircle} />
   </View>
 );
 
-const PresenceStatusIndicatorOffline = ({ style }: { style: ViewStyleProp }) => (
+const PresenceStatusIndicatorOffline = ({ style }: { style: ViewStyleProp, ... }) => (
   <View style={[styles.offline, styles.common, style]} />
 );
 
-const PresenceStatusIndicatorUnavailable = ({ style }: { style: ViewStyleProp }) => (
+const PresenceStatusIndicatorUnavailable = ({ style }: { style: ViewStyleProp, ... }) => (
   <View style={[styles.unavailableWrapper, styles.common, style]}>
     <View style={styles.unavailableLine} />
   </View>

@@ -16,7 +16,11 @@ import { navigateToMessageReactionScreen } from '../nav/navActions';
 
 // TODO really this belongs in a libdef.
 export type ShowActionSheetWithOptions = (
-  { options: string[], cancelButtonIndex: number },
+  {
+    options: string[],
+    cancelButtonIndex: number,
+    ...
+  },
   (number) => void,
 ) => void;
 
@@ -30,13 +34,14 @@ type ButtonDescription = {
     subscriptions: Subscription[],
     dispatch: Dispatch,
     _: GetText,
+    ...
   }): void | Promise<void>,
   title: string,
-
   /** The title of the alert-box that will be displayed if the callback throws. */
   // Required even when the callback can't throw (e.g., "Cancel"), since we can't
   // otherwise ensure that everything that _can_ throw has one.
   errorMessage: string,
+  ...
 };
 
 const isAnOutboxMessage = (message: Message | Outbox): boolean => message.isOutbox;
@@ -171,7 +176,7 @@ const allButtonsRaw = {
 
 type ButtonCode = $Keys<typeof allButtonsRaw>;
 
-const allButtons: { [ButtonCode]: ButtonDescription } = allButtonsRaw;
+const allButtons: { [ButtonCode]: ButtonDescription, ... } = allButtonsRaw;
 
 type ConstructSheetParams = {|
   backgroundData: BackgroundData,

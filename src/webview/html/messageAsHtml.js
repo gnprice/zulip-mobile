@@ -31,7 +31,7 @@ const messageTagsAsHtml = (isStarred: boolean, timeEdited: number | void): strin
 
 const messageReactionAsHtml = (
   reaction: AggregatedReaction,
-  allImageEmojiById: $ReadOnly<{ [id: string]: ImageEmojiType }>,
+  allImageEmojiById: $ReadOnly<{ [id: string]: ImageEmojiType, ... }>,
 ): string =>
   template`<span onClick="" class="reaction${reaction.selfReacted ? ' self-voted' : ''}"
         data-name="${reaction.name}"
@@ -45,7 +45,7 @@ const messageReactionAsHtml = (
 const messageReactionListAsHtml = (
   reactions: $ReadOnlyArray<Reaction>,
   ownUserId: number,
-  allImageEmojiById: $ReadOnly<{ [id: string]: ImageEmojiType }>,
+  allImageEmojiById: $ReadOnly<{ [id: string]: ImageEmojiType, ... }>,
 ): string => {
   if (reactions.length === 0) {
     return '';

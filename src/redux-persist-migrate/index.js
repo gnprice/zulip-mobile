@@ -19,7 +19,7 @@ type StoreEnhancer<S, A, D> = (InnerStoreCreator<S, A, D>) => InnerStoreCreator<
 /* eslint-disable no-use-before-define */
 
 export default function createMigration(
-  manifest: { [string]: (State) => State },
+  manifest: { [string]: (State) => State, ... },
   versionSelector: string | (State => number | string | void),
   versionSetter?: (State, number) => State,
 ): StoreEnhancer<State, Action, Dispatch<Action>> {
@@ -49,7 +49,7 @@ export default function createMigration(
 }
 
 export function createMigrationImpl(
-  manifest: { [string]: (State) => State },
+  manifest: { [string]: (State) => State, ... },
   versionSelector: State => number | string | void,
   versionSetter: (State, number) => State,
 ): StoreEnhancer<State, Action, Dispatch<Action>> {

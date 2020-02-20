@@ -100,7 +100,7 @@ export type Account = {|
  * Use `identityOfAuth` or `identityOfAccount` to make one of these where
  * you have an `Auth` or `Account`.
  */
-export type Identity = $Diff<Auth, { apiKey: string }>;
+export type Identity = $Diff<Auth, { apiKey: string, ... }>;
 
 /** An aggregate of all the reactions with one emoji to one message. */
 export type AggregatedReaction = {|
@@ -215,12 +215,17 @@ export type Outbox = {|
 export type MessageLike =
   | $ReadOnly<Message>
   | $ReadOnly<{
-      // $Shape<T> is unsound, per Flow docs, but $ReadOnly<$Shape<T>> is not
-      ...$Shape<{ [$Keys<Message>]: void }>,
-      ...Outbox,
-    }>;
+  // $Shape<T> is unsound, per Flow docs, but $ReadOnly<$Shape<T>> is not
+  ...$Shape<{ [$Keys<Message>]: void, ... }>,
+  ...Outbox,
+  ...
+}>;
 
-export type LocalizableText = string | { text: string, values?: { [string]: string } };
+export type LocalizableText = string | {
+  text: string,
+  values?: { [string]: string, ... },
+  ...
+};
 
 /**
  * Usually called `_`, and invoked like `_('Message')` -> `'Nachricht'`.
@@ -240,6 +245,7 @@ export type LocalizableText = string | { text: string, values?: { [string]: stri
 export type GetText = {
   (string): string,
   intl: IntlShape,
+  ...
 };
 
 export type UnreadStreamItem = {|

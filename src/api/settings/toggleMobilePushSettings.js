@@ -22,6 +22,7 @@ export default async ({
   auth: Auth,
   opp: string,
   value: boolean,
+  ...
 }): Promise<ApiResponse> =>
   apiPatch(auth, 'settings/notifications', {
     ...getRequestBody(opp, value),
