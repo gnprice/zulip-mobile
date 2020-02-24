@@ -256,6 +256,34 @@ pick just one, and that's the one we use.
 [gh-close-issue-keywords]: https://help.github.com/en/github/managing-your-work-on-github/closing-issues-using-keywords
 
 
+## JavaScript
+
+### JS unit tests
+
+See also [`docs/howto/testing.md`](howto/testing.md#unit-tests-js).
+
+These standards apply to all new test files.  For existing test files,
+before making substantial changes to a given file we bring it up,
+at a minimum, to the standard of `@flow strict-local`.
+
+* Test files are type-checked with `@flow strict-local`, just like all
+  our non-test code.
+
+* Test cases should describe the pieces of data that are relevant to
+  what they're testing, and should avoid reciting details that aren't
+  relevant to what they're testing.
+
+* Use the `exampleData` module as needed to produce well-formed
+  objects of type `User`, `Message`, `GlobalState`, and our many other
+  data types, and to avoid reciting a lot of extraneous details.
+
+  * If `exampleData` doesn't already have code to produce the type you
+    need, add to it.
+
+* Use `deepFreeze` for most test data, in particular for all Redux
+  state and action values.  This helps catch unintended mutation.
+
+
 ## WebView: HTML, CSS, JS
 
 ### Styling/CSS

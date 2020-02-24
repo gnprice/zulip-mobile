@@ -18,38 +18,7 @@ To write a test, place a Javascript file with the `-test.js` suffix in the
 `__tests__` directory inside of any subfolder of `/src`. The test will be
 automatically picked up by the test runner.
 
-
-### Test style guide
-
-* New test files should be `@flow strict-local`, just like all our
-  non-test code.
-
-* Tests should use the `exampleData` module as needed to produce
-  objects of type `User`, `Message`, `GlobalState`, and our many other
-  data types.
-
-  * This typically allows a test to write out only the details
-    relevant to it -- far less tedious than writing out lots of other
-    properties that the application code expects to exist, but the
-    given test doesn't care about the specific value of.
-
-  * If `exampleData` doesn't already have code to produce the type you
-    need, add to it.
-
-* Lots of existing tests aren't marked with `@flow`.  If making
-  substantial changes to a test file, first bring it up to our normal
-  typing standards: add `@flow strict-local` and make it pass Flow.
-
-  * Most of these tests build example data by hand, and to stay at a
-    bearable level of tedium they leave out a lot of properties the
-    real non-test objects would have, causing type errors.
-
-    To convert such code to well-typed code, you'll want to use
-    `exampleData` as described above.
-
-* Use [deepFreeze](https://github.com/substack/deep-freeze) to test
-  functions which access redux state. This won't allow the object to
-  be mutated and hence will eventually fail tests in case of mutation.
+See also our [style guide](../style.md#js-unit-tests).
 
 
 ## Unit tests: Android
