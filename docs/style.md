@@ -266,8 +266,8 @@ These standards apply to all new test files.  For existing test files,
 before making substantial changes to a given file we bring it up,
 at a minimum, to the standard of `@flow strict-local`.
 
-* Test files are type-checked with `@flow strict-local`, just like all
-  our non-test code.
+**Test files are type-checked** with `@flow strict-local`, just like
+all our non-test code.
 
 * Test cases should describe the pieces of data that are relevant to
   what they're testing, and should avoid reciting details that aren't
