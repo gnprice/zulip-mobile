@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import type { PmRecipientUser, Message, Outbox, User } from '../types';
+import type { PmRecipientUser, Message, Outbox, User, TypingEventUser } from '../types';
 
 // Filter a list of PM recipients in the quirky way that we do.
 //
@@ -45,6 +45,14 @@ export const normalizeRecipientsSansMe = (
   recipients: $ReadOnlyArray<{ email: string, ... }>,
   ownEmail: string,
 ) => pmEmailKeyStringFromKeyRecipients(filterRecipientsByEmail(recipients, ownEmail));
+
+/**
+ * Like pmKeyRecipientsFromMessage, but from a typing-status event.
+ *
+ * See pmKeyRecipientsFromMessage for detailed context.
+ */
+export const pmKeyRecipientsFromTypingEvent = (recipients: TypingEventUser[], ownEmail: string) =>
+  filterRecipientsByEmail(recipients, ownEmail);
 
 /**
  * The set of users to show in the UI to identify a PM conversation.
