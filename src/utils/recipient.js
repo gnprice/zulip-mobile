@@ -12,6 +12,14 @@ import type { PmRecipientUser, Message, Outbox, User } from '../types';
 const filterRecipients = (recipients: PmRecipientUser[], ownUserId: number): PmRecipientUser[] =>
   recipients.length === 1 ? recipients : recipients.filter(r => r.id !== ownUserId);
 
+// Like filterRecipients, but by email instead of user ID.
+function filterRecipientsByEmail<T: { email: string, ... }>(
+  recipients: $ReadOnlyArray<T>,
+  ownEmail: string,
+): $ReadOnlyArray<T> {
+  return recipients.length === 1 ? recipients : recipients.filter(r => r.email !== ownEmail);
+}
+
 // TODO types: this union is confusing
 export const normalizeRecipients = (recipients: $ReadOnlyArray<{ email: string, ... }> | string) =>
   !Array.isArray(recipients)
@@ -25,10 +33,7 @@ export const normalizeRecipients = (recipients: $ReadOnlyArray<{ email: string, 
 export const normalizeRecipientsSansMe = (
   recipients: $ReadOnlyArray<{ email: string, ... }>,
   ownEmail: string,
-) =>
-  recipients.length === 1
-    ? recipients[0].email
-    : normalizeRecipients(recipients.filter(r => r.email !== ownEmail));
+) => normalizeRecipients(filterRecipientsByEmail(recipients, ownEmail));
 
 /**
  * The set of users to show in the UI to identify a PM conversation.
