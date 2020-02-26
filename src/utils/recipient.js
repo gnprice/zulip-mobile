@@ -20,20 +20,31 @@ function filterRecipientsByEmail<T: { email: string, ... }>(
   return recipients.length === 1 ? recipients : recipients.filter(r => r.email !== ownEmail);
 }
 
+/**
+ * A string to uniquely identify the PM conversation, using emails for users.
+ *
+ * Callers should be migrated to use user IDs instead; see #3764.
+ *
+ * @param recipients The set of key-recipients for the conversation, as
+ *   e.g. produced by `pmKeyRecipientsFromMessage` or found in a `Narrow`.
+ */
+export const pmEmailKeyStringFromKeyRecipients = (
+  recipients: $ReadOnlyArray<{ email: string, ... }>,
+) =>
+  recipients
+    .map(s => s.email.trim())
+    .filter(x => x.length > 0)
+    .sort()
+    .join(',');
+
 // TODO types: this union is confusing
 export const normalizeRecipients = (recipients: $ReadOnlyArray<{ email: string, ... }> | string) =>
-  !Array.isArray(recipients)
-    ? recipients
-    : recipients
-        .map(s => s.email.trim())
-        .filter(x => x.length > 0)
-        .sort()
-        .join(',');
+  !Array.isArray(recipients) ? recipients : pmEmailKeyStringFromKeyRecipients(recipients);
 
 export const normalizeRecipientsSansMe = (
   recipients: $ReadOnlyArray<{ email: string, ... }>,
   ownEmail: string,
-) => normalizeRecipients(filterRecipientsByEmail(recipients, ownEmail));
+) => pmEmailKeyStringFromKeyRecipients(filterRecipientsByEmail(recipients, ownEmail));
 
 /**
  * The set of users to show in the UI to identify a PM conversation.
