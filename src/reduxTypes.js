@@ -10,7 +10,7 @@
 
 import type { InputSelector } from 'reselect';
 
-import type { Account, Outbox } from './types';
+import type { Outbox } from './types';
 import type { Action, NavigationAction } from './actionTypes';
 import type {
   Topic,
@@ -31,25 +31,12 @@ import type {
   UserStatusMapObject,
 } from './api/apiTypes';
 
+import type { AccountsState } from './account/accountsReducer';
 import type { SessionState } from './session/sessionReducer';
 
 export type * from './actionTypes';
 
-/**
- * The list of known accounts, with the active account first.
- *
- * Some accounts in the list may have a blank API key (if the user hasn't
- * yet completed login, or has logged out) or even a blank email (if the
- * user hasn't completed login.)
- *
- * See:
- *  * "active account" in `docs/glossary.md`.
- *  * `getIdentity`, `getAuth`, and related selectors, for getting
- *    information about the active account as needed in most codepaths of
- *    the app.
- *  * `Account` for details on the properties of each account object.
- */
-export type AccountsState = Account[];
+// type AccountsState is defined in its reducer file
 
 export type AlertWordsState = string[];
 
@@ -250,6 +237,8 @@ export type RealmState = {|
   canCreateStreams: boolean,
   isAdmin: boolean,
 |};
+
+// type SessionState is defined in its reducer file
 
 export type ThemeName = 'default' | 'night';
 
