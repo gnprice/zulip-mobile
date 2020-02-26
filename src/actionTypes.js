@@ -358,15 +358,19 @@ type EventPresenceAction = {|
 
 type EventTypingCommon = {|
   ...ServerEvent,
+
+  // `recipients` and `sender` come verbatim from the server's event.
+  // They've had `user_id` and `email` since server commit 1.4.0-1080-gfbe817181 .
+  recipients: Array<{|
+    user_id: number,
+    email: string,
+  |}>,
+  sender: {|
+    user_id: number,
+    email: string,
+  |},
+
   ownEmail: string,
-  recipients: Array<{
-    user_id: number,
-    email: string,
-  }>,
-  sender: {
-    user_id: number,
-    email: string,
-  },
   time: number,
 |};
 
