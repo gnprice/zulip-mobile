@@ -10,7 +10,6 @@ import {
 } from '../actionConstants';
 
 import type { Account, Identity, Action } from '../types';
-import { NULL_ARRAY } from '../nullObjects';
 
 /**
  * The list of known accounts, with the active account first.
@@ -28,7 +27,7 @@ import { NULL_ARRAY } from '../nullObjects';
  */
 export type AccountsState = Account[];
 
-const initialState = NULL_ARRAY;
+const initialState = Object.freeze([]);
 
 const realmAdd = (state, action) => {
   const accountIndex = state.findIndex(account => account.realm === action.realm);
