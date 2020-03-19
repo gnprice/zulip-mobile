@@ -1,0 +1,31 @@
+# This was the iOS Deployment Target (project > ZulipMobile > Info in Xcode)
+# as of 2020-03.
+platform :ios, '10.3'
+
+# This list will need to change for RN > v0.59. If you're changing it
+# for any other reason, first look at the official example Podfile at
+# https://github.com/facebook/react-native-website/blob/ded79d2cf/docs/integration-with-existing-apps.md#configuring-cocoapods-dependencies.
+target 'ZulipMobile' do
+  pod 'React', :path => '../node_modules/react-native', :subspecs => [
+    'Core',
+    'CxxBridge',
+    'DevSupport',
+    'RCTText',
+    'RCTNetwork',
+    'RCTWebSocket', # Needed for debugging
+    'RCTAnimation', # Needed for FlatList and animations running on native UI thread
+    # Add any other subspecs you want to use in your project
+  ]
+  pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+
+  # Third party deps podspec link
+  pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
+  pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
+  pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+
+  target 'ZulipMobileTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
