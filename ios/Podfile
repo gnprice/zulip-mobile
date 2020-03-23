@@ -14,6 +14,7 @@ target 'ZulipMobile' do
     'RCTNetwork',
     'RCTWebSocket', # Needed for debugging
     'RCTAnimation', # Needed for FlatList and animations running on native UI thread
+    'RCTImage', # Included in react-native-unimodules' example Podfile
     # Add any other subspecs you want to use in your project
   ]
   pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
