@@ -1023,6 +1023,7 @@
 				047663CF32A867699B13342E /* Pods-ZulipMobileTests.debug.xcconfig */,
 				412BDA8A3FA264AE52430606 /* Pods-ZulipMobileTests.release.xcconfig */,
 			);
+                        name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
