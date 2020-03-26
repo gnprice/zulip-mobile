@@ -145,10 +145,10 @@ fi  # if $sanity_checks
 # For documentation on rsync filter rules, see `man rsync` or:
 #   https://dyn.manpages.debian.org/testing/rsync/rsync.1.en.html#FILTER_RULES
 sync() {
-    local src="$1" dest="$2"
-    mkdir -p "${dest}"
+    local src="$1" _dest="$2"
+    mkdir -p "${_dest}"
     rsync -aR --no-D --delete --delete-excluded \
-          "${src}/./" "${dest}/." \
+          "${src}/./" "${_dest}/." \
           --filter='. /dev/stdin'
 }
 
