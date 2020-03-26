@@ -154,9 +154,9 @@ sync() {
 # Copy over files from KaTeX.
 katex_font_type=woff2  # Supported since Safari 10 and Chrome 36.
 sync "${root}/node_modules/katex/dist" "${dest}/katex" <<EOF
-+ katex.min.css
-+ *.${katex_font_type}
-+ fonts/
++ /katex.min.css
++ /fonts/
++ /fonts/*.${katex_font_type}
 - *
 EOF
 
