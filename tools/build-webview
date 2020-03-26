@@ -34,70 +34,70 @@ err() {
 ################################################################################
 
 # Get the auxiliary script directory.
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-AUX_SCRIPT_DIR=${SCRIPT_DIR}/${BASH_SOURCE[0]##*/}.d/
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+aux_script_dir=${script_dir}/${BASH_SOURCE[0]##*/}.d/
 
 # Chdir to the current git repo's root.
-ROOT="$(git rev-parse --show-toplevel)"
-cd "$ROOT"
+root="$(git rev-parse --show-toplevel)"
+cd "$root"
 
 # Ensure that we have access to a functional `readlink -f`.
-. "$ROOT"/tools/lib/ensure-coreutils.sh
+. "$root"/tools/lib/ensure-coreutils.sh
 
 # Parse arguments. Sloppy, but sufficient for now.
-unset TARGET
-unset DEST
+unset target
+unset dest
 while (( $# )); do
     case "$1" in
         --help|-h|help)
             usage; exit 0;;
         android|ios)
             # no check for multiple nouns; oh well
-            TARGET="$1"; shift;;
+            target="$1"; shift;;
         --destination)
             # note: this doesn't permit an equals sign after `--destination`
-            shift; DEST="$1"; shift;;
+            shift; dest="$1"; shift;;
         *) usage; exit 2;;
     esac
 done
 
-if  [ -z "${TARGET-}" ]; then
+if  [ -z "${target-}" ]; then
     usage; exit 2
-elif [ -z "${DEST-}" ]; then
+elif [ -z "${dest-}" ]; then
     usage; exit 2
 fi
 
-# Make $DEST absolute, if it isn't already.
-DEST=$(readlink -m "$DEST")
+# Make $dest absolute, if it isn't already.
+dest=$(readlink -m "$dest")
 
-# Sanity-check DEST and TARGET.
-case "$TARGET" in
+# Sanity-check dest and target.
+case "$target" in
     ios)
         if [ "$(uname)" != "Darwin" ]; then
             err "iOS builds only supported on macOS";
         fi
 
-        # $DEST should be copied to `${bundle_root}/webview`.
+        # $dest should be copied to `${bundle_root}/webview`.
         #
-        # $DEST itself must be specified twice in Xcode: once in the invocation
+        # $dest itself must be specified twice in Xcode: once in the invocation
         # of this script, and once in the "Copy Bundle Resources" step. If you
         # change it, you'll need to change it in both places. (And here, of
         # course.)
-        if [[ "$DEST" != "$ROOT/ios/"* ]]; then
-            err "unexpected destination directory '$DEST' (expected target in iOS build dir)"
+        if [[ "$dest" != "$root/ios/"* ]]; then
+            err "unexpected destination directory '$dest' (expected target in iOS build dir)"
         fi
     ;;
     android)
-        # $DEST should be copied to `file:///android_asset/webview`.
+        # $dest should be copied to `file:///android_asset/webview`.
         #
         # Gradle -- more precisely, the Android Gradle plugin -- is already
         # configured to copy some directory from `build/` into the APK. We
         # determine which directory that is in Gradle, and pass it here.
-        if [[ "$DEST" != "$ROOT/android/app/build/"* ]]; then
-            err "unexpected destination directory '$DEST' (expected target in Android build dir)"
+        if [[ "$dest" != "$root/android/app/build/"* ]]; then
+            err "unexpected destination directory '$dest' (expected target in Android build dir)"
         fi
     ;;
-    *) err "impossible target $TARGET";;
+    *) err "impossible target $target";;
 esac
 
 # As implied above, the ultimate destination of these files should be a
@@ -106,8 +106,8 @@ esac
 #
 # The target directory basename should therefore be 'webview': both build
 # systems will preserve the name they're given here.
-if [[ "$DEST" != *"/webview" ]]; then
-    err "unexpected destination directory '$DEST'"
+if [[ "$dest" != *"/webview" ]]; then
+    err "unexpected destination directory '$dest'"
 fi
 
 
@@ -132,7 +132,7 @@ sync() {
 
 # Copy over files from KaTeX.
 katex_font_type=woff2  # Supported since Safari 10 and Chrome 36.
-sync "${ROOT}/node_modules/katex/dist" "${DEST}/katex" <<EOF
+sync "${root}/node_modules/katex/dist" "${dest}/katex" <<EOF
 + katex.css
 + katex.js
 + *.${katex_font_type}
@@ -141,7 +141,7 @@ sync "${ROOT}/node_modules/katex/dist" "${DEST}/katex" <<EOF
 EOF
 
 # Copy over our own files.
-sync "${ROOT}/src/webview/static" "${DEST}" <<EOF
+sync "${root}/src/webview/static" "${dest}" <<EOF
 # Leave alone the katex directory we just made.
 -,r /katex
 
