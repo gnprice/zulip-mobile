@@ -57,7 +57,7 @@ readonly root
 # Parse arguments. Sloppy, but sufficient for now.
 unset target
 unset dest
-sanity_checks=1
+sanity_checks=0
 while (( $# )); do
     case "$1" in
         --help|-h|help)
@@ -68,9 +68,10 @@ while (( $# )); do
         --destination)
             # note: this doesn't permit an equals sign after `--destination`
             shift; dest="$1"; shift;;
-        --no-sanity-checks)
-            # disables target-directory sanity checks, for testing's sake
-            shift; sanity_checks=0;;
+        --script)
+            # enable persnickety checks of our caller's business, on
+            # the assumption it's the actual app build script
+            shift; sanity_checks=1;;
         *) usage; exit 2;;
     esac
 done
