@@ -165,8 +165,7 @@ sync "${root}/src/webview/static" "${dest}" <<EOF
 # Leave alone the katex directory we just made.
 -,r /katex
 
-# Ignore files that won't be needed at runtime.
-- README.md
-
-+ *
++ /index.html
++ /base.css
+- *
 EOF
