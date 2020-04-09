@@ -63,6 +63,7 @@ class WebviewAssets extends Exec {
     }
 
     // The root of our git repository.
+    @Internal
     String getRepoDir() {
         project.file('../..').absolutePath
     }
@@ -76,10 +77,12 @@ class WebviewAssets extends Exec {
     // (In particular, we should _not_ build directly to the assets-merge
     // task's output directory: we run before it does, and it will generally
     // clear that directory out before merging.)
+    @OutputDirectory
     String getAssetsDir() {
         "${buildDir}/_zulip_webview_staging/out"
     }
 
+    @Internal
     String getDestDir() {
         // See above note on Windows compatibility.
         normalizePath(relativizePath("${assetsDir}/webview", repoDir))
