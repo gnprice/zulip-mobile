@@ -88,8 +88,8 @@ gradle.projectsEvaluated {
         def destDir = normalizePath(relativizePath("${assetsDir}/webview", repoDir))
 
         def variantTask = tasks.register(
-            name: "build${variant.name.capitalize()}StaticWebviewAssets",
-            type: Exec
+            "build${variant.name.capitalize()}StaticWebviewAssets",
+            Exec,
         ) {
             // All arguments to our script must be relative to `workingDir`.
             workingDir repoDir
