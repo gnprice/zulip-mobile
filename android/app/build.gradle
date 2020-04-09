@@ -125,10 +125,12 @@ android {
         versionCode 149
         versionName "26.26.149"
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     signingConfigs {
         release {
             if (project.hasProperty('signed')) {
@@ -147,6 +149,7 @@ android {
             }
         }
     }
+
     splits {
         abi {
             reset()
@@ -155,10 +158,12 @@ android {
             include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }
+
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
         }
+
         release {
             minifyEnabled enableProguardInReleaseBuilds
             // `minifyEnabled` is required for `shrinkResources`
@@ -172,6 +177,7 @@ android {
             }
         }
     }
+
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
