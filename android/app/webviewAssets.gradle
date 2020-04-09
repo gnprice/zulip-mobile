@@ -87,7 +87,7 @@ gradle.projectsEvaluated {
         // See above note on Windows compatibility.
         def destDir = normalizePath(relativizePath("${assetsDir}/webview", repoDir))
 
-        def variantTask = tasks.create(
+        def variantTask = tasks.register(
             name: "build${variant.name.capitalize()}StaticWebviewAssets",
             type: Exec
         ) {
