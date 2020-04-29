@@ -31,11 +31,10 @@ export const encodeParamsForUrl = (params: UrlParams): string =>
     .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value.toString())}`)
     .join('&');
 
-export const getFullUrl = (url: string, realm: string): string =>
-  !url.startsWith('http') ? `${realm}${url.startsWith('/') ? '' : '/'}${url}` : url;
+export const getFullUrl = (url: string, realm: string): string => new URL(url, realm).href;
 
 export const isUrlOnRealm = (url: string, realm: string): boolean =>
-  url.startsWith('/') || url.startsWith(realm) || !/^(http|www.)/i.test(url);
+  new URL(url, realm).origin === new URL(realm).origin;
 
 const getResourceWithAuth = (uri: string, auth: Auth) => ({
   uri: getFullUrl(uri, auth.realm),
