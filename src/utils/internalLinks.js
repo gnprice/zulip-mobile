@@ -4,7 +4,7 @@ import type { Narrow, Stream, User } from '../types';
 import { topicNarrow, streamNarrow, groupNarrow, specialNarrow } from './narrow';
 import { isUrlOnRealm } from './url';
 
-const getPathsFromUrl = (url: string = '', realm: string) => {
+const getPathsFromUrl = (url: string, realm: string) => {
   const paths = url
     .split(realm)
     .pop()

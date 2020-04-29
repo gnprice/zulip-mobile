@@ -31,10 +31,10 @@ export const encodeParamsForUrl = (params: UrlParams): string =>
     .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value.toString())}`)
     .join('&');
 
-export const getFullUrl = (url: string = '', realm: string): string =>
+export const getFullUrl = (url: string, realm: string): string =>
   !url.startsWith('http') ? `${realm}${url.startsWith('/') ? '' : '/'}${url}` : url;
 
-export const isUrlOnRealm = (url: string = '', realm: string): boolean =>
+export const isUrlOnRealm = (url: string, realm: string): boolean =>
   url.startsWith('/') || url.startsWith(realm) || !/^(http|www.)/i.test(url);
 
 const getResourceWithAuth = (uri: string, auth: Auth) => ({
@@ -57,7 +57,7 @@ export type Protocol = 'https://' | 'http://';
 const protocolRegex = /^\s*((?:http|https):\/\/)(.*)$/;
 
 /** DEPRECATED */
-const hasProtocol = (url: string = '') => url.search(protocolRegex) !== -1;
+const hasProtocol = (url: string) => url.search(protocolRegex) !== -1;
 
 // Split a (possible) URL into protocol and non-protocol parts.
 // The former will be null if no recognized protocol is a component
@@ -80,7 +80,7 @@ export const parseProtocol = (value: string): [Protocol | null, string] => {
 };
 
 /** DEPRECATED */
-export const fixRealmUrl = (url: string = '') => {
+export const fixRealmUrl = (url: string) => {
   if (url === '') {
     return '';
   }

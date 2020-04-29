@@ -123,10 +123,6 @@ describe('parseProtocol', () => {
 });
 
 describe('fixRealmUrl', () => {
-  test('undefined input results in empty string', () => {
-    expect(fixRealmUrl()).toEqual('');
-  });
-
   test('empty url input results in empty string', () => {
     expect(fixRealmUrl('')).toEqual('');
   });
