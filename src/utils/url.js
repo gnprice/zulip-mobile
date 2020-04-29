@@ -39,11 +39,9 @@ export const tryParseUrl = (url: string, base?: string | URL): URL | void => {
 };
 
 // TODO: Work out what this does, write a jsdoc for its interface, and
-// reimplement using URL object (not just for the realm)
+// reimplement using all URL objects (not just for the realm)
 export const isUrlOnRealm = (url: string = '', realm: URL): boolean =>
-  // TODO does this work right with the change to trailing slash?
-  //   (Looks like that's really a question about its callers.)
-  url.startsWith('/') || url.startsWith(realm.toString()) || !/^(http|www.)/i.test(url);
+  new URL(url, realm).origin === realm.origin;
 
 const getResourceWithAuth = (uri: string, auth: Auth) => ({
   uri: new URL(uri, auth.realm).toString(),
