@@ -36,20 +36,13 @@ export const getFullUrl = (url: string, realm: string): string => new URL(url, r
 export const isUrlOnRealm = (url: string, realm: string): boolean =>
   new URL(url, realm).origin === new URL(realm).origin;
 
-const getResourceWithAuth = (uri: string, auth: Auth) => ({
-  uri: getFullUrl(uri, auth.realm),
-  headers: getAuthHeaders(auth),
-});
-
-const getResourceNoAuth = (uri: string) => ({
-  uri,
-});
-
 export const getResource = (
   uri: string,
   auth: Auth,
 ): {| uri: string, headers?: { [string]: string } |} =>
-  isUrlOnRealm(uri, auth.realm) ? getResourceWithAuth(uri, auth) : getResourceNoAuth(uri);
+  isUrlOnRealm(uri, auth.realm)
+    ? { uri: getFullUrl(uri, auth.realm), headers: getAuthHeaders(auth) }
+    : { uri };
 
 export type Protocol = 'https://' | 'http://';
 
