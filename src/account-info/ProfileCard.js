@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 
 import type { Dispatch, User } from '../types';
 import { connect } from '../react-redux';
-import { getSelfUserDetail } from '../selectors';
+import { getOwnUser } from '../selectors';
 import { ZulipButton } from '../common';
 import {
   logout,
@@ -65,7 +65,7 @@ class LogoutButton extends PureComponent<{| +dispatch: Dispatch |}> {
 
 type Props = $ReadOnly<{|
   dispatch: Dispatch,
-  selfUserDetail: User,
+  ownUser: User,
 |}>;
 
 /**
@@ -76,11 +76,11 @@ type Props = $ReadOnly<{|
  */
 class ProfileCard extends PureComponent<Props> {
   render() {
-    const { selfUserDetail } = this.props;
+    const { ownUser } = this.props;
 
     return (
       <ScrollView>
-        <AccountDetails user={selfUserDetail} />
+        <AccountDetails user={ownUser} />
         <AwayStatusSwitch />
         <View style={styles.buttonRow}>
           <SetStatusButton dispatch={this.props.dispatch} />
@@ -95,5 +95,5 @@ class ProfileCard extends PureComponent<Props> {
 }
 
 export default connect(state => ({
-  selfUserDetail: getSelfUserDetail(state),
+  ownUser: getOwnUser(state),
 }))(ProfileCard);

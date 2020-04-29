@@ -2,7 +2,6 @@
 import { createSelector } from 'reselect';
 
 import type { GlobalState, UserOrBot, Selector, User } from '../types';
-import { NULL_USER } from '../nullObjects';
 import { getUsers, getCrossRealmBots, getNonActiveUsers } from '../directSelectors';
 
 /**
@@ -138,16 +137,6 @@ export const getOwnUser = (state: GlobalState): User => {
   }
   return ownUser;
 };
-
-/**
- * DEPRECATED; don't add new uses.  Generally, use `getOwnUser` instead.
- *
- * PRs to eliminate the remaining uses of this are welcome.
- *
- * For discussion, see `nullObjects.js`.
- */
-export const getSelfUserDetail = (state: GlobalState): User =>
-  getUsersByEmail(state).get(getOwnEmail(state)) || NULL_USER;
 
 /**
  * WARNING: despite the name, only (a) `is_active` users (b) excluding cross-realm bots.

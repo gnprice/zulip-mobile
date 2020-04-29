@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 
 import type { User, Dispatch } from '../types';
 import { connect } from '../react-redux';
-import { getCurrentRealm, getSelfUserDetail } from '../selectors';
+import { getCurrentRealm, getOwnUser } from '../selectors';
 import UserAvatar from './UserAvatar';
 import { getAvatarFromUser } from '../utils/avatar';
 
@@ -29,5 +29,5 @@ class OwnAvatar extends PureComponent<Props> {
 
 export default connect(state => ({
   realm: getCurrentRealm(state),
-  user: getSelfUserDetail(state),
+  user: getOwnUser(state),
 }))(OwnAvatar);
