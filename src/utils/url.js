@@ -37,12 +37,12 @@ export const isUrlOnRealm = (url: string, realm: string): boolean =>
   new URL(url, realm).origin === new URL(realm).origin;
 
 export const getResource = (
-  uri: string,
+  url: string,
   auth: Auth,
 ): {| uri: string, headers?: { [string]: string } |} =>
-  isUrlOnRealm(uri, auth.realm)
-    ? { uri: getFullUrl(uri, auth.realm), headers: getAuthHeaders(auth) }
-    : { uri };
+  isUrlOnRealm(url, auth.realm)
+    ? { uri: getFullUrl(url, auth.realm), headers: getAuthHeaders(auth) }
+    : { uri: url };
 
 export type Protocol = 'https://' | 'http://';
 
