@@ -6,8 +6,8 @@ import { getMediumAvatar, getGravatarFromEmail } from '../avatar';
 
 describe('getMediumAvatar', () => {
   test('if avatarUrl can be converted into mediumAvatarUrl, return mediumAvatarUrl', () => {
-    const avatarUrl = '/user_avatars/AVATAR_IMAGE_NAME.png/';
-    const mediumAvatarUrl = '/user_avatars/AVATAR_IMAGE_NAME-medium.png/';
+    const avatarUrl = 'https://chat.example/user_avatars/AVATAR_IMAGE_NAME.png?a=b';
+    const mediumAvatarUrl = 'https://chat.example/user_avatars/AVATAR_IMAGE_NAME-medium.png?a=b';
 
     const resultUrl = getMediumAvatar(avatarUrl);
 
@@ -15,7 +15,7 @@ describe('getMediumAvatar', () => {
   });
 
   test('if avatarUrl cannot be converted into mediumAvatarUrl, return avatarUrl itself', () => {
-    const avatarUrl = '/avatar/AVATAR_IMAGE_NAME/';
+    const avatarUrl = 'https://chat.example/avatar/AVATAR_IMAGE_NAME/';
 
     const resultUrl = getMediumAvatar(avatarUrl);
 

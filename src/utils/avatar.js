@@ -14,9 +14,9 @@ import { getFullUrl } from './url';
  * This function converts a normal avatar to medium-sized one.
  */
 export const getMediumAvatar = (avatarUrl: string): string => {
-  const matches = new RegExp(/(\w+)\.png/g).exec(avatarUrl);
-
-  return matches ? avatarUrl.replace(matches[0], `${matches[1]}-medium.png`) : avatarUrl;
+  const url = new URL(avatarUrl);
+  url.pathname = url.pathname.replace(/\.png$/, '-medium.png');
+  return url.href;
 };
 
 export const getGravatarFromEmail = (email: string, size: number): string =>
