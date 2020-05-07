@@ -6,6 +6,7 @@ import { IntlProvider, IntlContext } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 
 import type { GetText, Dispatch } from '../types';
+import type { PropsMinus } from '../generics';
 import { connect } from '../react-redux';
 import { getSettings } from '../selectors';
 import messages from '../i18n/messages';
@@ -22,8 +23,8 @@ export const TranslationContext: Context<GetText> = React.createContext(undefine
  */
 export function withGetText<P: { +_: GetText, ... }, C: ComponentType<P>>(
   WrappedComponent: C,
-): ComponentType<$ReadOnly<$Diff<$Exact<ElementConfig<C>>, {| _: GetText |}>>> {
-  return class extends React.Component<$Diff<$Exact<ElementConfig<C>>, {| _: GetText |}>> {
+): ComponentType<PropsMinus<C, {| _: GetText |}>> {
+  return class extends React.Component<PropsMinus<C, {| _: GetText |}>> {
     render() {
       return (
         <TranslationContext.Consumer>
