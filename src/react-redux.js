@@ -7,12 +7,12 @@ import {
 } from 'react-redux';
 
 import type { GlobalState, Dispatch } from './types';
-import type { PropsMinus } from './generics';
+import type { BoundedDiff, PropsMinus } from './generics';
 
 /* eslint-disable flowtype/generic-spacing */
 
-export type OwnProps<-C, -SP> = $ReadOnly<
-  $Diff<$ReadOnly<PropsMinus<C, SP>>, {| dispatch: Dispatch |}>,
+export type OwnProps<C, SP> = $ReadOnly<
+  BoundedDiff<$ReadOnly<PropsMinus<C, SP>>, {| dispatch: Dispatch |}>,
 >;
 
 /**
