@@ -117,7 +117,7 @@ export type BoundedDiff<-U, -L> =
     >,
   >;
 
-export type PropsMinus<C, -SP> = BoundedDiff<$Exact<ElementConfig<C>>, SP>;
+export type PropsMinus<C, -SP> = $ReadOnly<BoundedDiff<$Exact<ElementConfig<C>>, SP>>;
 
 /**
  * The object type `T` with its readonly annotation stripped.
