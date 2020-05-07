@@ -7,11 +7,11 @@ import {
 } from 'react-redux';
 
 import type { GlobalState, Dispatch } from './types';
-import type { PropsMinus } from './generics';
+import type { BoundedDiff, PropsMinus } from './generics';
 
 /* eslint-disable flowtype/generic-spacing */
 
-export type OwnProps<-C, -SP> = $Diff<PropsMinus<C, SP>, {| dispatch: Dispatch |}>;
+export type OwnProps<C, SP> = BoundedDiff<PropsMinus<C, SP>, {| dispatch: Dispatch |}>;
 
 /**
  * Exactly like the `connect` in `react-redux` upstream, but more typed.
