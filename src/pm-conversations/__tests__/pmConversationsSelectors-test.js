@@ -3,9 +3,12 @@ import Immutable from 'immutable';
 
 import { getRecentConversations } from '../pmConversationsSelectors';
 import { ALL_PRIVATE_NARROW_STR } from '../../utils/narrow';
+import { ZulipVersion } from '../../utils/zulipVersion';
 import * as eg from '../../__tests__/lib/exampleData';
 
-describe('getRecentConversations', () => {
+describe('getRecentConversations: legacy', () => {
+  const zulipVersion = new ZulipVersion('2.0.0');
+
   const userJohn = eg.makeUser();
   const userMark = eg.makeUser();
   const keyForUsers = users =>
@@ -17,6 +20,7 @@ describe('getRecentConversations', () => {
 
   test('when no messages, return no conversations', () => {
     const state = eg.reduxState({
+      accounts: [eg.makeAccount({ user: eg.selfUser, zulipVersion })],
       realm: eg.realmState({ email: eg.selfUser.email }),
       users: [eg.selfUser],
       narrows: Immutable.Map({
@@ -36,6 +40,7 @@ describe('getRecentConversations', () => {
 
   test('returns unique list of recipients, includes conversations with self', () => {
     const state = eg.reduxState({
+      accounts: [eg.makeAccount({ user: eg.selfUser, zulipVersion })],
       realm: eg.realmState({ email: eg.selfUser.email }),
       users: [eg.selfUser, userJohn, userMark],
       narrows: Immutable.Map({
@@ -83,6 +88,7 @@ describe('getRecentConversations', () => {
 
   test('returns recipients sorted by last activity', () => {
     const state = eg.reduxState({
+      accounts: [eg.makeAccount({ user: eg.selfUser, zulipVersion })],
       realm: eg.realmState({ email: eg.selfUser.email }),
       users: [eg.selfUser, userJohn, userMark],
       narrows: Immutable.Map({

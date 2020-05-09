@@ -1,11 +1,26 @@
 /* @flow strict-local */
 import { createSelector } from 'reselect';
 
-import type { Message, PmConversationData, Selector, User } from '../types';
+import type {
+  Message,
+  PmConversationData,
+  RecentPrivateConversation,
+  Selector,
+  User,
+  UserOrBot,
+} from '../types';
+import { getServerVersion } from '../account/accountsSelectors';
 import { getPrivateMessages } from '../message/messageSelectors';
 import { getAllUsersById, getOwnUser } from '../users/userSelectors';
+import { getRecentPrivateConversations } from '../directSelectors';
 import { getUnreadByPms, getUnreadByHuddles } from '../unread/unreadSelectors';
-import { pmUnreadsKeyFromMessage, pmKeyRecipientUsersFromMessage } from '../utils/recipient';
+import {
+  pmUnreadsKeyFromMessage,
+  pmKeyRecipientUsersFromMessage,
+  pmKeyRecipientsFromIds,
+  pmUnreadsKeyFromPmKeyIds,
+} from '../utils/recipient';
+import { ZulipVersion } from '../utils/zulipVersion';
 
 /**
  * Given a list of PmConversationPartial or PmConversationData, trim it down to
@@ -61,7 +76,12 @@ const getAttachUnread = createSelector(
     })),
 );
 
-export const getRecentConversations: Selector<PmConversationData[]> = createSelector(
+/**
+ * Legacy implementation of {@link getRecentConversations}. Computes an
+ * approximation to the set of recent conversations, based on the messages we
+ * already know about.
+ */
+const getRecentConversationsLegacyImpl: Selector<PmConversationData[]> = createSelector(
   getOwnUser,
   getPrivateMessages,
   getAttachUnread,
@@ -79,6 +99,73 @@ export const getRecentConversations: Selector<PmConversationData[]> = createSele
     const sortedByMostRecent = collateByRecipient(items);
 
     return attachUnread(sortedByMostRecent);
+  },
+);
+
+/**
+ * Modern implementation of {@link getRecentConversations}. Returns exactly the
+ * most recent conversations. Requires server-side support.
+ */
+const getRecentConversationsImpl: Selector<PmConversationData[]> = createSelector(
+  getOwnUser,
+  getAllUsersById,
+  getRecentPrivateConversations,
+  getAttachUnread,
+  (
+    ownUser: User,
+    allUsersById: Map<number, UserOrBot>,
+    recentPCs: RecentPrivateConversation[],
+    attachUnread,
+  ) => {
+    const recipients = recentPCs.map(conversation => {
+      const keyRecipients = pmKeyRecipientsFromIds(
+        conversation.user_ids,
+        allUsersById,
+        ownUser.user_id,
+      );
+      if (!keyRecipients) {
+        throw new Error('getRecentConversations: unknown user id');
+      }
+
+      return {
+        unreadsKey: pmUnreadsKeyFromPmKeyIds(keyRecipients.map(r => r.user_id), ownUser.user_id),
+        keyRecipients,
+        msgId: conversation.max_message_id,
+      };
+    });
+
+    return attachUnread(recipients);
+  },
+);
+
+/**
+ * The server version in which 'recent_private_conversations' was first made
+ * available.
+ */
+const DIVIDING_LINE = new ZulipVersion('2.1-dev-384-g4c3c669b41');
+
+/**
+ * Get a list of the most recent private conversations, including the most
+ * recent message from each.
+ */
+// TODO: don't compute `legacy` when `version` indicates it's unneeded
+export const getRecentConversations: Selector<PmConversationData[]> = createSelector(
+  getRecentConversationsImpl,
+  getRecentConversationsLegacyImpl,
+  getServerVersion,
+  (modern, legacy, version) => {
+    // If we're talking to a new enough version of the Zulip server, we don't
+    // need the legacy impl; the modern one will always return a superset of
+    // its content.
+    if (version && version.isAtLeast(DIVIDING_LINE)) {
+      return modern;
+    }
+
+    // If we're _not_ talking to a newer version of the Zulip server, then
+    // there's no point in using the modern version; it will only return
+    // messages received in the current session, which should all be in the
+    // legacy impl's data as well.
+    return legacy;
   },
 );
 
