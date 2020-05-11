@@ -27,6 +27,7 @@ import {
 import rootReducer from '../../boot/reducers';
 import { authOfAccount } from '../../account/accountMisc';
 import { HOME_NARROW } from '../../utils/narrow';
+import { NULL_OBJECT } from '../../nullObjects';
 
 /* ========================================================================
  * Utilities
@@ -101,8 +102,13 @@ export const diverseCharacters =
  * Users and bots
  */
 
+type UserOrBotPropertiesArgs = {|
+  name?: string,
+  user_id?: number,
+|};
+
 const randUserId: () => number = makeUniqueRandInt('user IDs', 10000);
-const userOrBotProperties = ({ name: _name }) => {
+const userOrBotProperties = ({ name: _name, user_id }: UserOrBotPropertiesArgs) => {
   const name = _name ?? randString();
   const capsName = name.substring(0, 1).toUpperCase() + name.substring(1);
   return deepFreeze({
@@ -119,12 +125,12 @@ const userOrBotProperties = ({ name: _name }) => {
     full_name: `${capsName} User`,
     is_admin: false,
     timezone: 'UTC',
-    user_id: randUserId(),
+    user_id: user_id ?? randUserId(),
   });
 };
 
 /** Beware! These values may not be representative. */
-export const makeUser = (args: { name?: string } = {}): User =>
+export const makeUser = (args: UserOrBotPropertiesArgs = NULL_OBJECT): User =>
   deepFreeze({
     ...userOrBotProperties(args),
 
@@ -138,7 +144,7 @@ export const makeUser = (args: { name?: string } = {}): User =>
   });
 
 /** Beware! These values may not be representative. */
-export const makeCrossRealmBot = (args: { name?: string } = {}): CrossRealmBot =>
+export const makeCrossRealmBot = (args: UserOrBotPropertiesArgs = NULL_OBJECT): CrossRealmBot =>
   deepFreeze({
     ...userOrBotProperties(args),
     is_bot: true,
