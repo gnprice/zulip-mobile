@@ -30,7 +30,7 @@ import {
 import { FIRST_UNREAD_ANCHOR, LAST_MESSAGE_ANCHOR } from '../anchor';
 import { showErrorAlert } from '../utils/info';
 import { ALL_PRIVATE_NARROW, apiNarrowOfNarrow } from '../utils/narrow';
-import { BackoffMachine } from '../utils/async';
+import { BackoffMachine, promiseTimeout, TimeoutError } from '../utils/async';
 import { initNotifications } from '../notification/notificationActions';
 import { addToOutbox, sendOutbox } from '../outbox/outboxActions';
 import { realmInit } from '../realm/realmActions';
@@ -181,8 +181,6 @@ const initialFetchAbortPlain = (reason: 'server' | 'network' | 'timeout'): Actio
   reason,
 });
 
-// This will be used in an upcoming commit.
-/* eslint-disable-next-line no-unused-vars */
 export const initialFetchAbort = (reason: 'server' | 'network' | 'timeout') => async (
   dispatch: Dispatch,
   getState: GetState,
@@ -304,31 +302,53 @@ const fetchPrivateMessages = () => async (dispatch: Dispatch, getState: GetState
 };
 
 /**
- * Makes a request that retries until success or a non-retryable error.
+ * Makes a request that retries until success or a non-retryable error, with
+ *   timeout.
  *
  * Waits between retries with a backoff.
  *
  * A non-retryable error will propagate to the caller to be handled.
+ *
+ * The timeout's length is `config.requestLongTimeoutMs` and it is absolute:
+ * it triggers after that time has elapsed no matter whether the time was
+ * spent waiting to hear back from one request, or retrying a request
+ * unsuccessfully many times (and the time spent in backoff is included in
+ * that).
  */
 export async function tryFetch<T>(func: () => Promise<T>): Promise<T> {
   const backoffMachine = new BackoffMachine();
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    try {
-      return await func();
-    } catch (e) {
-      if (!isRetryable(e)) {
-        throw e;
-      }
-      await backoffMachine.wait();
-    }
-  }
 
-  // Without this, Flow 0.92.1 does not know this code is unreachable,
-  // and it incorrectly thinks Promise<undefined> could be returned,
-  // which is inconsistent with the stated Promise<T> return type.
-  // eslint-disable-next-line no-unreachable
-  throw new Error();
+  // TODO: Use AbortController instead of this stateful flag; #4170
+  let timerHasExpired = false;
+
+  try {
+    return await promiseTimeout(
+      (async () => {
+        // eslint-disable-next-line no-constant-condition
+        while (true) {
+          if (timerHasExpired) {
+            // No one is listening for this Promise to settle, so stop
+            // doing more work.
+            throw new Error();
+          }
+          try {
+            return await func();
+          } catch (e) {
+            if (!isRetryable(e)) {
+              throw e;
+            }
+            await backoffMachine.wait();
+          }
+        }
+      })(),
+      config.requestLongTimeoutMs,
+    );
+  } catch (e) {
+    if (e instanceof TimeoutError) {
+      timerHasExpired = true;
+    }
+    throw e;
+  }
 }
 
 /**
@@ -391,6 +411,8 @@ export const doInitialFetch = () => async (dispatch: Dispatch, getState: GetStat
       // This should only happen when `auth` is no longer valid. No
       // use retrying; just log out.
       dispatch(logout());
+    } else if (e instanceof TimeoutError) {
+      dispatch(initialFetchAbort('timeout'));
     } else {
       logging.warn(e, {
         message: 'Unexpected error during initial fetch and serverSettings fetch.',
