@@ -5,6 +5,7 @@ import { Animated, Easing, View } from 'react-native';
 import { UserAvatarWithPresence, ComponentWithOverlay, RawLabel, Touchable } from '../common';
 import { createStyleSheet } from '../styles';
 import { IconCancel } from '../common/Icons';
+import type { AvatarURL } from '../utils/avatar';
 
 const styles = createStyleSheet({
   wrapper: {
@@ -27,7 +28,7 @@ const styles = createStyleSheet({
 
 type Props = $ReadOnly<{|
   email: string,
-  avatarUrl: ?string,
+  avatarUrl: AvatarURL,
   fullName: string,
   onPress: (email: string) => void,
 |}>;

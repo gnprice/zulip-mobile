@@ -8,6 +8,10 @@ type ApiResponseUsers = {|
   members: User[],
 |};
 
+// TODO: If we start to use this, we need to convert `.avatar_url` to
+// an AvatarURL instance, like we do in `registerForEvents` and
+// `EVENT_USER_ADD` and `EVENT_USER_UPDATE`.
+
 /** See https://zulip.com/api/get-all-users */
 export default (auth: Auth): Promise<ApiResponseUsers> =>
   apiGet(auth, 'users', { client_gravatar: true });

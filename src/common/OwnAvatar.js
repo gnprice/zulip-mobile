@@ -5,7 +5,6 @@ import type { User, Dispatch } from '../types';
 import { connect } from '../react-redux';
 import { getCurrentRealm, getSelfUserDetail } from '../selectors';
 import UserAvatar from './UserAvatar';
-import { getAvatarFromUser } from '../utils/avatar';
 
 type Props = $ReadOnly<{|
   dispatch: Dispatch,
@@ -21,9 +20,8 @@ type Props = $ReadOnly<{|
  */
 class OwnAvatar extends PureComponent<Props> {
   render() {
-    const { user, size, realm } = this.props;
-    const fullAvatarUrl = getAvatarFromUser(user, realm, size);
-    return <UserAvatar avatarUrl={fullAvatarUrl} size={size} />;
+    const { user, size } = this.props;
+    return <UserAvatar avatarUrl={user.avatar_url} size={size} />;
   }
 }
 

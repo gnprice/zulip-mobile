@@ -4,6 +4,7 @@ import type { Auth } from './transportTypes';
 import type { Narrow } from './apiTypes';
 import type { CrossRealmBot, User } from './modelTypes';
 import { apiPost } from './apiFetch';
+import { AvatarURL } from '../utils/avatar';
 
 type RegisterForEventsParams = {|
   apply_markdown?: boolean,
@@ -23,10 +24,14 @@ type RegisterForEventsParams = {|
 export const transformUserOrBot = <T: User | CrossRealmBot>(
   rawUserOrBot: $FlowFixMe, // server data pre-transformation
   realm: URL,
-): T =>
-  // In an upcoming commit, we'll convert `avatar_url` to an AvatarURL
-  // instance.
-  rawUserOrBot;
+): T => {
+  const { avatar_url: rawAvatarUrl, email } = rawUserOrBot;
+
+  return {
+    ...rawUserOrBot,
+    avatar_url: AvatarURL.fromUserOrBotData({ rawAvatarUrl, email, realm }),
+  };
+};
 
 const transform = (
   rawInitialData: $FlowFixMe, // server data pre-transformation

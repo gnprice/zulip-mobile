@@ -4,9 +4,10 @@ import { ImageBackground, View } from 'react-native';
 
 import type { Node as React$Node } from 'react';
 import Touchable from './Touchable';
+import type { AvatarURL } from '../utils/avatar';
 
 type Props = $ReadOnly<{|
-  avatarUrl: string,
+  avatarUrl: AvatarURL,
   size: number,
   shape: 'rounded' | 'square',
   children?: React$Node,
@@ -41,7 +42,7 @@ export default class UserAvatar extends PureComponent<Props> {
         <Touchable onPress={onPress} style={style}>
           <ImageBackground
             style={style}
-            source={{ uri: avatarUrl }}
+            source={{ uri: avatarUrl.get(size).toString() }}
             resizeMode="cover"
             /* ImageBackground seems to ignore `style.borderRadius`. */
             borderRadius={borderRadius}

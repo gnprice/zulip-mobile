@@ -7,8 +7,8 @@ import { createStyleSheet } from '../styles';
 import { connect } from '../react-redux';
 import { getCurrentRealm } from '../selectors';
 import UserAvatar from './UserAvatar';
-import { getAvatarUrl } from '../utils/avatar';
 import PresenceStatusIndicator from './PresenceStatusIndicator';
+import type { AvatarURL } from '../utils/avatar';
 
 const styles = createStyleSheet({
   status: {
@@ -20,7 +20,7 @@ const styles = createStyleSheet({
 
 type Props = $ReadOnly<{|
   dispatch: Dispatch,
-  avatarUrl: ?string,
+  avatarUrl: AvatarURL,
   email: string,
   size: number,
   realm: URL,
@@ -40,18 +40,16 @@ type Props = $ReadOnly<{|
  */
 class UserAvatarWithPresence extends PureComponent<Props> {
   static defaultProps = {
-    avatarUrl: '',
     email: '',
     size: 32,
     shape: 'rounded',
   };
 
   render() {
-    const { avatarUrl, email, size, onPress, realm, shape } = this.props;
-    const fullAvatarUrl = getAvatarUrl(avatarUrl, email, realm);
+    const { avatarUrl, email, size, onPress, shape } = this.props;
 
     return (
-      <UserAvatar avatarUrl={fullAvatarUrl} size={size} onPress={onPress} shape={shape}>
+      <UserAvatar avatarUrl={avatarUrl} size={size} onPress={onPress} shape={shape}>
         <PresenceStatusIndicator style={styles.status} email={email} hideIfOffline />
       </UserAvatar>
     );

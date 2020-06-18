@@ -76,6 +76,9 @@ export default (state: RealmState = initialState, action: Action): RealmState =>
     }
 
     // TODO on EVENT_USER_UPDATE for self: update email, isAdmin, etc.
+    // TODO on EVENT_USER_UPDATE for a user in
+    // `state.realm.nonActiveUsers`: Convert `.avatar_url` field to
+    // AvatarURL instance.
 
     case EVENT_REALM_FILTERS:
       return {

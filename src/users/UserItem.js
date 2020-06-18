@@ -4,6 +4,7 @@ import { View } from 'react-native';
 
 import { UserAvatarWithPresence, RawLabel, Touchable, UnreadCount } from '../common';
 import styles, { createStyleSheet, BRAND_COLOR } from '../styles';
+import type { AvatarURL } from '../utils/avatar';
 
 const componentStyles = createStyleSheet({
   selectedRow: {
@@ -27,7 +28,7 @@ const componentStyles = createStyleSheet({
 type Props = $ReadOnly<{|
   email: string,
   fullName: string,
-  avatarUrl: ?string,
+  avatarUrl: AvatarURL,
   isSelected: boolean,
   showEmail: boolean,
   unreadCount?: number,

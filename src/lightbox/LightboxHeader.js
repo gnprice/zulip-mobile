@@ -55,12 +55,7 @@ export default class LightboxHeader extends PureComponent<Props> {
 
     return (
       <View style={styles.wrapper}>
-        <UserAvatarWithPresence
-          size={36}
-          // In the next commit, `UserAvatarWithPresence` will take an
-          // AvatarURL instance for `avatarUrl`.
-          avatarUrl={avatarUrl.get(36).toString()}
-        />
+        <UserAvatarWithPresence size={36} avatarUrl={avatarUrl} />
         <View style={styles.text}>
           <Text style={styles.name} numberOfLines={1}>
             {senderName}

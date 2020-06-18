@@ -129,17 +129,26 @@ export default (state: GlobalState, event: $FlowFixMe): EventAction => {
       };
 
     case 'realm_user': {
+      const realm = getCurrentRealm(state);
+
       switch (event.op) {
-        case 'add':
+        case 'add': {
+          const { avatar_url: rawAvatarUrl, email } = event.person;
           return {
             type: EVENT_USER_ADD,
             id: event.id,
             // TODO: Validate and rebuild `event.person`.
-            person: event.person,
+            person: {
+              ...event.person,
+              avatar_url: AvatarURL.fromUserOrBotData({
+                rawAvatarUrl,
+                email,
+                realm,
+              }),
+            },
           };
+        }
         case 'update': {
-          // We'll use this in an upcoming commit.
-          // eslint-disable-next-line no-unused-vars
           let existingUser: UserOrBot;
           try {
             existingUser = getUserForId(state, event.person.user_id);
@@ -167,7 +176,13 @@ export default (state: GlobalState, event: $FlowFixMe): EventAction => {
               // currently use them: `avatar_source`,
               // `avatar_url_medium`, and `avatar_version`.
               ...(event.person.avatar_url !== undefined
-                ? { avatar_url: event.person.avatar_url }
+                ? {
+                    avatar_url: AvatarURL.fromUserOrBotData({
+                      rawAvatarUrl: event.person.avatar_url,
+                      email: existingUser.email,
+                      realm,
+                    }),
+                  }
                 : undefined),
             },
           };
@@ -185,6 +200,9 @@ export default (state: GlobalState, event: $FlowFixMe): EventAction => {
     }
 
     case 'realm_bot':
+      // If implementing, don't forget to convert `avatar_url` on
+      // `op: 'add'`, and (where `avatar_url` is present) on
+      // `op: 'update'`.
       return { type: 'ignore' };
 
     case 'reaction':

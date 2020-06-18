@@ -23,7 +23,6 @@ import * as api from '../api';
 import { getSelfUserDetail, getUsersByEmail } from '../users/userSelectors';
 import { getUsersAndWildcards } from '../users/userHelpers';
 import { isStreamNarrow, isPrivateOrGroupNarrow } from '../utils/narrow';
-import { AvatarURL } from '../utils/avatar';
 import { BackoffMachine } from '../utils/async';
 import { NULL_USER } from '../nullObjects';
 
@@ -160,7 +159,6 @@ export const addToOutbox = (narrow: Narrow, content: string) => async (
   getState: GetState,
 ) => {
   const state = getState();
-  const auth = getAuth(state);
   const userDetail = getSelfUserDetail(state);
 
   const localTime = Math.round(new Date().getTime() / 1000);
@@ -175,14 +173,7 @@ export const addToOutbox = (narrow: Narrow, content: string) => async (
       id: localTime,
       sender_full_name: userDetail.full_name,
       sender_email: userDetail.email,
-
-      // In the next commit, we'll just use `userDetail.avatar_url`,
-      // since it'll already be an `AvatarURL`.
-      avatar_url: AvatarURL.fromUserOrBotData({
-        rawAvatarUrl: userDetail.avatar_url,
-        email: userDetail.email,
-        realm: auth.realm,
-      }),
+      avatar_url: userDetail.avatar_url,
       isOutbox: true,
       reactions: [],
     }),
