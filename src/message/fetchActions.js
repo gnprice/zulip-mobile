@@ -337,8 +337,8 @@ export async function tryFetch<T>(func: () => Promise<T>): Promise<T> {
             if (!isRetryable(e)) {
               throw e;
             }
-            await backoffMachine.wait();
           }
+          await backoffMachine.wait();
         }
       })(),
       config.requestLongTimeoutMs,
