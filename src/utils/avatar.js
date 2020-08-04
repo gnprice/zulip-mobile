@@ -3,7 +3,7 @@
 /* eslint-disable no-use-before-define */
 import md5 from 'blueimp-md5';
 
-import type { Message, Outbox, UserOrBot } from '../types';
+import type { UserOrBot } from '../types';
 import { tryParseUrl } from './url';
 import * as logging from './logging';
 import { ensureUnreachable } from '../types';
@@ -273,9 +273,3 @@ export const getAvatarUrl = (
 
 export const getAvatarFromUser = (user: UserOrBot, realm: URL, size?: number): string =>
   getAvatarUrl(user.avatar_url, user.email, realm, size);
-
-export const getAvatarFromMessage = (
-  message: Message | Outbox,
-  realm: URL,
-  size?: number,
-): string => getAvatarUrl(message.avatar_url, message.sender_email, realm, size);

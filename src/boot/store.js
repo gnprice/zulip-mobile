@@ -199,6 +199,9 @@ const migrations: { [string]: (GlobalState) => GlobalState } = {
     })),
   }),
 
+  // Convert messages[].avatar_url from `string | null` to `AvatarURL`.
+  '16': dropCache,
+
   // TIP: When adding a migration, consider just using `dropCache`.
 };
 

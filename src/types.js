@@ -3,6 +3,7 @@ import type { IntlShape } from 'react-intl';
 import type { DangerouslyImpreciseStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 import type { Auth, Topic, Message, Reaction, ReactionType, Narrow } from './api/apiTypes';
+import type { AvatarURL } from './utils/avatar';
 import type { ZulipVersion } from './utils/zulipVersion';
 
 export type * from './generics';
@@ -177,7 +178,7 @@ export type Outbox = {|
   narrow: Narrow,
 
   // These fields are modeled on `Message`.
-  avatar_url: string | null,
+  avatar_url: AvatarURL,
   content: string,
   display_recipient: $FlowFixMe, // `string` for type stream, else PmRecipientUser[].
   id: number,

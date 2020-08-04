@@ -2,6 +2,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text } from 'react-native';
 
+import type { AvatarURL } from '../utils/avatar';
 import { shortTime, humanDate } from '../utils/date';
 import { createStyleSheet } from '../styles';
 import { UserAvatarWithPresence, Touchable } from '../common';
@@ -41,7 +42,7 @@ const styles = createStyleSheet({
 type Props = $ReadOnly<{|
   senderName: string,
   timestamp: number,
-  avatarUrl: string,
+  avatarUrl: AvatarURL,
   onPressBack: () => void,
 |}>;
 
@@ -54,7 +55,12 @@ export default class LightboxHeader extends PureComponent<Props> {
 
     return (
       <View style={styles.wrapper}>
-        <UserAvatarWithPresence size={36} avatarUrl={avatarUrl} />
+        <UserAvatarWithPresence
+          size={36}
+          // In the next commit, `UserAvatarWithPresence` will take an
+          // AvatarURL instance for `avatarUrl`.
+          avatarUrl={avatarUrl.get(36).toString()}
+        />
         <View style={styles.text}>
           <Text style={styles.name} numberOfLines={1}>
             {senderName}
