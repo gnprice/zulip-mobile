@@ -18,6 +18,7 @@ type RegisterForEventsParams = {|
   client_capabilities?: {|
     notification_settings_null: boolean,
     bulk_message_deletion: boolean,
+    user_avatar_url_field_optional: boolean,
   |},
 |};
 
@@ -25,11 +26,11 @@ export const transformUserOrBot = <T: User | CrossRealmBot>(
   rawUserOrBot: $FlowFixMe, // server data pre-transformation
   realm: URL,
 ): T => {
-  const { avatar_url: rawAvatarUrl, email } = rawUserOrBot;
+  const { avatar_url: rawAvatarUrl, user_id: userId, email } = rawUserOrBot;
 
   return {
     ...rawUserOrBot,
-    avatar_url: AvatarURL.fromUserOrBotData({ rawAvatarUrl, email, realm }),
+    avatar_url: AvatarURL.fromUserOrBotData({ rawAvatarUrl, userId, email, realm }),
   };
 };
 

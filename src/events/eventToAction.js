@@ -133,7 +133,7 @@ export default (state: GlobalState, event: $FlowFixMe): EventAction => {
 
       switch (event.op) {
         case 'add': {
-          const { avatar_url: rawAvatarUrl, email } = event.person;
+          const { avatar_url: rawAvatarUrl, user_id: userId, email } = event.person;
           return {
             type: EVENT_USER_ADD,
             id: event.id,
@@ -142,6 +142,7 @@ export default (state: GlobalState, event: $FlowFixMe): EventAction => {
               ...event.person,
               avatar_url: AvatarURL.fromUserOrBotData({
                 rawAvatarUrl,
+                userId,
                 email,
                 realm,
               }),
@@ -149,9 +150,10 @@ export default (state: GlobalState, event: $FlowFixMe): EventAction => {
           };
         }
         case 'update': {
+          const { user_id: userId } = event.person;
           let existingUser: UserOrBot;
           try {
-            existingUser = getUserForId(state, event.person.user_id);
+            existingUser = getUserForId(state, userId);
           } catch (e) {
             // If we get one of these events and don't have
             // information on the user, there's nothing to do about
@@ -168,7 +170,7 @@ export default (state: GlobalState, event: $FlowFixMe): EventAction => {
           return {
             type: EVENT_USER_UPDATE,
             id: event.id,
-            userId: event.person.user_id,
+            userId,
             // Just the fields we want to overwrite.
             person: {
               // Note: The `avatar_url` field will be out of sync with
@@ -179,6 +181,7 @@ export default (state: GlobalState, event: $FlowFixMe): EventAction => {
                 ? {
                     avatar_url: AvatarURL.fromUserOrBotData({
                       rawAvatarUrl: event.person.avatar_url,
+                      userId,
                       email: existingUser.email,
                       realm,
                     }),
