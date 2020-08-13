@@ -12,26 +12,26 @@ export const clearTyping = (outdatedNotifications: string[]): Action => ({
 
 let expiryTimer = null;
 
-function typingStatusExpiryLoopOnce(dispatch: Dispatch, getState: GetState) {
-  expiryTimer = null;
-  const currentTime = new Date().getTime();
-  const typing = getTyping(getState());
-  if (Object.keys(typing).length === 0) {
-    // No longer anything to do or to wait for.
-    return;
-  }
-  const outdatedNotifications = [];
-  Object.keys(typing).forEach(recipients => {
-    if (currentTime - typing[recipients].time >= 15000) {
-      outdatedNotifications.push(recipients);
-    }
-  });
-  dispatch(clearTyping(outdatedNotifications));
-  typingStatusExpiryLoop(dispatch, getState);
-}
-
 function typingStatusExpiryLoop(dispatch: Dispatch, getState: GetState) {
-  expiryTimer = setTimeout(typingStatusExpiryLoopOnce, 15000, dispatch, getState);
+  const loop = () => {
+    expiryTimer = null;
+    const currentTime = new Date().getTime();
+    const typing = getTyping(getState());
+    if (Object.keys(typing).length === 0) {
+      // No longer anything to do or to wait for.
+      return;
+    }
+    const outdatedNotifications = [];
+    Object.keys(typing).forEach(recipients => {
+      if (currentTime - typing[recipients].time >= 15000) {
+        outdatedNotifications.push(recipients);
+      }
+    });
+    dispatch(clearTyping(outdatedNotifications));
+    expiryTimer = setTimeout(loop, 15000);
+  };
+
+  expiryTimer = setTimeout(loop, 15000);
 }
 
 /** Start the typing-status expiry loop, if there isn't one already. */
