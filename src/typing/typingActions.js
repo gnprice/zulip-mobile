@@ -12,7 +12,15 @@ export const clearTyping = (outdatedNotifications: string[]): Action => ({
 
 let expiryTimer = null;
 
-function typingStatusExpiryLoop(dispatch: Dispatch, getState: GetState) {
+/** Start the typing-status expiry loop, if there isn't one already. */
+export const ensureTypingStatusExpiryLoop = () => async (
+  dispatch: Dispatch,
+  getState: GetState,
+) => {
+  if (expiryTimer) {
+    return;
+  }
+
   const loop = () => {
     expiryTimer = null;
     const currentTime = new Date().getTime();
@@ -32,14 +40,4 @@ function typingStatusExpiryLoop(dispatch: Dispatch, getState: GetState) {
   };
 
   expiryTimer = setTimeout(loop, 15000);
-}
-
-/** Start the typing-status expiry loop, if there isn't one already. */
-export const ensureTypingStatusExpiryLoop = () => async (
-  dispatch: Dispatch,
-  getState: GetState,
-) => {
-  if (!expiryTimer) {
-    typingStatusExpiryLoop(dispatch, getState);
-  }
 };
