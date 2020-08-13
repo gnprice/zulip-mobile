@@ -1,7 +1,6 @@
 /* @flow strict-local */
 import type { Action, Dispatch, GetState } from '../types';
 
-import { sleep } from '../utils/async';
 import { getTyping } from '../directSelectors';
 
 export const clearTyping = (outdatedNotifications: string[]): Action => ({
@@ -9,25 +8,22 @@ export const clearTyping = (outdatedNotifications: string[]): Action => ({
   outdatedNotifications,
 });
 
-const typingStatusExpiryLoop = () => async (dispatch: Dispatch, getState: GetState) => {
-  // loop to auto dismiss typing notifications after typingNotificationTimeout
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    await sleep(15000);
-    const currentTime = new Date().getTime();
-    const typing = getTyping(getState());
-    if (Object.keys(typing).length === 0) {
-      break; // break if no typing notifications
-    }
-    const outdatedNotifications = [];
-    Object.keys(typing).forEach(recipients => {
-      if (currentTime - typing[recipients].time >= 15000) {
-        outdatedNotifications.push(recipients);
-      }
-    });
-    dispatch(clearTyping(outdatedNotifications));
+function typingStatusExpiryLoop(dispatch: Dispatch, getState: GetState) {
+  const currentTime = new Date().getTime();
+  const typing = getTyping(getState());
+  if (Object.keys(typing).length === 0) {
+    // No longer anything to do or to wait for.
+    return;
   }
-};
+  const outdatedNotifications = [];
+  Object.keys(typing).forEach(recipients => {
+    if (currentTime - typing[recipients].time >= 15000) {
+      outdatedNotifications.push(recipients);
+    }
+  });
+  dispatch(clearTyping(outdatedNotifications));
+  setTimeout(typingStatusExpiryLoop, 15000, dispatch, getState);
+}
 
 /** Start the typing-status expiry loop, if there isn't one already. */
 export const ensureTypingStatusExpiryLoop = () => async (
@@ -36,6 +32,6 @@ export const ensureTypingStatusExpiryLoop = () => async (
 ) => {
   const state = getState();
   if (Object.keys(state.typing).length === 0) {
-    dispatch(typingStatusExpiryLoop());
+    typingStatusExpiryLoop(dispatch, getState);
   }
 };
