@@ -8,7 +8,12 @@ export const clearTyping = (outdatedNotifications: string[]): Action => ({
   outdatedNotifications,
 });
 
-function typingStatusExpiryLoop(dispatch: Dispatch, getState: GetState) {
+/* eslint-disable no-use-before-define */
+
+let expiryTimer = null;
+
+function typingStatusExpiryLoopOnce(dispatch: Dispatch, getState: GetState) {
+  expiryTimer = null;
   const currentTime = new Date().getTime();
   const typing = getTyping(getState());
   if (Object.keys(typing).length === 0) {
@@ -22,7 +27,11 @@ function typingStatusExpiryLoop(dispatch: Dispatch, getState: GetState) {
     }
   });
   dispatch(clearTyping(outdatedNotifications));
-  setTimeout(typingStatusExpiryLoop, 15000, dispatch, getState);
+  typingStatusExpiryLoop(dispatch, getState);
+}
+
+function typingStatusExpiryLoop(dispatch: Dispatch, getState: GetState) {
+  expiryTimer = setTimeout(typingStatusExpiryLoopOnce, 15000, dispatch, getState);
 }
 
 /** Start the typing-status expiry loop, if there isn't one already. */
@@ -30,8 +39,7 @@ export const ensureTypingStatusExpiryLoop = () => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
-  const state = getState();
-  if (Object.keys(state.typing).length === 0) {
+  if (!expiryTimer) {
     typingStatusExpiryLoop(dispatch, getState);
   }
 };
