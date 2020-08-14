@@ -265,12 +265,7 @@ const messagePropertiesBase = deepFreeze({
 });
 
 const messagePropertiesFromSender = (user: User) => {
-  const {
-    avatar_url,
-    user_id: sender_id,
-    email: sender_email,
-    full_name: sender_full_name,
-  } = otherUser;
+  const { avatar_url, user_id: sender_id, email: sender_email, full_name: sender_full_name } = user;
 
   return deepFreeze({
     sender_domain: '',
@@ -326,14 +321,21 @@ const messagePropertiesFromStream = (stream1: Stream) => {
  *
  * Beware! These values may not be representative.
  */
-export const streamMessage = (args?: {| ...$Rest<Message, {}>, stream?: Stream |}): Message => {
-  // The redundant `stream` in the ?? case avoids a Flow issue:
-  // https://github.com/facebook/flow/issues/2386
-  const { stream: streamInner = stream, ...extra } = args ?? { stream };
+export const streamMessage = (args?: {|
+  ...$Rest<Message, {}>,
+  stream?: Stream,
+  sender?: User,
+|}): Message => {
+  // The redundant `stream` and `sender` in the ?? case avoids a Flow
+  // issue: https://github.com/facebook/flow/issues/2386
+  const { stream: streamInner = stream, sender = otherUser, ...extra } = args ?? {
+    stream,
+    sender: otherUser,
+  };
 
   const baseMessage: Message = {
     ...messagePropertiesBase,
-    ...messagePropertiesFromSender(otherUser),
+    ...messagePropertiesFromSender(sender),
     ...messagePropertiesFromStream(streamInner),
 
     content: 'This is an example stream message.',
