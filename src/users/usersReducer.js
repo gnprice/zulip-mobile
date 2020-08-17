@@ -10,6 +10,7 @@ import {
   EVENT_USER_UPDATE,
 } from '../actionConstants';
 import { NULL_ARRAY } from '../nullObjects';
+import { replaceItemInArray } from '../utils/immutability';
 
 const initialState: UsersState = NULL_ARRAY;
 
@@ -29,8 +30,21 @@ export default (state: UsersState = initialState, action: Action): UsersState =>
     case EVENT_USER_REMOVE:
       return state; // TODO
 
-    case EVENT_USER_UPDATE:
-      return state; // TODO
+    case EVENT_USER_UPDATE: {
+      if (!state.some(u => u.user_id === action.userId)) {
+        // This should never happen because we only dispatch this
+        // event if the user is already in state. But good to check,
+        // just in case -- we don't want to trigger
+        // `replaceItemInArray`'s logic for when it doesn't find the
+        // item to be replaced.
+        return state;
+      }
+      return replaceItemInArray(
+        state,
+        u => u.user_id === action.userId,
+        u => ({ ...u, ...action.person }),
+      );
+    }
 
     default:
       return state;

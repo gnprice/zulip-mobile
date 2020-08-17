@@ -1,7 +1,9 @@
 /* @flow strict-local */
 import { EventTypes } from '../api/eventTypes';
 
+import * as logging from '../utils/logging';
 import type { GlobalState, EventAction } from '../types';
+import type { UserOrBot } from '../api/modelTypes';
 import {
   EVENT_ALERT_WORDS,
   EVENT_NEW_MESSAGE,
@@ -31,7 +33,7 @@ import {
   EVENT_SUBSCRIPTION,
   EVENT,
 } from '../actionConstants';
-import { getOwnEmail, getOwnUserId } from '../users/userSelectors';
+import { getOwnEmail, getOwnUserId, getUserForId } from '../users/userSelectors';
 
 const opToActionUserGroup = {
   add: EVENT_USER_GROUP_ADD,
@@ -128,12 +130,41 @@ export default (state: GlobalState, event: $FlowFixMe): EventAction => {
             // TODO: Validate and rebuild `event.person`.
             person: event.person,
           };
-        case 'update':
-          // In an upcoming commit, we'll add `person`, with the
-          // fields we wish to update.
+        case 'update': {
+          // We'll use this in an upcoming commit.
+          // eslint-disable-next-line no-unused-vars
+          let existingUser: UserOrBot;
+          try {
+            existingUser = getUserForId(state, event.person.user_id);
+          } catch (e) {
+            // If we get one of these events and don't have
+            // information on the user, there's nothing to do about
+            // it. But it's probably a bug, so, tell Sentry.
+            logging.warn(
+              "`realm_user` event with op `update` received for a user we don't know about",
+              { userId: event.person?.user_id },
+            );
+            return {
+              type: 'ignore',
+            };
+          }
+
           return {
             type: EVENT_USER_UPDATE,
+            id: event.id,
+            userId: event.person.user_id,
+            // Just the fields we want to overwrite.
+            person: {
+              // Note: The `avatar_url` field will be out of sync with
+              // some related, documented properties, but we don't
+              // currently use them: `avatar_source`,
+              // `avatar_url_medium`, and `avatar_version`.
+              ...(event.person.avatar_url !== undefined
+                ? { avatar_url: event.person.avatar_url }
+                : undefined),
+            },
           };
+        }
         case 'remove':
           // TODO: Handle (and properly form) this action.
           return {
