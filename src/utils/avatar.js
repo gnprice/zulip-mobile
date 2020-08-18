@@ -23,17 +23,16 @@ export class AvatarURL {
   |}): AvatarURL => {
     const { rawAvatarUrl, email, realm } = args;
     if (rawAvatarUrl === null) {
-      // If we announce `client_gravatar`, which we do in most
-      // relevant requests, `rawAvatarUrl` might be null. In that
-      // case, we take responsibility for computing a hash for the
-      // user's email and using it to form a URL for an avatar served
-      // by Gravatar.
+      // If we announce `client_gravatar`, which we do, `rawAvatarUrl`
+      // might be null. In that case, we take responsibility for
+      // computing a hash for the user's email and using it to form a
+      // URL for an avatar served by Gravatar.
       return GravatarURL.validateAndConstructInstance({ email });
     } else if (typeof rawAvatarUrl === 'string') {
-      // If we don't announce `client_gravatar` (which we do in most
-      // relevant requests), or if the server doesn't have
-      // EMAIL_ADDRESS_VISIBILITY_EVERYONE set, then `rawAvatarUrl`
-      // will be the absolute Gravatar URL string.
+      // If we don't announce `client_gravatar` (which we do), or if
+      // the server doesn't have EMAIL_ADDRESS_VISIBILITY_EVERYONE
+      // set, then `rawAvatarUrl` will be the absolute Gravatar URL
+      // string.
       //
       // (In that later case, we won't have real email addresses with
       // which to generate the correct hash; see
