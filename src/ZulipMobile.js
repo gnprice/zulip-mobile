@@ -11,7 +11,7 @@ import AppEventHandlers from './boot/AppEventHandlers';
 import AppDataFetcher from './boot/AppDataFetcher';
 import BackNavigationHandler from './nav/BackNavigationHandler';
 import InitialNavigationDispatcher from './nav/InitialNavigationDispatcher';
-import AppWithNavigation from './nav/AppWithNavigation';
+import AppContainer from './nav/AppContainer';
 import NavigationService from './nav/NavigationService';
 
 import './i18n/locale';
@@ -31,7 +31,12 @@ export default (): React$Node => (
             <ThemeProvider>
               <InitialNavigationDispatcher>
                 <BackNavigationHandler>
-                  <AppWithNavigation ref={NavigationService.reduxContainerRef} />
+                  <AppContainer
+                    // `static navigationOptions` and `static router` not
+                    // being handled properly
+                    // $FlowFixMe
+                    ref={NavigationService.appContainerRef}
+                  />
                 </BackNavigationHandler>
               </InitialNavigationDispatcher>
             </ThemeProvider>
