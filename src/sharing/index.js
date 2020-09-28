@@ -1,6 +1,8 @@
 /* @flow strict-local */
 import { NativeModules, DeviceEventEmitter, Platform } from 'react-native';
-import type { Dispatch, SharedData, GetState } from '../types';
+
+import NavigationService from '../nav/NavigationService';
+import type { SharedData } from '../types';
 import { navigateToSharing } from '../actions';
 
 const Sharing = NativeModules.Sharing ?? {
@@ -9,24 +11,15 @@ const Sharing = NativeModules.Sharing ?? {
     null,
 };
 
-const goToSharing = (data: SharedData) => (dispatch: Dispatch, getState: GetState) => {
-  dispatch(navigateToSharing(data));
-};
-
-export const handleInitialShare = async (dispatch: Dispatch) => {
+export const handleInitialShare = async () => {
   const initialSharedData: SharedData | null = await Sharing.getInitialSharedContent();
   if (initialSharedData !== null) {
-    dispatch(goToSharing(initialSharedData));
+    NavigationService.dispatch(navigateToSharing(initialSharedData));
   }
 };
 
 export class ShareReceivedListener {
-  dispatch: Dispatch;
   unsubs: Array<() => void> = [];
-
-  constructor(dispatch: Dispatch) {
-    this.dispatch = dispatch;
-  }
 
   /** Private. */
   listen(name: string, handler: (...empty) => void | Promise<void>) {
@@ -44,7 +37,7 @@ export class ShareReceivedListener {
   }
 
   handleShareReceived = (data: SharedData) => {
-    this.dispatch(goToSharing(data));
+    NavigationService.dispatch(navigateToSharing(data));
   };
 
   /** Start listening.  Don't call twice without intervening `stop`. */

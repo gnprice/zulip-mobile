@@ -115,7 +115,7 @@ class AppEventHandlers extends PureComponent<Props> {
   };
 
   notificationListener = new NotificationListener(this.props.dispatch);
-  shareListener = new ShareReceivedListener(this.props.dispatch);
+  shareListener = new ShareReceivedListener();
 
   handleMemoryWarning = () => {
     // Release memory here
@@ -124,7 +124,7 @@ class AppEventHandlers extends PureComponent<Props> {
   componentDidMount() {
     const { dispatch } = this.props;
     handleInitialNotification(dispatch);
-    handleInitialShare(dispatch);
+    handleInitialShare();
 
     this.netInfoDisconnectCallback = NetInfo.addEventListener(this.handleConnectivityChange);
     AppState.addEventListener('change', this.handleAppStateChange);
