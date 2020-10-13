@@ -9,7 +9,6 @@ import ThemeProvider from './boot/ThemeProvider';
 import CompatibilityChecker from './boot/CompatibilityChecker';
 import AppEventHandlers from './boot/AppEventHandlers';
 import AppDataFetcher from './boot/AppDataFetcher';
-import BackNavigationHandler from './nav/BackNavigationHandler';
 import InitialNavigationDispatcher from './nav/InitialNavigationDispatcher';
 import AppContainer from './nav/AppContainer';
 import NavigationService from './nav/NavigationService';
@@ -30,14 +29,12 @@ export default (): React$Node => (
           <TranslationProvider>
             <ThemeProvider>
               <InitialNavigationDispatcher>
-                <BackNavigationHandler>
-                  <AppContainer
-                    // `static navigationOptions` and `static router` not
-                    // being handled properly
-                    // $FlowFixMe
-                    ref={NavigationService.appContainerRef}
-                  />
-                </BackNavigationHandler>
+                <AppContainer
+                  // `static navigationOptions` and `static router` not
+                  // being handled properly
+                  // $FlowFixMe
+                  ref={NavigationService.appContainerRef}
+                />
               </InitialNavigationDispatcher>
             </ThemeProvider>
           </TranslationProvider>
