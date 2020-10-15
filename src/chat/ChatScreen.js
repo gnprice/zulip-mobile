@@ -1,12 +1,13 @@
 /* @flow strict-local */
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import type { NavigationStackProp, NavigationStateRoute } from 'react-navigation-stack';
 import { withNavigationFocus } from 'react-navigation';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 
-import styles, { createStyleSheet, ThemeContext, type ThemeData } from '../styles';
+import styles, { createStyleSheet, ThemeContext } from '../styles';
 import type { Dispatch, Fetching, Narrow, EditMessage } from '../types';
 import { KeyboardAvoider, OfflineNotice, ZulipStatusBar } from '../common';
 import ChatNavBar from '../nav/ChatNavBar';
@@ -53,130 +54,148 @@ const componentStyles = createStyleSheet({
   },
 });
 
-type State = {|
-  editMessage: EditMessage | null,
-  fetchError: Error | null,
-|};
+/**
+ * Fetch messages for this narrow and report an error, if any
+ *
+ * See `MessagesState` for background about the fetching, including
+ * why this is nearly the only place where additional data fetching
+ * is required.  See `fetchMessagesInNarrow` and `fetchMessages` for
+ * more details, including how Redux is kept up-to-date during the
+ * whole process.
+ */
+const useFetchMessages = args => {
+  const { isFocused, narrow, eventQueueId, loading, fetching, haveNoMessages } = args;
 
-class ChatScreen extends PureComponent<Props, State> {
-  static contextType = ThemeContext;
-  context: ThemeData;
+  const dispatch: Dispatch = useDispatch();
 
-  state = {
-    editMessage: null,
-    fetchError: null,
-  };
+  const isFetching = fetching.older || fetching.newer || loading;
 
-  // This could live in `this.state`, but it isn't used in `render`.
-  // If we don't use `this.setState` to update it, we don't have to
-  // worry about pointless rerenders. We just check it in
-  // `componentDidUpdate`.
-  shouldFetchWhenNextFocused: boolean = false;
+  // This could live in state, but then we'd risk pointless rerenders;
+  // we only use it in our `useEffect` callbacks. Using `useRef` is
+  // like using instance variables in class components:
+  //   https://reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables
+  const shouldFetchWhenNextFocused = React.useRef<boolean>(false);
 
-  componentDidMount() {
-    this.fetch();
-  }
+  const [fetchError, setFetchError] = React.useState<Error | null>(null);
 
-  /* eslint-disable react/no-did-update-set-state */
-  componentDidUpdate(prevProps, prevState) {
-    const { isFocused } = this.props;
-
-    // When the event queue changes, schedule a fetch.
-    if (prevProps.eventQueueId !== this.props.eventQueueId) {
-      this.shouldFetchWhenNextFocused = true;
-    }
-
-    // Do a scheduled fetch, if it's time
-    if (this.shouldFetchWhenNextFocused && isFocused === true) {
-      this.shouldFetchWhenNextFocused = false;
-      this.fetch();
-    }
-  }
-
-  clearError = () => {
-    this.setState({ fetchError: null });
-  };
-
-  /**
-   * Fetch messages for this narrow.
-   *
-   * See `MessagesState` for background about the fetching, including
-   * why this is nearly the only place where additional data fetching
-   * is required.  See `fetchMessagesInNarrow` and `fetchMessages` for
-   * more details, including how Redux is kept up-to-date during the
-   * whole process.
-   */
-  fetch = async () => {
-    const { narrow } = this.props.navigation.state.params;
-    const { dispatch } = this.props;
+  const fetch = React.useCallback(async () => {
+    shouldFetchWhenNextFocused.current = false;
     try {
       await dispatch(fetchMessagesInNarrow(narrow));
     } catch (e) {
-      this.setState({ fetchError: e });
+      setFetchError(e);
     }
-  };
+  }, [
+    // Neither of these should change, but we include them for
+    // correctness.
+    dispatch,
+    narrow,
+  ]);
 
-  startEditMessage = (editMessage: EditMessage | null) => {
-    this.setState({ editMessage });
-  };
+  // First `useEffect` (order matters).
+  React.useEffect(
+    () => {
+      // When the event queue changes, schedule a fetch.
+      shouldFetchWhenNextFocused.current = true;
+    },
+    // Don't add `isFocused` here: we only want to set
+    // `shouldFetchWhenNextFocused` to true when the `eventQueueId`
+    // changes, and not for any other reason. If we include
+    // `isFocused`, then the callback might be firing because
+    // `isFocused` changed, and we can't easily inspect previous
+    // values of `eventQueueId` or `isFocused` to see if that's the
+    // case
+    // (https://reactjs.org/docs/hooks-faq.html#how-to-get-the-previous-props-or-state).
+    [eventQueueId],
+  );
 
-  completeEditMessage = () => {
-    this.setState({ editMessage: null });
-  };
+  // Second `useEffect` (order matters)
+  React.useEffect(() => {
+    // Fetch on the first mount. Synchronously, unset
+    // `shouldFetchWhenNextFocused.current` that was set in the
+    // previous `useEffect`, so that only one fetch will be done on
+    // first mount (i.e., prevent the fetch in the next `useEffect`).
+    fetch();
+  }, [
+    // `fetch` will not change, but we include it for correctness.
+    fetch,
+  ]);
 
-  render() {
-    const { fetching, haveNoMessages, loading, navigation } = this.props;
-    const { narrow } = navigation.state.params;
-    const { editMessage } = this.state;
+  // Third `useEffect` (order matters)
+  React.useEffect(() => {
+    if (shouldFetchWhenNextFocused.current && isFocused === true) {
+      // Do a scheduled fetch, if it's time
+      fetch();
+    }
+  }, [
+    // Fetch (if needed) when the screen gains focus.
+    isFocused,
+    // In case the screen was already in focus when we got a new
+    // `eventQueueId`. In that case, a previous `useEffect` will have
+    // set `shouldFetchWhenNextFocused.current` to `true`.
+    eventQueueId,
+    // `fetch` will not change, but we include it for correctness.
+    fetch,
+  ]);
 
-    const isFetching = fetching.older || fetching.newer || loading;
+  return { fetchError, isFetching, haveNoMessages };
+};
 
-    const { backgroundColor } = this.context;
-    const { isNarrowValid } = this.props;
-    const { fetchError } = this.state;
-    const setEditMessage = this.startEditMessage;
+function ChatScreen(props: Props) {
+  const { backgroundColor } = React.useContext(ThemeContext);
 
-    const showMessagePlaceholders = haveNoMessages && isFetching;
-    const sayNoMessages = haveNoMessages && !isFetching;
-    const showComposeBox = canSendToNarrow(narrow) && !showMessagePlaceholders;
+  const [editMessage, setEditMessage] = React.useState<EditMessage | null>(null);
 
-    return (
-      <ActionSheetProvider>
-        <View style={[componentStyles.screen, { backgroundColor }]}>
-          <KeyboardAvoider style={styles.flexed} behavior="padding">
-            <ZulipStatusBar narrow={narrow} />
-            <ChatNavBar narrow={narrow} editMessage={editMessage} />
-            <OfflineNotice />
-            <UnreadNotice narrow={narrow} />
-            {(() => {
-              if (!isNarrowValid) {
-                return <InvalidNarrow narrow={narrow} />;
-              } else if (fetchError !== null) {
-                return <FetchError narrow={narrow} error={fetchError} />;
-              } else if (sayNoMessages) {
-                return <NoMessages narrow={narrow} />;
-              } else {
-                return (
-                  <MessageList
-                    narrow={narrow}
-                    showMessagePlaceholders={showMessagePlaceholders}
-                    startEditMessage={setEditMessage}
-                  />
-                );
-              }
-            })()}
-            {showComposeBox && (
-              <ComposeBox
-                narrow={narrow}
-                editMessage={editMessage}
-                completeEditMessage={() => setEditMessage(null)}
-              />
-            )}
-          </KeyboardAvoider>
-        </View>
-      </ActionSheetProvider>
-    );
-  }
+  const { navigation } = props;
+  const { narrow } = navigation.state.params;
+
+  const { isNarrowValid } = props;
+
+  const { fetchError, isFetching, haveNoMessages } = useFetchMessages({
+    ...props,
+    narrow,
+  });
+
+  const showMessagePlaceholders = haveNoMessages && isFetching;
+  const sayNoMessages = haveNoMessages && !isFetching;
+  const showComposeBox = canSendToNarrow(narrow) && !showMessagePlaceholders;
+
+  return (
+    <ActionSheetProvider>
+      <View style={[componentStyles.screen, { backgroundColor }]}>
+        <KeyboardAvoider style={styles.flexed} behavior="padding">
+          <ZulipStatusBar narrow={narrow} />
+          <ChatNavBar narrow={narrow} editMessage={editMessage} />
+          <OfflineNotice />
+          <UnreadNotice narrow={narrow} />
+          {(() => {
+            if (!isNarrowValid) {
+              return <InvalidNarrow narrow={narrow} />;
+            } else if (fetchError !== null) {
+              return <FetchError narrow={narrow} error={fetchError} />;
+            } else if (sayNoMessages) {
+              return <NoMessages narrow={narrow} />;
+            } else {
+              return (
+                <MessageList
+                  narrow={narrow}
+                  showMessagePlaceholders={showMessagePlaceholders}
+                  startEditMessage={setEditMessage}
+                />
+              );
+            }
+          })()}
+          {showComposeBox && (
+            <ComposeBox
+              narrow={narrow}
+              editMessage={editMessage}
+              completeEditMessage={() => setEditMessage(null)}
+            />
+          )}
+        </KeyboardAvoider>
+      </View>
+    </ActionSheetProvider>
+  );
 }
 
 export default compose(
