@@ -25,6 +25,7 @@ export type Language = {
  *
  * For the values of `nativeName`, consult Wikipedia:
  *   https://meta.wikimedia.org/wiki/List_of_Wikipedias
+ *   https://en.wikipedia.org/wiki/Special:Preferences
  * or better yet, Wikipedia's own mobile UIs.  Wikipedia is a very
  * conscientiously international and intercultural project with a lot of
  * effort going into it by speakers of many languages, which makes it a
@@ -34,8 +35,10 @@ const languages: $ReadOnlyArray<Language> = [
   { locale: 'en', name: 'English', nativeName: 'English' },
   { locale: 'bg', name: 'Bulgarian', nativeName: 'Български' },
   { locale: 'ca', name: 'Catalan', nativeName: 'Català' },
+  // For the various zh* translations, we follow Wikipedia's naming, as seen
+  // in user preferences: https://en.wikipedia.org/wiki/Special:Preferences
   { locale: 'zh-Hans', name: 'Chinese (Simplified)', nativeName: '中文（简体）' },
-  { locale: 'zh-Hant', name: 'Chinese (Traditional)', nativeName: '中文 (繁体)' },
+  { locale: 'zh_TW', name: 'Chinese (Taiwan)', nativeName: '中文（台灣）' },
   { locale: 'cs', name: 'Czech', nativeName: 'Čeština' },
   { locale: 'nl', name: 'Dutch', nativeName: 'Nederlands' },
   // TODO: add `en_GB` -- it's "100% translated", though that just means
