@@ -1,19 +1,9 @@
 /* @flow strict-local */
 import React from 'react';
-import type {
-  NavigationAction,
-  NavigationState,
-  NavigationContainer,
-  NavigationContainerProps,
-} from 'react-navigation';
+import type { NavigationAction, NavigationState, NavigationContainer } from 'react-navigation';
 
-/* prettier-ignore */
 const appContainerRef = React.createRef<
-  React$ElementRef<
-    NavigationContainer<
-      NavigationState,
-      { ... },
-      NavigationContainerProps<NavigationState, { ... }>>>
+  React$ElementRef<NavigationContainer<NavigationState, { ... }>>,
 >();
 
 const getState = (): NavigationState => {

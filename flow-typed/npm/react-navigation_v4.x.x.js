@@ -409,7 +409,7 @@ declare module 'react-navigation' {
   declare export type NavigationContainer<
     State: NavigationState,
     Options: {...},
-    Props: NavigationContainerProps<State, Options>,
+    Props: NavigationContainerProps<State, Options> = NavigationContainerProps<State, Options>,
   > = React$ComponentType<Props> &
     withRouter<State, Options> &
     withOptionalNavigationOptions<Options>;
@@ -946,7 +946,7 @@ declare module 'react-navigation' {
 
   declare export function createAppContainer<S: NavigationState, O: {...}>(
     Component: NavigationNavigator<S, O, *>
-  ): NavigationContainer<S, O, NavigationContainerProps<S, O>>;
+  ): NavigationContainer<S, O>;
 
   declare export function createKeyboardAwareNavigator<Props: {...}>(
     Comp: React$ComponentType<Props>,
