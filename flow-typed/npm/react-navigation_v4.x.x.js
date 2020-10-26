@@ -409,7 +409,7 @@ declare module 'react-navigation' {
   declare export type NavigationContainer<
     State: NavigationState,
     Options: {...},
-    Props: NavigationContainerProps<Options, State>,
+    Props: NavigationContainerProps<State, Options>,
   > = React$ComponentType<Props> &
     withRouter<State, Options> &
     withOptionalNavigationOptions<Options>;

@@ -13,7 +13,7 @@ const appContainerRef = React.createRef<
     NavigationContainer<
       NavigationState,
       { ... },
-      NavigationContainerProps<{ ... }, NavigationState>>>
+      NavigationContainerProps<NavigationState, { ... }>>>
 >();
 
 const getState = (): NavigationState => {
