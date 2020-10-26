@@ -7,8 +7,13 @@ import type {
   NavigationContainerProps,
 } from 'react-navigation';
 
+/* prettier-ignore */
 const appContainerRef = React.createRef<
-  NavigationContainer<NavigationState, { ... }, NavigationContainerProps<{ ... }, NavigationState>>,
+  React$ElementRef<
+    NavigationContainer<
+      NavigationState,
+      { ... },
+      NavigationContainerProps<{ ... }, NavigationState>>>
 >();
 
 const getState = (): NavigationState => {
@@ -25,11 +30,7 @@ const dispatch = (navigationAction: NavigationAction): boolean => {
   if (appContainerRef.current === null) {
     throw new Error('Tried to use NavigationService before appContainerRef was set.');
   }
-  return (
-    appContainerRef.current
-      // $FlowFixMe - how to tell Flow about this method?
-      .dispatch(navigationAction)
-  );
+  return appContainerRef.current.dispatch(navigationAction);
 };
 
 export default {

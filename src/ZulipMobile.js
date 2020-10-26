@@ -32,7 +32,6 @@ export default (): React$Node => (
                 <AppContainer
                   // `static navigationOptions` and `static router` not
                   // being handled properly
-                  // $FlowFixMe
                   ref={NavigationService.appContainerRef}
                 />
               </InitialNavigationDispatcher>
