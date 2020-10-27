@@ -122,6 +122,13 @@ class SimpleAvatarURLImpl extends AvatarURL {
   }
 
   /**
+   * Use a special string from `serialize` to make a new instance.
+   */
+  static deserialize<T: SimpleAvatarURLImpl>(Cls: Class<T>, serialized: string): T {
+    return new Cls(serialized);
+  }
+
+  /**
    * PRIVATE: Get the internal standard URL.
    *
    * URLs are mutable; don't mutate this one.
@@ -147,13 +154,6 @@ class SimpleAvatarURLImpl extends AvatarURL {
  * the size options.
  */
 export class GravatarURL extends SimpleAvatarURLImpl {
-  /**
-   * Use a special string from `serialize` to make a new instance.
-   */
-  static deserialize(serialized: string): GravatarURL {
-    return new GravatarURL(serialized);
-  }
-
   /**
    * Construct from raw server data, or throw an error.
    *
@@ -191,13 +191,6 @@ export class GravatarURL extends SimpleAvatarURLImpl {
  */
 export class FallbackAvatarURL extends SimpleAvatarURLImpl {
   /**
-   * Use a special string from `serialize` to make a new instance.
-   */
-  static deserialize(serialized: string): FallbackAvatarURL {
-    return new FallbackAvatarURL(serialized);
-  }
-
-  /**
    * Construct from raw server data, or throw an error.
    */
   static validateAndConstructInstance = (args: {|
@@ -225,13 +218,6 @@ export class FallbackAvatarURL extends SimpleAvatarURLImpl {
  *  * medium: 500x500
  */
 export class UploadedAvatarURL extends SimpleAvatarURLImpl {
-  /**
-   * Use a special string from `serialize` to make a new instance.
-   */
-  static deserialize(serialized: string): UploadedAvatarURL {
-    return new UploadedAvatarURL(serialized);
-  }
-
   /**
    * Construct from raw server data, or throw an error.
    */

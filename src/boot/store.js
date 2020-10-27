@@ -316,11 +316,11 @@ const customReviver = (key, value, defaultReviver) => {
       case 'URL':
         return new URL(data);
       case 'GravatarURL':
-        return GravatarURL.deserialize(data);
+        return GravatarURL.deserialize(GravatarURL, data);
       case 'UploadedAvatarURL':
-        return UploadedAvatarURL.deserialize(data);
+        return UploadedAvatarURL.deserialize(UploadedAvatarURL, data);
       case 'FallbackAvatarURL':
-        return FallbackAvatarURL.deserialize(data);
+        return FallbackAvatarURL.deserialize(FallbackAvatarURL, data);
       default:
       // Fall back to defaultReviver, below
     }

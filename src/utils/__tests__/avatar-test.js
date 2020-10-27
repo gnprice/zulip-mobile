@@ -50,7 +50,7 @@ describe('GravatarURL', () => {
   test('serializes/deserializes correctly', () => {
     const instance = GravatarURL.validateAndConstructInstance({ email: eg.selfUser.email });
 
-    const roundTripped = GravatarURL.deserialize(GravatarURL.serialize(instance));
+    const roundTripped = GravatarURL.deserialize(GravatarURL, GravatarURL.serialize(instance));
 
     SIZES_WE_USE.forEach(size => {
       expect(instance.get(size).toString()).toEqual(roundTripped.get(size).toString());
@@ -91,7 +91,10 @@ describe('UploadedAvatarURL', () => {
         'https://zulip-avatars.s3.amazonaws.com/13/430713047f2cffed661f84e139a64f864f17f286?x=x&version=5',
     });
 
-    const roundTripped = UploadedAvatarURL.deserialize(UploadedAvatarURL.serialize(instance));
+    const roundTripped = UploadedAvatarURL.deserialize(
+      UploadedAvatarURL,
+      UploadedAvatarURL.serialize(instance),
+    );
 
     SIZES_WE_USE.forEach(size => {
       expect(instance.get(size).toString()).toEqual(roundTripped.get(size).toString());
@@ -152,7 +155,10 @@ describe('FallbackAvatarURL', () => {
       userId: eg.selfUser.user_id,
     });
 
-    const roundTripped = FallbackAvatarURL.deserialize(FallbackAvatarURL.serialize(instance));
+    const roundTripped = FallbackAvatarURL.deserialize(
+      FallbackAvatarURL,
+      FallbackAvatarURL.serialize(instance),
+    );
 
     SIZES_WE_USE.forEach(size => {
       expect(instance.get(size).toString()).toEqual(roundTripped.get(size).toString());
