@@ -22,8 +22,16 @@ type RegisterForEventsParams = {|
   |},
 |};
 
+type UnTransformUserLike = <T>(T) => {| ...T, avatar_url: string |};
+type RawInitialData = {|
+  ...InitialData,
+  realm_users: $Call<UnTransformUserLike, User>[],
+  realm_non_active_users: $Call<UnTransformUserLike, User>[],
+  cross_realm_bots: $Call<UnTransformUserLike, CrossRealmBot>[],
+|};
+
 export const transformUserOrBot = <T: User | CrossRealmBot>(
-  rawUserOrBot: $FlowFixMe, // server data pre-transformation
+  rawUserOrBot: {| ...T, avatar_url: string |},
   realm: URL,
 ): T => {
   const { avatar_url: rawAvatarUrl, user_id: userId, email } = rawUserOrBot;
@@ -34,10 +42,7 @@ export const transformUserOrBot = <T: User | CrossRealmBot>(
   };
 };
 
-const transform = (
-  rawInitialData: $FlowFixMe, // server data pre-transformation
-  auth: Auth,
-): InitialData => ({
+const transform = (rawInitialData: RawInitialData, auth: Auth): InitialData => ({
   ...rawInitialData,
   realm_users: rawInitialData.realm_users.map(rawUser =>
     transformUserOrBot<User>(rawUser, auth.realm),
