@@ -84,21 +84,69 @@ export class AvatarURL {
 }
 
 /**
+ * An AvatarURL that's described by a single base URL.
+ *
+ * This class is abstract, and private to the "avatar" module.
+ */
+class SimpleAvatarURLImpl extends AvatarURL {
+  /**
+   * Standard URL from which to generate others. PRIVATE.
+   *
+   * May be a string if the instance was constructed at rehydrate
+   * time, when URL validation is unnecessary.
+   */
+  _standardUrl: string | URL;
+
+  /**
+   * PRIVATE: Make an instance from already-validated data.
+   *
+   * Not part of the public interface; use the static methods instead.
+   *
+   * It's private because we need a path to constructing an instance
+   * without constructing URL objects, which takes more time than is
+   * acceptable when we can avoid it, e.g., during rehydration.
+   * Constructing URL objects is a necessary part of validating data
+   * from the server, but we only need to validate the data once, when
+   * it's first received.
+   */
+  constructor(standardUrl: string | URL) {
+    super();
+    this._standardUrl = standardUrl;
+  }
+
+  /**
+   * Serialize to a special string; reversible with `deserialize`.
+   */
+  static serialize(instance: SimpleAvatarURLImpl): string {
+    return instance._standardUrl.toString();
+  }
+
+  /**
+   * PRIVATE: Get the internal standard URL.
+   *
+   * URLs are mutable; don't mutate this one.
+   *
+   * This method is only for use by subclasses.
+   */
+  // Not named with leading `_` because Flow then forbids it even to subclasses.
+  getStandardUrl(): URL {
+    // `this._standardUrl` may have begun its life as a string, to
+    // avoid computing a URL object during rehydration
+    if (typeof this._standardUrl === 'string') {
+      this._standardUrl = new URL(this._standardUrl);
+    }
+
+    return this._standardUrl;
+  }
+}
+
+/**
  * A Gravatar URL with a hash we compute from an email address.
  *
  * See http://secure.gravatar.com/site/implement/images/, which covers
  * the size options.
  */
-export class GravatarURL extends AvatarURL {
-  /**
-   * Serialize to a special string; reversible with `deserialize`.
-   */
-  static serialize(instance: GravatarURL): string {
-    return instance._standardUrl instanceof URL
-      ? instance._standardUrl.toString()
-      : instance._standardUrl;
-  }
-
+export class GravatarURL extends SimpleAvatarURLImpl {
   /**
    * Use a special string from `serialize` to make a new instance.
    */
@@ -122,39 +170,8 @@ export class GravatarURL extends AvatarURL {
 
   static ORIGIN = 'https://secure.gravatar.com';
 
-  /**
-   * Standard URL from which to generate others. PRIVATE.
-   *
-   * May be a string if the instance was constructed at rehydrate
-   * time, when URL validation is unnecessary.
-   */
-  _standardUrl: string | URL;
-
-  /**
-   * PRIVATE: Make an instance from already-validated data.
-   *
-   * Not part of the public interface; use the static methods instead.
-   *
-   * It's private because we need a path to constructing an instance
-   * without constructing URL objects, which takes more time than is
-   * acceptable when we can avoid it, e.g., during rehydration.
-   * Constructing URL objects is a necessary part of validating data
-   * from the server, but we only need to validate the data once, when
-   * it's first received.
-   */
-  constructor(standardUrl: string | URL) {
-    super();
-    this._standardUrl = standardUrl;
-  }
-
   get(size: number | void): URL {
-    // `this._standardUrl` may have begun its life as a string, to
-    // avoid computing a URL object during rehydration
-    if (typeof this._standardUrl === 'string') {
-      this._standardUrl = new URL(this._standardUrl);
-    }
-
-    let result: URL = this._standardUrl;
+    let result: URL = this.getStandardUrl();
     if (size !== undefined) {
       // Make a new URL to mutate
       result = new URL(result.toString());
@@ -172,16 +189,7 @@ export class GravatarURL extends AvatarURL {
  *
  * This endpoint does not currently support size customization.
  */
-export class FallbackAvatarURL extends AvatarURL {
-  /**
-   * Serialize to a special string; reversible with `deserialize`.
-   */
-  static serialize(instance: FallbackAvatarURL): string {
-    return instance._standardUrl instanceof URL
-      ? instance._standardUrl.toString()
-      : instance._standardUrl;
-  }
-
+export class FallbackAvatarURL extends SimpleAvatarURLImpl {
   /**
    * Use a special string from `serialize` to make a new instance.
    */
@@ -200,39 +208,8 @@ export class FallbackAvatarURL extends AvatarURL {
     return new FallbackAvatarURL(new URL(`/avatar/${userId.toString()}`, realm.origin));
   };
 
-  /**
-   * Standard URL from which to generate others. PRIVATE.
-   *
-   * May be a string if the instance was constructed at rehydrate
-   * time, when URL validation is unnecessary.
-   */
-  _standardUrl: string | URL;
-
-  /**
-   * PRIVATE: Make an instance from already-validated data.
-   *
-   * Not part of the public interface; use the static methods instead.
-   *
-   * It's private because we need a path to constructing an instance
-   * without constructing URL objects, which takes more time than is
-   * acceptable when we can avoid it, e.g., during rehydration.
-   * Constructing URL objects is a necessary part of validating data
-   * from the server, but we only need to validate the data once, when
-   * it's first received.
-   */
-  constructor(standardUrl: string | URL) {
-    super();
-    this._standardUrl = standardUrl;
-  }
-
   get(size: number | void): URL {
-    // `this._standardUrl` may have begun its life as a string, to
-    // avoid computing a URL object during rehydration
-    if (typeof this._standardUrl === 'string') {
-      this._standardUrl = new URL(this._standardUrl);
-    }
-
-    return this._standardUrl;
+    return this.getStandardUrl();
   }
 }
 
@@ -247,16 +224,7 @@ export class FallbackAvatarURL extends AvatarURL {
  *  * default: 100x100
  *  * medium: 500x500
  */
-export class UploadedAvatarURL extends AvatarURL {
-  /**
-   * Serialize to a special string; reversible with `deserialize`.
-   */
-  static serialize(instance: UploadedAvatarURL): string {
-    return instance._standardUrl instanceof URL
-      ? instance._standardUrl.toString()
-      : instance._standardUrl;
-  }
-
+export class UploadedAvatarURL extends SimpleAvatarURLImpl {
   /**
    * Use a special string from `serialize` to make a new instance.
    */
@@ -277,42 +245,11 @@ export class UploadedAvatarURL extends AvatarURL {
     return new UploadedAvatarURL(new URL(absoluteOrRelativeUrl, realm.origin));
   };
 
-  /**
-   * Standard URL from which to generate others. PRIVATE.
-   *
-   * May be a string if the instance was constructed at rehydrate
-   * time, when URL validation is unnecessary.
-   */
-  _standardUrl: string | URL;
-
-  /**
-   * PRIVATE: Make an instance from already-validated data.
-   *
-   * Not part of the public interface; use the static methods instead.
-   *
-   * It's private because we need a path to constructing an instance
-   * without constructing URL objects, which takes more time than is
-   * acceptable when we can avoid it, e.g., during rehydration.
-   * Constructing URL objects is a necessary part of validating data
-   * from the server, but we only need to validate the data once, when
-   * it's first received.
-   */
-  constructor(standardUrl: string | URL) {
-    super();
-    this._standardUrl = standardUrl;
-  }
-
   get(size: number | void): URL {
-    // `this._standardUrl` may have begun its life as a string, to
-    // avoid computing a URL object during rehydration
-    if (typeof this._standardUrl === 'string') {
-      this._standardUrl = new URL(this._standardUrl);
-    }
-
-    let result: URL = this._standardUrl;
+    let result: URL = this.getStandardUrl();
     if (size !== undefined && size > 100) {
-      // Make a new URL to mutate, instead of mutating this._url
-      result = new URL(this._standardUrl.toString());
+      // Make a new URL to mutate
+      result = new URL(result.toString());
 
       const match = new RegExp(/(\w+)\.png/g).exec(result.pathname);
       if (match !== null) {
