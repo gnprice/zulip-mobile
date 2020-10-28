@@ -8,6 +8,7 @@ import { isUrlOnRealm } from './url';
 // reimplement using URL object (not just for the realm)
 const getPathsFromUrl = (url: string = '', realm: URL) => {
   const paths = url
+    // TODO does this work right with the change to trailing slash?
     .split(realm.toString())
     .pop()
     .split('#narrow/')
@@ -25,6 +26,7 @@ const getPathsFromUrl = (url: string = '', realm: URL) => {
 // reimplement using URL object (not just for the realm)
 /** PRIVATE -- exported only for tests. */
 export const isInternalLink = (url: string, realm: URL): boolean =>
+  // TODO does this work right with the change to trailing slash?
   isUrlOnRealm(url, realm)
     ? /^(\/#narrow|#narrow)/i.test(url.split(realm.toString()).pop())
     : false;
