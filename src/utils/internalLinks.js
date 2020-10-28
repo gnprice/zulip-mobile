@@ -2,7 +2,7 @@
 import { addBreadcrumb } from '@sentry/react-native';
 import type { Narrow, Stream, User } from '../types';
 import { topicNarrow, streamNarrow, groupNarrow, specialNarrow } from './narrow';
-import { isUrlOnRealm } from './url';
+import { isUrlOnRealm, tryParseUrl } from './url';
 
 // TODO: Work out what this does, write a jsdoc for its interface, and
 // reimplement using URL object (not just for the realm)
@@ -22,14 +22,29 @@ const getPathsFromUrl = (url: string = '', realm: URL) => {
   return paths;
 };
 
-// TODO: Work out what this does, write a jsdoc for its interface, and
-// reimplement using URL object (not just for the realm)
-/** PRIVATE -- exported only for tests. */
-export const isInternalLink = (url: string, realm: URL): boolean =>
-  // TODO does this work right with the change to trailing slash?
-  isUrlOnRealm(url, realm)
-    ? /^(\/#narrow|#narrow)/i.test(url.split(realm.toString()).pop())
-    : false;
+/**
+ * PRIVATE -- exported only for tests.
+ *
+ * True just if the given URL is a Zulip-internal link to a narrow on the
+ * given realm.
+ */
+// TODO: Adjust to use all URL objects (not just for the realm)
+export const isInternalLink = (urlStr: string, realm: URL): boolean => {
+  if (!isUrlOnRealm(urlStr, realm)) {
+    return false;
+  }
+
+  const url = tryParseUrl(urlStr, realm);
+  if (!url) {
+    return false;
+  }
+
+  if (url.pathname !== '/' || url.search !== '') {
+    return false;
+  }
+
+  return /^#narrow/i.test(url.hash);
+};
 
 // TODO: Work out what this does, write a jsdoc for its interface, and
 // reimplement using URL object (not just for the realm)
