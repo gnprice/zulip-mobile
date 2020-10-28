@@ -4,24 +4,6 @@ import type { Narrow, Stream, User } from '../types';
 import { topicNarrow, streamNarrow, groupNarrow, specialNarrow } from './narrow';
 import { isUrlOnRealm, tryParseUrl } from './url';
 
-// TODO: Work out what this does, write a jsdoc for its interface, and
-// reimplement using URL object (not just for the realm)
-const getPathsFromUrl = (url: string = '', realm: URL) => {
-  const paths = url
-    // TODO does this work right with the change to trailing slash?
-    .split(realm.toString())
-    .pop()
-    .split('#narrow/')
-    .pop()
-    .split('/');
-
-  if (paths.length > 0 && paths[paths.length - 1] === '') {
-    // url ends with /
-    paths.splice(-1, 1);
-  }
-  return paths;
-};
-
 /**
  * PRIVATE -- exported only for tests.
  *
@@ -44,6 +26,39 @@ export const isInternalLink = (urlStr: string, realm: URL): boolean => {
   }
 
   return /^#narrow/i.test(url.hash);
+};
+
+/**
+ * PRIVATE.
+ *
+ * The "path components" in the narrow in the given narrow URL.
+ *
+ * If the URL is not a narrow URL on the given realm, i.e. if
+ * `isInternalLink(url, realm)` is false, then the return value is
+ * unspecified and must be ignored.
+ *
+ * TODO: refactor this and `isInternalLink` together to reflect that
+ *   constraint directly.
+ */
+// TODO: Adjust to use all URL objects (not just for the realm)
+const getPathsFromUrl = (urlStr: string = '', realm: URL) => {
+  if (!isInternalLink(urlStr, realm)) {
+    return [];
+  }
+
+  const url = new URL(urlStr, realm);
+  if (!/^#narrow\//i.test(url.hash)) {
+    // (This is slightly stronger than in isInternalLink.  The discrepancy
+    // should be refactored away.)
+    return [];
+  }
+
+  const components = url.hash.replace(/^#narrow\//i, '').split('/');
+  if (components.length > 0 && components[components.length - 1] === '') {
+    // url ends with /
+    components.splice(-1, 1);
+  }
+  return components;
 };
 
 // TODO: Work out what this does, write a jsdoc for its interface, and
