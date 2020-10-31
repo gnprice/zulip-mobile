@@ -10,14 +10,14 @@ import {
 } from '../actionConstants';
 import { NULL_OBJECT } from '../nullObjects';
 import { DEFAULT_FETCHING } from './fetchingSelectors';
-import { isSearchNarrow } from '../utils/narrow';
+import { SearchNarrow } from '../utils/narrow';
 
 const initialState: FetchingState = NULL_OBJECT;
 
 const messageFetchStart = (state, action) => {
   // We don't want to accumulate old searches that we'll never need
   // again.
-  if (isSearchNarrow(action.narrow.strings)) {
+  if (action.narrow.clean instanceof SearchNarrow) {
     return state;
   }
 
@@ -36,7 +36,7 @@ const messageFetchStart = (state, action) => {
 const messageFetchError = (state, action) => {
   const key = JSON.stringify(action.narrow.strings);
 
-  if (isSearchNarrow(action.narrow.strings)) {
+  if (action.narrow.clean instanceof SearchNarrow) {
     return state;
   }
 
@@ -48,7 +48,7 @@ const messageFetchError = (state, action) => {
 
 const messageFetchComplete = (state, action) => {
   // We don't want to accumulate old searches that we'll never need again.
-  if (isSearchNarrow(action.narrow.strings)) {
+  if (action.narrow.clean instanceof SearchNarrow) {
     return state;
   }
   const key = JSON.stringify(action.narrow.strings);

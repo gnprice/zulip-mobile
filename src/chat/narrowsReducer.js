@@ -20,7 +20,7 @@ import {
   isMessageInNarrow,
   MENTIONED_NARROW_STR,
   STARRED_NARROW_STR,
-  isSearchNarrow,
+  SearchNarrow,
 } from '../utils/narrow';
 import { NULL_OBJECT } from '../nullObjects';
 
@@ -28,7 +28,7 @@ const initialState: NarrowsState = NULL_OBJECT;
 
 const messageFetchComplete = (state, action) => {
   // We don't want to accumulate old searches that we'll never need again.
-  if (isSearchNarrow(action.narrow.strings)) {
+  if (action.narrow.clean instanceof SearchNarrow) {
     return state;
   }
   const key = JSON.stringify(action.narrow.strings);
@@ -114,7 +114,7 @@ export default (state: NarrowsState = initialState, action: Action): NarrowsStat
 
     case MESSAGE_FETCH_START: {
       // We don't want to accumulate old searches that we'll never need again.
-      if (isSearchNarrow(action.narrow.strings)) {
+      if (action.narrow.clean instanceof SearchNarrow) {
         return state;
       }
       // Currently this whole case could be subsumed in `default`. But
