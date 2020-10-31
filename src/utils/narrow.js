@@ -26,8 +26,8 @@ export class CleanNarrow {
   }
 }
 
-export class DualNarrow<T: CleanNarrow = CleanNarrow> {
-  clean: T;
+export class DualNarrow<+T: CleanNarrow = CleanNarrow> {
+  +clean: T;
   strings: Narrow;
 
   constructor(clean: T, strings: Narrow) {
