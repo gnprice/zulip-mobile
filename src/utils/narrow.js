@@ -129,6 +129,13 @@ export class StreamNarrow extends StreamOrTopicNarrow {
 export class TopicNarrow extends StreamOrTopicNarrow {
   topic: string;
 
+  constructor(streamId: number, topic: string, streamName?: string) {
+    super();
+    this.streamId = streamId;
+    this.streamName = streamName;
+    this.topic = topic;
+  }
+
   key() {
     return `topic:${this.streamId}:${this.topic}`;
   }
@@ -455,7 +462,8 @@ export const canSendToNarrow = (narrow: Narrow): boolean =>
     search: () => false,
   });
 
-export const narrowContainsOutbox = (haystack: Narrow, needle: Outbox): boolean => caseNarrowPartial(haystack, {
+export const narrowContainsOutbox = (haystack: Narrow, needle: Outbox): boolean =>
+  caseNarrowPartial(haystack, {
     stream: name => needle.type === 'stream' && needle.display_recipient === name,
     topic: (streamName, topic) =>
       needle.type === 'stream'
