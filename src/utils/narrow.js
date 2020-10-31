@@ -5,6 +5,9 @@ import unescape from 'lodash.unescape';
 import type { Narrow, Message, Outbox, Stream, UserOrBot } from '../types';
 import { normalizeRecipients } from './recipient';
 
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-use-before-define */
+
 class CleanNarrow {
   data: | {| type: 'stream', streamId: number, streamName?: string |}
     | {| type: 'topic', streamId: number, streamName?: string, topic: string |}
