@@ -15,7 +15,7 @@ import type {
   GetText,
   Message,
   MuteState,
-  Narrow,
+  NarrowBridge,
   Outbox,
   ImageEmojiType,
   RenderedSectionDescriptor,
@@ -55,6 +55,7 @@ import { handleMessageListEvent } from './webViewEventHandlers';
 import { base64Utf8Encode } from '../utils/encoding';
 import * as logging from '../utils/logging';
 import { tryParseUrl } from '../utils/url';
+import { asApiStringNarrow } from '../utils/narrow';
 
 // ESLint doesn't notice how `this.props` escapes, and complains about some
 // props not being used here.
@@ -99,7 +100,7 @@ type SelectorProps = {|
 
 // TODO get a type for `connectActionSheet` so this gets fully type-checked.
 export type Props = $ReadOnly<{|
-  narrow: Narrow,
+  narrow: NarrowBridge,
   showMessagePlaceholders: boolean,
   startEditMessage: (editMessage: EditMessage) => void,
 
@@ -232,7 +233,8 @@ class MessageList extends Component<Props> {
       narrow,
       showMessagePlaceholders,
     } = this.props;
-    const messagesHtml = renderMessagesAsHtml(backgroundData, narrow, renderedMessages);
+    const stringsNarrow = asApiStringNarrow(narrow);
+    const messagesHtml = renderMessagesAsHtml(backgroundData, stringsNarrow, renderedMessages);
     const { auth, theme } = backgroundData;
     const html: string = getHtml(messagesHtml, theme, {
       scrollMessageId: initialScrollMessageId,
@@ -319,7 +321,7 @@ class MessageList extends Component<Props> {
 }
 
 type OuterProps = {|
-  narrow: Narrow,
+  narrow: NarrowBridge,
   showMessagePlaceholders: boolean,
 
   /* Remaining props are derived from `narrow` by default. */
@@ -352,15 +354,16 @@ export default connect<SelectorProps, _, _>((state, props: OuterProps) => {
     twentyFourHourTime: getRealm(state).twentyFourHourTime,
   };
 
+  const stringsNarrow = asApiStringNarrow(props.narrow);
   return {
     backgroundData,
     initialScrollMessageId:
       props.initialScrollMessageId !== undefined
         ? props.initialScrollMessageId
-        : getFirstUnreadIdInNarrow(state, props.narrow),
-    fetching: props.fetching || getFetchingForNarrow(state, props.narrow),
-    messages: props.messages || getShownMessagesForNarrow(state, props.narrow),
-    renderedMessages: props.renderedMessages || getRenderedMessages(state, props.narrow),
-    typingUsers: props.typingUsers || getCurrentTypingUsers(state, props.narrow),
+        : getFirstUnreadIdInNarrow(state, stringsNarrow),
+    fetching: props.fetching || getFetchingForNarrow(state, stringsNarrow),
+    messages: props.messages || getShownMessagesForNarrow(state, stringsNarrow),
+    renderedMessages: props.renderedMessages || getRenderedMessages(state, stringsNarrow),
+    typingUsers: props.typingUsers || getCurrentTypingUsers(state, stringsNarrow),
   };
 })(connectActionSheet(withGetText(MessageList)));

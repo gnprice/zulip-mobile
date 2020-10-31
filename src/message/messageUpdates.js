@@ -1,9 +1,10 @@
 /* @flow strict-local */
 import isEqual from 'lodash.isequal';
-import type { Narrow } from '../types';
+import type { NarrowBridge } from '../types';
+import { asApiStringNarrow } from '../utils/narrow';
 
 type Props = $ReadOnly<{
-  narrow: Narrow,
+  narrow: NarrowBridge,
   messages: $ReadOnlyArray<$ReadOnly<{ id: number }>>,
 }>;
 
@@ -26,7 +27,11 @@ export type UpdateStrategy =
   | 'scroll-to-bottom-if-near-bottom';
 
 export const getMessageTransitionProps = (prevProps: Props, nextProps: Props): TransitionProps => {
-  const sameNarrow = isEqual(prevProps.narrow, nextProps.narrow);
+  // TODO(CleanNarrow): migrate equality test
+  const sameNarrow = isEqual(
+    asApiStringNarrow(prevProps.narrow),
+    asApiStringNarrow(nextProps.narrow),
+  );
   const noMessages = nextProps.messages.length === 0;
   const noNewMessages = sameNarrow && prevProps.messages.length === nextProps.messages.length;
   const allNewMessages =

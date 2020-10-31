@@ -2,7 +2,7 @@
 import { Clipboard, Alert } from 'react-native';
 import * as api from '../api';
 import config from '../config';
-import type { Dispatch, GetText, Message, Narrow, Outbox, EditMessage } from '../types';
+import type { Dispatch, GetText, Message, NarrowBridge, Outbox, EditMessage } from '../types';
 import type { BackgroundData } from './MessageList';
 import type { ShowActionSheetWithOptions } from '../message/messageActionSheet';
 import type { JSONableDict } from '../utils/jsonable';
@@ -10,7 +10,7 @@ import { showToast } from '../utils/info';
 import { isUrlAnImage } from '../utils/url';
 import * as logging from '../utils/logging';
 import { filterUnreadMessagesInRange } from '../utils/unread';
-import { parseNarrowString } from '../utils/narrow';
+import { asApiStringNarrow, parseNarrowString } from '../utils/narrow';
 import {
   fetchOlder,
   fetchNewer,
@@ -144,7 +144,7 @@ type Props = $ReadOnly<{
   backgroundData: BackgroundData,
   dispatch: Dispatch,
   messages: $ReadOnlyArray<Message | Outbox>,
-  narrow: Narrow,
+  narrow: NarrowBridge,
   showActionSheetWithOptions: ShowActionSheetWithOptions,
   startEditMessage: (editMessage: EditMessage) => void,
 }>;
@@ -153,10 +153,10 @@ const fetchMore = (props: Props, event: MessageListEventScroll) => {
   const { innerHeight, offsetHeight, scrollY } = event;
   const { dispatch, narrow } = props;
   if (scrollY < config.messageListThreshold) {
-    dispatch(fetchOlder(narrow));
+    dispatch(fetchOlder(asApiStringNarrow(narrow)));
   }
   if (innerHeight + scrollY >= offsetHeight - config.messageListThreshold) {
-    dispatch(fetchNewer(narrow));
+    dispatch(fetchNewer(asApiStringNarrow(narrow)));
   }
 };
 
@@ -206,7 +206,7 @@ const handleLongPress = (
     target === 'header',
     showActionSheetWithOptions,
     { dispatch, startEditMessage, _ },
-    { backgroundData, message, narrow },
+    { backgroundData, message, narrow: asApiStringNarrow(narrow) },
   );
 };
 

@@ -8,6 +8,7 @@ import htmlBody from './html/htmlBody';
 import renderMessagesAsHtml from './html/renderMessagesAsHtml';
 import messageTypingAsHtml from './html/messageTypingAsHtml';
 import { getMessageTransitionProps, getMessageUpdateStrategy } from '../message/messageUpdates';
+import { asApiStringNarrow } from '../utils/narrow';
 
 export type WebViewUpdateEventContent = {|
   type: 'content',
@@ -47,7 +48,11 @@ export type WebViewUpdateEvent =
 
 const updateContent = (prevProps: Props, nextProps: Props): WebViewUpdateEventContent => {
   const content = htmlBody(
-    renderMessagesAsHtml(nextProps.backgroundData, nextProps.narrow, nextProps.renderedMessages),
+    renderMessagesAsHtml(
+      nextProps.backgroundData,
+      asApiStringNarrow(nextProps.narrow),
+      nextProps.renderedMessages,
+    ),
     nextProps.showMessagePlaceholders,
   );
   const transitionProps = getMessageTransitionProps(prevProps, nextProps);
