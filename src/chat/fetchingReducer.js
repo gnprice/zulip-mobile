@@ -17,11 +17,11 @@ const initialState: FetchingState = NULL_OBJECT;
 const messageFetchStart = (state, action) => {
   // We don't want to accumulate old searches that we'll never need
   // again.
-  if (isSearchNarrow(action.narrow)) {
+  if (isSearchNarrow(action.narrow.strings)) {
     return state;
   }
 
-  const key = JSON.stringify(action.narrow);
+  const key = JSON.stringify(action.narrow.strings);
   const currentValue = state[key] || DEFAULT_FETCHING;
 
   return {
@@ -34,9 +34,9 @@ const messageFetchStart = (state, action) => {
 };
 
 const messageFetchError = (state, action) => {
-  const key = JSON.stringify(action.narrow);
+  const key = JSON.stringify(action.narrow.strings);
 
-  if (isSearchNarrow(action.narrow)) {
+  if (isSearchNarrow(action.narrow.strings)) {
     return state;
   }
 
@@ -48,10 +48,10 @@ const messageFetchError = (state, action) => {
 
 const messageFetchComplete = (state, action) => {
   // We don't want to accumulate old searches that we'll never need again.
-  if (isSearchNarrow(action.narrow)) {
+  if (isSearchNarrow(action.narrow.strings)) {
     return state;
   }
-  const key = JSON.stringify(action.narrow);
+  const key = JSON.stringify(action.narrow.strings);
   const currentValue = state[key] || DEFAULT_FETCHING;
 
   return {

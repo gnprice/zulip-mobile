@@ -84,6 +84,7 @@ import type {
   AlertWordsState,
   UserStatusEvent,
 } from './types';
+import { DualNarrow } from './utils/narrow';
 import type { ZulipVersion } from './utils/zulipVersion';
 
 export type { NavigationAction } from 'react-navigation';
@@ -189,7 +190,7 @@ type AckPushTokenAction = {|
 
 type MessageFetchStartAction = {|
   type: typeof MESSAGE_FETCH_START,
-  narrow: Narrow,
+  narrow: DualNarrow<>,
   numBefore: number,
   numAfter: number,
 |};
@@ -211,7 +212,7 @@ type MessageFetchStartAction = {|
  */
 type MessageFetchErrorAction = {|
   type: typeof MESSAGE_FETCH_ERROR,
-  narrow: Narrow,
+  narrow: DualNarrow<>,
   // Before storing this in state, be sure to replace/revive Error
   // instances so they aren't coerced into plain objects; see
   // bfe794955 for an example.
@@ -221,7 +222,7 @@ type MessageFetchErrorAction = {|
 type MessageFetchCompleteAction = {|
   type: typeof MESSAGE_FETCH_COMPLETE,
   messages: Message[],
-  narrow: Narrow,
+  narrow: DualNarrow<>,
   anchor: number,
   numBefore: number,
   numAfter: number,

@@ -28,10 +28,10 @@ const initialState: NarrowsState = NULL_OBJECT;
 
 const messageFetchComplete = (state, action) => {
   // We don't want to accumulate old searches that we'll never need again.
-  if (isSearchNarrow(action.narrow)) {
+  if (isSearchNarrow(action.narrow.strings)) {
     return state;
   }
-  const key = JSON.stringify(action.narrow);
+  const key = JSON.stringify(action.narrow.strings);
   const fetchedMessageIds = action.messages.map(message => message.id);
   const replaceExisting =
     action.anchor === FIRST_UNREAD_ANCHOR || action.anchor === LAST_MESSAGE_ANCHOR;
@@ -114,7 +114,7 @@ export default (state: NarrowsState = initialState, action: Action): NarrowsStat
 
     case MESSAGE_FETCH_START: {
       // We don't want to accumulate old searches that we'll never need again.
-      if (isSearchNarrow(action.narrow)) {
+      if (isSearchNarrow(action.narrow.strings)) {
         return state;
       }
       // Currently this whole case could be subsumed in `default`. But

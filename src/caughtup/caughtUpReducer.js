@@ -68,7 +68,7 @@ export default (state: CaughtUpState = initialState, action: Action): CaughtUpSt
     case MESSAGE_FETCH_START: {
       // We don't want to accumulate old searches that we'll never
       // need again.
-      if (isSearchNarrow(action.narrow)) {
+      if (isSearchNarrow(action.narrow.strings)) {
         return state;
       }
       // Currently this whole case could be subsumed in `default`. But
@@ -86,10 +86,10 @@ export default (state: CaughtUpState = initialState, action: Action): CaughtUpSt
 
     case MESSAGE_FETCH_COMPLETE: {
       // We don't want to accumulate old searches that we'll never need again.
-      if (isSearchNarrow(action.narrow)) {
+      if (isSearchNarrow(action.narrow.strings)) {
         return state;
       }
-      const key = JSON.stringify(action.narrow);
+      const key = JSON.stringify(action.narrow.strings);
       let caughtUp;
       if (action.foundNewest !== undefined && action.foundOldest !== undefined) {
         /* This should always be the case for Zulip Server v1.8 or newer. */

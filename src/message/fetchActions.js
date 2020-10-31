@@ -31,7 +31,7 @@ import {
   MESSAGE_FETCH_COMPLETE,
 } from '../actionConstants';
 import { FIRST_UNREAD_ANCHOR, LAST_MESSAGE_ANCHOR } from '../anchor';
-import { ALL_PRIVATE_NARROW, asApiStringNarrow, DualNarrow } from '../utils/narrow';
+import { AllPmsNarrow, ALL_PRIVATE_NARROW, asApiStringNarrow, DualNarrow } from '../utils/narrow';
 import { BackoffMachine } from '../utils/async';
 import { initNotifications } from '../notification/notificationActions';
 import { addToOutbox, sendOutbox } from '../outbox/outboxActions';
@@ -41,14 +41,14 @@ import { logout } from '../account/accountActions';
 import { ZulipVersion } from '../utils/zulipVersion';
 import { getDualNarrow } from '../chat/narrowsSelectors';
 
-const messageFetchStart = (narrow: Narrow, numBefore: number, numAfter: number): Action => ({
+const messageFetchStart = (narrow: DualNarrow<>, numBefore: number, numAfter: number): Action => ({
   type: MESSAGE_FETCH_START,
   narrow,
   numBefore,
   numAfter,
 });
 
-const messageFetchError = (args: {| narrow: Narrow, error: Error |}): Action => {
+const messageFetchError = (args: {| narrow: DualNarrow<>, error: Error |}): Action => {
   const { narrow, error } = args;
   return {
     type: MESSAGE_FETCH_ERROR,
@@ -59,7 +59,7 @@ const messageFetchError = (args: {| narrow: Narrow, error: Error |}): Action => 
 
 const messageFetchComplete = (args: {|
   messages: Message[],
-  narrow: Narrow,
+  narrow: DualNarrow<>,
   anchor: number,
   numBefore: number,
   numAfter: number,
@@ -92,8 +92,10 @@ export const fetchMessages = (fetchArgs: {|
   numBefore: number,
   numAfter: number,
 |}) => async (dispatch: Dispatch, getState: GetState): Promise<Message[]> => {
-  const stringsNarrow = asApiStringNarrow(fetchArgs.narrow);
-  dispatch(messageFetchStart(stringsNarrow, fetchArgs.numBefore, fetchArgs.numAfter));
+  const state = getState();
+  const narrow = getDualNarrow(state, fetchArgs.narrow);
+  const stringsNarrow = narrow.strings;
+  dispatch(messageFetchStart(narrow, fetchArgs.numBefore, fetchArgs.numAfter));
   try {
     // api.getMessages is one spot that really does want an API-style
     // narrow... though for new enough servers, it can take IDs.
@@ -105,7 +107,7 @@ export const fetchMessages = (fetchArgs: {|
     dispatch(
       messageFetchComplete({
         ...fetchArgs,
-        narrow: stringsNarrow,
+        narrow,
         messages,
         foundNewest: found_newest,
         foundOldest: found_oldest,
@@ -115,7 +117,7 @@ export const fetchMessages = (fetchArgs: {|
   } catch (e) {
     dispatch(
       messageFetchError({
-        narrow: stringsNarrow,
+        narrow,
         error: e,
       }),
     );
@@ -264,7 +266,7 @@ const fetchPrivateMessages = () => async (dispatch: Dispatch, getState: GetState
   dispatch(
     messageFetchComplete({
       messages,
-      narrow: ALL_PRIVATE_NARROW,
+      narrow: new DualNarrow(new AllPmsNarrow(), ALL_PRIVATE_NARROW),
       anchor: LAST_MESSAGE_ANCHOR,
       numBefore: 100,
       numAfter: 0,
