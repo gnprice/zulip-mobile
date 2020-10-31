@@ -3,7 +3,13 @@ import deepFreeze from 'deep-freeze';
 
 import * as eg from '../../__tests__/lib/exampleData';
 import fetchingReducer from '../fetchingReducer';
-import { HOME_NARROW, HOME_NARROW_STR, streamNarrow } from '../../utils/narrow';
+import {
+  AllMessagesNarrow,
+  DualNarrow,
+  HOME_NARROW,
+  HOME_NARROW_STR,
+  streamNarrow,
+} from '../../utils/narrow';
 import { MESSAGE_FETCH_START, MESSAGE_FETCH_ERROR } from '../../actionConstants';
 import { DEFAULT_FETCHING } from '../fetchingSelectors';
 
@@ -16,7 +22,7 @@ describe('fetchingReducer', () => {
 
       const action = deepFreeze({
         type: MESSAGE_FETCH_START,
-        narrow: [],
+        narrow: new DualNarrow(new AllMessagesNarrow(), HOME_NARROW),
         numBefore: 10,
         numAfter: 10,
       });
