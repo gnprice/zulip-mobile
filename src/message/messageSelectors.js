@@ -13,7 +13,7 @@ import * as logging from '../utils/logging';
 import { getShownMessagesForNarrow } from '../chat/narrowsSelectors';
 import renderMessages from './renderMessages';
 import type { JSONable } from '../utils/jsonable';
-import { ALL_PRIVATE_NARROW_STR } from '../utils/narrow';
+import { ALL_PRIVATE_NARROW_STR, DualNarrow } from '../utils/narrow';
 import { NULL_ARRAY } from '../nullObjects';
 
 /**
@@ -61,13 +61,16 @@ export const getPrivateMessages: Selector<Message[]> = createSelector(
   },
 );
 
-export const getRenderedMessages: Selector<RenderedSectionDescriptor[], Narrow> = createSelector(
+export const getRenderedMessages: Selector<
+  RenderedSectionDescriptor[],
+  DualNarrow<>,
+> = createSelector(
   (state, narrow) => narrow,
   getShownMessagesForNarrow,
-  (narrow, messages) => renderMessages(messages, narrow),
+  (narrow, messages) => renderMessages(messages, narrow.strings),
 );
 
-export const getFirstUnreadIdInNarrow: Selector<number | null, Narrow> = createSelector(
+export const getFirstUnreadIdInNarrow: Selector<number | null, DualNarrow<>> = createSelector(
   (state, narrow) => getShownMessagesForNarrow(state, narrow),
   getFlags,
   getSubscriptions,

@@ -17,7 +17,7 @@ import { getMute, getStreams, getTopics, getUnreadStreams } from '../directSelec
 import { getShownMessagesForNarrow } from '../chat/narrowsSelectors';
 import { getStreamsById } from '../subscriptions/subscriptionSelectors';
 import { NULL_ARRAY } from '../nullObjects';
-import { isStreamNarrow } from '../utils/narrow';
+import { DualNarrow, isStreamNarrow } from '../utils/narrow';
 
 export const getTopicsForNarrow: Selector<string[], Narrow> = createSelector(
   (state, narrow) => narrow,
@@ -67,7 +67,7 @@ export const getTopicsForStream: Selector<?(TopicExtended[]), number> = createSe
   },
 );
 
-export const getLastMessageTopic = (state: GlobalState, narrow: Narrow): string => {
+export const getLastMessageTopic = (state: GlobalState, narrow: DualNarrow<>): string => {
   const messages = getShownMessagesForNarrow(state, narrow);
   return messages.length === 0 ? '' : messages[messages.length - 1].subject;
 };

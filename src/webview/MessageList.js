@@ -362,10 +362,10 @@ export default connect<SelectorProps, _, _>((state, props: OuterProps) => {
     initialScrollMessageId:
       props.initialScrollMessageId !== undefined
         ? props.initialScrollMessageId
-        : getFirstUnreadIdInNarrow(state, stringsNarrow),
+        : getFirstUnreadIdInNarrow(state, narrow),
     fetching: props.fetching || getFetchingForNarrow(state, stringsNarrow),
     messages: props.messages || getShownMessagesForNarrow(state, narrow),
-    renderedMessages: props.renderedMessages || getRenderedMessages(state, stringsNarrow),
+    renderedMessages: props.renderedMessages || getRenderedMessages(state, narrow),
     typingUsers: props.typingUsers || getCurrentTypingUsers(state, stringsNarrow),
   };
 })(connectActionSheet(withGetText(MessageList)));

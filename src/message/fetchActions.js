@@ -39,6 +39,7 @@ import { realmInit } from '../realm/realmActions';
 import { startEventPolling } from '../events/eventActions';
 import { logout } from '../account/accountActions';
 import { ZulipVersion } from '../utils/zulipVersion';
+import { getDualNarrow } from '../chat/narrowsSelectors';
 
 const messageFetchStart = (narrow: Narrow, numBefore: number, numAfter: number): Action => ({
   type: MESSAGE_FETCH_START,
@@ -122,11 +123,15 @@ export const fetchMessages = (fetchArgs: {|
   }
 };
 
-export const fetchOlder = (narrow: Narrow) => (dispatch: Dispatch, getState: GetState) => {
+export const fetchOlder = (narrowBridge: NarrowBridge) => (
+  dispatch: Dispatch,
+  getState: GetState,
+) => {
   const state = getState();
+  const narrow = getDualNarrow(state, narrowBridge);
   const firstMessageId = getFirstMessageId(state, narrow);
-  const caughtUp = getCaughtUpForNarrow(state, narrow);
-  const fetching = getFetchingForNarrow(state, narrow);
+  const caughtUp = getCaughtUpForNarrow(state, narrow.strings);
+  const fetching = getFetchingForNarrow(state, narrow.strings);
   const { needsInitialFetch } = getSession(state);
 
   if (!needsInitialFetch && !fetching.older && !caughtUp.older && firstMessageId !== undefined) {
@@ -141,11 +146,15 @@ export const fetchOlder = (narrow: Narrow) => (dispatch: Dispatch, getState: Get
   }
 };
 
-export const fetchNewer = (narrow: Narrow) => (dispatch: Dispatch, getState: GetState) => {
+export const fetchNewer = (narrowBridge: NarrowBridge) => (
+  dispatch: Dispatch,
+  getState: GetState,
+) => {
   const state = getState();
+  const narrow = getDualNarrow(state, narrowBridge);
   const lastMessageId = getLastMessageId(state, narrow);
-  const caughtUp = getCaughtUpForNarrow(state, narrow);
-  const fetching = getFetchingForNarrow(state, narrow);
+  const caughtUp = getCaughtUpForNarrow(state, narrow.strings);
+  const fetching = getFetchingForNarrow(state, narrow.strings);
   const { needsInitialFetch } = getSession(state);
 
   if (!needsInitialFetch && !fetching.newer && !caughtUp.newer && lastMessageId !== undefined) {
