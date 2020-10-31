@@ -21,7 +21,7 @@ const messageFetchStart = (state, action) => {
     return state;
   }
 
-  const key = JSON.stringify(action.narrow.strings);
+  const key = action.narrow.clean.key();
   const currentValue = state[key] || DEFAULT_FETCHING;
 
   return {
@@ -34,7 +34,7 @@ const messageFetchStart = (state, action) => {
 };
 
 const messageFetchError = (state, action) => {
-  const key = JSON.stringify(action.narrow.strings);
+  const key = action.narrow.clean.key();
 
   if (action.narrow.clean instanceof SearchNarrow) {
     return state;
@@ -51,7 +51,7 @@ const messageFetchComplete = (state, action) => {
   if (action.narrow.clean instanceof SearchNarrow) {
     return state;
   }
-  const key = JSON.stringify(action.narrow.strings);
+  const key = action.narrow.clean.key();
   const currentValue = state[key] || DEFAULT_FETCHING;
 
   return {

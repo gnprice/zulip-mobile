@@ -7,4 +7,4 @@ import { DualNarrow } from '../utils/narrow';
 export const DEFAULT_FETCHING = { older: false, newer: false };
 
 export const getFetchingForNarrow = (state: GlobalState, narrow: DualNarrow<>): Fetching =>
-  getFetching(state)[JSON.stringify(narrow.strings)] || DEFAULT_FETCHING;
+  getFetching(state)[narrow.clean.key()] || DEFAULT_FETCHING;

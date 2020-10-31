@@ -90,6 +90,9 @@ export type Fetching = {|
 /**
  * Info about which narrows we're actively fetching more messages from.
  *
+ * Unlike some other data structures indexed by narrow, the keys here
+ * are those of the *new*, CleanNarrow structures.
+ *
  * See also: `CaughtUpState`, `NarrowsState`.
  */
 export type FetchingState = {
