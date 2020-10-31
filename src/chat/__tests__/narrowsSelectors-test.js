@@ -14,6 +14,9 @@ import {
   topicNarrow,
   STARRED_NARROW,
   groupNarrow,
+  AllMessagesNarrow,
+  DualNarrow,
+  PmNarrow,
 } from '../../utils/narrow';
 import { NULL_SUBSCRIPTION } from '../../nullObjects';
 import * as eg from '../../__tests__/lib/exampleData';
@@ -31,23 +34,25 @@ describe('getMessagesForNarrow', () => {
   });
 
   test('if no outbox messages returns messages with no change', () => {
+    const narrow = new DualNarrow(new AllMessagesNarrow(), HOME_NARROW);
     const state = eg.reduxState({
       narrows: {
-        '[]': [123],
+        [JSON.stringify(narrow)]: [123],
       },
       messages,
       outbox: [],
     });
 
-    const result = getMessagesForNarrow(state, HOME_NARROW);
+    const result = getMessagesForNarrow(state, narrow);
 
     expect(result).toEqual([state.messages[123]]);
   });
 
   test('combine messages and outbox in same narrow', () => {
+    const narrow = new DualNarrow(new AllMessagesNarrow(), HOME_NARROW);
     const state = eg.reduxState({
       narrows: {
-        '[]': [123],
+        [JSON.stringify(narrow)]: [123],
       },
       messages,
       outbox: [outboxMessage],
@@ -56,36 +61,38 @@ describe('getMessagesForNarrow', () => {
       },
     });
 
-    const result = getMessagesForNarrow(state, HOME_NARROW);
+    const result = getMessagesForNarrow(state, narrow);
 
     expect(result).toEqual([message, outboxMessage]);
   });
 
   test('do not combine messages and outbox if not caught up', () => {
+    const narrow = new DualNarrow(new AllMessagesNarrow(), HOME_NARROW);
     const state = eg.reduxState({
       narrows: {
-        [HOME_NARROW_STR]: [123],
+        [JSON.stringify(narrow)]: [123],
       },
       messages,
       outbox: [outboxMessage],
     });
 
-    const result = getMessagesForNarrow(state, HOME_NARROW);
+    const result = getMessagesForNarrow(state, narrow);
 
     expect(result).toEqual([state.messages[123]]);
   });
 
   test('do not combine messages and outbox in different narrow', () => {
+    const narrow = PmNarrow.dualFromUser(eg.otherUser);
     const state = eg.reduxState({
       narrows: {
-        [JSON.stringify(privateNarrow('john@example.com'))]: [123],
+        [JSON.stringify(narrow)]: [123],
       },
       messages,
       /* $FlowFixMe: NOMERGE prototype */
       outbox: [{ ...outboxMessage, narrow: streamNarrow('denmark') }],
     });
 
-    const result = getMessagesForNarrow(state, privateNarrow('john@example.com'));
+    const result = getMessagesForNarrow(state, narrow);
 
     expect(result).toEqual([message]);
   });
@@ -93,22 +100,24 @@ describe('getMessagesForNarrow', () => {
 
 describe('getFirstMessageId', () => {
   test('return undefined when there are no messages', () => {
+    const narrow = new DualNarrow(new AllMessagesNarrow(), HOME_NARROW);
     const state = eg.reduxState({
       narrows: {
-        '[]': [],
+        [JSON.stringify(narrow)]: [],
       },
       outbox: [],
     });
 
-    const result = getFirstMessageId(state, HOME_NARROW);
+    const result = getFirstMessageId(state, narrow);
 
     expect(result).toEqual(undefined);
   });
 
   test('returns first message id', () => {
+    const narrow = new DualNarrow(new AllMessagesNarrow(), HOME_NARROW);
     const state = eg.reduxState({
       narrows: {
-        '[]': [1, 2, 3],
+        [JSON.stringify(narrow)]: [1, 2, 3],
       },
       messages: {
         [1]: eg.streamMessage({ id: 1 }) /* eslint-disable-line no-useless-computed-key */,
@@ -118,7 +127,7 @@ describe('getFirstMessageId', () => {
       outbox: [],
     });
 
-    const result = getFirstMessageId(state, HOME_NARROW);
+    const result = getFirstMessageId(state, narrow);
 
     expect(result).toEqual(1);
   });
@@ -126,23 +135,25 @@ describe('getFirstMessageId', () => {
 
 describe('getLastMessageId', () => {
   test('return undefined when there are no messages', () => {
+    const narrow = new DualNarrow(new AllMessagesNarrow(), HOME_NARROW);
     const state = eg.reduxState({
       narrows: {
-        '[]': [],
+        [JSON.stringify(narrow)]: [],
       },
       messages: {},
       outbox: [],
     });
 
-    const result = getLastMessageId(state, HOME_NARROW);
+    const result = getLastMessageId(state, narrow);
 
     expect(result).toEqual(undefined);
   });
 
   test('returns last message id', () => {
+    const narrow = new DualNarrow(new AllMessagesNarrow(), HOME_NARROW);
     const state = eg.reduxState({
       narrows: {
-        '[]': [1, 2, 3],
+        [JSON.stringify(narrow)]: [1, 2, 3],
       },
       messages: {
         [1]: eg.streamMessage({ id: 1 }) /* eslint-disable-line no-useless-computed-key */,
@@ -152,7 +163,7 @@ describe('getLastMessageId', () => {
       outbox: [],
     });
 
-    const result = getLastMessageId(state, HOME_NARROW);
+    const result = getLastMessageId(state, narrow);
 
     expect(result).toEqual(3);
   });

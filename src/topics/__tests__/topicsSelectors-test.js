@@ -1,6 +1,12 @@
 /* @flow strict-local */
 import { getTopicsForNarrow, getLastMessageTopic, getTopicsForStream } from '../topicSelectors';
-import { HOME_NARROW, streamNarrow } from '../../utils/narrow';
+import {
+  AllMessagesNarrow,
+  DualNarrow,
+  HOME_NARROW,
+  StreamNarrow,
+  streamNarrow,
+} from '../../utils/narrow';
 import * as eg from '../../__tests__/lib/exampleData';
 
 describe('getTopicsForNarrow', () => {
@@ -33,13 +39,16 @@ describe('getLastMessageTopic', () => {
       narrows: {},
     });
 
-    const topic = getLastMessageTopic(state, HOME_NARROW);
+    const topic = getLastMessageTopic(state, new DualNarrow(new AllMessagesNarrow(), HOME_NARROW));
 
     expect(topic).toEqual('');
   });
 
   test('when one or more messages return the topic of the last one', () => {
-    const narrow = streamNarrow('hello');
+    const narrow = new DualNarrow(
+      new StreamNarrow(eg.stream.stream_id, eg.stream.name),
+      streamNarrow(eg.stream.name),
+    );
     const message1 = eg.streamMessage({ id: 1 });
     const message2 = eg.streamMessage({ id: 2, subject: 'some topic' });
     const state = eg.reduxState({
