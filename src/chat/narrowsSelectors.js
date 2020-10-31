@@ -6,6 +6,7 @@ import type {
   GlobalState,
   Message,
   Narrow,
+  NarrowBridge,
   Outbox,
   Selector,
   Stream,
@@ -27,9 +28,27 @@ import {
   isStreamOrTopicNarrow,
   emailsOfGroupNarrow,
   narrowContainsOutbox,
+  asDualNarrow,
 } from '../utils/narrow';
 import { shouldBeMuted } from '../utils/message';
 import { NULL_ARRAY, NULL_SUBSCRIPTION } from '../nullObjects';
+import { getStreamsByName } from '../subscriptions/subscriptionSelectors';
+
+export const tryGetDualNarrow: Selector<DualNarrow<> | null, NarrowBridge> = createSelector(
+  (state, narrow) => narrow,
+  state => getAllUsersByEmail(state),
+  state => getStreamsByName(state),
+  (narrow, allUsersByEmail, streamsByName) =>
+    asDualNarrow(narrow, { allUsersByName: allUsersByEmail, streamsByName }),
+);
+
+export const getDualNarrow = (state: GlobalState, narrow: NarrowBridge) => {
+  const dualNarrow = tryGetDualNarrow(state, narrow);
+  if (!dualNarrow) {
+    throw new Error('getDualNarrow: bad narrow');
+  }
+  return dualNarrow;
+};
 
 export const outboxMessagesForNarrow: Selector<Outbox[], Narrow> = createSelector(
   (state, narrow) => narrow,
