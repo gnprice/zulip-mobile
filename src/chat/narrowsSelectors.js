@@ -24,6 +24,7 @@ import {
 import { getCaughtUpForNarrow } from '../caughtup/caughtUpSelectors';
 import { getAllUsersByEmail } from '../users/userSelectors';
 import {
+  DualNarrow,
   isPrivateNarrow,
   isStreamOrTopicNarrow,
   emailsOfGroupNarrow,
@@ -63,10 +64,10 @@ export const outboxMessagesForNarrow: Selector<Outbox[], Narrow> = createSelecto
   },
 );
 
-export const getFetchedMessageIdsForNarrow = (state: GlobalState, narrow: Narrow) =>
-  getAllNarrows(state)[JSON.stringify(narrow)] || NULL_ARRAY;
+export const getFetchedMessageIdsForNarrow = (state: GlobalState, narrow: DualNarrow<>) =>
+  getAllNarrows(state)[JSON.stringify(narrow.strings)] || NULL_ARRAY;
 
-const getFetchedMessagesForNarrow: Selector<Message[], Narrow> = createSelector(
+const getFetchedMessagesForNarrow: Selector<Message[], DualNarrow<>> = createSelector(
   getFetchedMessageIdsForNarrow,
   state => getMessages(state),
   (messageIds, messages) => messageIds.map(id => messages[id]),
@@ -74,10 +75,10 @@ const getFetchedMessagesForNarrow: Selector<Message[], Narrow> = createSelector(
 
 // Prettier mishandles this Flow syntax.
 // prettier-ignore
-export const getMessagesForNarrow: Selector<$ReadOnlyArray<Message | Outbox>, Narrow> =
+export const getMessagesForNarrow: Selector<$ReadOnlyArray<Message | Outbox>, DualNarrow<>> =
   createSelector(
     getFetchedMessagesForNarrow,
-    outboxMessagesForNarrow,
+    (state, narrow) => outboxMessagesForNarrow(state, narrow.strings),
     (fetchedMessages, outboxMessages) => {
       if (outboxMessages.length === 0) {
         return fetchedMessages;
@@ -89,22 +90,22 @@ export const getMessagesForNarrow: Selector<$ReadOnlyArray<Message | Outbox>, Na
 
 // Prettier mishandles this Flow syntax.
 // prettier-ignore
-export const getShownMessagesForNarrow: Selector<$ReadOnlyArray<Message | Outbox>, Narrow> =
+export const getShownMessagesForNarrow: Selector<$ReadOnlyArray<Message | Outbox>, DualNarrow<>> =
   createSelector(
     (state, narrow) => narrow,
     getMessagesForNarrow,
     state => getSubscriptions(state),
     state => getMute(state),
     (narrow, messagesForNarrow, subscriptions, mute) =>
-      messagesForNarrow.filter(item => !shouldBeMuted(item, narrow, subscriptions, mute)),
+      messagesForNarrow.filter(item => !shouldBeMuted(item, narrow.strings, subscriptions, mute)),
   );
 
-export const getFirstMessageId = (state: GlobalState, narrow: Narrow): number | void => {
+export const getFirstMessageId = (state: GlobalState, narrow: DualNarrow<>): number | void => {
   const ids = getFetchedMessageIdsForNarrow(state, narrow);
   return ids.length > 0 ? ids[0] : undefined;
 };
 
-export const getLastMessageId = (state: GlobalState, narrow: Narrow): number | void => {
+export const getLastMessageId = (state: GlobalState, narrow: DualNarrow<>): number | void => {
   const ids = getFetchedMessageIdsForNarrow(state, narrow);
   return ids.length > 0 ? ids[ids.length - 1] : undefined;
 };

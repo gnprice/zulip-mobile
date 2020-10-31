@@ -56,6 +56,7 @@ import { base64Utf8Encode } from '../utils/encoding';
 import * as logging from '../utils/logging';
 import { tryParseUrl } from '../utils/url';
 import { asApiStringNarrow } from '../utils/narrow';
+import { getDualNarrow } from '../chat/narrowsSelectors';
 
 // ESLint doesn't notice how `this.props` escapes, and complains about some
 // props not being used here.
@@ -354,6 +355,7 @@ export default connect<SelectorProps, _, _>((state, props: OuterProps) => {
     twentyFourHourTime: getRealm(state).twentyFourHourTime,
   };
 
+  const narrow = getDualNarrow(state, props.narrow);
   const stringsNarrow = asApiStringNarrow(props.narrow);
   return {
     backgroundData,
@@ -362,7 +364,7 @@ export default connect<SelectorProps, _, _>((state, props: OuterProps) => {
         ? props.initialScrollMessageId
         : getFirstUnreadIdInNarrow(state, stringsNarrow),
     fetching: props.fetching || getFetchingForNarrow(state, stringsNarrow),
-    messages: props.messages || getShownMessagesForNarrow(state, stringsNarrow),
+    messages: props.messages || getShownMessagesForNarrow(state, narrow),
     renderedMessages: props.renderedMessages || getRenderedMessages(state, stringsNarrow),
     typingUsers: props.typingUsers || getCurrentTypingUsers(state, stringsNarrow),
   };
