@@ -533,7 +533,7 @@ export default connect<SelectorProps, _, _>((state, props) => ({
   isAnnouncementOnly: getIsActiveStreamAnnouncementOnly(state, props.narrow.strings),
   isSubscribed: getIsActiveStreamSubscribed(state, props.narrow.strings),
   draft: getDraftForNarrow(state, props.narrow.strings),
-  lastMessageTopic: getLastMessageTopic(state, props.narrow.strings),
+  lastMessageTopic: getLastMessageTopic(state, props.narrow),
   caughtUp: getCaughtUpForNarrow(state, props.narrow.strings),
   stream: getStreamInNarrow(state, props.narrow.strings),
   videoChatProvider: getVideoChatProvider(state),

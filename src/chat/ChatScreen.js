@@ -185,11 +185,11 @@ export default compose(
   // https://reactnavigation.org/docs/4.x/function-after-focusing-screen/#triggering-an-action-with-the-withnavigationfocus-higher-order-component
   withNavigationFocus,
   connect<SelectorProps, _, _>((state, props) => {
-    const narrow = asApiStringNarrow(props.navigation.state.params.narrow);
+    const narrow = props.navigation.state.params.narrow;
     return {
-      isNarrowValid: isNarrowValid(state, narrow),
+      isNarrowValid: isNarrowValid(state, narrow.strings),
       loading: getLoading(state),
-      fetching: getFetchingForNarrow(state, narrow),
+      fetching: getFetchingForNarrow(state, narrow.strings),
       haveNoMessages: getShownMessagesForNarrow(state, narrow).length === 0,
       eventQueueId: getSession(state).eventQueueId,
     };
