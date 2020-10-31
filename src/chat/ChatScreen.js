@@ -189,7 +189,7 @@ export default compose(
     return {
       isNarrowValid: isNarrowValid(state, narrow.strings),
       loading: getLoading(state),
-      fetching: getFetchingForNarrow(state, narrow.strings),
+      fetching: getFetchingForNarrow(state, narrow),
       haveNoMessages: getShownMessagesForNarrow(state, narrow).length === 0,
       eventQueueId: getSession(state).eventQueueId,
     };

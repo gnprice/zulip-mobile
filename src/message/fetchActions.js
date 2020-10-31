@@ -131,7 +131,7 @@ export const fetchOlder = (narrowBridge: NarrowBridge) => (
   const narrow = getDualNarrow(state, narrowBridge);
   const firstMessageId = getFirstMessageId(state, narrow);
   const caughtUp = getCaughtUpForNarrow(state, narrow.strings);
-  const fetching = getFetchingForNarrow(state, narrow.strings);
+  const fetching = getFetchingForNarrow(state, narrow);
   const { needsInitialFetch } = getSession(state);
 
   if (!needsInitialFetch && !fetching.older && !caughtUp.older && firstMessageId !== undefined) {
@@ -154,7 +154,7 @@ export const fetchNewer = (narrowBridge: NarrowBridge) => (
   const narrow = getDualNarrow(state, narrowBridge);
   const lastMessageId = getLastMessageId(state, narrow);
   const caughtUp = getCaughtUpForNarrow(state, narrow.strings);
-  const fetching = getFetchingForNarrow(state, narrow.strings);
+  const fetching = getFetchingForNarrow(state, narrow);
   const { needsInitialFetch } = getSession(state);
 
   if (!needsInitialFetch && !fetching.newer && !caughtUp.newer && lastMessageId !== undefined) {

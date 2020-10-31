@@ -363,7 +363,7 @@ export default connect<SelectorProps, _, _>((state, props: OuterProps) => {
       props.initialScrollMessageId !== undefined
         ? props.initialScrollMessageId
         : getFirstUnreadIdInNarrow(state, narrow),
-    fetching: props.fetching || getFetchingForNarrow(state, stringsNarrow),
+    fetching: props.fetching || getFetchingForNarrow(state, narrow),
     messages: props.messages || getShownMessagesForNarrow(state, narrow),
     renderedMessages: props.renderedMessages || getRenderedMessages(state, narrow),
     typingUsers: props.typingUsers || getCurrentTypingUsers(state, stringsNarrow),
