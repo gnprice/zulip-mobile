@@ -21,6 +21,20 @@ export const getStreamsById: Selector<Map<number, Stream>> = createSelector(
   streams => new Map(streams.map(stream => [stream.stream_id, stream])),
 );
 
+/**
+ * All streams in the current realm, by name.
+ *
+ * Use this only as part of migrating to identifying streams by ID
+ * everywhere, by helping bridge between code that still uses names and code
+ * that now uses IDs.
+ *
+ * For any other use, prefer `getStreamsById`.
+ */
+export const getStreamsByName: Selector<Map<string, Stream>> = createSelector(
+  getStreams,
+  streams => new Map(streams.map(stream => [stream.name, stream])),
+);
+
 export const getSubscriptionsById: Selector<Map<number, Subscription>> = createSelector(
   getSubscriptions,
   subscriptions =>
