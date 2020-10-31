@@ -473,6 +473,7 @@ class ComposeBox extends PureComponent<Props, State> {
         </View>
         <View style={[this.styles.composeBox, style]} onLayout={this.handleLayoutChange}>
           <ComposeMenu
+            /* $FlowFixMe: NOMERGE prototype */
             destinationNarrow={this.getDestinationNarrow()}
             expanded={isMenuExpanded}
             insertVideoCallLink={insertVideoCallLink}

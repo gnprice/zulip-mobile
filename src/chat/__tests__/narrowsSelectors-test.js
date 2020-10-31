@@ -25,6 +25,7 @@ describe('getMessagesForNarrow', () => {
     // them to be numbers.
     [123]: message /* eslint-disable-line no-useless-computed-key */,
   };
+  /* $FlowFixMe: NOMERGE prototype */
   const outboxMessage = eg.makeOutboxMessage({
     narrow: HOME_NARROW,
   });
@@ -80,6 +81,7 @@ describe('getMessagesForNarrow', () => {
         [JSON.stringify(privateNarrow('john@example.com'))]: [123],
       },
       messages,
+      /* $FlowFixMe: NOMERGE prototype */
       outbox: [{ ...outboxMessage, narrow: streamNarrow('denmark') }],
     });
 
