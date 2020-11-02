@@ -249,6 +249,12 @@ export class SearchNarrow extends CleanNarrow {
   query: string;
 }
 
+/*
+ *
+ * Legacy Narrow objects
+ *
+ */
+
 export const isSameNarrow = (narrow1: Narrow, narrow2: Narrow): boolean =>
   Array.isArray(narrow1) && Array.isArray(narrow2) && isEqual(narrow1, narrow2);
 
