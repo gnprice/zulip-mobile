@@ -10,6 +10,7 @@ import { normalizeRecipients } from './recipient';
   * Type-checker help check we don't JSON.stringify a clean or dual
     narrow
     * Convert them all to a specific helper function first.
+      -> done: keyFromNarrow
   * Type-checker prevent trying an instanceof check that always fails
     because LHS is a DualNarrow
     * Use instead a method, like `CleanNarrow#isa`
