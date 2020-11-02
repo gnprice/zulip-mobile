@@ -1,5 +1,4 @@
 /* @flow strict-local */
-import { keyFromNarrow } from '../utils/narrow.js';
 import isEqual from 'lodash.isequal';
 import unescape from 'lodash.unescape';
 
@@ -261,7 +260,7 @@ export const isSameNarrow = (narrow1: Narrow, narrow2: Narrow): boolean =>
 
 export const parseNarrowString = (narrowStr: string): Narrow => JSON.parse(unescape(narrowStr));
 
-export const keyFromNarrow = (narrow: Narrow): string => keyFromNarrow(narrow);
+export const keyFromNarrow = (narrow: Narrow): string => JSON.stringify(narrow);
 
 export const HOME_NARROW: Narrow = [];
 
