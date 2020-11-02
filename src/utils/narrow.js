@@ -7,7 +7,7 @@ import { normalizeRecipients } from './recipient';
 
 /*
  TODO on CleanNarrow:
-  * Type-checker help check we don't keyFromNarrow a clean or dual
+  * Type-checker help check we don't JSON.stringify a clean or dual
     narrow
     * Convert them all to a specific helper function first.
   * Type-checker prevent trying an instanceof check that always fails

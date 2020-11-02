@@ -5,7 +5,7 @@ import type { Auth, Dispatch, GetState, GlobalState } from '../types';
 import * as api from '../api';
 import { PRESENCE_RESPONSE } from '../actionConstants';
 import { getAuth, tryGetAuth, getServerVersion } from '../selectors';
-import { keyFromNarrow, PmNarrow, CleanNarrow } from '../utils/narrow';
+import { PmNarrow, CleanNarrow } from '../utils/narrow';
 import { getUserForId } from './userSelectors';
 import { ZulipVersion } from '../utils/zulipVersion';
 
@@ -38,9 +38,9 @@ const typingWorker = (state: GlobalState) => {
 
   const getRecipients = user_ids_array => {
     if (useEmailArrays) {
-      return keyFromNarrow(user_ids_array.map(userId => getUserForId(state, userId).email));
+      return JSON.stringify(user_ids_array.map(userId => getUserForId(state, userId).email));
     }
-    return keyFromNarrow(user_ids_array);
+    return JSON.stringify(user_ids_array);
   };
 
   return {

@@ -2,7 +2,6 @@
 import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 
-import { keyFromNarrow } from '../utils/narrow';
 import { RawLabel } from '../common';
 import { createStyleSheet } from '../styles';
 import type { JSONable } from '../utils/jsonable';
@@ -33,7 +32,7 @@ export default class InfoItem extends PureComponent<Props> {
     return (
       <View style={styles.item}>
         <RawLabel style={styles.label} text={label} />
-        <RawLabel style={styles.value} text={keyFromNarrow(value)} />
+        <RawLabel style={styles.value} text={JSON.stringify(value)} />
       </View>
     );
   }

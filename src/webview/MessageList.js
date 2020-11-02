@@ -4,7 +4,6 @@ import { Platform, NativeModules } from 'react-native';
 import { WebView } from 'react-native-webview';
 import type { WebViewNavigation } from 'react-native-webview';
 import { connectActionSheet } from '@expo/react-native-action-sheet';
-import { keyFromNarrow, asApiStringNarrow } from '../utils/narrow';
 
 import type {
   AlertWordsState,
@@ -56,7 +55,7 @@ import { handleMessageListEvent } from './webViewEventHandlers';
 import { base64Utf8Encode } from '../utils/encoding';
 import * as logging from '../utils/logging';
 import { tryParseUrl } from '../utils/url';
-
+import { asApiStringNarrow } from '../utils/narrow';
 import { getDualNarrow } from '../chat/narrowsSelectors';
 
 // ESLint doesn't notice how `this.props` escapes, and complains about some
@@ -200,7 +199,7 @@ class MessageList extends Component<Props> {
     if (this.webview && uevents.length > 0) {
       // $FlowFixMe This `postMessage` is undocumented; tracking as #3572.
       const secretWebView: { postMessage: (string, string) => void } = this.webview;
-      secretWebView.postMessage(base64Utf8Encode(keyFromNarrow(uevents)), '*');
+      secretWebView.postMessage(base64Utf8Encode(JSON.stringify(uevents)), '*');
     }
   };
 

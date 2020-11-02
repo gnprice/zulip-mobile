@@ -1,5 +1,4 @@
 /* @flow strict-local */
-import { keyFromNarrow } from './narrow';
 import type { Auth } from '../types';
 import { getAuthHeaders } from '../api/transport';
 import objectEntries from './objectEntries';
@@ -8,7 +7,7 @@ import objectEntries from './objectEntries';
  * An object `encodeParamsForUrl` can flatten.
  *
  * In principle the values should be strings; but we include some other
- * primitive types for which `toString` is just as good as `keyFromNarrow`.
+ * primitive types for which `toString` is just as good as `JSON.stringify`.
  */
 export type UrlParamValue = string | boolean | number;
 export type UrlParams = $ReadOnly<{ [string]: UrlParamValue | void }>;
@@ -16,7 +15,7 @@ export type UrlParams = $ReadOnly<{ [string]: UrlParamValue | void }>;
 /**
  * Encode parameters as if for the URL query-part submitting an HTML form.
  *
- * Following the pattern of keyFromNarrow, drop (rather than encoding in any
+ * Following the pattern of JSON.stringify, drop (rather than encoding in any
  * fashion) parameters whose provided value is `undefined`.
  */
 export const encodeParamsForUrl = (params: UrlParams): string =>

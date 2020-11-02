@@ -1,5 +1,4 @@
 /* @flow strict-local */
-import { keyFromNarrow } from './narrow';
 import type { PmRecipientUser, Message, Outbox, User } from '../types';
 
 // Filter a list of PM recipients in the quirky way that we do.

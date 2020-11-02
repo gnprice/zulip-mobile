@@ -1,5 +1,4 @@
 /* @flow strict-local */
-import { keyFromNarrow } from '../utils/narrow';
 import type { GetState, Dispatch, Stream } from '../types';
 import * as api from '../api';
 import { getAuth } from '../selectors';
@@ -20,7 +19,7 @@ export const updateExistingStream = (
 ) => async (dispatch: Dispatch, getState: GetState) => {
   if (initialValues.name !== newValues.name) {
     // Stream names might contain unsafe characters so we must encode it first.
-    await api.updateStream(getAuth(getState()), id, 'new_name', keyFromNarrow(newValues.name));
+    await api.updateStream(getAuth(getState()), id, 'new_name', JSON.stringify(newValues.name));
   }
   if (initialValues.description !== newValues.description) {
     // Description might contain unsafe characters so we must encode it first.
@@ -28,7 +27,7 @@ export const updateExistingStream = (
       getAuth(getState()),
       id,
       'description',
-      keyFromNarrow(newValues.description),
+      JSON.stringify(newValues.description),
     );
   }
   if (initialValues.invite_only !== newValues.isPrivate) {

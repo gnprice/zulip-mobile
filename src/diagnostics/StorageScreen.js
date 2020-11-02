@@ -4,7 +4,6 @@ import React, { PureComponent } from 'react';
 import { FlatList } from 'react-native';
 import type { NavigationStackProp, NavigationStateRoute } from 'react-navigation-stack';
 
-import { keyFromNarrow } from '../utils/narrow';
 import type { GlobalState, Dispatch } from '../types';
 import { connect } from '../react-redux';
 import { Screen } from '../common';
@@ -14,7 +13,7 @@ const calculateKeyStorageSizes = obj =>
   Object.keys(obj)
     .map(key => ({
       key,
-      size: keyFromNarrow(obj[key]).length * 2,
+      size: JSON.stringify(obj[key]).length * 2,
     }))
     .sort((a, b) => b.size - a.size);
 

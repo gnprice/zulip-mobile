@@ -4,11 +4,11 @@
 /**
  * Type of a round-trip-capable JSONable object.
  *
- * Note that this is not the same as the type of objects which `keyFromNarrow`
- * will accept, nor even the type of objects which `keyFromNarrow` will accept
+ * Note that this is not the same as the type of objects which `JSON.stringify`
+ * will accept, nor even the type of objects which `JSON.stringify` will accept
  * without returning `undefined`. For example,
  *
- *    keyFromNarrow({f: 2, g: () => 3, h: undefined}) === '{"f":2}'
+ *    JSON.stringify({f: 2, g: () => 3, h: undefined}) === '{"f":2}'
  *
  * which of course will not be equal to the original object after parsing.
  */

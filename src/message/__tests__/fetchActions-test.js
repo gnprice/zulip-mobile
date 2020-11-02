@@ -15,14 +15,13 @@ import {
 import { FIRST_UNREAD_ANCHOR } from '../../anchor';
 import type { Message } from '../../api/modelTypes';
 import type { ServerMessage } from '../../api/messages/getMessages';
-import { keyFromNarrow, streamNarrow, HOME_NARROW, HOME_NARROW_STR } from '../../utils/narrow';
-
+import { streamNarrow, HOME_NARROW, HOME_NARROW_STR } from '../../utils/narrow';
 import * as eg from '../../__tests__/lib/exampleData';
 
 const mockStore = configureStore([thunk]);
 
 const narrow = streamNarrow('some stream');
-const streamNarrowStr = keyFromNarrow(narrow);
+const streamNarrowStr = JSON.stringify(narrow);
 
 global.FormData = class FormData {};
 
@@ -138,7 +137,7 @@ describe('fetchActions', () => {
           messages: [serverMessage1],
           result: 'success',
         };
-        fetch.mockResponseSuccess(keyFromNarrow(response));
+        fetch.mockResponseSuccess(JSON.stringify(response));
       });
 
       const store = mockStore<GlobalState, Action>(baseState);
@@ -197,7 +196,7 @@ describe('fetchActions', () => {
           messages: [message1, eg.streamMessage({ id: 2 }), eg.streamMessage({ id: 3 })],
           result: 'success',
         };
-        fetch.mockResponseSuccess(keyFromNarrow(response));
+        fetch.mockResponseSuccess(JSON.stringify(response));
 
         await expect(
           store.dispatch(
@@ -249,7 +248,7 @@ describe('fetchActions', () => {
           messages: [{ ...message1, reactions: [faultyReaction] }],
           result: 'success',
         };
-        fetch.mockResponseSuccess(keyFromNarrow(response));
+        fetch.mockResponseSuccess(JSON.stringify(response));
 
         await expect(
           store.dispatch(
@@ -284,7 +283,7 @@ describe('fetchActions', () => {
       });
     });
 
-    const BORING_RESPONSE = keyFromNarrow({
+    const BORING_RESPONSE = JSON.stringify({
       messages: [],
       result: 'success',
     });

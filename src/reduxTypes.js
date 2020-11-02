@@ -10,7 +10,6 @@
 
 import type { InputSelector } from 'reselect';
 
-import { keyFromNarrow } from './utils/narrow';
 import type { Account, Outbox } from './types';
 import type { Action, NavigationAction } from './actionTypes';
 import type {
@@ -177,7 +176,7 @@ export type MuteState = MuteTuple[];
  * to; see `MessagesState` for more context.  The data here should
  * correspond exactly to the data in `MessagesState`.
  *
- * Keys are `keyFromNarrow`-encoded `Narrow` objects.
+ * Keys are `JSON.stringify`-encoded `Narrow` objects.
  * Values are sorted lists of message IDs.
  *
  * See also:

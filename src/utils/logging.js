@@ -2,7 +2,6 @@
 import type { Scope, SeverityType, EventHint } from '@sentry/react-native';
 import { getCurrentHub, Severity, withScope as withScopeImpl } from '@sentry/react-native';
 
-import { keyFromNarrow } from './narrow';
 import type { JSONable } from './jsonable';
 import objectEntries from './objectEntries';
 import config from '../config';
@@ -83,7 +82,7 @@ const makeLogFunction = ({ consoleMethod, severity }: LogParams): LogFunction =>
       toConsole(event);
 
       const data = objectEntries(extras)
-        .map(([key, value]) => `    ${key}: ${keyFromNarrow(value)}`)
+        .map(([key, value]) => `    ${key}: ${JSON.stringify(value)}`)
         .join('\n');
 
       if (data) {

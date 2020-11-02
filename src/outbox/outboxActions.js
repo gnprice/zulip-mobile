@@ -22,13 +22,7 @@ import { getAuth } from '../selectors';
 import * as api from '../api';
 import { getSelfUserDetail, getUsersById } from '../users/userSelectors';
 import { getUsersAndWildcards } from '../users/userHelpers';
-import {
-  keyFromNarrow,
-  PmNarrow,
-  CleanNarrow,
-  TopicNarrow,
-  StreamOrTopicNarrow,
-} from '../utils/narrow';
+import { PmNarrow, CleanNarrow, TopicNarrow, StreamOrTopicNarrow } from '../utils/narrow';
 import { BackoffMachine } from '../utils/async';
 import { NULL_USER } from '../nullObjects';
 import { getStreamsById } from '../subscriptions/subscriptionSelectors';
@@ -133,7 +127,7 @@ const extractTypeToAndSubjectFromNarrow = (
         } else {
           // HACK: the server attempts to interpret this argument as JSON, then
           // CSV, then a literal. To avoid misparsing, always use JSON.
-          return keyFromNarrow([item.display_recipient]);
+          return JSON.stringify([item.display_recipient]);
         }
       })();
 

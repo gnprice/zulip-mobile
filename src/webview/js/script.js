@@ -1,7 +1,6 @@
 /* @flow strict-local */
 import { Platform } from 'react-native';
 
-import { keyFromNarrow } from '../../utils/narrow';
 import type { Auth } from '../../types';
 import smoothScroll from './smoothScroll.min';
 import matchesPolyfill from './matchesPolyfill';
@@ -17,9 +16,9 @@ window.enableWebViewErrorDisplay = ${config.enableWebViewErrorDisplay.toString()
 document.addEventListener('DOMContentLoaded', function() {
   ${compiledWebviewJs}
   compiledWebviewJs.handleInitialLoad(
-    ${keyFromNarrow(Platform.OS)},
-    ${keyFromNarrow(scrollMessageId)},
-    ${keyFromNarrow(auth)}
+    ${JSON.stringify(Platform.OS)},
+    ${JSON.stringify(scrollMessageId)},
+    ${JSON.stringify(auth)}
   );
 });
 </script>

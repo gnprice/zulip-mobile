@@ -86,7 +86,7 @@ var compiledWebviewJs = (function (exports) {
   }
 
   var sendMessage = (function (msg) {
-    window.ReactNativeWebView.postMessage(keyFromNarrow(msg));
+    window.ReactNativeWebView.postMessage(JSON.stringify(msg));
   });
 
   var placeholdersDivTagFromContent = function placeholdersDivTagFromContent(content) {
@@ -330,7 +330,7 @@ var compiledWebviewJs = (function (exports) {
       var elementJsError = document.getElementById('js-error-detailed');
 
       if (elementJsError) {
-        elementJsError.innerHTML = ["Message: ".concat(message), "Source: ".concat(source), "Line: ".concat(line, ":").concat(column), "Error: ".concat(keyFromNarrow(error)), ''].map(escapeHtml).join('<br>');
+        elementJsError.innerHTML = ["Message: ".concat(message), "Source: ".concat(source), "Line: ".concat(line, ":").concat(column), "Error: ".concat(JSON.stringify(error)), ''].map(escapeHtml).join('<br>');
       }
     } else {
       var _elementJsError = document.getElementById('js-error-plain');
