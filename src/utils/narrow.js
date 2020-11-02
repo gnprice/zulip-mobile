@@ -14,6 +14,8 @@ import { normalizeRecipients } from './recipient';
     because LHS is a DualNarrow
     * Use instead a method, like `CleanNarrow#isa`
     * Or better -- is there a way to get Flow to warn on this?  TS can.
+      -> Nope, don't see it at https://flow.org/en/docs/linting/rule-reference/
+         or any suggestion of it in a web search.
 
   * Implement `key` for all CleanNarrow subclasses
   * Make singletons for each UniqueNarrow subclass,
