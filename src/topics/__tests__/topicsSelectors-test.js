@@ -1,5 +1,4 @@
 /* @flow strict-local */
-import { keyFromNarrow } from '../../utils/narrow';
 import { getTopicsForNarrow, getLastMessageTopic, getTopicsForStream } from '../topicSelectors';
 import {
   AllMessagesNarrow,
@@ -7,6 +6,7 @@ import {
   HOME_NARROW,
   StreamNarrow,
   streamNarrow,
+  keyFromNarrow,
 } from '../../utils/narrow';
 import * as eg from '../../__tests__/lib/exampleData';
 

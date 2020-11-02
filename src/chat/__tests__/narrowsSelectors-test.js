@@ -1,5 +1,4 @@
 /* @flow strict-local */
-import { keyFromNarrow } from '../../utils/narrow';
 import {
   getFirstMessageId,
   getLastMessageId,
@@ -15,6 +14,7 @@ import {
   topicNarrow,
   STARRED_NARROW,
   groupNarrow,
+  keyFromNarrow,
   AllMessagesNarrow,
   DualNarrow,
   PmNarrow,

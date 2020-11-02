@@ -1,5 +1,4 @@
 /* @flow strict-local */
-import { keyFromNarrow } from '../../utils/narrow';
 import template from './template';
 import type { Message, Narrow, Outbox } from '../../types';
 import type { BackgroundData } from '../MessageList';
@@ -9,6 +8,7 @@ import {
   privateNarrow,
   groupNarrow,
   caseNarrow,
+  keyFromNarrow,
 } from '../../utils/narrow';
 import { foregroundColorFromBackground } from '../../utils/color';
 import { humanDate } from '../../utils/date';

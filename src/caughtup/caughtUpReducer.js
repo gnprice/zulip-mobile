@@ -1,5 +1,4 @@
 /* @flow strict-local */
-import { keyFromNarrow } from '../utils/narrow';
 import type { CaughtUp, CaughtUpState, Action } from '../types';
 import {
   REALM_INIT,
@@ -13,7 +12,7 @@ import {
 import { LAST_MESSAGE_ANCHOR, FIRST_UNREAD_ANCHOR } from '../anchor';
 import { NULL_OBJECT } from '../nullObjects';
 import { DEFAULT_CAUGHTUP } from './caughtUpSelectors';
-import { SearchNarrow } from '../utils/narrow';
+import { keyFromNarrow, SearchNarrow } from '../utils/narrow';
 
 const initialState: CaughtUpState = NULL_OBJECT;
 
