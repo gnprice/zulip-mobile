@@ -1,4 +1,5 @@
 /* @flow strict-local */
+import { keyFromNarrow } from "../../utils/narrow.js";
 import { Platform } from 'react-native';
 
 import type { Auth } from '../../types';
@@ -16,9 +17,9 @@ window.enableWebViewErrorDisplay = ${config.enableWebViewErrorDisplay.toString()
 document.addEventListener('DOMContentLoaded', function() {
   ${compiledWebviewJs}
   compiledWebviewJs.handleInitialLoad(
-    ${JSON.stringify(Platform.OS)},
-    ${JSON.stringify(scrollMessageId)},
-    ${JSON.stringify(auth)}
+    ${keyFromNarrow(Platform.OS)},
+    ${keyFromNarrow(scrollMessageId)},
+    ${keyFromNarrow(auth)}
   );
 });
 </script>

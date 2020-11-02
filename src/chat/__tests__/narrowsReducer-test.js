@@ -1,4 +1,5 @@
 /* @flow strict-local */
+import { keyFromNarrow } from "../../utils/narrow.js";
 import deepFreeze from 'deep-freeze';
 
 import narrowsReducer from '../narrowsReducer';
@@ -23,10 +24,10 @@ import { LAST_MESSAGE_ANCHOR, FIRST_UNREAD_ANCHOR } from '../../anchor';
 import * as eg from '../../__tests__/lib/exampleData';
 
 describe('narrowsReducer', () => {
-  const privateNarrowStr = JSON.stringify(privateNarrow('mark@example.com'));
-  const groupNarrowStr = JSON.stringify(groupNarrow(['mark@example.com', 'john@example.com']));
-  const streamNarrowStr = JSON.stringify(streamNarrow('some stream'));
-  const topicNarrowStr = JSON.stringify(topicNarrow('some stream', 'some topic'));
+  const privateNarrowStr = keyFromNarrow(privateNarrow('mark@example.com'));
+  const groupNarrowStr = keyFromNarrow(groupNarrow(['mark@example.com', 'john@example.com']));
+  const streamNarrowStr = keyFromNarrow(streamNarrow('some stream'));
+  const topicNarrowStr = keyFromNarrow(topicNarrow('some stream', 'some topic'));
 
   describe('EVENT_NEW_MESSAGE', () => {
     test('if not caught up in narrow, do not add message in home narrow', () => {
@@ -176,7 +177,7 @@ describe('narrowsReducer', () => {
   });
 
   test('message sent to self is stored correctly', () => {
-    const narrowWithSelfStr = JSON.stringify(privateNarrow('me@example.com'));
+    const narrowWithSelfStr = keyFromNarrow(privateNarrow('me@example.com'));
     const initialState = deepFreeze({
       [HOME_NARROW_STR]: [],
       [narrowWithSelfStr]: [],
@@ -437,7 +438,7 @@ describe('narrowsReducer', () => {
 
       const expectedState = {
         [HOME_NARROW_STR]: [1, 2, 3],
-        [JSON.stringify(privateNarrow('mark@example.com'))]: [],
+        [keyFromNarrow(privateNarrow('mark@example.com'))]: [],
       };
 
       const newState = narrowsReducer(initialState, action);

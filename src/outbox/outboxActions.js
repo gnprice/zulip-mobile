@@ -1,4 +1,5 @@
 /* @flow strict-local */
+import { keyFromNarrow } from "../utils/narrow.js";
 import parseMarkdown from 'zulip-markdown-parser';
 
 import * as logging from '../utils/logging';
@@ -127,7 +128,7 @@ const extractTypeToAndSubjectFromNarrow = (
         } else {
           // HACK: the server attempts to interpret this argument as JSON, then
           // CSV, then a literal. To avoid misparsing, always use JSON.
-          return JSON.stringify([item.display_recipient]);
+          return keyFromNarrow([item.display_recipient]);
         }
       })();
 

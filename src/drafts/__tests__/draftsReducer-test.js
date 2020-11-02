@@ -1,3 +1,4 @@
+import { keyFromNarrow } from "../../utils/narrow.js";
 import deepFreeze from 'deep-freeze';
 
 import { NULL_OBJECT } from '../../nullObjects';
@@ -7,7 +8,7 @@ import { topicNarrow } from '../../utils/narrow';
 
 describe('draftsReducer', () => {
   const testNarrow = topicNarrow('denmark', 'denmark2');
-  const testNarrowStr = JSON.stringify(testNarrow);
+  const testNarrowStr = keyFromNarrow(testNarrow);
 
   describe('DRAFT_UPDATE', () => {
     test('add a new draft key drafts', () => {

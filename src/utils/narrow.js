@@ -1,4 +1,5 @@
 /* @flow strict-local */
+import { keyFromNarrow } from "../utils/narrow.js";
 import isEqual from 'lodash.isequal';
 import unescape from 'lodash.unescape';
 
@@ -7,7 +8,7 @@ import { normalizeRecipients } from './recipient';
 
 /*
  TODO on CleanNarrow:
-  * Type-checker help check we don't JSON.stringify a clean or dual
+  * Type-checker help check we don't keyFromNarrow a clean or dual
     narrow
     * Convert them all to a specific helper function first.
   * Type-checker prevent trying an instanceof check that always fails
@@ -260,7 +261,7 @@ export const isSameNarrow = (narrow1: Narrow, narrow2: Narrow): boolean =>
 
 export const parseNarrowString = (narrowStr: string): Narrow => JSON.parse(unescape(narrowStr));
 
-export const keyFromNarrow = (narrow: Narrow): string => JSON.stringify(narrow);
+export const keyFromNarrow = (narrow: Narrow): string => keyFromNarrow(narrow);
 
 export const HOME_NARROW: Narrow = [];
 
@@ -289,15 +290,15 @@ export const specialNarrow = (operand: string): Narrow => [
 
 export const STARRED_NARROW = specialNarrow('starred');
 
-export const STARRED_NARROW_STR = JSON.stringify(STARRED_NARROW);
+export const STARRED_NARROW_STR = keyFromNarrow(STARRED_NARROW);
 
 export const MENTIONED_NARROW = specialNarrow('mentioned');
 
-export const MENTIONED_NARROW_STR = JSON.stringify(MENTIONED_NARROW);
+export const MENTIONED_NARROW_STR = keyFromNarrow(MENTIONED_NARROW);
 
 export const ALL_PRIVATE_NARROW = specialNarrow('private');
 
-export const ALL_PRIVATE_NARROW_STR = JSON.stringify(ALL_PRIVATE_NARROW);
+export const ALL_PRIVATE_NARROW_STR = keyFromNarrow(ALL_PRIVATE_NARROW);
 
 export const streamNarrow = (stream: string): Narrow => [
   {
@@ -339,7 +340,7 @@ type NarrowCases<T> = {|
 /* prettier-ignore */
 export function caseNarrow<T>(narrow: Narrow, cases: NarrowCases<T>): T {
   const err = (): empty => {
-    throw new Error(`bad narrow: ${JSON.stringify(narrow)}`);
+    throw new Error(`bad narrow: ${keyFromNarrow(narrow)}`);
   };
 
   switch (narrow.length) {
@@ -371,7 +372,7 @@ export function caseNarrow<T>(narrow: Narrow, cases: NarrowCases<T>): T {
 
 export function caseNarrowPartial<T>(narrow: Narrow, cases: $Shape<NarrowCases<T>>): T {
   const err = (type: string) => (): empty => {
-    throw new Error(`unexpected ${type} narrow: ${JSON.stringify(narrow)}`);
+    throw new Error(`unexpected ${type} narrow: ${keyFromNarrow(narrow)}`);
   };
   return caseNarrow(
     narrow,

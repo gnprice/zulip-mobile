@@ -1,4 +1,5 @@
 /* @flow strict-local */
+import { keyFromNarrow } from "../../utils/narrow.js";
 import {
   getFirstMessageId,
   getLastMessageId,
@@ -37,7 +38,7 @@ describe('getMessagesForNarrow', () => {
     const narrow = new DualNarrow(new AllMessagesNarrow(), HOME_NARROW);
     const state = eg.reduxState({
       narrows: {
-        [JSON.stringify(narrow)]: [123],
+        [keyFromNarrow(narrow)]: [123],
       },
       messages,
       outbox: [],
@@ -52,7 +53,7 @@ describe('getMessagesForNarrow', () => {
     const narrow = new DualNarrow(new AllMessagesNarrow(), HOME_NARROW);
     const state = eg.reduxState({
       narrows: {
-        [JSON.stringify(narrow)]: [123],
+        [keyFromNarrow(narrow)]: [123],
       },
       messages,
       outbox: [outboxMessage],
@@ -70,7 +71,7 @@ describe('getMessagesForNarrow', () => {
     const narrow = new DualNarrow(new AllMessagesNarrow(), HOME_NARROW);
     const state = eg.reduxState({
       narrows: {
-        [JSON.stringify(narrow)]: [123],
+        [keyFromNarrow(narrow)]: [123],
       },
       messages,
       outbox: [outboxMessage],
@@ -85,7 +86,7 @@ describe('getMessagesForNarrow', () => {
     const narrow = PmNarrow.dualFromUser(eg.otherUser);
     const state = eg.reduxState({
       narrows: {
-        [JSON.stringify(narrow)]: [123],
+        [keyFromNarrow(narrow)]: [123],
       },
       messages,
       /* $FlowFixMe: NOMERGE prototype */
@@ -103,7 +104,7 @@ describe('getFirstMessageId', () => {
     const narrow = new DualNarrow(new AllMessagesNarrow(), HOME_NARROW);
     const state = eg.reduxState({
       narrows: {
-        [JSON.stringify(narrow)]: [],
+        [keyFromNarrow(narrow)]: [],
       },
       outbox: [],
     });
@@ -117,7 +118,7 @@ describe('getFirstMessageId', () => {
     const narrow = new DualNarrow(new AllMessagesNarrow(), HOME_NARROW);
     const state = eg.reduxState({
       narrows: {
-        [JSON.stringify(narrow)]: [1, 2, 3],
+        [keyFromNarrow(narrow)]: [1, 2, 3],
       },
       messages: {
         [1]: eg.streamMessage({ id: 1 }) /* eslint-disable-line no-useless-computed-key */,
@@ -138,7 +139,7 @@ describe('getLastMessageId', () => {
     const narrow = new DualNarrow(new AllMessagesNarrow(), HOME_NARROW);
     const state = eg.reduxState({
       narrows: {
-        [JSON.stringify(narrow)]: [],
+        [keyFromNarrow(narrow)]: [],
       },
       messages: {},
       outbox: [],
@@ -153,7 +154,7 @@ describe('getLastMessageId', () => {
     const narrow = new DualNarrow(new AllMessagesNarrow(), HOME_NARROW);
     const state = eg.reduxState({
       narrows: {
-        [JSON.stringify(narrow)]: [1, 2, 3],
+        [keyFromNarrow(narrow)]: [1, 2, 3],
       },
       messages: {
         [1]: eg.streamMessage({ id: 1 }) /* eslint-disable-line no-useless-computed-key */,

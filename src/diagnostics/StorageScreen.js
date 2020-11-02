@@ -1,5 +1,6 @@
 /* @flow strict-local */
 
+import { keyFromNarrow } from "../utils/narrow.js";
 import React, { PureComponent } from 'react';
 import { FlatList } from 'react-native';
 import type { NavigationStackProp, NavigationStateRoute } from 'react-navigation-stack';
@@ -13,7 +14,7 @@ const calculateKeyStorageSizes = obj =>
   Object.keys(obj)
     .map(key => ({
       key,
-      size: JSON.stringify(obj[key]).length * 2,
+      size: keyFromNarrow(obj[key]).length * 2,
     }))
     .sort((a, b) => b.size - a.size);
 

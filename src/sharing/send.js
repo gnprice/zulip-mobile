@@ -1,5 +1,6 @@
 /* @flow strict-local */
 
+import { keyFromNarrow } from "../utils/narrow.js";
 import type { SharedData, User, Auth, GetText } from '../types';
 import { showToast } from '../utils/info';
 import { sendMessage, uploadFile } from '../api';
@@ -43,7 +44,7 @@ export const handleSend = async (data: SendStream | SendPm, auth: Auth, _: GetTe
       ? {
           content: messageToSend,
           type: 'private',
-          to: JSON.stringify(data.selectedRecipients.map(user => user.user_id)),
+          to: keyFromNarrow(data.selectedRecipients.map(user => user.user_id)),
         }
       : {
           content: messageToSend,

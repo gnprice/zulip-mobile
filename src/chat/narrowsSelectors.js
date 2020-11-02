@@ -1,4 +1,5 @@
 /* @flow strict-local */
+import { keyFromNarrow } from "../utils/narrow.js";
 import isEqual from 'lodash.isequal';
 import { createSelector } from 'reselect';
 
@@ -65,7 +66,7 @@ export const outboxMessagesForNarrow: Selector<Outbox[], Narrow> = createSelecto
 );
 
 export const getFetchedMessageIdsForNarrow = (state: GlobalState, narrow: DualNarrow<>) =>
-  getAllNarrows(state)[JSON.stringify(narrow.strings)] || NULL_ARRAY;
+  getAllNarrows(state)[keyFromNarrow(narrow.strings)] || NULL_ARRAY;
 
 const getFetchedMessagesForNarrow: Selector<Message[], DualNarrow<>> = createSelector(
   getFetchedMessageIdsForNarrow,

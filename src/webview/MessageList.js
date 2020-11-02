@@ -1,4 +1,5 @@
 /* @flow strict-local */
+import { keyFromNarrow } from "../utils/narrow.js";
 import React, { Component } from 'react';
 import { Platform, NativeModules } from 'react-native';
 import { WebView } from 'react-native-webview';
@@ -199,7 +200,7 @@ class MessageList extends Component<Props> {
     if (this.webview && uevents.length > 0) {
       // $FlowFixMe This `postMessage` is undocumented; tracking as #3572.
       const secretWebView: { postMessage: (string, string) => void } = this.webview;
-      secretWebView.postMessage(base64Utf8Encode(JSON.stringify(uevents)), '*');
+      secretWebView.postMessage(base64Utf8Encode(keyFromNarrow(uevents)), '*');
     }
   };
 

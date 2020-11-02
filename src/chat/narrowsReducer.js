@@ -1,4 +1,5 @@
 /* @flow strict-local */
+import { keyFromNarrow } from "../utils/narrow.js";
 import union from 'lodash.union';
 
 import type { NarrowsState, Action } from '../types';
@@ -31,7 +32,7 @@ const messageFetchComplete = (state, action) => {
   if (action.narrow.clean instanceof SearchNarrow) {
     return state;
   }
-  const key = JSON.stringify(action.narrow.strings);
+  const key = keyFromNarrow(action.narrow.strings);
   const fetchedMessageIds = action.messages.map(message => message.id);
   const replaceExisting =
     action.anchor === FIRST_UNREAD_ANCHOR || action.anchor === LAST_MESSAGE_ANCHOR;

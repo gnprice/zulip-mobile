@@ -1,4 +1,5 @@
 /* @flow strict-local */
+import { keyFromNarrow } from "../utils/narrow.js";
 import type { CaughtUp, CaughtUpState, Action } from '../types';
 import {
   REALM_INIT,
@@ -89,7 +90,7 @@ export default (state: CaughtUpState = initialState, action: Action): CaughtUpSt
       if (action.narrow.clean instanceof SearchNarrow) {
         return state;
       }
-      const key = JSON.stringify(action.narrow.strings);
+      const key = keyFromNarrow(action.narrow.strings);
       let caughtUp;
       if (action.foundNewest !== undefined && action.foundOldest !== undefined) {
         /* This should always be the case for Zulip Server v1.8 or newer. */

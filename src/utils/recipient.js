@@ -1,4 +1,5 @@
 /* @flow strict-local */
+import { keyFromNarrow } from "../utils/narrow.js";
 import type { PmRecipientUser, Message, Outbox, User } from '../types';
 
 // Filter a list of PM recipients in the quirky way that we do.
@@ -76,7 +77,7 @@ export const pmUiRecipientsFromMessage = (
  *    UI.
  *
  *  * The `Narrow` type and its constructors in `narrow.js`, which with
- *    `JSON.stringify` we use to make keys to identify narrows in general,
+ *    `keyFromNarrow` we use to make keys to identify narrows in general,
  *    including stream and topic narrows.
  *
  *  * `normalizeRecipients`, `normalizeRecipientsSansMe`, and

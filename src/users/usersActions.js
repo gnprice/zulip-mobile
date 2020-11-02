@@ -1,4 +1,5 @@
 /* @flow strict-local */
+import { keyFromNarrow } from "../utils/narrow.js";
 import * as typing_status from '@zulip/shared/js/typing_status';
 
 import type { Auth, Dispatch, GetState, GlobalState } from '../types';
@@ -38,9 +39,9 @@ const typingWorker = (state: GlobalState) => {
 
   const getRecipients = user_ids_array => {
     if (useEmailArrays) {
-      return JSON.stringify(user_ids_array.map(userId => getUserForId(state, userId).email));
+      return keyFromNarrow(user_ids_array.map(userId => getUserForId(state, userId).email));
     }
-    return JSON.stringify(user_ids_array);
+    return keyFromNarrow(user_ids_array);
   };
 
   return {

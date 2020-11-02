@@ -1,4 +1,5 @@
 /* @flow strict-local */
+import { keyFromNarrow } from "../../utils/narrow.js";
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import omit from 'lodash.omit';
@@ -21,7 +22,7 @@ import * as eg from '../../__tests__/lib/exampleData';
 const mockStore = configureStore([thunk]);
 
 const narrow = streamNarrow('some stream');
-const streamNarrowStr = JSON.stringify(narrow);
+const streamNarrowStr = keyFromNarrow(narrow);
 
 global.FormData = class FormData {};
 
@@ -137,7 +138,7 @@ describe('fetchActions', () => {
           messages: [serverMessage1],
           result: 'success',
         };
-        fetch.mockResponseSuccess(JSON.stringify(response));
+        fetch.mockResponseSuccess(keyFromNarrow(response));
       });
 
       const store = mockStore<GlobalState, Action>(baseState);
@@ -196,7 +197,7 @@ describe('fetchActions', () => {
           messages: [message1, eg.streamMessage({ id: 2 }), eg.streamMessage({ id: 3 })],
           result: 'success',
         };
-        fetch.mockResponseSuccess(JSON.stringify(response));
+        fetch.mockResponseSuccess(keyFromNarrow(response));
 
         await expect(
           store.dispatch(
@@ -248,7 +249,7 @@ describe('fetchActions', () => {
           messages: [{ ...message1, reactions: [faultyReaction] }],
           result: 'success',
         };
-        fetch.mockResponseSuccess(JSON.stringify(response));
+        fetch.mockResponseSuccess(keyFromNarrow(response));
 
         await expect(
           store.dispatch(
@@ -283,7 +284,7 @@ describe('fetchActions', () => {
       });
     });
 
-    const BORING_RESPONSE = JSON.stringify({
+    const BORING_RESPONSE = keyFromNarrow({
       messages: [],
       result: 'success',
     });

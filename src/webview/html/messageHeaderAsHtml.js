@@ -1,4 +1,5 @@
 /* @flow strict-local */
+import { keyFromNarrow } from "../../utils/narrow.js";
 import template from './template';
 import type { Message, Narrow, Outbox } from '../../types';
 import type { BackgroundData } from '../MessageList';
@@ -44,7 +45,7 @@ export default (
   }
 
   if (item.type === 'stream' && headerStyle === 'topic+date') {
-    const topicNarrowStr = JSON.stringify(topicNarrow(item.display_recipient, item.subject));
+    const topicNarrowStr = keyFromNarrow(topicNarrow(item.display_recipient, item.subject));
     const topicHtml = renderSubject(item);
 
     return template`
@@ -67,8 +68,8 @@ export default (
 
     const backgroundColor = stream ? stream.color : 'hsl(0, 0%, 80%)';
     const textColor = foregroundColorFromBackground(backgroundColor);
-    const streamNarrowStr = JSON.stringify(streamNarrow(item.display_recipient));
-    const topicNarrowStr = JSON.stringify(topicNarrow(item.display_recipient, item.subject));
+    const streamNarrowStr = keyFromNarrow(streamNarrow(item.display_recipient));
+    const topicNarrowStr = keyFromNarrow(topicNarrow(item.display_recipient, item.subject));
     const topicHtml = renderSubject(item);
 
     return template`
@@ -93,7 +94,7 @@ export default (
       keyRecipients.length === 1
         ? privateNarrow(keyRecipients[0].email)
         : groupNarrow(keyRecipients.map(r => r.email));
-    const privateNarrowStr = JSON.stringify(narrowObj);
+    const privateNarrowStr = keyFromNarrow(narrowObj);
 
     const uiRecipients = pmUiRecipientsFromMessage(item, ownUser);
     return template`

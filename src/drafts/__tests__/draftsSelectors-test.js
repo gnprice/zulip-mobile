@@ -1,3 +1,4 @@
+import { keyFromNarrow } from "../../utils/narrow.js";
 import deepFreeze from 'deep-freeze';
 
 import { getDraftForNarrow } from '../draftsSelectors';
@@ -8,7 +9,7 @@ describe('getDraftForNarrow', () => {
     const narrow = topicNarrow('stream', 'topic');
     const state = deepFreeze({
       drafts: {
-        [JSON.stringify(narrow)]: 'content',
+        [keyFromNarrow(narrow)]: 'content',
       },
     });
 
@@ -21,7 +22,7 @@ describe('getDraftForNarrow', () => {
     const narrow = topicNarrow('stream', 'topic');
     const state = deepFreeze({
       drafts: {
-        [JSON.stringify(narrow)]: 'content',
+        [keyFromNarrow(narrow)]: 'content',
       },
     });
 

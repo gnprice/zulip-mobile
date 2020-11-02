@@ -1,4 +1,5 @@
 /* @flow strict-local */
+import { keyFromNarrow } from "../../utils/narrow.js";
 import { getTopicsForNarrow, getLastMessageTopic, getTopicsForStream } from '../topicSelectors';
 import {
   AllMessagesNarrow,
@@ -53,7 +54,7 @@ describe('getLastMessageTopic', () => {
     const message2 = eg.streamMessage({ id: 2, subject: 'some topic' });
     const state = eg.reduxState({
       narrows: {
-        [JSON.stringify(narrow)]: [1, 2],
+        [keyFromNarrow(narrow)]: [1, 2],
       },
       messages: {
         [message1.id]: message1,

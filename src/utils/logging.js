@@ -1,4 +1,5 @@
 /* @flow strict-local */
+import { keyFromNarrow } from "../utils/narrow.js";
 import type { Scope, SeverityType, EventHint } from '@sentry/react-native';
 import { getCurrentHub, Severity, withScope as withScopeImpl } from '@sentry/react-native';
 
@@ -82,7 +83,7 @@ const makeLogFunction = ({ consoleMethod, severity }: LogParams): LogFunction =>
       toConsole(event);
 
       const data = objectEntries(extras)
-        .map(([key, value]) => `    ${key}: ${JSON.stringify(value)}`)
+        .map(([key, value]) => `    ${key}: ${keyFromNarrow(value)}`)
         .join('\n');
 
       if (data) {

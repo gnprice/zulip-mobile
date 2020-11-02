@@ -8,6 +8,7 @@
  * @flow strict-local
  */
 
+import { keyFromNarrow } from "./utils/narrow.js";
 import type { InputSelector } from 'reselect';
 
 import type { Account, Outbox } from './types';
@@ -176,7 +177,7 @@ export type MuteState = MuteTuple[];
  * to; see `MessagesState` for more context.  The data here should
  * correspond exactly to the data in `MessagesState`.
  *
- * Keys are `JSON.stringify`-encoded `Narrow` objects.
+ * Keys are `keyFromNarrow`-encoded `Narrow` objects.
  * Values are sorted lists of message IDs.
  *
  * See also:

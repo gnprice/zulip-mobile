@@ -1,4 +1,5 @@
 /* @flow strict-local */
+import { keyFromNarrow } from "../../utils/narrow.js";
 import deepFreeze from 'deep-freeze';
 
 import * as eg from '../../__tests__/lib/exampleData';
@@ -50,7 +51,7 @@ describe('fetchingReducer', () => {
 
       const expectedState = {
         [HOME_NARROW_STR]: { older: false, newer: false },
-        [JSON.stringify(streamNarrow('some stream'))]: { older: true, newer: false },
+        [keyFromNarrow(streamNarrow('some stream'))]: { older: true, newer: false },
       };
 
       const newState = fetchingReducer(initialState, action);

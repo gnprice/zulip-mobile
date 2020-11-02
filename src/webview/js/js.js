@@ -1,5 +1,6 @@
 /* @flow strict-local */
 /* eslint-disable no-useless-return */
+import { keyFromNarrow } from "../../utils/narrow.js";
 import type { Auth } from '../../types';
 import type {
   WebViewUpdateEvent,
@@ -113,7 +114,7 @@ window.onerror = (message: string, source: string, line: number, column: number,
         `Message: ${message}`,
         `Source: ${source}`,
         `Line: ${line}:${column}`,
-        `Error: ${JSON.stringify(error)}`,
+        `Error: ${keyFromNarrow(error)}`,
         '',
       ]
         .map(escapeHtml)
