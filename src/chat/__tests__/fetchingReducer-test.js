@@ -7,7 +7,7 @@ import {
   HOME_NARROW,
   HOME_NARROW_STR,
   streamNarrow,
-} from '../../utils/narrow.js';
+} from '../../utils/narrow';
 
 import * as eg from '../../__tests__/lib/exampleData';
 import fetchingReducer from '../fetchingReducer';

@@ -1,6 +1,6 @@
 /* @flow strict-local */
 import { Platform } from 'react-native';
-import { keyFromNarrow } from '../../utils/narrow.js';
+import { keyFromNarrow } from '../../utils/narrow';
 
 import type { Auth } from '../../types';
 import smoothScroll from './smoothScroll.min';

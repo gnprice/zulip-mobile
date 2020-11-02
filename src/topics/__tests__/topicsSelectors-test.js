@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import { keyFromNarrow } from '../../utils/narrow.js';
+import { keyFromNarrow } from '../../utils/narrow';
 import { getTopicsForNarrow, getLastMessageTopic, getTopicsForStream } from '../topicSelectors';
 import {
   AllMessagesNarrow,

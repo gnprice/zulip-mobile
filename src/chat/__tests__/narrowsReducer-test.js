@@ -10,7 +10,7 @@ import {
   streamNarrow,
   topicNarrow,
   STARRED_NARROW_STR,
-} from '../../utils/narrow.js';
+} from '../../utils/narrow';
 
 import narrowsReducer from '../narrowsReducer';
 

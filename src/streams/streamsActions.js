@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import { keyFromNarrow } from '../utils/narrow.js';
+import { keyFromNarrow } from '../utils/narrow';
 import type { GetState, Dispatch, Stream } from '../types';
 import * as api from '../api';
 import { getAuth } from '../selectors';

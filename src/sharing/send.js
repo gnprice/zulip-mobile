@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import { keyFromNarrow } from '../utils/narrow.js';
+import { keyFromNarrow } from '../utils/narrow';
 import type { SharedData, User, Auth, GetText } from '../types';
 import { showToast } from '../utils/info';
 import { sendMessage, uploadFile } from '../api';

@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import { FlatList } from 'react-native';
 import type { NavigationStackProp, NavigationStateRoute } from 'react-navigation-stack';
-import { keyFromNarrow } from '../utils/narrow.js';
+import { keyFromNarrow } from '../utils/narrow';
 
 import type { GlobalState, Dispatch } from '../types';
 import { connect } from '../react-redux';

@@ -6,7 +6,7 @@ import {
   MENTIONED_NARROW_STR,
   STARRED_NARROW_STR,
   SearchNarrow,
-} from '../utils/narrow.js';
+} from '../utils/narrow';
 
 import type { NarrowsState, Action } from '../types';
 import { ensureUnreachable } from '../types';

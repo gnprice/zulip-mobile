@@ -6,7 +6,7 @@ import {
   CleanNarrow,
   TopicNarrow,
   StreamOrTopicNarrow,
-} from '../utils/narrow.js';
+} from '../utils/narrow';
 
 import * as logging from '../utils/logging';
 import type {

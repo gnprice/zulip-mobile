@@ -1,6 +1,6 @@
 /* @flow strict-local */
 import * as typing_status from '@zulip/shared/js/typing_status';
-import { keyFromNarrow, PmNarrow, CleanNarrow } from '../utils/narrow.js';
+import { keyFromNarrow, PmNarrow, CleanNarrow } from '../utils/narrow';
 
 import type { Auth, Dispatch, GetState, GlobalState } from '../types';
 import * as api from '../api';

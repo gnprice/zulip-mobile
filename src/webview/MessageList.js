@@ -4,7 +4,7 @@ import { Platform, NativeModules } from 'react-native';
 import { WebView } from 'react-native-webview';
 import type { WebViewNavigation } from 'react-native-webview';
 import { connectActionSheet } from '@expo/react-native-action-sheet';
-import { keyFromNarrow, asApiStringNarrow } from '../utils/narrow.js';
+import { keyFromNarrow, asApiStringNarrow } from '../utils/narrow';
 
 import type {
   AlertWordsState,

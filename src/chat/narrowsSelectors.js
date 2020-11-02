@@ -9,7 +9,7 @@ import {
   emailsOfGroupNarrow,
   narrowContainsOutbox,
   asDualNarrow,
-} from '../utils/narrow.js';
+} from '../utils/narrow';
 
 import type {
   GlobalState,

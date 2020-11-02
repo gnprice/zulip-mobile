@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import { keyFromNarrow } from '../utils/narrow.js';
+import { keyFromNarrow } from '../utils/narrow';
 import type { CaughtUp, CaughtUpState, Action } from '../types';
 import {
   REALM_INIT,

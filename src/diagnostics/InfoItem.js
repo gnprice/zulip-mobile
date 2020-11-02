@@ -1,7 +1,7 @@
 /* @flow strict-local */
 import React, { PureComponent } from 'react';
 import { View } from 'react-native';
-import { keyFromNarrow } from '../utils/narrow.js';
+import { keyFromNarrow } from '../utils/narrow';
 
 import { RawLabel } from '../common';
 import { createStyleSheet } from '../styles';

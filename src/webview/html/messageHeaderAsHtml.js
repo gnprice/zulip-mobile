@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import { keyFromNarrow } from '../../utils/narrow.js';
+import { keyFromNarrow } from '../../utils/narrow';
 import template from './template';
 import type { Message, Narrow, Outbox } from '../../types';
 import type { BackgroundData } from '../MessageList';

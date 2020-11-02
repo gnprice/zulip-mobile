@@ -2,7 +2,7 @@
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import omit from 'lodash.omit';
-import { keyFromNarrow, streamNarrow, HOME_NARROW, HOME_NARROW_STR } from '../../utils/narrow.js';
+import { keyFromNarrow, streamNarrow, HOME_NARROW, HOME_NARROW_STR } from '../../utils/narrow';
 
 import type { GlobalState } from '../../reduxTypes';
 import type { Action } from '../../actionTypes';
