@@ -9,8 +9,8 @@
  */
 
 import type { InputSelector } from 'reselect';
-import { keyFromNarrow } from './utils/narrow';
 
+import { keyFromNarrow } from './utils/narrow';
 import type { Account, Outbox } from './types';
 import type { Action, NavigationAction } from './actionTypes';
 import type {

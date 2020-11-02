@@ -1,6 +1,6 @@
 import deepFreeze from 'deep-freeze';
-import { keyFromNarrow, topicNarrow } from '../../utils/narrow';
 
+import { keyFromNarrow, topicNarrow } from '../../utils/narrow';
 import { getDraftForNarrow } from '../draftsSelectors';
 
 describe('getDraftForNarrow', () => {

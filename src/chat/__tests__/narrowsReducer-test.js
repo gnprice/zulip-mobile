@@ -1,5 +1,7 @@
 /* @flow strict-local */
 import deepFreeze from 'deep-freeze';
+
+import narrowsReducer from '../narrowsReducer';
 import {
   keyFromNarrow,
   HOME_NARROW,
@@ -11,9 +13,6 @@ import {
   topicNarrow,
   STARRED_NARROW_STR,
 } from '../../utils/narrow';
-
-import narrowsReducer from '../narrowsReducer';
-
 import {
   MESSAGE_FETCH_ERROR,
   MESSAGE_FETCH_COMPLETE,

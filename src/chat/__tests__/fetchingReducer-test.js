@@ -1,5 +1,8 @@
 /* @flow strict-local */
 import deepFreeze from 'deep-freeze';
+
+import * as eg from '../../__tests__/lib/exampleData';
+import fetchingReducer from '../fetchingReducer';
 import {
   keyFromNarrow,
   AllMessagesNarrow,
@@ -8,10 +11,6 @@ import {
   HOME_NARROW_STR,
   streamNarrow,
 } from '../../utils/narrow';
-
-import * as eg from '../../__tests__/lib/exampleData';
-import fetchingReducer from '../fetchingReducer';
-
 import { MESSAGE_FETCH_START, MESSAGE_FETCH_ERROR } from '../../actionConstants';
 import { DEFAULT_FETCHING } from '../fetchingSelectors';
 

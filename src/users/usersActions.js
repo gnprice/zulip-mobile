@@ -1,12 +1,11 @@
 /* @flow strict-local */
 import * as typing_status from '@zulip/shared/js/typing_status';
-import { keyFromNarrow, PmNarrow, CleanNarrow } from '../utils/narrow';
 
 import type { Auth, Dispatch, GetState, GlobalState } from '../types';
 import * as api from '../api';
 import { PRESENCE_RESPONSE } from '../actionConstants';
 import { getAuth, tryGetAuth, getServerVersion } from '../selectors';
-
+import { keyFromNarrow, PmNarrow, CleanNarrow } from '../utils/narrow';
 import { getUserForId } from './userSelectors';
 import { ZulipVersion } from '../utils/zulipVersion';
 

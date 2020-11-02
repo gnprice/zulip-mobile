@@ -1,6 +1,6 @@
 import deepFreeze from 'deep-freeze';
-import { keyFromNarrow, topicNarrow } from '../../utils/narrow';
 
+import { keyFromNarrow, topicNarrow } from '../../utils/narrow';
 import { NULL_OBJECT } from '../../nullObjects';
 import draftsReducer from '../draftsReducer';
 import { DRAFT_UPDATE } from '../../actionConstants';
