@@ -5,6 +5,34 @@ import unescape from 'lodash.unescape';
 import type { Narrow, Message, Outbox, Stream, UserOrBot } from '../types';
 import { normalizeRecipients } from './recipient';
 
+/*
+ TODO on CleanNarrow:
+  * Type-checker help check we don't JSON.stringify a clean or dual
+    narrow
+    * Convert them all to a specific helper function first.
+  * Type-checker prevent trying an instanceof check that always fails
+    because LHS is a DualNarrow
+    * Use instead a method, like `CleanNarrow#isa`
+    * Or better -- is there a way to get Flow to warn on this?  TS can.
+
+  * Implement `key` for all CleanNarrow subclasses
+  * Make singletons for each UniqueNarrow subclass,
+    and corresponding DualNarrow
+  * go fix all these tests
+  * In PmNarrow, require knowing self user ID; factories
+    enforce normalization and provide sorting
+    * Perhaps even provide different normalizations:
+      all-users, traditional, and never-self
+  * Revise migration instructions a bit: try converting to
+    DualNarrow bottom-up
+    * Follow type errors up through callers and data sources
+    * Where something needs to pass an old Narrow somewhere,
+      use `narrow.strings`
+    * When reach a selector or thunk action, use `getDualNarrow`
+      to convert any provided Narrow
+
+ */
+
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-use-before-define */
 
