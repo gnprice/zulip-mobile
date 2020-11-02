@@ -1,9 +1,7 @@
 /* @flow strict-local */
-import { keyFromNarrow } from "../../utils/narrow.js";
 import deepFreeze from 'deep-freeze';
-
-import narrowsReducer from '../narrowsReducer';
 import {
+  keyFromNarrow,
   HOME_NARROW,
   HOME_NARROW_STR,
   privateNarrow,
@@ -12,7 +10,10 @@ import {
   streamNarrow,
   topicNarrow,
   STARRED_NARROW_STR,
-} from '../../utils/narrow';
+} from '../../utils/narrow.js';
+
+import narrowsReducer from '../narrowsReducer';
+
 import {
   MESSAGE_FETCH_ERROR,
   MESSAGE_FETCH_COMPLETE,

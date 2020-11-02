@@ -1,7 +1,15 @@
 /* @flow strict-local */
-import { keyFromNarrow } from "../utils/narrow.js";
 import isEqual from 'lodash.isequal';
 import { createSelector } from 'reselect';
+import {
+  keyFromNarrow,
+  DualNarrow,
+  isPrivateNarrow,
+  isStreamOrTopicNarrow,
+  emailsOfGroupNarrow,
+  narrowContainsOutbox,
+  asDualNarrow,
+} from '../utils/narrow.js';
 
 import type {
   GlobalState,
@@ -24,14 +32,7 @@ import {
 } from '../directSelectors';
 import { getCaughtUpForNarrow } from '../caughtup/caughtUpSelectors';
 import { getAllUsersByEmail } from '../users/userSelectors';
-import {
-  DualNarrow,
-  isPrivateNarrow,
-  isStreamOrTopicNarrow,
-  emailsOfGroupNarrow,
-  narrowContainsOutbox,
-  asDualNarrow,
-} from '../utils/narrow';
+
 import { shouldBeMuted } from '../utils/message';
 import { NULL_ARRAY, NULL_SUBSCRIPTION } from '../nullObjects';
 import { getStreamsByName } from '../subscriptions/subscriptionSelectors';

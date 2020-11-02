@@ -1,10 +1,9 @@
-import { keyFromNarrow } from "../../utils/narrow.js";
 import deepFreeze from 'deep-freeze';
+import { keyFromNarrow, topicNarrow } from '../../utils/narrow.js';
 
 import { NULL_OBJECT } from '../../nullObjects';
 import draftsReducer from '../draftsReducer';
 import { DRAFT_UPDATE } from '../../actionConstants';
-import { topicNarrow } from '../../utils/narrow';
 
 describe('draftsReducer', () => {
   const testNarrow = topicNarrow('denmark', 'denmark2');

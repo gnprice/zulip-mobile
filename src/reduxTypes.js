@@ -8,8 +8,8 @@
  * @flow strict-local
  */
 
-import { keyFromNarrow } from "./utils/narrow.js";
 import type { InputSelector } from 'reselect';
+import { keyFromNarrow } from './utils/narrow.js';
 
 import type { Account, Outbox } from './types';
 import type { Action, NavigationAction } from './actionTypes';

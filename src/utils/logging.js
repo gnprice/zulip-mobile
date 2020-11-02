@@ -1,7 +1,7 @@
 /* @flow strict-local */
-import { keyFromNarrow } from "../utils/narrow.js";
 import type { Scope, SeverityType, EventHint } from '@sentry/react-native';
 import { getCurrentHub, Severity, withScope as withScopeImpl } from '@sentry/react-native';
+import { keyFromNarrow } from './narrow.js';
 
 import type { JSONable } from './jsonable';
 import objectEntries from './objectEntries';

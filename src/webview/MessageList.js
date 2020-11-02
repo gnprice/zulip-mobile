@@ -1,10 +1,10 @@
 /* @flow strict-local */
-import { keyFromNarrow } from "../utils/narrow.js";
 import React, { Component } from 'react';
 import { Platform, NativeModules } from 'react-native';
 import { WebView } from 'react-native-webview';
 import type { WebViewNavigation } from 'react-native-webview';
 import { connectActionSheet } from '@expo/react-native-action-sheet';
+import { keyFromNarrow, asApiStringNarrow } from '../utils/narrow.js';
 
 import type {
   AlertWordsState,
@@ -56,7 +56,7 @@ import { handleMessageListEvent } from './webViewEventHandlers';
 import { base64Utf8Encode } from '../utils/encoding';
 import * as logging from '../utils/logging';
 import { tryParseUrl } from '../utils/url';
-import { asApiStringNarrow } from '../utils/narrow';
+
 import { getDualNarrow } from '../chat/narrowsSelectors';
 
 // ESLint doesn't notice how `this.props` escapes, and complains about some

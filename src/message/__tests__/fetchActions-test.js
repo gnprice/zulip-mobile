@@ -1,8 +1,8 @@
 /* @flow strict-local */
-import { keyFromNarrow } from "../../utils/narrow.js";
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import omit from 'lodash.omit';
+import { keyFromNarrow, streamNarrow, HOME_NARROW, HOME_NARROW_STR } from '../../utils/narrow.js';
 
 import type { GlobalState } from '../../reduxTypes';
 import type { Action } from '../../actionTypes';
@@ -16,7 +16,7 @@ import {
 import { FIRST_UNREAD_ANCHOR } from '../../anchor';
 import type { Message } from '../../api/modelTypes';
 import type { ServerMessage } from '../../api/messages/getMessages';
-import { streamNarrow, HOME_NARROW, HOME_NARROW_STR } from '../../utils/narrow';
+
 import * as eg from '../../__tests__/lib/exampleData';
 
 const mockStore = configureStore([thunk]);

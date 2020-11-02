@@ -1,16 +1,17 @@
 /* @flow strict-local */
-import { keyFromNarrow } from "../../utils/narrow.js";
 import deepFreeze from 'deep-freeze';
-
-import * as eg from '../../__tests__/lib/exampleData';
-import fetchingReducer from '../fetchingReducer';
 import {
+  keyFromNarrow,
   AllMessagesNarrow,
   DualNarrow,
   HOME_NARROW,
   HOME_NARROW_STR,
   streamNarrow,
-} from '../../utils/narrow';
+} from '../../utils/narrow.js';
+
+import * as eg from '../../__tests__/lib/exampleData';
+import fetchingReducer from '../fetchingReducer';
+
 import { MESSAGE_FETCH_START, MESSAGE_FETCH_ERROR } from '../../actionConstants';
 import { DEFAULT_FETCHING } from '../fetchingSelectors';
 

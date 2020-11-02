@@ -1,6 +1,12 @@
 /* @flow strict-local */
-import { keyFromNarrow } from "../utils/narrow.js";
 import parseMarkdown from 'zulip-markdown-parser';
+import {
+  keyFromNarrow,
+  PmNarrow,
+  CleanNarrow,
+  TopicNarrow,
+  StreamOrTopicNarrow,
+} from '../utils/narrow.js';
 
 import * as logging from '../utils/logging';
 import type {
@@ -23,7 +29,7 @@ import { getAuth } from '../selectors';
 import * as api from '../api';
 import { getSelfUserDetail, getUsersById } from '../users/userSelectors';
 import { getUsersAndWildcards } from '../users/userHelpers';
-import { PmNarrow, CleanNarrow, TopicNarrow, StreamOrTopicNarrow } from '../utils/narrow';
+
 import { BackoffMachine } from '../utils/async';
 import { NULL_USER } from '../nullObjects';
 import { getStreamsById } from '../subscriptions/subscriptionSelectors';

@@ -1,6 +1,12 @@
 /* @flow strict-local */
-import { keyFromNarrow } from "../utils/narrow.js";
 import union from 'lodash.union';
+import {
+  keyFromNarrow,
+  isMessageInNarrow,
+  MENTIONED_NARROW_STR,
+  STARRED_NARROW_STR,
+  SearchNarrow,
+} from '../utils/narrow.js';
 
 import type { NarrowsState, Action } from '../types';
 import { ensureUnreachable } from '../types';
@@ -17,12 +23,7 @@ import {
   EVENT_UPDATE_MESSAGE_FLAGS,
 } from '../actionConstants';
 import { LAST_MESSAGE_ANCHOR, FIRST_UNREAD_ANCHOR } from '../anchor';
-import {
-  isMessageInNarrow,
-  MENTIONED_NARROW_STR,
-  STARRED_NARROW_STR,
-  SearchNarrow,
-} from '../utils/narrow';
+
 import { NULL_OBJECT } from '../nullObjects';
 
 const initialState: NarrowsState = NULL_OBJECT;

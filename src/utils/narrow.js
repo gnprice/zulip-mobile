@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import { keyFromNarrow } from "../utils/narrow.js";
+import { keyFromNarrow } from '../utils/narrow.js';
 import isEqual from 'lodash.isequal';
 import unescape from 'lodash.unescape';
 
@@ -439,8 +439,8 @@ export const isPrivateOrGroupNarrow = (narrow?: Narrow): boolean =>
   !!narrow && caseNarrowDefault(narrow, { pm: () => true, groupPm: () => true }, () => false);
 
 export const isSpecialNarrow = (narrow?: Narrow): boolean =>
-  !!narrow
-  && caseNarrowDefault(
+  !!narrow &&
+  caseNarrowDefault(
     narrow,
     { starred: () => true, mentioned: () => true, allPrivate: () => true },
     () => false,
@@ -505,9 +505,9 @@ export const narrowContainsOutbox = (haystack: Narrow, needle: Outbox): boolean 
   caseNarrowPartial(haystack, {
     stream: name => needle.type === 'stream' && needle.display_recipient === name,
     topic: (streamName, topic) =>
-      needle.type === 'stream'
-      && needle.display_recipient === streamName
-      && needle.subject === topic,
+      needle.type === 'stream' &&
+      needle.display_recipient === streamName &&
+      needle.subject === topic,
     pm: emails => emails === needle.display_recipient.map(r => r.email).join(','),
 
     home: () => true,

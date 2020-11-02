@@ -1,9 +1,9 @@
 /* @flow strict-local */
 
-import { keyFromNarrow } from "../utils/narrow.js";
 import React, { PureComponent } from 'react';
 import { FlatList } from 'react-native';
 import type { NavigationStackProp, NavigationStateRoute } from 'react-navigation-stack';
+import { keyFromNarrow } from '../utils/narrow.js';
 
 import type { GlobalState, Dispatch } from '../types';
 import { connect } from '../react-redux';

@@ -1,8 +1,7 @@
-import { keyFromNarrow } from "../../utils/narrow.js";
 import deepFreeze from 'deep-freeze';
+import { keyFromNarrow, topicNarrow } from '../../utils/narrow.js';
 
 import { getDraftForNarrow } from '../draftsSelectors';
-import { topicNarrow } from '../../utils/narrow';
 
 describe('getDraftForNarrow', () => {
   test('return content of draft if exists', () => {

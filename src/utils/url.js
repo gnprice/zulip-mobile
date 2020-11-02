@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import { keyFromNarrow } from "../utils/narrow.js";
+import { keyFromNarrow } from './narrow.js';
 import type { Auth } from '../types';
 import { getAuthHeaders } from '../api/transport';
 import objectEntries from './objectEntries';

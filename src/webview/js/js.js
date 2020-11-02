@@ -1,6 +1,6 @@
 /* @flow strict-local */
 /* eslint-disable no-useless-return */
-import { keyFromNarrow } from "../../utils/narrow.js";
+import { keyFromNarrow } from '../../utils/narrow.js';
 import type { Auth } from '../../types';
 import type {
   WebViewUpdateEvent,
