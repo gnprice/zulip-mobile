@@ -188,8 +188,8 @@ export const pmUnreadsKeyFromMessage = (message: Message, ownUserId?: number): s
 };
 
 export const isSameRecipient = (
-  message1: Message | Outbox,
-  message2: Message | Outbox,
+  message1: Message | Outbox | void,
+  message2: Message | Outbox | void,
 ): boolean => {
   if (message1 === undefined || message2 === undefined) {
     return false;
