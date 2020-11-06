@@ -60,11 +60,11 @@ export function createMigrationImpl(
 
   const migrate = (state, version) => {
     let newState = state;
-    versionKeys
-      .filter(v => v > version || version === null)
-      .forEach(v => {
+    for (const v of versionKeys) {
+      if (v > version || version === null) {
         newState = manifest[v.toString()](newState);
-      });
+      }
+    }
 
     newState = versionSetter(newState, currentVersion);
     return newState;
