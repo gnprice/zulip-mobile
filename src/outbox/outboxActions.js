@@ -45,13 +45,16 @@ export const messageSendComplete = (localMessageId: number): Action => ({
   local_message_id: localMessageId,
 });
 
+// TODO: (filed as #3881) The try/catch in here doesn't apply to the actual
+//   sending.  As a result, this will return true even when we're unable to
+//   reach the server, and so the caller won't retry.
 export const trySendMessages = (dispatch: Dispatch, getState: GetState): boolean => {
   const state = getState();
   const auth = getAuth(state);
   const outboxToSend = state.outbox.filter(outbox => !outbox.isSent);
   const oneWeekAgoTimestamp = Date.now() / 1000 - 60 * 60 * 24 * 7;
   try {
-    outboxToSend.forEach(async item => {
+    outboxToSend.forEach(item => {
       // If a message has spent over a week in the outbox, it's probably too
       // stale to try sending it.
       //
@@ -60,7 +63,7 @@ export const trySendMessages = (dispatch: Dispatch, getState: GetState): boolean
       // that instead.
       if (item.timestamp < oneWeekAgoTimestamp) {
         dispatch(deleteOutboxMessage(item.id));
-        return; // i.e., continue
+        return;
       }
 
       // prettier-ignore
@@ -74,15 +77,18 @@ export const trySendMessages = (dispatch: Dispatch, getState: GetState): boolean
             //   CSV, then a literal. To avoid misparsing, always use JSON.
           : JSON.stringify([item.display_recipient]);
 
-      await api.sendMessage(auth, {
+      // Prettier does something silly with this method chaining.
+      // prettier-ignore
+      api.sendMessage(auth, {
         type: item.type,
         to,
         subject: item.subject,
         content: item.markdownContent,
         localId: item.timestamp,
         eventQueueId: state.session.eventQueueId,
+      }).then(() => {
+        dispatch(messageSendComplete(item.timestamp));
       });
-      dispatch(messageSendComplete(item.timestamp));
     });
     return true;
   } catch (e) {
