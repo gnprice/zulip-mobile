@@ -29,7 +29,7 @@ const process_message = function (words: string[],
         return;
     }
 
-    words.forEach(function (word) {
+    for (let word of words) {
         var clean = escape_user_regex(word);
         var before_punctuation = '\\s|^|>|[\\(\\".,\';\\[]';
         var after_punctuation = '\\s|$|<|[\\)\\"\\?!:.,\';\\]!]';
@@ -54,7 +54,7 @@ const process_message = function (words: string[],
             }
             return before + "<span class='alert-word'>" + word + "</span>" + after;
         });
-    });
+    }
 };
 
 /** Mark any alert words in `content` with an appropriate span. */

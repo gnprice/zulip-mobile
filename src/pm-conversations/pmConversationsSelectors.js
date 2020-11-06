@@ -29,7 +29,8 @@ export const getRecentConversations: Selector<PmConversationData[]> = createSele
     }));
 
     const latestByRecipient = new Map();
-    recipients.forEach(recipient => {
+
+    for (const recipient of recipients) {
       const prev = latestByRecipient.get(recipient.emails);
       if (!prev || recipient.msgId > prev.msgId) {
         latestByRecipient.set(recipient.emails, {
@@ -38,7 +39,7 @@ export const getRecentConversations: Selector<PmConversationData[]> = createSele
           msgId: recipient.msgId,
         });
       }
-    });
+    }
 
     const sortedByMostRecent = Array.from(latestByRecipient.values()).sort(
       (a, b) => +b.msgId - +a.msgId,

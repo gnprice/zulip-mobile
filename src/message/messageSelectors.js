@@ -40,14 +40,15 @@ export const getPrivateMessages: Selector<Message[]> = createSelector(
     const unknownIds: number[] = [];
 
     const pmIds = narrows[ALL_PRIVATE_NARROW_STR] || NULL_ARRAY;
-    pmIds.forEach(id => {
+
+    for (const id of pmIds) {
       const msg = messages[id];
       if (msg !== undefined) {
         privateMessages.push(msg);
       } else {
         unknownIds.push(id);
       }
-    });
+    }
 
     // BUG (#3749): all messages in `narrows` _should_ also be in `messages`.
     // Error reports indicate that, somehow, this isn't always so.

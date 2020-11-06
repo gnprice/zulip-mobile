@@ -45,11 +45,12 @@ export const getAccountFromNotificationData = (
   }
 
   const urlMatches = [];
-  identities.forEach((account, i) => {
+
+  for (const [i, account] of identities.entries()) {
     if (account.realm.href === realmUrl.href) {
       urlMatches.push(i);
     }
-  });
+  }
 
   if (urlMatches.length === 0) {
     // No match.  Either we logged out of this account and didn't

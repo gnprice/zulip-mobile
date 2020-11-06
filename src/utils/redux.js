@@ -3,7 +3,7 @@ import config from '../config';
 import timing from './timing';
 
 export function logSlowReducers<O: {}>(reducers: O): O {
-  Object.keys(reducers).forEach((name: string) => {
+  for (const name: string of Object.keys(reducers)) {
     const originalReducer = reducers[name];
     reducers[name] = (state, action) => {
       const startMs = Date.now();
@@ -18,6 +18,7 @@ export function logSlowReducers<O: {}>(reducers: O): O {
       }
       return result;
     };
-  });
+  }
+
   return reducers;
 }

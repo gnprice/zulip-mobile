@@ -12,7 +12,8 @@ export default (
 
   let prevItem = undefined;
   const sections = [{ key: 0, data: [], message: {} }];
-  messages.forEach(item => {
+
+  for (const item of messages) {
     const diffDays =
       !!prevItem
       && !isSameDay(new Date(prevItem.timestamp * 1000), new Date(item.timestamp * 1000));
@@ -49,6 +50,7 @@ export default (
     });
 
     prevItem = item;
-  });
+  }
+
   return sections;
 };

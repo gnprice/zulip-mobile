@@ -25,9 +25,10 @@ describe('jsdom-global', () => {
     });
 
     expect(document.location.host).toContain(hostname);
-    paths.forEach(element => {
+
+    for (const element of paths) {
       expect(document.location.pathname).toContain(element);
-    });
+    }
   });
 
   describe('properly resolves a URL', () => {

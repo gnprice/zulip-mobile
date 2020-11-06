@@ -72,12 +72,12 @@ export const startEventPolling = (queueId: number, eventId: number) => async (
 
       const actions = eventsToActions(getState(), events);
 
-      actions.forEach(action => {
+      for (const action of actions) {
         // These side effects should not be moved to reducers, which
         // are explicitly not the place for side effects (see
         // https://redux.js.org/faq/actions).
         dispatch(doEventActionSideEffects(action));
-      });
+      }
 
       dispatchOrBatch(dispatch, actions);
 

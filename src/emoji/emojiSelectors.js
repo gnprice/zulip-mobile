@@ -11,14 +11,16 @@ export const getAllImageEmojiById: Selector<RealmEmojiById> = createSelector(
   getRawRealmEmoji,
   (identity, realmEmoji) => {
     const result: { [string]: ImageEmojiType } = {};
-    [realmEmoji, zulipExtraEmojiMap].forEach(emojis => {
-      Object.keys(emojis).forEach(id => {
+
+    for (const emojis of [realmEmoji, zulipExtraEmojiMap]) {
+      for (const id of Object.keys(emojis)) {
         result[id] = {
           ...emojis[id],
           source_url: new URL(emojis[id].source_url, identity.realm).toString(),
         };
-      });
-    });
+      }
+    }
+
     return result;
   },
 );
@@ -27,11 +29,13 @@ export const getActiveImageEmojiById: Selector<RealmEmojiById> = createSelector(
   getAllImageEmojiById,
   emojis => {
     const result: { [string]: ImageEmojiType } = {};
-    Object.keys(emojis).forEach(id => {
+
+    for (const id of Object.keys(emojis)) {
       if (!emojis[id].deactivated) {
         result[id] = emojis[id];
       }
-    });
+    }
+
     return result;
   },
 );

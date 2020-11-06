@@ -15,10 +15,12 @@ type UsersByStatus = {|
 
 export const groupUsersByStatus = (users: User[], presences: PresenceState): UsersByStatus => {
   const groupedUsers = { active: [], idle: [], offline: [], unavailable: [] };
-  users.forEach(user => {
+
+  for (const user of users) {
     const status = statusFromPresence(presences[user.email]);
     groupedUsers[status].push(user);
-  });
+  }
+
   return groupedUsers;
 };
 

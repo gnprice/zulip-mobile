@@ -20,10 +20,12 @@
  */
 export function objectFromEntries<+K, +V>(entries: $ReadOnlyArray<[K, V]>): { [K]: V } {
   const obj = ({}: { [K]: V });
-  entries.forEach(entry => {
+
+  for (const entry of entries) {
     // ESLint bug?  I don't understand how this rule even applies to this line.
     // eslint-disable-next-line prefer-destructuring
     obj[entry[0]] = entry[1];
-  });
+  }
+
   return obj;
 }

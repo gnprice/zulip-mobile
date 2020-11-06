@@ -30,7 +30,8 @@ export const getUnreadByStream: Selector<{ [number]: number }> = createSelector(
   getMute,
   (unreadStreams, subscriptionsById, mute) => {
     const totals = ({}: { [number]: number });
-    unreadStreams.forEach(stream => {
+
+    for (const stream of unreadStreams) {
       if (!totals[stream.stream_id]) {
         totals[stream.stream_id] = 0;
       }
@@ -40,7 +41,8 @@ export const getUnreadByStream: Selector<{ [number]: number }> = createSelector(
         mute,
       );
       totals[stream.stream_id] += isMuted ? 0 : stream.unread_message_ids.length;
-    });
+    }
+
     return totals;
   },
 );
@@ -65,9 +67,11 @@ export const getUnreadByPms: Selector<{ [number]: number }> = createSelector(
   getUnreadPms,
   unreadPms => {
     const totals = ({}: { [number]: number });
-    unreadPms.forEach(pm => {
+
+    for (const pm of unreadPms) {
       totals[pm.sender_id] = totals[pm.sender_id] || 0 + pm.unread_message_ids.length;
-    });
+    }
+
     return totals;
   },
 );
@@ -95,10 +99,12 @@ export const getUnreadByHuddles: Selector<{ [string]: number }> = createSelector
   getUnreadHuddles,
   unreadHuddles => {
     const totals = ({}: { [string]: number });
-    unreadHuddles.forEach(huddle => {
+
+    for (const huddle of unreadHuddles) {
       totals[huddle.user_ids_string] =
         totals[huddle.user_ids_string] || 0 + huddle.unread_message_ids.length;
-    });
+    }
+
     return totals;
   },
 );
@@ -141,7 +147,8 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
   getMute,
   (subscriptionsById, unreadStreams, mute) => {
     const totals = new Map();
-    unreadStreams.forEach(stream => {
+
+    for (const stream of unreadStreams) {
       const { name, color, in_home_view, invite_only, pin_to_top } =
         subscriptionsById.get(stream.stream_id) || NULL_SUBSCRIPTION;
 
@@ -172,15 +179,15 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
         lastUnreadMsgId: stream.unread_message_ids[stream.unread_message_ids.length - 1],
         isMuted,
       });
-    });
+    }
 
     const sortedStreams = Array.from(totals.values())
       .sort((a, b) => caseInsensitiveCompareFunc(a.streamName, b.streamName))
       .sort((a, b) => +b.isPinned - +a.isPinned);
 
-    sortedStreams.forEach(stream => {
+    for (const stream of sortedStreams) {
       stream.data.sort((a, b) => b.lastUnreadMsgId - a.lastUnreadMsgId);
-    });
+    }
 
     return sortedStreams;
   },

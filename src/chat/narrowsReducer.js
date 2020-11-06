@@ -46,7 +46,8 @@ const messageFetchComplete = (state, action) => {
 const eventNewMessage = (state, action) => {
   let stateChange = false;
   const newState: NarrowsState = {};
-  Object.keys(state).forEach(key => {
+
+  for (const key of Object.keys(state)) {
     const { flags } = action.message;
     if (!flags) {
       throw new Error('EVENT_NEW_MESSAGE message missing flags');
@@ -61,17 +62,20 @@ const eventNewMessage = (state, action) => {
     } else {
       newState[key] = state[key];
     }
-  });
+  }
+
   return stateChange ? newState : state;
 };
 
 const eventMessageDelete = (state, action) => {
   let stateChange = false;
   const newState: NarrowsState = {};
-  Object.keys(state).forEach(key => {
+
+  for (const key of Object.keys(state)) {
     newState[key] = state[key].filter(id => !action.messageIds.includes(id));
     stateChange = stateChange || newState[key].length < state[key].length;
-  });
+  }
+
   return stateChange ? newState : state;
 };
 

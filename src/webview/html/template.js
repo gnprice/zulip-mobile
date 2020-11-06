@@ -17,7 +17,8 @@ export default (strings: string[], ...values: Array<string | number>) => {
   // $FlowFixMe github.com/facebook/flow/issues/2616
   const raw: string[] = strings.raw; // eslint-disable-line prefer-destructuring
   const result = [];
-  values.forEach((value, i) => {
+
+  for (const [i, value] of values.entries()) {
     if (raw[i].endsWith('$!')) {
       result.push(strings[i].substring(0, strings[i].length - 2));
       result.push(value);
@@ -25,7 +26,8 @@ export default (strings: string[], ...values: Array<string | number>) => {
       result.push(strings[i]);
       result.push(escape(value));
     }
-  });
+  }
+
   result.push(strings[strings.length - 1]);
   return result.join('');
 };

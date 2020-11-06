@@ -12,15 +12,18 @@ export default (
   renderedMessages: RenderedSectionDescriptor[],
 ): string => {
   const pieces = [];
-  renderedMessages.forEach(section => {
+
+  for (const section of renderedMessages) {
     pieces.push(messageHeaderAsHtml(backgroundData, narrow, section.message));
-    section.data.forEach(item => {
+
+    for (const item of section.data) {
       if (item.type === 'time') {
         pieces.push(timeRowAsHtml(item.timestamp, item.firstMessage));
       } else {
         pieces.push(messageAsHtml(backgroundData, item.message, item.isBrief));
       }
-    });
-  });
+    }
+  }
+
   return pieces.join('');
 };

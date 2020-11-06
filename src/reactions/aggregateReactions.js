@@ -6,7 +6,8 @@ export default (
   ownUserId: number,
 ): $ReadOnlyArray<AggregatedReaction> => {
   const reactionMap = new Map();
-  reactions.forEach(x => {
+
+  for (const x of reactions) {
     let item = reactionMap.get(x.emoji_name);
     if (!item) {
       item = {
@@ -25,7 +26,8 @@ export default (
     if (x.user_id === ownUserId) {
       item.selfReacted = true;
     }
-  });
+  }
+
   return Array.from(reactionMap.values()).sort(
     (r1: AggregatedReaction, r2: AggregatedReaction) => r2.count - r1.count,
   );

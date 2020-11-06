@@ -76,10 +76,12 @@ export const cacheKeys: Array<$Keys<GlobalState>> = [
  */
 function dropCache(state: GlobalState): $Shape<GlobalState> {
   const result: $Shape<GlobalState> = {};
-  storeKeys.forEach(key => {
+
+  for (const key of storeKeys) {
     // $FlowFixMe This is well-typed only because it's the same `key` twice.
     result[key] = state[key];
-  });
+  }
+
   return result;
 }
 

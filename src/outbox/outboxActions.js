@@ -54,7 +54,7 @@ export const trySendMessages = (dispatch: Dispatch, getState: GetState): boolean
   const outboxToSend = state.outbox.filter(outbox => !outbox.isSent);
   const oneWeekAgoTimestamp = Date.now() / 1000 - 60 * 60 * 24 * 7;
   try {
-    outboxToSend.forEach(item => {
+    for (const item of outboxToSend) {
       // If a message has spent over a week in the outbox, it's probably too
       // stale to try sending it.
       //
@@ -63,7 +63,7 @@ export const trySendMessages = (dispatch: Dispatch, getState: GetState): boolean
       // that instead.
       if (item.timestamp < oneWeekAgoTimestamp) {
         dispatch(deleteOutboxMessage(item.id));
-        return;
+        continue;
       }
 
       // prettier-ignore
@@ -89,7 +89,8 @@ export const trySendMessages = (dispatch: Dispatch, getState: GetState): boolean
       }).then(() => {
         dispatch(messageSendComplete(item.timestamp));
       });
-    });
+    }
+
     return true;
   } catch (e) {
     logging.warn(e);

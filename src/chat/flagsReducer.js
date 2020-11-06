@@ -38,13 +38,13 @@ const addFlagsForMessages = (
   // $FlowFixMe - #4252
   const newState: FlagsState = {};
 
-  flags.forEach(flag => {
+  for (const flag of flags) {
     newState[flag] = { ...(state[flag] || {}) };
 
-    messages.forEach(message => {
+    for (const message of messages) {
       newState[flag][message] = true;
-    });
-  });
+    }
+  }
 
   return {
     ...state,
@@ -54,9 +54,11 @@ const addFlagsForMessages = (
 
 const removeFlagForMessages = (state: FlagsState, messages: number[], flag: string): FlagsState => {
   const newStateForFlag = { ...(state[flag] || {}) };
-  messages.forEach(message => {
+
+  for (const message of messages) {
     delete newStateForFlag[message];
-  });
+  }
+
   return {
     ...state,
     [flag]: newStateForFlag,
@@ -67,8 +69,9 @@ const processFlagsForMessages = (state: FlagsState, messages: Message[]): FlagsS
   let stateChanged = false;
   // $FlowFixMe - #4252
   const newState: FlagsState = {};
-  messages.forEach(msg => {
-    (msg.flags || []).forEach(flag => {
+
+  for (const msg of messages) {
+    for (const flag of msg.flags || []) {
       if (!state[flag] || !state[flag][msg.id]) {
         if (!newState[flag]) {
           newState[flag] = {};
@@ -76,8 +79,8 @@ const processFlagsForMessages = (state: FlagsState, messages: Message[]): FlagsS
         newState[flag][msg.id] = true;
         stateChanged = true;
       }
-    });
-  });
+    }
+  }
 
   // $FlowFixMe: Flow can't follow this objects-as-maps logic.
   return stateChanged ? deeperMerge(state, newState) : state;

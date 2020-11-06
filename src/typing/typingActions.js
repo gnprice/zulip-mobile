@@ -20,11 +20,13 @@ const typingStatusExpiryLoop = () => async (dispatch: Dispatch, getState: GetSta
       break; // break if no typing notifications
     }
     const outdatedNotifications = [];
-    Object.keys(typing).forEach(recipients => {
+
+    for (const recipients of Object.keys(typing)) {
       if (currentTime - typing[recipients].time >= 15000) {
         outdatedNotifications.push(recipients);
       }
-    });
+    }
+
     dispatch(clearTyping(outdatedNotifications));
   }
 };

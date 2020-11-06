@@ -122,31 +122,31 @@ export const activeAuthentications = (
 ): AuthenticationMethodDetails[] => {
   const result = [];
 
-  availableDirectMethods.forEach(auth => {
+  for (const auth of availableDirectMethods) {
     if (!authenticationMethods[auth.name]) {
-      return;
+      continue;
     }
     if (auth.name === 'ldap' && authenticationMethods.password === true) {
       // For either of these, we show a button that looks and behaves
       // exactly the same.  When both are enabled, dedupe them.
-      return;
+      continue;
     }
     result.push(auth);
-  });
+  }
 
   if (!externalAuthenticationMethods) {
     // Server doesn't speak new API; get these methods from the old one.
-    availableExternalMethods.forEach(auth => {
+    for (const auth of availableExternalMethods) {
       if (authenticationMethods[auth.name]) {
         result.push(auth);
       }
-    });
+    }
   } else {
     // We have info from new API; ignore old one for these methods.
-    externalAuthenticationMethods.forEach(method => {
+    for (const method of externalAuthenticationMethods) {
       if (result.some(({ name }) => name === method.name)) {
         // Ignore duplicate.
-        return;
+        continue;
       }
 
       // The server provides icons as image URLs; but we have our own built
@@ -161,7 +161,7 @@ export const activeAuthentications = (
         Icon,
         action: { url: method.login_url },
       });
-    });
+    }
   }
 
   return result;

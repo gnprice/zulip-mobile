@@ -47,7 +47,7 @@ describe('BackoffMachine', () => {
       trialResults.push(resultsForThisTrial);
     }
 
-    expectedMaxDurations.forEach((expectedMax, i) => {
+    for (const [i, expectedMax] of expectedMaxDurations.entries()) {
       const maxFromAllTrials = Math.max(...trialResults.map(r => r[i]));
       const minFromAllTrials = Math.min(...trialResults.map(r => r[i]));
 
@@ -55,6 +55,6 @@ describe('BackoffMachine', () => {
       //     0.75 ** NUM_TRIALS = 0.75 ** 100 < 1e-12
       expect(minFromAllTrials).toBeLessThan(expectedMax * 0.25);
       expect(maxFromAllTrials).toBeGreaterThan(expectedMax * 0.75);
-    });
+    }
   });
 });
