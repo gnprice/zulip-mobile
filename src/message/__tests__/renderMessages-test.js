@@ -1,7 +1,10 @@
+/* @flow strict-local */
 import deepFreeze from 'deep-freeze';
 
 import { HOME_NARROW } from '../../utils/narrow';
 import renderMessages from '../renderMessages';
+
+import * as eg from '../../__tests__/lib/exampleData';
 
 describe('renderMessages', () => {
   const narrow = deepFreeze([]);
@@ -12,19 +15,12 @@ describe('renderMessages', () => {
   });
 
   test('renders time, header and message for a single input', () => {
-    const messages = deepFreeze([
-      {
-        timestamp: 123,
-        avatar_url: '',
-        id: 12345,
-      },
+    const message = eg.streamMessage();
+    const messageList = renderMessages([message], narrow);
+    expect(messageList).toMatchObject([
+      { data: [{ key: `time${message.timestamp}` }] },
+      { data: [{ key: message.id }] },
     ]);
-
-    const messageList = renderMessages(messages, narrow);
-
-    expect(messageList).toHaveLength(2);
-    expect(messageList[0].data[0].key).toEqual('time123');
-    expect(messageList[1].data[0].key).toEqual(12345);
   });
 
   test('several messages in same stream, from same person result in time row, header for the stream, three messages, only first of which is full detail', () => {
