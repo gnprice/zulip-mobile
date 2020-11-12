@@ -72,7 +72,7 @@ export type DevUser = {|
  *    different part of a `/register` response
  *  * `UserOrBot` for a convenience union of the two
  */
-export type User = {|
+export type User = $ReadOnly<{|
   user_id: number,
   email: string,
 
@@ -113,7 +113,7 @@ export type User = {|
   // see also e3aed0f7b (in 2.0.0)
   // (This one doesn't appear in `/users` responses.)
   profile_data?: empty, // TODO describe actual type
-|};
+|}>;
 
 /**
  * A "cross-realm bot", a bot user shared across the realms on a Zulip server.
@@ -127,7 +127,7 @@ export type User = {|
  *    realm are, like human users, represented by a `User` value.
  *  * `UserOrBot`, a convenience union
  */
-export type CrossRealmBot = {|
+export type CrossRealmBot = $ReadOnly<{|
   // avatar_url included since commit 58ee3fa8c (in 1.9.0)
   // TODO(crunchy): convert missing -> null
   avatar_url?: string | null,
@@ -148,12 +148,12 @@ export type CrossRealmBot = {|
   // omitted later to reduce payload sizes. So, we're future-proofing this field
   // by making it optional. See comment on the same field in User.
   timezone?: string,
-|};
+|}>;
 
 /**
  * A Zulip user/account, which might be a cross-realm bot.
  */
-export type UserOrBot = User | CrossRealmBot;
+export type UserOrBot = User;
 
 /**
  * For @-mentioning multiple users at once.
