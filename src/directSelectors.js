@@ -98,7 +98,7 @@ export const getUnreadMentions = (state: GlobalState): UnreadMentionsState => st
 export const getRealm = (state: GlobalState): RealmState => state.realm;
 
 export const getCrossRealmBots = (state: GlobalState): $ReadOnlyArray<User> =>
-  state.realm.crossRealmBots.map(u => ({ ...u, avatar_url: u.avatar_url ?? null }));
+  state.realm.crossRealmBots;
 
 export const getRawRealmEmoji = (state: GlobalState): RealmEmojiById => state.realm.emoji;
 

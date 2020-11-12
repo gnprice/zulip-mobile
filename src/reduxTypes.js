@@ -18,7 +18,6 @@ import type {
   Message,
   MuteTuple,
   PmsUnreadItem,
-  CrossRealmBot,
   RealmEmojiById,
   RealmFilter,
   Narrow,
@@ -253,7 +252,7 @@ export type VideoChatProvider = {| name: 'jitsi_meet', jitsiServerUrl: string |}
  * @prop isAdmin
  */
 export type RealmState = {|
-  crossRealmBots: CrossRealmBot[],
+  crossRealmBots: $ReadOnlyArray<User>,
 
   nonActiveUsers: User[],
   filters: RealmFilter[],

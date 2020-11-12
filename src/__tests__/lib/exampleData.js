@@ -3,7 +3,6 @@ import deepFreeze from 'deep-freeze';
 import { createStore } from 'redux';
 
 import type {
-  CrossRealmBot,
   Message,
   PmRecipientUser,
   Reaction,
@@ -117,7 +116,7 @@ export const makeUser = (args: { name?: string } = {}): User =>
   });
 
 /** Beware! These values may not be representative. */
-export const makeCrossRealmBot = (args: { name?: string } = {}): CrossRealmBot =>
+export const makeCrossRealmBot = (args: { name?: string } = {}): User =>
   deepFreeze({
     ...userOrBotProperties(args),
     is_bot: true,
@@ -181,7 +180,7 @@ export const selfAuth: Auth = deepFreeze(authOfAccount(selfAccount));
 export const otherUser: User = makeUser({ name: 'other' });
 export const thirdUser: User = makeUser({ name: 'third' });
 
-export const crossRealmBot: CrossRealmBot = makeCrossRealmBot({ name: 'bot' });
+export const crossRealmBot: User = makeCrossRealmBot({ name: 'bot' });
 
 /* ========================================================================
  * Streams and subscriptions

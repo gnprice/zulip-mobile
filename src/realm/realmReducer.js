@@ -56,7 +56,10 @@ export default (state: RealmState = initialState, action: Action): RealmState =>
 
     case REALM_INIT: {
       return {
-        crossRealmBots: action.data.cross_realm_bots,
+        crossRealmBots: action.data.cross_realm_bots.map(u => ({
+          ...u,
+          avatar_url: u.avatar_url ?? null,
+        })),
 
         nonActiveUsers: action.data.realm_non_active_users,
         filters: action.data.realm_filters,
