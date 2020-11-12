@@ -24,13 +24,13 @@ const rewriteImageUrls = (auth: Auth, element: Element | Document) => {
     Array.from(element.getElementsByTagName('img')),
   );
 
-  imageTags.forEach(img => {
+  for (const img of imageTags) {
     // Not `img.src`, because that getter absolutizes relative URLs itself.
     const actualSrc = img.getAttribute('src');
 
     // A missing `src` is invalid per the HTML spec.
     if (actualSrc == null) {
-      return;
+      continue;
     }
 
     // 1: Absolutize the URL appropriately.
@@ -50,7 +50,7 @@ const rewriteImageUrls = (auth: Auth, element: Element | Document) => {
     if (img.src !== fixedSrc.toString()) {
       img.src = fixedSrc.toString();
     }
-  });
+  }
 };
 
 /**
@@ -66,12 +66,12 @@ const rewriteTime = (element: Element | Document) => {
     Array.from(element.getElementsByTagName('time')),
   );
 
-  timeElements.forEach(elem => {
+  for (const elem of timeElements) {
     // Present only because the Flow DOM libdef does not have a specific definition
     // for `getElementsByTagName('time')`, so the typedef of `timeElements` is wider
     // than it actually is. See https://github.com/facebook/flow/issues/8450.
     if (!(elem instanceof HTMLTimeElement)) {
-      return;
+      continue;
     }
 
     const timeStamp = elem.dateTime;
@@ -83,7 +83,7 @@ const rewriteTime = (element: Element | Document) => {
       dateStyle: 'full',
       timeStyle: 'short',
     })}`;
-  });
+  }
 };
 
 /**

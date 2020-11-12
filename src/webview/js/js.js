@@ -604,9 +604,10 @@ const handleUpdateEventMessagesRead = (uevent: WebViewUpdateEventMessagesRead) =
   }
   const selector = uevent.messageIds.map(id => `[data-msg-id="${id}"]`).join(',');
   const messageElements = Array.from(document.querySelectorAll(selector));
-  messageElements.forEach(element => {
+
+  for (const element of messageElements) {
     element.setAttribute('data-read', 'true');
-  });
+  }
 };
 
 const eventUpdateHandlers = {
@@ -631,11 +632,12 @@ const handleMessageEvent: MessageEventListener = e => {
       : {}),
   }));
 
-  updateEvents.forEach((uevent: WebViewUpdateEvent) => {
+  for (const uevent: WebViewUpdateEvent of updateEvents) {
     eventLogger.maybeCaptureInboundEvent(uevent);
     // $FlowFixMe
     eventUpdateHandlers[uevent.type](uevent);
-  });
+  }
+
   scrollEventsDisabled = false;
 };
 

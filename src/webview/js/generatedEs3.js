@@ -85,6 +85,48 @@ var compiledWebviewJs = (function (exports) {
     return target;
   }
 
+  function _unsupportedIterableToArray(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+  }
+
+  function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+
+    for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+    return arr2;
+  }
+
+  function _createForOfIteratorHelperLoose(o, allowArrayLike) {
+    var it;
+
+    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+      if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
+        if (it) o = it;
+        var i = 0;
+        return function () {
+          if (i >= o.length) return {
+            done: true
+          };
+          return {
+            done: false,
+            value: o[i++]
+          };
+        };
+      }
+
+      throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+    }
+
+    it = o[Symbol.iterator]();
+    return it.next.bind(it);
+  }
+
   var sendMessage = (function (msg) {
     window.ReactNativeWebView.postMessage(JSON.stringify(msg));
   });
@@ -233,11 +275,13 @@ var compiledWebviewJs = (function (exports) {
   var rewriteImageUrls = function rewriteImageUrls(auth, element) {
     var realm = auth.realm;
     var imageTags = [].concat(element instanceof HTMLImageElement ? [element] : [], Array.from(element.getElementsByTagName('img')));
-    imageTags.forEach(function (img) {
+
+    var _loop = function _loop() {
+      var img = _step.value;
       var actualSrc = img.getAttribute('src');
 
       if (actualSrc == null) {
-        return;
+        return "continue";
       }
 
       var fixedSrc = new URL(actualSrc, realm);
@@ -254,14 +298,23 @@ var compiledWebviewJs = (function (exports) {
       if (img.src !== fixedSrc.toString()) {
         img.src = fixedSrc.toString();
       }
-    });
+    };
+
+    for (var _iterator = _createForOfIteratorHelperLoose(imageTags), _step; !(_step = _iterator()).done;) {
+      var _ret = _loop();
+
+      if (_ret === "continue") continue;
+    }
   };
 
   var rewriteTime = function rewriteTime(element) {
     var timeElements = [].concat(element instanceof HTMLTimeElement ? [element] : [], Array.from(element.getElementsByTagName('time')));
-    timeElements.forEach(function (elem) {
+
+    for (var _iterator2 = _createForOfIteratorHelperLoose(timeElements), _step2; !(_step2 = _iterator2()).done;) {
+      var elem = _step2.value;
+
       if (!(elem instanceof HTMLTimeElement)) {
-        return;
+        continue;
       }
 
       var timeStamp = elem.dateTime;
@@ -272,7 +325,7 @@ var compiledWebviewJs = (function (exports) {
         dateStyle: 'full',
         timeStyle: 'short'
       }));
-    });
+    }
   };
 
   var rewriteHTML = function rewriteHTML(auth) {
@@ -708,9 +761,11 @@ var compiledWebviewJs = (function (exports) {
       return "[data-msg-id=\\"".concat(id, "\\"]");
     }).join(',');
     var messageElements = Array.from(document.querySelectorAll(selector));
-    messageElements.forEach(function (element) {
+
+    for (var _i = 0, _messageElements = messageElements; _i < _messageElements.length; _i++) {
+      var element = _messageElements[_i];
       element.setAttribute('data-read', 'true');
-    });
+    }
   };
 
   var eventUpdateHandlers = {
@@ -732,10 +787,13 @@ var compiledWebviewJs = (function (exports) {
         })
       } : {});
     });
-    updateEvents.forEach(function (uevent) {
+
+    for (var _iterator = _createForOfIteratorHelperLoose(updateEvents), _step; !(_step = _iterator()).done;) {
+      var uevent = _step.value;
       eventLogger.maybeCaptureInboundEvent(uevent);
       eventUpdateHandlers[uevent.type](uevent);
-    });
+    }
+
     scrollEventsDisabled = false;
   };
 

@@ -104,6 +104,8 @@ ${es3Code.replace(/\\/g, '\\\\')}
 
           /* Add TC39 stage 3+ transforms here as needed. */
           ['@babel/plugin-proposal-optional-chaining'],
+
+          ['@babel/plugin-transform-for-of', { loose: true }],
         ],
 
         // See comments below about (the absence of) automatic polyfills via

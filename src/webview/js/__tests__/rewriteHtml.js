@@ -40,13 +40,13 @@ describe('rewriteHtml', () => {
     'other endpoint': 'placekitten?w=640&w=480',
   };
 
-  Object.keys(prefixes).forEach(pType => {
+  for (const pType of Object.keys(prefixes)) {
     const prefix: string = prefixes[pType];
     describe(`${pType} URL`, () => {
-      Object.keys(suffixes).forEach(sType => {
+      for (const sType of Object.keys(suffixes)) {
         const suffix: string = suffixes[sType];
         if (!prefix && !suffix) {
-          return;
+          continue;
         }
         describe(`+ ${sType} path`, () => {
           const divider =
@@ -90,9 +90,9 @@ describe('rewriteHtml', () => {
             });
           }
         });
-      });
+      }
     });
-  });
+  }
 
   /* Specific concrete examples.
 
