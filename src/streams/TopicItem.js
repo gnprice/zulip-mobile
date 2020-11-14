@@ -61,7 +61,7 @@ export default class TopicItem extends PureComponent<Props> {
           ]}
         >
           <RawLabel
-            style={[componentStyles.label, isSelected && componentStyles.selectedText]}
+            style={componentStyles.label}
             text={name}
             numberOfLines={1}
             ellipsizeMode="tail"

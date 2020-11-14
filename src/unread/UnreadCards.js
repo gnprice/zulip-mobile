@@ -2,6 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import { SectionList } from 'react-native';
+import withPerformanceMonitor from 'react-native-performance-monitor/provider';
 
 import type { Dispatch, PmConversationData, UnreadStreamItem } from '../types';
 import { connect } from '../react-redux';
@@ -84,7 +85,10 @@ class UnreadCards extends PureComponent<Props> {
   }
 }
 
-export default connect(state => ({
+const actual = connect(state => ({
   conversations: getUnreadConversations(state),
   unreadStreamsAndTopics: getUnreadStreamsAndTopicsSansMuted(state),
 }))(UnreadCards);
+
+export default withPerformanceMonitor(actual, 'UnreadCards');
+// export default actual;
