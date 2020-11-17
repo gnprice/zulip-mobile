@@ -85,11 +85,7 @@ class ChatScreen extends PureComponent<Props, State> {
 
     // When the event queue changes, fetch or schedule a fetch
     if (prevProps.eventQueueId !== this.props.eventQueueId) {
-      if (isFocused === true) {
-        this.fetch();
-      } else {
-        this.shouldFetchWhenNextFocused = true;
-      }
+      this.shouldFetchWhenNextFocused = true;
     }
 
     // Do a scheduled fetch, if it's time
