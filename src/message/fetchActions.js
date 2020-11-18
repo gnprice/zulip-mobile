@@ -33,6 +33,82 @@ import { startEventPolling } from '../events/eventActions';
 import { logout } from '../account/accountActions';
 import { ZulipVersion } from '../utils/zulipVersion';
 
+import * as logging from '../utils/logging';
+
+const sendLotsOfMessages = () => (dispatch: Dispatch, getState: GetState) => {
+  const numMessages = 1000;
+
+  const messageFetchCompleteActions = [];
+  const eventNewMessageActions = [];
+
+  for (let i = 0; i < 1; i++) {
+    messageFetchCompleteActions.push({
+      type: 'MESSAGE_FETCH_COMPLETE',
+      messages: [],
+      narrow: [
+        { operator: 'stream', operand: `myStream${i}` },
+        { operator: 'topic', operand: `myTopic${i}` },
+      ],
+      anchor: 0,
+      numBefore: 50,
+      numAfter: 50,
+      foundNewest: true,
+      foundOldest: true,
+    });
+  }
+
+  // Add keys to `state.narrows` before the timer starts
+  messageFetchCompleteActions.forEach(a => {
+    dispatch(a);
+  });
+
+  for (let i = 0; i < numMessages; i++) {
+    eventNewMessageActions.push({
+      type: 'EVENT_NEW_MESSAGE',
+      id: 2000,
+      caughtUp: getState().caughtUp,
+      ownEmail: 'cbobbe@zulip.com',
+      message: {
+        isOutbox: false,
+        edit_history: [],
+        is_me_message: false,
+        reactions: [],
+        subject_links: [],
+        submessages: [],
+        sender_domain: '',
+        avatar_url: 'https://zulip.example.org/yo/avatar-other.png',
+        client: 'ExampleClient',
+        gravatar_hash: 'd3adb33f',
+        sender_email: 'other@example.org',
+        sender_full_name: 'Other User',
+        sender_id: 4135,
+        sender_realm_str: 'zulip',
+        sender_short_name: '',
+        recipient_id: 2567,
+        display_recipient: `myStream${0}`,
+        stream_id: 624,
+        content: 'This is an example stream message.',
+        content_type: 'text/markdown',
+        id: 9281159 + i,
+        subject: `myTopic${0}`,
+        timestamp: 1556579727,
+        type: 'stream',
+        flags: [],
+      },
+    });
+  }
+
+  const before = Date.now();
+  // With the timer running, dispatch all the EVENT_NEW_MESSAGE
+  // actions.
+  eventNewMessageActions.forEach(a => {
+    dispatch(a);
+  });
+  const after = Date.now();
+
+  logging.logToProfiling({ durationMs: after - before, ip: '192.168.1.2' });
+};
+
 const messageFetchStart = (narrow: Narrow, numBefore: number, numAfter: number): Action => ({
   type: MESSAGE_FETCH_START,
   narrow,
@@ -340,6 +416,8 @@ export const doInitialFetch = () => async (dispatch: Dispatch, getState: GetStat
 
   dispatch(sendOutbox());
   dispatch(initNotifications());
+
+  dispatch(sendLotsOfMessages());
 
   console.log('constructor', Object.getPrototypeOf(getState().narrows).constructor);
 };
