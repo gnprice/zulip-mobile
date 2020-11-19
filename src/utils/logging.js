@@ -66,6 +66,21 @@ const logToSentry = (event: string | Error, level: SeverityType, extras: Extras)
   });
 };
 
+/**
+ * Log to `react-native-performance-monitor`.
+ *
+ * See docs/howto/profiling for important temporary setup before using
+ * this.
+ */
+export const logToProfiling = (args: {| durationMs: number, ip?: string |}) => {
+  const { durationMs, ip } = args;
+  fetch(`http://${ip ?? '127.0.0.1'}:8125/value`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ value: durationMs }),
+  });
+};
+
 type LogParams = {|
   consoleMethod: mixed => void,
   severity: SeverityType,
