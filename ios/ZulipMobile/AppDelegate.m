@@ -40,7 +40,7 @@
     InitializeFlipper(application);
   #endif
 
-  RCTSetLogThreshold(RCTLogLevelError);
+  RCTSetLogThreshold(RCTLogLevelInfo);
   self.moduleRegistryAdapter = [[UMModuleRegistryAdapter alloc] initWithModuleRegistryProvider:[[UMModuleRegistryProvider alloc] init]];
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
