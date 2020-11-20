@@ -44,25 +44,21 @@ const messageFetchComplete = (state, action) => {
 };
 
 const eventNewMessage = (state, action) => {
-  let stateChange = false;
-  const newState = state.map((value, key) => {
-    const { flags } = action.message;
-    if (!flags) {
-      throw new Error('EVENT_NEW_MESSAGE message missing flags');
-    }
-    const isInNarrow = isMessageInNarrow(action.message, flags, JSON.parse(key), action.ownEmail);
-    const isCaughtUp = action.caughtUp[key] && action.caughtUp[key].newer;
-    const messageDoesNotExist = value.find(id => action.message.id === id) === undefined;
+  const { flags } = action.message;
+  if (!flags) {
+    throw new Error('EVENT_NEW_MESSAGE message missing flags');
+  }
+  return state.withMutations(stateMut => {
+    for (const [key, value] of state.entries()) {
+      const isInNarrow = isMessageInNarrow(action.message, flags, JSON.parse(key), action.ownEmail);
+      const isCaughtUp = action.caughtUp[key] && action.caughtUp[key].newer;
+      const messageDoesNotExist = value.find(id => action.message.id === id) === undefined;
 
-    if (isInNarrow && isCaughtUp && messageDoesNotExist) {
-      stateChange = true;
-      return [...value, action.message.id];
-    } else {
-      return value;
+      if (isInNarrow && isCaughtUp && messageDoesNotExist) {
+        stateMut.set(key, [...value, action.message.id]);
+      }
     }
   });
-
-  return stateChange ? newState : state;
 };
 
 const eventMessageDelete = (state, action) => {
