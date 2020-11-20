@@ -340,6 +340,8 @@ export const doInitialFetch = () => async (dispatch: Dispatch, getState: GetStat
 
   dispatch(sendOutbox());
   dispatch(initNotifications());
+
+  console.log('constructor', Object.getPrototypeOf(getState().narrows).constructor);
 };
 
 export const uploadFile = (narrow: Narrow, uri: string, name: string) => async (
