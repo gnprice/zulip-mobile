@@ -106,7 +106,8 @@ const sendLotsOfMessages = () => (dispatch: Dispatch, getState: GetState) => {
   });
   const after = Date.now();
 
-  logging.logToProfiling({ durationMs: after - before, ip: '192.168.1.2' });
+  console.log('durationMs', after - before);
+  logging.logToProfiling({ durationMs: after - before });
 };
 
 const messageFetchStart = (narrow: Narrow, numBefore: number, numAfter: number): Action => ({
@@ -417,9 +418,9 @@ export const doInitialFetch = () => async (dispatch: Dispatch, getState: GetStat
   dispatch(sendOutbox());
   dispatch(initNotifications());
 
-  dispatch(sendLotsOfMessages());
-
   console.log('constructor', Object.getPrototypeOf(getState().narrows).constructor);
+
+  dispatch(sendLotsOfMessages());
 };
 
 export const uploadFile = (narrow: Narrow, uri: string, name: string) => async (
