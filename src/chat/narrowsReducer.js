@@ -61,15 +61,15 @@ const eventNewMessage = (state, action) => {
   });
 };
 
-const eventMessageDelete = (state, action) => {
-  let stateChange = false;
-  const newState = state.map((value, key) => {
-    const result = value.filter(id => !action.messageIds.includes(id));
-    stateChange = stateChange || result.length < value.length;
-    return result;
+const eventMessageDelete = (state, action) =>
+  state.withMutations(stateMut => {
+    for (const [key, value] of state.entries()) {
+      const result = value.filter(id => !action.messageIds.includes(id));
+      if (result.length < value.length) {
+        stateMut.set(key, result);
+      }
+    }
   });
-  return stateChange ? newState : state;
-};
 
 const updateFlagNarrow = (state, narrowStr, operation, messageIds): NarrowsState => {
   const value = state.get(narrowStr);
