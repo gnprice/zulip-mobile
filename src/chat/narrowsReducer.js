@@ -49,10 +49,12 @@ const eventNewMessage = (state, action) => {
     throw new Error('EVENT_NEW_MESSAGE message missing flags');
   }
   return state.withMutations(stateMut => {
-    for (const [key, value] of state.entries()) {
+    for (const key of state.keys()) {
+      let value;
       if (
         isMessageInNarrow(action.message, flags, JSON.parse(key), action.ownEmail)
         && (action.caughtUp[key] && action.caughtUp[key].newer)
+        && (value = state.get(key))
         && value.find(id => action.message.id === id) === undefined
       ) {
         stateMut.set(key, [...value, action.message.id]);
