@@ -50,11 +50,11 @@ const eventNewMessage = (state, action) => {
   }
   return state.withMutations(stateMut => {
     for (const [key, value] of state.entries()) {
-      const isInNarrow = isMessageInNarrow(action.message, flags, JSON.parse(key), action.ownEmail);
-      const isCaughtUp = action.caughtUp[key] && action.caughtUp[key].newer;
-      const messageDoesNotExist = value.find(id => action.message.id === id) === undefined;
-
-      if (isInNarrow && isCaughtUp && messageDoesNotExist) {
+      if (
+        isMessageInNarrow(action.message, flags, JSON.parse(key), action.ownEmail)
+        && (action.caughtUp[key] && action.caughtUp[key].newer)
+        && value.find(id => action.message.id === id) === undefined
+      ) {
         stateMut.set(key, [...value, action.message.id]);
       }
     }
