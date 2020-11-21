@@ -50,11 +50,13 @@ const eventNewMessage = (state, action) => {
   }
   return state.withMutations(stateMut => {
     for (const key of state.keys()) {
-      let value;
+      const value = state.get(key);
+      if (!value) {
+        throw new Error();
+      }
       if (
         isMessageInNarrow(action.message, flags, JSON.parse(key), action.ownEmail)
         && (action.caughtUp[key] && action.caughtUp[key].newer)
-        && (value = state.get(key))
         && value.find(id => action.message.id === id) === undefined
       ) {
         stateMut.set(key, [...value, action.message.id]);
