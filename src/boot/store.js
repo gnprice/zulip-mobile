@@ -215,6 +215,10 @@ const migrations: { [string]: (GlobalState) => GlobalState } = {
     narrows: Immutable.Map(state.narrows),
   }),
 
+  '18': state => ({
+    ...state,
+    narrows: Immutable.Map(state.narrows.entries()),
+  }),
   // TIP: When adding a migration, consider just using `dropCache`.
 };
 
