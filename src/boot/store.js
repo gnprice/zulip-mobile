@@ -256,16 +256,27 @@ const migrations: { [string]: (GlobalState) => GlobalState } = {
   // TIP: When adding a migration, consider just using `dropCache`.
 };
 
+let timerIndent = '';
+
 const timerMiddleware = ({ dispatch, getState }) => next => action => {
-  const start = Date.now();
-  const result = next(action);
-  const duration = Date.now() - start;
   // prettier-ignore
   const label =
     typeof action === 'object' ? action.type
-      : typeof action === 'function' ? action.name
-      : typeof action;
-  console.log(`Dispatch time: ${duration.toFixed(2).padStart(6)}ms type: ${label}`);
+      : typeof action === 'function' ? (action.name || '(thunk)')
+      : `(${typeof action})`;
+
+  if (typeof action === 'function') {
+    console.log(`Dispatching:          ${timerIndent}>${label}`);
+    timerIndent += '  ';
+  }
+  const start = Date.now();
+  const result = next(action);
+  const duration = Date.now() - start;
+
+  if (typeof action === 'function') {
+    timerIndent = timerIndent.slice(0, -2);
+  }
+  console.log(`Dispatch time: ${duration.toFixed(0).padStart(4)}ms ${timerIndent}${label}`);
   return result;
 };
 
