@@ -303,6 +303,37 @@ const migrations: {| [string]: (GlobalState) => GlobalState |} = {
   // TIP: When adding a migration, consider just using `dropCache`.
 };
 
+let timerIndent = '';
+
+/** Redux middleware to log how long actions take to dispatch. */
+const timerMiddleware = ({ dispatch, getState }) => next => action => {
+  // prettier-ignore
+  const label =
+    typeof action === 'object' ? action.type
+      : typeof action === 'function' ? (action.name || '(thunk)')
+      : `(${typeof action})`;
+
+  if (typeof action === 'function') {
+    /* eslint-disable-next-line no-console */
+    console.log(`Dispatching:          ${timerIndent}>${label}`);
+
+    // Indent any actions nested inside this thunk action.
+    timerIndent += '  ';
+  }
+
+  const start = Date.now();
+  const result = next(action);
+  const duration = Date.now() - start;
+
+  if (typeof action === 'function') {
+    timerIndent = timerIndent.slice(0, -2);
+  }
+  /* eslint-disable-next-line no-console */
+  console.log(`Dispatch time: ${duration.toFixed(0).padStart(4)}ms ${timerIndent}${label}`);
+
+  return result;
+};
+
 /**
  * Return a list of Redux middleware objects to use in our Redux store.
  *
@@ -310,18 +341,22 @@ const migrations: {| [string]: (GlobalState) => GlobalState |} = {
  *   https://redux.js.org/api/applymiddleware/
  */
 function listMiddleware() {
-  const result = [
-    // Delay ("buffer") actions until a REHYDRATE action comes through.
-    // After dispatching the latter, this will go back and dispatch
-    // all the buffered actions.  See docs:
-    //   https://github.com/rt2zz/redux-action-buffer
-    createActionBuffer(REHYDRATE),
+  const result = [];
 
-    // Handle the fancy "thunk" actions we often use, i.e. async
-    // functions of `dispatch` and `state`.  See docs:
-    //   https://github.com/reduxjs/redux-thunk
-    thunkMiddleware,
-  ];
+  // Delay ("buffer") actions until a REHYDRATE action comes through.
+  // After dispatching the latter, this will go back and dispatch
+  // all the buffered actions.  See docs:
+  //   https://github.com/rt2zz/redux-action-buffer
+  result.push(createActionBuffer(REHYDRATE));
+
+  if (config.enableReduxPerfLogging) {
+    result.push(timerMiddleware);
+  }
+
+  // Handle the fancy "thunk" actions we often use, i.e. async
+  // functions of `dispatch` and `state`.  See docs:
+  //   https://github.com/reduxjs/redux-thunk
+  result.push(thunkMiddleware);
 
   if (config.enableReduxLogging) {
     result.push(
