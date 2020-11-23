@@ -22,6 +22,8 @@ import {
   MENTIONED_NARROW_STR,
   STARRED_NARROW_STR,
   isSearchNarrow,
+  streamNarrow,
+  topicNarrow,
 } from '../utils/narrow';
 
 const initialState: NarrowsState = Immutable.Map();
@@ -44,20 +46,35 @@ const messageFetchComplete = (state, action) => {
 };
 
 const eventNewMessage = (state, action) => {
-  const { flags } = action.message;
+  const { message } = action;
+  const { flags } = message;
   if (!flags) {
     throw new Error('EVENT_NEW_MESSAGE message missing flags');
   }
   return state.withMutations(stateMut => {
-    state.forEach((value, key) => {
+    const maybeAdd = (key: string, value: number[]) => {
       if (
-        isMessageInNarrow(action.message, flags, JSON.parse(key), action.ownEmail)
-        && (action.caughtUp[key] && action.caughtUp[key].newer)
+        action.caughtUp[key]
+        && action.caughtUp[key].newer
         && value.find(id => action.message.id === id) === undefined
       ) {
         stateMut.set(key, [...value, action.message.id]);
       }
-    });
+    };
+    const maybeAddN = narrow => {
+      const key = JSON.stringify(narrow);
+      const value = state.get(key);
+      if (value) {
+        maybeAdd(key, value);
+      }
+    };
+    if (message.type === 'stream') {
+      maybeAddN(streamNarrow(message.display_recipient));
+      maybeAddN(topicNarrow(message.display_recipient, message.subject));
+    } else {
+      // TODO convo and also all-private
+    }
+    // TODO various special narrows
   });
 };
 
