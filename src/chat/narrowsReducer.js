@@ -135,6 +135,7 @@ export default (state: NarrowsState = initialState, action: Action): NarrowsStat
     }
 
     case MESSAGE_FETCH_COMPLETE: {
+      return state;
       return messageFetchComplete(state, action);
     }
 
