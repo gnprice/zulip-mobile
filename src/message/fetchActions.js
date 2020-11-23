@@ -36,7 +36,7 @@ import { ZulipVersion } from '../utils/zulipVersion';
 import * as logging from '../utils/logging';
 
 const sendLotsOfMessages = () => (dispatch: Dispatch, getState: GetState) => {
-  const numNarrows = 1000;
+  const numNarrows = 30;
   const numMessages = 10;
 
   const messageFetchCompleteActions = [];
