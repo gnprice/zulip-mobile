@@ -256,6 +256,19 @@ const migrations: { [string]: (GlobalState) => GlobalState } = {
   // TIP: When adding a migration, consider just using `dropCache`.
 };
 
+const timerMiddleware = ({ dispatch, getState }) => next => action => {
+  const start = Date.now();
+  const result = next(action);
+  const duration = Date.now() - start;
+  // prettier-ignore
+  const label =
+    typeof action === 'object' ? action.type
+      : typeof action === 'function' ? action.name
+      : typeof action;
+  console.log(`Dispatch time: ${duration.toFixed(2).padStart(6)}ms type: ${label}`);
+  return result;
+};
+
 /**
  * Return a list of Redux middleware objects to use in our Redux store.
  *
@@ -269,6 +282,8 @@ function listMiddleware() {
     // all the buffered actions.  See docs:
     //   https://github.com/rt2zz/redux-action-buffer
     createActionBuffer(REHYDRATE),
+
+    timerMiddleware,
 
     // Handle the fancy "thunk" actions we often use, i.e. async
     // functions of `dispatch` and `state`.  See docs:
