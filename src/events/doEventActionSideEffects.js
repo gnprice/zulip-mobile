@@ -2,7 +2,7 @@
 // import { Vibration } from 'react-native';
 
 import { AppState } from 'react-native';
-import type { GlobalState, GetState, Dispatch, Message } from '../types';
+import type { GetState, Dispatch, Message } from '../types';
 import type { EventAction } from '../actionTypes';
 import { EVENT_NEW_MESSAGE, EVENT_TYPING_START } from '../actionConstants';
 import { isHomeNarrow, isMessageInNarrow } from '../utils/narrow';
@@ -13,9 +13,10 @@ import { ensureTypingStatusExpiryLoop } from '../typing/typingActions';
 import { getOwnUserId } from '../users/userSelectors';
 
 /**
- * React to incoming `MessageEvent`s.
+ * React to an incoming `MessageEvent`.
  */
-const messageEvent = (state: GlobalState, message: Message): void => {
+const messageEvent = (message: Message) => (dispatch: Dispatch, getState: GetState): void => {
+  const state = getState();
   const flags = message.flags ?? NULL_ARRAY;
 
   if (AppState.currentState !== 'active') {
@@ -44,15 +45,14 @@ const messageEvent = (state: GlobalState, message: Message): void => {
 };
 
 /**
- * React to actions dispatched for Zulip server events.
+ * React to an action for a Zulip server event.
  *
- * To be dispatched before the event actions are dispatched.
+ * This should be called before dispatching the action.
  */
-export default (action: EventAction) => async (dispatch: Dispatch, getState: GetState) => {
-  const state = getState();
+export default (action: EventAction, dispatch: Dispatch) => {
   switch (action.type) {
     case EVENT_NEW_MESSAGE: {
-      messageEvent(state, action.message);
+      dispatch(messageEvent(action.message));
       break;
     }
     case EVENT_TYPING_START:

@@ -26,7 +26,7 @@ const handleEvent = (event: GeneralEvent, dispatch: Dispatch, getState: GetState
     // These side effects should not be moved to reducers, which
     // are explicitly not the place for side effects (see
     // https://redux.js.org/faq/actions).
-    dispatch(doEventActionSideEffects(action));
+    doEventActionSideEffects(action, dispatch);
 
     // Now dispatch the plain-object action, for our reducers to handle.
     dispatch(action);
