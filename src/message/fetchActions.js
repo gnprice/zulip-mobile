@@ -205,22 +205,23 @@ export const isFetchNeededAtAnchor = (
  * See also handlers for the `MESSAGE_FETCH_COMPLETE` action, which this
  * dispatches with the data it receives from the server.
  */
-export const fetchMessagesInNarrow = (
-  narrow: Narrow,
-  anchor: number = FIRST_UNREAD_ANCHOR,
-) => async (dispatch: Dispatch, getState: GetState): Promise<Message[] | void> => {
-  if (!isFetchNeededAtAnchor(getState(), narrow, anchor)) {
-    return undefined;
-  }
-  return dispatch(
-    fetchMessages({
-      narrow,
-      anchor,
-      numBefore: config.messagesPerRequest / 2,
-      numAfter: config.messagesPerRequest / 2,
-    }),
-  );
-};
+export const fetchMessagesInNarrow = (narrow: Narrow, anchor: number = FIRST_UNREAD_ANCHOR) =>
+  async function fetchMessagesInNarrow(
+    dispatch: Dispatch,
+    getState: GetState,
+  ): Promise<Message[] | void> {
+    if (!isFetchNeededAtAnchor(getState(), narrow, anchor)) {
+      return undefined;
+    }
+    return dispatch(
+      fetchMessages({
+        narrow,
+        anchor,
+        numBefore: config.messagesPerRequest / 2,
+        numAfter: config.messagesPerRequest / 2,
+      }),
+    );
+  };
 
 /**
  * Fetch the few most recent PMs.
