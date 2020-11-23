@@ -72,5 +72,28 @@ module.exports = {
         inlineRequires: false,
       },
     }),
+
+    // This gets passed to uglify-es; see its docs for API.
+    minifierConfig: {
+      keep_fnames: true,
+
+      // rest is Metro's default (from metro-config:src/defaults/index.js .)
+      mangle: {
+        toplevel: false,
+      },
+      output: {
+        ascii_only: true,
+        quote_style: 3,
+        wrap_iife: true,
+      },
+      sourceMap: {
+        includeSources: false,
+      },
+      toplevel: false,
+      compress: {
+        // reduce_funcs inlines single-use functions, which cause perf regressions.
+        reduce_funcs: false,
+      },
+    },
   },
 };
