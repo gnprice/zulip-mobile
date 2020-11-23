@@ -15,7 +15,8 @@ import { getOwnUserId } from '../users/userSelectors';
 /**
  * React to incoming `MessageEvent`s.
  */
-const messageEvent = (state: GlobalState, message: Message): void => {
+const messageEvent = (message: Message) => (dispatch: Dispatch, getState: GetState): void => {
+  const state = getState();
   const flags = message.flags ?? NULL_ARRAY;
 
   if (AppState.currentState !== 'active') {
@@ -49,10 +50,9 @@ const messageEvent = (state: GlobalState, message: Message): void => {
  * To be dispatched before the event actions are dispatched.
  */
 export default (action: EventAction) => async (dispatch: Dispatch, getState: GetState) => {
-  const state = getState();
   switch (action.type) {
     case EVENT_NEW_MESSAGE: {
-      messageEvent(state, action.message);
+      dispatch(messageEvent(action.message));
       break;
     }
     case EVENT_TYPING_START:
