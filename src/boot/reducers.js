@@ -117,4 +117,12 @@ const combinedReducer = (state: void | GlobalState, action: Action): GlobalState
   return nextState;
 };
 
-export default enableBatching(combinedReducer);
+export default (state: GlobalState, action: Action) => {
+  const startMs = Date.now();
+  const result = enableBatching(combinedReducer)(state, action);
+  const endMs = Date.now();
+  console.log(
+    `Dispatch sub-time: ${(endMs - startMs).toFixed(0).padStart(4)}ms ${action.type} reducer`,
+  );
+  return result;
+};
