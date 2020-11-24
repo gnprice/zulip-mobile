@@ -61,7 +61,7 @@ export const getFetchedMessageIdsForNarrow = (state: GlobalState, narrow: Narrow
 const getFetchedMessagesForNarrow: Selector<Message[], Narrow> = createSelector(
   getFetchedMessageIdsForNarrow,
   state => getMessages(state),
-  (messageIds, messages) => messageIds.map(id => messages[id]),
+  (messageIds, messages) => messageIds.map(id => messages.get(id)),
 );
 
 // Prettier mishandles this Flow syntax.
