@@ -108,7 +108,6 @@ export default (state: FlagsState = initialState, action: Action): FlagsState =>
       return initialState;
 
     case MESSAGE_FETCH_COMPLETE:
-      return state;
       return processFlagsForMessages(state, action.messages);
 
     case EVENT_NEW_MESSAGE:
