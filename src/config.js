@@ -17,9 +17,9 @@ const config: Config = {
   messagesPerRequest: 100,
   messageListThreshold: 4000,
   enableReduxLogging: isDevelopment && !!global.btoa,
-  enableReduxPerfLogging: isDevelopment && !!global.btoa,
+  enableReduxPerfLogging: true,
   enableWebViewErrorDisplay: isDevelopment,
-  slowReducersThreshold: 5,
+  slowReducersThreshold: 1.5,
   enableErrorConsoleLogging: true,
   serverDataOnStartup: [
     'alert_words',
