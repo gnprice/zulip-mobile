@@ -27,7 +27,6 @@ import { reducer as unread } from '../unread/unreadModel';
 import userGroups from '../user-groups/userGroupsReducer';
 import userStatus from '../user-status/userStatusReducer';
 import users from '../users/usersReducer';
-import timing from '../utils/timing';
 
 const migrations = (state: MigrationsState = NULL_OBJECT): MigrationsState => state;
 
@@ -35,7 +34,10 @@ const { enableReduxPerfLogging, slowReducersThreshold } = config;
 
 function maybeLogSlowReducer(action, key, startMs, endMs) {
   if (endMs - startMs >= slowReducersThreshold) {
-    timing.add({ text: `${action.type} @ ${key}`, startMs, endMs });
+    /* eslint-disable-next-line no-console */
+    console.log(
+      `Dispatch sub-time: ${(endMs - startMs).toFixed(0).padStart(4)}ms ${action.type} > ${key}`,
+    );
   }
 }
 
