@@ -9,7 +9,12 @@ export function logSlowReducers<O: {}>(reducers: O): O {
       const startMs = Date.now();
       const result = originalReducer(state, action);
       const endMs = Date.now();
-      if (endMs - startMs >= config.slowReducersThreshold) {
+      if (endMs - startMs > config.slowReducersThreshold) {
+        console.log(
+          `Dispatch sub-time: ${(endMs - startMs).toFixed(0).padStart(4)}ms ${
+            action.type
+          } > ${name}`,
+        );
         timing.add({
           text: `${action.type} @ ${name}`,
           startMs,

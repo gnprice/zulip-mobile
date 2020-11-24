@@ -18,9 +18,9 @@ const config: Config = {
   messagesPerRequest: 100,
   messageListThreshold: 4000,
   enableReduxLogging: isDevelopment && !!global.btoa,
-  enableReduxSlowReducerWarnings: isDevelopment && !!global.btoa,
+  enableReduxSlowReducerWarnings: true,
   enableWebViewErrorDisplay: isDevelopment,
-  slowReducersThreshold: 5,
+  slowReducersThreshold: 1,
   sentryKey: null, // add DSN here
   enableErrorConsoleLogging: true,
   serverDataOnStartup: [
