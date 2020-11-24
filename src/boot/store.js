@@ -197,6 +197,8 @@ const migrations: { [string]: (GlobalState) => GlobalState } = {
     })),
   }),
 
+  '19': state => ({ ...state, messages: Immutable.Map(state.messages) }),
+
   // TIP: When adding a migration, consider just using `dropCache`.
 };
 
