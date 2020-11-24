@@ -197,6 +197,8 @@ const migrations: { [string]: (GlobalState) => GlobalState } = {
     })),
   }),
 
+  '20': dropCache,
+
   // TIP: When adding a migration, consider just using `dropCache`.
 };
 

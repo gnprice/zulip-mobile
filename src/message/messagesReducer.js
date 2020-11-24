@@ -137,16 +137,24 @@ const eventUpdateMessage = (state, action) => {
   };
 };
 
+let parallelState = { ...initialState };
+
 export default (state: MessagesState = initialState, action: Action): MessagesState => {
   switch (action.type) {
     case REALM_INIT:
     case LOGOUT:
     case LOGIN_SUCCESS:
     case ACCOUNT_SWITCH:
+      parallelState = { ...initialState };
       return initialState;
 
-    case MESSAGE_FETCH_COMPLETE:
-      return {
+    case MESSAGE_FETCH_COMPLETE: {
+      const t0 = Date.now();
+      for (const message of action.messages) {
+        parallelState[message.id] = omit(message, ['flags', 'match_content', 'match_subject']);
+      }
+      const t1 = Date.now();
+      const result = {
         ...state,
         // $FlowFixMe - Flow bug; should resolve in #4245
         ...groupItemsById(
@@ -155,6 +163,19 @@ export default (state: MessagesState = initialState, action: Action): MessagesSt
           ),
         ),
       };
+      const t2 = Date.now();
+      console.log(
+        `Dispatch sub-time: ${(t1 - t0)
+          .toFixed(0)
+          .padStart(4)}ms MESSAGE_FETCH_COMPLETE > messages : mutating`,
+      );
+      console.log(
+        `Dispatch sub-time: ${(t2 - t1)
+          .toFixed(0)
+          .padStart(4)}ms MESSAGE_FETCH_COMPLETE > messages : spreading`,
+      );
+      return result;
+    }
 
     case EVENT_REACTION_ADD:
       return eventReactionAdd(state, action);
