@@ -32,14 +32,6 @@ export const eventsToActions = (
       return true;
     });
 
-export const dispatchOrBatch = (dispatch: Dispatch, actions: $ReadOnlyArray<Action>) => {
-  if (actions.length > 1) {
-    dispatch(batchActions(actions));
-  } else if (actions.length === 1) {
-    dispatch(actions[0]);
-  }
-};
-
 /**
  * Poll an event queue on the Zulip server for updates, in a loop.
  *
@@ -77,9 +69,8 @@ export const startEventPolling = (queueId: number, eventId: number) => async (
         // are explicitly not the place for side effects (see
         // https://redux.js.org/faq/actions).
         doEventActionSideEffects(action)(dispatch, getState);
+        dispatch(action);
       });
-
-      dispatchOrBatch(dispatch, actions);
 
       lastEventId = Math.max.apply(null, [lastEventId, ...events.map(x => x.id)]);
     } catch (e) {
