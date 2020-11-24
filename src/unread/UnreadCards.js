@@ -2,8 +2,15 @@
 
 import React, { PureComponent } from 'react';
 import { SectionList } from 'react-native';
+import type { SectionBase } from 'react-native/Libraries/Lists/VirtualizedSectionList';
 
-import type { Dispatch, PmConversationData, UnreadStreamItem, UserOrBot } from '../types';
+import type {
+  Dispatch,
+  PmConversationData,
+  UnreadStreamItem,
+  UnreadTopicItem,
+  UserOrBot,
+} from '../types';
 import { connect } from '../react-redux';
 import { SearchEmptyState } from '../common';
 import PmConversationList from '../pm-conversations/PmConversationList';
@@ -35,15 +42,25 @@ class UnreadCards extends PureComponent<Props> {
 
   render() {
     const { conversations, unreadStreamsAndTopics, ...restProps } = this.props;
-    type Card =
-      | UnreadStreamItem
-      | { key: 'private', data: Array<$PropertyType<PmConversationList, 'props'>> };
-    const unreadCards: Array<Card> = [
+    type UnreadPmItem = $PropertyType<PmConversationList, 'props'>;
+    type UnreadPmSection = $ReadOnly<{| key: 'private', data: $ReadOnlyArray<UnreadPmItem> |}>;
+    type Card = UnreadStreamItem | UnreadPmSection;
+
+    /* eslint-disable no-unused-expressions */
+    (unreadStreamsAndTopics[0]: $ReadOnly<SectionBase<mixed>>);
+    (x: UnreadStreamItem): $ReadOnly<SectionBase<UnreadTopicItem>> => x;
+    (x: UnreadPmSection): $ReadOnly<SectionBase<UnreadPmItem>> => x;
+    (x: Card): $ReadOnly<SectionBase<UnreadTopicItem | UnreadPmItem>> => x;
+    (
+      x: $ReadOnly<SectionBase<UnreadTopicItem | UnreadPmItem>>,
+    ): SectionBase<UnreadTopicItem | UnreadPmItem> => x;
+
+    const unreadCards: $ReadOnlyArray<Card> = [
       {
         key: 'private',
         data: [{ conversations, ...restProps }],
       },
-      ...unreadStreamsAndTopics,
+      ...(unreadStreamsAndTopics: $ReadOnlyArray<UnreadStreamItem>),
     ];
 
     if (unreadStreamsAndTopics.length === 0 && conversations.length === 0) {
@@ -51,7 +68,6 @@ class UnreadCards extends PureComponent<Props> {
     }
 
     return (
-      // $FlowFixMe SectionList libdef seems confused; should take $ReadOnly objects.
       <SectionList
         stickySectionHeadersEnabled
         initialNumToRender={20}

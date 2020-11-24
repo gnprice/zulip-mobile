@@ -135,7 +135,7 @@ export const getUnreadTotal: Selector<number> = createSelector(
 );
 
 /** Helper for getUnreadStreamsAndTopicsSansMuted; see there. */
-export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSelector(
+export const getUnreadStreamsAndTopics: Selector<$ReadOnlyArray<UnreadStreamItem>> = createSelector(
   getSubscriptionsById,
   getUnreadStreams,
   getMute,

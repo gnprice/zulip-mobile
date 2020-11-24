@@ -260,7 +260,14 @@ export type GetText = {
   intl: IntlShape,
 };
 
-export type UnreadStreamItem = {|
+export type UnreadTopicItem = $ReadOnly<{|
+  key: string,
+  topic: string,
+  unread: number,
+  isMuted: boolean,
+  lastUnreadMsgId: number,
+|}>;
+export type UnreadStreamItem = $ReadOnly<{|
   key: string,
   streamName: string,
   unread: number,
@@ -268,14 +275,8 @@ export type UnreadStreamItem = {|
   isMuted: boolean,
   isPinned: boolean,
   isPrivate: boolean,
-  data: Array<{|
-    key: string,
-    topic: string,
-    unread: number,
-    isMuted: boolean,
-    lastUnreadMsgId: number,
-  |}>,
-|};
+  data: $ReadOnlyArray<UnreadTopicItem>,
+|}>;
 
 export type RenderedTimeDescriptor = {|
   type: 'time',
