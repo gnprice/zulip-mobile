@@ -79,7 +79,7 @@ function applyReducer<Key: $Keys<GlobalState>, State>(
 }
 
 // Based on Redux upstream's combineReducers.
-export default (state: void | GlobalState, action: Action): GlobalState => {
+const reducerCore = (state: void | GlobalState, action: Action): GlobalState => {
   // prettier-ignore
   const nextState = {
     migrations: applyReducer('migrations', migrations, state?.migrations, action, state),
@@ -114,4 +114,23 @@ export default (state: void | GlobalState, action: Action): GlobalState => {
   }
 
   return nextState;
+};
+
+export default (state: void | GlobalState, action: Action): GlobalState => {
+  let startMs = undefined;
+  if (enableReduxPerfLogging) {
+    startMs = Date.now();
+  }
+
+  const result = reducerCore(state, action);
+
+  if (startMs !== undefined) {
+    const endMs = Date.now();
+    /* eslint-disable-next-line no-console */
+    console.log(
+      `Dispatch sub-time: ${(endMs - startMs).toFixed(0).padStart(4)}ms ${action.type} reducer`,
+    );
+  }
+
+  return result;
 };
