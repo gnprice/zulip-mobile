@@ -158,6 +158,8 @@ const makeLogFunction = ({ consoleMethod, severity }: LogParams): LogFunction =>
       if (data) {
         toConsole(data);
       }
+
+      toConsole(new Error().stack);
     }
   };
 };
