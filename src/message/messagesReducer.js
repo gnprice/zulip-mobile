@@ -127,15 +127,11 @@ export default (state: MessagesState = initialState, action: Action): MessagesSt
       return initialState;
 
     case MESSAGE_FETCH_COMPLETE:
-      // return state;
-      return {
-        ...state,
-        // $FlowFixMe - Flow bug; should resolve in #4245
-        ...action.messages.map(message => [
-          message.id,
-          omit(message, ['flags', 'match_content', 'match_subject']),
-        ]),
-      };
+      return state.withMutations(stateMut => {
+        action.messages.forEach(message => {
+          stateMut.set(message.id, omit(message, ['flags', 'match_content', 'match_subject']));
+        });
+      });
 
     case EVENT_REACTION_ADD:
       return eventReactionAdd(state, action);
