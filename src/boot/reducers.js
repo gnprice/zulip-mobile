@@ -35,7 +35,10 @@ const migrations = (state: MigrationsState = NULL_OBJECT): MigrationsState => st
 const { enableReduxSlowReducerWarnings, slowReducersThreshold } = config;
 
 function maybeLogSlowReducer(action, key, startMs, endMs) {
-  if (endMs - startMs >= slowReducersThreshold) {
+  if (endMs - startMs > slowReducersThreshold) {
+    console.log(
+      `Dispatch sub-time: ${(endMs - startMs).toFixed(0).padStart(4)}ms ${action.type} > ${key}`,
+    );
     timing.add({ text: `${action.type} @ ${key}`, startMs, endMs });
   }
 }
