@@ -25,15 +25,9 @@ export default (
           return { text: 'Type a message' };
         }
 
-        return {
-          text: 'Message {recipient}',
-          values: { recipient: `@${user.full_name}` },
-        };
+        return { text: 'Message {recipient}', values: { recipient: user.full_name } };
       },
-      stream: name => ({
-        text: 'Message {recipient}',
-        values: { recipient: `#${name}` },
-      }),
+      stream: name => ({ text: 'Message {recipient}', values: { recipient: `#${name}` } }),
       topic: () => ({ text: 'Reply' }),
     },
     () => ({ text: 'Type a message' }),
