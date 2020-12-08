@@ -119,8 +119,14 @@ run_android() {
 
 run_lint() {
     local file_list
-    file_list=( $(files_js) )
+    if files_check .eslintrc.yaml .eslintignore tools/formatting.eslintrc.yaml; then
+        # The lint config itself changed; check all lintable files.
+        file_list=( src/ )
+    else
+        file_list=( $(files_js) )
+    fi
     (( ${#file_list[@]} )) || return 0
+
     eslint ${fix:+--fix} --max-warnings=0 "${file_list[@]}"
 }
 
@@ -164,8 +170,14 @@ run_jest() {
 
 run_prettier() {
     local file_list
-    file_list=( $(files_js) )
+    if files_check .prettierrc.js .prettierignore tools/formatting.eslintrc.yaml; then
+        # The Prettier config itself changed; check all Prettier-able files.
+        file_list=( src/ )
+    else
+        file_list=( $(files_js) )
+    fi
     (( ${#file_list[@]} )) || return 0
+
     patterns=( "${file_list[@]/%\///**/*.js}" ) # replace trailing `/` with `/**/*.js`
     # Workaround for https://github.com/prettier/prettier-eslint-cli/issues/205
     patterns=( "${patterns[@]/#/$rootdir/}" )
