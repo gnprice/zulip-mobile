@@ -118,8 +118,10 @@ run_android() {
 }
 
 run_lint() {
-    (( $# )) || return 0
-    eslint ${fix:+--fix} --max-warnings=0 "$@"
+    local file_list
+    file_list=( $(files_js) )
+    (( ${#file_list[@]} )) || return 0
+    eslint ${fix:+--fix} --max-warnings=0 "${file_list[@]}"
 }
 
 check_node() {
@@ -139,7 +141,6 @@ EOF
 }
 
 run_jest() {
-    # Unlike some others, this inspects "$files" for itself.
     jest_args=()
     case "$files" in
         full)
@@ -162,8 +163,10 @@ run_jest() {
 }
 
 run_prettier() {
-    (( $# )) || return 0
-    patterns=( "${@/%\///**/*.js}" ) # replace trailing `/` with `/**/*.js`
+    local file_list
+    file_list=( $(files_js) )
+    (( ${#file_list[@]} )) || return 0
+    patterns=( "${file_list[@]/%\///**/*.js}" ) # replace trailing `/` with `/**/*.js`
     # Workaround for https://github.com/prettier/prettier-eslint-cli/issues/205
     patterns=( "${patterns[@]/#/$rootdir/}" )
     prettier-eslint \
@@ -200,13 +203,13 @@ for suite in "${suites[@]}"; do
             flow
             ;;
         lint)
-            run_lint $(files_js)
+            run_lint
             ;;
         jest)
             run_jest
             ;;
         prettier)
-            run_prettier $(files_js)
+            run_prettier
             ;;
         deps)
             run_deps
