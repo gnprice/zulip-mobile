@@ -128,12 +128,12 @@ check_node() {
     local node_version
     node_version="$(node --version)"
     case "${node_version}" in
-        v1[0-9].*) ;;
+        v1[2-9].*) ;;
         *)
             cat >&2 <<EOF
-Node 10 required; \`node --version\` says: ${node_version:-(nothing)}
+Node 12+ required; \`node --version\` says: ${node_version:-(nothing)}
 
-To run the zulip-mobile tests, please install Node v10.x .
+To run the zulip-mobile tests, please install Node v12.x .
 
 EOF
             return 1 ;;

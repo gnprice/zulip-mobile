@@ -171,14 +171,18 @@ Output:
 node-pre-gyp ERR! not ok
 Failed to execute [...]
 ```
-then this is a known error caused by using Node 11, which one of our
-dependencies (`fsevents`) isn't yet compatible with.
+then this is a known error caused by using a newer version of Node
+which one of our dependencies (`fsevents`) isn't yet compatible with.
 
-To fix the problem, use Node 10.x instead.
+To fix the problem, use the recommended version of Node.  For current
+versions of the app, use the version mentioned in our setup
+instructions at the top of this page.
 
-The same problem has also been observed when using Node 10 on commits that were
-made when we were using Node 8, prior to Greg's recommendation to switch to Node
-10 in 4e5e31ac2. To fix the problem in that case, use Node 8.
+Specifically, for a period in 2019 when our recommended version was
+Node 10, this problem would appear if using Node 11.  (It was
+apparently gone by the time of 053cf11a3 in 2020-01.)  Some while
+before that, at a time when our recommended version was Node 8, this
+problem would appear if using Node 10.
 
 
 ### `yarn install` failure about "Detox"
