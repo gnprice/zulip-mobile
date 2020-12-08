@@ -373,6 +373,8 @@ export const canSendToNarrow = (narrow: Narrow): boolean =>
  * See also isMessageInNarrow, which should return true for exactly the
  * narrows this lists and no others.
  */
+// TODO is that last bit true for PM narrows?
+// TODO try adding tests specifically for it, anyway
 export const getNarrowsForMessage = (
   message: Message | Outbox,
   ownUser: User,
