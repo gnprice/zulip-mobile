@@ -8,7 +8,7 @@ import { getAuth, tryGetAuth, getServerVersion } from '../selectors';
 import { isPmNarrow, caseNarrowPartial } from '../utils/narrow';
 import { getAllUsersByEmail, getUserForId } from './userSelectors';
 import { ZulipVersion } from '../utils/zulipVersion';
-import { maybeGetAll } from '../maybe';
+import { maybeMapAll } from '../maybe';
 
 export const reportPresence = (isActive: boolean = true, newUserInput: boolean = false) => async (
   dispatch: Dispatch,
@@ -68,7 +68,7 @@ export const sendTypingStart = (narrow: Narrow) => async (
   const allUsersByEmail = getAllUsersByEmail(getState());
   /* eslint-disable-next-line no-shadow */
   const emails = caseNarrowPartial(narrow, { pm: emails => emails });
-  const recipientIds = maybeGetAll(allUsersByEmail, emails)?.map(u => u.user_id);
+  const recipientIds = maybeMapAll(emails, email => allUsersByEmail.get(email)?.user_id);
   if (!recipientIds) {
     throw new Error('unknown user');
   }
