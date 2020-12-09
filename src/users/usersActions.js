@@ -8,6 +8,7 @@ import { getAuth, tryGetAuth, getServerVersion } from '../selectors';
 import { isPmNarrow, caseNarrowPartial } from '../utils/narrow';
 import { getAllUsersByEmail, getUserForId } from './userSelectors';
 import { ZulipVersion } from '../utils/zulipVersion';
+import { maybeGetAll } from '../maybe';
 
 export const reportPresence = (isActive: boolean = true, newUserInput: boolean = false) => async (
   dispatch: Dispatch,
@@ -65,15 +66,12 @@ export const sendTypingStart = (narrow: Narrow) => async (
   }
 
   const allUsersByEmail = getAllUsersByEmail(getState());
-  const recipientIds = caseNarrowPartial(narrow, {
-    pm: emails => emails,
-  }).map(email => {
-    const user = allUsersByEmail.get(email);
-    if (!user) {
-      throw new Error('unknown user');
-    }
-    return user.user_id;
-  });
+  /* eslint-disable-next-line no-shadow */
+  const emails = caseNarrowPartial(narrow, { pm: emails => emails });
+  const recipientIds = maybeGetAll(allUsersByEmail, emails)?.map(u => u.user_id);
+  if (!recipientIds) {
+    throw new Error('unknown user');
+  }
   typing_status.update(typingWorker(getState()), recipientIds);
 };
 

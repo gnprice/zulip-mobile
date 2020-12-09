@@ -3,10 +3,11 @@ import { createSelector } from 'reselect';
 
 import type { Narrow, Selector, UserOrBot } from '../types';
 import { getTyping } from '../directSelectors';
-import { isPmNarrow } from '../utils/narrow';
+import { caseNarrowPartial, isPmNarrow } from '../utils/narrow';
 import { normalizeRecipientsAsUserIds } from '../utils/recipient';
 import { NULL_ARRAY, NULL_USER } from '../nullObjects';
 import { getAllUsersById, getAllUsersByEmail } from '../users/userSelectors';
+import { maybeGetAll } from '../maybe';
 
 export const getCurrentTypingUsers: Selector<$ReadOnlyArray<UserOrBot>, Narrow> = createSelector(
   (state, narrow) => narrow,
@@ -18,13 +19,12 @@ export const getCurrentTypingUsers: Selector<$ReadOnlyArray<UserOrBot>, Narrow> 
       return NULL_ARRAY;
     }
 
-    const recipients = narrow[0].operand.split(',').map(email => {
-      const userId = allUsersByEmail.get(email)?.user_id;
-      if (userId === undefined) {
-        throw new Error(`Narrow contains email '${email}' that does not map to any user.`);
-      }
-      return userId;
-    });
+    /* eslint-disable-next-line no-shadow */
+    const emails = caseNarrowPartial(narrow, { pm: emails => emails });
+    const recipients = maybeGetAll(allUsersByEmail, emails)?.map(u => u.user_id);
+    if (!recipients) {
+      throw new Error('Narrow contains email that does not map to any user.');
+    }
     const normalizedRecipients = normalizeRecipientsAsUserIds(recipients);
     const currentTyping = typing[normalizedRecipients];
 

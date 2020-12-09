@@ -17,6 +17,7 @@ import { getUsersAndWildcards } from '../users/userHelpers';
 import { caseNarrowPartial } from '../utils/narrow';
 import { BackoffMachine } from '../utils/async';
 import { recipientsOfPrivateMessage, streamNameOfStreamMessage } from '../utils/recipient';
+import { maybeGetAll } from '../maybe';
 
 export const messageSendStart = (outbox: Outbox): Action => ({
   type: MESSAGE_SEND_START,
@@ -99,13 +100,14 @@ export const sendOutbox = () => async (dispatch: Dispatch, getState: GetState) =
 
 // A valid display_recipient with all the thread's users, sorted by ID.
 const mapEmailsToUsers = (emails, allUsersByEmail, ownUser) => {
-  const result = emails.map(email => {
-    const user = allUsersByEmail.get(email);
-    if (!user) {
-      throw new Error('outbox: missing user when preparing to send PM');
-    }
-    return { email, id: user.user_id, full_name: user.full_name };
-  });
+  const result = maybeGetAll(allUsersByEmail, emails)?.map(user => ({
+    email: user.email,
+    id: user.user_id,
+    full_name: user.full_name,
+  }));
+  if (!result) {
+    throw new Error('outbox: missing user when preparing to send PM');
+  }
   if (!result.some(r => r.id === ownUser.user_id)) {
     result.push({ email: ownUser.email, id: ownUser.user_id, full_name: ownUser.full_name });
   }
