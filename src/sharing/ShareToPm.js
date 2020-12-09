@@ -4,7 +4,7 @@ import { View, Image, ScrollView, Modal, BackHandler } from 'react-native';
 import type { NavigationTabProp, NavigationStateRoute } from 'react-navigation-tabs';
 
 import NavigationService from '../nav/NavigationService';
-import type { Dispatch, SharedData, User, Auth, GetText } from '../types';
+import type { Dispatch, SharedData, UserOrBot, Auth, GetText } from '../types';
 import { createStyleSheet } from '../styles';
 import { TranslationContext } from '../boot/TranslationProvider';
 import { connect } from '../react-redux';
@@ -69,7 +69,7 @@ type Props = $ReadOnly<{|
 |}>;
 
 type State = $ReadOnly<{|
-  selectedRecipients: User[],
+  selectedRecipients: UserOrBot[],
   message: string,
   choosingRecipients: boolean,
   sending: boolean,
@@ -97,7 +97,7 @@ class ShareToPm extends React.Component<Props, State> {
     this.setState({ sending: true });
   };
 
-  handleChooseRecipients = (selectedRecipients: Array<User>) => {
+  handleChooseRecipients = (selectedRecipients: Array<UserOrBot>) => {
     this.setState({ selectedRecipients });
     this.setState({ choosingRecipients: false });
   };
@@ -141,7 +141,7 @@ class ShareToPm extends React.Component<Props, State> {
       return <Label text="Please choose recipients to share with" />;
     }
     const preview = [];
-    selectedRecipients.forEach((user: User) => {
+    selectedRecipients.forEach((user: UserOrBot) => {
       preview.push(<UserItem user={user} onPress={() => {}} key={user.user_id} />);
     });
     return preview;

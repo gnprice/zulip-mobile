@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import type { SharedData, User, Auth, GetText } from '../types';
+import type { SharedData, UserOrBot, Auth, GetText } from '../types';
 import { showToast } from '../utils/info';
 import { sendMessage, uploadFile } from '../api';
 
@@ -13,7 +13,7 @@ type SendStream = {|
 |};
 
 type SendPm = {|
-  selectedRecipients: Array<User>,
+  selectedRecipients: Array<UserOrBot>,
   message: string,
   sharedData: SharedData,
   type: 'pm',
