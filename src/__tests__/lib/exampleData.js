@@ -62,7 +62,7 @@ const makeUniqueRandInt = (itemsType: string, end: number): (() => number) => {
       throw new Error(`ran out of ${itemsType}`);
     }
     // Perform a single step of the Fisher-Yates shuffle...
-    const leftIndex = randInt(deck.length);
+    const leftIndex = 3; // randInt(deck.length);
     const rightIndex = deck.length - 1;
     const leftValue = deck[leftIndex] ?? leftIndex;
     const rightValue = deck[rightIndex] ?? rightIndex;
