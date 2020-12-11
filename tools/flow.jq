@@ -16,20 +16,23 @@
 def descrs:
   .errors[] | .message[0].descr | try fromjson;
 
-# Internal helper for `shortloc`.
-def shortloc_one:
+# Mostly an internal helper.  Shorten a source location, from 12 lines to 1.
+# A bit crude; might be nice to collapse equal start/end lines.
+def shorten_pos:
   "\(.source):\(.start.line)-\(.end.line):\(.start.column)-\(.end.column)";
 
-# Internal helper for `shortloc`.
-def shortloc_pos:
-  if type == "object" and .pos
-  then .pos |= shortloc_one
-  else . end;
+# Mostly an internal helper.  Shorten a "reason", from 15 lines to 1.
+def shorten_reason:
+  "\(.desc) at \(.pos | shorten_pos)";
 
-# Compact the source locations to take 1 line each instead of 12.
+# Make verbose details more compact.
 # Sample usage:
-#   descrs | shortloc
-def shortloc:
+#   descrs | shorten
+def shorten:
   if type != "object" and type != "array"
   then .
-  else shortloc_pos | map_values(shortloc) end;
+  else if type == "object" and .reason
+       then .reason |= shorten_reason
+       else . end
+       | map_values(shorten)
+  end;
