@@ -561,6 +561,12 @@ describe('getUnreadStreamsAndTopicsSansMuted', () => {
           color: 'red',
           in_home_view: true,
         },
+        {
+          stream_id: 2,
+          name: 'stream 2',
+          color: 'blue',
+          in_home_view: false,
+        },
       ],
       unread: unreadState,
       mute: [['stream 0', 'a topic']],

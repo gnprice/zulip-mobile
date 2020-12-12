@@ -8,7 +8,7 @@ import { getOwnUserId } from '../users/userSelectors';
 import { getSubscriptionsById } from '../subscriptions/subscriptionSelectors';
 import { isTopicMuted } from '../utils/message';
 import { caseNarrow } from '../utils/narrow';
-import { NULL_SUBSCRIPTION } from '../nullObjects';
+import * as logging from '../utils/logging';
 import { pmUnreadsKeyFromPmKeyIds } from '../utils/recipient';
 import { getUnreadStreams, getUnreadPms, getUnreadHuddles, getUnreadMentions } from './unreadModel';
 
@@ -23,11 +23,12 @@ export const getUnreadByStream: Selector<{ [number]: number }> = createSelector(
       if (!totals[stream.stream_id]) {
         totals[stream.stream_id] = 0;
       }
-      const isMuted = isTopicMuted(
-        (subscriptionsById.get(stream.stream_id) || NULL_SUBSCRIPTION).name,
-        stream.topic,
-        mute,
-      );
+      const subscription = subscriptionsById.get(stream.stream_id);
+      if (!subscription) {
+        logging.error('missing subscription for stream', { streamId: stream.stream_id });
+        return; // i.e., continue
+      }
+      const isMuted = isTopicMuted(subscription.name, stream.topic, mute);
       totals[stream.stream_id] += isMuted ? 0 : stream.unread_message_ids.length;
     });
     return totals;
@@ -131,8 +132,12 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
   (subscriptionsById, unreadStreams, mute) => {
     const totals = new Map();
     unreadStreams.forEach(stream => {
-      const { name, color, in_home_view, invite_only, pin_to_top } =
-        subscriptionsById.get(stream.stream_id) || NULL_SUBSCRIPTION;
+      const subscription = subscriptionsById.get(stream.stream_id);
+      if (!subscription) {
+        logging.error('missing subscription for stream', { streamId: stream.stream_id });
+        return; // i.e., continue
+      }
+      const { name, color, in_home_view, invite_only, pin_to_top } = subscription;
 
       let total = totals.get(stream.stream_id);
       if (!total) {
