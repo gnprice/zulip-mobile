@@ -1,4 +1,5 @@
 /* @flow strict-local */
+import invariant from 'invariant';
 import isEqual from 'lodash.isequal';
 import { createSelector } from 'reselect';
 
@@ -29,7 +30,7 @@ import {
   streamNameOfNarrow,
 } from '../utils/narrow';
 import { shouldBeMuted } from '../utils/message';
-import { NULL_ARRAY, NULL_SUBSCRIPTION } from '../nullObjects';
+import { NULL_ARRAY } from '../nullObjects';
 import * as logging from '../utils/logging';
 
 export const outboxMessagesForNarrow: Selector<Outbox[], Narrow> = createSelector(
@@ -119,9 +120,7 @@ export const getStreamInNarrow: Selector<Subscription | {| ...Stream, in_home_vi
   state => getSubscriptions(state),
   state => getStreams(state),
   (narrow, subscriptions, streams) => {
-    if (!isStreamOrTopicNarrow(narrow)) {
-      return NULL_SUBSCRIPTION;
-    }
+    invariant(isStreamOrTopicNarrow(narrow), 'getStreamInNarrow: got non-stream/topic narrow');
     const streamName = streamNameOfNarrow(narrow);
 
     const subscription = subscriptions.find(x => x.name === streamName);
@@ -137,7 +136,7 @@ export const getStreamInNarrow: Selector<Subscription | {| ...Stream, in_home_vi
       };
     }
 
-    return NULL_SUBSCRIPTION;
+    throw new Error('getStreamInNarrow: no stream nor subscription found');
   },
 );
 

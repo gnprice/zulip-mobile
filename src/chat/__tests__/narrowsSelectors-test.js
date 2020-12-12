@@ -18,7 +18,6 @@ import {
   pmNarrowFromUsersUnsafe,
   keyFromNarrow,
 } from '../../utils/narrow';
-import { NULL_SUBSCRIPTION } from '../../nullObjects';
 import * as eg from '../../__tests__/lib/exampleData';
 
 describe('getMessagesForNarrow', () => {
@@ -186,15 +185,14 @@ describe('getStreamInNarrow', () => {
     expect(getStreamInNarrow(state, narrow)).toEqual({ ...stream3, in_home_view: true });
   });
 
-  test('return NULL_SUBSCRIPTION if stream in narrow is not valid', () => {
+  test('throw if stream in narrow is not valid', () => {
     const narrow = streamNarrow(stream4.name);
-
-    expect(getStreamInNarrow(state, narrow)).toEqual(NULL_SUBSCRIPTION);
+    expect(() => getStreamInNarrow(state, narrow)).toThrow();
   });
 
-  test('return NULL_SUBSCRIPTION is narrow is not topic or stream', () => {
-    expect(getStreamInNarrow(state, pm1to1NarrowFromUser(eg.otherUser))).toEqual(NULL_SUBSCRIPTION);
-    expect(getStreamInNarrow(state, topicNarrow(stream4.name, 'topic'))).toEqual(NULL_SUBSCRIPTION);
+  test('throw if narrow is not topic or stream', () => {
+    expect(() => getStreamInNarrow(state, pm1to1NarrowFromUser(eg.otherUser))).toThrow();
+    expect(() => getStreamInNarrow(state, topicNarrow(stream4.name, 'topic'))).toThrow();
   });
 });
 
