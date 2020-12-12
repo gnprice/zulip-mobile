@@ -8,5 +8,5 @@ type ApiResponseStreamId = {|
 |};
 
 /** See https://zulip.com/api/get-stream-id */
-export default async (auth: Auth, stream: string): Promise<ApiResponseStreamId> =>
-  apiGet(auth, 'get_stream_id', { stream });
+export default async (auth: Auth, streamName: string): Promise<ApiResponseStreamId> =>
+  apiGet(auth, 'get_stream_id', { stream: streamName });

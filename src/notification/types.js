@@ -13,6 +13,7 @@
  */
 // NOTE: Keep the Android-side code in sync with this type definition.
 export type Notification =
+  // TODO: rename this `stream` to `streamName` for clarity.
   | {| recipient_type: 'stream', stream: string, topic: string, realm_uri?: string |}
   // Group PM messages have `pm_users`, which is sorted, comma-separated IDs.
   | {| recipient_type: 'private', pm_users: string, realm_uri?: string |}

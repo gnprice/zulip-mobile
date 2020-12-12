@@ -3,8 +3,8 @@ import type { Narrow, Message, MuteState, Outbox, Subscription } from '../types'
 import { isHomeNarrow, isTopicNarrow } from './narrow';
 import { streamNameOfStreamMessage } from './recipient';
 
-export const isTopicMuted = (stream: string, topic: string, mute: MuteState = []): boolean =>
-  mute.some(x => x[0] === stream && x[1] === topic);
+export const isTopicMuted = (streamName: string, topic: string, mute: MuteState = []): boolean =>
+  mute.some(x => x[0] === streamName && x[1] === topic);
 
 export const shouldBeMuted = (
   message: Message | Outbox,

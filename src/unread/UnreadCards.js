@@ -20,12 +20,12 @@ type Props = $ReadOnly<{|
 |}>;
 
 class UnreadCards extends PureComponent<Props> {
-  handleStreamPress = (stream: string) => {
-    setTimeout(() => this.props.dispatch(doNarrow(streamNarrow(stream))));
+  handleStreamPress = (streamName: string) => {
+    setTimeout(() => this.props.dispatch(doNarrow(streamNarrow(streamName))));
   };
 
-  handleTopicPress = (stream: string, topic: string) => {
-    setTimeout(() => this.props.dispatch(doNarrow(topicNarrow(stream, topic))));
+  handleTopicPress = (streamName: string, topic: string) => {
+    setTimeout(() => this.props.dispatch(doNarrow(topicNarrow(streamName, topic))));
   };
 
   render() {
@@ -72,7 +72,7 @@ class UnreadCards extends PureComponent<Props> {
           ) : (
             <TopicItem
               name={item.topic}
-              stream={section.streamName || ''}
+              streamName={section.streamName || ''}
               isMuted={section.isMuted || item.isMuted}
               isSelected={false}
               unreadCount={item.unread}

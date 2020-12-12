@@ -5,7 +5,7 @@ import { showToast } from '../utils/info';
 import { sendMessage, uploadFile } from '../api';
 
 type SendStream = {|
-  stream: string,
+  streamName: string,
   topic: string,
   message: string,
   sharedData: SharedData,
@@ -49,7 +49,7 @@ export const handleSend = async (data: SendStream | SendPm, auth: Auth, _: GetTe
           content: messageToSend,
           type: 'stream',
           subject: data.topic,
-          to: data.stream,
+          to: data.streamName,
         };
 
   try {

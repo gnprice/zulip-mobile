@@ -53,7 +53,7 @@ type Props = $ReadOnly<{|
 |}>;
 
 type State = $ReadOnly<{|
-  stream: string,
+  streamName: string,
   topic: string,
   message: string,
   isStreamFocused: boolean,
@@ -66,7 +66,7 @@ class ShareToStream extends React.Component<Props, State> {
   context: GetText;
 
   state = {
-    stream: '',
+    streamName: '',
     topic: '',
     message: this.props.route.params.sharedData.sharedText || '',
     isStreamFocused: false,
@@ -91,9 +91,9 @@ class ShareToStream extends React.Component<Props, State> {
   };
 
   focusTopic = () => {
-    const { stream } = this.state;
+    const { streamName } = this.state;
     const { dispatch } = this.props;
-    const narrow = streamNarrow(stream);
+    const narrow = streamNarrow(streamName);
 
     dispatch(fetchTopicsForStream(narrow));
     this.setState({ isTopicFocused: true });
@@ -103,8 +103,8 @@ class ShareToStream extends React.Component<Props, State> {
     this.setState({ message });
   };
 
-  handleStreamChange = stream => {
-    this.setState({ stream });
+  handleStreamChange = streamName => {
+    this.setState({ streamName });
   };
 
   handleTopicChange = topic => {
@@ -112,8 +112,8 @@ class ShareToStream extends React.Component<Props, State> {
   };
 
   handleStreamAutoComplete = (rawStream: string) => {
-    const stream = rawStream.split('**')[1];
-    this.setState({ stream, isStreamFocused: false });
+    const streamName = rawStream.split('**')[1];
+    this.setState({ streamName, isStreamFocused: false });
   };
 
   handleTopicAutoComplete = (topic: string) => {
@@ -123,9 +123,9 @@ class ShareToStream extends React.Component<Props, State> {
   handleSend = async () => {
     const _ = this.context;
     const { auth } = this.props;
-    const { topic, stream, message } = this.state;
+    const { topic, streamName, message } = this.state;
     const { sharedData } = this.props.route.params;
-    const data = { stream, topic, message, sharedData, type: 'stream' };
+    const data = { streamName, topic, message, sharedData, type: 'stream' };
 
     this.setSending();
     await handleSend(data, auth, _);
@@ -138,20 +138,20 @@ class ShareToStream extends React.Component<Props, State> {
   };
 
   isSendButtonEnabled = () => {
-    const { stream, topic, message } = this.state;
+    const { streamName, topic, message } = this.state;
     const { sharedData } = this.props.route.params;
 
     if (sharedData.type !== 'text') {
-      return stream !== '' && topic !== '';
+      return streamName !== '' && topic !== '';
     }
 
-    return stream !== '' && topic !== '' && message !== '';
+    return streamName !== '' && topic !== '' && message !== '';
   };
 
   render() {
     const { sharedData } = this.props.route.params;
-    const { stream, topic, message, isStreamFocused, isTopicFocused, sending } = this.state;
-    const narrow = streamNarrow(stream);
+    const { streamName, topic, message, isStreamFocused, isTopicFocused, sending } = this.state;
+    const narrow = streamNarrow(streamName);
 
     return (
       <>
@@ -161,11 +161,14 @@ class ShareToStream extends React.Component<Props, State> {
               <Image source={{ uri: sharedData.sharedImageUrl }} style={styles.imagePreview} />
             )}
             <AnimatedScaleComponent visible={isStreamFocused}>
-              <StreamAutocomplete filter={stream} onAutocomplete={this.handleStreamAutoComplete} />
+              <StreamAutocomplete
+                filter={streamName}
+                onAutocomplete={this.handleStreamAutoComplete}
+              />
             </AnimatedScaleComponent>
             <Input
               placeholder="Stream"
-              value={stream}
+              value={streamName}
               onChangeText={this.handleStreamChange}
               onFocus={this.focusStream}
               onChange={this.focusStream}
@@ -187,7 +190,7 @@ class ShareToStream extends React.Component<Props, State> {
               onFocus={this.focusTopic}
               onBlur={this.blurTopic}
               onChangeText={this.handleTopicChange}
-              editable={stream !== ''}
+              editable={streamName !== ''}
             />
             <Input
               placeholder="Message"

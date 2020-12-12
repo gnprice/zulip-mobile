@@ -22,25 +22,25 @@ const componentStyles = createStyleSheet({
 });
 
 type Props = $ReadOnly<{|
-  stream: string,
+  streamName: string,
   name: string,
   isMuted: boolean,
   isSelected: boolean,
   unreadCount: number,
-  onPress: (topic: string, stream: string) => void,
+  onPress: (topic: string, streamName: string) => void,
 |}>;
 
 export default class TopicItem extends PureComponent<Props> {
   static defaultProps = {
-    stream: '',
+    streamName: '',
     isMuted: false,
     isSelected: false,
     unreadCount: 0,
   };
 
   handlePress = () => {
-    const { name, stream, onPress } = this.props;
-    onPress(stream, name);
+    const { name, streamName, onPress } = this.props;
+    onPress(streamName, name);
   };
 
   handleLongPress = () => {

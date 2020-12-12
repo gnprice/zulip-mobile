@@ -143,11 +143,11 @@ export const ALL_PRIVATE_NARROW = specialNarrow('private');
 
 export const ALL_PRIVATE_NARROW_STR = keyFromNarrow(ALL_PRIVATE_NARROW);
 
-export const streamNarrow = (stream: string): Narrow =>
-  Object.freeze({ type: 'stream', streamName: stream });
+export const streamNarrow = (streamName: string): Narrow =>
+  Object.freeze({ type: 'stream', streamName });
 
-export const topicNarrow = (stream: string, topic: string): Narrow =>
-  Object.freeze({ type: 'topic', streamName: stream, topic });
+export const topicNarrow = (streamName: string, topic: string): Narrow =>
+  Object.freeze({ type: 'topic', streamName, topic });
 
 export const SEARCH_NARROW = (query: string): Narrow => Object.freeze({ type: 'search', query });
 
