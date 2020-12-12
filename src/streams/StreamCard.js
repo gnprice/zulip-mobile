@@ -6,7 +6,6 @@ import type { Stream, Subscription } from '../types';
 import styles, { createStyleSheet } from '../styles';
 import { RawLabel } from '../common';
 import StreamIcon from './StreamIcon';
-import { NULL_SUBSCRIPTION } from '../nullObjects';
 
 const componentStyles = createStyleSheet({
   streamRow: {
@@ -27,35 +26,31 @@ const componentStyles = createStyleSheet({
 
 type Props = $ReadOnly<{|
   stream: Stream,
-  subscription: Subscription,
+  subscription: ?Subscription,
 |}>;
 
 export default class StreamCard extends PureComponent<Props> {
   render() {
     const { stream, subscription } = this.props;
-
-    const name = subscription.name || stream.name;
-    const description = subscription.description || stream.description;
-
     return (
       <View style={styles.padding}>
         <View style={componentStyles.streamRow}>
           <StreamIcon
             style={componentStyles.streamIcon}
             size={22}
-            color={subscription.color || NULL_SUBSCRIPTION.color}
+            color={subscription?.color ?? 'gray'}
             isMuted={subscription ? !subscription.in_home_view : false}
-            isPrivate={stream && stream.invite_only}
+            isPrivate={stream.invite_only}
           />
           <RawLabel
             style={componentStyles.streamText}
-            text={name}
+            text={stream.name}
             numberOfLines={1}
             ellipsizeMode="tail"
           />
         </View>
-        {description.length > 0 && (
-          <RawLabel style={componentStyles.descriptionText} text={description} />
+        {stream.description && (
+          <RawLabel style={componentStyles.descriptionText} text={stream.description} />
         )}
       </View>
     );

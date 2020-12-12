@@ -21,12 +21,11 @@ import {
 } from '../actions';
 import styles from '../styles';
 import { getSubscriptionsById } from '../subscriptions/subscriptionSelectors';
-import { NULL_SUBSCRIPTION } from '../nullObjects';
 
 type SelectorProps = $ReadOnly<{|
   isAdmin: boolean,
   stream: Stream,
-  subscription: Subscription,
+  subscription: Subscription | void,
   userSettingStreamNotification: boolean,
 |}>;
 
@@ -61,7 +60,9 @@ class StreamSettingsScreen extends PureComponent<Props> {
 
   toggleStreamPushNotification = () => {
     const { dispatch, subscription, stream, userSettingStreamNotification } = this.props;
-    const currentValue = subscription.push_notifications ?? userSettingStreamNotification;
+    const currentValue = subscription
+      ? subscription.push_notifications ?? userSettingStreamNotification
+      : false;
     dispatch(toggleStreamNotification(stream.stream_id, !currentValue));
   };
 
@@ -74,19 +75,21 @@ class StreamSettingsScreen extends PureComponent<Props> {
         <OptionRow
           Icon={IconPin}
           label="Pinned"
-          value={subscription.pin_to_top}
+          value={subscription?.pin_to_top ?? false}
           onValueChange={this.handleTogglePinStream}
         />
         <OptionRow
           Icon={IconMute}
           label="Muted"
-          value={subscription.in_home_view === false}
+          value={subscription ? !subscription.in_home_view : false}
           onValueChange={this.handleToggleMuteStream}
         />
         <OptionRow
           Icon={IconNotifications}
           label="Notifications"
-          value={subscription.push_notifications ?? userSettingStreamNotification}
+          value={
+            subscription ? subscription.push_notifications ?? userSettingStreamNotification : false
+          }
           onValueChange={this.toggleStreamPushNotification}
         />
         <View style={styles.padding}>
@@ -115,6 +118,6 @@ class StreamSettingsScreen extends PureComponent<Props> {
 export default connect((state, props) => ({
   isAdmin: getIsAdmin(state),
   stream: getStreamForId(state, props.route.params.streamId),
-  subscription: getSubscriptionsById(state).get(props.route.params.streamId) || NULL_SUBSCRIPTION,
+  subscription: getSubscriptionsById(state).get(props.route.params.streamId),
   userSettingStreamNotification: getSettings(state).streamNotification,
 }))(StreamSettingsScreen);

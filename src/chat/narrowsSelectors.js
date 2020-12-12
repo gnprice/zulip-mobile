@@ -112,6 +112,7 @@ export const getLastMessageId = (state: GlobalState, narrow: Narrow): number | v
   return ids.length > 0 ? ids[ids.length - 1] : undefined;
 };
 
+/** (NB throws if not a stream/topic narrow, or if we have no data for the stream.) */
 // Prettier mishandles this Flow syntax.
 // prettier-ignore
 // TODO: clean up what this returns.
