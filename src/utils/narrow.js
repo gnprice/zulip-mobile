@@ -250,13 +250,15 @@ export function caseNarrowDefault<T>(
   );
 }
 
+export opaque type NarrowKey: string = string;
+
 /**
  * The key we use for this narrow in our Redux data structures.
  *
  * See in particular `NarrowsState`, `CaughtUpState`, `FetchingState`,
  * and `DraftsState`.
  */
-export function keyFromNarrow(narrow: Narrow): string {
+export function keyFromNarrow(narrow: Narrow): NarrowKey {
   // The ":s" bit in several of these is to keep them disjoint, out of an
   // abundance of caution, from future keys that use numeric IDs.
   return caseNarrow(narrow, {

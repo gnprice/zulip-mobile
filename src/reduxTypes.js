@@ -30,7 +30,7 @@ import type {
   UserPresence,
   UserStatusMapObject,
 } from './api/apiTypes';
-
+import type { NarrowKey } from './utils/narrow';
 import type { SessionState } from './session/sessionReducer';
 
 export type * from './actionTypes';
@@ -103,7 +103,7 @@ export type Fetching = {|
  */
 export type FetchingState = {
   // TODO(flow-v0.126): Should be exact. See note in src/utils/jsonable.js.
-  [narrow: string]: Fetching,
+  [narrow: NarrowKey]: Fetching,
 };
 
 /**

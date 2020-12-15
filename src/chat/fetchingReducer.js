@@ -26,7 +26,7 @@ const messageFetchStart = (state, action) => {
 
   return {
     ...state,
-    [key]: {
+    [(key: string)]: {
       older: currentValue.older || action.numBefore > 0,
       newer: currentValue.newer || action.numAfter > 0,
     },
