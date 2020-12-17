@@ -91,10 +91,44 @@ export const tryParseUrl = (url: string, base?: string | URL): URL | void => {
   }
 };
 
-// TODO: Work out what this does, write a jsdoc for its interface, and
-// reimplement using URL object (not just for the realm)
-export const isUrlOnRealm = (url: string = '', realm: URL): boolean =>
-  url.startsWith('/') || url.startsWith(realm.toString()) || !/^(http|www.)/i.test(url);
+/**
+ * Test if the given URL points within the realm, taking the realm as base URL.
+ *
+ * This is equivalent to (but more efficient than) asking if
+ *
+ *     new URL(url, realm).href.startsWith(realm.href)
+ *
+ * provided `url` is a valid URL string, and given our usual assumption that
+ * `realm.href` is just `realm.origin` modulo a trailing slash.
+ *
+ * If `url` is not a valid URL string, the result is unspecified.
+ */
+export const isUrlOnRealm = (url: string, realm: URL): boolean => {
+  // See the URL Standard for the definitions of quoted terms:
+  //   https://url.spec.whatwg.org/#url-writing
+
+  if (isUrlAbsolute(url)) {
+    // An absolute URL (that is, "absolute-URL-with-fragment string").
+    // `new URL(url, realm)` would be equivalent to just `new URL(url)`.
+    return url.startsWith(realm.href);
+  }
+  // A relative URL string of some kind.  In the standard's terms: a
+  // "relative-URL-with-fragment string", which starts with some kind of
+  // "relative-URL string".
+
+  if (!url.startsWith('//')) {
+    // The "relative-URL string" is a "path-absolute-URL string" or
+    // "path-relative-URL string".   Either way, `new URL(url, realm)` would
+    // borrow all of `realm` before the path -- which is all of `realm`.
+    return true;
+  }
+
+  // A scheme-relative URL.  (These are pretty uncommon; they look like
+  // `//chat.example.org/foo`.)  In this case, `new URL(url, realm)` would
+  // borrow the scheme from `realm` but nothing else.
+  const resolvedUrl = `${realm.protocol}:${url}`;
+  return resolvedUrl.startsWith(realm.href);
+};
 
 const getResourceWithAuth = (uri: string, auth: Auth) => ({
   uri: new URL(uri, auth.realm).toString(),
