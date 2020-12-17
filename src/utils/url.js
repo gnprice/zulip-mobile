@@ -92,13 +92,30 @@ export const tryParseUrl = (url: string, base?: string | URL): URL | void => {
 };
 
 /**
- * Resolve the given possibly-relative URL, with the realm URL as a base.
+ * Resolve a possibly-relative URL, with realm URL as base, hastily.
  *
- * This is equivalent to (but more efficient than) `new URL(url, realm).href`,
- * provided `url` is a valid URL string, and given our usual assumption that
- * `realm.href` is just `realm.origin` modulo a trailing slash.
+ * Assumes `url` is a valid URL string, and `realm` a valid Zulip realm URL,
+ * with `realm.href` is just `realm.origin` modulo a trailing slash.
  *
- * If `url` is not a valid URL string, the result is unspecified.
+ * The canonical resolved URL string would be `new URL(url, realm).href`.
+ * This function returns an absolute URL string which is equivalent to the
+ * canonical resolved URL string (meaning it parses to the same URL), but
+ * may not be the same string.
+ *
+ * That is, we always have:
+ *   new URL(resolveUrl(url, realm)).href === new URL(url, realm).href
+ * but may have
+ *           resolveUrl(url, realm)       !== new URL(url, realm).href
+ *
+ * (For example, if `url` contains path components like `.` or `..`, or any
+ * non-ASCII code points, then the return value may contain similar
+ * features.  URL parsing will canonicalize out such path components and
+ * percent-encode such code points.)
+ *
+ * This function is useful because it is more efficient than `new URL`.
+ *
+ * If `url` is not a valid URL string or `realm` not a valid Zulip realm
+ * URL, the result is unspecified.
  */
 export const resolveUrl = (url: string, realm: URL): string => {
   // See the URL Standard for the definitions of quoted terms:
@@ -123,7 +140,15 @@ export const resolveUrl = (url: string, realm: URL): string => {
     // in which the "relative-URL string" is a "path-relative URL string".)
     // Now `new URL(…)` would borrow all of `realm`, including its trailing
     // slash.
+    //
+    // We're relying heavily here on the assumption that `realm` has a path
+    // of just `/`, empty query, and empty fragment.
+    return realm.href + url;
   }
+
+  // A scheme-relative URL, like `//chat.example/foo/bar`.
+  // `new URL(…)` would borrow the scheme from `realm` but nothing else.
+  return `${realm.protocol}:${url}`;
 };
 
 /**
