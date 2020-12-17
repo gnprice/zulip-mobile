@@ -92,6 +92,41 @@ export const tryParseUrl = (url: string, base?: string | URL): URL | void => {
 };
 
 /**
+ * Resolve the given possibly-relative URL, with the realm URL as a base.
+ *
+ * This is equivalent to (but more efficient than) `new URL(url, realm).href`,
+ * provided `url` is a valid URL string, and given our usual assumption that
+ * `realm.href` is just `realm.origin` modulo a trailing slash.
+ *
+ * If `url` is not a valid URL string, the result is unspecified.
+ */
+export const resolveUrl = (url: string, realm: URL): string => {
+  // See the URL Standard for the definitions of quoted terms:
+  //   https://url.spec.whatwg.org/#url-writing
+
+  if (isUrlAbsolute(url)) {
+    // An absolute URL (that is, "absolute-URL-with-fragment string").
+    // `new URL(…)` would ignore the base URL.
+    return url;
+  }
+
+  if (isUrlPathAbsolute(url)) {
+    // The kind of relative URL we routinely use, like `/foo/bar`.
+    // `new URL(…)` would borrow all of `realm` before the path -- which is
+    // all of `realm` except its trailing slash.  This coincides with
+    // `realm.origin`.
+    return realm.origin + url;
+  }
+
+  if (!url.startsWith('//')) {
+    // A path-relative URL (that is, a "relative-URL-with-fragment string"
+    // in which the "relative-URL string" is a "path-relative URL string".)
+    // Now `new URL(…)` would borrow all of `realm`, including its trailing
+    // slash.
+  }
+};
+
+/**
  * Test if the given URL points within the realm, taking the realm as base URL.
  *
  * This is equivalent to (but more efficient than) asking if
