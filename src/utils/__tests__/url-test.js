@@ -96,7 +96,11 @@ describe('isUrlOnRealm', () => {
   const realm = new URL('https://chat.example/');
   for (const url of exampleUrls) {
     test(`handles ${url}`, () => {
-      expect(isUrlOnRealm(url, realm)).toEqual(new URL(url, realm).href.startsWith(realm.href));
+      const resolved = new URL(url, realm);
+      // Both `url` itself...
+      expect(isUrlOnRealm(url, realm)).toEqual(resolved.href.startsWith(realm.href));
+      // ... and using it to get an absolute URL that may happen to be on `realm`.
+      expect(isUrlOnRealm(resolved.href, realm)).toEqual(resolved.href.startsWith(realm.href));
     });
   }
 });
@@ -145,24 +149,6 @@ describe('getResource', () => {
     };
     const resource = getResource('https://another.com/img.gif', exampleAuth);
     expect(resource).toEqual(expectedResult);
-  });
-});
-
-describe('isUrlOnRealm', () => {
-  const realm = new URL('https://example.com');
-
-  test('when link is on realm, return true', () => {
-    expect(isUrlOnRealm('/#narrow/stream/jest', realm)).toBe(true);
-
-    expect(isUrlOnRealm('https://example.com/#narrow/stream/jest', realm)).toBe(true);
-
-    expect(isUrlOnRealm('#narrow/#near/1', realm)).toBe(true);
-  });
-
-  test('when link is on not realm, return false', () => {
-    expect(isUrlOnRealm('https://demo.example.com', realm)).toBe(false);
-
-    expect(isUrlOnRealm('www.google.com', realm)).toBe(false);
   });
 });
 
