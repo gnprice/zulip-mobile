@@ -41,6 +41,7 @@ const urlClassifierCases = {
     '/',
     '/foo/bar',
     ' /foo',
+    // ' \\x', // our `URL` gets this one wrong 😬 cf https://github.com/nodejs/node/issues/36559
     '/.//path',
     '/../localhost/',
     '/:23',
@@ -53,6 +54,7 @@ const urlClassifierCases = {
     '///test',
     '//www.example2.com',
     '/\\/a/b',
+    '/\\///\\\\\\/x',
     '.',
     '..',
     './/path',
