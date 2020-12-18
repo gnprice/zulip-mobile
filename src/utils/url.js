@@ -148,7 +148,7 @@ export const resolveUrl = (url: string, realm: URL): string => {
 
   // A scheme-relative URL, like `//chat.example/foo/bar`.
   // `new URL(…)` would borrow the scheme from `realm` but nothing else.
-  return `${realm.protocol}:${url}`;
+  return `${realm.protocol}${url}`;
 };
 
 /**

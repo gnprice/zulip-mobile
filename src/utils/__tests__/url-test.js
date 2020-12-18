@@ -10,6 +10,7 @@ import {
   isUrlAbsolute,
   isUrlRelative,
   isUrlPathAbsolute,
+  resolveUrl,
 } from '../url';
 import type { Auth } from '../../types';
 import type { AutocompletionDefaults } from '../url';
@@ -19,17 +20,31 @@ const urlClassifierCases = {
   //   https://github.com/web-platform-tests/wpt/blob/master/url/resources/urltestdata.json
   // which is referred to at the top of the URL Standard.
   absolute: ['https://example.com/foo', 'a1234567890-+.:foo/bar', 'AB://c/d'],
-  pathAbsolute: ['/', '/foo/bar', '/.//path', '/../localhost/', '/:23', '/a/ /c'],
+  pathAbsolute: [
+    '/',
+    '/foo/bar',
+    '/.//path',
+    '/../localhost/',
+    '/:23',
+    '/a/ /c',
+    '/#narrow/stream/general',
+  ],
   otherRelative: [
     '//example.com/foo',
     '//foo/bar',
     '///test',
     '//www.example2.com',
+    '.',
+    '..',
+    './/path',
+    '../localhost/',
     '10.0.0.7:8080/foo.html',
     'a!@$*=/foo.html',
+    '?q=x/y/z',
     '#β',
   ],
 };
+const exampleUrls = Object.keys(urlClassifierCases).flatMap(key => urlClassifierCases[key]);
 
 const urlClassifierData = Object.keys(urlClassifierCases).flatMap(key =>
   urlClassifierCases[key].map(url => ({
@@ -64,6 +79,15 @@ describe('isUrlPathAbsolute', () => {
     const { url, pathAbsolute: expected } = case_;
     test(`${expected ? 'accept' : 'reject'} ${url}`, () => {
       expect(isUrlPathAbsolute(url)).toEqual(expected);
+    });
+  }
+});
+
+describe('resolveUrl', () => {
+  const realm = new URL('https://chat.example/');
+  for (const url of exampleUrls) {
+    test(`handles ${url}`, () => {
+      expect(new URL(resolveUrl(url, realm)).href).toEqual(new URL(url, realm).href);
     });
   }
 });
