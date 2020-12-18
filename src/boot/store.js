@@ -384,6 +384,10 @@ const customReplacer = (key, value) => {
   return defaultReplacer(key, value);
 };
 
+const replacer = function replacer(key, value) {
+  return customReplacer(key, value);
+};
+
 const defaultReviver = function defaultReviver(key, value) {
   if (typeof value === 'object' && value !== null && '__serializedType__' in value) {
     const data = value.data;
@@ -420,18 +424,8 @@ const customReviver = (key, value) => {
   return defaultReviver(key, value);
 };
 
-// Recently inlined from
-// node_modules/remotedev-serialize/immutable/serialize.js; this will
-// change over the next few commits.
-const serialize = function serialize() {
-  return {
-    replacer(key, value) {
-      return customReplacer(key, value);
-    },
-    reviver(key, value) {
-      return customReviver(key, value);
-    },
-  };
+const reviver = function reviver(key, value) {
+  return customReviver(key, value);
 };
 
 /** PRIVATE: Exported only for tests. */
@@ -439,7 +433,7 @@ const serialize = function serialize() {
 // node_modules/remotedev-serialize/immutable/index.js; this will
 // change over the next few commits.
 export const stringify = function (data: mixed): string {
-  return jsan.stringify(data, serialize().replacer, null, jsanOptions);
+  return jsan.stringify(data, replacer, null, jsanOptions);
 };
 
 /** PRIVATE: Exported only for tests. */
@@ -447,7 +441,7 @@ export const stringify = function (data: mixed): string {
 // node_modules/remotedev-serialize/immutable/index.js; this will
 // change over the next few commits.
 export const parse = function (data: string): mixed {
-  return jsan.parse(data, serialize().reviver);
+  return jsan.parse(data, reviver);
 };
 
 /**
