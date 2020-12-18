@@ -52,6 +52,7 @@ const urlClassifierCases = {
     '//foo/bar',
     '///test',
     '//www.example2.com',
+    '/\\/a/b',
     '.',
     '..',
     './/path',

@@ -45,7 +45,9 @@ const urlStripWhitespace = (url: string) =>
   url
     .replace(/^[\x00-\x20]+/, '')
     .replace(/[\x00-\x20]+$/, '')
-    .replace(/[\x09\x0a\x0d]/g, '');
+    .replace(/[\x09\x0a\x0d]/g, '')
+    // TODO HACK rename/redoc for this
+    .replace(/^\/*\\[\/\\]*/, s => s.replace(/\\/g, '/'));
 
 /**
  * Test for an absolute URL, assuming a valid URL.
@@ -201,9 +203,14 @@ export const resolveUrl = (url: string, realm: URL): string => {
  *
  * If `url` is not a valid URL string, the result is unspecified.
  */
-export const isUrlOnRealm = (url: string, realm: URL): boolean => {
+export const isUrlOnRealm = (url_: string, realm: URL): boolean => {
   // See the URL Standard for the definitions of quoted terms:
   //   https://url.spec.whatwg.org/#url-writing
+
+  // This is a no-op for valid URL strings.  But it means
+  //  ... TODO WORK HERE
+  // provided that `new URL(url, realm)` returns a URL at all.
+  const url = urlStripWhitespace(url_);
 
   if (isUrlAbsolute(url)) {
     // An absolute URL (that is, "absolute-URL-with-fragment string").
