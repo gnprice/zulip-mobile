@@ -23,8 +23,6 @@ const urlClassifierCases = {
   otherRelative: [
     '//example.com/foo',
     '//foo/bar',
-    '//',
-    '///',
     '///test',
     '//www.example2.com',
     '10.0.0.7:8080/foo.html',
