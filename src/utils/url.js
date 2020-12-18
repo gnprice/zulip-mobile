@@ -215,6 +215,21 @@ export const isUrlOnRealm = (url_: string, realm: URL): boolean => {
   if (isUrlAbsolute(url)) {
     // An absolute URL (that is, "absolute-URL-with-fragment string").
     // `new URL(url, realm)` would be equivalent to just `new URL(url)`.
+    //
+    // TODO this would need backslashes fixed up to the start of the path...
+    //   and oh gosh the host.  Oh gosh the whole authority.
+    //   I guess a fast path for the "yes" case could do this check.
+    //
+    // TODO but even valid URL strings may not be canonical here!
+    //   even when equivalent to a nice normal Zulip realm URL!
+    //   E.g. https://chat.example:443/ and https://chat.example:000443/
+    //   both parse to the same URL as https://chat.example/ .
+    //   Ditto https://%63hat.example/ and https://chat%2eexample/ .
+    //   And https://ℭʰaᵀ.eⅩªm🄿ₗℰ/ , and maybe more TR46 things.
+    //
+    //   Probably at messageLinkPress, and likely any future callsites,
+    //   the right answer is to fail to notice those are a match, and just
+    //   treat them as if they linked off somewhere else.
     return url.startsWith(realm.href);
   }
   // A relative URL string of some kind.  In the standard's terms: a
@@ -231,6 +246,8 @@ export const isUrlOnRealm = (url_: string, realm: URL): boolean => {
   // A scheme-relative URL.  (These are pretty uncommon; they look like
   // `//chat.example.org/foo`.)  In this case, `new URL(url, realm)` would
   // borrow the scheme from `realm` but nothing else.
+  //
+  // TODO this is subject to the same concerns as the absolute case.
   const resolvedUrl = realm.protocol + url;
   return resolvedUrl.startsWith(realm.href);
 };
