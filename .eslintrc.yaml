@@ -65,6 +65,7 @@ rules:
   no-bitwise: off
   no-confusing-arrow: off
   no-continue: off
+  no-control-regex: off
   no-plusplus: off
   no-nested-ternary: off
 
