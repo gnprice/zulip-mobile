@@ -28,10 +28,18 @@ const urlClassifierCases = {
   //     # print inputs that aren't errors (there are ~500 of them)
   //   $ jq -c '.[] | objects | select(.href) | { base, input }' urltestdata.json
 
-  absolute: ['https://example.com/foo', 'a1234567890-+.:foo/bar', 'AB://c/d'],
+  absolute: [
+    'https://example.com/foo',
+    'a1234567890-+.:foo/bar',
+    'AB://c/d',
+    'a:\t foo.com',
+    '  File:c|////foo\\bar.html',
+    'http://f:21/ b ? d # e ',
+  ],
   pathAbsolute: [
     '/',
     '/foo/bar',
+    ' /foo',
     '/.//path',
     '/../localhost/',
     '/:23',
@@ -49,6 +57,9 @@ const urlClassifierCases = {
     '../localhost/',
     '10.0.0.7:8080/foo.html',
     'a!@$*=/foo.html',
+    '\t   :foo.com   \n',
+    ' foo.com  ',
+    '  \t',
     '?q=x/y/z',
     '#β',
   ],

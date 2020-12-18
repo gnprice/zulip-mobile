@@ -30,6 +30,24 @@ export const encodeParamsForUrl = (params: UrlParams): string =>
     .join('&');
 
 /**
+ * PRIVATE.  Remove whitespace as done at the start of URL parsing.
+ *
+ * This corresponds to the modifications the URL parser makes to its input
+ * before entering its main state-machine loop, per the URL Standard:
+ *   https://url.spec.whatwg.org/#url-parsing
+ *
+ * A string where this has any effect is not a valid URL string.  So for our
+ * other functions whose behavior is unspecified on such strings, this isn't
+ * required... but because the URL parser does accept such strings, they may
+ * be realistic inputs we get.
+ */
+const urlStripWhitespace = (url: string) =>
+  url
+    .replace(/^[\x00-\x20]+/, '')
+    .replace(/[\x00-\x20]+$/, '')
+    .replace(/\x09\x0a\x0d/g, '');
+
+/**
  * Test for an absolute URL, assuming a valid URL.
  *
  * Specifically, we assume the input is a "valid URL string" as defined by
@@ -39,12 +57,21 @@ export const encodeParamsForUrl = (params: UrlParams): string =>
  *
  * If the input is not a valid URL string, the result is unspecified.
  */
-export const isUrlAbsolute = (url: string): boolean =>
+export const isUrlAbsolute = (url: string): boolean => {
+  // This is a no-op for valid URL strings.  But it means that this
+  // function's actual behavior even for invalid URL strings is:
+  //   isUrlAbsolute(url) ===
+  //      (forall base:
+  //         new URL(url, base).href === new URL(url).href)
+  // provided that `new URL(url)` returns a URL at all.
+  const cleanUrl = urlStripWhitespace(url);
+
   // True just if the string starts with a "URL-scheme string", then `:`.
   // Every "absolute-URL string" must do so.
   // Every "relative-URL string" must not do so: either it starts with a
   //   "path-relative-scheme-less-URL string", or it starts with `/`.
-  url.match(/^[a-zA-Z][a-zA-Z0-9+.-]*:/) !== null;
+  return cleanUrl.match(/^[a-zA-Z][a-zA-Z0-9+.-]*:/) !== null;
+};
 
 /**
  * Test for a relative URL string, assuming a valid URL.
@@ -73,14 +100,20 @@ export const isUrlRelative = (url: string): boolean => !isUrlAbsolute(url);
  * true (for a valid URL), `isUrlRelative` will always also return true and
  * `isUrlAbsolute` will return false.
  */
-export const isUrlPathAbsolute = (url: string): boolean =>
+export const isUrlPathAbsolute = (url: string): boolean => {
+  // This is a no-op for valid URL strings.  But it means
+  //  ... TODO WORK HERE
+  // provided that `new URL(url)` returns a URL at all.
+  const cleanUrl = urlStripWhitespace(url);
+
   // A "path-absolute URL string" must start with `/` and not `//`.
   // On the other hand:
   //  * a "path-relative scheme-less-URL string" must not start with `/`;
   //  * the other forms of "relative-URL string" all must start with `//`.
-  !!url.match(/^\/($|[^\/])/); // eslint-disable-line no-useless-escape
-// ESLint says one of these slashes could be written unescaped.
-//   But that seems like a recipe for confusion, so we escape them both.
+  return !!cleanUrl.match(/^\/($|[^\/])/); // eslint-disable-line no-useless-escape
+  // ESLint says one of these slashes could be written unescaped.
+  //   But that seems like a recipe for confusion, so we escape them both.
+};
 
 /** Just like `new URL`, but on error return undefined instead of throwing. */
 export const tryParseUrl = (url: string, base?: string | URL): URL | void => {
@@ -121,21 +154,26 @@ export const resolveUrl = (url: string, realm: URL): string => {
   // See the URL Standard for the definitions of quoted terms:
   //   https://url.spec.whatwg.org/#url-writing
 
-  if (isUrlAbsolute(url)) {
+  // This is a no-op for valid URL strings.  But it means
+  //  ... TODO WORK HERE
+  // provided that `new URL(url, realm)` returns a URL at all.
+  const cleanUrl = urlStripWhitespace(url);
+
+  if (isUrlAbsolute(cleanUrl)) {
     // An absolute URL (that is, "absolute-URL-with-fragment string").
     // `new URL(…)` would ignore the base URL.
-    return url;
+    return cleanUrl;
   }
 
-  if (isUrlPathAbsolute(url)) {
+  if (isUrlPathAbsolute(cleanUrl)) {
     // The kind of relative URL we routinely use, like `/foo/bar`.
     // `new URL(…)` would borrow all of `realm` before the path -- which is
     // all of `realm` except its trailing slash.  This coincides with
     // `realm.origin`.
-    return realm.origin + url;
+    return realm.origin + cleanUrl;
   }
 
-  if (!url.startsWith('//')) {
+  if (!cleanUrl.startsWith('//')) {
     // A path-relative URL (that is, a "relative-URL-with-fragment string"
     // in which the "relative-URL string" is a "path-relative URL string".)
     // Now `new URL(…)` would borrow all of `realm`, including its trailing
@@ -143,12 +181,12 @@ export const resolveUrl = (url: string, realm: URL): string => {
     //
     // We're relying heavily here on the assumption that `realm` has a path
     // of just `/`, empty query, and empty fragment.
-    return realm.href + url;
+    return realm.href + cleanUrl;
   }
 
   // A scheme-relative URL, like `//chat.example/foo/bar`.
   // `new URL(…)` would borrow the scheme from `realm` but nothing else.
-  return `${realm.protocol}${url}`;
+  return `${realm.protocol}${cleanUrl}`;
 };
 
 /**
