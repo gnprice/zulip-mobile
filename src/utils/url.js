@@ -186,7 +186,7 @@ export const isUrlOnRealm = (url: string, realm: URL): boolean => {
   // A scheme-relative URL.  (These are pretty uncommon; they look like
   // `//chat.example.org/foo`.)  In this case, `new URL(url, realm)` would
   // borrow the scheme from `realm` but nothing else.
-  const resolvedUrl = `${realm.protocol}:${url}`;
+  const resolvedUrl = realm.protocol + url;
   return resolvedUrl.startsWith(realm.href);
 };
 
