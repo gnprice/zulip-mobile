@@ -392,7 +392,6 @@ const replacer = function replacer(key, value) {
 };
 
 const reviver = function reviver(key, value) {
-  // customReviver, previously
   if (value !== null && typeof value === 'object' && SERIALIZED_TYPE_FIELD_NAME in value) {
     const data = value.data;
     switch (value[SERIALIZED_TYPE_FIELD_NAME]) {
@@ -406,15 +405,6 @@ const reviver = function reviver(key, value) {
         return UploadedAvatarURL.deserialize(data);
       case 'FallbackAvatarURL':
         return FallbackAvatarURL.deserialize(data);
-      default:
-      // Fall back to defaultReviver, below
-    }
-  }
-
-  // defaultReviver, previously
-  if (typeof value === 'object' && value !== null && SERIALIZED_TYPE_FIELD_NAME in value) {
-    const data = value.data;
-    switch (value[SERIALIZED_TYPE_FIELD_NAME]) {
       case 'ImmutableMap':
         return Immutable.Map(data);
       case 'Object':
