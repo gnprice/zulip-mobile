@@ -92,6 +92,15 @@ describe('resolveUrl', () => {
   }
 });
 
+describe('isUrlOnRealm', () => {
+  const realm = new URL('https://chat.example/');
+  for (const url of exampleUrls) {
+    test(`handles ${url}`, () => {
+      expect(isUrlOnRealm(url, realm)).toEqual(new URL(url, realm).href.startsWith(realm.href));
+    });
+  }
+});
+
 describe('getResource', () => {
   test('when uri contains domain, do not change, add auth headers', () => {
     const auth: Auth = {
