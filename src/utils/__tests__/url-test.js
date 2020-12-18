@@ -17,8 +17,17 @@ import type { AutocompletionDefaults } from '../url';
 
 const urlClassifierCases = {
   // These data are mostly a selection from this resource:
-  //   https://github.com/web-platform-tests/wpt/blob/master/url/resources/urltestdata.json
+  //   https://github.com/web-platform-tests/wpt/blob/851d3386a/url/resources/urltestdata.json
   // which is referred to at the top of the URL Standard.
+  //
+  // To browse that for more ideas, try:
+  //     # download
+  //   $ wget -q https://raw.githubusercontent.com/web-platform-tests/wpt/master/url/resources/urltestdata.json
+  //     # neuter invalid JSON in one test case
+  //   $ perl -i -pe 's/\\u[dD]/ud/g' urltestdata.json
+  //     # print inputs that aren't errors (there are ~500 of them)
+  //   $ jq -c '.[] | objects | select(.href) | { base, input }' urltestdata.json
+
   absolute: ['https://example.com/foo', 'a1234567890-+.:foo/bar', 'AB://c/d'],
   pathAbsolute: [
     '/',
