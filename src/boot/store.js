@@ -356,7 +356,6 @@ const jsanOptions = {
 };
 
 const replacer = function replacer(key, value) {
-  // customReplacer, previously
   if (value instanceof ZulipVersion) {
     return { data: value.raw(), [SERIALIZED_TYPE_FIELD_NAME]: 'ZulipVersion' };
   } else if (value instanceof URL) {
@@ -373,13 +372,9 @@ const replacer = function replacer(key, value) {
       data: FallbackAvatarURL.serialize(value),
       [SERIALIZED_TYPE_FIELD_NAME]: 'FallbackAvatarURL',
     };
-  }
-
-  // defaultReplacer, previously
-  if (Immutable.Map.isMap(value)) {
+  } else if (Immutable.Map.isMap(value)) {
     return mark(value, 'ImmutableMap', 'toObject');
-  }
-  if (typeof value === 'object' && value !== null && SERIALIZED_TYPE_FIELD_NAME in value) {
+  } else if (typeof value === 'object' && value !== null && SERIALIZED_TYPE_FIELD_NAME in value) {
     const copy = { ...value };
     delete copy[SERIALIZED_TYPE_FIELD_NAME];
     return {
