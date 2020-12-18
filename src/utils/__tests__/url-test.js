@@ -35,6 +35,7 @@ const urlClassifierCases = {
     'a:\t foo.com',
     '  File:c|////foo\\bar.html',
     'http://f:21/ b ? d # e ',
+    'h\tt\nt\rp://h\to\ns\rt:9\t0\n0\r0/p\ta\nt\rh?q\tu\ne\rry#f\tr\na\rg',
   ],
   pathAbsolute: [
     '/',

@@ -45,7 +45,7 @@ const urlStripWhitespace = (url: string) =>
   url
     .replace(/^[\x00-\x20]+/, '')
     .replace(/[\x00-\x20]+$/, '')
-    .replace(/\x09\x0a\x0d/g, '');
+    .replace(/[\x09\x0a\x0d]/g, '');
 
 /**
  * Test for an absolute URL, assuming a valid URL.
