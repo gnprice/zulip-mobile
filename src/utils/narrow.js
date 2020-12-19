@@ -44,7 +44,7 @@ export const HOME_NARROW_STR: string = keyFromNarrow(HOME_NARROW);
 /**
  * A PM narrow, either 1:1 or group.
  *
- * The list of users represented in `emails` must agree with what
+ * The list of users represented in the input must agree with what
  * `pmKeyRecipientsFromMessage` would return.  Effectively this means:
  *  * it actually comes from `pmKeyRecipientsFromMessage`, or one of its
  *    relatives in `src/utils/recipient.js`;
