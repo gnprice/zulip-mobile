@@ -57,19 +57,19 @@ describe('narrowsReducer', () => {
       const action = deepFreeze({
         ...eg.eventNewMessageActionBase,
         message,
-        caughtUp: {
-          [HOME_NARROW_STR]: {
-            older: false,
-            newer: true,
-          },
-        },
       });
 
       const expectedState = Immutable.Map({
         [HOME_NARROW_STR]: [1, 2, 3],
       });
 
-      const newState = narrowsReducer(initialState, action, eg.plusReduxState);
+      const newState = narrowsReducer(
+        initialState,
+        action,
+        eg.reduxStatePlus({
+          caughtUp: { [HOME_NARROW_STR]: { older: false, newer: true } },
+        }),
+      );
 
       expect(newState).toEqual(expectedState);
       expect(newState).not.toBe(initialState);
@@ -104,15 +104,18 @@ describe('narrowsReducer', () => {
     const action = deepFreeze({
       ...eg.eventNewMessageActionBase,
       message,
-      caughtUp: {
-        [ALL_PRIVATE_NARROW_STR]: { older: true, newer: true },
-      },
     });
     const expectedState = Immutable.Map({
       [ALL_PRIVATE_NARROW_STR]: [1],
     });
 
-    const actualState = narrowsReducer(initialState, action, eg.plusReduxState);
+    const actualState = narrowsReducer(
+      initialState,
+      action,
+      eg.reduxStatePlus({
+        caughtUp: { [ALL_PRIVATE_NARROW_STR]: { older: true, newer: true } },
+      }),
+    );
 
     expect(actualState).toEqual(expectedState);
   });
@@ -125,23 +128,22 @@ describe('narrowsReducer', () => {
     const action = deepFreeze({
       ...eg.eventNewMessageActionBase,
       message,
-      caughtUp: {
-        [HOME_NARROW_STR]: {
-          older: false,
-          newer: false,
-        },
-        [topicNarrowStr]: {
-          older: false,
-          newer: true,
-        },
-      },
     });
     const expectedState = Immutable.Map({
       [HOME_NARROW_STR]: [1, 2],
       [topicNarrowStr]: [2, message.id],
     });
 
-    const newState = narrowsReducer(initialState, action, eg.plusReduxState);
+    const newState = narrowsReducer(
+      initialState,
+      action,
+      eg.reduxStatePlus({
+        caughtUp: {
+          [HOME_NARROW_STR]: { older: false, newer: false },
+          [topicNarrowStr]: { older: false, newer: true },
+        },
+      }),
+    );
 
     expect(newState).toEqual(expectedState);
   });
@@ -163,10 +165,6 @@ describe('narrowsReducer', () => {
     const action = deepFreeze({
       ...eg.eventNewMessageActionBase,
       message,
-      caughtUp: {
-        [HOME_NARROW_STR]: { older: false, newer: true },
-        [narrowWithSelfStr]: { older: false, newer: true },
-      },
     });
 
     const expectedState = Immutable.Map({
@@ -174,7 +172,16 @@ describe('narrowsReducer', () => {
       [narrowWithSelfStr]: [message.id],
     });
 
-    const newState = narrowsReducer(initialState, action, eg.plusReduxState);
+    const newState = narrowsReducer(
+      initialState,
+      action,
+      eg.reduxStatePlus({
+        caughtUp: {
+          [HOME_NARROW_STR]: { older: false, newer: true },
+          [narrowWithSelfStr]: { older: false, newer: true },
+        },
+      }),
+    );
 
     expect(newState).toEqual(expectedState);
     expect(newState).not.toBe(initialState);
@@ -195,11 +202,6 @@ describe('narrowsReducer', () => {
     const action = deepFreeze({
       ...eg.eventNewMessageActionBase,
       message,
-      caughtUp: {
-        [HOME_NARROW_STR]: { older: false, newer: true },
-        [streamNarrowStr]: { older: false, newer: true },
-        [topicNarrowStr]: { older: false, newer: true },
-      },
     });
 
     const expectedState = Immutable.Map({
@@ -211,7 +213,17 @@ describe('narrowsReducer', () => {
       [groupNarrowStr]: [2, 4],
     });
 
-    const newState = narrowsReducer(initialState, action, eg.plusReduxState);
+    const newState = narrowsReducer(
+      initialState,
+      action,
+      eg.reduxStatePlus({
+        caughtUp: {
+          [HOME_NARROW_STR]: { older: false, newer: true },
+          [streamNarrowStr]: { older: false, newer: true },
+          [topicNarrowStr]: { older: false, newer: true },
+        },
+      }),
+    );
 
     expect(newState).toEqual(expectedState);
     expect(newState).not.toBe(initialState);
@@ -225,16 +237,19 @@ describe('narrowsReducer', () => {
     const action = deepFreeze({
       ...eg.eventNewMessageActionBase,
       message,
-      caughtUp: {
-        [HOME_NARROW_STR]: { older: false, newer: true },
-      },
     });
 
     const expectedState = Immutable.Map({
       [HOME_NARROW_STR]: [1, message.id],
     });
 
-    const newState = narrowsReducer(initialState, action, eg.plusReduxState);
+    const newState = narrowsReducer(
+      initialState,
+      action,
+      eg.reduxStatePlus({
+        caughtUp: { [HOME_NARROW_STR]: { older: false, newer: true } },
+      }),
+    );
 
     expect(newState).toEqual(expectedState);
     expect(newState).not.toBe(initialState);
@@ -260,7 +275,6 @@ describe('narrowsReducer', () => {
     const action = deepFreeze({
       ...eg.eventNewMessageActionBase,
       message,
-      caughtUp: initialState.map(_ => ({ older: false, newer: true })).toObject(),
     });
 
     const expectedState = Immutable.Map({
@@ -272,7 +286,13 @@ describe('narrowsReducer', () => {
       [groupNarrowStr]: [2, 4],
     });
 
-    const newState = narrowsReducer(initialState, action, eg.plusReduxState);
+    const newState = narrowsReducer(
+      initialState,
+      action,
+      eg.reduxStatePlus({
+        caughtUp: initialState.map(_ => ({ older: false, newer: true })).toObject(),
+      }),
+    );
 
     expect(newState).toEqual(expectedState);
     expect(newState).not.toBe(initialState);
