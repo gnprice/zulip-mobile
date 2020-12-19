@@ -94,6 +94,8 @@ export default (state: GlobalState, event: $FlowFixMe): EventAction => {
           }),
         },
         local_message_id: event.local_message_id,
+        caughtUp: state.caughtUp,
+        ownUserId: getOwnUserId(state),
       };
 
     // Before server feature level 13, or if we don't specify the
