@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-import type { UserId, UserPresence, UserStatusMapObject, Dispatch } from '../types';
+import type { UserId, UserPresence, UserStatus, Dispatch } from '../types';
 import { createStyleSheet } from '../styles';
 import { connect } from '../react-redux';
 import { statusFromPresenceAndUserStatus } from '../utils/presence';
@@ -95,18 +95,19 @@ const PresenceStatusIndicatorUnavailable = () => (
   </View>
 );
 
-type PropsFromConnect = {|
-  dispatch: Dispatch,
-  presence: Map<UserId, UserPresence>,
-  userStatus: UserStatusMapObject,
+type SelectorProps = {|
+  presence: void | UserPresence,
+  userStatus: void | UserStatus,
 |};
 
 type Props = $ReadOnly<{|
-  ...PropsFromConnect,
   style?: ViewStyleProp,
   userId: UserId,
   hideIfOffline: boolean,
   useOpaqueBackground: boolean,
+
+  dispatch: Dispatch,
+  ...SelectorProps,
 |}>;
 
 /**
@@ -116,19 +117,13 @@ type Props = $ReadOnly<{|
  * * gray if 'offline'
  *
  * @prop [style] - Style object for additional customization.
- * @prop email - email of the user whose status we are showing.
  * @prop hideIfOffline - Do not render for 'offline' state.
  */
 class PresenceStatusIndicator extends PureComponent<Props> {
   render() {
-    const { userId, presence, style, hideIfOffline, userStatus, useOpaqueBackground } = this.props;
+    const { presence, style, hideIfOffline, userStatus, useOpaqueBackground } = this.props;
 
-    const userPresence = presence.get(userId);
-    if (!userPresence || !userPresence.aggregated) {
-      return null;
-    }
-
-    const status = statusFromPresenceAndUserStatus(userPresence, userStatus[userId]);
+    const status = statusFromPresenceAndUserStatus(presence, userStatus);
 
     if (hideIfOffline && status === 'offline') {
       return null;
@@ -170,7 +165,7 @@ class PresenceStatusIndicator extends PureComponent<Props> {
   }
 }
 
-export default connect(state => ({
-  presence: getPresence(state),
-  userStatus: getUserStatus(state),
+export default connect((state, props) => ({
+  presence: getPresence(state).get(props.userId),
+  userStatus: getUserStatus(state)[props.userId],
 }))(PresenceStatusIndicator);
