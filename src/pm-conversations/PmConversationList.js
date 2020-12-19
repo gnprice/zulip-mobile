@@ -19,7 +19,7 @@ const styles = createStyleSheet({
 
 type Props = $ReadOnly<{|
   dispatch: Dispatch,
-  conversations: PmConversationData[],
+  pmConversations: PmConversationData[],
 |}>;
 
 /**
@@ -35,13 +35,13 @@ export default class PmConversationList extends PureComponent<Props> {
   };
 
   render() {
-    const { conversations } = this.props;
+    const { pmConversations } = this.props;
 
     return (
       <FlatList
         style={styles.list}
         initialNumToRender={20}
-        data={conversations}
+        data={pmConversations}
         keyExtractor={item => item.key}
         renderItem={({ item }) => {
           const users = item.keyRecipients;

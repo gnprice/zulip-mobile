@@ -41,7 +41,7 @@ type Props = $ReadOnly<{|
  * The "PMs" page in the main tabs navigation.
  * */
 export default function PmConversationsScreen(props: Props) {
-  const conversations = useSelector(getRecentConversations);
+  const pmConversations = useSelector(getRecentConversations);
   const dispatch = useDispatch();
   const context = useContext(ThemeContext);
 
@@ -68,10 +68,10 @@ export default function PmConversationsScreen(props: Props) {
         />
       </View>
       <LoadingBanner />
-      {conversations.length === 0 ? (
+      {pmConversations.length === 0 ? (
         <Label style={styles.emptySlate} text="No recent conversations" />
       ) : (
-        <PmConversationList dispatch={dispatch} conversations={conversations} />
+        <PmConversationList dispatch={dispatch} pmConversations={pmConversations} />
       )}
     </View>
   );

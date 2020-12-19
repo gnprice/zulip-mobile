@@ -14,7 +14,7 @@ import { getUnreadConversations, getUnreadStreamsAndTopicsSansMuted } from '../s
 import { doNarrow } from '../actions';
 
 type Props = $ReadOnly<{|
-  conversations: PmConversationData[],
+  pmConversations: PmConversationData[],
   dispatch: Dispatch,
   unreadStreamsAndTopics: UnreadStreamItem[],
 |}>;
@@ -29,19 +29,19 @@ class UnreadCards extends PureComponent<Props> {
   };
 
   render() {
-    const { conversations, dispatch, unreadStreamsAndTopics } = this.props;
+    const { pmConversations, dispatch, unreadStreamsAndTopics } = this.props;
     type Card =
       | UnreadStreamItem
       | { key: 'private', data: Array<React$ElementConfig<typeof PmConversationList>> };
     const unreadCards: Array<Card> = [
       {
         key: 'private',
-        data: [{ conversations, dispatch }],
+        data: [{ pmConversations, dispatch }],
       },
       ...unreadStreamsAndTopics,
     ];
 
-    if (unreadStreamsAndTopics.length === 0 && conversations.length === 0) {
+    if (unreadStreamsAndTopics.length === 0 && pmConversations.length === 0) {
       return <SearchEmptyState text="No unread messages" />;
     }
 
@@ -86,6 +86,6 @@ class UnreadCards extends PureComponent<Props> {
 }
 
 export default connect(state => ({
-  conversations: getUnreadConversations(state),
+  pmConversations: getUnreadConversations(state),
   unreadStreamsAndTopics: getUnreadStreamsAndTopicsSansMuted(state),
 }))(UnreadCards);
