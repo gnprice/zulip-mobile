@@ -134,12 +134,15 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
       const { name, color, in_home_view, invite_only, pin_to_top } =
         subscriptionsById.get(stream.stream_id) || NULL_SUBSCRIPTION;
 
+      if (!in_home_view) {
+        return; // i.e., continue
+      }
+
       let streamData = dataByStream.get(stream.stream_id);
       if (!streamData) {
         streamData = {
           key: `stream:${name}`,
           streamName: name,
-          isMuted: !in_home_view,
           isPrivate: invite_only,
           isPinned: pin_to_top,
           color,
@@ -193,7 +196,7 @@ export const getUnreadStreamsAndTopicsSansMuted: Selector<UnreadStreamItem[]> = 
         ...streamData,
         topics: streamData.topics.filter(topic => !topic.isMuted),
       }))
-      .filter(streamData => !streamData.isMuted && streamData.topics.length > 0),
+      .filter(streamData => streamData.topics.length > 0),
 );
 
 /** Total number of a certain subset of unreads, plus ??? double-counting. */

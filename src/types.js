@@ -273,7 +273,6 @@ export type UnreadStreamItem = {|
   streamName: string,
   unread: number,
   color: string,
-  isMuted: boolean,
   isPinned: boolean,
   isPrivate: boolean,
   topics: Array<{|

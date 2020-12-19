@@ -58,7 +58,7 @@ class UnreadCards extends PureComponent<Props> {
             <StreamItem
               name={section.streamName}
               iconSize={16}
-              isMuted={section.isMuted}
+              isMuted={false}
               isPrivate={section.isPrivate}
               backgroundColor={section.color}
               unreadCount={section.unread}
@@ -73,7 +73,7 @@ class UnreadCards extends PureComponent<Props> {
             <TopicItem
               name={item.topic}
               stream={section.streamName || ''}
-              isMuted={section.isMuted || item.isMuted}
+              isMuted={item.isMuted}
               isSelected={false}
               unreadCount={item.unread}
               onPress={this.handleTopicPress}
