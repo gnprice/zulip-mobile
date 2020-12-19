@@ -3,12 +3,11 @@ import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-import type { UserId, UserOrBot, UserPresence, UserStatusMapObject, Dispatch } from '../types';
+import type { UserId, UserPresence, UserStatusMapObject, Dispatch } from '../types';
 import { createStyleSheet } from '../styles';
 import { connect } from '../react-redux';
 import { statusFromPresenceAndUserStatus } from '../utils/presence';
 import { getPresence, getUserStatus } from '../selectors';
-import { getAllUsersByEmail } from '../users/userSelectors';
 import { ensureUnreachable } from '../types';
 
 const styles = createStyleSheet({
@@ -99,14 +98,13 @@ const PresenceStatusIndicatorUnavailable = () => (
 type PropsFromConnect = {|
   dispatch: Dispatch,
   presence: Map<UserId, UserPresence>,
-  allUsersByEmail: Map<string, UserOrBot>,
   userStatus: UserStatusMapObject,
 |};
 
 type Props = $ReadOnly<{|
   ...PropsFromConnect,
   style?: ViewStyleProp,
-  email: string,
+  userId: UserId,
   hideIfOffline: boolean,
   useOpaqueBackground: boolean,
 |}>;
@@ -123,27 +121,14 @@ type Props = $ReadOnly<{|
  */
 class PresenceStatusIndicator extends PureComponent<Props> {
   render() {
-    const {
-      email,
-      presence,
-      style,
-      hideIfOffline,
-      allUsersByEmail,
-      userStatus,
-      useOpaqueBackground,
-    } = this.props;
+    const { userId, presence, style, hideIfOffline, userStatus, useOpaqueBackground } = this.props;
 
-    const user = allUsersByEmail.get(email);
-    if (!user) {
-      return null;
-    }
-
-    const userPresence = presence.get(user.user_id);
+    const userPresence = presence.get(userId);
     if (!userPresence || !userPresence.aggregated) {
       return null;
     }
 
-    const status = statusFromPresenceAndUserStatus(userPresence, userStatus[user.user_id]);
+    const status = statusFromPresenceAndUserStatus(userPresence, userStatus[userId]);
 
     if (hideIfOffline && status === 'offline') {
       return null;
@@ -187,6 +172,5 @@ class PresenceStatusIndicator extends PureComponent<Props> {
 
 export default connect(state => ({
   presence: getPresence(state),
-  allUsersByEmail: getAllUsersByEmail(state),
   userStatus: getUserStatus(state),
 }))(PresenceStatusIndicator);
