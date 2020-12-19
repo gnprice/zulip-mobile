@@ -9,7 +9,7 @@ import {
   EVENT_MESSAGE_DELETE,
   EVENT_UPDATE_MESSAGE_FLAGS,
 } from '../actionConstants';
-import { addItemsToStreamArray, removeItemsDeeply } from './unreadHelpers';
+import { removeItemsDeeply } from './unreadHelpers';
 import { NULL_ARRAY } from '../nullObjects';
 import { getOwnUserId } from '../users/userSelectors';
 
@@ -24,12 +24,41 @@ const eventNewMessage = (state, action, globalState) => {
     return state;
   }
 
-  return addItemsToStreamArray(
-    state,
-    [action.message.id],
-    action.message.stream_id,
-    action.message.subject,
-  );
+  const topic = action.message.subject;
+
+  const index = state.findIndex(s => s.stream_id === action.message.stream_id && s.topic === topic);
+
+  if (index === -1) {
+    return [
+      ...state,
+      {
+        stream_id: action.message.stream_id,
+        topic,
+        unread_message_ids: [action.message.id],
+      },
+    ];
+  }
+
+  const item = state[index];
+
+  const newItems = [action.message.id].filter(x => !item.unread_message_ids.includes(x));
+  const unreadMessageIds =
+    newItems.length > 0
+      ? [...item.unread_message_ids, ...[action.message.id]]
+      : item.unread_message_ids;
+
+  if (item.unread_message_ids === unreadMessageIds) {
+    return state;
+  }
+
+  return [
+    ...state.slice(0, index),
+    {
+      ...item,
+      unread_message_ids: unreadMessageIds,
+    },
+    ...state.slice(index + 1),
+  ];
 };
 
 const eventUpdateMessageFlags = (state, action) => {
