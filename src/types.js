@@ -279,7 +279,6 @@ export type UnreadStreamItem = {|
     key: string,
     topic: string,
     unread: number,
-    isMuted: boolean,
     lastUnreadMsgId: number,
   |}>,
 |};
