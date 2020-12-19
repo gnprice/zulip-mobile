@@ -76,7 +76,7 @@ export default class AvatarItem extends PureComponent<Props> {
               key={user.user_id}
               size={50}
               avatarUrl={user.avatar_url}
-              email={user.email}
+              userId={user.user_id}
             />
           </ComponentWithOverlay>
         </Touchable>

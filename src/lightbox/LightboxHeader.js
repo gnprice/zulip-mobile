@@ -2,6 +2,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text } from 'react-native';
 
+import type { UserId } from '../types';
 import { shortTime, humanDate } from '../utils/date';
 import { createStyleSheet } from '../styles';
 import { UserAvatarWithPresence, Touchable } from '../common';
@@ -41,7 +42,7 @@ const styles = createStyleSheet({
 
 type Props = $ReadOnly<{|
   senderName: string,
-  senderEmail: string, // TODO(email): convert to user ID (after presence data)
+  userId: UserId,
   timestamp: number,
   avatarUrl: AvatarURL,
   onPressBack: () => void,
@@ -51,20 +52,17 @@ type Props = $ReadOnly<{|
  * Shows sender's name and date of photo being displayed.
  *
  * @prop [senderName] - The sender's full name.
- * @prop [avatarUrl]
- * @prop [timestamp]
- * @prop [onPressBack]
  */
 export default class LightboxHeader extends PureComponent<Props> {
   render() {
-    const { onPressBack, senderName, senderEmail, timestamp, avatarUrl } = this.props;
+    const { onPressBack, senderName, userId, timestamp, avatarUrl } = this.props;
     const displayDate = humanDate(new Date(timestamp * 1000));
     const time = shortTime(new Date(timestamp * 1000));
     const subheader = `${displayDate} at ${time}`;
 
     return (
       <View style={styles.wrapper}>
-        <UserAvatarWithPresence size={36} avatarUrl={avatarUrl} email={senderEmail} />
+        <UserAvatarWithPresence size={36} userId={userId} avatarUrl={avatarUrl} />
         <View style={styles.text}>
           <Text style={styles.name} numberOfLines={1}>
             {senderName}

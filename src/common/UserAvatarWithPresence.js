@@ -21,14 +21,14 @@ type Props = $ReadOnly<{|
   avatarUrl: AvatarURL,
   size: number,
   onPress?: () => void,
-  email: string,
+  userId: UserId,
 |}>;
 
 /**
  * A user avatar with a PresenceStatusIndicator in the corner.
  *
  * Prefer `UserAvatarWithPresenceById` over this component: it does the same
- * thing but avoids an email in the component's interface.  Once all callers
+ * thing but provides a more encapsulated interface.  Once all callers
  * have migrated to that version, it'll replace this one.
  *
  * @prop [avatarUrl]
@@ -38,13 +38,13 @@ type Props = $ReadOnly<{|
  */
 export default class UserAvatarWithPresence extends PureComponent<Props> {
   render() {
-    const { avatarUrl, email, size, onPress } = this.props;
+    const { avatarUrl, userId, size, onPress } = this.props;
 
     return (
       <UserAvatar avatarUrl={avatarUrl} size={size} onPress={onPress}>
         <PresenceStatusIndicator
           style={styles.status}
-          email={email}
+          userId={userId}
           hideIfOffline
           useOpaqueBackground
         />
@@ -57,19 +57,14 @@ export default class UserAvatarWithPresence extends PureComponent<Props> {
  * A user avatar with a PresenceStatusIndicator in the corner.
  *
  * Use this in preference to the default export `UserAvatarWithPresence`.
- * We're migrating from that one to this in order to avoid using emails.
+ * We're migrating from that one to this for better encapsulation.
  *
  * @prop [userId]
  * @prop [size]
  * @prop [onPress]
  */
-export function UserAvatarWithPresenceById(
-  props: $ReadOnly<{|
-    ...$Diff<Props, {| avatarUrl: mixed, email: mixed |}>,
-    userId: UserId,
-  |}>,
-) {
-  const { userId, ...restProps } = props;
+export function UserAvatarWithPresenceById(props: $ReadOnly<$Diff<Props, {| avatarUrl: mixed |}>>) {
+  const { userId } = props;
 
   const user = useSelector(state => tryGetUserForId(state, userId));
   if (!user) {
@@ -79,5 +74,5 @@ export function UserAvatarWithPresenceById(
     return null;
   }
 
-  return <UserAvatarWithPresence {...restProps} avatarUrl={user.avatar_url} email={user.email} />;
+  return <UserAvatarWithPresence {...props} avatarUrl={user.avatar_url} />;
 }

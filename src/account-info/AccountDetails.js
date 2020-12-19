@@ -63,7 +63,7 @@ class AccountDetails extends PureComponent<Props> {
         <View style={componentStyles.statusWrapper}>
           <PresenceStatusIndicator
             style={componentStyles.presenceStatusIndicator}
-            email={user.email}
+            userId={user.user_id}
             hideIfOffline={false}
             useOpaqueBackground={false}
           />
