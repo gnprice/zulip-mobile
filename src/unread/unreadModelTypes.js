@@ -1,10 +1,10 @@
 /* @flow strict-local */
 import Immutable from 'immutable';
 
-import type { HuddlesUnreadItem, PmsUnreadItem, StreamUnreadItem } from '../api/apiTypes';
+import type { HuddlesUnreadItem, PmsUnreadItem } from '../api/apiTypes';
 
 // These four are fragments of UnreadState; see below.
-export type UnreadStreamsState = Immutable.List<StreamUnreadItem>;
+export type UnreadStreamsState = Immutable.Map<number, Immutable.Map<string, number[]>>;
 export type UnreadHuddlesState = HuddlesUnreadItem[];
 export type UnreadPmsState = PmsUnreadItem[];
 export type UnreadMentionsState = number[];

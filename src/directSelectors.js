@@ -1,6 +1,4 @@
 /* @flow strict-local */
-import Immutable from 'immutable';
-
 import type {
   GlobalState,
   DraftsState,

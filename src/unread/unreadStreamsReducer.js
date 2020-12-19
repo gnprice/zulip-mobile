@@ -15,7 +15,7 @@ import {
 import { getOwnUserId } from '../users/userSelectors';
 import { removeItemsFromArray } from '../utils/immutability';
 
-const initialState: UnreadStreamsState = Immutable.List();
+const initialState: UnreadStreamsState = Immutable.Map();
 
 const eventNewMessage = (state, action, globalState): UnreadStreamsState => {
   if (action.message.type !== 'stream') {
@@ -26,34 +26,32 @@ const eventNewMessage = (state, action, globalState): UnreadStreamsState => {
     return state;
   }
 
-  const topic = action.message.subject;
+  const { id: message_id, stream_id, subject: topic } = action.message;
 
-  const index = state.findIndex(s => s.stream_id === action.message.stream_id && s.topic === topic);
+  // TODO this can surely be deduped to simplify further; withMutations?
 
-  if (index === -1) {
-    return state.push({
-      stream_id: action.message.stream_id,
-      topic,
-      unread_message_ids: [action.message.id],
-    });
+  const forStream = state.get(stream_id);
+  if (!forStream) {
+    return state.set(stream_id, Immutable.Map().set(topic, [message_id]));
   }
 
-  const item = state.get(index);
-  invariant(item, 'missing item we just found');
+  const forTopic = forStream.get(topic);
+  if (!forTopic) {
+    return state.set(stream_id, forStream.set(topic, [message_id]));
+  }
 
-  if (item.unread_message_ids.includes(action.message.id)) {
+  if (forTopic.includes(message_id)) {
     return state;
   }
 
-  return state.set(index, {
-    ...item,
-    unread_message_ids: [...item.unread_message_ids, action.message.id],
-  });
+  return state.set(stream_id, forStream.set(topic, [...forTopic, message_id]));
 };
 
 const removeItemsDeeply = (state, messageIds): UnreadStreamsState => {
   let haveEmpty = false;
   const filtered = state.withMutations(stateMutable => {
+    // TODO WORK HERE
+
     for (let i = 0; i < state.size; i++) {
       const elt = state.get(i);
       invariant(elt, 'bounds check');
