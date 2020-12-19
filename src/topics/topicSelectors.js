@@ -1,4 +1,5 @@
 /* @flow strict-local */
+import Immutable from 'immutable';
 import { createSelector } from 'reselect';
 
 import type {

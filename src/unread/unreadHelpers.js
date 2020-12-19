@@ -4,6 +4,7 @@ import { addItemsToArray, removeItemsFromArray, filterArray } from '../utils/imm
 
 type SomeUnreadItem = { unread_message_ids: number[] };
 
+/** Remove the given message IDs from unread_message_ids on each item in the array. */
 export function removeItemsDeeply<T: SomeUnreadItem>(objArray: T[], messageIds: number[]): T[] {
   let changed = false;
   const objWithAddedUnreadIds = objArray.map(obj => {
