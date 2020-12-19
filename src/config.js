@@ -1,5 +1,13 @@
 /* @flow strict-local */
+
 const isDevelopment = process.env.NODE_ENV === 'development';
+
+// True just when we're using remote JS debugging.
+// When that's the case, our JS code is actually running in the Chrome
+// that's providing the debugging environment.  As a hack to detect that,
+// we look for the `btoa` global, which isn't present in the JS engine
+// provided by RN for running the actual app.  (At least it isn't in JSC.)
+const isRemoteDebugging = isDevelopment && !!global.btoa;
 
 type Config = {|
   messagesPerRequest: number,
@@ -17,8 +25,8 @@ type Config = {|
 const config: Config = {
   messagesPerRequest: 100,
   messageListThreshold: 4000,
-  enableReduxLogging: isDevelopment && !!global.btoa,
-  enableReduxSlowReducerWarnings: isDevelopment && !!global.btoa,
+  enableReduxLogging: isRemoteDebugging,
+  enableReduxSlowReducerWarnings: isRemoteDebugging,
   enableWebViewErrorDisplay: isDevelopment,
   slowReducersThreshold: 5,
   sentryKey: null, // add DSN here
