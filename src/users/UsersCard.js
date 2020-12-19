@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 
 import * as NavigationService from '../nav/NavigationService';
-import type { Dispatch, PresenceState, User, UserOrBot } from '../types';
+import type { Dispatch, User, UserId, UserOrBot, UserPresence } from '../types';
 import { connect } from '../react-redux';
 import { pm1to1NarrowFromUser } from '../utils/narrow';
 import UserList from './UserList';
@@ -14,7 +14,7 @@ type Props = $ReadOnly<{|
   dispatch: Dispatch,
   users: User[],
   filter: string,
-  presences: PresenceState, // TODO ??
+  presences: Map<UserId, UserPresence>,
 |}>;
 
 class UsersCard extends PureComponent<Props> {

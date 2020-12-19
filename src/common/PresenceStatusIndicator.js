@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-import type { PresenceState, UserOrBot, UserStatusMapObject, Dispatch } from '../types';
+import type { UserId, UserOrBot, UserPresence, UserStatusMapObject, Dispatch } from '../types';
 import { createStyleSheet } from '../styles';
 import { connect } from '../react-redux';
 import { statusFromPresenceAndUserStatus } from '../utils/presence';
@@ -98,7 +98,7 @@ const PresenceStatusIndicatorUnavailable = () => (
 
 type PropsFromConnect = {|
   dispatch: Dispatch,
-  presence: PresenceState,
+  presence: Map<UserId, UserPresence>,
   allUsersByEmail: Map<string, UserOrBot>,
   userStatus: UserStatusMapObject,
 |};
@@ -138,7 +138,7 @@ class PresenceStatusIndicator extends PureComponent<Props> {
       return null;
     }
 
-    const userPresence = presence[user.user_id];
+    const userPresence = presence.get(user.user_id);
     if (!userPresence || !userPresence.aggregated) {
       return null;
     }

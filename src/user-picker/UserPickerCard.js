@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import type { FlatList } from 'react-native';
 import { createSelector } from 'reselect';
 
-import type { User, UserId, UserOrBot, PresenceState, Selector, Dispatch } from '../types';
+import type { User, UserId, UserOrBot, UserPresence, Selector, Dispatch } from '../types';
 import { createStyleSheet } from '../styles';
 import { connect } from '../react-redux';
 import { FloatingActionButton, LineSeparator } from '../common';
@@ -29,7 +29,7 @@ const styles = createStyleSheet({
 type Props = $ReadOnly<{|
   dispatch: Dispatch,
   users: User[],
-  presences: PresenceState,
+  presences: Map<UserId, UserPresence>,
   filter: string,
   onComplete: (selected: UserOrBot[]) => void,
 |}>;
