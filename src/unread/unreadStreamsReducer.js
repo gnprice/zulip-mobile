@@ -41,13 +41,7 @@ const eventNewMessage = (state, action, globalState) => {
 
   const item = state[index];
 
-  const newItems = [action.message.id].filter(x => !item.unread_message_ids.includes(x));
-  const unreadMessageIds =
-    newItems.length > 0
-      ? [...item.unread_message_ids, ...[action.message.id]]
-      : item.unread_message_ids;
-
-  if (item.unread_message_ids === unreadMessageIds) {
+  if (item.unread_message_ids.includes(action.message.id)) {
     return state;
   }
 
@@ -55,7 +49,7 @@ const eventNewMessage = (state, action, globalState) => {
     ...state.slice(0, index),
     {
       ...item,
-      unread_message_ids: unreadMessageIds,
+      unread_message_ids: [...item.unread_message_ids, action.message.id],
     },
     ...state.slice(index + 1),
   ];
