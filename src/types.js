@@ -276,7 +276,7 @@ export type UnreadStreamItem = {|
   isMuted: boolean,
   isPinned: boolean,
   isPrivate: boolean,
-  data: Array<{|
+  topics: Array<{|
     key: string,
     topic: string,
     unread: number,

@@ -144,7 +144,7 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
           isPinned: pin_to_top,
           color,
           unread: 0,
-          data: [],
+          topics: [],
         };
         dataByStream.set(stream.stream_id, streamData);
       }
@@ -154,7 +154,7 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
         streamData.unread += stream.unread_message_ids.length;
       }
 
-      streamData.data.push({
+      streamData.topics.push({
         key: stream.topic,
         topic: stream.topic,
         unread: stream.unread_message_ids.length,
@@ -168,7 +168,7 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
       .sort((a, b) => +b.isPinned - +a.isPinned);
 
     sortedStreams.forEach(stream => {
-      stream.data.sort((a, b) => b.lastUnreadMsgId - a.lastUnreadMsgId);
+      stream.topics.sort((a, b) => b.lastUnreadMsgId - a.lastUnreadMsgId);
     });
 
     return sortedStreams;
@@ -191,9 +191,9 @@ export const getUnreadStreamsAndTopicsSansMuted: Selector<UnreadStreamItem[]> = 
     unreadStreamsAndTopics
       .map(stream => ({
         ...stream,
-        data: stream.data.filter(topic => !topic.isMuted),
+        topics: stream.topics.filter(topic => !topic.isMuted),
       }))
-      .filter(stream => !stream.isMuted && stream.data.length > 0),
+      .filter(stream => !stream.isMuted && stream.topics.length > 0),
 );
 
 /** Total number of a certain subset of unreads, plus ??? double-counting. */
