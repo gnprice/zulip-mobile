@@ -80,7 +80,7 @@ export const getSubscriptions = (state: GlobalState): Subscription[] => state.su
  */
 export const getStreams = (state: GlobalState): Stream[] => state.streams;
 
-export const getPresence = (state: GlobalState): PresenceState => state.presence;
+export const getRawPresence = (state: GlobalState): PresenceState => state.presence;
 
 export const getOutbox = (state: GlobalState): Outbox[] => state.outbox;
 

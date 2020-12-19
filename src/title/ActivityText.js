@@ -10,7 +10,7 @@ import { presenceToHumanTime } from '../utils/presence';
 import { RawLabel } from '../common';
 
 type SelectorProps = $ReadOnly<{|
-  presence: UserPresence,
+  presence: UserPresence | void,
   userStatus: UserStatus,
 |}>;
 
@@ -37,6 +37,6 @@ class ActivityText extends PureComponent<Props> {
 }
 
 export default connect<SelectorProps, _, _>((state, props) => ({
-  presence: getPresence(state)[props.user.user_id],
+  presence: getPresence(state).get(props.user.user_id),
   userStatus: getUserStatus(state)[props.user.user_id],
 }))(ActivityText);

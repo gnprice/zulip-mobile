@@ -1,7 +1,7 @@
 /* @flow strict-local */
 import uniqby from 'lodash.uniqby';
 
-import type { UserPresence, User, UserId, UserGroup, PresenceState, UserOrBot } from '../types';
+import type { UserPresence, User, UserId, UserGroup, UserOrBot } from '../types';
 import { ensureUnreachable } from '../types';
 import { statusFromPresence } from '../utils/presence';
 import { makeUserId } from '../api/idTypes';
@@ -13,16 +13,19 @@ type UsersByStatus = {|
   unavailable: UserOrBot[],
 |};
 
-export const groupUsersByStatus = (users: UserOrBot[], presences: PresenceState): UsersByStatus => {
+export const groupUsersByStatus = (
+  users: UserOrBot[],
+  presences: Map<UserId, UserPresence>,
+): UsersByStatus => {
   const groupedUsers = { active: [], idle: [], offline: [], unavailable: [] };
   users.forEach(user => {
-    const status = statusFromPresence(presences[user.user_id]);
+    const status = statusFromPresence(presences.get(user.user_id));
     groupedUsers[status].push(user);
   });
   return groupedUsers;
 };
 
-const statusOrder = (presence: UserPresence): number => {
+const statusOrder = (presence: UserPresence | void): number => {
   const status = statusFromPresence(presence);
   switch (status) {
     case 'active':
@@ -37,10 +40,13 @@ const statusOrder = (presence: UserPresence): number => {
   }
 };
 
-export const sortUserList = (users: UserOrBot[], presences: PresenceState): UserOrBot[] =>
+export const sortUserList = (
+  users: UserOrBot[],
+  presences: Map<UserId, UserPresence>,
+): UserOrBot[] =>
   [...users].sort(
     (x1, x2) =>
-      statusOrder(presences[x1.user_id]) - statusOrder(presences[x2.user_id])
+      statusOrder(presences.get(x1.user_id)) - statusOrder(presences.get(x2.user_id))
       || x1.full_name.toLowerCase().localeCompare(x2.full_name.toLowerCase()),
   );
 

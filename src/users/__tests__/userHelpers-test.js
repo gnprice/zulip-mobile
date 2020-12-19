@@ -161,7 +161,7 @@ describe('sortUserList', () => {
     const user2 = eg.makeUser({ name: 'xyz' });
     const user3 = eg.makeUser({ name: 'jkl' });
     const users = deepFreeze([user1, user2, user3]);
-    const presences = {};
+    const presences = new Map();
     const shouldMatch = [user1, user3, user2];
 
     const sortedUsers = sortUserList(users, presences);
@@ -175,24 +175,34 @@ describe('sortUserList', () => {
     const user3 = { ...eg.makeUser({ name: 'Bob' }), email: 'bob@example.com' };
     const user4 = { ...eg.makeUser({ name: 'Rick' }), email: 'rick@example.com' };
     const users = deepFreeze([user1, user2, user3, user4]);
-    const presences = {
-      [(user1.user_id: number)]: {
-        aggregated: { client: 'website', status: 'offline', timestamp: Date.now() / 1000 - 300 },
-      },
-      [(user2.user_id: number)]: {
-        aggregated: {
-          client: 'website',
-          status: 'active',
-          timestamp: Date.now() / 1000 - 120 * 60,
+    const presences = new Map([
+      [
+        user1.user_id,
+        {
+          aggregated: { client: 'website', status: 'offline', timestamp: Date.now() / 1000 - 300 },
         },
-      },
-      [(user3.user_id: number)]: {
-        aggregated: { client: 'website', status: 'idle', timestamp: Date.now() / 1000 - 20 * 60 },
-      },
-      [(user4.user_id: number)]: {
-        aggregated: { client: 'website', status: 'active', timestamp: Date.now() / 1000 },
-      },
-    };
+      ],
+      [
+        user2.user_id,
+        {
+          aggregated: {
+            client: 'website',
+            status: 'active',
+            timestamp: Date.now() / 1000 - 120 * 60,
+          },
+        },
+      ],
+      [
+        user3.user_id,
+        {
+          aggregated: { client: 'website', status: 'idle', timestamp: Date.now() / 1000 - 20 * 60 },
+        },
+      ],
+      [
+        user4.user_id,
+        { aggregated: { client: 'website', status: 'active', timestamp: Date.now() / 1000 } },
+      ],
+    ]);
     const shouldMatch = [user4, user3, user2, user1];
 
     const sortedUsers = sortUserList(users, presences);
@@ -252,7 +262,7 @@ describe('filterUserByInitials', () => {
 describe('groupUsersByStatus', () => {
   test('empty input results in empty map !!!', () => {
     const users = deepFreeze([]);
-    const presence = deepFreeze({});
+    const presence = deepFreeze(new Map());
 
     const groupedUsers = groupUsersByStatus(users, presence);
     expect(groupedUsers).toEqual({ active: [], idle: [], unavailable: [], offline: [] });
@@ -264,17 +274,22 @@ describe('groupUsersByStatus', () => {
     const user3 = { ...eg.makeUser(), email: 'carter@example.com' };
     const user4 = { ...eg.makeUser(), email: 'dan@example.com' };
     const users = deepFreeze([user1, user2, user3, user4]);
-    const presence = {
-      [(user1.user_id: number)]: {
-        aggregated: { client: 'website', status: 'active', timestamp: Date.now() / 1000 },
-      },
-      [(user2.user_id: number)]: {
-        aggregated: { client: 'website', status: 'idle', timestamp: Date.now() / 1000 - 10 },
-      },
-      [(user3.user_id: number)]: {
-        aggregated: { client: 'website', status: 'offline', timestamp: Date.now() / 1000 - 150 },
-      },
-    };
+    const presence = new Map([
+      [
+        user1.user_id,
+        { aggregated: { client: 'website', status: 'active', timestamp: Date.now() / 1000 } },
+      ],
+      [
+        user2.user_id,
+        { aggregated: { client: 'website', status: 'idle', timestamp: Date.now() / 1000 - 10 } },
+      ],
+      [
+        user3.user_id,
+        {
+          aggregated: { client: 'website', status: 'offline', timestamp: Date.now() / 1000 - 150 },
+        },
+      ],
+    ]);
     const expectedResult = {
       active: [user1],
       idle: [user2],

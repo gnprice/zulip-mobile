@@ -1,33 +1,13 @@
 /* @flow strict-local */
 import * as typing_status from '@zulip/shared/js/typing_status';
 
-import type { Auth, Dispatch, GetState, GlobalState, Narrow, UserId, UserOrBot } from '../types';
+import type { Auth, Dispatch, GetState, GlobalState, Narrow, UserId } from '../types';
 import * as api from '../api';
 import { PRESENCE_RESPONSE } from '../actionConstants';
 import { getAuth, tryGetAuth, getServerVersion } from '../selectors';
 import { isPmNarrow, userIdsOfPmNarrow } from '../utils/narrow';
-import { getAllUsersByEmail, getUserForId } from './userSelectors';
+import { getUserForId } from './userSelectors';
 import { ZulipVersion } from '../utils/zulipVersion';
-import { objectFromEntries } from '../jsBackport';
-
-// Convert keys from email to ID.
-// If not found, just drop the entry.
-function transformPresenceResponse<T>(
-  apiResponse: { [email: string]: T },
-  allUsersByEmail: Map<string, UserOrBot>,
-): { [number]: T } {
-  return objectFromEntries(
-    Object.keys(apiResponse)
-      .map(email => {
-        const user = allUsersByEmail.get(email);
-        if (!user) {
-          return null;
-        }
-        return [user.user_id, apiResponse[email]];
-      })
-      .filter(Boolean),
-  );
-}
 
 export const reportPresence = (isActive: boolean = true, newUserInput: boolean = false) => async (
   dispatch: Dispatch,
@@ -39,10 +19,9 @@ export const reportPresence = (isActive: boolean = true, newUserInput: boolean =
   }
 
   const response = await api.reportPresence(auth, isActive, newUserInput);
-  const allUsersByEmail = getAllUsersByEmail(getState());
   dispatch({
     type: PRESENCE_RESPONSE,
-    presence: transformPresenceResponse(response.presences, allUsersByEmail),
+    presence: response.presences,
     serverTimestamp: response.server_timestamp,
   });
 };

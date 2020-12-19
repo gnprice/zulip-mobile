@@ -14,7 +14,7 @@ type Props = $ReadOnly<{|
   dispatch: Dispatch,
   users: User[],
   filter: string,
-  presences: PresenceState,
+  presences: PresenceState, // TODO ??
 |}>;
 
 class UsersCard extends PureComponent<Props> {
