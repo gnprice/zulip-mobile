@@ -129,14 +129,14 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
   getUnreadStreams,
   getMute,
   (subscriptionsById, unreadStreams, mute) => {
-    const totals = new Map();
+    const dataByStream = new Map();
     unreadStreams.forEach(stream => {
       const { name, color, in_home_view, invite_only, pin_to_top } =
         subscriptionsById.get(stream.stream_id) || NULL_SUBSCRIPTION;
 
-      let total = totals.get(stream.stream_id);
-      if (!total) {
-        total = {
+      let streamData = dataByStream.get(stream.stream_id);
+      if (!streamData) {
+        streamData = {
           key: `stream:${name}`,
           streamName: name,
           isMuted: !in_home_view,
@@ -146,15 +146,15 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
           unread: 0,
           data: [],
         };
-        totals.set(stream.stream_id, total);
+        dataByStream.set(stream.stream_id, streamData);
       }
 
       const isMuted = !mute.every(x => x[0] !== name || x[1] !== stream.topic);
       if (!isMuted) {
-        total.unread += stream.unread_message_ids.length;
+        streamData.unread += stream.unread_message_ids.length;
       }
 
-      total.data.push({
+      streamData.data.push({
         key: stream.topic,
         topic: stream.topic,
         unread: stream.unread_message_ids.length,
@@ -163,7 +163,7 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
       });
     });
 
-    const sortedStreams = Array.from(totals.values())
+    const sortedStreams = Array.from(dataByStream.values())
       .sort((a, b) => caseInsensitiveCompareFunc(a.streamName, b.streamName))
       .sort((a, b) => +b.isPinned - +a.isPinned);
 
