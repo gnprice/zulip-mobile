@@ -11,7 +11,7 @@ import { RawLabel } from '../common';
 
 type SelectorProps = $ReadOnly<{|
   presence: UserPresence | void,
-  userStatus: UserStatus,
+  userStatus: UserStatus | void,
 |}>;
 
 type Props = $ReadOnly<{|
