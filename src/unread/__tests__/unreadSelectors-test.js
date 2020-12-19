@@ -10,9 +10,8 @@ import {
   getUnreadHuddlesTotal,
   getUnreadMentionsTotal,
   getUnreadTotal,
-  getUnreadStreamsAndTopics,
-  getUnreadStreamsAndTopicsSansMuted,
 } from '../unreadSelectors';
+import { getUnreadStreamsAndTopics, getUnreadStreamsAndTopicsSansMuted } from '../UnreadCards';
 
 import * as eg from '../../__tests__/lib/exampleData';
 import { initialState, mkMessageAction, selectorBaseState as unreadState } from './unread-testlib';
