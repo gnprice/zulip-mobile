@@ -28,7 +28,7 @@ const eventNewMessage = (state, action, globalState): UnreadStreamsState => {
 
   const { id: message_id, stream_id, subject: topic } = action.message;
 
-  // TODO this can surely be deduped to simplify further; withMutations?
+  // TODO this can surely be deduped to simplify further; withMutations? updateIn?
 
   const forStream = state.get(stream_id);
   if (!forStream) {
@@ -47,29 +47,38 @@ const eventNewMessage = (state, action, globalState): UnreadStreamsState => {
   return state.set(stream_id, forStream.set(topic, [...forTopic, message_id]));
 };
 
-const removeItemsDeeply = (state, messageIds): UnreadStreamsState => {
-  let haveEmpty = false;
-  const filtered = state.withMutations(stateMutable => {
-    // TODO WORK HERE
+const removeItemsDeeply = (state, messageIds): UnreadStreamsState =>
+  state.withMutations(stateMutable => {
+    for (const streamId of state.keys()) {
+      const forStream = state.get(streamId);
+      invariant(forStream, 'missing key');
 
-    for (let i = 0; i < state.size; i++) {
-      const elt = state.get(i);
-      invariant(elt, 'bounds check');
-      const filteredIds = removeItemsFromArray(elt.unread_message_ids, messageIds);
-      if (filteredIds === elt.unread_message_ids) {
+      const newForStream = forStream.withMutations(forStreamMutable => {
+        for (const topic of forStream.keys()) {
+          const forTopic = forStream.get(topic);
+          invariant(forTopic, 'missing key');
+
+          const filteredIds = removeItemsFromArray(forTopic, messageIds);
+
+          if (filteredIds === forTopic) {
+            continue;
+          }
+          if (filteredIds.length === 0) {
+            forStreamMutable.delete(topic);
+          }
+          forStreamMutable.set(topic, filteredIds);
+        }
+      });
+
+      if (newForStream === forStream) {
         continue;
       }
-      stateMutable.set(i, { ...elt, unread_message_ids: filteredIds });
-      haveEmpty = haveEmpty || filteredIds.length === 0;
+      if (newForStream.size === 0) {
+        stateMutable.delete(streamId);
+      }
+      stateMutable.set(streamId, newForStream);
     }
   });
-
-  if (!haveEmpty) {
-    return filtered;
-  }
-
-  return filtered.filter(elt => elt.unread_message_ids.length > 0);
-};
 
 const eventUpdateMessageFlags = (state, action) => {
   if (action.flag !== 'read') {
@@ -100,9 +109,13 @@ export default (
       return initialState;
 
     case REALM_INIT:
-      return action.data.unread_msgs
-        ? Immutable.List(action.data.unread_msgs.streams)
-        : initialState;
+      return Immutable.Map().withMutations(map => {
+        // TODO see if this scenario can really happen
+        // flowlint-next-line unnecessary-optional-chain:off
+        for (const item of action.data.unread_msgs?.streams ?? []) {
+          map.setIn([item.stream_id, item.topic], item.unread_message_ids);
+        }
+      });
 
     case EVENT_NEW_MESSAGE:
       return eventNewMessage(state, action, globalState);
