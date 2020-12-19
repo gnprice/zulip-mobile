@@ -31,6 +31,7 @@ import type { Narrow } from './utils/narrow';
 import type { SessionState } from './session/sessionReducer';
 import type { PmConversationsState } from './pm-conversations/pmConversationsModel';
 import type { UnreadState } from './unread/unreadModelTypes';
+import type { UnreadViewState } from './unread/unreadViewReducer';
 
 export type * from './actionTypes';
 
@@ -348,6 +349,7 @@ export type GlobalState = {|
   userGroups: UserGroupsState,
   userStatus: UserStatusState,
   users: UsersState,
+  viewUnread: UnreadViewState,
 |};
 
 /** A selector returning TResult, with extra parameter TParam. */

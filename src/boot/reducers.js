@@ -25,6 +25,7 @@ import subscriptions from '../subscriptions/subscriptionsReducer';
 import topics from '../topics/topicsReducer';
 import typing from '../typing/typingReducer';
 import { reducer as unread } from '../unread/unreadModel';
+import unreadViewReducer from '../unread/unreadViewReducer';
 import userGroups from '../user-groups/userGroupsReducer';
 import userStatus from '../user-status/userStatusReducer';
 import users from '../users/usersReducer';
@@ -105,6 +106,7 @@ const combinedReducer = (state: void | GlobalState, action: Action): GlobalState
     userGroups: applyReducer('userGroups', userGroups, state?.userGroups, action, state),
     userStatus: applyReducer('userStatus', userStatus, state?.userStatus, action, state),
     users: applyReducer('users', users, state?.users, action, state),
+    viewUnread: applyReducer('viewUnread', unreadViewReducer, state?.viewUnread, action, state),
   };
 
   if (state && Object.keys(nextState).every(key => nextState[key] === state[key])) {
