@@ -81,11 +81,11 @@ typically highly structured and pretty short, as in this example:
 export default connect((state: GlobalState) => ({
   unreadHuddlesTotal: getUnreadHuddlesTotal(state),
   unreadPmsTotal: getUnreadPmsTotal(state),
-}))(IconUnreadConversations);
+}))(IconUnreadPmConversations);
 ```
 
 This supplies values for `unreadHuddlesTotal` and `unreadPmsTotal`, which
-then get passed as props to the nice pure `IconUnreadConversations`
+then get passed as props to the nice pure `IconUnreadPmConversations`
 component on the inside.
 
 Because these `connect` calls are so highly structured, all will be well as

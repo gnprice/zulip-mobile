@@ -16,7 +16,7 @@ import PmConversationsScreen from '../pm-conversations/PmConversationsScreen';
 import SettingsScreen from '../settings/SettingsScreen';
 import { IconInbox, IconSettings, IconStream } from '../common/Icons';
 import { OwnAvatar, OfflineNotice, ZulipStatusBar } from '../common';
-import IconUnreadConversations from '../nav/IconUnreadConversations';
+import IconUnreadPmConversations from '../nav/IconUnreadPmConversations';
 import ProfileScreen from '../account-info/ProfileScreen';
 import { useSelector } from '../react-redux';
 import { getHaveServerData } from '../selectors';
@@ -96,7 +96,7 @@ export default function MainTabsScreen(props: Props) {
           component={PmConversationsScreen}
           options={{
             tabBarLabel: 'Conversations',
-            tabBarIcon: ({ color }) => <IconUnreadConversations color={color} />,
+            tabBarIcon: ({ color }) => <IconUnreadPmConversations color={color} />,
           }}
         />
         <Tab.Screen

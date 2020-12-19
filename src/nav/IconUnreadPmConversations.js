@@ -16,7 +16,7 @@ type Props = $ReadOnly<{|
   color: string,
 |}>;
 
-class IconUnreadConversations extends PureComponent<Props> {
+class IconUnreadPmConversations extends PureComponent<Props> {
   render() {
     const { unreadHuddlesTotal, unreadPmsTotal, color } = this.props;
     const unreadCount = unreadHuddlesTotal + unreadPmsTotal;
@@ -34,4 +34,4 @@ class IconUnreadConversations extends PureComponent<Props> {
 export default connect(state => ({
   unreadHuddlesTotal: getUnreadHuddlesTotal(state),
   unreadPmsTotal: getUnreadPmsTotal(state),
-}))(IconUnreadConversations);
+}))(IconUnreadPmConversations);
