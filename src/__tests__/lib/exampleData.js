@@ -686,6 +686,4 @@ export const action = deepFreeze({
 export const eventNewMessageActionBase /* \: $Diff<EventNewMessageAction, {| message: Message |}> */ = {
   type: EVENT_NEW_MESSAGE,
   id: 1001,
-  caughtUp: {},
-  ownUserId: selfUser.user_id,
 };
