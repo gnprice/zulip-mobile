@@ -42,7 +42,7 @@ describe('narrowsReducer', () => {
         message,
       });
 
-      const newState = narrowsReducer(initialState, action);
+      const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
       const expectedState = Immutable.Map({ [HOME_NARROW_STR]: [1, 2] });
 
@@ -69,7 +69,7 @@ describe('narrowsReducer', () => {
         [HOME_NARROW_STR]: [1, 2, 3],
       });
 
-      const newState = narrowsReducer(initialState, action);
+      const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
       expect(newState).toEqual(expectedState);
       expect(newState).not.toBe(initialState);
@@ -85,7 +85,7 @@ describe('narrowsReducer', () => {
         message,
       });
 
-      const newState = narrowsReducer(initialState, action);
+      const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
       const expectedState = Immutable.Map({
         [topicNarrowStr]: [1, 2],
@@ -112,7 +112,7 @@ describe('narrowsReducer', () => {
       [ALL_PRIVATE_NARROW_STR]: [1],
     });
 
-    const actualState = narrowsReducer(initialState, action);
+    const actualState = narrowsReducer(initialState, action, eg.plusReduxState);
 
     expect(actualState).toEqual(expectedState);
   });
@@ -141,7 +141,7 @@ describe('narrowsReducer', () => {
       [topicNarrowStr]: [2, message.id],
     });
 
-    const newState = narrowsReducer(initialState, action);
+    const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
     expect(newState).toEqual(expectedState);
   });
@@ -174,7 +174,7 @@ describe('narrowsReducer', () => {
       [narrowWithSelfStr]: [message.id],
     });
 
-    const newState = narrowsReducer(initialState, action);
+    const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
     expect(newState).toEqual(expectedState);
     expect(newState).not.toBe(initialState);
@@ -211,7 +211,7 @@ describe('narrowsReducer', () => {
       [groupNarrowStr]: [2, 4],
     });
 
-    const newState = narrowsReducer(initialState, action);
+    const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
     expect(newState).toEqual(expectedState);
     expect(newState).not.toBe(initialState);
@@ -234,7 +234,7 @@ describe('narrowsReducer', () => {
       [HOME_NARROW_STR]: [1, message.id],
     });
 
-    const newState = narrowsReducer(initialState, action);
+    const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
     expect(newState).toEqual(expectedState);
     expect(newState).not.toBe(initialState);
@@ -272,7 +272,7 @@ describe('narrowsReducer', () => {
       [groupNarrowStr]: [2, 4],
     });
 
-    const newState = narrowsReducer(initialState, action);
+    const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
     expect(newState).toEqual(expectedState);
     expect(newState).not.toBe(initialState);
@@ -287,7 +287,7 @@ describe('narrowsReducer', () => {
         messageIds: [3],
       });
 
-      const newState = narrowsReducer(initialState, action);
+      const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
       expect(newState).toBe(initialState);
     });
@@ -300,7 +300,7 @@ describe('narrowsReducer', () => {
       });
       const expectedState = Immutable.Map({ [HOME_NARROW_STR]: [1, 3], [privateNarrowStr]: [] });
 
-      const newState = narrowsReducer(initialState, action);
+      const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
       expect(newState).toEqual(expectedState);
     });
@@ -313,7 +313,7 @@ describe('narrowsReducer', () => {
       });
       const expectedState = Immutable.Map({ [HOME_NARROW_STR]: [1], [privateNarrowStr]: [] });
 
-      const newState = narrowsReducer(initialState, action);
+      const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
       expect(newState).toEqual(expectedState);
     });
@@ -328,7 +328,7 @@ describe('narrowsReducer', () => {
         narrow: SEARCH_NARROW('some query'),
       });
 
-      const newState = narrowsReducer(initialState, action);
+      const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
       expect(newState).toEqual(initialState);
     });
@@ -352,7 +352,7 @@ describe('narrowsReducer', () => {
         narrow: HOME_NARROW,
       });
 
-      const state1 = narrowsReducer(initialState, messageFetchStartAction);
+      const state1 = narrowsReducer(initialState, messageFetchStartAction, eg.plusReduxState);
 
       const messageFetchErrorAction = deepFreeze({
         type: MESSAGE_FETCH_ERROR,
@@ -360,7 +360,7 @@ describe('narrowsReducer', () => {
         error: new Error(),
       });
 
-      const finalState = narrowsReducer(state1, messageFetchErrorAction);
+      const finalState = narrowsReducer(state1, messageFetchErrorAction, eg.plusReduxState);
 
       expect(finalState).toEqual(initialState);
     });
@@ -387,7 +387,7 @@ describe('narrowsReducer', () => {
         [keyFromNarrow(pm1to1NarrowFromUser(eg.otherUser))]: [],
       });
 
-      const newState = narrowsReducer(initialState, action);
+      const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
       expect(newState).toEqual(expectedState);
     });
@@ -415,7 +415,7 @@ describe('narrowsReducer', () => {
         [HOME_NARROW_STR]: [1, 2, 3, 4],
       });
 
-      const newState = narrowsReducer(initialState, action);
+      const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
       expect(newState).toEqual(expectedState);
       expect(newState).not.toBe(initialState);
@@ -443,7 +443,7 @@ describe('narrowsReducer', () => {
         [HOME_NARROW_STR]: [1, 2, 3, 4],
       });
 
-      const newState = narrowsReducer(initialState, action);
+      const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
       expect(newState).toEqual(expectedState);
       expect(newState).not.toBe(initialState);
@@ -471,7 +471,7 @@ describe('narrowsReducer', () => {
         [HOME_NARROW_STR]: [3, 4],
       });
 
-      const newState = narrowsReducer(initialState, action);
+      const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
       expect(newState).toEqual(expectedState);
     });
@@ -498,7 +498,7 @@ describe('narrowsReducer', () => {
         [HOME_NARROW_STR]: [3, 4],
       });
 
-      const newState = narrowsReducer(initialState, action);
+      const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
       expect(newState).toEqual(expectedState);
     });
@@ -511,7 +511,7 @@ describe('narrowsReducer', () => {
         narrow: SEARCH_NARROW('some query'),
       });
 
-      const newState = narrowsReducer(initialState, action);
+      const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
       expect(newState).toEqual(initialState);
     });
@@ -537,7 +537,7 @@ describe('narrowsReducer', () => {
         messages: [4, 2],
       });
 
-      const newState = narrowsReducer(initialState, action);
+      const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
       expect(newState).toEqual(initialState);
     });
@@ -555,7 +555,7 @@ describe('narrowsReducer', () => {
         flag: 'read',
       });
 
-      const newState = narrowsReducer(initialState, action);
+      const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
       expect(newState).toEqual(initialState);
     });
@@ -580,7 +580,7 @@ describe('narrowsReducer', () => {
           [STARRED_NARROW_STR]: [1, 2, 3, 4, 5],
         });
 
-        const newState = narrowsReducer(initialState, action);
+        const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
         expect(newState).toEqual(expectedState);
       },
@@ -606,7 +606,7 @@ describe('narrowsReducer', () => {
           [STARRED_NARROW_STR]: [1, 3, 5],
         });
 
-        const newState = narrowsReducer(initialState, action);
+        const newState = narrowsReducer(initialState, action, eg.plusReduxState);
 
         expect(newState).toEqual(expectedState);
       },

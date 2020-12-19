@@ -2,7 +2,7 @@
 import union from 'lodash.union';
 import Immutable from 'immutable';
 
-import type { NarrowsState, Action } from '../types';
+import type { NarrowsState, Action, GlobalState } from '../types';
 import { ensureUnreachable } from '../types';
 import {
   REALM_INIT,
@@ -24,6 +24,7 @@ import {
   isSearchNarrow,
   keyFromNarrow,
 } from '../utils/narrow';
+import { getOwnUserId } from '../users/userSelectors';
 
 const initialState: NarrowsState = Immutable.Map();
 
@@ -44,7 +45,7 @@ const messageFetchComplete = (state, action) => {
   );
 };
 
-const eventNewMessage = (state, action) => {
+const eventNewMessage = (state, action, globalState) => {
   const { message } = action;
   const { flags } = message;
 
@@ -53,7 +54,7 @@ const eventNewMessage = (state, action) => {
   }
 
   return state.withMutations(stateMutable => {
-    const narrowsForMessage = getNarrowsForMessage(message, action.ownUserId, flags);
+    const narrowsForMessage = getNarrowsForMessage(message, getOwnUserId(globalState), flags);
 
     narrowsForMessage.forEach(narrow => {
       const key = keyFromNarrow(narrow);
@@ -69,7 +70,7 @@ const eventNewMessage = (state, action) => {
 
       // (No guarantee that `key` is in `action.caughtUp`)
       // flowlint-next-line unnecessary-optional-chain:off
-      if (!action.caughtUp[key]?.newer) {
+      if (!globalState.caughtUp[key]?.newer) {
         // Don't add a message to the end of the list unless we know
         // it's the most recent message, i.e., unless we know we're
         // currently looking at (caught up with) the newest messages
@@ -143,7 +144,11 @@ const eventUpdateMessageFlags = (state, action) => {
   return state;
 };
 
-export default (state: NarrowsState = initialState, action: Action): NarrowsState => {
+export default (
+  state: NarrowsState = initialState,
+  action: Action,
+  globalState: GlobalState,
+): NarrowsState => {
   switch (action.type) {
     case REALM_INIT:
     case LOGOUT:
@@ -174,7 +179,7 @@ export default (state: NarrowsState = initialState, action: Action): NarrowsStat
     }
 
     case EVENT_NEW_MESSAGE:
-      return eventNewMessage(state, action);
+      return eventNewMessage(state, action, globalState);
 
     case EVENT_MESSAGE_DELETE:
       return eventMessageDelete(state, action);
