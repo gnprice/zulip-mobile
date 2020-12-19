@@ -1,7 +1,7 @@
 /* @flow strict-local */
 import Immutable from 'immutable';
 
-import { getRecentConversations } from '../pmConversationsSelectors';
+import { getRecentPmConversations } from '../pmConversationsSelectors';
 import { keyOfExactUsers } from '../pmConversationsModel';
 import { ALL_PRIVATE_NARROW_STR } from '../../utils/narrow';
 import * as eg from '../../__tests__/lib/exampleData';
@@ -14,7 +14,7 @@ const keyForUsers = users =>
     .map(String)
     .join(',');
 
-describe('getRecentConversationsModern', () => {
+describe('getRecentPmConversationsModern', () => {
   const accounts = [{ ...eg.selfAccount, zulipVersion: new ZulipVersion('2.1') }];
   const recentsKeyForUsers = users => keyOfExactUsers(users.map(u => u.user_id));
 
@@ -49,7 +49,7 @@ describe('getRecentConversationsModern', () => {
       },
     });
 
-    expect(getRecentConversations(state)).toEqual([
+    expect(getRecentPmConversations(state)).toEqual([
       { key: eg.selfUser.user_id.toString(), keyRecipients: [eg.selfUser], msgId: 4, unread: 1 },
       { key: eg.otherUser.user_id.toString(), keyRecipients: [eg.otherUser], msgId: 3, unread: 2 },
       {
@@ -62,7 +62,7 @@ describe('getRecentConversationsModern', () => {
   });
 });
 
-describe('getRecentConversationsLegacy', () => {
+describe('getRecentPmConversationsLegacy', () => {
   const accounts = [{ ...eg.selfAccount, zulipVersion: new ZulipVersion('2.0') }];
   const userJohn = eg.makeUser();
   const userMark = eg.makeUser();
@@ -82,7 +82,7 @@ describe('getRecentConversationsLegacy', () => {
       },
     });
 
-    const actual = getRecentConversations(state);
+    const actual = getRecentPmConversations(state);
 
     expect(actual).toEqual([]);
   });
@@ -130,7 +130,7 @@ describe('getRecentConversationsLegacy', () => {
       },
     ];
 
-    const actual = getRecentConversations(state);
+    const actual = getRecentPmConversations(state);
 
     expect(actual).toMatchObject(expectedResult);
   });
@@ -179,7 +179,7 @@ describe('getRecentConversationsLegacy', () => {
       { key: userMark.user_id.toString(), keyRecipients: [userMark], msgId: 3, unread: 2 },
     ];
 
-    const actual = getRecentConversations(state);
+    const actual = getRecentPmConversations(state);
 
     expect(actual).toEqual(expectedResult);
   });

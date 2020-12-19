@@ -10,7 +10,7 @@ import PmConversationList from '../pm-conversations/PmConversationList';
 import StreamItem from '../streams/StreamItem';
 import TopicItem from '../streams/TopicItem';
 import { streamNarrow, topicNarrow } from '../utils/narrow';
-import { getUnreadConversations, getUnreadStreamsAndTopicsSansMuted } from '../selectors';
+import { getUnreadPmConversations, getUnreadStreamsAndTopicsSansMuted } from '../selectors';
 import { doNarrow } from '../actions';
 
 type Props = $ReadOnly<{|
@@ -86,6 +86,6 @@ class UnreadCards extends PureComponent<Props> {
 }
 
 export default connect(state => ({
-  pmConversations: getUnreadConversations(state),
+  pmConversations: getUnreadPmConversations(state),
   unreadStreamsAndTopics: getUnreadStreamsAndTopicsSansMuted(state),
 }))(UnreadCards);

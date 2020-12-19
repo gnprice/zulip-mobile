@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from '../react-redux';
 import { Label, ZulipButton, LoadingBanner } from '../common';
 import { IconPeople, IconSearch } from '../common/Icons';
 import PmConversationList from './PmConversationList';
-import { getRecentConversations } from '../selectors';
+import { getRecentPmConversations } from '../selectors';
 import { navigateToCreateGroup, navigateToUsersScreen } from '../actions';
 
 const styles = createStyleSheet({
@@ -41,7 +41,7 @@ type Props = $ReadOnly<{|
  * The "PMs" page in the main tabs navigation.
  * */
 export default function PmConversationsScreen(props: Props) {
-  const pmConversations = useSelector(getRecentConversations);
+  const pmConversations = useSelector(getRecentPmConversations);
   const dispatch = useDispatch();
   const context = useContext(ThemeContext);
 

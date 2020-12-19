@@ -29,7 +29,7 @@ function unreadCount(unreadsKey, unreadPms, unreadHuddles): number {
 }
 
 // TODO(server-2.1): Delete this, and simplify logic around it.
-export const getRecentConversationsLegacy: Selector<PmConversationData[]> = createSelector(
+export const getRecentPmConversationsLegacy: Selector<PmConversationData[]> = createSelector(
   getOwnUserId,
   getPrivateMessages,
   getUnreadByPms,
@@ -72,7 +72,7 @@ export const getRecentConversationsLegacy: Selector<PmConversationData[]> = crea
   },
 );
 
-export const getRecentConversationsModern: Selector<PmConversationData[]> = createSelector(
+export const getRecentPmConversationsModern: Selector<PmConversationData[]> = createSelector(
   state => state.pmConversations,
   getUnreadByPms,
   getUnreadByHuddles,
@@ -125,10 +125,12 @@ const getServerIsOld: Selector<boolean> = createSelector(
 /**
  * The most recent PM conversations, with unread count and latest message ID.
  */
-export const getRecentConversations = (state: GlobalState): PmConversationData[] =>
-  getServerIsOld(state) ? getRecentConversationsLegacy(state) : getRecentConversationsModern(state);
+export const getRecentPmConversations = (state: GlobalState): PmConversationData[] =>
+  getServerIsOld(state)
+    ? getRecentPmConversationsLegacy(state)
+    : getRecentPmConversationsModern(state);
 
-export const getUnreadConversations: Selector<PmConversationData[]> = createSelector(
-  getRecentConversations,
+export const getUnreadPmConversations: Selector<PmConversationData[]> = createSelector(
+  getRecentPmConversations,
   conversations => conversations.filter(c => c.unread > 0),
 );
