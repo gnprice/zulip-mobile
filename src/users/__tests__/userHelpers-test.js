@@ -176,20 +176,20 @@ describe('sortUserList', () => {
     const user4 = { ...eg.makeUser({ name: 'Rick' }), email: 'rick@example.com' };
     const users = deepFreeze([user1, user2, user3, user4]);
     const presences = {
-      [user1.email]: {
+      [(user1.user_id: number)]: {
         aggregated: { client: 'website', status: 'offline', timestamp: Date.now() / 1000 - 300 },
       },
-      [user2.email]: {
+      [(user2.user_id: number)]: {
         aggregated: {
           client: 'website',
           status: 'active',
           timestamp: Date.now() / 1000 - 120 * 60,
         },
       },
-      [user3.email]: {
+      [(user3.user_id: number)]: {
         aggregated: { client: 'website', status: 'idle', timestamp: Date.now() / 1000 - 20 * 60 },
       },
-      [user4.email]: {
+      [(user4.user_id: number)]: {
         aggregated: { client: 'website', status: 'active', timestamp: Date.now() / 1000 },
       },
     };
@@ -265,13 +265,13 @@ describe('groupUsersByStatus', () => {
     const user4 = { ...eg.makeUser(), email: 'dan@example.com' };
     const users = deepFreeze([user1, user2, user3, user4]);
     const presence = {
-      [user1.email]: {
+      [(user1.user_id: number)]: {
         aggregated: { client: 'website', status: 'active', timestamp: Date.now() / 1000 },
       },
-      [user2.email]: {
+      [(user2.user_id: number)]: {
         aggregated: { client: 'website', status: 'idle', timestamp: Date.now() / 1000 - 10 },
       },
-      [user3.email]: {
+      [(user3.user_id: number)]: {
         aggregated: { client: 'website', status: 'offline', timestamp: Date.now() / 1000 - 150 },
       },
     };

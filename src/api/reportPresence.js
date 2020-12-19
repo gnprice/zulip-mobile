@@ -6,6 +6,8 @@ import { apiPost } from './apiFetch';
 type ApiResponseWithPresence = {|
   ...ApiResponse,
   server_timestamp: number,
+  // With Zulip 3.0 it becomes possible to get these keyed by user ID
+  // rather than email: https://chat.zulip.org/api/register-queue#parameter-slim_presence
   presences: {| [email: string]: UserPresence |},
 |};
 

@@ -133,10 +133,13 @@ class PresenceStatusIndicator extends PureComponent<Props> {
       useOpaqueBackground,
     } = this.props;
 
-    const userPresence = presence[email];
     const user = allUsersByEmail.get(email);
+    if (!user) {
+      return null;
+    }
 
-    if (!user || !userPresence || !userPresence.aggregated) {
+    const userPresence = presence[user.user_id];
+    if (!userPresence || !userPresence.aggregated) {
       return null;
     }
 

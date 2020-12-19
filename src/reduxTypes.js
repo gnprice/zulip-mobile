@@ -204,11 +204,10 @@ export type OutboxState = Outbox[];
 /**
  * The `presence` subtree of our Redux state.
  *
- * @prop (email) - Indexes over all users for which the app has received a
- *   presence status.
+ * Indexes over all users for which the app has received a presence status.
  */
 export type PresenceState = {
-  [email: string]: UserPresence,
+  [userId: number]: UserPresence,
 };
 
 /**

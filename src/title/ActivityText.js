@@ -37,6 +37,6 @@ class ActivityText extends PureComponent<Props> {
 }
 
 export default connect<SelectorProps, _, _>((state, props) => ({
-  presence: getPresence(state)[props.user.email],
+  presence: getPresence(state)[props.user.user_id],
   userStatus: getUserStatus(state)[props.user.user_id],
 }))(ActivityText);

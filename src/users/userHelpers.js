@@ -16,7 +16,7 @@ type UsersByStatus = {|
 export const groupUsersByStatus = (users: UserOrBot[], presences: PresenceState): UsersByStatus => {
   const groupedUsers = { active: [], idle: [], offline: [], unavailable: [] };
   users.forEach(user => {
-    const status = statusFromPresence(presences[user.email]);
+    const status = statusFromPresence(presences[user.user_id]);
     groupedUsers[status].push(user);
   });
   return groupedUsers;
@@ -40,7 +40,7 @@ const statusOrder = (presence: UserPresence): number => {
 export const sortUserList = (users: UserOrBot[], presences: PresenceState): UserOrBot[] =>
   [...users].sort(
     (x1, x2) =>
-      statusOrder(presences[x1.email]) - statusOrder(presences[x2.email])
+      statusOrder(presences[x1.user_id]) - statusOrder(presences[x2.user_id])
       || x1.full_name.toLowerCase().localeCompare(x2.full_name.toLowerCase()),
   );
 
