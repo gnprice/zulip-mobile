@@ -18,10 +18,10 @@ const styles = createStyleSheet({
 });
 
 type Props = $ReadOnly<{|
+  userId: UserId,
   avatarUrl: AvatarURL,
   size: number,
   onPress?: () => void,
-  userId: UserId,
 |}>;
 
 /**
@@ -31,8 +31,6 @@ type Props = $ReadOnly<{|
  * thing but provides a more encapsulated interface.  Once all callers
  * have migrated to that version, it'll replace this one.
  *
- * @prop [avatarUrl]
- * @prop [email] - Sender's / user's email address, for the presence dot.
  * @prop [size] - Sets width and height in logical pixels.
  * @prop [onPress] - Event fired on pressing the component.
  */
@@ -58,10 +56,6 @@ export default class UserAvatarWithPresence extends PureComponent<Props> {
  *
  * Use this in preference to the default export `UserAvatarWithPresence`.
  * We're migrating from that one to this for better encapsulation.
- *
- * @prop [userId]
- * @prop [size]
- * @prop [onPress]
  */
 export function UserAvatarWithPresenceById(props: $ReadOnly<$Diff<Props, {| avatarUrl: mixed |}>>) {
   const { userId } = props;
