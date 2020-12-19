@@ -163,15 +163,15 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
       });
     });
 
-    const sortedStreams = Array.from(dataByStream.values())
+    const sortedStreamData = Array.from(dataByStream.values())
       .sort((a, b) => caseInsensitiveCompareFunc(a.streamName, b.streamName))
       .sort((a, b) => +b.isPinned - +a.isPinned);
 
-    sortedStreams.forEach(stream => {
-      stream.topics.sort((a, b) => b.lastUnreadMsgId - a.lastUnreadMsgId);
+    sortedStreamData.forEach(streamData => {
+      streamData.topics.sort((a, b) => b.lastUnreadMsgId - a.lastUnreadMsgId);
     });
 
-    return sortedStreams;
+    return sortedStreamData;
   },
 );
 
@@ -189,11 +189,11 @@ export const getUnreadStreamsAndTopicsSansMuted: Selector<UnreadStreamItem[]> = 
   getUnreadStreamsAndTopics,
   unreadStreamsAndTopics =>
     unreadStreamsAndTopics
-      .map(stream => ({
-        ...stream,
-        topics: stream.topics.filter(topic => !topic.isMuted),
+      .map(streamData => ({
+        ...streamData,
+        topics: streamData.topics.filter(topic => !topic.isMuted),
       }))
-      .filter(stream => !stream.isMuted && stream.topics.length > 0),
+      .filter(streamData => !streamData.isMuted && streamData.topics.length > 0),
 );
 
 /** Total number of a certain subset of unreads, plus ??? double-counting. */
