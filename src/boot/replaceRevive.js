@@ -69,14 +69,6 @@ const replacer = function replacer(key, value) {
     };
   } else if (Immutable.Map.isMap(origValue)) {
     return { data: value, [SERIALIZED_TYPE_FIELD_NAME]: 'ImmutableMap' };
-  } else if (typeof value === 'object' && value !== null && SERIALIZED_TYPE_FIELD_NAME in value) {
-    const copy = { ...value };
-    delete copy[SERIALIZED_TYPE_FIELD_NAME];
-    return {
-      [SERIALIZED_TYPE_FIELD_NAME]: 'Object',
-      data: copy,
-      [SERIALIZED_TYPE_FIELD_NAME_ESCAPED]: value[SERIALIZED_TYPE_FIELD_NAME],
-    };
   }
 
   // `origValue.toJSON` and `Object.getPrototypeOf(origValue)` fail
@@ -89,6 +81,16 @@ const replacer = function replacer(key, value) {
     // If storing an interesting data type, don't forget to handle it
     // here, and in `reviver`.
     invariant(boringPrototypes.includes(Object.getPrototypeOf(origValue)), 'unexpected class');
+  }
+
+  if (typeof value === 'object' && value !== null && SERIALIZED_TYPE_FIELD_NAME in value) {
+    const copy = { ...value };
+    delete copy[SERIALIZED_TYPE_FIELD_NAME];
+    return {
+      [SERIALIZED_TYPE_FIELD_NAME]: 'Object',
+      data: copy,
+      [SERIALIZED_TYPE_FIELD_NAME_ESCAPED]: value[SERIALIZED_TYPE_FIELD_NAME],
+    };
   }
 
   return value;
