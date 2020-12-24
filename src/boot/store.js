@@ -1,4 +1,5 @@
 /* @flow strict-local */
+import invariant from 'invariant';
 import { applyMiddleware, compose, createStore } from 'redux';
 import type { Store } from 'redux';
 import thunkMiddleware from 'redux-thunk';
@@ -329,6 +330,17 @@ export const SERIALIZED_TYPE_FIELD_NAME: '__serializedType__' = '__serializedTyp
  */
 const SERIALIZED_TYPE_FIELD_NAME_ESCAPED: '__serializedType__value' = '__serializedType__value';
 
+// If a value's prototype chain starts with one of these, then the
+// value doesn't need special handling in our replacer --
+// JSON.stringify will handle it just fine.
+const boringPrototypes = [
+  Object.prototype,
+  Array.prototype,
+  Number.prototype,
+  String.prototype,
+  Boolean.prototype,
+];
+
 // Don't make this an arrow function -- we need `this` to be a special
 // value; see
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#The_replacer_parameter.
@@ -373,6 +385,19 @@ const replacer = function replacer(key, value) {
       [SERIALIZED_TYPE_FIELD_NAME_ESCAPED]: value[SERIALIZED_TYPE_FIELD_NAME],
     };
   }
+
+  // `origValue.toJSON` and `Object.getPrototypeOf(origValue)` fail
+  // if origValue is undefined or null.
+  if (origValue !== undefined && origValue !== null) {
+    // Don't forget to handle a value's `toJSON` method, if present, as
+    // described above.
+    invariant(typeof origValue.toJSON !== 'function', 'unexpected toJSON');
+
+    // If storing an interesting data type, don't forget to handle it
+    // here, and in `reviver`.
+    invariant(boringPrototypes.includes(Object.getPrototypeOf(origValue)), 'unexpected class');
+  }
+
   return value;
 };
 
