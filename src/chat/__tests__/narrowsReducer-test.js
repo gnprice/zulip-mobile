@@ -98,7 +98,8 @@ describe('narrowsReducer', () => {
     const initialState = Immutable.Map({ [ALL_PRIVATE_NARROW_STR]: [] });
     const message = eg.pmMessage({
       id: 1,
-      recipients: [eg.selfUser, eg.otherUser, eg.thirdUser],
+      sender: eg.otherUser,
+      to: [eg.selfUser, eg.thirdUser],
       flags: [],
     });
     const action = deepFreeze({
@@ -153,12 +154,7 @@ describe('narrowsReducer', () => {
       [narrowWithSelfStr]: [],
     });
 
-    const message = eg.pmMessage({
-      id: 1,
-      sender: eg.selfUser,
-      recipients: [eg.selfUser],
-      flags: [],
-    });
+    const message = eg.pmMessage({ id: 1, sender: eg.selfUser, to: [], flags: [] });
 
     const action = deepFreeze({
       ...eg.eventNewMessageActionBase,
@@ -250,12 +246,7 @@ describe('narrowsReducer', () => {
       [groupNarrowStr]: [2, 4],
     });
 
-    const message = eg.pmMessage({
-      id: 5,
-      flags: [],
-      sender: eg.selfUser,
-      recipients: [eg.selfUser, eg.otherUser],
-    });
+    const message = eg.pmMessage({ id: 5, flags: [], sender: eg.selfUser, to: [eg.otherUser] });
 
     const action = deepFreeze({
       ...eg.eventNewMessageActionBase,

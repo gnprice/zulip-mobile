@@ -124,10 +124,7 @@ describe('unreadHuddlesReducer', () => {
 
       const initialState = deepFreeze([]);
 
-      const message2 = eg.pmMessage({
-        sender: selfUser,
-        recipients: [selfUser, user2, user3],
-      });
+      const message2 = eg.pmMessage({ sender: selfUser, to: [user2, user3] });
 
       const action = deepFreeze({
         type: EVENT_NEW_MESSAGE,
