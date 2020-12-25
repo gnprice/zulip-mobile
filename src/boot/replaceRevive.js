@@ -37,18 +37,18 @@ const boringPrototypes = [
 // Don't make this an arrow function -- we need `this` to be a special
 // value; see
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#The_replacer_parameter.
-const replacer = function replacer(key, value) {
+const replacer = function replacer(key, defaultReplacedValue) {
   // The value at the current path before JSON.stringify called its
   // `toJSON` method, if present.
   //
-  // When identifying what kind of thing we're working with, be sure
-  // to examine `origValue` instead of `value`, if calling `toJSON` on
-  // that kind of thing would remove its identifying features -- which
-  // is to say, if that kind of thing has a `toJSON` method.
+  // When identifying what kind of thing we're working with, be sure to
+  // examine `origValue` instead of `defaultReplacedValue`, if calling
+  // `toJSON` on that kind of thing would remove its identifying features --
+  // which is to say, if that kind of thing has a `toJSON` method.
   //
-  // For things that have a `toJSON` method, it may be convenient to
-  // set `data` to `value`, if we trust that `toJSON` gives the output
-  // we want to store there. And it would mean we don't discard the
+  // For things that have a `toJSON` method, it may be convenient to set
+  // `data` to `defaultReplacedValue`, if we trust that `toJSON` gives the
+  // output we want to store there. And it would mean we don't discard the
   // work `JSON.stringify` did by calling `toJSON`.
   const origValue = this[key];
 
@@ -70,8 +70,8 @@ const replacer = function replacer(key, value) {
     };
   } else if (Immutable.Map.isMap(origValue)) {
     // Immutable.Map#toJSON returns a nice JSONable object-as-map,
-    // so we use `value` which is the result of that.
-    return { data: value, [SERIALIZED_TYPE_FIELD_NAME]: 'ImmutableMap' };
+    // so we use `defaultReplacedValue` which is the result of that.
+    return { data: defaultReplacedValue, [SERIALIZED_TYPE_FIELD_NAME]: 'ImmutableMap' };
   }
 
   // `origValue.toJSON` and `Object.getPrototypeOf(origValue)` fail
