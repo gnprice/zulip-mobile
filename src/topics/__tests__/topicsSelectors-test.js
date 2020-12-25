@@ -49,10 +49,7 @@ describe('getLastMessageTopic', () => {
       narrows: Immutable.Map({
         [keyFromNarrow(narrow)]: [1, 2],
       }),
-      messages: {
-        [message1.id]: message1,
-        [message2.id]: message2,
-      },
+      messages: eg.makeMessagesState([message1, message2]),
       realm: eg.realmState({ email: eg.selfUser.email }),
     });
 
