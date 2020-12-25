@@ -27,6 +27,8 @@ const SERIALIZED_TYPE_FIELD_NAME_ESCAPED: '__serializedType__value' = '__seriali
 // value; see
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#The_replacer_parameter.
 const replacer = function replacer(key, defaultReplacedValue) {
+  const wrap = (tag, data) => ({ data, [SERIALIZED_TYPE_FIELD_NAME]: tag });
+
   // The value at the current path before JSON.stringify called its
   // `toJSON` method, if present.
   //
@@ -56,30 +58,24 @@ const replacer = function replacer(key, defaultReplacedValue) {
       return value;
 
     case (ZulipVersion.prototype: $FlowFixMe):
-      return { data: value.raw(), [SERIALIZED_TYPE_FIELD_NAME]: 'ZulipVersion' };
+      return wrap('ZulipVersion', value.raw());
 
     case (URL.prototype: $FlowFixMe):
-      return { data: value.toString(), [SERIALIZED_TYPE_FIELD_NAME]: 'URL' };
+      return wrap('URL', value.toString());
 
     case (GravatarURL.prototype: $FlowFixMe):
-      return { data: GravatarURL.serialize(value), [SERIALIZED_TYPE_FIELD_NAME]: 'GravatarURL' };
+      return wrap('GravatarURL', GravatarURL.serialize(value));
 
     case (UploadedAvatarURL.prototype: $FlowFixMe):
-      return {
-        data: UploadedAvatarURL.serialize(value),
-        [SERIALIZED_TYPE_FIELD_NAME]: 'UploadedAvatarURL',
-      };
+      return wrap('UploadedAvatarURL', UploadedAvatarURL.serialize(value));
 
     case (FallbackAvatarURL.prototype: $FlowFixMe):
-      return {
-        data: FallbackAvatarURL.serialize(value),
-        [SERIALIZED_TYPE_FIELD_NAME]: 'FallbackAvatarURL',
-      };
+      return wrap('FallbackAvatarURL', FallbackAvatarURL.serialize(value));
 
     case (Immutable.Map.prototype: $FlowFixMe):
       // Immutable.Map#toJSON returns a nice JSONable object-as-map,
       // so we use `defaultReplacedValue` which is the result of that.
-      return { data: defaultReplacedValue, [SERIALIZED_TYPE_FIELD_NAME]: 'ImmutableMap' };
+      return wrap('ImmutableMap', defaultReplacedValue);
 
     case (Object.prototype: $FlowFixMe):
       // Don't forget to handle a value's `toJSON` method, if present, as
