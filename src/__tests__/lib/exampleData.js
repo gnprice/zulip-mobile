@@ -1,5 +1,6 @@
 /* @flow strict-local */
 import deepFreeze from 'deep-freeze';
+import invariant from 'invariant';
 import { createStore } from 'redux';
 
 import type {
@@ -319,12 +320,19 @@ const randMessageId: () => number = makeUniqueRandInt('message ID', 10000000);
 export const pmMessage = (args?: {|
   ...$Rest<Message, {}>,
   sender?: User,
+  to?: User[],
+  // Instead of recipients, prefer `to`.
   recipients?: User[],
 |}): Message => {
   // The `Object.freeze` is to work around a Flow issue:
   //   https://github.com/facebook/flow/issues/2386#issuecomment-695064325
-  const { sender = otherUser, recipients = [otherUser, selfUser], ...extra } =
+  const { sender = otherUser, to: to_ = undefined, recipients: recipients_ = undefined, ...extra } =
     args ?? Object.freeze({});
+
+  invariant(!(to_ && recipients_), 'both `to` and `recipients` passed');
+  const to = to_ ?? (sender === selfUser ? [] : [selfUser]);
+  invariant(!to.includes(sender), 'included sender in `to`');
+  const recipients = recipients_ ?? [sender, ...to];
 
   const baseMessage: Message = {
     ...messagePropertiesBase,
@@ -347,7 +355,7 @@ export const pmMessage = (args?: {|
 };
 
 export const pmMessageFromTo = (from: User, to: User[], extra?: $Rest<Message, {}>): Message =>
-  pmMessage({ sender: from, recipients: [from, ...to], ...extra });
+  pmMessage({ sender: from, to, ...extra });
 
 const messagePropertiesFromStream = (stream1: Stream) => {
   const { stream_id, name: display_recipient } = stream1;
