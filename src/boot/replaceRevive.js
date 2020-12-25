@@ -45,6 +45,15 @@ const replacer = function replacer(key, defaultReplacedValue) {
     return value;
   }
 
+  const prototype = Object.getPrototypeOf(value);
+  // Flow bug: https://github.com/facebook/flow/issues/6110
+  if (prototype === (Array.prototype: $FlowFixMe)) {
+    // For an array we don't need the SERIALIZED_TYPE_FIELD_NAME logic
+    // below, because properties with non-numeric names won't get serialized
+    // in the JSON anyway.
+    return value;
+  }
+
   if (value instanceof ZulipVersion) {
     return { data: value.raw(), [SERIALIZED_TYPE_FIELD_NAME]: 'ZulipVersion' };
   } else if (value instanceof URL) {
@@ -73,12 +82,8 @@ const replacer = function replacer(key, defaultReplacedValue) {
 
   // If storing an interesting data type, don't forget to handle it
   // here, and in `reviver`.
-  const prototype = Object.getPrototypeOf(value);
-  invariant(
-    // Flow bug: https://github.com/facebook/flow/issues/6110
-    prototype === (Object.prototype: $FlowFixMe) || prototype === (Array.prototype: $FlowFixMe),
-    'unexpected class',
-  );
+  // Flow bug: https://github.com/facebook/flow/issues/6110
+  invariant(prototype === (Object.prototype: $FlowFixMe), 'unexpected class');
 
   if (SERIALIZED_TYPE_FIELD_NAME in value) {
     const copy = { ...value };
