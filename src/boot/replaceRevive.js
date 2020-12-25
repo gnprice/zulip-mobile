@@ -51,23 +51,26 @@ const replacer = function replacer(key, value) {
   // we want to store there. And it would mean we don't discard the
   // work `JSON.stringify` did by calling `toJSON`.
   const origValue = this[key];
-  if (value instanceof ZulipVersion) {
-    return { data: value.raw(), [SERIALIZED_TYPE_FIELD_NAME]: 'ZulipVersion' };
+
+  if (origValue instanceof ZulipVersion) {
+    return { data: origValue.raw(), [SERIALIZED_TYPE_FIELD_NAME]: 'ZulipVersion' };
   } else if (origValue instanceof URL) {
     return { data: origValue.toString(), [SERIALIZED_TYPE_FIELD_NAME]: 'URL' };
-  } else if (value instanceof GravatarURL) {
-    return { data: GravatarURL.serialize(value), [SERIALIZED_TYPE_FIELD_NAME]: 'GravatarURL' };
-  } else if (value instanceof UploadedAvatarURL) {
+  } else if (origValue instanceof GravatarURL) {
+    return { data: GravatarURL.serialize(origValue), [SERIALIZED_TYPE_FIELD_NAME]: 'GravatarURL' };
+  } else if (origValue instanceof UploadedAvatarURL) {
     return {
-      data: UploadedAvatarURL.serialize(value),
+      data: UploadedAvatarURL.serialize(origValue),
       [SERIALIZED_TYPE_FIELD_NAME]: 'UploadedAvatarURL',
     };
-  } else if (value instanceof FallbackAvatarURL) {
+  } else if (origValue instanceof FallbackAvatarURL) {
     return {
-      data: FallbackAvatarURL.serialize(value),
+      data: FallbackAvatarURL.serialize(origValue),
       [SERIALIZED_TYPE_FIELD_NAME]: 'FallbackAvatarURL',
     };
   } else if (Immutable.Map.isMap(origValue)) {
+    // Immutable.Map#toJSON returns a nice JSONable object-as-map,
+    // so we use `value` which is the result of that.
     return { data: value, [SERIALIZED_TYPE_FIELD_NAME]: 'ImmutableMap' };
   }
 
