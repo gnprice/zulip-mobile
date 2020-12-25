@@ -86,17 +86,21 @@ const replacer = function replacer(key, value) {
     invariant(boringPrototypes.includes(Object.getPrototypeOf(origValue)), 'unexpected class');
   }
 
-  if (typeof value === 'object' && value !== null && SERIALIZED_TYPE_FIELD_NAME in value) {
-    const copy = { ...value };
+  if (
+    typeof origValue === 'object'
+    && origValue !== null
+    && SERIALIZED_TYPE_FIELD_NAME in origValue
+  ) {
+    const copy = { ...origValue };
     delete copy[SERIALIZED_TYPE_FIELD_NAME];
     return {
       [SERIALIZED_TYPE_FIELD_NAME]: 'Object',
       data: copy,
-      [SERIALIZED_TYPE_FIELD_NAME_ESCAPED]: value[SERIALIZED_TYPE_FIELD_NAME],
+      [SERIALIZED_TYPE_FIELD_NAME_ESCAPED]: origValue[SERIALIZED_TYPE_FIELD_NAME],
     };
   }
 
-  return value;
+  return origValue;
 };
 
 const reviver = function reviver(key, value) {
