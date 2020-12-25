@@ -23,17 +23,6 @@ export const SERIALIZED_TYPE_FIELD_NAME: '__serializedType__' = '__serializedTyp
  */
 const SERIALIZED_TYPE_FIELD_NAME_ESCAPED: '__serializedType__value' = '__serializedType__value';
 
-// If a value's prototype chain starts with one of these, then the
-// value doesn't need special handling in our replacer --
-// JSON.stringify will handle it just fine.
-const boringPrototypes = [
-  Object.prototype,
-  Array.prototype,
-  Number.prototype,
-  String.prototype,
-  Boolean.prototype,
-];
-
 // Don't make this an arrow function -- we need `this` to be a special
 // value; see
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#The_replacer_parameter.
@@ -84,7 +73,12 @@ const replacer = function replacer(key, defaultReplacedValue) {
 
   // If storing an interesting data type, don't forget to handle it
   // here, and in `reviver`.
-  invariant(boringPrototypes.includes(Object.getPrototypeOf(value)), 'unexpected class');
+  const prototype = Object.getPrototypeOf(value);
+  invariant(
+    // Flow bug: https://github.com/facebook/flow/issues/6110
+    prototype === (Object.prototype: $FlowFixMe) || prototype === (Array.prototype: $FlowFixMe),
+    'unexpected class',
+  );
 
   if (SERIALIZED_TYPE_FIELD_NAME in value) {
     const copy = { ...value };
