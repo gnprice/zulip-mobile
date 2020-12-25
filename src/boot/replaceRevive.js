@@ -52,6 +52,10 @@ const replacer = function replacer(key, defaultReplacedValue) {
   // work `JSON.stringify` did by calling `toJSON`.
   const value = this[key];
 
+  if (typeof value !== 'object' || value === null) {
+    return value;
+  }
+
   if (value instanceof ZulipVersion) {
     return { data: value.raw(), [SERIALIZED_TYPE_FIELD_NAME]: 'ZulipVersion' };
   } else if (value instanceof URL) {
@@ -74,19 +78,15 @@ const replacer = function replacer(key, defaultReplacedValue) {
     return { data: defaultReplacedValue, [SERIALIZED_TYPE_FIELD_NAME]: 'ImmutableMap' };
   }
 
-  // `value.toJSON` and `Object.getPrototypeOf(value)` fail
-  // if value is undefined or null.
-  if (value !== undefined && value !== null) {
-    // Don't forget to handle a value's `toJSON` method, if present, as
-    // described above.
-    invariant(typeof value.toJSON !== 'function', 'unexpected toJSON');
+  // Don't forget to handle a value's `toJSON` method, if present, as
+  // described above.
+  invariant(typeof value.toJSON !== 'function', 'unexpected toJSON');
 
-    // If storing an interesting data type, don't forget to handle it
-    // here, and in `reviver`.
-    invariant(boringPrototypes.includes(Object.getPrototypeOf(value)), 'unexpected class');
-  }
+  // If storing an interesting data type, don't forget to handle it
+  // here, and in `reviver`.
+  invariant(boringPrototypes.includes(Object.getPrototypeOf(value)), 'unexpected class');
 
-  if (typeof value === 'object' && value !== null && SERIALIZED_TYPE_FIELD_NAME in value) {
+  if (SERIALIZED_TYPE_FIELD_NAME in value) {
     const copy = { ...value };
     delete copy[SERIALIZED_TYPE_FIELD_NAME];
     return {
