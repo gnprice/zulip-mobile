@@ -45,57 +45,64 @@ const replacer = function replacer(key, defaultReplacedValue) {
     return value;
   }
 
-  const prototype = Object.getPrototypeOf(value);
-  // Flow bug: https://github.com/facebook/flow/issues/6110
-  if (prototype === (Array.prototype: $FlowFixMe)) {
-    // For an array we don't need the SERIALIZED_TYPE_FIELD_NAME logic
-    // below, because properties with non-numeric names won't get serialized
-    // in the JSON anyway.
-    return value;
+  switch (Object.getPrototypeOf(value)) {
+    // The $FlowFixMe on each `foo.prototype` is due to this Flow bug:
+    //   https://github.com/facebook/flow/issues/6110
+
+    case (Array.prototype: $FlowFixMe):
+      // For an array we don't need the SERIALIZED_TYPE_FIELD_NAME logic
+      // below, because properties with non-numeric names won't get serialized
+      // in the JSON anyway.
+      return value;
+
+    case (ZulipVersion.prototype: $FlowFixMe):
+      return { data: value.raw(), [SERIALIZED_TYPE_FIELD_NAME]: 'ZulipVersion' };
+
+    case (URL.prototype: $FlowFixMe):
+      return { data: value.toString(), [SERIALIZED_TYPE_FIELD_NAME]: 'URL' };
+
+    case (GravatarURL.prototype: $FlowFixMe):
+      return { data: GravatarURL.serialize(value), [SERIALIZED_TYPE_FIELD_NAME]: 'GravatarURL' };
+
+    case (UploadedAvatarURL.prototype: $FlowFixMe):
+      return {
+        data: UploadedAvatarURL.serialize(value),
+        [SERIALIZED_TYPE_FIELD_NAME]: 'UploadedAvatarURL',
+      };
+
+    case (FallbackAvatarURL.prototype: $FlowFixMe):
+      return {
+        data: FallbackAvatarURL.serialize(value),
+        [SERIALIZED_TYPE_FIELD_NAME]: 'FallbackAvatarURL',
+      };
+
+    case (Immutable.Map.prototype: $FlowFixMe):
+      // Immutable.Map#toJSON returns a nice JSONable object-as-map,
+      // so we use `defaultReplacedValue` which is the result of that.
+      return { data: defaultReplacedValue, [SERIALIZED_TYPE_FIELD_NAME]: 'ImmutableMap' };
+
+    case (Object.prototype: $FlowFixMe):
+      // Don't forget to handle a value's `toJSON` method, if present, as
+      // described above.
+      invariant(typeof value.toJSON !== 'function', 'unexpected toJSON');
+
+      if (SERIALIZED_TYPE_FIELD_NAME in value) {
+        const copy = { ...value };
+        delete copy[SERIALIZED_TYPE_FIELD_NAME];
+        return {
+          [SERIALIZED_TYPE_FIELD_NAME]: 'Object',
+          data: copy,
+          [SERIALIZED_TYPE_FIELD_NAME_ESCAPED]: value[SERIALIZED_TYPE_FIELD_NAME],
+        };
+      }
+
+      return value;
+
+    default:
+      // If storing an interesting data type, don't forget to handle it
+      // here, and in `reviver`.
+      throw new Error('unexpected class');
   }
-
-  if (value instanceof ZulipVersion) {
-    return { data: value.raw(), [SERIALIZED_TYPE_FIELD_NAME]: 'ZulipVersion' };
-  } else if (value instanceof URL) {
-    return { data: value.toString(), [SERIALIZED_TYPE_FIELD_NAME]: 'URL' };
-  } else if (value instanceof GravatarURL) {
-    return { data: GravatarURL.serialize(value), [SERIALIZED_TYPE_FIELD_NAME]: 'GravatarURL' };
-  } else if (value instanceof UploadedAvatarURL) {
-    return {
-      data: UploadedAvatarURL.serialize(value),
-      [SERIALIZED_TYPE_FIELD_NAME]: 'UploadedAvatarURL',
-    };
-  } else if (value instanceof FallbackAvatarURL) {
-    return {
-      data: FallbackAvatarURL.serialize(value),
-      [SERIALIZED_TYPE_FIELD_NAME]: 'FallbackAvatarURL',
-    };
-  } else if (Immutable.Map.isMap(value)) {
-    // Immutable.Map#toJSON returns a nice JSONable object-as-map,
-    // so we use `defaultReplacedValue` which is the result of that.
-    return { data: defaultReplacedValue, [SERIALIZED_TYPE_FIELD_NAME]: 'ImmutableMap' };
-  }
-
-  // Don't forget to handle a value's `toJSON` method, if present, as
-  // described above.
-  invariant(typeof value.toJSON !== 'function', 'unexpected toJSON');
-
-  // If storing an interesting data type, don't forget to handle it
-  // here, and in `reviver`.
-  // Flow bug: https://github.com/facebook/flow/issues/6110
-  invariant(prototype === (Object.prototype: $FlowFixMe), 'unexpected class');
-
-  if (SERIALIZED_TYPE_FIELD_NAME in value) {
-    const copy = { ...value };
-    delete copy[SERIALIZED_TYPE_FIELD_NAME];
-    return {
-      [SERIALIZED_TYPE_FIELD_NAME]: 'Object',
-      data: copy,
-      [SERIALIZED_TYPE_FIELD_NAME_ESCAPED]: value[SERIALIZED_TYPE_FIELD_NAME],
-    };
-  }
-
-  return value;
 };
 
 const reviver = function reviver(key, value) {
