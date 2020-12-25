@@ -42,7 +42,7 @@ const replacer = function replacer(key, defaultReplacedValue) {
   // `toJSON` method, if present.
   //
   // When identifying what kind of thing we're working with, be sure to
-  // examine `origValue` instead of `defaultReplacedValue`, if calling
+  // examine `value` instead of `defaultReplacedValue`, if calling
   // `toJSON` on that kind of thing would remove its identifying features --
   // which is to say, if that kind of thing has a `toJSON` method.
   //
@@ -50,57 +50,53 @@ const replacer = function replacer(key, defaultReplacedValue) {
   // `data` to `defaultReplacedValue`, if we trust that `toJSON` gives the
   // output we want to store there. And it would mean we don't discard the
   // work `JSON.stringify` did by calling `toJSON`.
-  const origValue = this[key];
+  const value = this[key];
 
-  if (origValue instanceof ZulipVersion) {
-    return { data: origValue.raw(), [SERIALIZED_TYPE_FIELD_NAME]: 'ZulipVersion' };
-  } else if (origValue instanceof URL) {
-    return { data: origValue.toString(), [SERIALIZED_TYPE_FIELD_NAME]: 'URL' };
-  } else if (origValue instanceof GravatarURL) {
-    return { data: GravatarURL.serialize(origValue), [SERIALIZED_TYPE_FIELD_NAME]: 'GravatarURL' };
-  } else if (origValue instanceof UploadedAvatarURL) {
+  if (value instanceof ZulipVersion) {
+    return { data: value.raw(), [SERIALIZED_TYPE_FIELD_NAME]: 'ZulipVersion' };
+  } else if (value instanceof URL) {
+    return { data: value.toString(), [SERIALIZED_TYPE_FIELD_NAME]: 'URL' };
+  } else if (value instanceof GravatarURL) {
+    return { data: GravatarURL.serialize(value), [SERIALIZED_TYPE_FIELD_NAME]: 'GravatarURL' };
+  } else if (value instanceof UploadedAvatarURL) {
     return {
-      data: UploadedAvatarURL.serialize(origValue),
+      data: UploadedAvatarURL.serialize(value),
       [SERIALIZED_TYPE_FIELD_NAME]: 'UploadedAvatarURL',
     };
-  } else if (origValue instanceof FallbackAvatarURL) {
+  } else if (value instanceof FallbackAvatarURL) {
     return {
-      data: FallbackAvatarURL.serialize(origValue),
+      data: FallbackAvatarURL.serialize(value),
       [SERIALIZED_TYPE_FIELD_NAME]: 'FallbackAvatarURL',
     };
-  } else if (Immutable.Map.isMap(origValue)) {
+  } else if (Immutable.Map.isMap(value)) {
     // Immutable.Map#toJSON returns a nice JSONable object-as-map,
     // so we use `defaultReplacedValue` which is the result of that.
     return { data: defaultReplacedValue, [SERIALIZED_TYPE_FIELD_NAME]: 'ImmutableMap' };
   }
 
-  // `origValue.toJSON` and `Object.getPrototypeOf(origValue)` fail
-  // if origValue is undefined or null.
-  if (origValue !== undefined && origValue !== null) {
+  // `value.toJSON` and `Object.getPrototypeOf(value)` fail
+  // if value is undefined or null.
+  if (value !== undefined && value !== null) {
     // Don't forget to handle a value's `toJSON` method, if present, as
     // described above.
-    invariant(typeof origValue.toJSON !== 'function', 'unexpected toJSON');
+    invariant(typeof value.toJSON !== 'function', 'unexpected toJSON');
 
     // If storing an interesting data type, don't forget to handle it
     // here, and in `reviver`.
-    invariant(boringPrototypes.includes(Object.getPrototypeOf(origValue)), 'unexpected class');
+    invariant(boringPrototypes.includes(Object.getPrototypeOf(value)), 'unexpected class');
   }
 
-  if (
-    typeof origValue === 'object'
-    && origValue !== null
-    && SERIALIZED_TYPE_FIELD_NAME in origValue
-  ) {
-    const copy = { ...origValue };
+  if (typeof value === 'object' && value !== null && SERIALIZED_TYPE_FIELD_NAME in value) {
+    const copy = { ...value };
     delete copy[SERIALIZED_TYPE_FIELD_NAME];
     return {
       [SERIALIZED_TYPE_FIELD_NAME]: 'Object',
       data: copy,
-      [SERIALIZED_TYPE_FIELD_NAME_ESCAPED]: origValue[SERIALIZED_TYPE_FIELD_NAME],
+      [SERIALIZED_TYPE_FIELD_NAME_ESCAPED]: value[SERIALIZED_TYPE_FIELD_NAME],
     };
   }
 
-  return origValue;
+  return value;
 };
 
 const reviver = function reviver(key, value) {
