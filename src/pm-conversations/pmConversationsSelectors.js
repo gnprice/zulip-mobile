@@ -114,7 +114,7 @@ const getRecentConversationsImpl: Selector<PmConversationData[]> = createSelecto
     unreadPms,
     unreadHuddles,
   ) => {
-    const recipients = recentPCs.map(conversation => {
+    const latestByRecipients = recentPCs.map(conversation => {
       const keyRecipients = pmKeyRecipientsFromIds(
         conversation.user_ids,
         allUsersById,
@@ -131,7 +131,7 @@ const getRecentConversationsImpl: Selector<PmConversationData[]> = createSelecto
       };
     });
 
-    return attachUnread(unreadPms, unreadHuddles, recipients);
+    return attachUnread(unreadPms, unreadHuddles, latestByRecipients);
   },
 );
 
