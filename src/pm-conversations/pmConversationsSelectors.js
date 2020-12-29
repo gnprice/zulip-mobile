@@ -2,6 +2,7 @@
 import { createSelector } from 'reselect';
 
 import type {
+  GlobalState,
   Message,
   PmConversationData,
   RecentPrivateConversation,
@@ -171,11 +172,8 @@ const getMetaselector: Selector<Selector<PmConversationData[]>> = createSelector
  * Switches between implementations as appropriate for the current server
  * version.
  */
-export const getRecentConversations: Selector<PmConversationData[]> = createSelector(
-  state => state,
-  getMetaselector,
-  (state, metaselector) => metaselector(state),
-);
+export const getRecentConversations = (state: GlobalState): PmConversationData[] =>
+  getMetaselector(state)(state);
 
 export const getUnreadConversations: Selector<PmConversationData[]> = createSelector(
   getRecentConversations,
