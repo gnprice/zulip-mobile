@@ -37,7 +37,8 @@ import { ZulipVersion } from '../utils/zulipVersion';
 const attachUnread = (
   unreadPms: { [number]: number },
   unreadHuddles: { [string]: number },
-) => partials =>
+  partials,
+) =>
   partials.map(conversation => ({
     key: conversation.unreadsKey,
     keyRecipients: conversation.keyRecipients,
@@ -92,7 +93,7 @@ const getRecentConversationsLegacyImpl: Selector<PmConversationData[]> = createS
       (a, b) => +b.msgId - +a.msgId,
     );
 
-    return attachUnread(unreadPms, unreadHuddles)(sortedByMostRecent);
+    return attachUnread(unreadPms, unreadHuddles, sortedByMostRecent);
   },
 );
 
@@ -130,7 +131,7 @@ const getRecentConversationsImpl: Selector<PmConversationData[]> = createSelecto
       };
     });
 
-    return attachUnread(unreadPms, unreadHuddles)(recipients);
+    return attachUnread(unreadPms, unreadHuddles, recipients);
   },
 );
 
