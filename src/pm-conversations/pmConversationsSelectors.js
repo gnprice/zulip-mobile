@@ -13,7 +13,7 @@ import type {
 import { getServerVersion } from '../account/accountsSelectors';
 import { getPrivateMessages } from '../message/messageSelectors';
 import { getAllUsersById, getOwnUser } from '../users/userSelectors';
-import { getRecentPrivateConversations } from '../directSelectors';
+import { getRecentPrivateConversations, getUnreadPms } from '../directSelectors';
 import { getUnreadByPms, getUnreadByHuddles } from '../unread/unreadSelectors';
 import {
   pmUnreadsKeyFromMessage,
@@ -34,25 +34,24 @@ import { ZulipVersion } from '../utils/zulipVersion';
  * Note that, since this will only ever be called by other selectors, the inner
  * function doesn't need to do any memoization of its own.
  */
-const getAttachUnread = createSelector(
-  getUnreadByPms,
-  getUnreadByHuddles,
-  (unreadPms: { [number]: number }, unreadHuddles: { [string]: number }) => partials =>
-    partials.map(conversation => ({
-      key: conversation.unreadsKey,
-      keyRecipients: conversation.keyRecipients,
-      msgId: conversation.msgId,
-      unread:
-        // This business of looking in one place and then the other is kind
-        // of messy.  Fortunately it always works, because the key spaces
-        // are disjoint: all `unreadHuddles` keys contain a comma, and all
-        // `unreadPms` keys don't.
-        /* $FlowFixMe: The keys of unreadPms are logically numbers, but because it's an object they
+const attachUnread = (
+  unreadPms: { [number]: number },
+  unreadHuddles: { [string]: number },
+) => partials =>
+  partials.map(conversation => ({
+    key: conversation.unreadsKey,
+    keyRecipients: conversation.keyRecipients,
+    msgId: conversation.msgId,
+    unread:
+      // This business of looking in one place and then the other is kind
+      // of messy.  Fortunately it always works, because the key spaces
+      // are disjoint: all `unreadHuddles` keys contain a comma, and all
+      // `unreadPms` keys don't.
+      /* $FlowFixMe: The keys of unreadPms are logically numbers, but because it's an object they
          end up converted to strings, so this access with string keys works.  We should probably use
          a Map for this and similar maps. */
-        unreadPms[conversation.unreadsKey] || unreadHuddles[conversation.unreadsKey],
-    })),
-);
+      unreadPms[conversation.unreadsKey] || unreadHuddles[conversation.unreadsKey],
+  }));
 
 /**
  * Legacy implementation of {@link getRecentConversations}. Computes an
@@ -62,9 +61,16 @@ const getAttachUnread = createSelector(
 const getRecentConversationsLegacyImpl: Selector<PmConversationData[]> = createSelector(
   getOwnUser,
   getPrivateMessages,
-  getAttachUnread,
+  getUnreadByPms,
+  getUnreadByHuddles,
   getAllUsersById,
-  (ownUser: User, messages: Message[], attachUnread, allUsersById): PmConversationData[] => {
+  (
+    ownUser: User,
+    messages: Message[],
+    unreadPms,
+    unreadHuddles,
+    allUsersById,
+  ): PmConversationData[] => {
     const items = messages
       .map(msg => {
         // Note this can be a different set of users from those in `keyRecipients`.
@@ -86,7 +92,7 @@ const getRecentConversationsLegacyImpl: Selector<PmConversationData[]> = createS
       (a, b) => +b.msgId - +a.msgId,
     );
 
-    return attachUnread(sortedByMostRecent);
+    return attachUnread(unreadPms, unreadHuddles)(sortedByMostRecent);
   },
 );
 
@@ -98,12 +104,14 @@ const getRecentConversationsImpl: Selector<PmConversationData[]> = createSelecto
   getOwnUser,
   getAllUsersById,
   getRecentPrivateConversations,
-  getAttachUnread,
+  getUnreadByPms,
+  getUnreadByHuddles,
   (
     ownUser: User,
     allUsersById: Map<number, UserOrBot>,
     recentPCs: RecentPrivateConversation[],
-    attachUnread,
+    unreadPms,
+    unreadHuddles,
   ) => {
     const recipients = recentPCs.map(conversation => {
       const keyRecipients = pmKeyRecipientsFromIds(
@@ -122,7 +130,7 @@ const getRecentConversationsImpl: Selector<PmConversationData[]> = createSelecto
       };
     });
 
-    return attachUnread(recipients);
+    return attachUnread(unreadPms, unreadHuddles)(recipients);
   },
 );
 
