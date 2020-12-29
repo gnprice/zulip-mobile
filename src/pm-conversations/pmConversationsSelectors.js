@@ -147,13 +147,18 @@ const DIVIDING_LINE = new ZulipVersion('2.1-dev-384-g4c3c669b41');
 
 // Private. Selector to choose between other selectors. (This avoids needlessly
 // recomputing the old version when we're on a new server, or vice versa.)
-const getMetaselector: Selector<Selector<PmConversationData[]>> = createSelector(
+const getServerIsOld: Selector<boolean> = createSelector(
   getServerVersion,
-  version => {
+  version => !(version && version.isAtLeast(DIVIDING_LINE)),
+);
+
+const getMetaselector: Selector<Selector<PmConversationData[]>> = createSelector(
+  getServerIsOld,
+  serverIsOld => {
     // If we're talking to a new enough version of the Zulip server, we don't
     // need the legacy impl; the modern one will always return a superset of
     // its content.
-    if (version && version.isAtLeast(DIVIDING_LINE)) {
+    if (!serverIsOld) {
       return getRecentConversationsImpl;
     }
 
