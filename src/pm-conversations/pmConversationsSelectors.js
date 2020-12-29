@@ -23,29 +23,6 @@ import {
 } from '../utils/recipient';
 import { ZulipVersion } from '../utils/zulipVersion';
 
-/**
- * Given a list of PmConversationPartial or PmConversationData, trim it down to
- * contain only the most recent message from any conversation, and return them
- * sorted by recency.
- */
-const collateByRecipient = <T: { unreadsKey: string, msgId: number }>(
-  items: $ReadOnlyArray<T>,
-): T[] => {
-  const latestByRecipients = new Map();
-  items.forEach(item => {
-    const prev = latestByRecipients.get(item.unreadsKey);
-    if (!prev || item.msgId > prev.msgId) {
-      latestByRecipients.set(item.unreadsKey, item);
-    }
-  });
-
-  const sortedByMostRecent = Array.from(latestByRecipients.values()).sort(
-    (a, b) => +b.msgId - +a.msgId,
-  );
-
-  return sortedByMostRecent;
-};
-
 // (Overtaken by rebase.)
 // type PmConversationPartial = $Diff<PmConversationData, {| unread: mixed |}>;
 // type UnreadAttacher = ($ReadOnlyArray<PmConversationPartial>) => PmConversationData[];
@@ -97,7 +74,17 @@ const getRecentConversationsLegacyImpl: Selector<PmConversationData[]> = createS
       })
       .filter(Boolean);
 
-    const sortedByMostRecent = collateByRecipient(items);
+    const latestByRecipients = new Map();
+    items.forEach(item => {
+      const prev = latestByRecipients.get(item.unreadsKey);
+      if (!prev || item.msgId > prev.msgId) {
+        latestByRecipients.set(item.unreadsKey, item);
+      }
+    });
+
+    const sortedByMostRecent = Array.from(latestByRecipients.values()).sort(
+      (a, b) => +b.msgId - +a.msgId,
+    );
 
     return attachUnread(sortedByMostRecent);
   },
