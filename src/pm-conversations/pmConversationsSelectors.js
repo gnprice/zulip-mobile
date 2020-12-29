@@ -115,6 +115,8 @@ const getRecentConversationsImpl: Selector<PmConversationData[]> = createSelecto
     unreadHuddles,
   ) => {
     const latestByRecipients = recentPCs.map(conversation => {
+      // TODO this is wrong for a self-1:1 -- doesn't add back self
+      //   (And that means pmKeyRecipientsFromIds has a bug.)
       const keyRecipients = pmKeyRecipientsFromIds(
         conversation.user_ids,
         allUsersById,
