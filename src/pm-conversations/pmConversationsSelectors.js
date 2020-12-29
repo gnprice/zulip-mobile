@@ -152,24 +152,6 @@ const getServerIsOld: Selector<boolean> = createSelector(
   version => !(version && version.isAtLeast(DIVIDING_LINE)),
 );
 
-const getMetaselector: Selector<Selector<PmConversationData[]>> = createSelector(
-  getServerIsOld,
-  serverIsOld => {
-    // If we're talking to a new enough version of the Zulip server, we don't
-    // need the legacy impl; the modern one will always return a superset of
-    // its content.
-    if (!serverIsOld) {
-      return getRecentConversationsImpl;
-    }
-
-    // If we're _not_ talking to a newer version of the Zulip server, then
-    // there's no point in using the modern version; it will only return
-    // messages received in the current session, which should all be in the
-    // legacy impl's data as well.
-    return getRecentConversationsLegacyImpl;
-  },
-);
-
 /**
  * Get a list of the most recent private conversations, including the most
  * recent message from each.
@@ -177,8 +159,20 @@ const getMetaselector: Selector<Selector<PmConversationData[]>> = createSelector
  * Switches between implementations as appropriate for the current server
  * version.
  */
-export const getRecentConversations = (state: GlobalState): PmConversationData[] =>
-  getMetaselector(state)(state);
+export const getRecentConversations = (state: GlobalState): PmConversationData[] => {
+  if (!getServerIsOld(state)) {
+    // If we're talking to a new enough version of the Zulip server, we don't
+    // need the legacy impl; the modern one will always return a superset of
+    // its content.
+    return getRecentConversationsImpl(state);
+  }
+
+  // If we're _not_ talking to a newer version of the Zulip server, then
+  // there's no point in using the modern version; it will only return
+  // messages received in the current session, which should all be in the
+  // legacy impl's data as well.
+  return getRecentConversationsLegacyImpl(state);
+};
 
 export const getUnreadConversations: Selector<PmConversationData[]> = createSelector(
   getRecentConversations,
