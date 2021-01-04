@@ -4,11 +4,11 @@ import { View } from 'react-native';
 import type { NavigationStackProp, NavigationStateRoute } from 'react-navigation-stack';
 import { withNavigationFocus } from 'react-navigation';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
 
 import styles, { createStyleSheet, ThemeContext } from '../styles';
-import type { Dispatch, Fetching, Narrow, EditMessage } from '../types';
+import type { Dispatch, GlobalState, Narrow, EditMessage } from '../types';
 import { KeyboardAvoider, OfflineNotice, ZulipStatusBar } from '../common';
 import ChatNavBar from '../nav/ChatNavBar';
 import MessageList from '../webview/MessageList';
@@ -22,15 +22,6 @@ import { canSendToNarrow } from '../utils/narrow';
 import { getLoading, getSession } from '../directSelectors';
 import { getFetchingForNarrow } from './fetchingSelectors';
 import { getShownMessagesForNarrow, isNarrowValid as getIsNarrowValid } from './narrowsSelectors';
-import { connect } from '../react-redux';
-
-type SelectorProps = {|
-  isNarrowValid: boolean,
-  fetching: Fetching,
-  haveNoMessages: boolean,
-  loading: boolean,
-  eventQueueId: number,
-|};
 
 type Props = $ReadOnly<{|
   // Since we've put this screen in a stack-nav route config, and we
@@ -38,13 +29,10 @@ type Props = $ReadOnly<{|
   // don't invoke it anywhere else at all), we know it gets the
   // `navigation` prop for free, with the stack-nav shape.
   navigation: NavigationStackProp<{| ...NavigationStateRoute, params: {| narrow: Narrow |} |}>,
-  dispatch: Dispatch,
 
   // From React Navigation's `withNavigationFocus` HOC. Type copied
   // from the libdef.
   isFocused: ?boolean,
-
-  ...SelectorProps,
 |}>;
 
 const componentStyles = createStyleSheet({
@@ -63,12 +51,18 @@ const componentStyles = createStyleSheet({
  * more details, including how Redux is kept up-to-date during the
  * whole process.
  */
-const useFetchMessages = args => {
-  const { isFocused, narrow, eventQueueId, loading, fetching, haveNoMessages } = args;
+const useFetchMessages = (args: {| isFocused: ?boolean, narrow: Narrow |}) => {
+  const { isFocused, narrow } = args;
 
   const dispatch: Dispatch = useDispatch();
 
+  const eventQueueId = useSelector((state: GlobalState) => getSession(state).eventQueueId);
+  const loading = useSelector(getLoading);
+  const fetching = useSelector((state: GlobalState) => getFetchingForNarrow(state, narrow));
   const isFetching = fetching.older || fetching.newer || loading;
+  const haveNoMessages = useSelector(
+    (state: GlobalState) => getShownMessagesForNarrow(state, narrow).length === 0,
+  );
 
   // This could live in state, but then we'd risk pointless rerenders;
   // we only use it in our `useEffect` callbacks. Using `useRef` is
@@ -146,13 +140,13 @@ function ChatScreen(props: Props) {
 
   const [editMessage, setEditMessage] = React.useState<EditMessage | null>(null);
 
-  const { navigation } = props;
+  const { navigation, isFocused } = props;
   const { narrow } = navigation.state.params;
 
-  const { isNarrowValid } = props;
+  const isNarrowValid = useSelector((state: GlobalState) => getIsNarrowValid(state, narrow));
 
   const { fetchError, isFetching, haveNoMessages } = useFetchMessages({
-    ...props,
+    isFocused,
     narrow,
   });
 
@@ -201,14 +195,4 @@ function ChatScreen(props: Props) {
 export default compose(
   // https://reactnavigation.org/docs/4.x/function-after-focusing-screen/#triggering-an-action-with-the-withnavigationfocus-higher-order-component
   withNavigationFocus,
-  connect<SelectorProps, _, _>((state, props) => {
-    const { narrow } = props.navigation.state.params;
-    return {
-      isNarrowValid: getIsNarrowValid(state, narrow),
-      loading: getLoading(state),
-      fetching: getFetchingForNarrow(state, narrow),
-      haveNoMessages: getShownMessagesForNarrow(state, narrow).length === 0,
-      eventQueueId: getSession(state).eventQueueId,
-    };
-  }),
 )(ChatScreen);
