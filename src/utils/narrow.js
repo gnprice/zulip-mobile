@@ -399,20 +399,24 @@ export const isSearchNarrow = (narrow?: Narrow): boolean =>
 /**
  * Convert the narrow into the form used in the Zulip API at get-messages.
  */
-export const apiNarrowOfNarrow = (narrow: Narrow): ApiNarrow =>
-  caseNarrow(narrow, {
-    stream: streamName => [{ operator: 'stream', operand: streamName }],
-    topic: (streamName, topic) => [
-      { operator: 'stream', operand: streamName },
-      { operator: 'topic', operand: topic },
-    ],
-    pm: emails => [{ operator: 'pm-with', operand: emails.join(',') }],
-    search: query => [{ operator: 'search', operand: query }],
-    home: () => [],
-    starred: () => [{ operator: 'is', operand: 'starred' }],
-    mentioned: () => [{ operator: 'is', operand: 'mentioned' }],
-    allPrivate: () => [{ operator: 'is', operand: 'private' }],
-  });
+export const apiNarrowOfNarrow = (narrow: Narrow): ApiNarrow => {
+  // prettier-ignore
+  switch (narrow.type) {
+    case 'stream': return [{ operator: 'stream', operand: narrow.streamName }];
+    case 'topic': return [
+      { operator: 'stream', operand: narrow.streamName },
+      { operator: 'topic', operand: narrow.topic },
+    ];
+    // TODO(server-2.1): Switch to user IDs, then drop emails from Narrow entirely.
+    case 'pm': return [{ operator: 'pm-with', operand: narrow.emails.join(',') }];
+    case 'search': return [{ operator: 'search', operand: narrow.query }];
+    case 'all': return [];
+    case 'starred': return [{ operator: 'is', operand: 'starred' }];
+    case 'mentioned': return [{ operator: 'is', operand: 'mentioned' }];
+    case 'all-pm': return [{ operator: 'is', operand: 'private' }];
+    default: ensureUnreachable(narrow.type); throw new Error('bad narrow.type');
+  }
+};
 
 /**
  * True just if the given message is part of the given narrow.
