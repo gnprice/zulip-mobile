@@ -6,13 +6,10 @@ import { withNavigationFocus } from 'react-navigation';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { compose } from 'redux';
 
-import { connect } from '../react-redux';
-import type { ThemeData } from '../styles';
-import styles, { ThemeContext } from '../styles';
+import styles, { createStyleSheet, ThemeContext, type ThemeData } from '../styles';
 import type { Dispatch, Fetching, Narrow, EditMessage } from '../types';
 import { KeyboardAvoider, OfflineNotice, ZulipStatusBar } from '../common';
 import ChatNavBar from '../nav/ChatNavBar';
-
 import MessageList from '../webview/MessageList';
 import NoMessages from '../message/NoMessages';
 import FetchError from './FetchError';
@@ -23,7 +20,8 @@ import UnreadNotice from './UnreadNotice';
 import { canSendToNarrow } from '../utils/narrow';
 import { getLoading, getSession } from '../directSelectors';
 import { getFetchingForNarrow } from './fetchingSelectors';
-import { getShownMessagesForNarrow, isNarrowValid } from './narrowsSelectors';
+import { getShownMessagesForNarrow, isNarrowValid as getIsNarrowValid } from './narrowsSelectors';
+import { connect } from '../react-redux';
 
 type SelectorProps = {|
   isNarrowValid: boolean,
@@ -48,6 +46,13 @@ type Props = $ReadOnly<{|
   ...SelectorProps,
 |}>;
 
+const componentStyles = createStyleSheet({
+  screen: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+});
+
 type State = {|
   editMessage: EditMessage | null,
   fetchError: Error | null,
@@ -60,13 +65,6 @@ class ChatScreen extends PureComponent<Props, State> {
   state = {
     editMessage: null,
     fetchError: null,
-  };
-
-  styles = {
-    screen: {
-      flex: 1,
-      flexDirection: 'column',
-    },
   };
 
   // This could live in `this.state`, but it isn't used in `render`.
@@ -118,7 +116,7 @@ class ChatScreen extends PureComponent<Props, State> {
     }
   };
 
-  startEditMessage = (editMessage: EditMessage) => {
+  startEditMessage = (editMessage: EditMessage | null) => {
     this.setState({ editMessage });
   };
 
@@ -132,23 +130,29 @@ class ChatScreen extends PureComponent<Props, State> {
     const { editMessage } = this.state;
 
     const isFetching = fetching.older || fetching.newer || loading;
+
+    const { backgroundColor } = this.context;
+    const { isNarrowValid } = this.props;
+    const { fetchError } = this.state;
+    const setEditMessage = this.startEditMessage;
+
     const showMessagePlaceholders = haveNoMessages && isFetching;
     const sayNoMessages = haveNoMessages && !isFetching;
     const showComposeBox = canSendToNarrow(narrow) && !showMessagePlaceholders;
 
     return (
       <ActionSheetProvider>
-        <View style={[this.styles.screen, { backgroundColor: this.context.backgroundColor }]}>
+        <View style={[componentStyles.screen, { backgroundColor }]}>
           <KeyboardAvoider style={styles.flexed} behavior="padding">
             <ZulipStatusBar narrow={narrow} />
             <ChatNavBar narrow={narrow} editMessage={editMessage} />
             <OfflineNotice />
             <UnreadNotice narrow={narrow} />
             {(() => {
-              if (!this.props.isNarrowValid) {
+              if (!isNarrowValid) {
                 return <InvalidNarrow narrow={narrow} />;
-              } else if (this.state.fetchError !== null) {
-                return <FetchError narrow={narrow} error={this.state.fetchError} />;
+              } else if (fetchError !== null) {
+                return <FetchError narrow={narrow} error={fetchError} />;
               } else if (sayNoMessages) {
                 return <NoMessages narrow={narrow} />;
               } else {
@@ -156,7 +160,7 @@ class ChatScreen extends PureComponent<Props, State> {
                   <MessageList
                     narrow={narrow}
                     showMessagePlaceholders={showMessagePlaceholders}
-                    startEditMessage={this.startEditMessage}
+                    startEditMessage={setEditMessage}
                   />
                 );
               }
@@ -165,7 +169,7 @@ class ChatScreen extends PureComponent<Props, State> {
               <ComposeBox
                 narrow={narrow}
                 editMessage={editMessage}
-                completeEditMessage={this.completeEditMessage}
+                completeEditMessage={() => setEditMessage(null)}
               />
             )}
           </KeyboardAvoider>
@@ -181,7 +185,7 @@ export default compose(
   connect<SelectorProps, _, _>((state, props) => {
     const { narrow } = props.navigation.state.params;
     return {
-      isNarrowValid: isNarrowValid(state, narrow),
+      isNarrowValid: getIsNarrowValid(state, narrow),
       loading: getLoading(state),
       fetching: getFetchingForNarrow(state, narrow),
       haveNoMessages: getShownMessagesForNarrow(state, narrow).length === 0,
