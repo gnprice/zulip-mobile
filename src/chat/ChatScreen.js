@@ -83,7 +83,7 @@ class ChatScreen extends PureComponent<Props, State> {
   componentDidUpdate(prevProps, prevState) {
     const { isFocused } = this.props;
 
-    // When the event queue changes, fetch or schedule a fetch
+    // When the event queue changes, schedule a fetch.
     if (prevProps.eventQueueId !== this.props.eventQueueId) {
       this.shouldFetchWhenNextFocused = true;
     }
@@ -110,8 +110,9 @@ class ChatScreen extends PureComponent<Props, State> {
    */
   fetch = async () => {
     const { narrow } = this.props.navigation.state.params;
+    const { dispatch } = this.props;
     try {
-      await this.props.dispatch(fetchMessagesInNarrow(narrow));
+      await dispatch(fetchMessagesInNarrow(narrow));
     } catch (e) {
       this.setState({ fetchError: e });
     }
