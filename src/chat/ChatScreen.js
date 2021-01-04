@@ -79,58 +79,27 @@ const useFetchMessages = (args: {| isFocused: ?boolean, narrow: Narrow |}) => {
     } catch (e) {
       setFetchError(e);
     }
-  }, [
-    // Neither of these should change, but we include them for
-    // correctness.
-    dispatch,
-    narrow,
-  ]);
+  }, [dispatch, narrow]);
 
-  // First `useEffect` (order matters).
-  React.useEffect(
-    () => {
-      // When the event queue changes, schedule a fetch.
-      shouldFetchWhenNextFocused.current = true;
-    },
-    // Don't add `isFocused` here: we only want to set
-    // `shouldFetchWhenNextFocused` to true when the `eventQueueId`
-    // changes, and not for any other reason. If we include
-    // `isFocused`, then the callback might be firing because
-    // `isFocused` changed, and we can't easily inspect previous
-    // values of `eventQueueId` or `isFocused` to see if that's the
-    // case
-    // (https://reactjs.org/docs/hooks-faq.html#how-to-get-the-previous-props-or-state).
-    [eventQueueId],
-  );
-
-  // Second `useEffect` (order matters)
+  // When the event queue changes, schedule a fetch.
   React.useEffect(() => {
-    // Fetch on the first mount. Synchronously, unset
-    // `shouldFetchWhenNextFocused.current` that was set in the
-    // previous `useEffect`, so that only one fetch will be done on
-    // first mount (i.e., prevent the fetch in the next `useEffect`).
-    fetch();
-  }, [
-    // `fetch` will not change, but we include it for correctness.
-    fetch,
-  ]);
+    shouldFetchWhenNextFocused.current = true;
+  }, [eventQueueId]);
 
-  // Third `useEffect` (order matters)
+  // On first mount, fetch. Also unset `shouldFetchWhenNextFocused.current`
+  // that was set in the previous `useEffect`, so the fetch below doesn't
+  // also fire.
+  React.useEffect(() => {
+    fetch();
+  }, [fetch]);
+
+  // When a fetch is scheduled and we're focused, fetch.
   React.useEffect(() => {
     if (shouldFetchWhenNextFocused.current && isFocused === true) {
-      // Do a scheduled fetch, if it's time
       fetch();
     }
-  }, [
-    // Fetch (if needed) when the screen gains focus.
-    isFocused,
-    // In case the screen was already in focus when we got a new
-    // `eventQueueId`. In that case, a previous `useEffect` will have
-    // set `shouldFetchWhenNextFocused.current` to `true`.
-    eventQueueId,
-    // `fetch` will not change, but we include it for correctness.
-    fetch,
-  ]);
+    // `eventQueueId` needed here because it affects `shouldFetchWhenNextFocused`.
+  }, [isFocused, eventQueueId, fetch]);
 
   return { fetchError, isFetching, haveNoMessages };
 };
