@@ -1,5 +1,6 @@
 /* @flow strict-local */
 
+import { ensureUnreachable } from '../generics';
 import type { ApiNarrow, Message, Outbox, User, UserOrBot } from '../types';
 import {
   normalizeRecipientsAsUserIdsSansMe,
@@ -239,29 +240,34 @@ export function caseNarrowDefault<T>(
 // The arbitrary Unicode codepoints come from (a) stream names and topics,
 // and (b) our use of `\x00` as a delimiter.  Also perhaps email addresses,
 // if it's possible for those to have exciting characters in them.
+// prettier-ignore
 export function keyFromNarrow(narrow: Narrow): string {
   // The ":s" (for "string") in several of these is to keep them disjoint,
   // out of an abundance of caution, from future keys that use numeric IDs.
   //
   // Similarly, ":d" ("dual") marks those with both numeric IDs and strings.
-  return caseNarrow(narrow, {
+  switch (narrow.type) {
     // NB if you're changing any of these: be sure to do a migration.
     // Take a close look at migration 19 and any later related migrations.
 
-    stream: name => `stream:s:${name}`,
+    case 'stream': return `stream:s:${narrow.streamName}`;
     // '\x00' is the one character not allowed in Zulip stream names.
     // (See `check_stream_name` in zulip.git:zerver/lib/streams.py.)
-    topic: (streamName, topic) => `topic:s:${streamName}\x00${topic}`,
+    case 'topic': return `topic:s:${narrow.streamName}\x00${narrow.topic}`;
 
     // An earlier version had `pm:s:`.
-    pm: (emails, ids) => `pm:d:${ids.join(',')}:${emails.join(',')}`,
+    case 'pm': return `pm:d:${narrow.userIds.join(',')}:${narrow.emails.join(',')}`;
 
-    home: () => 'all',
-    starred: () => 'starred',
-    mentioned: () => 'mentioned',
-    allPrivate: () => 'all-pm',
-    search: query => `search:${query}`,
-  });
+    case 'all': return 'all';
+    case 'starred': return 'starred';
+    case 'mentioned': return 'mentioned';
+    case 'all-pm': return 'all-pm';
+    case 'search': return `search:${narrow.query}`;
+
+    default:
+       ensureUnreachable(narrow.type);
+       throw new Error(`bad narrow.type: ${narrow.type}`);
+  }
 }
 
 /**
