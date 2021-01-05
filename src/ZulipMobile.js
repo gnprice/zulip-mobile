@@ -10,8 +10,7 @@ import CompatibilityChecker from './boot/CompatibilityChecker';
 import AppEventHandlers from './boot/AppEventHandlers';
 import AppDataFetcher from './boot/AppDataFetcher';
 import BackNavigationHandler from './nav/BackNavigationHandler';
-import { AppContainer, InitialNavigationDispatcher } from './nav/ZulipAppContainer';
-import * as NavigationService from './nav/NavigationService';
+import { ZulipAppContainer, InitialNavigationDispatcher } from './nav/ZulipAppContainer';
 import { initializeSentry } from './sentry';
 import LoadingScreen from './start/LoadingScreen';
 
@@ -30,7 +29,7 @@ export default (): React$Node => (
               <ThemeProvider>
                 <InitialNavigationDispatcher>
                   <BackNavigationHandler>
-                    <AppContainer ref={NavigationService.appContainerRef} />
+                    <ZulipAppContainer />
                   </BackNavigationHandler>
                 </InitialNavigationDispatcher>
               </ThemeProvider>
