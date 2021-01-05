@@ -7,22 +7,22 @@ import type {
   NavigationContainer,
 } from 'react-navigation';
 
+import { connect } from '../react-redux';
 import * as NavigationService from './NavigationService';
 import getInitialRouteInfo from './getInitialRouteInfo';
-import { connect } from '../react-redux';
 import type { Dispatch, Account } from '../types';
 import { hasAuth as getHasAuth, getAccounts, getHaveServerData } from '../selectors';
 import { createAppNavigator } from './AppNavigator';
 
-type SelectorProps = {|
+type SelectorProps = $ReadOnly<{|
   hasAuth: boolean,
   accounts: Account[],
   haveServerData: boolean,
-|};
+|}>;
 
 type Props = $ReadOnly<{|
-  ...SelectorProps,
   dispatch: Dispatch,
+  ...SelectorProps,
 |}>;
 
 /**
