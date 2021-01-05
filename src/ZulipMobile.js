@@ -10,10 +10,8 @@ import CompatibilityChecker from './boot/CompatibilityChecker';
 import AppEventHandlers from './boot/AppEventHandlers';
 import AppDataFetcher from './boot/AppDataFetcher';
 import BackNavigationHandler from './nav/BackNavigationHandler';
-import InitialNavigationDispatcher from './nav/InitialNavigationDispatcher';
-import AppContainer from './nav/AppContainer';
+import { AppContainer, InitialNavigationDispatcher } from './nav/ZulipAppContainer';
 import * as NavigationService from './nav/NavigationService';
-
 import { initializeSentry } from './sentry';
 import LoadingScreen from './start/LoadingScreen';
 
