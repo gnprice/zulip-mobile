@@ -66,7 +66,6 @@ export const getRecentConversationsLegacy: Selector<PmConversationData[]> = crea
     return sortedByMostRecent.map(conversation => ({
       key: conversation.unreadsKey,
       keyRecipients: conversation.keyRecipients,
-      msgId: conversation.msgId,
       unread: unreadCount(conversation.unreadsKey, unreadPms, unreadHuddles),
     }));
   },
@@ -106,12 +105,9 @@ function getRecentConversationsModernImpl(
 
       const unreadsKey = pmUnreadsKeyFromPmKeyIds(keyRecipients.map(r => r.user_id), ownUserId);
 
-      const msgId = map.get(recentsKey);
-      invariant(msgId !== undefined, 'pm-conversations: key in sorted should be in map');
-
       const unread = unreadCount(unreadsKey, unreadPms, unreadHuddles);
 
-      return { key: unreadsKey, keyRecipients, msgId, unread };
+      return { key: unreadsKey, keyRecipients, unread };
     })
     .filter(Boolean)
     .toArray();

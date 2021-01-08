@@ -332,9 +332,6 @@ export type PmConversationData = {|
 
   keyRecipients: PmKeyUsers,
 
-  /** The most recent message in this conversation. */
-  msgId: number,
-
   /** The count of unread messages in this conversation. */
   unread: number,
 |};
