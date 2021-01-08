@@ -4,13 +4,20 @@ import Immutable from 'immutable';
 import { ACCOUNT_SWITCH, EVENT_UPDATE_MESSAGE_FLAGS } from '../../actionConstants';
 import { reducer } from '../unreadModel';
 import * as eg from '../../__tests__/lib/exampleData';
-import { initialState, mkMessageAction } from './unread-testlib';
+import {
+  initialState,
+  mkMessageAction,
+  selectorBaseState,
+  stream0,
+  stream2,
+} from './unread-testlib';
+import { getUnreadByStream } from '../unreadSelectors';
 
 // These are the tests corresponding to unreadStreamsReducer-test.js.
 // Ultimately we'll want to flip this way of organizing the tests, and
 // test the whole model together rather than streams/mentions/etc.;
 // but this way simplifies the conversion from the old tests.
-describe('stream substate', () => {
+describe('stream substate reducer', () => {
   // Summarize the state, for convenient comparison to expectations.
   // In particular, abstract away irrelevant details of the ordering of
   // streams and topics in the data structure -- those should never matter
@@ -205,6 +212,23 @@ describe('stream substate', () => {
     test('when "all" is true reset state', () => {
       const action = mkAction({ messages: [], all: true });
       expect(reducer(baseState, action, eg.plusReduxState).streams).toBe(initialState.streams);
+    });
+  });
+});
+
+describe('stream substate selectors', () => {
+  describe('getUnreadByStream', () => {
+    test('when no items in streams key, the result is an empty object', () => {
+      expect(getUnreadByStream(eg.reduxState({ unread: initialState }))).toEqual({});
+    });
+
+    test('when there are unread stream messages, returns a list with counts per stream_id ', () => {
+      const globalState = eg.reduxState({
+        unread: selectorBaseState,
+        subscriptions: [stream0, stream2].map(stream => eg.makeSubscription({ stream })),
+        mute: [['stream 0', 'a topic']],
+      });
+      expect(getUnreadByStream(globalState)).toEqual({ '0': 2, '2': 2 });
     });
   });
 });
