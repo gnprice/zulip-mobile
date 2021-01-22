@@ -107,7 +107,9 @@ export const filterUserMatchesEmail = (
 
 export const getUniqueUsers = (
   users: $ReadOnlyArray<AutocompleteOption>,
-): $ReadOnlyArray<AutocompleteOption> => uniqby(users, 'email');
+): $ReadOnlyArray<AutocompleteOption> =>
+  // TODO(email): switch to user ID
+  uniqby(users, 'email');
 
 export const getUsersAndWildcards = (users: $ReadOnlyArray<AutocompleteOption>) => [
   // TODO stop using makeUserId on these fake "user IDs"; have some

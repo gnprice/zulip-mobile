@@ -83,7 +83,7 @@ export type SubmessageEvent = {|
 export type PresenceEvent = {|
   ...EventCommon,
   type: typeof EventTypes.presence,
-  email: string,
+  email: string, // TODO(email): should use user ID instead
   server_timestamp: number,
   presence: UserPresence,
 |};

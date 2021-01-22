@@ -59,6 +59,7 @@ const styles = createStyleSheet({
 class MentionedUserNotSubscribed extends PureComponent<Props> {
   subscribeToStream = () => {
     const { auth, stream, user } = this.props;
+    // TODO(email): switch to user ID
     api.subscriptionAdd(auth, [{ name: stream.name }], [user.email]);
     this.handleDismiss();
   };

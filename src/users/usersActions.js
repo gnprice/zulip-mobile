@@ -34,6 +34,7 @@ const typingWorker = (state: GlobalState) => {
   // (zulip/zulip@2f634f8c0). For versions before this, email arrays
   // are used. If current server version is undetermined, user ID
   // arrays are optimistically used.
+  // TODO(server-2.0): Cut this condition, and stop using emails here.
   const useEmailArrays = !!serverVersion && !serverVersion.isAtLeast('2.0.0-rc1');
 
   const getRecipients = user_ids_array => {

@@ -77,7 +77,7 @@ export const getAccountFromNotificationData = (
       parsed_url: realmUrl,
       match_count: urlMatches.length,
     });
-    // TODO get user_id into accounts data, and use that
+    // TODO(email): get user_id into accounts data, and use that instead
     return null;
   }
 
@@ -103,6 +103,7 @@ export const getNarrowFromNotificationData = (
   }
 
   if (data.pm_users === undefined) {
+    // TODO(email): switch to sender's user ID
     const user = allUsersByEmail.get(data.sender_email);
     return (user && pm1to1NarrowFromUser(user)) ?? null;
   }

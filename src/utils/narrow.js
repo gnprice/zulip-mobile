@@ -409,7 +409,7 @@ export const apiNarrowOfNarrow = (
         }
         emails.push(email);
       }
-      // TODO(server-2.1): just send IDs instead
+      // TODO(server-2.1): just send IDs instead, not emails
       return [{ operator: 'pm-with', operand: emails.join(',') }];
     },
     search: query => [{ operator: 'search', operand: query }],

@@ -25,7 +25,7 @@ type ApiResponseMessages = {|
 export type ServerReaction = $ReadOnly<{|
   ...$Diff<Reaction, {| user_id: mixed |}>,
   user: $ReadOnly<{|
-    email: string,
+    -email: string, // input-only because we don't and shouldn't use it; see #3764
     full_name: string,
     id: UserId,
   |}>,

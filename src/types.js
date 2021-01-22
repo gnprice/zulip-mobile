@@ -180,7 +180,7 @@ export type Outbox = $ReadOnly<{|
 
   // The remaining fields are modeled on `Message`.
 
-  // TODO(#3764): Make sender_id required.  Needs a migration to drop Outbox
+  // TODO(email): Make sender_id required.  Needs a migration to drop Outbox
   //   values that lack it; which is fine once the release that adds it has
   //   been out for a few weeks.
   //   (Also drop the hack line about it in MessageLike.)

@@ -19,7 +19,7 @@ export type * from './idTypes';
 
 export type ImageEmojiType = $ReadOnly<{|
   author?: $ReadOnly<{|
-    email: string,
+    -email: string, // input-only because we don't and shouldn't use it; see #3764
     full_name: string,
     id: number,
   |}>,
@@ -46,7 +46,7 @@ export type RealmFilter = [string, string, number];
 
 export type DevUser = {|
   realm_uri: string,
-  email: string,
+  email: string, // legit email use, for login
 |};
 
 /**
@@ -416,7 +416,7 @@ export type PmRecipientUser = $ReadOnly<{|
   // These five fields (id, email, full_name, short_name, is_mirror_dummy)
   // have all been present since server commit 6b13f4a3c, in 2014.
   id: UserId,
-  email: string,
+  -email: string, // input-only because we don't and shouldn't use it; see #3764
   full_name: string,
   // We mark short_name and is_mirror_dummy optional so we can leave them
   // out of Outbox values; we never rely on them anyway.
@@ -533,7 +533,7 @@ export type Message = $ReadOnly<{|
   is_me_message: boolean,
   last_edit_timestamp?: number,
   reactions: $ReadOnlyArray<Reaction>,
-  sender_email: string,
+  sender_email: string, // TODO(email): switch to sender_id
   sender_full_name: string,
   sender_id: UserId,
   sender_realm_str: string,

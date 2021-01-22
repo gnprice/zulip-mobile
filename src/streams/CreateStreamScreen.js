@@ -22,6 +22,7 @@ class CreateStreamScreen extends PureComponent<Props> {
   handleComplete = (name: string, description: string, isPrivate: boolean) => {
     const { dispatch, ownEmail } = this.props;
 
+    // TODO(email): switch to own user ID, not email
     dispatch(createNewStream(name, description, [ownEmail], isPrivate));
     NavigationService.dispatch(navigateBack());
   };

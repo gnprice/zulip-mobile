@@ -41,7 +41,7 @@ const styles = createStyleSheet({
 
 type Props = $ReadOnly<{|
   senderName: string,
-  senderEmail: string,
+  senderEmail: string, // TODO(email): convert to user ID (after presence data)
   timestamp: number,
   avatarUrl: AvatarURL,
   onPressBack: () => void,

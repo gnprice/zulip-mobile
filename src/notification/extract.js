@@ -196,6 +196,7 @@ export const fromAPNsImpl = (rawData: JSONableDict): Notification | void => {
     if (typeof sender_email !== 'string') {
       throw err('invalid');
     }
+    // TODO(email): switch to sender's user ID
     return { recipient_type: 'private', sender_email, ...realm_uri_obj };
   }
 

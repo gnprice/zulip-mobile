@@ -38,6 +38,7 @@ class InviteUsersScreen extends PureComponent<Props, State> {
   handleInviteUsers = (selected: UserOrBot[]) => {
     const { auth, stream } = this.props;
 
+    // TODO(email): switch to user IDs, instead of emails
     const recipients = selected.map(user => user.email);
     api.subscriptionAdd(auth, [{ name: stream.name }], recipients);
     NavigationService.dispatch(navigateBack());

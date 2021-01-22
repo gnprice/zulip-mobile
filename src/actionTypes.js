@@ -146,7 +146,7 @@ type AccountRemoveAction = {|
 type LoginSuccessAction = {|
   type: typeof LOGIN_SUCCESS,
   realm: URL,
-  email: string,
+  email: string, // legit email use, for login
   apiKey: string,
 |};
 
@@ -274,7 +274,7 @@ type EventSubscriptionUpdateAction = {|
   ...ServerEvent,
   type: typeof EVENT_SUBSCRIPTION,
   op: 'update',
-  email: string,
+  email: string, // TODO(email): is this a user's email? switch to user ID
   name: string,
   property: string,
   stream_id: number,
@@ -377,11 +377,11 @@ type EventTypingCommon = {|
   ownUserId: UserId,
   recipients: $ReadOnlyArray<{
     user_id: UserId,
-    email: string,
+    -email: string, // input-only because we don't and shouldn't use it; see #3764
   }>,
   sender: {
     user_id: UserId,
-    email: string,
+    -email: string, // input-only because we don't and shouldn't use it; see #3764
   },
   time: number,
 |};

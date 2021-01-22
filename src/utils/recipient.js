@@ -158,11 +158,10 @@ export const pmKeyRecipientsFromIds = (
 /**
  * The list of users to identify a PM conversation by in our data structures.
  *
- * This list is sorted by user ID.
+ * This list is sorted by user ID, numerically.
  *
- * Typically we go on to take either the emails or user IDs in the result,
- * stringify them, and join with `,` to produce a string key.  IDs are
- * preferred; see #3764.
+ * Typically we go on to take the user IDs in the result, stringify them,
+ * and join with `,` to produce a string key.
  *
  * See also:
  *  * `pmUiRecipientsFromMessage`, which gives a set of users to show in the
@@ -328,8 +327,7 @@ export const pmUnreadsKeyFromPmKeyIds = (
 // and comma-separated.
 //
 // TODO: It'd be neat to have another opaque type like PmKeyIds, for this
-//   and pmUnreadsKeyFromPmKeyIds to consume.  Perhaps simplest to do after
-//   Narrow no longer contains emails.
+//   and pmUnreadsKeyFromPmKeyIds to consume.
 export const pmTypingKeyFromPmKeyIds = (userIds: $ReadOnlyArray<UserId>): string =>
   userIds.join(',');
 
