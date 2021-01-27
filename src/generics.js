@@ -3,6 +3,8 @@
  * Tools for manipulating generic types in the Flow type system.
  */
 
+import type { ElementConfig } from 'react';
+
 /* eslint-disable flowtype/generic-spacing */
 
 /**
@@ -107,6 +109,8 @@ export type BoundedDiff<-U, -L> = $Diff<
   // powerful, ensuring that all properties in `L` are removed completely.
   $ObjMap<L, () => mixed>,
 >;
+
+export type PropsMinus<C, -SP> = BoundedDiff<$Exact<ElementConfig<C>>, SP>;
 
 /**
  * An object type with a subset of T's properties, namely those in U.

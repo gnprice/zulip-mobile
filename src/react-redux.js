@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import type { ComponentType, ElementConfig } from 'react';
+import type { ComponentType } from 'react';
 import {
   connect as connectInner,
   useSelector as useSelectorInner,
@@ -7,14 +7,11 @@ import {
 } from 'react-redux';
 
 import type { GlobalState, Dispatch } from './types';
-import type { BoundedDiff } from './generics';
+import type { PropsMinus } from './generics';
 
 /* eslint-disable flowtype/generic-spacing */
 
-export type OwnProps<-C, -SP> = $Diff<
-  BoundedDiff<$Exact<ElementConfig<C>>, SP>,
-  {| dispatch: Dispatch |},
->;
+export type OwnProps<-C, -SP> = $Diff<PropsMinus<C, SP>, {| dispatch: Dispatch |}>;
 
 /**
  * Exactly like the `connect` in `react-redux` upstream, but more typed.
