@@ -182,6 +182,7 @@ function test_typesEquivalent_$Diff_surprise() {
   }
 }
 
+// prettier-ignore
 function test_BoundedDiff() {
   // Here we use functions, to avoid having to ever actually make a value of
   // the various types.
@@ -200,15 +201,17 @@ function test_BoundedDiff() {
   }
 
   // Basic happy use.
-  (x: BoundedDiff<{| +a: number, +b: number |}, {| +b: number |}>): {| +a: number |} => x;
-  (x: BoundedDiff<{| +a: number, +b: number |}, {| +b: number |}>): { +a: number, ... } => x;
-  (x: BoundedDiff<{| +a: number, +b: number |}, {| +b: number |}>): number => x.a;
-
-  // The resulting types' properties are invariant, even if the originals were
-  // read-only.  This behavior comes from $Diff and is a Flow bug:
+  //
+  // There is one surprise here!  The resulting types' properties are
+  // invariant, even if the originals were read-only.  This behavior comes
+  // from $Diff and is a Flow bug:
   //   https://github.com/facebook/flow/issues/6225
   // (But with this test, we'll hopefully notice when it's fixed!)
-  (x: BoundedDiff<{| +a: number, +b: number |}, {| +b: number |}>): {| a: number |} => x;
+  typesEquivalent<BoundedDiff<{| +a: number, +b: number |}, {| +b: number |}>,
+                  {| a: number |}>();
+  typesEquivalent<BoundedDiff<{| +a: number, +b: number |}, {| +b: number |}>,
+                  // $FlowIssue #6225 -- see above
+                  {| +a: number |}>();
 
   // No extraneous properties allowed.
   // $FlowExpectedError
