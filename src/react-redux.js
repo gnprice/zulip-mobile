@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import type { ComponentType, ElementConfig } from 'react';
+import type { ComponentType } from 'react';
 import {
   connect as connectInner,
   useSelector as useSelectorInner,
@@ -7,12 +7,12 @@ import {
 } from 'react-redux';
 
 import type { GlobalState, Dispatch } from './types';
-import type { BoundedDiff } from './generics';
+import type { PropsMinus } from './generics';
 
 /* eslint-disable flowtype/generic-spacing */
 
 export type OwnProps<-C, -SP> = $ReadOnly<
-  $Diff<BoundedDiff<$Exact<ElementConfig<C>>, SP>, {| dispatch: Dispatch |}>,
+  $Diff<PropsMinus<C, SP>, {| dispatch: Dispatch |}>,
 >;
 
 /**
