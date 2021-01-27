@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import { typesEquivalent } from '../generics';
+import { type BoundedDiff, typesEquivalent } from '../generics';
 import type { IsSupertype } from '../types';
 
 /* eslint-disable flowtype/space-after-type-colon */
@@ -181,3 +181,71 @@ function test_typesEquivalent_$Diff_surprise() {
     }
   }
 }
+
+//
+//
+// Test BoundedDiff.
+//
+
+// Here we use functions, to avoid having to ever actually make a value of
+// the various types.
+
+// First, validate the test technique:
+(x: number): number => x;
+(x: number): mixed => x;
+// $FlowExpectedError
+(x: number): string => x;
+// $FlowExpectedError
+(x: number): empty => x;
+
+function f(x: $Diff<{| +a: number, +b: number |}, {| +b: number |}>) {
+  const y = x;
+  y.a;
+}
+
+// Basic happy use.
+(x: BoundedDiff<{| +a: number, +b: number |}, {| +b: number |}>): {| +a: number |} => x;
+(x: BoundedDiff<{| +a: number, +b: number |}, {| +b: number |}>): { +a: number, ... } => x;
+(x: BoundedDiff<{| +a: number, +b: number |}, {| +b: number |}>): number => x.a;
+
+// The resulting types' properties are invariant, even if the originals were
+// read-only.  This behavior comes from $Diff and is a Flow bug:
+//   https://github.com/facebook/flow/issues/6225
+// (But with this test, we'll hopefully notice when it's fixed!)
+(x: BoundedDiff<{| +a: number, +b: number |}, {| +b: number |}>): {| a: number |} => x;
+
+// No extraneous properties allowed.
+// $FlowExpectedError
+(x: BoundedDiff<{| +a: number, +b: number |}, {| +c: number |}>): number => x.a;
+
+// For a given property, must be subtracting with (non-strict) subtype.
+(x: BoundedDiff<{| +a: number, +b: mixed |}, {| +b: number |}>): number => x.a;
+// $FlowExpectedError
+(x: BoundedDiff<{| +a: number, +b: number |}, {| +b: mixed |}>): number => x.a;
+// $FlowExpectedError
+(x: BoundedDiff<{| +a: number, +b: number |}, {| +b: mixed |}>): mixed => x.a;
+
+// Property is removed even if subtracting with a proper subtype.
+(x: BoundedDiff<{| +a: number, +b: mixed |}, {| +b: number |}>): {| +a: number |} => x;
+
+// More notes on Flow and sharp edges for writing tests of types.
+//
+// Note if we don't actually use `x`, Flow doesn't dig into its type to find
+// the contradiction there:
+(x: BoundedDiff<{| +a: number, +b: number |}, {| +c: number |}>): number => 1;
+//
+// Similarly if we just use it where we only need a `mixed`:
+(x: BoundedDiff<{| +a: number, +b: number |}, {| +c: number |}>): mixed => x;
+//
+// But a missing property is an error even when it's only going to be used
+// as `mixed`:
+// $FlowExpectedError
+(x: {| +a: number |}): mixed => x.c;
+// $FlowExpectedError
+(x: BoundedDiff<{| +a: number, +b: number |}, {| +b: number |}>): mixed => x.c;
+//
+// So if we try to get a *property* of `x`, even to use as `mixed`, then
+// Flow does want to check that `x` has that property at all.  Which means
+// it has to examine its type, and it finds the contradiction:
+// $FlowExpectedError
+(x: BoundedDiff<{| +a: number, +b: number |}, {| +c: number |}>): mixed => x.a;

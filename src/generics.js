@@ -80,10 +80,11 @@ export function typesEquivalent<T, U: T, _InternalDoNotPass: U = T>() { }
  * Also always subtracts a given property completely, even if its type on
  * `L` happens to be more specific than on `U`.
  *
- * Assumes both U and L are exact object types.  (If not, behavior unknown.)
- * Returns a solution, where possible, to the type equation
+ * Assumes both U and L are exact, read-only, object types.  (If not,
+ * behavior unknown.) Returns a solution, where possible, to the type
+ * equation
  *   `U == {| ...D, ...L |}`
- * with an (inexact) object type `D`.
+ * with an (exact) object type `D`.
  *
  * More generally, returns the most general solution `D` to the relation
  *   `{| ...D, ...L |}: U`  (read "subtype of")
