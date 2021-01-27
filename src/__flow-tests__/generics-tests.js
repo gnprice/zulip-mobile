@@ -111,10 +111,10 @@ function test_IsSupertype_object_types() {
 
 function test_typesEquivalent() {
   // $ReadOnly means the same thing as putting a `+` variance sigil
-  // on each property.
+  // on each property, so these are two ways of spelling the same thing.
   typesEquivalent<$ReadOnly<{| x: number |}>, {| +x: number |}>();
 
-  // $FlowExpectedError -- These types are different :)
+  // $FlowExpectedError - These are different types :-)
   typesEquivalent<number, number | void>();
 
   // prettier-ignore

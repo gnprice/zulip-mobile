@@ -31,10 +31,11 @@ export type IsSupertype<+S, +T: S> = S; // eslint-disable-line no-unused-vars
  *
  * Examples:
  *
+ *   // These are two ways of spelling the same type.
  *   typesEquivalent<$ReadOnly<{| x: number |}>, {| +x: number |}>();
+ *
+ *   // FlowExpectedError - These are different types :-)
  *   typesEquivalent<number, number | void>(); // error
- *   typesEquivalent<$Diff<{| x: number, y: number |}, {| y: mixed |}>,
- *                   {| x: number |}>();
  *
  * Important caveat #1: When T or U is an "unclear type", i.e. one involving
  *   `any` or its less-common friends `Object` or `Function`, this can give
@@ -54,16 +55,10 @@ export type IsSupertype<+S, +T: S> = S; // eslint-disable-line no-unused-vars
  *
  * Important caveat #2: Sometimes complex type operations like $Diff can
  *   take types that are equivalent in this sense and produce inequivalent
- *   results.  Example:
- *
- *     typesEquivalent<{| x?: mixed |}, {| x: mixed |}>(); // equivalent
- *
- *     type S = {| x: number |};
- *     typesEquivalent<$Diff<S, {| x?: mixed |}>,
- *                     $Diff<S, {| x: mixed |}>>(); // error; not equivalent
- *     // instead:
- *     typesEquivalent<$Diff<S, {| x?: mixed |}>, {| x?: number |}>();
- *     typesEquivalent<$Diff<S, {| x: mixed |}>, {| |}>();
+ *   results.  The only known examples of this involve types that probably
+ *   shouldn't be equivalent in the first place, namely object types where
+ *   the same property is optional on the one hand and required on the
+ *   other.  See test `test_typesEquivalent_$Diff_surprise`.
  *
  * (*) "Preorder" means the relation is reflexive (A subtype A, for all A)
  *   and transitive (whenever A subtype B subtype C, then also A subtype C.)
