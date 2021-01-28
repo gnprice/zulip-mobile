@@ -66,32 +66,34 @@ function updateAndPrune<K, V>(
 // TODO doc/comment
 function deleteFromList(
   list_: Immutable.List<number>,
-  toDelete_: Immutable.List<number>,
+  toDelete: Array<number>,
 ): Immutable.List<number> {
   // Alias the parameters because Flow doesn't accept mutating them.
   let list = list_;
-  let toDelete = toDelete_;
 
   // First, see if some items to delete happen to be at the start, and
   // remove those.  This is  the common case for marking messages as read,
   // so it's worth some effort to optimize.  And we can do it efficiently:
   // for deleting the first k out of n messages, we take time O(k log n)
   // rather than O(n).
-  const minSize = Math.min(list.size, toDelete.size);
   let i = 0;
-  for (; i < minSize; i++) {
-    if (list.get(i) !== toDelete.get(i)) {
+  for (const id of list) {
+    if (i >= toDelete.length) {
       break;
     }
+    if (id !== toDelete[i]) {
+      break;
+    }
+    i++;
   }
   if (i > 0) {
     list = list.slice(i);
-    toDelete = toDelete.slice(i);
+    toDelete.splice(0, i);
   }
 
   // That might have been all the items we wanted to delete.  In fact that's
   // the most common case for marking items as read.
-  if (toDelete.isEmpty()) {
+  if (toDelete.length === 0) {
     return list;
   }
 
@@ -109,7 +111,7 @@ function deleteMessages(
 ): UnreadStreamsState {
   const byConversation =
     // prettier-ignore
-    (Immutable.Map(): Immutable.Map<number, Immutable.Map<string, Immutable.List<number>>>)
+    (Immutable.Map(): Immutable.Map<number, Immutable.Map<string, Array<number>>>)
     .withMutations(mut => {
       for (const id of ids) {
         const message = globalMessages.get(id);
@@ -117,7 +119,7 @@ function deleteMessages(
           continue;
         }
         const { stream_id, subject: topic } = message;
-        mut.updateIn([stream_id, topic], l => (l ?? Immutable.List()).push(id));
+        mut.updateIn([stream_id, topic], (l = []) => { l.push(id); return l; });
       }
     });
 
