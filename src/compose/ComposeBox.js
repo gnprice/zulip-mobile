@@ -70,7 +70,7 @@ type SelectorProps = {|
   lastMessageTopic: string,
   caughtUp: CaughtUp,
   videoChatProvider: VideoChatProvider | null,
-  stream: Subscription | {| ...Stream, in_home_view: boolean |},
+  stream: null | Subscription | {| ...Stream, in_home_view: boolean |},
 |};
 
 type Props = $ReadOnly<{|
@@ -453,7 +453,7 @@ class ComposeBox extends PureComponent<Props, State> {
           $FlowFixMe[incompatible-use]:
           `MentionWarnings` should use a type-checked `connect`
         */}
-        <MentionWarnings narrow={narrow} stream={stream} ref={this.mentionWarnings} />
+        {stream && <MentionWarnings narrow={narrow} stream={stream} ref={this.mentionWarnings} />}
         <View style={[this.styles.autocompleteWrapper, { marginBottom: height }]}>
           <TopicAutocomplete
             isFocused={isTopicFocused}

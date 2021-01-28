@@ -185,14 +185,14 @@ describe('getStreamInNarrow', () => {
     expect(getStreamInNarrow(state, narrow)).toEqual({ ...stream3, in_home_view: true });
   });
 
-  test('throw if stream in narrow is not valid', () => {
+  test('return null if stream in narrow is not valid', () => {
     const narrow = streamNarrow(stream4.name);
-    expect(() => getStreamInNarrow(state, narrow)).toThrow();
+    expect(getStreamInNarrow(state, narrow)).toBe(null);
+    expect(getStreamInNarrow(state, topicNarrow(stream4.name, 'topic'))).toBe(null);
   });
 
   test('throw if narrow is not topic or stream', () => {
     expect(() => getStreamInNarrow(state, pm1to1NarrowFromUser(eg.otherUser))).toThrow();
-    expect(() => getStreamInNarrow(state, topicNarrow(stream4.name, 'topic'))).toThrow();
   });
 });
 

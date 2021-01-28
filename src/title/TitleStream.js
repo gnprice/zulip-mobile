@@ -12,7 +12,7 @@ import { getStreamInNarrow } from '../selectors';
 import { showToast } from '../utils/info';
 
 type SelectorProps = {|
-  stream: Subscription | {| ...Stream, in_home_view: boolean |},
+  stream: null | Subscription | {| ...Stream, in_home_view: boolean |},
 |};
 
 type Props = $ReadOnly<{|
@@ -45,13 +45,13 @@ class TitleStream extends PureComponent<Props> {
         <View style={this.styles.streamRow}>
           <StreamIcon
             style={styles.halfMarginRight}
-            isMuted={!stream.in_home_view}
-            isPrivate={stream.invite_only}
+            isMuted={stream != null && !stream.in_home_view}
+            isPrivate={stream != null && stream.invite_only}
             color={color}
             size={20}
           />
           <Text style={[styles.navTitle, { color }]} numberOfLines={1} ellipsizeMode="tail">
-            {stream.name}
+            {stream?.name ?? '(stream unknown)' /* TODO translate */}
           </Text>
         </View>
         {isTopicNarrow(narrow) && (

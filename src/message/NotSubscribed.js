@@ -12,7 +12,7 @@ import styles from '../styles';
 
 type SelectorProps = $ReadOnly<{|
   auth: Auth,
-  stream: { ...Stream },
+  stream: null | { ...Stream },
 |}>;
 
 type Props = $ReadOnly<{|
@@ -25,6 +25,9 @@ type Props = $ReadOnly<{|
 class NotSubscribed extends PureComponent<Props> {
   subscribeToStream = () => {
     const { auth, stream } = this.props;
+    if (!stream) {
+      return;
+    }
     api.subscriptionAdd(auth, [{ name: stream.name }]);
   };
 
@@ -34,7 +37,7 @@ class NotSubscribed extends PureComponent<Props> {
     return (
       <View style={styles.disabledComposeBox}>
         <Label style={styles.disabledComposeText} text="You are not subscribed to this stream" />
-        {!stream.invite_only && (
+        {stream && !stream.invite_only && (
           <ZulipButton
             style={styles.disabledComposeButton}
             text="Subscribe"

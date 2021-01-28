@@ -112,11 +112,11 @@ export const getLastMessageId = (state: GlobalState, narrow: Narrow): number | v
   return ids.length > 0 ? ids[ids.length - 1] : undefined;
 };
 
-/** (NB throws if not a stream/topic narrow, or if we have no data for the stream.) */
+/** (NB throws if not a stream/topic narrow; null if we have no data for the stream.) */
 // Prettier mishandles this Flow syntax.
 // prettier-ignore
 // TODO: clean up what this returns.
-export const getStreamInNarrow: Selector<Subscription | {| ...Stream, in_home_view: boolean |}, Narrow> = createSelector(
+export const getStreamInNarrow: Selector<null | Subscription | {| ...Stream, in_home_view: boolean |}, Narrow> = createSelector(
   (state, narrow) => narrow,
   state => getSubscriptions(state),
   state => getStreams(state),
@@ -137,7 +137,7 @@ export const getStreamInNarrow: Selector<Subscription | {| ...Stream, in_home_vi
       };
     }
 
-    throw new Error('getStreamInNarrow: no stream nor subscription found');
+    return null;
   },
 );
 
