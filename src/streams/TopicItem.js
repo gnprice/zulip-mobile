@@ -27,7 +27,7 @@ type Props = $ReadOnly<{|
   isMuted: boolean,
   isSelected: boolean,
   unreadCount: number,
-  onPress: (topic: string, streamName: string) => void,
+  onPress: (streamName: string, topic: string) => void,
 |}>;
 
 export default class TopicItem extends PureComponent<Props> {

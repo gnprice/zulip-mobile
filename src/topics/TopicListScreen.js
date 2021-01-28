@@ -39,7 +39,7 @@ class TopicListScreen extends PureComponent<Props, State> {
     dispatch(fetchTopics(stream.stream_id));
   }
 
-  handlePress = (streamObj: string, topic: string) => {
+  handlePress = (streamName: string, topic: string) => {
     const { dispatch, stream } = this.props;
     dispatch(doNarrow(topicNarrow(stream.name, topic)));
   };
