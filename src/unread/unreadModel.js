@@ -158,20 +158,14 @@ function streamsReducer(
       // flowlint-next-line unnecessary-optional-chain:off
       const data = action.data.unread_msgs?.streams ?? [];
 
-      let nTopics = 0;
-      let nUnreads = 0;
       const st = initialStreamsState.asMutable();
-      /* eslint-disable no-loop-func */
       for (const { stream_id, topic, unread_message_ids } of data) {
-        st.update(stream_id, (perStream = Immutable.Map()) => {
-          nTopics += 1;
-          nUnreads += unread_message_ids.length;
+        st.update(stream_id, (perStream = Immutable.Map()) =>
           // unread_message_ids is already sorted; see comment at its
           // definition in src/api/initialDataTypes.js.
-          return perStream.set(topic, Immutable.List(unread_message_ids));
-        });
+          perStream.set(topic, Immutable.List(unread_message_ids)),
+        );
       }
-      console.log(`Initial unreads: ${st.size} streams, ${nTopics} topics, ${nUnreads} messages`);
       return st.asImmutable();
     }
 
