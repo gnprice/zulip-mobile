@@ -160,9 +160,11 @@ function streamsReducer(
 
       const st = initialStreamsState.asMutable();
       for (const { stream_id, topic, unread_message_ids } of data) {
-        // unread_message_ids is already sorted; see comment at its
-        // definition in src/api/initialDataTypes.js.
-        st.setIn([stream_id, topic], Immutable.List(unread_message_ids));
+        st.update(stream_id, (perStream = Immutable.Map()) =>
+          // unread_message_ids is already sorted; see comment at its
+          // definition in src/api/initialDataTypes.js.
+          perStream.set(topic, Immutable.List(unread_message_ids)),
+        );
       }
       return st.asImmutable();
     }
