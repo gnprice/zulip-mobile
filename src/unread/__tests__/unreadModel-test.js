@@ -3,6 +3,7 @@ import Immutable from 'immutable';
 
 import { ACCOUNT_SWITCH, EVENT_UPDATE_MESSAGE_FLAGS } from '../../actionConstants';
 import { reducer } from '../unreadModel';
+import { type UnreadState } from '../unreadModelTypes';
 import * as eg from '../../__tests__/lib/exampleData';
 import { initialState, mkMessageAction } from './unread-testlib';
 
@@ -12,19 +13,10 @@ import { initialState, mkMessageAction } from './unread-testlib';
 // but this way simplifies the conversion from the old tests.
 describe('stream substate', () => {
   // Summarize the state, for convenient comparison to expectations.
-  // In particular, abstract away irrelevant details of the ordering of
-  // streams and topics in the data structure -- those should never matter
-  // to selectors, and in a better data structure they wouldn't exist in the
-  // first place.
-  const summary = state => {
-    // prettier-ignore
-    const result: Immutable.Map<number, Immutable.Map<string, number[]>> =
-      Immutable.Map().asMutable();
-    for (const { stream_id, topic, unread_message_ids } of state.streams) {
-      result.setIn([stream_id, topic], unread_message_ids);
-    }
-    return result.asImmutable();
-  };
+  // Specifically just turn the inner `Immutable.List`s into arrays,
+  // to shorten writing the expected data.
+  const summary = (state: UnreadState) =>
+    state.streams.map(perStream => perStream.map(perTopic => perTopic.toArray()));
 
   describe('ACCOUNT_SWITCH', () => {
     test('resets state to initial state', () => {
@@ -85,15 +77,6 @@ describe('stream substate', () => {
       expect(summary(baseState)).toEqual(Immutable.Map([
         [eg.stream.stream_id, Immutable.Map([['some topic', [1]]])],
       ]));
-    });
-
-    test('if message id already exists, do not mutate state', () => {
-      const state = reducer(
-        baseState,
-        action(eg.streamMessage({ id: 1, subject: 'some topic' })),
-        eg.plusReduxState,
-      );
-      expect(state).toBe(baseState);
     });
 
     test('if message is not stream, return original state', () => {
