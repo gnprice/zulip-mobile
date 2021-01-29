@@ -158,15 +158,18 @@ function streamsReducer(
       // flowlint-next-line unnecessary-optional-chain:off
       const data = action.data.unread_msgs?.streams ?? [];
 
-      const st = initialStreamsState.asMutable();
+      const byStream = new Map();
       for (const { stream_id, topic, unread_message_ids } of data) {
-        st.update(stream_id, (perStream = Immutable.Map()) =>
-          // unread_message_ids is already sorted; see comment at its
-          // definition in src/api/initialDataTypes.js.
-          perStream.set(topic, Immutable.List(unread_message_ids)),
-        );
+        let perStream = byStream.get(stream_id);
+        if (!perStream) {
+          perStream = [];
+          byStream.set(stream_id, perStream);
+        }
+        // unread_message_ids is already sorted; see comment at its
+        // definition in src/api/initialDataTypes.js.
+        perStream.push([topic, Immutable.List(unread_message_ids)]);
       }
-      return st.asImmutable();
+      return Immutable.Map(Immutable.Seq.Keyed(byStream.entries()).map(Immutable.Map));
     }
 
     case MESSAGE_FETCH_COMPLETE:
