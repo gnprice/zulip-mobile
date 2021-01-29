@@ -10,7 +10,7 @@ import { isTopicMuted } from '../utils/message';
 import { caseNarrow } from '../utils/narrow';
 import { NULL_SUBSCRIPTION } from '../nullObjects';
 import { pmUnreadsKeyFromPmKeyIds } from '../utils/recipient';
-import { getUnreadStreams, getUnreadPms, getUnreadHuddles, getUnreadMentions } from './unreadModel';
+import { getUnreadPms, getUnreadHuddles, getUnreadMentions, getUnreadStreams } from './unreadModel';
 
 /** The number of unreads in each stream, excluding muted topics, by stream ID. */
 export const getUnreadByStream: Selector<{ [number]: number }> = createSelector(
@@ -19,17 +19,18 @@ export const getUnreadByStream: Selector<{ [number]: number }> = createSelector(
   getMute,
   (unreadStreams, subscriptionsById, mute) => {
     const totals = ({}: { [number]: number });
-    unreadStreams.forEach(stream => {
-      if (!totals[stream.stream_id]) {
-        totals[stream.stream_id] = 0;
+    for (const [streamId, streamData] of unreadStreams.entries()) {
+      let total = 0;
+      for (const [topic, msgIds] of streamData) {
+        const isMuted = isTopicMuted(
+          (subscriptionsById.get(streamId) || NULL_SUBSCRIPTION).name,
+          topic,
+          mute,
+        );
+        total += isMuted ? 0 : msgIds.size;
       }
-      const isMuted = isTopicMuted(
-        (subscriptionsById.get(stream.stream_id) || NULL_SUBSCRIPTION).name,
-        stream.topic,
-        mute,
-      );
-      totals[stream.stream_id] += isMuted ? 0 : stream.unread_message_ids.length;
-    });
+      totals[streamId] = total;
+    }
     return totals;
   },
 );
@@ -130,38 +131,37 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
   getMute,
   (subscriptionsById, unreadStreams, mute) => {
     const totals = new Map();
-    unreadStreams.forEach(stream => {
+    for (const [streamId, streamData] of unreadStreams.entries()) {
       const { name, color, in_home_view, invite_only, pin_to_top } =
-        subscriptionsById.get(stream.stream_id) || NULL_SUBSCRIPTION;
+        subscriptionsById.get(streamId) || NULL_SUBSCRIPTION;
 
-      let total = totals.get(stream.stream_id);
-      if (!total) {
-        total = {
-          key: `stream:${name}`,
-          streamName: name,
-          isMuted: !in_home_view,
-          isPrivate: invite_only,
-          isPinned: pin_to_top,
-          color,
-          unread: 0,
-          data: [],
-        };
-        totals.set(stream.stream_id, total);
+      const total = {
+        key: `stream:${name}`,
+        streamName: name,
+        isMuted: !in_home_view,
+        isPrivate: invite_only,
+        isPinned: pin_to_top,
+        color,
+        unread: 0,
+        data: [],
+      };
+      totals.set(streamId, total);
+
+      for (const [topic, msgIds] of streamData) {
+        const isMuted = !mute.every(x => x[0] !== name || x[1] !== topic);
+        if (!isMuted) {
+          total.unread += msgIds.size;
+        }
+
+        total.data.push({
+          key: topic,
+          topic,
+          unread: msgIds.size,
+          lastUnreadMsgId: msgIds.last(),
+          isMuted,
+        });
       }
-
-      const isMuted = !mute.every(x => x[0] !== name || x[1] !== stream.topic);
-      if (!isMuted) {
-        total.unread += stream.unread_message_ids.length;
-      }
-
-      total.data.push({
-        key: stream.topic,
-        topic: stream.topic,
-        unread: stream.unread_message_ids.length,
-        lastUnreadMsgId: stream.unread_message_ids[stream.unread_message_ids.length - 1],
-        isMuted,
-      });
-    });
+    }
 
     const sortedStreams = Array.from(totals.values())
       .sort((a, b) => caseInsensitiveCompareFunc(a.streamName, b.streamName))
@@ -222,10 +222,8 @@ export const getUnreadCountForNarrow: Selector<number, Narrow> = createSelector(
   state => getUnreadHuddles(state),
   state => getUnreadPms(state),
   state => getMute(state),
-  (narrow, streams, ownUserId, unreadTotal, unreadStreams, unreadHuddles, unreadPms, mute) => {
-    const sumLengths = unreads => unreads.reduce((sum, x) => sum + x.unread_message_ids.length, 0);
-
-    return caseNarrow(narrow, {
+  (narrow, streams, ownUserId, unreadTotal, unreadStreams, unreadHuddles, unreadPms, mute) =>
+    caseNarrow(narrow, {
       home: () => unreadTotal,
 
       stream: name => {
@@ -233,10 +231,15 @@ export const getUnreadCountForNarrow: Selector<number, Narrow> = createSelector(
         if (!stream) {
           return 0;
         }
-        return sumLengths(
-          unreadStreams.filter(
-            x => x.stream_id === stream.stream_id && !isTopicMuted(name, x.topic, mute),
-          ),
+        // prettier-ignore
+        return (
+          unreadStreams
+            .get(stream.stream_id)
+            ?.entrySeq()
+            .filterNot(([topic, _]) => isTopicMuted(name, topic, mute))
+            .map(([_, msgIds]) => msgIds.size)
+            .reduce((s, x) => s + x, 0)
+            ?? 0
         );
       },
 
@@ -245,9 +248,7 @@ export const getUnreadCountForNarrow: Selector<number, Narrow> = createSelector(
         if (!stream) {
           return 0;
         }
-        return sumLengths(
-          unreadStreams.filter(x => x.stream_id === stream.stream_id && x.topic === topic),
-        );
+        return unreadStreams.get(stream.stream_id)?.get(topic)?.size ?? 0;
       },
 
       pm: ids => {
@@ -277,6 +278,5 @@ export const getUnreadCountForNarrow: Selector<number, Narrow> = createSelector(
       // because we never use this selector for that narrow (because we
       // don't expose it as one you can narrow to in the UI.)
       allPrivate: () => 0,
-    });
-  },
+    }),
 );
