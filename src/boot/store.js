@@ -14,7 +14,7 @@ import { stringify, parse } from './replaceRevive';
 import type { Action, GlobalState } from '../types';
 import config from '../config';
 import { REHYDRATE } from '../actionConstants';
-import rootReducer from './reducers';
+import rootReducer, { perfLoggingIgnoreAction } from './reducers';
 import ZulipAsyncStorage from './ZulipAsyncStorage';
 import createMigration from '../redux-persist-migrate/index';
 import { objectFromEntries } from '../jsBackport';
@@ -307,29 +307,38 @@ let timerIndent = '';
 
 /** Redux middleware to log how long actions take to dispatch. */
 const timerMiddleware = ({ dispatch, getState }) => next => action => {
-  // prettier-ignore
-  const label =
-    typeof action === 'object' ? action.type
-      : typeof action === 'function' ? (action.name || '(thunk)')
-      : `(${typeof action})`;
+  let start = undefined;
+  let label = undefined;
 
-  if (typeof action === 'function') {
-    /* eslint-disable-next-line no-console */
-    console.log(`Dispatching:          ${timerIndent}>${label}`);
+  if (!perfLoggingIgnoreAction(action)) {
+    // prettier-ignore
+    label =
+      typeof action === 'object' ? action.type
+        : typeof action === 'function' ? (action.name || '(thunk)')
+          : `(${typeof action})`;
 
-    // Indent any actions nested inside this thunk action.
-    timerIndent += '  ';
+    if (typeof action === 'function') {
+      /* eslint-disable-next-line no-console */
+      console.log(`Dispatching:          ${timerIndent}>${label}`);
+
+      // Indent any actions nested inside this thunk action.
+      timerIndent += '  ';
+    }
+
+    start = Date.now();
   }
 
-  const start = Date.now();
   const result = next(action);
-  const duration = Date.now() - start;
 
-  if (typeof action === 'function') {
-    timerIndent = timerIndent.slice(0, -2);
+  if (start !== undefined && label !== undefined) {
+    const duration = Date.now() - start;
+
+    if (typeof action === 'function') {
+      timerIndent = timerIndent.slice(0, -2);
+    }
+    /* eslint-disable-next-line no-console */
+    console.log(`Dispatch time: ${duration.toFixed(0).padStart(4)}ms ${timerIndent}${label}`);
   }
-  /* eslint-disable-next-line no-console */
-  console.log(`Dispatch time: ${duration.toFixed(0).padStart(4)}ms ${timerIndent}${label}`);
 
   return result;
 };

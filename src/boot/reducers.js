@@ -27,13 +27,36 @@ import { reducer as unread } from '../unread/unreadModel';
 import userGroups from '../user-groups/userGroupsReducer';
 import userStatus from '../user-status/userStatusReducer';
 import users from '../users/usersReducer';
+import { EVENT_PRESENCE, PRESENCE_RESPONSE } from '../actionConstants';
 
 const migrations = (state: MigrationsState = NULL_OBJECT): MigrationsState => state;
 
 const { enableReduxPerfLogging, slowReducersThreshold } = config;
 
+export function perfLoggingIgnoreAction(action: { ... }): boolean {
+  const { type } = (action: { +[string]: mixed, ... });
+  if (type === EVENT_PRESENCE || type === PRESENCE_RESPONSE) {
+    // These consistently take a few ms; like on a Pixel 2 XL, on czo, 2-5ms
+    // within the reducer and 10-20ms total for dispatch.  That is *a*
+    // problem; it's likely a dropped frame, if anything's happening at that
+    // moment.
+    //
+    // But it's not among the worst problems that we see in these logs.
+    // It's uncorrelated with the user actually doing anything and therefore
+    // being likely to be paying attention at that moment.  We have some
+    // other actions that are so correlated, and that take over 100ms.
+    //
+    // And on czo, it tends to happen a good handful of times a minute, and
+    // that's enough to make it thoroughly spam the logs and make it harder
+    // to see what's happening with the bigger problems.  So just silence it.
+    return true;
+  }
+
+  return false;
+}
+
 function maybeLogSlowReducer(action, key, startMs, endMs) {
-  if (endMs - startMs >= slowReducersThreshold) {
+  if (!perfLoggingIgnoreAction(action) && endMs - startMs >= slowReducersThreshold) {
     /* eslint-disable-next-line no-console */
     console.log(
       `Dispatch sub-time: ${(endMs - startMs).toFixed(0).padStart(4)}ms ${action.type} > ${key}`,
@@ -118,7 +141,7 @@ const reducerCore = (state: void | GlobalState, action: Action): GlobalState => 
 
 export default (state: void | GlobalState, action: Action): GlobalState => {
   let startMs = undefined;
-  if (enableReduxPerfLogging) {
+  if (enableReduxPerfLogging && !perfLoggingIgnoreAction(action)) {
     startMs = Date.now();
   }
 
