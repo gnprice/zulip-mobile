@@ -29,13 +29,38 @@ import userGroups from '../user-groups/userGroupsReducer';
 import userStatus from '../user-status/userStatusReducer';
 import users from '../users/usersReducer';
 import timing from '../utils/timing';
+import { EVENT_PRESENCE, PRESENCE_RESPONSE } from '../actionConstants';
 
 const migrations = (state: MigrationsState = NULL_OBJECT): MigrationsState => state;
 
 const { enableReduxSlowReducerWarnings, slowReducersThreshold } = config;
 
+export function perfLoggingIgnoreAction(action: mixed): boolean {
+  /* $FlowFixMe Yes, it might not exist (for e.g. a thunk action); that's
+    fine, we'll get `undefined`. */
+  const { type } = action;
+  if (type === EVENT_PRESENCE || type === PRESENCE_RESPONSE) {
+    // These consistently take a few ms; like on a Pixel 2 XL, on czo, 2-5ms
+    // within the reducer and 10-20ms total for dispatch.  That is *a*
+    // problem; it's likely a dropped frame, if anything's happening at that
+    // moment.
+    //
+    // But it's not among the worst problems that we see in these logs.
+    // It's uncorrelated with the user actually doing anything and therefore
+    // being likely to be paying attention at that moment.  We have some
+    // other actions that are so correlated, and that take over 100ms.
+    //
+    // And on czo, it tends to happen a good handful of times a minute, and
+    // that's enough to make it thoroughly spam the logs and make it harder
+    // to see what's happening with the bigger problems.  So just silence it.
+    return true;
+  }
+
+  return false;
+}
+
 function maybeLogSlowReducer(action, key, startMs, endMs) {
-  if (endMs - startMs > slowReducersThreshold) {
+  if (!perfLoggingIgnoreAction(action) && endMs - startMs > slowReducersThreshold) {
     console.log(
       `Dispatch sub-time: ${(endMs - startMs).toFixed(0).padStart(4)}ms ${action.type} > ${key}`,
     );
@@ -121,8 +146,10 @@ export default (state: GlobalState, action: Action) => {
   const startMs = Date.now();
   const result = enableBatching(combinedReducer)(state, action);
   const endMs = Date.now();
-  console.log(
-    `Dispatch sub-time: ${(endMs - startMs).toFixed(0).padStart(4)}ms ${action.type} reducer`,
-  );
+  if (!perfLoggingIgnoreAction(action)) {
+    console.log(
+      `Dispatch sub-time: ${(endMs - startMs).toFixed(0).padStart(4)}ms ${action.type} reducer`,
+    );
+  }
   return result;
 };
