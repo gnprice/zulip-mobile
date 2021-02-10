@@ -63,6 +63,7 @@ export function createMigrationImpl(
     versionKeys
       .filter(v => v > version || version === null)
       .forEach(v => {
+        console.log(`running migration ${v}`);
         newState = manifest[v.toString()](newState);
       });
 
@@ -75,9 +76,11 @@ export function createMigrationImpl(
       throw new Error('createMigration: bad arguments');
     }
     if (action.type === REHYDRATE) {
+      console.log('migrating');
       // $FlowMigrationFudge this really is a lie -- and kind of central to migration
       const incomingState: State = action.payload;
       const incomingVersion = parseInt(versionSelector(incomingState), 10);
+      console.log(`migrating: incomingVersion ${incomingVersion}`)
       if (Number.isNaN(incomingVersion)) {
         // first launch after install, so incoming state is empty object
         // migration not required, just update version

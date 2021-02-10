@@ -19,6 +19,7 @@ export default function persistStore (store, config = {}, onComplete) {
   if (shouldRestore) {
     setImmediate(() => {
       getStoredState(config, (err, restoredState) => {
+        console.log('restored state')
         if (err) {
           complete(err)
           return
@@ -41,6 +42,7 @@ export default function persistStore (store, config = {}, onComplete) {
           const prevVersion = restoredState.migrations?.version;
 
           store.dispatch(rehydrateAction(restoredState, err))
+          console.log('rehydrate complete')
 
           // The version (in redux-persist-migrate's terms) that is
           // current now, after rehydration.

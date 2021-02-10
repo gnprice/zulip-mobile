@@ -306,6 +306,7 @@ export async function tryFetch<T>(func: () => Promise<T>): Promise<T> {
  */
 export const doInitialFetch = () => async (dispatch: Dispatch, getState: GetState) => {
   dispatch(initialFetchStart());
+  console.log('start initial fetch');
   const auth = getAuth(getState());
 
   let initData: InitialData;

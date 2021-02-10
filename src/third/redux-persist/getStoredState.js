@@ -35,8 +35,14 @@ export default function getStoredState (config, onComplete) {
     if (restoreCount === 0) complete(null, restoredState)
     keysToRestore.forEach((key) => {
       storage.getItem(createStorageKey(key), (err, serialized) => {
+        console.log(`read ${key}: length ${serialized.length}`);
+        if (key === 'narrows') console.log(`value ${serialized}`);
         if (err && process.env.NODE_ENV !== 'production') console.warn('redux-persist/getStoredState: Error restoring data for key:', key, err)
         else restoredState[key] = rehydrate(key, serialized)
+        if (key === 'narrows') {
+          console.log(`rehydrated with get:`, restoredState[key].get);
+          console.log(`rehydrated with JSON.stringify:`, JSON.stringify(restoredState[key]));
+        }
         completionCount += 1
         if (completionCount === restoreCount) complete(null, restoredState)
       })

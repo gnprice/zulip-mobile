@@ -75,6 +75,7 @@ const initialState: SessionState = {
 const rehydrate = (state, action) => {
   const { payload } = action;
   const haveApiKey = !!(payload && payload.accounts && hasAuth(payload));
+  console.log(`rehydrate session: ${haveApiKey}`);
   return {
     ...state,
     isHydrated: true,
@@ -88,6 +89,7 @@ const rehydrate = (state, action) => {
 };
 
 export default (state: SessionState = initialState, action: Action): SessionState => {
+  console.log(`session reducer: needsInitialFetch ${state.needsInitialFetch}, action type ${action.type}`)
   switch (action.type) {
     case DEAD_QUEUE:
       return {

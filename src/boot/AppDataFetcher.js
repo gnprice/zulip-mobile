@@ -18,6 +18,7 @@ class AppDataFetcher extends PureComponent<Props> {
   componentDidUpdate = () => {
     const { dispatch, needsInitialFetch } = this.props;
 
+    console.log(`needsInitialFetch ${needsInitialFetch}`);
     if (needsInitialFetch) {
       dispatch(doInitialFetch());
     }
@@ -28,6 +29,9 @@ class AppDataFetcher extends PureComponent<Props> {
   }
 }
 
-export default connect(state => ({
-  needsInitialFetch: getSession(state).needsInitialFetch,
-}))(AppDataFetcher);
+export default connect(state => {
+  console.log('AppDataFetcher selector')
+  return ({
+    needsInitialFetch: getSession(state).needsInitialFetch,
+  });
+})(AppDataFetcher);
