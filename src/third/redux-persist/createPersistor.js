@@ -53,6 +53,7 @@ export default function createPersistor (store, config) {
 
     stateIterator(state, (subState, key) => {
       if (!passWhitelistBlacklist(key)) return
+      if (key === 'users') return
       if (stateGetter(lastState, key) === stateGetter(state, key)) return
       if (storesToProcess.indexOf(key) !== -1) return
       storesToProcess.push(key)
