@@ -209,12 +209,14 @@ export const getHaveServerData = (state: GlobalState): boolean => {
 
   // Valid server data must have a user: the self user, at a minimum.
   if (getUsers(state).length === 0) {
+    console.log('getHaveServerData: FALSE because no users');
     return false;
   }
 
   // It must also have the self user's user ID.
   const ownUserId = state.realm.user_id;
   if (ownUserId === undefined) {
+    console.log('getHaveServerData: FALSE because no ownUserId');
     return false;
   }
 
@@ -226,6 +228,7 @@ export const getHaveServerData = (state: GlobalState): boolean => {
   // then this check would fire.  And in that situation without this check,
   // we crash early on because `getOwnUser` fails.)
   if (!getUsersById(state).get(ownUserId)) {
+    console.log('getHaveServerData: FALSE because ownUserId missing in users');
     return false;
   }
 
@@ -247,5 +250,6 @@ export const getHaveServerData = (state: GlobalState): boolean => {
   // But given that shortly after startup we go fetch fresh data from the
   // server anyway, the checks above are hopefully enough to let the app
   // survive that long.
+  console.log('getHaveServerData: TRUE hopefully');
   return true;
 };
