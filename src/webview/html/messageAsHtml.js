@@ -98,13 +98,14 @@ export default (backgroundData: BackgroundData, message: Message | Outbox, isBri
   const messageTime = shortTime(new Date(timestamp * 1000), backgroundData.twentyFourHourTime);
 
   // TODO: i18n
-  const mutedMessageHtml = isUserMuted
-    ? template`
+  const mutedMessageHtml =
+    isUserMuted && !isBrief
+      ? template`
     <div class="special-message muted-message-explanation">
       This message was hidden because it is from a user you have muted. Long-press to view.
     </div>
   `
-    : '';
+      : '';
 
   const timestampHtml = (showOnRender: boolean) => template`
 <div class="time-container">

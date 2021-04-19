@@ -312,6 +312,11 @@ function previousMessage(start: Element): ?Element {
   return walkToMessage(start.previousElementSibling, 'previousElementSibling');
 }
 
+/** The message after the given message, if any. */
+function nextMessage(start: Element): ?Element {
+  return walkToMessage(start.nextElementSibling, 'nextElementSibling');
+}
+
 /**
  * An element is visible if any part of it is visible on screen.
  *
@@ -772,6 +777,18 @@ const handleMessageEvent: MessageEventListener = e => {
  *
  */
 
+/** If the given message is muted, show it and all following brief messages. */
+const revealMutedMessages = (target: Element) => {
+  let messageNode = target.closest('.message');
+  if (!messageNode) {
+    throw new Error('messageNode is not defined');
+  }
+  do {
+    messageNode.setAttribute('data-mute-state', 'shown');
+    messageNode = nextMessage(messageNode);
+  } while (messageNode && messageNode.classList.contains('message-brief'));
+};
+
 const requireAttribute = (e: Element, name: string): string => {
   const value = e.getAttribute(name);
   if (value === null || value === undefined) {
@@ -940,7 +957,7 @@ const handleLongPress = (target: Element) => {
     && messageNode instanceof Element
     && messageNode.getAttribute('data-mute-state') === 'hidden'
   ) {
-    messageNode.setAttribute('data-mute-state', 'shown');
+    revealMutedMessages(messageNode);
     return;
   }
 

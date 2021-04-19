@@ -519,6 +519,10 @@ var compiledWebviewJs = (function (exports) {
     return walkToMessage(start.previousElementSibling, 'previousElementSibling');
   }
 
+  function nextMessage(start) {
+    return walkToMessage(start.nextElementSibling, 'nextElementSibling');
+  }
+
   function isVisible(element, top, bottom) {
     var rect = element.getBoundingClientRect();
     return top < rect.bottom && rect.top < bottom;
@@ -861,6 +865,19 @@ var compiledWebviewJs = (function (exports) {
     scrollEventsDisabled = false;
   };
 
+  var revealMutedMessages = function revealMutedMessages(target) {
+    var messageNode = target.closest('.message');
+
+    if (!messageNode) {
+      throw new Error('messageNode is not defined');
+    }
+
+    do {
+      messageNode.setAttribute('data-mute-state', 'shown');
+      messageNode = nextMessage(messageNode);
+    } while (messageNode && messageNode.classList.contains('message-brief'));
+  };
+
   var requireAttribute = function requireAttribute(e, name) {
     var value = e.getAttribute(name);
 
@@ -1007,7 +1024,7 @@ var compiledWebviewJs = (function (exports) {
     var messageNode = getMessageNode(target);
 
     if (targetType === 'message' && messageNode instanceof Element && messageNode.getAttribute('data-mute-state') === 'hidden') {
-      messageNode.setAttribute('data-mute-state', 'shown');
+      revealMutedMessages(messageNode);
       return;
     }
 
