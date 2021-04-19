@@ -926,9 +926,27 @@ const handleLongPress = (target: Element) => {
     return;
   }
 
+  // Prettier bug on nested ternary
+  /* prettier-ignore */
+  const targetType = target.matches('.header')
+    ? 'header'
+    : target.matches('a')
+      ? 'link'
+      : 'message';
+  const messageNode = getMessageNode(target);
+
+  if (
+    targetType === 'message'
+    && messageNode instanceof Element
+    && messageNode.getAttribute('data-mute-state') === 'hidden'
+  ) {
+    messageNode.setAttribute('data-mute-state', 'shown');
+    return;
+  }
+
   sendMessage({
     type: 'longPress',
-    target: target.matches('.header') ? 'header' : target.matches('a') ? 'link' : 'message',
+    target: targetType,
     messageId: getMessageIdFromNode(target),
     href: target.matches('a') ? requireAttribute(target, 'href') : null,
   });

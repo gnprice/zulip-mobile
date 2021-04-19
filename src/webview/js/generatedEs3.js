@@ -1003,9 +1003,17 @@ var compiledWebviewJs = (function (exports) {
       return;
     }
 
+    var targetType = target.matches('.header') ? 'header' : target.matches('a') ? 'link' : 'message';
+    var messageNode = getMessageNode(target);
+
+    if (targetType === 'message' && messageNode instanceof Element && messageNode.getAttribute('data-mute-state') === 'hidden') {
+      messageNode.setAttribute('data-mute-state', 'shown');
+      return;
+    }
+
     sendMessage({
       type: 'longPress',
-      target: target.matches('.header') ? 'header' : target.matches('a') ? 'link' : 'message',
+      target: targetType,
       messageId: getMessageIdFromNode(target),
       href: target.matches('a') ? requireAttribute(target, 'href') : null
     });

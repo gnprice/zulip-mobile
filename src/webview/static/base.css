@@ -142,14 +142,19 @@ body {
   padding: 0 16px 16px 80px;
 }
 
-.message-muted {
+.message[data-mute-state="hidden"] {
   /* If a message is both brief and muted, we don't want to save the extra
    * space for the avatar, since it's not shown anyways. */
   padding: 16px;
 }
 
-.message-muted > .avatar,
-.message-muted > .content {
+.message[data-mute-state="hidden"] > .avatar,
+.message[data-mute-state="hidden"] > .content {
+  display: none;
+  visibility:hidden;
+}
+
+.message[data-mute-state="shown"] > .muted-message-explanation {
   display: none;
   visibility:hidden;
 }

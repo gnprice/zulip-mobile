@@ -89,11 +89,10 @@ export default (backgroundData: BackgroundData, message: Message | Outbox, isBri
 
   const divOpenHtml = template`
     <div
-     class="message ${isBrief ? 'message-brief' : 'message-full'} ${
-    isUserMuted ? 'message-muted' : ''
-  }"
+     class="message ${isBrief ? 'message-brief' : 'message-full'}"
      id="msg-${id}"
      data-msg-id="${id}"
+     data-mute-state="${isUserMuted ? 'hidden' : 'shown'}"
      $!${flagStrings.map(flag => template`data-${flag}="true" `).join('')}
     >`;
   const messageTime = shortTime(new Date(timestamp * 1000), backgroundData.twentyFourHourTime);
@@ -101,8 +100,8 @@ export default (backgroundData: BackgroundData, message: Message | Outbox, isBri
   // TODO: i18n
   const mutedMessageHtml = isUserMuted
     ? template`
-    <div class="special-message">
-      This message was hidden because it is from a user you have muted.
+    <div class="special-message muted-message-explanation">
+      This message was hidden because it is from a user you have muted. Long-press to view.
     </div>
   `
     : '';
