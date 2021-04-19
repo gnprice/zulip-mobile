@@ -142,6 +142,18 @@ body {
   padding: 0 16px 16px 80px;
 }
 
+.message-muted {
+  /* If a message is both brief and muted, we don't want to save the extra
+   * space for the avatar, since it's not shown anyways. */
+  padding: 16px;
+}
+
+.message-muted > .avatar,
+.message-muted > .content {
+  display: none;
+  visibility:hidden;
+}
+
 #message-loading {
   position: fixed;
   width: 100%;
@@ -569,7 +581,8 @@ hr {
   border-top: 1px solid hsla(0, 0%, 50%, 0.5);
 }
 
-/* Our own "sorry, unsupported" message for widgets. */
+/* Our own "sorry, unsupported" message for widgets.
+   Also used for showing that a message was sent by a muted user. */
 .special-message {
   display: flex;
   flex-direction: column;

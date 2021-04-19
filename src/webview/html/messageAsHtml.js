@@ -85,14 +85,27 @@ export const flagsStateToStringList = (flags: FlagsState, id: number): string[] 
 export default (backgroundData: BackgroundData, message: Message | Outbox, isBrief: boolean) => {
   const { id, timestamp } = message;
   const flagStrings = flagsStateToStringList(backgroundData.flags, id);
+  const isUserMuted = !!message.sender_id && backgroundData.mutedUsers.has(message.sender_id);
+
   const divOpenHtml = template`
     <div
-     class="message ${isBrief ? 'message-brief' : 'message-full'}"
+     class="message ${isBrief ? 'message-brief' : 'message-full'} ${
+    isUserMuted ? 'message-muted' : ''
+  }"
      id="msg-${id}"
      data-msg-id="${id}"
      $!${flagStrings.map(flag => template`data-${flag}="true" `).join('')}
     >`;
   const messageTime = shortTime(new Date(timestamp * 1000), backgroundData.twentyFourHourTime);
+
+  // TODO: i18n
+  const mutedMessageHtml = isUserMuted
+    ? template`
+    <div class="special-message">
+      This message was hidden because it is from a user you have muted.
+    </div>
+  `
+    : '';
 
   const timestampHtml = (showOnRender: boolean) => template`
 <div class="time-container">
@@ -113,6 +126,7 @@ $!${divOpenHtml}
     $!${timestampHtml(false)}
     $!${bodyHtml}
   </div>
+  $!${mutedMessageHtml}
 </div>
 `;
   }
@@ -144,6 +158,7 @@ $!${divOpenHtml}
     $!${subheaderHtml}
     $!${bodyHtml}
   </div>
+  $!${mutedMessageHtml}
 </div>
 `;
 };
