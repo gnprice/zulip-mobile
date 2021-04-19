@@ -93,7 +93,12 @@ export default (state: CaughtUpState = initialState, action: Action): CaughtUpSt
       let caughtUp = undefined;
       if (action.foundNewest !== undefined && action.foundOldest !== undefined) {
         /* This should always be the case for Zulip Server v1.8 or newer. */
-        caughtUp = { older: action.foundOldest, newer: action.foundNewest };
+        caughtUp = {
+          // $FlowIssue[unnecessary-optional-chain]
+          older: state[key]?.older || action.foundOldest,
+          // $FlowIssue[unnecessary-optional-chain]
+          newer: state[key]?.newer || action.foundNewest,
+        };
       } else {
         caughtUp = legacyInferCaughtUp(state[key], action);
       }
