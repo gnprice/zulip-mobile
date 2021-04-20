@@ -1,6 +1,7 @@
 /* @flow strict-local */
 import React from 'react';
 import { FlatList } from 'react-native';
+import { useSelector } from '../react-redux';
 
 import type { Dispatch, PmConversationData, UserOrBot } from '../types';
 import { createStyleSheet } from '../styles';
@@ -9,6 +10,7 @@ import { pm1to1NarrowFromUser, pmNarrowFromUsers } from '../utils/narrow';
 import UserItem from '../users/UserItem';
 import GroupPmConversationItem from './GroupPmConversationItem';
 import { doNarrow } from '../actions';
+import { getMutedUsers } from '../selectors';
 
 const styles = createStyleSheet({
   list: {
@@ -35,6 +37,7 @@ export default function PmConversationList(props: Props) {
   };
 
   const { conversations } = props;
+  const mutedUsers = useSelector(getMutedUsers);
 
   return (
     <FlatList
@@ -45,13 +48,17 @@ export default function PmConversationList(props: Props) {
       renderItem={({ item }) => {
         const users = item.keyRecipients;
         if (users.length === 1) {
-          return (
-            <UserItem
-              userId={users[0].user_id}
-              unreadCount={item.unread}
-              onPress={handleUserNarrow}
-            />
-          );
+          if (mutedUsers.has(users[0].user_id)) {
+            return null;
+          } else {
+            return (
+              <UserItem
+                userId={users[0].user_id}
+                unreadCount={item.unread}
+                onPress={handleUserNarrow}
+              />
+            );
+          }
         } else {
           return (
             <GroupPmConversationItem
