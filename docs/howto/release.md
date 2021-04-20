@@ -101,16 +101,14 @@ simple terminology for the process we follow with both.
 * Build the app, as both a good old-fashioned APK and a fancy new AAB:
 
   ```
-  tools/android aab && tools/android apk
+  tools/android aab
   ```
 
-* This produces an AAB at `android/app/build/outputs/bundle/release/app-release.aab`
-  and an APK at `android/app/build/outputs/apk/release/app-release.apk`.
+* This produces an AAB at `android/app/build/outputs/bundle/release/app-release.aab`.
 
 * Upload the AAB to Google Play via the "Create new release" button at
   the top of the
   [Release > Testing > Internal testing][play-internal-testing] page.
-  (We'll use the APK when posting the release on GitHub, at beta stage.)
 
   * For the release notes, use `tools/changelog user` and edit as
     needed.  (E.g., fix paragraph wrapping, and delete iOS-only items.)
@@ -253,6 +251,12 @@ simple terminology for the process we follow with both.
 
 * Android via GitHub:
 
+  * First, download an APK from Google Play.  (TODO add link.)
+
+    * This will be signed with our Android release key, the one that
+      devices which have the app installed expect to see signatures
+      from.  TODO explain.
+
   * Upload as a [GitHub release][gh-releases].
     This is useful for people who use Android without Google Play,
     e.g. out of privacy concerns or a desire to stick rigorously to
@@ -260,21 +264,16 @@ simple terminology for the process we follow with both.
 
   * Name the release the same as the tag name.
 
+  * (TODO: convention for downloading APK to where `tools/changelog
+    notes` can see it)
+
   * For the release notes, use `tools/changelog notes`, and fix
     formatting as needed.
 
-    * The hashes printed at the bottom are based on the files found at
-      the usual build-output locations mentioned [above](#alpha-android).
-      Those should be the same files you upload.
+    * The hash printed at the bottom is based on the APK file found at
+      (TODO location.)  This should be the same file you upload.
 
-  * Upload both the AAB and the APK.
-
-    (The AAB is more flexible and is the only version we use with
-    Google Play, but the APK is simpler and may be a bit easier for
-    people to work with.  As of 2020 it seems likely that some people
-    consuming these builds will prefer the APK, and it's not much
-    burden to build it at the same time, so we keep posting it
-    alongside the AAB.)
+  * Upload the APK file.
 
   * Check the box "This is a pre-release".
 
@@ -483,6 +482,8 @@ script Sentry supplies.)
 
 
 ### Prepare Android
+
+(TODO: update for upload key)
 
 We have a keystore file containing our [app signing key].  As the
 linked upstream doc explains, this is a highly sensitive secret
