@@ -63,6 +63,8 @@ module.exports = {
         name => [name, packagePath(name)],
       ),
     ),
+
+    platforms: ['sentry'],
   },
 
   transformer: {
