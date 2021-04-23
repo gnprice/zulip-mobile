@@ -5,6 +5,7 @@ import template from './template';
 import type {
   AggregatedReaction,
   FlagsState,
+  GetText,
   Message,
   MessageLike,
   Outbox,
@@ -82,7 +83,12 @@ $!${message.content}
 export const flagsStateToStringList = (flags: FlagsState, id: number): string[] =>
   Object.keys(flags).filter(key => flags[key][id]);
 
-export default (backgroundData: BackgroundData, message: Message | Outbox, isBrief: boolean) => {
+export default (
+  backgroundData: BackgroundData,
+  message: Message | Outbox,
+  isBrief: boolean,
+  _: GetText,
+) => {
   const { id, timestamp } = message;
   const flagStrings = flagsStateToStringList(backgroundData.flags, id);
   const isUserMuted = !!message.sender_id && backgroundData.mutedUsers.has(message.sender_id);
@@ -97,12 +103,11 @@ export default (backgroundData: BackgroundData, message: Message | Outbox, isBri
     >`;
   const messageTime = shortTime(new Date(timestamp * 1000), backgroundData.twentyFourHourTime);
 
-  // TODO: i18n
   const mutedMessageHtml =
     isUserMuted && !isBrief
       ? template`
     <div class="special-message muted-message-explanation">
-      This message was hidden because it is from a user you have muted. Long-press to view.
+      ${_('This message was hidden because it is from a user you have muted. Long-press to view.')}
     </div>
   `
       : '';
