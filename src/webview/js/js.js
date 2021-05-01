@@ -909,6 +909,8 @@ const handleLongPress = (target: Element) => {
 
   hasLongPressed = true;
 
+  sendMessage({ type: 'debug', target: target.outerHTML });
+
   const reactionElement = target.closest('.reaction');
   if (reactionElement) {
     sendMessage({

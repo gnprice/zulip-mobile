@@ -959,6 +959,10 @@ var compiledWebviewJs = (function (exports) {
 
   const handleLongPress = target => {
     hasLongPressed = true;
+    sendMessage({
+      type: 'debug',
+      target: target.outerHTML
+    });
     const reactionElement = target.closest('.reaction');
 
     if (reactionElement) {

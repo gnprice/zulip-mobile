@@ -118,9 +118,10 @@ type WebViewOutboundEventLongPressLink = {|
   href: string,
 |};
 
-type WebViewOutboundEventDebug = {|
+type WebViewOutboundEventDebug = {
   type: 'debug',
-|};
+  ...
+};
 
 type WebViewOutboundEventWarn = {|
   type: 'warn',
