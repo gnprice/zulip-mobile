@@ -24,6 +24,7 @@ import type {
   Stream,
   ThemeName,
   User,
+  UserId,
   UserOrBot,
   EditMessage,
 } from '../types';
@@ -63,6 +64,7 @@ import { tryParseUrl } from '../utils/url';
 import type { UnreadState } from '../unread/unreadModelTypes';
 import { getUnread } from '../unread/unreadModel';
 import { caseNarrow } from '../utils/narrow';
+import { getAllUsersById } from '../users/userSelectors';
 
 // ESLint doesn't notice how `this.props` escapes, and complains about some
 // props not being used here.
@@ -81,6 +83,7 @@ import { caseNarrow } from '../utils/narrow';
 export type BackgroundData = $ReadOnly<{|
   alertWords: AlertWordsState,
   allImageEmojiById: $ReadOnly<{| [id: string]: ImageEmojiType |}>,
+  allUsersById: Map<UserId, UserOrBot>,
   auth: Auth,
   debug: Debug,
   doNotMarkMessagesAsRead: boolean,
@@ -351,6 +354,7 @@ const MessageList: ComponentType<OuterProps> = connect<SelectorProps, _, _>(
     const backgroundData: BackgroundData = {
       alertWords: state.alertWords,
       allImageEmojiById: getAllImageEmojiById(state),
+      allUsersById: getAllUsersById(state),
       auth: getAuth(state),
       debug,
       doNotMarkMessagesAsRead:

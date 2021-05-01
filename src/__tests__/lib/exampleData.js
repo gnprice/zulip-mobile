@@ -48,6 +48,7 @@ import { authOfAccount } from '../../account/accountMisc';
 import { HOME_NARROW } from '../../utils/narrow';
 import type { BackgroundData } from '../../webview/MessageList';
 import {
+  getAllUsersById,
   getSettings,
   getStreamsById,
   getStreamsByName,
@@ -836,6 +837,7 @@ export const mkActionEventNewMessage = (
 export const backgroundData: BackgroundData = deepFreeze({
   alertWords: [],
   allImageEmojiById: action.register_complete.data.realm_emoji,
+  allUsersById: getAllUsersById(baseReduxState),
   auth: selfAuth,
   debug: baseReduxState.session.debug,
   doNotMarkMessagesAsRead: baseReduxState.settings.doNotMarkMessagesAsRead,
