@@ -972,9 +972,7 @@ var compiledWebviewJs = (function (exports) {
 
     if (target.matches('a')) {
       sendMessage({
-        type: 'longPress',
-        target: 'link',
-        messageId: getMessageIdFromElement(target),
+        type: 'longPressLink',
         href: requireAttribute(target, 'href')
       });
       return;
@@ -984,8 +982,7 @@ var compiledWebviewJs = (function (exports) {
       sendMessage({
         type: 'longPress',
         target: 'header',
-        messageId: getMessageIdFromElement(target),
-        href: null
+        messageId: getMessageIdFromElement(target)
       });
       return;
     }
@@ -1000,8 +997,7 @@ var compiledWebviewJs = (function (exports) {
     sendMessage({
       type: 'longPress',
       target: 'message',
-      messageId: getMessageIdFromElement(target),
-      href: null
+      messageId: getMessageIdFromElement(target)
     });
   };
 

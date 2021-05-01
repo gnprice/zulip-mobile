@@ -89,9 +89,13 @@ type WebViewOutboundEventUrl = {|
 
 type WebViewOutboundEventLongPress = {|
   type: 'longPress',
-  target: 'message' | 'header' | 'link',
+  target: 'message' | 'header',
   messageId: number,
-  href: string | null,
+|};
+
+type WebViewOutboundEventLongPressLink = {|
+  type: 'longPressLink',
+  href: string,
 |};
 
 type WebViewOutboundEventDebug = {|
@@ -147,6 +151,7 @@ export type WebViewOutboundEvent =
   | WebViewOutboundEventReaction
   | WebViewOutboundEventUrl
   | WebViewOutboundEventLongPress
+  | WebViewOutboundEventLongPressLink
   | WebViewOutboundEventReactionDetails
   | WebViewOutboundEventDebug
   | WebViewOutboundEventWarn
@@ -202,17 +207,9 @@ const handleImage = (props: Props, src: string, messageId: number) => {
 const handleLongPress = (
   props: Props,
   _: GetText,
-  target: 'message' | 'header' | 'link',
+  target: 'message' | 'header',
   messageId: number,
-  href: string | null,
 ) => {
-  if (href !== null) {
-    const url = new URL(href, props.backgroundData.auth.realm).toString();
-    Clipboard.setString(url);
-    showToast(_('Link copied to clipboard'));
-    return;
-  }
-
   const message = props.messages.find(x => x.id === messageId);
   if (!message) {
     return;
@@ -274,8 +271,15 @@ export const handleWebViewOutboundEvent = (
       break;
 
     case 'longPress':
-      handleLongPress(props, _, event.target, event.messageId, event.href);
+      handleLongPress(props, _, event.target, event.messageId);
       break;
+
+    case 'longPressLink': {
+      const url = new URL(event.href, props.backgroundData.auth.realm).toString();
+      Clipboard.setString(url);
+      showToast(_('Link copied to clipboard'));
+      break;
+    }
 
     case 'url':
       if (isUrlAnImage(event.href)) {

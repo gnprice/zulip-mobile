@@ -921,9 +921,7 @@ const handleLongPress = (target: Element) => {
 
   if (target.matches('a')) {
     sendMessage({
-      type: 'longPress',
-      target: 'link',
-      messageId: getMessageIdFromElement(target),
+      type: 'longPressLink',
       href: requireAttribute(target, 'href'),
     });
     return;
@@ -934,7 +932,6 @@ const handleLongPress = (target: Element) => {
       type: 'longPress',
       target: 'header',
       messageId: getMessageIdFromElement(target),
-      href: null,
     });
     return;
   }
@@ -949,7 +946,6 @@ const handleLongPress = (target: Element) => {
     type: 'longPress',
     target: 'message',
     messageId: getMessageIdFromElement(target),
-    href: null,
   });
 };
 
