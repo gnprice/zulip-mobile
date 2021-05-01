@@ -47,7 +47,6 @@ export default (
 <div
   class="msglist-element header-wrapper header topic-header"
   data-narrow="${base64Utf8Encode(topicNarrowStr)}"
-  data-msg-id="${message.id}"
 >
   <div class="topic-text">$!${topicHtml}</div>
   <div class="topic-date">${humanDate(new Date(message.timestamp * 1000))}</div>
@@ -65,7 +64,6 @@ export default (
 
       return template`
 <div class="msglist-element header-wrapper header stream-header topic-header"
-    data-msg-id="${message.id}"
     data-narrow="${base64Utf8Encode(topicNarrowStr)}">
   <div class="header stream-text"
        style="color: ${textColor};
@@ -95,7 +93,7 @@ export default (
     return template`
 <div class="msglist-element header-wrapper private-header header"
      data-narrow="${base64Utf8Encode(narrowStr)}"
-     data-msg-id="${message.id}">
+>
   ${uiRecipients
     .map(r => r.full_name)
     .sort()

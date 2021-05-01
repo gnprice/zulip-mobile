@@ -9,7 +9,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
   </div>
 
 <div class=\\"msglist-element header-wrapper header stream-header topic-header\\"
-    data-msg-id=\\"1024\\"
     data-narrow=\\"dG9waWM6czpzdHJlYW0gMQB0b3BpYyAx\\">
   <div class=\\"header stream-text\\"
        style=\\"color: black;
@@ -87,7 +86,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
   </div>
 
 <div class=\\"msglist-element header-wrapper header stream-header topic-header\\"
-    data-msg-id=\\"7938\\"
     data-narrow=\\"dG9waWM6czpzdHJlYW0gMQB0b3BpYyAx\\">
   <div class=\\"header stream-text\\"
        style=\\"color: black;
@@ -170,7 +168,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
   </div>
 
 <div class=\\"msglist-element header-wrapper header stream-header topic-header\\"
-    data-msg-id=\\"4948\\"
     data-narrow=\\"dG9waWM6czpzdHJlYW0gMQB0b3BpYyAx\\">
   <div class=\\"header stream-text\\"
        style=\\"color: black;
@@ -213,7 +210,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
 </div>
 
 <div class=\\"msglist-element header-wrapper header stream-header topic-header\\"
-    data-msg-id=\\"5083\\"
     data-narrow=\\"dG9waWM6czpzdHJlYW0gMQB0b3BpYyAy\\">
   <div class=\\"header stream-text\\"
        style=\\"color: black;
@@ -266,7 +262,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
   </div>
 
 <div class=\\"msglist-element header-wrapper header stream-header topic-header\\"
-    data-msg-id=\\"6789\\"
     data-narrow=\\"dG9waWM6czpzdHJlYW0gMQB0b3BpYyAx\\">
   <div class=\\"header stream-text\\"
        style=\\"color: black;
@@ -309,7 +304,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
 </div>
 
 <div class=\\"msglist-element header-wrapper header stream-header topic-header\\"
-    data-msg-id=\\"7727\\"
     data-narrow=\\"dG9waWM6czpzdHJlYW0gMgB0b3BpYyAy\\">
   <div class=\\"header stream-text\\"
        style=\\"color: black;
@@ -362,7 +356,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
   </div>
 
 <div class=\\"msglist-element header-wrapper header stream-header topic-header\\"
-    data-msg-id=\\"9181\\"
     data-narrow=\\"dG9waWM6czpzdHJlYW0gMQB0b3BpYyAx\\">
   <div class=\\"header stream-text\\"
        style=\\"color: black;
@@ -452,7 +445,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwy\\"
-     data-msg-id=\\"8849\\">
+>
   Nonrandom name one User, Nonrandom name two User
 </div>
 
@@ -523,7 +516,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwy\\"
-     data-msg-id=\\"5287\\">
+>
   Nonrandom name one User, Nonrandom name two User
 </div>
 
@@ -599,7 +592,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwy\\"
-     data-msg-id=\\"5829\\">
+>
   Nonrandom name one User, Nonrandom name two User
 </div>
 
@@ -681,7 +674,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwyLDM=\\"
-     data-msg-id=\\"5377\\">
+>
   Nonrandom name one User, Nonrandom name three User, Nonrandom name two User
 </div>
 
@@ -752,7 +745,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwyLDM=\\"
-     data-msg-id=\\"5637\\">
+>
   Nonrandom name one User, Nonrandom name three User, Nonrandom name two User
 </div>
 
@@ -828,7 +821,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwyLDM=\\"
-     data-msg-id=\\"2794\\">
+>
   Nonrandom name one User, Nonrandom name three User, Nonrandom name two User
 </div>
 
@@ -909,7 +902,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
   </div>
 
 <div class=\\"msglist-element header-wrapper header stream-header topic-header\\"
-    data-msg-id=\\"1024\\"
     data-narrow=\\"dG9waWM6czpzdHJlYW0gMQB0b3BpYyAx\\">
   <div class=\\"header stream-text\\"
        style=\\"color: black;
@@ -978,7 +970,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwyLDM=\\"
-     data-msg-id=\\"2794\\">
+>
   Nonrandom name one User, Nonrandom name three User, Nonrandom name two User
 </div>
 
@@ -1055,7 +1047,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
   </div>
 
 <div class=\\"msglist-element header-wrapper header stream-header topic-header\\"
-    data-msg-id=\\"4948\\"
     data-narrow=\\"dG9waWM6czpzdHJlYW0gMQB0b3BpYyAx\\">
   <div class=\\"header stream-text\\"
        style=\\"color: black;
@@ -1098,7 +1089,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
 </div>
 
 <div class=\\"msglist-element header-wrapper header stream-header topic-header\\"
-    data-msg-id=\\"5083\\"
     data-narrow=\\"dG9waWM6czpzdHJlYW0gMQB0b3BpYyAy\\">
   <div class=\\"header stream-text\\"
        style=\\"color: black;
@@ -1142,7 +1132,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwy\\"
-     data-msg-id=\\"5287\\">
+>
   Nonrandom name one User, Nonrandom name two User
 </div>
 
@@ -1208,7 +1198,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwyLDM=\\"
-     data-msg-id=\\"5377\\">
+>
   Nonrandom name one User, Nonrandom name three User, Nonrandom name two User
 </div>
 
@@ -1324,7 +1314,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwy\\"
-     data-msg-id=\\"5829\\">
+>
   Nonrandom name one User, Nonrandom name two User
 </div>
 
@@ -1401,7 +1391,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
   </div>
 
 <div class=\\"msglist-element header-wrapper header stream-header topic-header\\"
-    data-msg-id=\\"6789\\"
     data-narrow=\\"dG9waWM6czpzdHJlYW0gMQB0b3BpYyAx\\">
   <div class=\\"header stream-text\\"
        style=\\"color: black;
@@ -1444,7 +1433,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
 </div>
 
 <div class=\\"msglist-element header-wrapper header stream-header topic-header\\"
-    data-msg-id=\\"7727\\"
     data-narrow=\\"dG9waWM6czpzdHJlYW0gMgB0b3BpYyAy\\">
   <div class=\\"header stream-text\\"
        style=\\"color: black;
@@ -1487,7 +1475,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
 </div>
 
 <div class=\\"msglist-element header-wrapper header stream-header topic-header\\"
-    data-msg-id=\\"7938\\"
     data-narrow=\\"dG9waWM6czpzdHJlYW0gMQB0b3BpYyAx\\">
   <div class=\\"header stream-text\\"
        style=\\"color: black;
@@ -1561,7 +1548,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwy\\"
-     data-msg-id=\\"8849\\">
+>
   Nonrandom name one User, Nonrandom name two User
 </div>
 
@@ -1621,7 +1608,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible HOME_N
 </div>
 
 <div class=\\"msglist-element header-wrapper header stream-header topic-header\\"
-    data-msg-id=\\"9181\\"
     data-narrow=\\"dG9waWM6czpzdHJlYW0gMQB0b3BpYyAx\\">
   <div class=\\"header stream-text\\"
        style=\\"color: black;
@@ -1711,7 +1697,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible all-pm
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwy\\"
-     data-msg-id=\\"8849\\">
+>
   Nonrandom name one User, Nonrandom name two User
 </div>
 
@@ -1782,7 +1768,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible all-pm
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwy\\"
-     data-msg-id=\\"5287\\">
+>
   Nonrandom name one User, Nonrandom name two User
 </div>
 
@@ -1858,7 +1844,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible all-pm
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwy\\"
-     data-msg-id=\\"5829\\">
+>
   Nonrandom name one User, Nonrandom name two User
 </div>
 
@@ -1940,7 +1926,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible all-pm
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwyLDM=\\"
-     data-msg-id=\\"5377\\">
+>
   Nonrandom name one User, Nonrandom name three User, Nonrandom name two User
 </div>
 
@@ -2011,7 +1997,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible all-pm
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwyLDM=\\"
-     data-msg-id=\\"5637\\">
+>
   Nonrandom name one User, Nonrandom name three User, Nonrandom name two User
 </div>
 
@@ -2087,7 +2073,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible all-pm
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwyLDM=\\"
-     data-msg-id=\\"2794\\">
+>
   Nonrandom name one User, Nonrandom name three User, Nonrandom name two User
 </div>
 
@@ -2169,7 +2155,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible all-pm
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwyLDM=\\"
-     data-msg-id=\\"2794\\">
+>
   Nonrandom name one User, Nonrandom name three User, Nonrandom name two User
 </div>
 
@@ -2247,7 +2233,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible all-pm
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwy\\"
-     data-msg-id=\\"5287\\">
+>
   Nonrandom name one User, Nonrandom name two User
 </div>
 
@@ -2313,7 +2299,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible all-pm
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwyLDM=\\"
-     data-msg-id=\\"5377\\">
+>
   Nonrandom name one User, Nonrandom name three User, Nonrandom name two User
 </div>
 
@@ -2429,7 +2415,7 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible all-pm
 
 <div class=\\"msglist-element header-wrapper private-header header\\"
      data-narrow=\\"cG06MSwy\\"
-     data-msg-id=\\"5829\\">
+>
   Nonrandom name one User, Nonrandom name two User
 </div>
 
@@ -3384,7 +3370,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible stream
 <div
   class=\\"msglist-element header-wrapper header topic-header\\"
   data-narrow=\\"dG9waWM6czpzdHJlYW0gMQB0b3BpYyAx\\"
-  data-msg-id=\\"1024\\"
 >
   <div class=\\"topic-text\\">topic 1</div>
   <div class=\\"topic-date\\">Feb 5, 1995</div>
@@ -3458,7 +3443,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible stream
 <div
   class=\\"msglist-element header-wrapper header topic-header\\"
   data-narrow=\\"dG9waWM6czpzdHJlYW0gMQB0b3BpYyAx\\"
-  data-msg-id=\\"7938\\"
 >
   <div class=\\"topic-text\\">topic 1</div>
   <div class=\\"topic-date\\">Mar 5, 1995</div>
@@ -3537,7 +3521,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible stream
 <div
   class=\\"msglist-element header-wrapper header topic-header\\"
   data-narrow=\\"dG9waWM6czpzdHJlYW0gMQB0b3BpYyAx\\"
-  data-msg-id=\\"4948\\"
 >
   <div class=\\"topic-text\\">topic 1</div>
   <div class=\\"topic-date\\">Feb 19, 1995</div>
@@ -3576,7 +3559,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible stream
 <div
   class=\\"msglist-element header-wrapper header topic-header\\"
   data-narrow=\\"dG9waWM6czpzdHJlYW0gMQB0b3BpYyAy\\"
-  data-msg-id=\\"5083\\"
 >
   <div class=\\"topic-text\\">topic 2</div>
   <div class=\\"topic-date\\">Feb 19, 1995</div>
@@ -3625,7 +3607,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible stream
 <div
   class=\\"msglist-element header-wrapper header topic-header\\"
   data-narrow=\\"dG9waWM6czpzdHJlYW0gMQB0b3BpYyAx\\"
-  data-msg-id=\\"9181\\"
 >
   <div class=\\"topic-text\\">topic 1</div>
   <div class=\\"topic-date\\">Mar 5, 1995</div>
@@ -3710,7 +3691,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible stream
 <div
   class=\\"msglist-element header-wrapper header topic-header\\"
   data-narrow=\\"dG9waWM6czpzdHJlYW0gMQB0b3BpYyAx\\"
-  data-msg-id=\\"1024\\"
 >
   <div class=\\"topic-text\\">topic 1</div>
   <div class=\\"topic-date\\">Feb 5, 1995</div>
@@ -3810,7 +3790,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible stream
 <div
   class=\\"msglist-element header-wrapper header topic-header\\"
   data-narrow=\\"dG9waWM6czpzdHJlYW0gMQB0b3BpYyAy\\"
-  data-msg-id=\\"5083\\"
 >
   <div class=\\"topic-text\\">topic 2</div>
   <div class=\\"topic-date\\">Feb 19, 1995</div>
@@ -3855,7 +3834,6 @@ exports[`messages -> piece descriptors -> content HTML is stable/sensible stream
 <div
   class=\\"msglist-element header-wrapper header topic-header\\"
   data-narrow=\\"dG9waWM6czpzdHJlYW0gMQB0b3BpYyAx\\"
-  data-msg-id=\\"7938\\"
 >
   <div class=\\"topic-text\\">topic 1</div>
   <div class=\\"topic-date\\">Mar 5, 1995</div>
