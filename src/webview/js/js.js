@@ -941,10 +941,13 @@ const handleLongPress = (target: Element) => {
     return;
   }
 
-  sendMessage({
-    type: 'longPressMessage',
-    messageId: getMessageIdFromElement(target),
-  });
+  if (messageNode) {
+    sendMessage({
+      type: 'longPressMessage',
+      messageId: requireNumericAttribute(messageNode, 'data-msg-id'),
+    });
+    return;
+  }
 };
 
 documentBody.addEventListener('touchstart', (e: TouchEvent) => {
