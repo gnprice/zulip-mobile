@@ -970,19 +970,38 @@ var compiledWebviewJs = (function (exports) {
       return;
     }
 
-    const targetType = target.matches('.header') ? 'header' : target.matches('a') ? 'link' : 'message';
+    if (target.matches('a')) {
+      sendMessage({
+        type: 'longPress',
+        target: 'link',
+        messageId: getMessageIdFromElement(target),
+        href: requireAttribute(target, 'href')
+      });
+      return;
+    }
+
+    if (target.matches('.header')) {
+      sendMessage({
+        type: 'longPress',
+        target: 'header',
+        messageId: getMessageIdFromElement(target),
+        href: null
+      });
+      return;
+    }
+
     const messageNode = target.closest('.message');
 
-    if (targetType === 'message' && messageNode && messageNode.getAttribute('data-mute-state') === 'hidden') {
+    if (messageNode && messageNode.getAttribute('data-mute-state') === 'hidden') {
       revealMutedMessages(messageNode);
       return;
     }
 
     sendMessage({
       type: 'longPress',
-      target: targetType,
+      target: 'message',
       messageId: getMessageIdFromElement(target),
-      href: target.matches('a') ? requireAttribute(target, 'href') : null
+      href: null
     });
   };
 
