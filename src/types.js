@@ -376,7 +376,6 @@ export type TimeMessageListElement = {|
   type: 'time',
   key: string,
   timestamp: number,
-  subsequentMessage: Message | Outbox,
 |};
 
 export type MessageMessageListElement = {|
