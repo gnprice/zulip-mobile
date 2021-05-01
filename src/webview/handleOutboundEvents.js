@@ -87,9 +87,14 @@ type WebViewOutboundEventUrl = {|
   messageId: number,
 |};
 
-type WebViewOutboundEventLongPress = {|
-  type: 'longPress',
-  target: 'message' | 'header',
+type WebViewOutboundEventLongPressHeader = {|
+  type: 'longPressHeader',
+  /** The ID of some associated message. */
+  messageId: number,
+|};
+
+type WebViewOutboundEventLongPressMessage = {|
+  type: 'longPressMessage',
   messageId: number,
 |};
 
@@ -150,7 +155,8 @@ export type WebViewOutboundEvent =
   | WebViewOutboundEventImage
   | WebViewOutboundEventReaction
   | WebViewOutboundEventUrl
-  | WebViewOutboundEventLongPress
+  | WebViewOutboundEventLongPressHeader
+  | WebViewOutboundEventLongPressMessage
   | WebViewOutboundEventLongPressLink
   | WebViewOutboundEventReactionDetails
   | WebViewOutboundEventDebug
@@ -204,42 +210,42 @@ const handleImage = (props: Props, src: string, messageId: number) => {
   }
 };
 
-const handleLongPress = (
-  props: Props,
-  _: GetText,
-  target: 'message' | 'header',
-  messageId: number,
-) => {
+const handleLongPressHeader = (props: Props, _: GetText, messageId: number) => {
+  const message = props.messages.find(x => x.id === messageId);
+  if (!message) {
+    return;
+  }
+  const { dispatch, showActionSheetWithOptions, backgroundData } = props;
+  if (message.type === 'stream') {
+    showTopicActionSheet({
+      showActionSheetWithOptions,
+      callbacks: { dispatch, _ },
+      backgroundData,
+      streamId: message.stream_id,
+      topic: message.subject,
+    });
+  } else if (message.type === 'private') {
+    const label = pmUiRecipientsFromMessage(message, backgroundData.ownUser.user_id)
+      .map(r => r.full_name)
+      .sort()
+      .join(', ');
+    showToast(label);
+  }
+};
+
+const handleLongPressMessage = (props: Props, _: GetText, messageId: number) => {
   const message = props.messages.find(x => x.id === messageId);
   if (!message) {
     return;
   }
   const { dispatch, showActionSheetWithOptions, backgroundData, narrow, startEditMessage } = props;
-  if (target === 'header') {
-    if (message.type === 'stream') {
-      showTopicActionSheet({
-        showActionSheetWithOptions,
-        callbacks: { dispatch, _ },
-        backgroundData,
-        streamId: message.stream_id,
-        topic: message.subject,
-      });
-    } else if (message.type === 'private') {
-      const label = pmUiRecipientsFromMessage(message, backgroundData.ownUser.user_id)
-        .map(r => r.full_name)
-        .sort()
-        .join(', ');
-      showToast(label);
-    }
-  } else if (target === 'message') {
-    showMessageActionSheet({
-      showActionSheetWithOptions,
-      callbacks: { dispatch, startEditMessage, _ },
-      backgroundData,
-      message,
-      narrow,
-    });
-  }
+  showMessageActionSheet({
+    showActionSheetWithOptions,
+    callbacks: { dispatch, startEditMessage, _ },
+    backgroundData,
+    message,
+    narrow,
+  });
 };
 
 export const handleWebViewOutboundEvent = (
@@ -270,8 +276,12 @@ export const handleWebViewOutboundEvent = (
       handleImage(props, event.src, event.messageId);
       break;
 
-    case 'longPress':
-      handleLongPress(props, _, event.target, event.messageId);
+    case 'longPressHeader':
+      handleLongPressHeader(props, _, event.messageId);
+      break;
+
+    case 'longPressMessage':
+      handleLongPressMessage(props, _, event.messageId);
       break;
 
     case 'longPressLink': {

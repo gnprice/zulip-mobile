@@ -929,8 +929,7 @@ const handleLongPress = (target: Element) => {
 
   if (target.matches('.header')) {
     sendMessage({
-      type: 'longPress',
-      target: 'header',
+      type: 'longPressHeader',
       messageId: getMessageIdFromElement(target),
     });
     return;
@@ -943,8 +942,7 @@ const handleLongPress = (target: Element) => {
   }
 
   sendMessage({
-    type: 'longPress',
-    target: 'message',
+    type: 'longPressMessage',
     messageId: getMessageIdFromElement(target),
   });
 };
