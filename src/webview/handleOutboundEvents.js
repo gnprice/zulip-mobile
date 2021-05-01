@@ -345,7 +345,7 @@ export const handleWebViewOutboundEvent = (
     }
 
     case 'debug':
-      console.debug(props, event); // eslint-disable-line
+      console.debug('WebView debug', event); // eslint-disable-line
       break;
 
     case 'warn':
