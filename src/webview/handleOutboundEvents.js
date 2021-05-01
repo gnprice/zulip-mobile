@@ -1,5 +1,6 @@
 /* @flow strict-local */
 import { Clipboard, Alert } from 'react-native';
+import invariant from 'invariant';
 
 import * as NavigationService from '../nav/NavigationService';
 import * as api from '../api';
@@ -9,11 +10,19 @@ import type { BackgroundData } from './MessageList';
 import type { ShowActionSheetWithOptions } from '../action-sheets';
 import type { JSONableDict } from '../utils/jsonable';
 import { showToast } from '../utils/info';
-import { pmUiRecipientsFromMessage } from '../utils/recipient';
+import { pmUiRecipientsFromKeyRecipients } from '../utils/recipient';
 import { isUrlAnImage } from '../utils/url';
 import * as logging from '../utils/logging';
 import { filterUnreadMessagesInRange } from '../utils/unread';
-import { parseNarrow } from '../utils/narrow';
+import {
+  isPmNarrow,
+  isStreamNarrow,
+  isTopicNarrow,
+  parseNarrow,
+  streamNameOfNarrow,
+  topicOfNarrow,
+  userIdsOfPmNarrow,
+} from '../utils/narrow';
 import {
   fetchOlder,
   fetchNewer,
@@ -23,9 +32,14 @@ import {
   navigateToLightbox,
   messageLinkPress,
 } from '../actions';
-import { showTopicActionSheet, showMessageActionSheet } from '../action-sheets';
+import {
+  showMessageActionSheet,
+  showStreamActionSheet,
+  showTopicActionSheet,
+} from '../action-sheets';
 import { ensureUnreachable } from '../types';
 import { base64Utf8Decode } from '../utils/encoding';
+import { mapOrNull } from '../collections';
 
 type WebViewOutboundEventReady = {|
   type: 'ready',
@@ -89,8 +103,9 @@ type WebViewOutboundEventUrl = {|
 
 type WebViewOutboundEventLongPressHeader = {|
   type: 'longPressHeader',
-  /** The ID of some associated message. */
-  messageId: number,
+  // The result of `keyFromNarrow`, passed through `base64Utf8Encode`.
+  // Pass it through `base64UtfDecode` before using.
+  narrow: string,
 |};
 
 type WebViewOutboundEventLongPressMessage = {|
@@ -210,26 +225,39 @@ const handleImage = (props: Props, src: string, messageId: number) => {
   }
 };
 
-const handleLongPressHeader = (props: Props, _: GetText, messageId: number) => {
-  const message = props.messages.find(x => x.id === messageId);
-  if (!message) {
-    return;
-  }
-  const { dispatch, showActionSheetWithOptions, backgroundData } = props;
-  if (message.type === 'stream') {
+const handleLongPressHeader = (props: Props, _: GetText, narrowStr: string) => {
+  const narrow = parseNarrow(base64Utf8Decode(narrowStr));
+  if (isStreamNarrow(narrow)) {
+    const { dispatch, showActionSheetWithOptions, backgroundData } = props;
+    const stream = backgroundData.streamsByName.get(streamNameOfNarrow(narrow));
+    invariant(stream, 'handleLongPressHeader for stream: stream must exist');
+    showStreamActionSheet({
+      showActionSheetWithOptions,
+      callbacks: { dispatch, _ },
+      backgroundData,
+      streamId: stream.stream_id,
+    });
+  } else if (isTopicNarrow(narrow)) {
+    const { dispatch, showActionSheetWithOptions, backgroundData } = props;
+    const stream = backgroundData.streamsByName.get(streamNameOfNarrow(narrow));
+    invariant(stream, 'handleLongPressHeader for topic: stream must exist');
     showTopicActionSheet({
       showActionSheetWithOptions,
       callbacks: { dispatch, _ },
       backgroundData,
-      streamId: message.stream_id,
-      topic: message.subject,
+      streamId: stream.stream_id,
+      topic: topicOfNarrow(narrow),
     });
-  } else if (message.type === 'private') {
-    const label = pmUiRecipientsFromMessage(message, backgroundData.ownUser.user_id)
-      .map(r => r.full_name)
-      .sort()
-      .join(', ');
-    showToast(label);
+  } else if (isPmNarrow(narrow)) {
+    const { allUsersById, ownUser } = props.backgroundData;
+    const userIds = pmUiRecipientsFromKeyRecipients(userIdsOfPmNarrow(narrow), ownUser.user_id);
+    const names = mapOrNull(userIds, u => allUsersById.get(u)?.full_name);
+    if (!names) {
+      return;
+    }
+    showToast(names.sort().join(', '));
+  } else {
+    throw new Error('unexpected narrow from msglist header');
   }
 };
 
@@ -277,7 +305,7 @@ export const handleWebViewOutboundEvent = (
       break;
 
     case 'longPressHeader':
-      handleLongPressHeader(props, _, event.messageId);
+      handleLongPressHeader(props, _, event.narrow);
       break;
 
     case 'longPressMessage':

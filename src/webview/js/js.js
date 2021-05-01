@@ -930,7 +930,7 @@ const handleLongPress = (target: Element) => {
   if (target.matches('.header')) {
     sendMessage({
       type: 'longPressHeader',
-      messageId: getMessageIdFromElement(target),
+      narrow: requireAttribute(target, 'data-narrow'),
     });
     return;
   }

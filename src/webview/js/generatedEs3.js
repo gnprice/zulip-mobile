@@ -981,7 +981,7 @@ var compiledWebviewJs = (function (exports) {
     if (target.matches('.header')) {
       sendMessage({
         type: 'longPressHeader',
-        messageId: getMessageIdFromElement(target)
+        narrow: requireAttribute(target, 'data-narrow')
       });
       return;
     }
