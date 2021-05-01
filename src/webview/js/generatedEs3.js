@@ -804,13 +804,13 @@ var compiledWebviewJs = (function (exports) {
     scrollEventsDisabled = false;
   };
 
-  const revealMutedMessages = message => {
-    let messageNode = message;
+  const revealMutedMessages = message_ => {
+    let message = message_;
 
     do {
-      messageNode.setAttribute('data-mute-state', 'shown');
-      messageNode = nextMessage(messageNode);
-    } while (messageNode && messageNode.classList.contains('message-brief'));
+      message.setAttribute('data-mute-state', 'shown');
+      message = nextMessage(message);
+    } while (message && message.classList.contains('message-brief'));
   };
 
   const requireAttribute = (e, name) => {
@@ -959,13 +959,13 @@ var compiledWebviewJs = (function (exports) {
 
   const handleLongPress = target => {
     hasLongPressed = true;
-    const reactionNode = target.closest('.reaction');
+    const reactionElement = target.closest('.reaction');
 
-    if (reactionNode) {
+    if (reactionElement) {
       sendMessage({
         type: 'reactionDetails',
         messageId: getMessageIdFromElement(target),
-        reactionName: requireAttribute(reactionNode, 'data-name')
+        reactionName: requireAttribute(reactionElement, 'data-name')
       });
       return;
     }
@@ -986,17 +986,17 @@ var compiledWebviewJs = (function (exports) {
       return;
     }
 
-    const messageNode = target.closest('.message');
+    const messageElement = target.closest('.message');
 
-    if (messageNode && messageNode.getAttribute('data-mute-state') === 'hidden') {
-      revealMutedMessages(messageNode);
+    if (messageElement && messageElement.getAttribute('data-mute-state') === 'hidden') {
+      revealMutedMessages(messageElement);
       return;
     }
 
-    if (messageNode) {
+    if (messageElement) {
       sendMessage({
         type: 'longPressMessage',
-        messageId: requireNumericAttribute(messageNode, 'data-msg-id')
+        messageId: requireNumericAttribute(messageElement, 'data-msg-id')
       });
       return;
     }

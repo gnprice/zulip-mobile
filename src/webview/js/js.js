@@ -744,12 +744,12 @@ const handleMessageEvent: MessageEventListener = e => {
  * If the given message is muted, reveal it and all consecutive following
  * messages from the same user.
  */
-const revealMutedMessages = (message: Element) => {
-  let messageNode = message;
+const revealMutedMessages = (message_: Element) => {
+  let message = message_;
   do {
-    messageNode.setAttribute('data-mute-state', 'shown');
-    messageNode = nextMessage(messageNode);
-  } while (messageNode && messageNode.classList.contains('message-brief'));
+    message.setAttribute('data-mute-state', 'shown');
+    message = nextMessage(message);
+  } while (message && message.classList.contains('message-brief'));
 };
 
 const requireAttribute = (e: Element, name: string): string => {
@@ -909,12 +909,12 @@ const handleLongPress = (target: Element) => {
 
   hasLongPressed = true;
 
-  const reactionNode = target.closest('.reaction');
-  if (reactionNode) {
+  const reactionElement = target.closest('.reaction');
+  if (reactionElement) {
     sendMessage({
       type: 'reactionDetails',
       messageId: getMessageIdFromElement(target),
-      reactionName: requireAttribute(reactionNode, 'data-name'),
+      reactionName: requireAttribute(reactionElement, 'data-name'),
     });
     return;
   }
@@ -935,16 +935,16 @@ const handleLongPress = (target: Element) => {
     return;
   }
 
-  const messageNode = target.closest('.message');
-  if (messageNode && messageNode.getAttribute('data-mute-state') === 'hidden') {
-    revealMutedMessages(messageNode);
+  const messageElement = target.closest('.message');
+  if (messageElement && messageElement.getAttribute('data-mute-state') === 'hidden') {
+    revealMutedMessages(messageElement);
     return;
   }
 
-  if (messageNode) {
+  if (messageElement) {
     sendMessage({
       type: 'longPressMessage',
-      messageId: requireNumericAttribute(messageNode, 'data-msg-id'),
+      messageId: requireNumericAttribute(messageElement, 'data-msg-id'),
     });
     return;
   }
