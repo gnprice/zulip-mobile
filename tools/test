@@ -142,17 +142,17 @@ run_android() {
         android|both|sloppy)
             ;;
         ios)
-            echo "Skipping android: different platform"
+            echo "Suite android: skipping: different platform"
             return 0
             ;;
     esac
 
     if ! files_check android/; then
-        echo "Skipping android: no changes to files"
+        echo "Suite android: skipping: no changes to files"
         return 0
     fi
 
-    echo "Running android..."
+    echo "Suite android: running..."
 
     (
         cd android
@@ -174,17 +174,17 @@ run_ios() {
         ios|both|sloppy)
             ;;
         android)
-            echo "Skipping ios: different platform"
+            echo "Suite ios: skipping: different platform"
             return 0
             ;;
     esac
 
     if ! files_check ios/; then
-        echo "Skipping ios: no changes to files"
+        echo "Suite ios: skipping: no changes to files"
         return 0
     fi
 
-    echo "Running ios..."
+    echo "Suite ios: running..."
 
     # TODO: At least make an iOS build, when on macOS.
     #   When not on macOS, perhaps warn that we've skipped this suite.
@@ -227,7 +227,7 @@ run_jest() {
         diff:*)
             file_list=( $(files_js) )
             if ! (( ${#file_list[@]} )); then
-                echo "Skipping jest: no changes to files"
+                echo "Suite jest: skipping: no changes to files"
                 return 0
             fi
             jest_args+=( --findRelatedTests "${file_list[@]}" )
@@ -245,7 +245,7 @@ run_jest() {
         sloppy) jest_args+=( --selectProjects ios );;
     esac
 
-    echo "Running jest..."
+    echo "Suite jest: running..."
 
     check_node || return
     jest "${jest_args[@]}"
@@ -265,7 +265,7 @@ run_prettier() {
 
 run_deps() {
     if ! files_check package.json yarn.lock; then
-        echo "Skipping deps: no changes to files"
+        echo "Suite deps: skipping: no changes to files"
         return 0
     fi
 
@@ -291,18 +291,18 @@ for suite in "${suites[@]}"; do
             run_ios
             ;;
         flow)
-            echo "Running $suite..."
+            echo "Suite $suite: running..."
             flow
             ;;
         lint)
-            echo "Running $suite..."
+            echo "Suite $suite: running..."
             run_lint $(files_js)
             ;;
         jest)
             run_jest
             ;;
         prettier)
-            echo "Running $suite..."
+            echo "Suite $suite: running..."
             run_prettier $(files_js)
             ;;
         deps)
