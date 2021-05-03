@@ -139,12 +139,20 @@ files_check() {
 
 run_android() {
     case "$platform" in
-      android|both|sloppy) ;;
-      ios) return 0;;
+        android|both|sloppy)
+            ;;
+        ios)
+            echo "Skipping android: different platform"
+            return 0
+            ;;
     esac
 
-    files_check android/ \
-        || return 0
+    if ! files_check android/; then
+        echo "Skipping android: no changes to files"
+        return 0
+    fi
+
+    echo "Running android..."
 
     (
         cd android
@@ -163,12 +171,20 @@ run_android() {
 
 run_ios() {
     case "$platform" in
-      ios|both|sloppy) ;;
-      android) return 0;;
+        ios|both|sloppy)
+            ;;
+        android)
+            echo "Skipping ios: different platform"
+            return 0
+            ;;
     esac
 
-    files_check ios/ \
-        || return 0
+    if ! files_check ios/; then
+        echo "Skipping ios: no changes to files"
+        return 0
+    fi
+
+    echo "Running ios..."
 
     # TODO: At least make an iOS build, when on macOS.
     #   When not on macOS, perhaps warn that we've skipped this suite.
@@ -210,7 +226,10 @@ run_jest() {
             ;;
         diff:*)
             file_list=( $(files_js) )
-            (( ${#file_list[@]} )) || return 0
+            if ! (( ${#file_list[@]} )); then
+                echo "Skipping jest: no changes to files"
+                return 0
+            fi
             jest_args+=( --findRelatedTests "${file_list[@]}" )
             ;;
     esac
@@ -225,6 +244,8 @@ run_jest() {
         # small) loss of coverage.
         sloppy) jest_args+=( --selectProjects ios );;
     esac
+
+    echo "Running jest..."
 
     check_node || return
     jest "${jest_args[@]}"
@@ -243,8 +264,10 @@ run_prettier() {
 }
 
 run_deps() {
-    files_check package.json yarn.lock \
-        || return 0
+    if ! files_check package.json yarn.lock; then
+        echo "Skipping deps: no changes to files"
+        return 0
+    fi
 
     if ! yarn-deduplicate --fail --list; then
         cat <<EOF
@@ -260,7 +283,6 @@ EOF
 
 failed=()
 for suite in "${suites[@]}"; do
-    echo "Running $suite..."
     case "$suite" in
         android)
             run_android
@@ -269,15 +291,18 @@ for suite in "${suites[@]}"; do
             run_ios
             ;;
         flow)
+            echo "Running $suite..."
             flow
             ;;
         lint)
+            echo "Running $suite..."
             run_lint $(files_js)
             ;;
         jest)
             run_jest
             ;;
         prettier)
+            echo "Running $suite..."
             run_prettier $(files_js)
             ;;
         deps)
