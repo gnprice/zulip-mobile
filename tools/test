@@ -54,7 +54,6 @@ Extra things to do:
 
 Suites:
   android
-  ios
   flow
   lint
   jest
@@ -84,7 +83,7 @@ while (( $# )); do
             ;;
         --all) files=all; platform=both; shift;;
         --fix) fix=1; shift;;
-        android|ios|flow|lint|jest|prettier|deps)
+        android|flow|lint|jest|prettier|deps)
             suites+=("$1"); shift;;
         *) usage;;
     esac
@@ -93,7 +92,7 @@ done
 if [ -z "$suites" ]; then
     # This default doesn't have to be the complete list; just be sure to
     # document in the usage message any suites that it skips.
-    suites=(android ios flow lint jest prettier deps)
+    suites=(android flow lint jest prettier deps)
 fi
 
 
@@ -172,7 +171,8 @@ run_ios() {
         || return 0
 
     # TODO: At least make an iOS build, when on macOS.
-    #   (When not, perhaps warn that we've skipped this suite.)
+    #   When not on macOS, perhaps warn that we've skipped this suite.
+    #   (Once implemented, also add this suite to the CLI.)
 }
 
 run_lint() {
