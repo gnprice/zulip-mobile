@@ -70,7 +70,7 @@ or both of them.
 We have a small, nascent suite of unit tests for our Android-native
 (Kotlin and Java) code.
 
-`tools/test native` runs this suite, as well as building all the
+`tools/test android` runs this suite, as well as building all the
 Android code.
 
 Tests are written in Kotlin, using [JUnit 4] and the [Truth] library.

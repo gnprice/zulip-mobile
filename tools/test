@@ -53,7 +53,8 @@ Extra things to do:
   --fix       Fix issues found, where possible.
 
 Suites:
-  native
+  android
+  ios
   flow
   lint
   jest
@@ -83,7 +84,7 @@ while (( $# )); do
             ;;
         --all) files=all; platform=both; shift;;
         --fix) fix=1; shift;;
-        native|flow|lint|jest|prettier|deps)
+        android|ios|flow|lint|jest|prettier|deps)
             suites+=("$1"); shift;;
         *) usage;;
     esac
@@ -92,7 +93,7 @@ done
 if [ -z "$suites" ]; then
     # This default doesn't have to be the complete list; just be sure to
     # document in the usage message any suites that it skips.
-    suites=(native flow lint jest prettier deps)
+    suites=(android ios flow lint jest prettier deps)
 fi
 
 
@@ -137,7 +138,12 @@ files_check() {
     esac
 }
 
-run_native_android() {
+run_android() {
+    case "$platform" in
+      android|both|sloppy) ;;
+      ios) return 0;;
+    esac
+
     files_check android/ \
         || return 0
 
@@ -156,24 +162,17 @@ run_native_android() {
     )
 }
 
-run_native_ios() {
-    :
-    # TODO: At least make an iOS build.
-}
+run_ios() {
+    case "$platform" in
+      ios|both|sloppy) ;;
+      android) return 0;;
+    esac
 
-run_native() {
-    if [[ $platform == android || $platform == both || $platform == sloppy ]]; then
-        echo 'Running Android native tests...';
-        run_native_android || return
-    fi
+    files_check ios/ \
+        || return 0
 
-    if [[ $platform == ios || $platform == both || $platform == sloppy ]]; then
-        # TODO: Run if on macOS; otherwise, echo that these tests are
-        # skipped because they can't be run.
-
-        # echo 'Running iOS native tests...';
-        run_native_ios || return
-    fi
+    # TODO: At least make an iOS build, when on macOS.
+    #   (When not, perhaps warn that we've skipped this suite.)
 }
 
 run_lint() {
@@ -263,8 +262,11 @@ failed=()
 for suite in "${suites[@]}"; do
     echo "Running $suite..."
     case "$suite" in
-        native)
-            run_native
+        android)
+            run_android
+            ;;
+        ios)
+            run_ios
             ;;
         flow)
             flow
