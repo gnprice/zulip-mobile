@@ -192,8 +192,16 @@ run_ios() {
 }
 
 run_lint() {
-    (( $# )) || return 0
-    eslint ${fix:+--fix} --max-warnings=0 "$@"
+    local files
+    files=( $(files_js) )
+    if ! (( ${#files[@]} )); then
+        echo "Suite lint: skipping: no changes to files"
+        return 0
+    fi
+
+    echo "Suite lint: running..."
+
+    eslint ${fix:+--fix} --max-warnings=0 "${files[@]}"
 }
 
 check_node() {
@@ -252,8 +260,16 @@ run_jest() {
 }
 
 run_prettier() {
-    (( $# )) || return 0
-    patterns=( "${@/%\///**/*.js}" ) # replace trailing `/` with `/**/*.js`
+    local files
+    files=( $(files_js) )
+    if ! (( ${#files[@]} )); then
+        echo "Suite prettier: skipping: no changes to files"
+        return 0
+    fi
+
+    echo "Suite prettier: running..."
+
+    patterns=( "${files[@]/%\///**/*.js}" ) # replace trailing `/` with `/**/*.js`
     # Workaround for https://github.com/prettier/prettier-eslint-cli/issues/205
     patterns=( "${patterns[@]/#/$rootdir/}" )
     prettier-eslint \
@@ -295,15 +311,13 @@ for suite in "${suites[@]}"; do
             flow
             ;;
         lint)
-            echo "Suite $suite: running..."
-            run_lint $(files_js)
+            run_lint
             ;;
         jest)
             run_jest
             ;;
         prettier)
-            echo "Suite $suite: running..."
-            run_prettier $(files_js)
+            run_prettier
             ;;
         deps)
             run_deps
