@@ -186,7 +186,7 @@ check_node() {
     case "${node_version}" in
         v1[0-9].*) ;;
         *)
-            cat >&2 <<EOF
+            cat <<EOF
 Node 10 required; \`node --version\` says: ${node_version:-(nothing)}
 
 To run the zulip-mobile tests, please install Node v10.x .
@@ -247,7 +247,7 @@ run_deps() {
         || return 0
 
     if ! yarn-deduplicate --fail --list; then
-        cat >&2 <<EOF
+        cat <<EOF
 
 Found duplicate dependencies in yarn.lock which could be dedup'd.
 Run:
@@ -287,7 +287,7 @@ for suite in "${suites[@]}"; do
 done
 
 if [ -n "$failed" ]; then
-    cat >&2 <<EOF
+    cat <<EOF
 
 FAILED: ${failed[*]}
 EOF
