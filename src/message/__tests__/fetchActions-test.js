@@ -116,10 +116,7 @@ describe('fetchActions', () => {
       jest.runAllTimers();
     });
 
-    // TODO: test more errors, like regular `new Error()`s. Unexpected
-    // errors should actually cause the retry loop to break; we'll fix
-    // that soon.
-    test('retries a call if there is a non-client error', async () => {
+    test('retries a call if there is a recoverable error', async () => {
       const serverError = new ApiError(500, {
         code: 'SOME_ERROR_CODE',
         msg: 'Internal Server Error',
@@ -162,6 +159,19 @@ describe('fetchActions', () => {
       });
 
       await expect(tryFetch(func)).rejects.toThrow(apiError);
+      expect(func).toHaveBeenCalledTimes(1);
+
+      jest.runAllTimers();
+    });
+
+    test('Rethrows an unexpected error without retrying', async () => {
+      const unexpectedError = new Error('You have displaced the mirth.');
+
+      const func = jest.fn(async () => {
+        throw unexpectedError;
+      });
+
+      await expect(tryFetch(func)).rejects.toThrow(unexpectedError);
       expect(func).toHaveBeenCalledTimes(1);
 
       jest.runAllTimers();
