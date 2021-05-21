@@ -102,103 +102,131 @@ describe('fetchActions', () => {
       jest.clearAllTimers();
     });
 
-    test('resolves any promise, if there is no exception', async () => {
-      const tryFetchFunc = jest.fn(async () => {
-        await fakeSleep(10);
-        return 'hello';
-      });
+    describe.each([false, true])(
+      'whether or not asked to retry; was asked this time? %s',
+      withRetry => {
+        test('resolves any promise, if there is no exception', async () => {
+          const tryFetchFunc = jest.fn(async () => {
+            await fakeSleep(10);
+            return 'hello';
+          });
 
-      await expect(tryFetch(tryFetchFunc)).resolves.toBe('hello');
+          await expect(tryFetch(tryFetchFunc, withRetry)).resolves.toBe('hello');
 
-      expect(tryFetchFunc).toHaveBeenCalledTimes(1);
-      await expect(tryFetchFunc.mock.results[0].value).resolves.toBe('hello');
+          expect(tryFetchFunc).toHaveBeenCalledTimes(1);
+          await expect(tryFetchFunc.mock.results[0].value).resolves.toBe('hello');
 
-      jest.runAllTimers();
-    });
+          jest.runAllTimers();
+        });
 
-    test('retries a call if there is a recoverable error', async () => {
-      const serverError = new ApiError(500, {
-        code: 'SOME_ERROR_CODE',
-        msg: 'Internal Server Error',
-        result: 'error',
-      });
+        test('Rethrows a 4xx error without retrying', async () => {
+          const apiError = new ApiError(400, {
+            code: 'BAD_REQUEST',
+            msg: 'Bad Request',
+            result: 'error',
+          });
 
-      // fail on first call, succeed second time
-      let callCount = 0;
-      const thrower = jest.fn(() => {
-        callCount++;
-        if (callCount === 1) {
-          throw serverError;
-        }
-        return 'hello';
-      });
+          const func = jest.fn(async () => {
+            throw apiError;
+          });
 
-      const tryFetchFunc = jest.fn(async () => {
-        await fakeSleep(10);
-        return thrower();
-      });
+          await expect(tryFetch(func, withRetry)).rejects.toThrow(apiError);
+          expect(func).toHaveBeenCalledTimes(1);
 
-      await expect(tryFetch(tryFetchFunc)).resolves.toBe('hello');
+          jest.runAllTimers();
+        });
 
-      expect(tryFetchFunc).toHaveBeenCalledTimes(2);
-      await expect(tryFetchFunc.mock.results[0].value).rejects.toThrow(serverError);
-      await expect(tryFetchFunc.mock.results[1].value).resolves.toBe('hello');
+        test('Rethrows an unexpected error without retrying', async () => {
+          const unexpectedError = new Error('You have displaced the mirth.');
 
-      jest.runAllTimers();
-    });
+          const func = jest.fn(async () => {
+            throw unexpectedError;
+          });
 
-    test('Rethrows a 4xx error without retrying', async () => {
-      const apiError = new ApiError(400, {
-        code: 'BAD_REQUEST',
-        msg: 'Bad Request',
-        result: 'error',
-      });
+          await expect(tryFetch(func, withRetry)).rejects.toThrow(unexpectedError);
+          expect(func).toHaveBeenCalledTimes(1);
 
-      const func = jest.fn(async () => {
-        throw apiError;
-      });
+          jest.runAllTimers();
+        });
 
-      await expect(tryFetch(func)).rejects.toThrow(apiError);
-      expect(func).toHaveBeenCalledTimes(1);
+        test('times out after hanging on one request', async () => {
+          const tryFetchPromise = tryFetch(async () => {
+            await new Promise((resolve, reject) => {});
+          }, withRetry);
 
-      jest.runAllTimers();
-    });
+          await fakeSleep(60000);
+          return expect(tryFetchPromise).rejects.toThrow(TimeoutError);
+        });
+      },
+    );
 
-    test('Rethrows an unexpected error without retrying', async () => {
-      const unexpectedError = new Error('You have displaced the mirth.');
-
-      const func = jest.fn(async () => {
-        throw unexpectedError;
-      });
-
-      await expect(tryFetch(func)).rejects.toThrow(unexpectedError);
-      expect(func).toHaveBeenCalledTimes(1);
-
-      jest.runAllTimers();
-    });
-
-    test('times out after many short-duration 5xx errors', async () => {
-      const func = jest.fn(async () => {
-        await fakeSleep(50);
-        throw new ApiError(500, {
+    describe('if asked to retry', () => {
+      test('retries a call if there is a recoverable error', async () => {
+        const serverError = new ApiError(500, {
           code: 'SOME_ERROR_CODE',
           msg: 'Internal Server Error',
           result: 'error',
         });
+
+        // fail on first call, succeed second time
+        let callCount = 0;
+        const thrower = jest.fn(() => {
+          callCount++;
+          if (callCount === 1) {
+            throw serverError;
+          }
+          return 'hello';
+        });
+
+        const tryFetchFunc = jest.fn(async () => {
+          await fakeSleep(10);
+          return thrower();
+        });
+
+        await expect(tryFetch(tryFetchFunc, true)).resolves.toBe('hello');
+
+        expect(tryFetchFunc).toHaveBeenCalledTimes(2);
+        await expect(tryFetchFunc.mock.results[0].value).rejects.toThrow(serverError);
+        await expect(tryFetchFunc.mock.results[1].value).resolves.toBe('hello');
+
+        jest.runAllTimers();
       });
 
-      await expect(tryFetch(func)).rejects.toThrow(TimeoutError);
+      test('times out after many short-duration 5xx errors', async () => {
+        const func = jest.fn(async () => {
+          await fakeSleep(50);
+          throw new ApiError(500, {
+            code: 'SOME_ERROR_CODE',
+            msg: 'Internal Server Error',
+            result: 'error',
+          });
+        });
 
-      expect(func.mock.calls.length).toBeGreaterThan(50);
+        await expect(tryFetch(func, true)).rejects.toThrow(TimeoutError);
+
+        expect(func.mock.calls.length).toBeGreaterThan(50);
+      });
     });
 
-    test('times out after hanging on one request', async () => {
-      const tryFetchPromise = tryFetch(async () => {
-        await new Promise((resolve, reject) => {});
-      });
+    describe('if not asked to retry', () => {
+      test('does not retry a call if there is a server error', async () => {
+        const serverError = new ApiError(500, {
+          code: 'SOME_ERROR_CODE',
+          msg: 'Internal Server Error',
+          result: 'error',
+        });
 
-      await fakeSleep(60000);
-      return expect(tryFetchPromise).rejects.toThrow(TimeoutError);
+        const tryFetchFunc = jest.fn(async () => {
+          await fakeSleep(10);
+          throw serverError;
+        });
+
+        await expect(tryFetch(tryFetchFunc, false)).rejects.toThrow(serverError);
+
+        expect(tryFetchFunc).toHaveBeenCalledTimes(1);
+
+        jest.runAllTimers();
+      });
     });
   });
 

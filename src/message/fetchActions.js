@@ -302,12 +302,12 @@ const fetchPrivateMessages = () => async (dispatch: Dispatch, getState: GetState
 };
 
 /**
- * Makes a request that retries until success or a non-retryable error, with
- *   timeout.
+ * Makes a request with a timeout. If asked, retries until success or a
+ *   non-retryable error.
  *
  * Waits between retries with a backoff.
  *
- * A non-retryable error will propagate to the caller to be handled.
+ * A non-retryable error will always propagate to the caller to be handled.
  *
  * The timeout's length is `config.requestLongTimeoutMs` and it is absolute:
  * it triggers after that time has elapsed no matter whether the time was
@@ -315,7 +315,10 @@ const fetchPrivateMessages = () => async (dispatch: Dispatch, getState: GetState
  * unsuccessfully many times (and the time spent in backoff is included in
  * that).
  */
-export async function tryFetch<T>(func: () => Promise<T>): Promise<T> {
+export async function tryFetch<T>(
+  func: () => Promise<T>,
+  shouldRetry?: boolean = true,
+): Promise<T> {
   const backoffMachine = new BackoffMachine();
 
   // TODO: Use AbortController instead of this stateful flag; #4170
@@ -334,7 +337,7 @@ export async function tryFetch<T>(func: () => Promise<T>): Promise<T> {
           try {
             return await func();
           } catch (e) {
-            if (!isRetryable(e)) {
+            if (!(shouldRetry && isRetryable(e))) {
               throw e;
             }
           }
