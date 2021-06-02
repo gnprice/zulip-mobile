@@ -84,3 +84,9 @@ export const isServerError = (e: Error): boolean =>
  */
 export const isNetworkRequestFailedError = (e: Error): boolean =>
   e instanceof TypeError && e.message === 'Network request failed';
+
+/**
+ * Might the same request succeed if we retried it?
+ */
+export const isRetryable = (e: Error): boolean =>
+  isServerError(e) || isNetworkRequestFailedError(e);
