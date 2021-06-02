@@ -1,58 +1,46 @@
 /* @flow strict-local */
 import { isClientError, ApiError, isServerError, isNetworkRequestFailedError } from '../apiErrors';
 
-describe('an API error with error code between 400 and 499', () => {
-  const error = new ApiError(404, {
-    code: 'BAD_IMAGE',
-    result: 'error',
-    msg: 'File not found',
-  });
+const allPredicates = [isClientError, isServerError, isNetworkRequestFailedError];
 
-  test('is a "client error"', () => {
-    expect(isClientError(error)).toBe(true);
-  });
+describe('predicates identify errors properly', () => {
+  describe.each([
+    [
+      'an API error with error code between 400 and 499',
+      isClientError,
+      new ApiError(404, {
+        code: 'BAD_IMAGE',
+        result: 'error',
+        msg: 'File not found',
+      }),
+    ],
+    [
+      'an API error with error code between 500 and 599',
+      isServerError,
+      new ApiError(500, {
+        code: 'SOME_ERROR_CODE',
+        msg: 'Internal Server Error',
+        result: 'error',
+      }),
+    ],
+    [
+      "a TypeError with message 'Network request failed'",
+      isNetworkRequestFailedError,
+      new TypeError('Network request failed'),
+    ],
+  ])('%s', (description, predicateExpectedTrue, error) => {
+    const predicatesExpectedTrue = [predicateExpectedTrue]; // we'll add more soon
+    const predicatesExpectedFalse = allPredicates.filter(p => !predicatesExpectedTrue.includes(p));
 
-  test('is not a "server error"', () => {
-    expect(isServerError(error)).toBe(false);
-  });
-
-  test('is not a network request failed error', () => {
-    expect(isNetworkRequestFailedError(error)).toBe(false);
-  });
-});
-
-describe('an API error with error code between 500 and 599', () => {
-  const error = new ApiError(500, {
-    code: 'SOME_ERROR_CODE',
-    msg: 'Internal Server Error',
-    result: 'error',
-  });
-
-  test('is a "server error"', () => {
-    expect(isServerError(error)).toBe(true);
-  });
-
-  test('is not a "client error"', () => {
-    expect(isClientError(error)).toBe(false);
-  });
-
-  test('is not a network request failed error', () => {
-    expect(isNetworkRequestFailedError(error)).toBe(false);
-  });
-});
-
-describe("a TypeError with message 'Network request failed'", () => {
-  const error = new TypeError('Network request failed');
-
-  test('is a network request failed error', () => {
-    expect(isNetworkRequestFailedError(error)).toBe(true);
-  });
-
-  test('is not a "server error"', () => {
-    expect(isServerError(error)).toBe(false);
-  });
-
-  test('is not a "client error"', () => {
-    expect(isClientError(error)).toBe(false);
+    predicatesExpectedTrue.forEach(p => {
+      test(`${p.name}(error) is true`, () => {
+        expect(p(error)).toBeTrue();
+      });
+    });
+    predicatesExpectedFalse.forEach(p => {
+      test(`${p.name}(error) is false`, () => {
+        expect(p(error)).toBeFalse();
+      });
+    });
   });
 });
