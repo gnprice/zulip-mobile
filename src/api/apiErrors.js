@@ -75,3 +75,12 @@ export const isClientError = (e: Error): boolean =>
  */
 export const isServerError = (e: Error): boolean =>
   e instanceof ApiError && e.httpStatus >= 500 && e.httpStatus <= 599;
+
+/**
+ * Is the error `fetch`'s network-request error?
+ *
+ * There are several possible causes for this error:
+ *   https://fetch.spec.whatwg.org/#ref-for-concept-network-error%E2%91%A5%E2%93%AA
+ */
+export const isNetworkRequestFailedError = (e: Error): boolean =>
+  e instanceof TypeError && e.message === 'Network request failed';
