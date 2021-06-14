@@ -209,14 +209,12 @@ describe('getUnreadStreamsAndTopics', () => {
       {
         data: [
           {
-            isMuted: false,
             key: 'another topic',
             lastUnreadMsgId: 5,
             topic: 'another topic',
             unread: 2,
           },
           {
-            isMuted: false,
             key: 'a topic',
             lastUnreadMsgId: 3,
             topic: 'a topic',
@@ -230,7 +228,6 @@ describe('getUnreadStreamsAndTopics', () => {
       {
         data: [
           {
-            isMuted: false,
             key: 'some other topic',
             lastUnreadMsgId: 7,
             topic: 'some other topic',
@@ -244,12 +241,9 @@ describe('getUnreadStreamsAndTopics', () => {
     ]);
   });
 
-  test('muted topics inside non muted streams are included', () => {
+  test('muted topics inside non muted streams are not included', () => {
     const state = eg.reduxStatePlus({
-      subscriptions: [
-        { ...subscription0, name: 'stream 0' },
-        { ...subscription2, name: 'stream 2' },
-      ],
+      subscriptions: [{ ...subscription0, name: 'stream 0' }],
       unread: unreadState,
       mute: [['stream 0', 'a topic']],
     });
@@ -260,36 +254,14 @@ describe('getUnreadStreamsAndTopics', () => {
       {
         data: [
           {
-            isMuted: false,
             key: 'another topic',
             topic: 'another topic',
             unread: 2,
             lastUnreadMsgId: 5,
           },
-          {
-            isMuted: true,
-            key: 'a topic',
-            topic: 'a topic',
-            unread: 3,
-            lastUnreadMsgId: 3,
-          },
         ],
         key: 'stream:stream 0',
         subscription: { stream_id: subscription0.stream_id },
-        unread: 2,
-      },
-      {
-        data: [
-          {
-            isMuted: false,
-            key: 'some other topic',
-            lastUnreadMsgId: 7,
-            topic: 'some other topic',
-            unread: 2,
-          },
-        ],
-        key: 'stream:stream 2',
-        subscription: { stream_id: subscription2.stream_id },
         unread: 2,
       },
     ]);
@@ -316,10 +288,9 @@ describe('getUnreadStreamsAndTopics', () => {
             key: 'another topic',
             topic: 'another topic',
             unread: 2,
-            isMuted: false,
             lastUnreadMsgId: 5,
           },
-          { key: 'a topic', topic: 'a topic', unread: 3, isMuted: false, lastUnreadMsgId: 3 },
+          { key: 'a topic', topic: 'a topic', unread: 3, lastUnreadMsgId: 3 },
         ],
       },
       {
@@ -331,7 +302,6 @@ describe('getUnreadStreamsAndTopics', () => {
             key: 'some other topic',
             topic: 'some other topic',
             unread: 2,
-            isMuted: false,
             lastUnreadMsgId: 7,
           },
         ],
@@ -397,8 +367,8 @@ describe('getUnreadStreamsAndTopics', () => {
         subscription: { name: 'xyz stream' },
         unread: 2,
         data: [
-          { key: 'e topic', topic: 'e topic', unread: 1, isMuted: false, lastUnreadMsgId: 10 },
-          { key: 'd topic', topic: 'd topic', unread: 1, isMuted: false, lastUnreadMsgId: 9 },
+          { key: 'e topic', topic: 'e topic', unread: 1, lastUnreadMsgId: 10 },
+          { key: 'd topic', topic: 'd topic', unread: 1, lastUnreadMsgId: 9 },
         ],
       },
       {
@@ -406,18 +376,15 @@ describe('getUnreadStreamsAndTopics', () => {
         subscription: { name: 'abc stream' },
         unread: 5,
         data: [
-          { key: 'a topic', topic: 'a topic', unread: 2, isMuted: false, lastUnreadMsgId: 5 },
-          { key: 'z topic', topic: 'z topic', unread: 3, isMuted: false, lastUnreadMsgId: 3 },
+          { key: 'a topic', topic: 'a topic', unread: 2, lastUnreadMsgId: 5 },
+          { key: 'z topic', topic: 'z topic', unread: 3, lastUnreadMsgId: 3 },
         ],
       },
       {
         key: 'stream:def stream',
         subscription: { name: 'def stream' },
         unread: 2,
-        data: [
-          { key: 'c topic', topic: 'c topic', unread: 2, isMuted: true, lastUnreadMsgId: 8 },
-          { key: 'b topic', topic: 'b topic', unread: 2, isMuted: false, lastUnreadMsgId: 7 },
-        ],
+        data: [{ key: 'b topic', topic: 'b topic', unread: 2, lastUnreadMsgId: 7 }],
       },
     ]);
   });
@@ -436,32 +403,5 @@ describe('getUnreadStreamsAndTopicsSansMuted', () => {
     const unreadCount = getUnreadStreamsAndTopicsSansMuted(state);
 
     expect(unreadCount).toEqual([]);
-  });
-
-  test('muted topics inside non muted streams are not included', () => {
-    const state = eg.reduxStatePlus({
-      subscriptions: [{ ...subscription0, name: 'stream 0' }],
-      unread: unreadState,
-      mute: [['stream 0', 'a topic']],
-    });
-
-    const unreadCount = getUnreadStreamsAndTopicsSansMuted(state);
-
-    expect(unreadCount).toMatchObject([
-      {
-        data: [
-          {
-            isMuted: false,
-            key: 'another topic',
-            topic: 'another topic',
-            unread: 2,
-            lastUnreadMsgId: 5,
-          },
-        ],
-        key: 'stream:stream 0',
-        subscription: { stream_id: subscription0.stream_id },
-        unread: 2,
-      },
-    ]);
   });
 });

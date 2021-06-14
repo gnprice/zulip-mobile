@@ -154,16 +154,16 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
 
       for (const [topic, msgIds] of streamData) {
         const isMuted = !mute.every(x => x[0] !== name || x[1] !== topic);
-        if (!isMuted) {
-          total.unread += msgIds.size;
+        if (isMuted) {
+          continue;
         }
 
+        total.unread += msgIds.size;
         total.data.push({
           key: topic,
           topic,
           unread: msgIds.size,
           lastUnreadMsgId: msgIds.last(),
-          isMuted,
         });
       }
     }
@@ -190,15 +190,12 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
  * contains in `.data` an array with an element for each unmuted topic that
  * has unreads.
  */
-export const getUnreadStreamsAndTopicsSansMuted: Selector<UnreadStreamItem[]> = createSelector(
-  getUnreadStreamsAndTopics,
-  unreadStreamsAndTopics =>
-    unreadStreamsAndTopics
-      .map<UnreadStreamItem>(perStream => ({
-        ...perStream,
-        data: perStream.data.filter(topic => !topic.isMuted),
-      }))
-      .filter(perStream => perStream.subscription.in_home_view && perStream.data.length > 0),
+export const getUnreadStreamsAndTopicsSansMuted: Selector<
+  UnreadStreamItem[],
+> = createSelector(getUnreadStreamsAndTopics, unreadStreamsAndTopics =>
+  unreadStreamsAndTopics.filter(
+    perStream => perStream.subscription.in_home_view && perStream.data.length > 0,
+  ),
 );
 
 /** Total number of a certain subset of unreads, plus ??? double-counting. */
