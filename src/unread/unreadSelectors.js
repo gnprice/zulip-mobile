@@ -158,16 +158,16 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
 
       const { name: streamName } = subscription;
 
-      let unread = 0;
-      const data = [];
+      let numUnread = 0;
+      const topicData = [];
       for (const [topic, msgIds] of streamData) {
         const isMuted = !mute.every(x => x[0] !== streamName || x[1] !== topic);
         if (isMuted) {
           continue;
         }
 
-        unread += msgIds.size;
-        data.push({
+        numUnread += msgIds.size;
+        topicData.push({
           key: topic,
           topic,
           unread: msgIds.size,
@@ -175,15 +175,15 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
         });
       }
 
-      if (data.length === 0) {
+      if (topicData.length === 0) {
         continue;
       }
 
       totals.set(streamId, {
         key: `stream:${streamName}`,
         subscription,
-        unread,
-        data,
+        unread: numUnread,
+        data: topicData,
       });
     }
 
