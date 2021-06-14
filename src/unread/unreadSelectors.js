@@ -144,6 +144,10 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
       }
       const { name } = subscription;
 
+      if (!subscription.in_home_view) {
+        continue;
+      }
+
       const total: UnreadStreamItem = {
         key: `stream:${name}`,
         subscription,
@@ -195,10 +199,9 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
  * contains in `.data` an array with an element for each unmuted topic that
  * has unreads.
  */
-export const getUnreadStreamsAndTopicsSansMuted: Selector<
-  UnreadStreamItem[],
-> = createSelector(getUnreadStreamsAndTopics, unreadStreamsAndTopics =>
-  unreadStreamsAndTopics.filter(perStream => perStream.subscription.in_home_view),
+export const getUnreadStreamsAndTopicsSansMuted: Selector<UnreadStreamItem[]> = createSelector(
+  getUnreadStreamsAndTopics,
+  unreadStreamsAndTopics => unreadStreamsAndTopics,
 );
 
 /** Total number of a certain subset of unreads, plus ??? double-counting. */

@@ -10,7 +10,6 @@ import {
   getUnreadMentionsTotal,
   getUnreadTotal,
   getUnreadStreamsAndTopics,
-  getUnreadStreamsAndTopicsSansMuted,
 } from '../unreadSelectors';
 
 import * as eg from '../../__tests__/lib/exampleData';
@@ -194,51 +193,18 @@ describe('getUnreadStreamsAndTopics', () => {
     expect(unreadCount).toEqual([]);
   });
 
-  test('muted streams are included', () => {
+  test('muted streams are not included', () => {
     const state = eg.reduxStatePlus({
       subscriptions: [
-        { ...subscription0, in_home_view: false, name: 'stream 0' },
-        { ...subscription2, in_home_view: false, name: 'stream 2' },
+        { ...subscription0, in_home_view: false },
+        { ...subscription2, in_home_view: false },
       ],
       unread: unreadState,
     });
 
     const unreadCount = getUnreadStreamsAndTopics(state);
 
-    expect(unreadCount).toMatchObject([
-      {
-        data: [
-          {
-            key: 'another topic',
-            lastUnreadMsgId: 5,
-            topic: 'another topic',
-            unread: 2,
-          },
-          {
-            key: 'a topic',
-            lastUnreadMsgId: 3,
-            topic: 'a topic',
-            unread: 3,
-          },
-        ],
-        key: 'stream:stream 0',
-        subscription: { stream_id: subscription0.stream_id },
-        unread: 5,
-      },
-      {
-        data: [
-          {
-            key: 'some other topic',
-            lastUnreadMsgId: 7,
-            topic: 'some other topic',
-            unread: 2,
-          },
-        ],
-        key: 'stream:stream 2',
-        subscription: { stream_id: subscription2.stream_id },
-        unread: 2,
-      },
-    ]);
+    expect(unreadCount).toEqual([]);
   });
 
   test('muted topics inside non muted streams are not included', () => {
@@ -387,21 +353,5 @@ describe('getUnreadStreamsAndTopics', () => {
         data: [{ key: 'b topic', topic: 'b topic', unread: 2, lastUnreadMsgId: 7 }],
       },
     ]);
-  });
-});
-
-describe('getUnreadStreamsAndTopicsSansMuted', () => {
-  test('muted streams are not included', () => {
-    const state = eg.reduxStatePlus({
-      subscriptions: [
-        { ...subscription0, in_home_view: false },
-        { ...subscription2, in_home_view: false },
-      ],
-      unread: unreadState,
-    });
-
-    const unreadCount = getUnreadStreamsAndTopicsSansMuted(state);
-
-    expect(unreadCount).toEqual([]);
   });
 });
