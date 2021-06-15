@@ -14,7 +14,7 @@ import {
 } from '../unreadSelectors';
 
 import * as eg from '../../__tests__/lib/exampleData';
-import { initialState, selectorBaseState as unreadState } from './unread-testlib';
+import { selectorBaseState as unreadState } from './unread-testlib';
 
 // These stream IDs are shared with the data in `unreadState`.
 const stream0 = { ...eg.makeStream(), stream_id: 0 };
@@ -25,7 +25,7 @@ const subscription2 = eg.makeSubscription({ stream: stream2 });
 
 describe('getUnreadByStream', () => {
   test('when no items in streams key, the result is an empty object', () => {
-    const state = eg.reduxStatePlus({ subscriptions: [], unread: initialState });
+    const state = eg.reduxStatePlus({ subscriptions: [] });
 
     const unreadByStream = getUnreadByStream(state);
 
@@ -48,9 +48,7 @@ describe('getUnreadByStream', () => {
 describe('getUnreadStreamTotal', () => {
   test('when no items in "streams" key, there are unread message', () => {
     const state = eg.reduxStatePlus({
-      unread: initialState,
       subscriptions: [],
-      mute: [],
     });
 
     const unreadCount = getUnreadStreamTotal(state);
@@ -62,7 +60,6 @@ describe('getUnreadStreamTotal', () => {
     const state = eg.reduxStatePlus({
       unread: unreadState,
       subscriptions: [subscription0, subscription2],
-      mute: [],
     });
 
     const unreadCount = getUnreadStreamTotal(state);
@@ -73,9 +70,7 @@ describe('getUnreadStreamTotal', () => {
 
 describe('getUnreadByPms', () => {
   test('when no items in streams key, the result is an empty array', () => {
-    const state = eg.reduxStatePlus({
-      unread: initialState,
-    });
+    const state = eg.reduxStatePlus({});
 
     const unreadByStream = getUnreadByPms(state);
 
@@ -95,9 +90,7 @@ describe('getUnreadByPms', () => {
 
 describe('getUnreadPmsTotal', () => {
   test('when no items in "pms" key, there are unread private messages', () => {
-    const state = eg.reduxStatePlus({
-      unread: initialState,
-    });
+    const state = eg.reduxStatePlus({});
 
     const unreadCount = getUnreadPmsTotal(state);
 
@@ -117,9 +110,7 @@ describe('getUnreadPmsTotal', () => {
 
 describe('getUnreadByHuddles', () => {
   test('when no items in streams key, the result is an empty array', () => {
-    const state = eg.reduxStatePlus({
-      unread: initialState,
-    });
+    const state = eg.reduxStatePlus({});
 
     const unreadByStream = getUnreadByHuddles(state);
 
@@ -139,9 +130,7 @@ describe('getUnreadByHuddles', () => {
 
 describe('getUnreadHuddlesTotal', () => {
   test('when no items in "huddles" key, there are unread group messages', () => {
-    const state = eg.reduxStatePlus({
-      unread: initialState,
-    });
+    const state = eg.reduxStatePlus({});
 
     const unreadCount = getUnreadHuddlesTotal(state);
 
@@ -174,9 +163,7 @@ describe('getUnreadMentionsTotal', () => {
 describe('getUnreadTotal', () => {
   test('if no key has any items then no unread messages', () => {
     const state = eg.reduxStatePlus({
-      unread: initialState,
       subscriptions: [],
-      mute: [],
     });
 
     const unreadCount = getUnreadTotal(state);
@@ -188,7 +175,6 @@ describe('getUnreadTotal', () => {
     const state = eg.reduxStatePlus({
       unread: unreadState,
       subscriptions: [subscription0, subscription2],
-      mute: [],
     });
 
     const unreadCount = getUnreadTotal(state);
@@ -201,7 +187,6 @@ describe('getUnreadStreamsAndTopics', () => {
   test('if no key has any items then no unread messages', () => {
     const state = eg.reduxStatePlus({
       subscriptions: [],
-      unread: initialState,
     });
 
     const unreadCount = getUnreadStreamsAndTopics(state);
@@ -216,7 +201,6 @@ describe('getUnreadStreamsAndTopics', () => {
         { ...subscription2, in_home_view: false, name: 'stream 2' },
       ],
       unread: unreadState,
-      mute: [],
     });
 
     const unreadCount = getUnreadStreamsAndTopics(state);
@@ -322,7 +306,6 @@ describe('getUnreadStreamsAndTopics', () => {
         { ...subscription2, name: 'stream 2' },
       ],
       unread: unreadState,
-      mute: [],
     });
 
     const unreadCount = getUnreadStreamsAndTopics(state);
@@ -466,7 +449,6 @@ describe('getUnreadStreamsAndTopicsSansMuted', () => {
         { ...subscription2, in_home_view: false },
       ],
       unread: unreadState,
-      mute: [],
     });
 
     const unreadCount = getUnreadStreamsAndTopicsSansMuted(state);
