@@ -130,7 +130,16 @@ export const getUnreadTotal: Selector<number> = createSelector(
     unreadStreamTotal + unreadPmsTotal + unreadHuddlesTotal + mentionsTotal,
 );
 
-/** Helper for getUnreadStreamsAndTopicsSansMuted; see there. */
+/**
+ * Summary of unread unmuted stream messages, to feed to the unreads screen.
+ *
+ * The exact collection of data included here is just an assortment of what
+ * the unreads screen happens to need.
+ *
+ * Each stream with unmuted unreads appears as an element of the array, and
+ * contains in `.data` an array with an element for each unmuted topic that
+ * has unreads.
+ */
 export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSelector(
   getSubscriptionsById,
   getUnreadStreams,
@@ -187,21 +196,6 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
 
     return sortedStreams;
   },
-);
-
-/**
- * Summary of unread unmuted stream messages, to feed to the unreads screen.
- *
- * The exact collection of data included here is just an assortment of what
- * the unreads screen happens to need.
- *
- * Each stream with unmuted unreads appears as an element of the array, and
- * contains in `.data` an array with an element for each unmuted topic that
- * has unreads.
- */
-export const getUnreadStreamsAndTopicsSansMuted: Selector<UnreadStreamItem[]> = createSelector(
-  getUnreadStreamsAndTopics,
-  unreadStreamsAndTopics => unreadStreamsAndTopics,
 );
 
 /** Total number of a certain subset of unreads, plus ??? double-counting. */
