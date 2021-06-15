@@ -25,10 +25,7 @@ const subscription2 = eg.makeSubscription({ stream: stream2 });
 describe('getUnreadByStream', () => {
   test('when no items in streams key, the result is an empty object', () => {
     const state = eg.reduxStatePlus({ subscriptions: [] });
-
-    const unreadByStream = getUnreadByStream(state);
-
-    expect(unreadByStream).toEqual({});
+    expect(getUnreadByStream(state)).toEqual({});
   });
 
   test('when there are unread stream messages, returns their counts', () => {
@@ -37,10 +34,7 @@ describe('getUnreadByStream', () => {
       unread: unreadState,
       mute: [[stream0.name, 'a topic']],
     });
-
-    const unreadByStream = getUnreadByStream(state);
-
-    expect(unreadByStream).toEqual({ '0': 2, '2': 2 });
+    expect(getUnreadByStream(state)).toEqual({ '0': 2, '2': 2 });
   });
 });
 
@@ -49,10 +43,7 @@ describe('getUnreadStreamTotal', () => {
     const state = eg.reduxStatePlus({
       subscriptions: [],
     });
-
-    const unreadCount = getUnreadStreamTotal(state);
-
-    expect(unreadCount).toEqual(0);
+    expect(getUnreadStreamTotal(state)).toEqual(0);
   });
 
   test('count all the unread messages listed in "streams" key', () => {
@@ -60,90 +51,63 @@ describe('getUnreadStreamTotal', () => {
       unread: unreadState,
       subscriptions: [subscription0, subscription2],
     });
-
-    const unreadCount = getUnreadStreamTotal(state);
-
-    expect(unreadCount).toEqual(7);
+    expect(getUnreadStreamTotal(state)).toEqual(7);
   });
 });
 
 describe('getUnreadByPms', () => {
   test('when no items in streams key, the result is an empty array', () => {
     const state = eg.reduxStatePlus({});
-
-    const unreadByStream = getUnreadByPms(state);
-
-    expect(unreadByStream).toEqual({});
+    expect(getUnreadByPms(state)).toEqual({});
   });
 
   test('when there are unread private messages, returns counts by sender_id', () => {
     const state = eg.reduxStatePlus({
       unread: unreadState,
     });
-
-    const unreadByStream = getUnreadByPms(state);
-
-    expect(unreadByStream).toEqual({ '0': 2, '2': 3 });
+    expect(getUnreadByPms(state)).toEqual({ '0': 2, '2': 3 });
   });
 });
 
 describe('getUnreadPmsTotal', () => {
   test('when no items in "pms" key, there are unread private messages', () => {
     const state = eg.reduxStatePlus({});
-
-    const unreadCount = getUnreadPmsTotal(state);
-
-    expect(unreadCount).toEqual(0);
+    expect(getUnreadPmsTotal(state)).toEqual(0);
   });
 
   test('when there are keys in "pms", sum up all unread private message counts', () => {
     const state = eg.reduxStatePlus({
       unread: unreadState,
     });
-
-    const unreadCount = getUnreadPmsTotal(state);
-
-    expect(unreadCount).toEqual(5);
+    expect(getUnreadPmsTotal(state)).toEqual(5);
   });
 });
 
 describe('getUnreadByHuddles', () => {
   test('when no items in streams key, the result is an empty array', () => {
     const state = eg.reduxStatePlus({});
-
-    const unreadByStream = getUnreadByHuddles(state);
-
-    expect(unreadByStream).toEqual({});
+    expect(getUnreadByHuddles(state)).toEqual({});
   });
 
   test('when there are unread stream messages, returns a ', () => {
     const state = eg.reduxStatePlus({
       unread: unreadState,
     });
-
-    const unreadByStream = getUnreadByHuddles(state);
-
-    expect(unreadByStream).toEqual({ '1,2,3': 2, '1,4,5': 3 });
+    expect(getUnreadByHuddles(state)).toEqual({ '1,2,3': 2, '1,4,5': 3 });
   });
 });
 
 describe('getUnreadHuddlesTotal', () => {
   test('when no items in "huddles" key, there are unread group messages', () => {
     const state = eg.reduxStatePlus({});
-
-    const unreadCount = getUnreadHuddlesTotal(state);
-
-    expect(unreadCount).toEqual(0);
+    expect(getUnreadHuddlesTotal(state)).toEqual(0);
   });
 
   test('when there are keys in "huddles", sum up all unread group message counts', () => {
     const state = eg.reduxStatePlus({
       unread: unreadState,
     });
-
-    const unreadCount = getUnreadHuddlesTotal(state);
-
-    expect(unreadCount).toEqual(5);
+    expect(getUnreadHuddlesTotal(state)).toEqual(5);
   });
 });
 
@@ -152,10 +116,7 @@ describe('getUnreadMentionsTotal', () => {
     const state = eg.reduxStatePlus({
       unread: unreadState,
     });
-
-    const unreadCount = getUnreadMentionsTotal(state);
-
-    expect(unreadCount).toEqual(3);
+    expect(getUnreadMentionsTotal(state)).toEqual(3);
   });
 });
 
@@ -164,10 +125,7 @@ describe('getUnreadTotal', () => {
     const state = eg.reduxStatePlus({
       subscriptions: [],
     });
-
-    const unreadCount = getUnreadTotal(state);
-
-    expect(unreadCount).toEqual(0);
+    expect(getUnreadTotal(state)).toEqual(0);
   });
 
   test('calculates total unread of streams + pms + huddles', () => {
@@ -175,10 +133,7 @@ describe('getUnreadTotal', () => {
       unread: unreadState,
       subscriptions: [subscription0, subscription2],
     });
-
-    const unreadCount = getUnreadTotal(state);
-
-    expect(unreadCount).toEqual(20);
+    expect(getUnreadTotal(state)).toEqual(20);
   });
 });
 
@@ -187,10 +142,7 @@ describe('getUnreadStreamsAndTopics', () => {
     const state = eg.reduxStatePlus({
       subscriptions: [],
     });
-
-    const unreadCount = getUnreadStreamsAndTopics(state);
-
-    expect(unreadCount).toEqual([]);
+    expect(getUnreadStreamsAndTopics(state)).toEqual([]);
   });
 
   test('muted streams are not included', () => {
@@ -201,10 +153,7 @@ describe('getUnreadStreamsAndTopics', () => {
       ],
       unread: unreadState,
     });
-
-    const unreadCount = getUnreadStreamsAndTopics(state);
-
-    expect(unreadCount).toEqual([]);
+    expect(getUnreadStreamsAndTopics(state)).toEqual([]);
   });
 
   test('muted topics inside non muted streams are not included', () => {
@@ -213,10 +162,7 @@ describe('getUnreadStreamsAndTopics', () => {
       unread: unreadState,
       mute: [['stream 0', 'a topic']],
     });
-
-    const unreadCount = getUnreadStreamsAndTopics(state);
-
-    expect(unreadCount).toMatchObject([
+    expect(getUnreadStreamsAndTopics(state)).toMatchObject([
       {
         data: [
           {
@@ -241,10 +187,7 @@ describe('getUnreadStreamsAndTopics', () => {
       ],
       unread: unreadState,
     });
-
-    const unreadCount = getUnreadStreamsAndTopics(state);
-
-    expect(unreadCount).toMatchObject([
+    expect(getUnreadStreamsAndTopics(state)).toMatchObject([
       {
         key: 'stream:stream 0',
         subscription: { stream_id: subscription0.stream_id },
@@ -324,10 +267,7 @@ describe('getUnreadStreamsAndTopics', () => {
       ),
       mute: [['def stream', 'c topic']],
     });
-
-    const unreadCount = getUnreadStreamsAndTopics(state);
-
-    expect(unreadCount).toMatchObject([
+    expect(getUnreadStreamsAndTopics(state)).toMatchObject([
       {
         key: 'stream:xyz stream',
         subscription: { name: 'xyz stream' },
