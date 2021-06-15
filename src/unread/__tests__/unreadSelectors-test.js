@@ -1,5 +1,4 @@
-import deepFreeze from 'deep-freeze';
-
+// @flow strict-local
 import { reducer } from '../unreadModel';
 import {
   getUnreadByStream,
@@ -17,12 +16,16 @@ import {
 import * as eg from '../../__tests__/lib/exampleData';
 import { initialState, selectorBaseState as unreadState } from './unread-testlib';
 
+// These stream IDs are shared with the data in `unreadState`.
+const stream0 = { ...eg.makeStream(), stream_id: 0 };
+const stream2 = { ...eg.makeStream(), stream_id: 2 };
+
+const subscription0 = eg.makeSubscription({ stream: stream0 });
+const subscription2 = eg.makeSubscription({ stream: stream2 });
+
 describe('getUnreadByStream', () => {
   test('when no items in streams key, the result is an empty object', () => {
-    const state = deepFreeze({
-      subscriptions: [],
-      unread: initialState,
-    });
+    const state = eg.reduxStatePlus({ subscriptions: [], unread: initialState });
 
     const unreadByStream = getUnreadByStream(state);
 
@@ -30,21 +33,10 @@ describe('getUnreadByStream', () => {
   });
 
   test('when there are unread stream messages, returns their counts', () => {
-    const state = deepFreeze({
-      subscriptions: [
-        {
-          stream_id: 0,
-          name: 'stream 0',
-          in_home_view: true,
-        },
-        {
-          stream_id: 2,
-          name: 'stream 2',
-          in_home_view: true,
-        },
-      ],
+    const state = eg.reduxStatePlus({
+      subscriptions: [subscription0, subscription2],
       unread: unreadState,
-      mute: [['stream 0', 'a topic']],
+      mute: [[stream0.name, 'a topic']],
     });
 
     const unreadByStream = getUnreadByStream(state);
@@ -55,7 +47,7 @@ describe('getUnreadByStream', () => {
 
 describe('getUnreadStreamTotal', () => {
   test('when no items in "streams" key, there are unread message', () => {
-    const state = deepFreeze({
+    const state = eg.reduxStatePlus({
       unread: initialState,
       subscriptions: [],
       mute: [],
@@ -67,22 +59,9 @@ describe('getUnreadStreamTotal', () => {
   });
 
   test('count all the unread messages listed in "streams" key', () => {
-    const state = deepFreeze({
+    const state = eg.reduxStatePlus({
       unread: unreadState,
-      subscriptions: [
-        {
-          stream_id: 0,
-          in_home_view: true,
-        },
-        {
-          stream_id: 0,
-          in_home_view: true,
-        },
-        {
-          stream_id: 2,
-          in_home_view: true,
-        },
-      ],
+      subscriptions: [subscription0, subscription2],
       mute: [],
     });
 
@@ -94,7 +73,7 @@ describe('getUnreadStreamTotal', () => {
 
 describe('getUnreadByPms', () => {
   test('when no items in streams key, the result is an empty array', () => {
-    const state = deepFreeze({
+    const state = eg.reduxStatePlus({
       unread: initialState,
     });
 
@@ -104,7 +83,7 @@ describe('getUnreadByPms', () => {
   });
 
   test('when there are unread private messages, returns counts by sender_id', () => {
-    const state = deepFreeze({
+    const state = eg.reduxStatePlus({
       unread: unreadState,
     });
 
@@ -116,7 +95,7 @@ describe('getUnreadByPms', () => {
 
 describe('getUnreadPmsTotal', () => {
   test('when no items in "pms" key, there are unread private messages', () => {
-    const state = deepFreeze({
+    const state = eg.reduxStatePlus({
       unread: initialState,
     });
 
@@ -126,7 +105,7 @@ describe('getUnreadPmsTotal', () => {
   });
 
   test('when there are keys in "pms", sum up all unread private message counts', () => {
-    const state = deepFreeze({
+    const state = eg.reduxStatePlus({
       unread: unreadState,
     });
 
@@ -138,7 +117,7 @@ describe('getUnreadPmsTotal', () => {
 
 describe('getUnreadByHuddles', () => {
   test('when no items in streams key, the result is an empty array', () => {
-    const state = deepFreeze({
+    const state = eg.reduxStatePlus({
       unread: initialState,
     });
 
@@ -148,7 +127,7 @@ describe('getUnreadByHuddles', () => {
   });
 
   test('when there are unread stream messages, returns a ', () => {
-    const state = deepFreeze({
+    const state = eg.reduxStatePlus({
       unread: unreadState,
     });
 
@@ -160,7 +139,7 @@ describe('getUnreadByHuddles', () => {
 
 describe('getUnreadHuddlesTotal', () => {
   test('when no items in "huddles" key, there are unread group messages', () => {
-    const state = deepFreeze({
+    const state = eg.reduxStatePlus({
       unread: initialState,
     });
 
@@ -170,7 +149,7 @@ describe('getUnreadHuddlesTotal', () => {
   });
 
   test('when there are keys in "huddles", sum up all unread group message counts', () => {
-    const state = deepFreeze({
+    const state = eg.reduxStatePlus({
       unread: unreadState,
     });
 
@@ -182,7 +161,7 @@ describe('getUnreadHuddlesTotal', () => {
 
 describe('getUnreadMentionsTotal', () => {
   test('unread mentions count is equal to the unread array length', () => {
-    const state = deepFreeze({
+    const state = eg.reduxStatePlus({
       unread: unreadState,
     });
 
@@ -194,7 +173,7 @@ describe('getUnreadMentionsTotal', () => {
 
 describe('getUnreadTotal', () => {
   test('if no key has any items then no unread messages', () => {
-    const state = deepFreeze({
+    const state = eg.reduxStatePlus({
       unread: initialState,
       subscriptions: [],
       mute: [],
@@ -206,22 +185,9 @@ describe('getUnreadTotal', () => {
   });
 
   test('calculates total unread of streams + pms + huddles', () => {
-    const state = deepFreeze({
+    const state = eg.reduxStatePlus({
       unread: unreadState,
-      subscriptions: [
-        {
-          stream_id: 0,
-          in_home_view: true,
-        },
-        {
-          stream_id: 0,
-          in_home_view: true,
-        },
-        {
-          stream_id: 2,
-          in_home_view: true,
-        },
-      ],
+      subscriptions: [subscription0, subscription2],
       mute: [],
     });
 
@@ -233,7 +199,7 @@ describe('getUnreadTotal', () => {
 
 describe('getUnreadStreamsAndTopics', () => {
   test('if no key has any items then no unread messages', () => {
-    const state = deepFreeze({
+    const state = eg.reduxStatePlus({
       subscriptions: [],
       unread: initialState,
     });
@@ -244,20 +210,10 @@ describe('getUnreadStreamsAndTopics', () => {
   });
 
   test('muted streams are included', () => {
-    const state = deepFreeze({
+    const state = eg.reduxStatePlus({
       subscriptions: [
-        {
-          stream_id: 0,
-          name: 'stream 0',
-          color: 'red',
-          in_home_view: false,
-        },
-        {
-          stream_id: 2,
-          name: 'stream 2',
-          color: 'blue',
-          in_home_view: false,
-        },
+        { ...subscription0, in_home_view: false, name: 'stream 0' },
+        { ...subscription2, in_home_view: false, name: 'stream 2' },
       ],
       unread: unreadState,
       mute: [],
@@ -265,9 +221,8 @@ describe('getUnreadStreamsAndTopics', () => {
 
     const unreadCount = getUnreadStreamsAndTopics(state);
 
-    expect(unreadCount).toEqual([
+    expect(unreadCount).toMatchObject([
       {
-        color: 'red',
         data: [
           {
             isMuted: false,
@@ -290,7 +245,6 @@ describe('getUnreadStreamsAndTopics', () => {
         unread: 5,
       },
       {
-        color: 'blue',
         data: [
           {
             isMuted: false,
@@ -309,20 +263,10 @@ describe('getUnreadStreamsAndTopics', () => {
   });
 
   test('muted topics inside non muted streams are included', () => {
-    const state = deepFreeze({
+    const state = eg.reduxStatePlus({
       subscriptions: [
-        {
-          stream_id: 0,
-          name: 'stream 0',
-          color: 'red',
-          in_home_view: true,
-        },
-        {
-          stream_id: 2,
-          name: 'stream 2',
-          color: 'blue',
-          in_home_view: true,
-        },
+        { ...subscription0, name: 'stream 0' },
+        { ...subscription2, name: 'stream 2' },
       ],
       unread: unreadState,
       mute: [['stream 0', 'a topic']],
@@ -330,9 +274,8 @@ describe('getUnreadStreamsAndTopics', () => {
 
     const unreadCount = getUnreadStreamsAndTopics(state);
 
-    expect(unreadCount).toEqual([
+    expect(unreadCount).toMatchObject([
       {
-        color: 'red',
         data: [
           {
             isMuted: false,
@@ -350,13 +293,11 @@ describe('getUnreadStreamsAndTopics', () => {
           },
         ],
         isMuted: false,
-        isPrivate: undefined,
         key: 'stream:stream 0',
         streamName: 'stream 0',
         unread: 2,
       },
       {
-        color: 'blue',
         data: [
           {
             isMuted: false,
@@ -375,20 +316,10 @@ describe('getUnreadStreamsAndTopics', () => {
   });
 
   test('group data by stream and topics inside, count unread', () => {
-    const state = deepFreeze({
+    const state = eg.reduxStatePlus({
       subscriptions: [
-        {
-          stream_id: 0,
-          name: 'stream 0',
-          color: 'red',
-          in_home_view: true,
-        },
-        {
-          stream_id: 2,
-          name: 'stream 2',
-          color: 'blue',
-          in_home_view: true,
-        },
+        { ...subscription0, name: 'stream 0' },
+        { ...subscription2, name: 'stream 2' },
       ],
       unread: unreadState,
       mute: [],
@@ -396,11 +327,10 @@ describe('getUnreadStreamsAndTopics', () => {
 
     const unreadCount = getUnreadStreamsAndTopics(state);
 
-    expect(unreadCount).toEqual([
+    expect(unreadCount).toMatchObject([
       {
         key: 'stream:stream 0',
         streamName: 'stream 0',
-        color: 'red',
         unread: 5,
         isMuted: false,
         data: [
@@ -417,7 +347,6 @@ describe('getUnreadStreamsAndTopics', () => {
       {
         key: 'stream:stream 2',
         streamName: 'stream 2',
-        color: 'blue',
         unread: 2,
         isMuted: false,
         data: [
@@ -437,6 +366,7 @@ describe('getUnreadStreamsAndTopics', () => {
     const state = eg.reduxStatePlus({
       subscriptions: [
         {
+          ...eg.makeSubscription(),
           stream_id: 2,
           color: 'green',
           name: 'def stream',
@@ -445,6 +375,7 @@ describe('getUnreadStreamsAndTopics', () => {
           pin_to_top: false,
         },
         {
+          ...eg.makeSubscription(),
           stream_id: 1,
           color: 'blue',
           name: 'xyz stream',
@@ -453,6 +384,7 @@ describe('getUnreadStreamsAndTopics', () => {
           pin_to_top: true,
         },
         {
+          ...eg.makeSubscription(),
           stream_id: 0,
           color: 'red',
           name: 'abc stream',
@@ -528,20 +460,10 @@ describe('getUnreadStreamsAndTopics', () => {
 
 describe('getUnreadStreamsAndTopicsSansMuted', () => {
   test('muted streams are not included', () => {
-    const state = deepFreeze({
+    const state = eg.reduxStatePlus({
       subscriptions: [
-        {
-          stream_id: 0,
-          name: 'stream 0',
-          color: 'red',
-          in_home_view: false,
-        },
-        {
-          stream_id: 2,
-          name: 'stream 2',
-          color: 'blue',
-          in_home_view: false,
-        },
+        { ...subscription0, in_home_view: false },
+        { ...subscription2, in_home_view: false },
       ],
       unread: unreadState,
       mute: [],
@@ -553,24 +475,16 @@ describe('getUnreadStreamsAndTopicsSansMuted', () => {
   });
 
   test('muted topics inside non muted streams are not included', () => {
-    const state = deepFreeze({
-      subscriptions: [
-        {
-          stream_id: 0,
-          name: 'stream 0',
-          color: 'red',
-          in_home_view: true,
-        },
-      ],
+    const state = eg.reduxStatePlus({
+      subscriptions: [{ ...subscription0, name: 'stream 0' }],
       unread: unreadState,
       mute: [['stream 0', 'a topic']],
     });
 
     const unreadCount = getUnreadStreamsAndTopicsSansMuted(state);
 
-    expect(unreadCount).toEqual([
+    expect(unreadCount).toMatchObject([
       {
-        color: 'red',
         data: [
           {
             isMuted: false,
@@ -581,7 +495,6 @@ describe('getUnreadStreamsAndTopicsSansMuted', () => {
           },
         ],
         isMuted: false,
-        isPrivate: undefined,
         key: 'stream:stream 0',
         streamName: 'stream 0',
         unread: 2,
