@@ -172,8 +172,8 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
       .sort((a, b) => caseInsensitiveCompareFunc(a.subscription.name, b.subscription.name))
       .sort((a, b) => +b.subscription.pin_to_top - +a.subscription.pin_to_top);
 
-    sortedStreams.forEach(stream => {
-      stream.data.sort((a, b) => b.lastUnreadMsgId - a.lastUnreadMsgId);
+    sortedStreams.forEach(perStream => {
+      perStream.data.sort((a, b) => b.lastUnreadMsgId - a.lastUnreadMsgId);
     });
 
     return sortedStreams;
@@ -194,11 +194,11 @@ export const getUnreadStreamsAndTopicsSansMuted: Selector<UnreadStreamItem[]> = 
   getUnreadStreamsAndTopics,
   unreadStreamsAndTopics =>
     unreadStreamsAndTopics
-      .map<UnreadStreamItem>(stream => ({
-        ...stream,
-        data: stream.data.filter(topic => !topic.isMuted),
+      .map<UnreadStreamItem>(perStream => ({
+        ...perStream,
+        data: perStream.data.filter(topic => !topic.isMuted),
       }))
-      .filter(stream => stream.subscription.in_home_view && stream.data.length > 0),
+      .filter(perStream => perStream.subscription.in_home_view && perStream.data.length > 0),
 );
 
 /** Total number of a certain subset of unreads, plus ??? double-counting. */
