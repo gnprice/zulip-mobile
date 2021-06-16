@@ -138,8 +138,11 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
   (subscriptionsById, unreadStreams, mute) => {
     const totals = new Map();
     for (const [streamId, streamData] of unreadStreams.entries()) {
-      const { name, color, in_home_view, invite_only, pin_to_top } =
-        subscriptionsById.get(streamId) || NULL_SUBSCRIPTION;
+      const subscription = subscriptionsById.get(streamId);
+      if (!subscription) {
+        continue;
+      }
+      const { name, color, in_home_view, invite_only, pin_to_top } = subscription;
 
       const total = {
         key: `stream:${name}`,
