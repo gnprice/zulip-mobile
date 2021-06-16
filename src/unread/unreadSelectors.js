@@ -142,15 +142,11 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
       if (!subscription) {
         continue;
       }
-      const { name, color, in_home_view, invite_only, pin_to_top } = subscription;
+      const { name } = subscription;
 
-      const total = {
+      const total: UnreadStreamItem = {
         key: `stream:${name}`,
-        streamName: name,
-        isMuted: !in_home_view,
-        isPrivate: invite_only,
-        isPinned: pin_to_top,
-        color,
+        subscription,
         unread: 0,
         data: [],
       };
@@ -172,9 +168,9 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
       }
     }
 
-    const sortedStreams = Array.from(totals.values())
-      .sort((a, b) => caseInsensitiveCompareFunc(a.streamName, b.streamName))
-      .sort((a, b) => +b.isPinned - +a.isPinned);
+    const sortedStreams: UnreadStreamItem[] = Array.from(totals.values())
+      .sort((a, b) => caseInsensitiveCompareFunc(a.subscription.name, b.subscription.name))
+      .sort((a, b) => +b.subscription.pin_to_top - +a.subscription.pin_to_top);
 
     sortedStreams.forEach(stream => {
       stream.data.sort((a, b) => b.lastUnreadMsgId - a.lastUnreadMsgId);
@@ -202,7 +198,7 @@ export const getUnreadStreamsAndTopicsSansMuted: Selector<UnreadStreamItem[]> = 
         ...stream,
         data: stream.data.filter(topic => !topic.isMuted),
       }))
-      .filter(stream => !stream.isMuted && stream.data.length > 0),
+      .filter(stream => stream.subscription.in_home_view && stream.data.length > 0),
 );
 
 /** Total number of a certain subset of unreads, plus ??? double-counting. */

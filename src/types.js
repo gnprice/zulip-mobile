@@ -9,6 +9,7 @@ import type {
   Message,
   PmMessage,
   StreamMessage,
+  Subscription,
   ReactionType,
   UserId,
 } from './api/apiTypes';
@@ -311,12 +312,8 @@ export type GetText = {|
 
 export type UnreadStreamItem = {|
   key: string,
-  streamName: string,
+  subscription: Subscription,
   unread: number,
-  color: string,
-  isMuted: boolean,
-  isPinned: boolean,
-  isPrivate: boolean,
   data: Array<{|
     key: string,
     topic: string,

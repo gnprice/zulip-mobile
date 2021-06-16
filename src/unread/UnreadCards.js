@@ -47,13 +47,14 @@ export default function UnreadCards(props: Props) {
         if (section.key === 'private') {
           return null;
         }
+        const { subscription } = section;
         return (
           <StreamItem
-            name={section.streamName}
+            name={subscription.name}
             iconSize={16}
-            isMuted={section.isMuted}
-            isPrivate={section.isPrivate}
-            backgroundColor={section.color}
+            isMuted={!subscription.in_home_view}
+            isPrivate={subscription.invite_only}
+            backgroundColor={subscription.color}
             unreadCount={section.unread}
             onPress={(stream: string) => {
               setTimeout(() => dispatch(doNarrow(streamNarrow(stream))));
@@ -65,11 +66,12 @@ export default function UnreadCards(props: Props) {
         if (section.key === 'private') {
           return <PmConversationList {...item} />;
         }
+        const { subscription } = section;
         return (
           <TopicItem
             name={item.topic}
-            stream={section.streamName || ''}
-            isMuted={section.isMuted || item.isMuted}
+            stream={subscription.name || ''}
+            isMuted={!subscription.in_home_view || item.isMuted}
             isSelected={false}
             unreadCount={item.unread}
             onPress={(stream: string, topic: string) => {

@@ -223,9 +223,8 @@ describe('getUnreadStreamsAndTopics', () => {
             unread: 3,
           },
         ],
-        isMuted: true,
         key: 'stream:stream 0',
-        streamName: 'stream 0',
+        subscription: { stream_id: subscription0.stream_id },
         unread: 5,
       },
       {
@@ -238,9 +237,8 @@ describe('getUnreadStreamsAndTopics', () => {
             unread: 2,
           },
         ],
-        isMuted: true,
         key: 'stream:stream 2',
-        streamName: 'stream 2',
+        subscription: { stream_id: subscription2.stream_id },
         unread: 2,
       },
     ]);
@@ -276,9 +274,8 @@ describe('getUnreadStreamsAndTopics', () => {
             lastUnreadMsgId: 3,
           },
         ],
-        isMuted: false,
         key: 'stream:stream 0',
-        streamName: 'stream 0',
+        subscription: { stream_id: subscription0.stream_id },
         unread: 2,
       },
       {
@@ -291,9 +288,8 @@ describe('getUnreadStreamsAndTopics', () => {
             unread: 2,
           },
         ],
-        isMuted: false,
         key: 'stream:stream 2',
-        streamName: 'stream 2',
+        subscription: { stream_id: subscription2.stream_id },
         unread: 2,
       },
     ]);
@@ -313,9 +309,8 @@ describe('getUnreadStreamsAndTopics', () => {
     expect(unreadCount).toMatchObject([
       {
         key: 'stream:stream 0',
-        streamName: 'stream 0',
+        subscription: { stream_id: subscription0.stream_id },
         unread: 5,
-        isMuted: false,
         data: [
           {
             key: 'another topic',
@@ -329,9 +324,8 @@ describe('getUnreadStreamsAndTopics', () => {
       },
       {
         key: 'stream:stream 2',
-        streamName: 'stream 2',
+        subscription: { stream_id: subscription2.stream_id },
         unread: 2,
-        isMuted: false,
         data: [
           {
             key: 'some other topic',
@@ -397,14 +391,10 @@ describe('getUnreadStreamsAndTopics', () => {
 
     const unreadCount = getUnreadStreamsAndTopics(state);
 
-    expect(unreadCount).toEqual([
+    expect(unreadCount).toMatchObject([
       {
         key: 'stream:xyz stream',
-        streamName: 'xyz stream',
-        color: 'blue',
-        isMuted: false,
-        isPrivate: false,
-        isPinned: true,
+        subscription: { name: 'xyz stream' },
         unread: 2,
         data: [
           { key: 'e topic', topic: 'e topic', unread: 1, isMuted: false, lastUnreadMsgId: 10 },
@@ -413,11 +403,7 @@ describe('getUnreadStreamsAndTopics', () => {
       },
       {
         key: 'stream:abc stream',
-        streamName: 'abc stream',
-        color: 'red',
-        isMuted: false,
-        isPrivate: false,
-        isPinned: false,
+        subscription: { name: 'abc stream' },
         unread: 5,
         data: [
           { key: 'a topic', topic: 'a topic', unread: 2, isMuted: false, lastUnreadMsgId: 5 },
@@ -426,11 +412,7 @@ describe('getUnreadStreamsAndTopics', () => {
       },
       {
         key: 'stream:def stream',
-        streamName: 'def stream',
-        color: 'green',
-        isMuted: false,
-        isPrivate: false,
-        isPinned: false,
+        subscription: { name: 'def stream' },
         unread: 2,
         data: [
           { key: 'c topic', topic: 'c topic', unread: 2, isMuted: true, lastUnreadMsgId: 8 },
@@ -476,9 +458,8 @@ describe('getUnreadStreamsAndTopicsSansMuted', () => {
             lastUnreadMsgId: 5,
           },
         ],
-        isMuted: false,
         key: 'stream:stream 0',
-        streamName: 'stream 0',
+        subscription: { stream_id: subscription0.stream_id },
         unread: 2,
       },
     ]);
