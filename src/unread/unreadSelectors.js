@@ -198,7 +198,7 @@ export const getUnreadStreamsAndTopicsSansMuted: Selector<UnreadStreamItem[]> = 
   getUnreadStreamsAndTopics,
   unreadStreamsAndTopics =>
     unreadStreamsAndTopics
-      .map(stream => ({
+      .map<UnreadStreamItem>(stream => ({
         ...stream,
         data: stream.data.filter(topic => !topic.isMuted),
       }))
