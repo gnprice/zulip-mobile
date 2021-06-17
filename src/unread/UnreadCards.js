@@ -77,7 +77,7 @@ export default function UnreadCards(props: Props) {
               false
             }
             isSelected={false}
-            unreadCount={item.unread}
+            unreadCount={item.unreadCount}
             onPress={(stream: string, topic: string) => {
               setTimeout(() => dispatch(doNarrow(topicNarrow(stream, topic))));
             }}

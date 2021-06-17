@@ -328,7 +328,7 @@ export type UnreadStreamItem = {|
   topics: Array<{|
     key: string,
     topicName: string,
-    unread: number,
+    unreadCount: number,
     lastUnreadMsgId: number,
   |}>,
 |};

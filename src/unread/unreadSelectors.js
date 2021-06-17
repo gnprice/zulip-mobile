@@ -170,7 +170,7 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
         topicData.push({
           key: topicName,
           topicName,
-          unread: msgIds.size,
+          unreadCount: msgIds.size,
           lastUnreadMsgId: msgIds.last(),
         });
       }
