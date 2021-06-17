@@ -323,7 +323,9 @@ export type UnreadStreamItem = {|
   key: string,
   subscription: Subscription,
   unread: number,
-  data: Array<{|
+
+  /** The relevant per-topic data.  Sorted by most-recent unread. */
+  topics: Array<{|
     key: string,
     topic: string,
     unread: number,

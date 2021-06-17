@@ -164,7 +164,7 @@ describe('getUnreadStreamsAndTopics', () => {
     });
     expect(getUnreadStreamsAndTopics(state)).toMatchObject([
       {
-        data: [
+        topics: [
           {
             key: 'another topic',
             topic: 'another topic',
@@ -192,7 +192,7 @@ describe('getUnreadStreamsAndTopics', () => {
         key: 'stream:stream 0',
         subscription: { stream_id: subscription0.stream_id },
         unread: 5,
-        data: [
+        topics: [
           {
             key: 'another topic',
             topic: 'another topic',
@@ -206,7 +206,7 @@ describe('getUnreadStreamsAndTopics', () => {
         key: 'stream:stream 2',
         subscription: { stream_id: subscription2.stream_id },
         unread: 2,
-        data: [
+        topics: [
           {
             key: 'some other topic',
             topic: 'some other topic',
@@ -272,7 +272,7 @@ describe('getUnreadStreamsAndTopics', () => {
         key: 'stream:xyz stream',
         subscription: { name: 'xyz stream' },
         unread: 2,
-        data: [
+        topics: [
           { key: 'e topic', topic: 'e topic', unread: 1, lastUnreadMsgId: 10 },
           { key: 'd topic', topic: 'd topic', unread: 1, lastUnreadMsgId: 9 },
         ],
@@ -281,7 +281,7 @@ describe('getUnreadStreamsAndTopics', () => {
         key: 'stream:abc stream',
         subscription: { name: 'abc stream' },
         unread: 5,
-        data: [
+        topics: [
           { key: 'a topic', topic: 'a topic', unread: 2, lastUnreadMsgId: 5 },
           { key: 'z topic', topic: 'z topic', unread: 3, lastUnreadMsgId: 3 },
         ],
@@ -290,7 +290,7 @@ describe('getUnreadStreamsAndTopics', () => {
         key: 'stream:def stream',
         subscription: { name: 'def stream' },
         unread: 2,
-        data: [{ key: 'b topic', topic: 'b topic', unread: 2, lastUnreadMsgId: 7 }],
+        topics: [{ key: 'b topic', topic: 'b topic', unread: 2, lastUnreadMsgId: 7 }],
       },
     ]);
   });

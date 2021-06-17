@@ -183,7 +183,7 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
         key: `stream:${streamName}`,
         subscription,
         unread: numUnread,
-        data: topicData,
+        topics: topicData,
       });
     }
 
@@ -192,7 +192,7 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
       .sort((a, b) => +b.subscription.pin_to_top - +a.subscription.pin_to_top);
 
     sortedStreams.forEach(perStream => {
-      perStream.data.sort((a, b) => b.lastUnreadMsgId - a.lastUnreadMsgId);
+      perStream.topics.sort((a, b) => b.lastUnreadMsgId - a.lastUnreadMsgId);
     });
 
     return sortedStreams;
