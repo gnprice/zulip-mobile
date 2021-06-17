@@ -71,7 +71,11 @@ export default function UnreadCards(props: Props) {
           <TopicItem
             name={item.topic}
             stream={subscription.name || ''}
-            isMuted={!subscription.in_home_view || item.isMuted}
+            isMuted={
+              // We can't efficiently check this here; but if the topic were
+              // muted, it'd have been filtered out of this data.
+              false
+            }
             isSelected={false}
             unreadCount={item.unread}
             onPress={(stream: string, topic: string) => {
