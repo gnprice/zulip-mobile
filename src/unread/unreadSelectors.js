@@ -179,6 +179,8 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
         continue;
       }
 
+      topics.sort((a, b) => b.lastUnreadMsgId - a.lastUnreadMsgId);
+
       totals.set(streamId, {
         key: `stream:${streamName}`,
         subscription,
@@ -190,10 +192,6 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
     const sortedStreams: UnreadStreamItem[] = Array.from(totals.values())
       .sort((a, b) => caseInsensitiveCompareFunc(a.subscription.name, b.subscription.name))
       .sort((a, b) => +b.subscription.pin_to_top - +a.subscription.pin_to_top);
-
-    sortedStreams.forEach(perStream => {
-      perStream.topics.sort((a, b) => b.lastUnreadMsgId - a.lastUnreadMsgId);
-    });
 
     return sortedStreams;
   },
