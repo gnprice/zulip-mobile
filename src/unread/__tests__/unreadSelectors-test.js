@@ -167,7 +167,7 @@ describe('getUnreadStreamsAndTopics', () => {
         topics: [
           {
             key: 'another topic',
-            topic: 'another topic',
+            topicName: 'another topic',
             unread: 2,
             lastUnreadMsgId: 5,
           },
@@ -195,11 +195,11 @@ describe('getUnreadStreamsAndTopics', () => {
         topics: [
           {
             key: 'another topic',
-            topic: 'another topic',
+            topicName: 'another topic',
             unread: 2,
             lastUnreadMsgId: 5,
           },
-          { key: 'a topic', topic: 'a topic', unread: 3, lastUnreadMsgId: 3 },
+          { key: 'a topic', topicName: 'a topic', unread: 3, lastUnreadMsgId: 3 },
         ],
       },
       {
@@ -209,7 +209,7 @@ describe('getUnreadStreamsAndTopics', () => {
         topics: [
           {
             key: 'some other topic',
-            topic: 'some other topic',
+            topicName: 'some other topic',
             unread: 2,
             lastUnreadMsgId: 7,
           },
@@ -273,8 +273,8 @@ describe('getUnreadStreamsAndTopics', () => {
         subscription: { name: 'xyz stream' },
         unread: 2,
         topics: [
-          { key: 'e topic', topic: 'e topic', unread: 1, lastUnreadMsgId: 10 },
-          { key: 'd topic', topic: 'd topic', unread: 1, lastUnreadMsgId: 9 },
+          { key: 'e topic', topicName: 'e topic', unread: 1, lastUnreadMsgId: 10 },
+          { key: 'd topic', topicName: 'd topic', unread: 1, lastUnreadMsgId: 9 },
         ],
       },
       {
@@ -282,15 +282,15 @@ describe('getUnreadStreamsAndTopics', () => {
         subscription: { name: 'abc stream' },
         unread: 5,
         topics: [
-          { key: 'a topic', topic: 'a topic', unread: 2, lastUnreadMsgId: 5 },
-          { key: 'z topic', topic: 'z topic', unread: 3, lastUnreadMsgId: 3 },
+          { key: 'a topic', topicName: 'a topic', unread: 2, lastUnreadMsgId: 5 },
+          { key: 'z topic', topicName: 'z topic', unread: 3, lastUnreadMsgId: 3 },
         ],
       },
       {
         key: 'stream:def stream',
         subscription: { name: 'def stream' },
         unread: 2,
-        topics: [{ key: 'b topic', topic: 'b topic', unread: 2, lastUnreadMsgId: 7 }],
+        topics: [{ key: 'b topic', topicName: 'b topic', unread: 2, lastUnreadMsgId: 7 }],
       },
     ]);
   });

@@ -69,7 +69,7 @@ export default function UnreadCards(props: Props) {
         const { subscription } = section;
         return (
           <TopicItem
-            name={item.topic}
+            name={item.topicName}
             stream={subscription.name || ''}
             isMuted={
               // We can't efficiently check this here; but if the topic were
