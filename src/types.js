@@ -310,6 +310,15 @@ export type GetText = {|
   intl: IntlShape,
 |};
 
+/**
+ * An item in the view model for the unreads screen, aka `UnreadCards`.
+ *
+ * The details of this data structure are specialized for what that
+ * particular piece of UI needs.
+ *
+ * Each object of this type carries the relevant data for one stream,
+ * including the topics within the stream.
+ */
 export type UnreadStreamItem = {|
   key: string,
   subscription: Subscription,
