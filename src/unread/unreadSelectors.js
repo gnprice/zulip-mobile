@@ -189,11 +189,9 @@ export const getUnreadStreamsAndTopics: Selector<UnreadStreamItem[]> = createSel
       });
     }
 
-    const sortedStreams: UnreadStreamItem[] = Array.from(totals.values())
+    return Array.from(totals.values())
       .sort((a, b) => caseInsensitiveCompareFunc(a.subscription.name, b.subscription.name))
       .sort((a, b) => +b.subscription.pin_to_top - +a.subscription.pin_to_top);
-
-    return sortedStreams;
   },
 );
 
