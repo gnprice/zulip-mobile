@@ -322,7 +322,7 @@ export type GetText = {|
 export type UnreadStreamItem = {|
   key: string,
   subscription: Subscription,
-  unread: number,
+  unreadCount: number,
 
   /** The relevant per-topic data.  Sorted by most-recent unread. */
   topics: Array<{|

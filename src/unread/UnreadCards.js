@@ -55,7 +55,7 @@ export default function UnreadCards(props: Props) {
             isMuted={!subscription.in_home_view}
             isPrivate={subscription.invite_only}
             backgroundColor={subscription.color}
-            unreadCount={section.unread}
+            unreadCount={section.unreadCount}
             onPress={(stream: string) => {
               setTimeout(() => dispatch(doNarrow(streamNarrow(stream))));
             }}
