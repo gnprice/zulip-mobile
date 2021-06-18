@@ -35,44 +35,45 @@ export default function createPersistor (store, config) {
 
   const storage = config.storage;
 
-  // initialize stateful values
-  let lastState = stateInit
-  let paused = false
-  let storesToProcess = []
-  let timeIterator = null
+  let lastWrittenState = stateInit
+  let writeTimer = null
 
   store.subscribe(() => {
-    if (paused) return
+    if (writeTimer === null)
+      writeTimer = setTimeout(write);
+  })
 
-    let state = store.getState()
+  async function write() {
+    const state = store.getState();
 
-    stateIterator(state, (subState, key) => {
-      if (!passWhitelistBlacklist(key)) return
-      if (stateGetter(lastState, key) === stateGetter(state, key)) return
-      if (storesToProcess.indexOf(key) !== -1) return
-      storesToProcess.push(key)
-    })
-
-    const len = storesToProcess.length
-
-    // time iterator (read: debounce)
-    if (timeIterator === null) {
-      timeIterator = setInterval(() => {
-        if ((paused && len === storesToProcess.length) || storesToProcess.length === 0) {
-          clearInterval(timeIterator)
-          timeIterator = null
-          return
-        }
-
-        let key = storesToProcess.shift()
-        let storageKey = createStorageKey(key)
-        let endState = transforms.reduce((subState, transformer) => transformer.in(subState, key), stateGetter(store.getState(), key))
-        if (typeof endState !== 'undefined') storage.setItem(storageKey, serializer(endState)).catch(warnIfSetError(key))
-      }, debounce)
+    // Atomically collect the subtrees that need to be written out.
+    const updatedSubstates = [];
+    for (const key of state.keys()) {
+      if (state[key] === lastWrittenState[key])
+        continue;
+      updatedSubstates.push([key, state[key]]);
     }
 
-    lastState = state
-  })
+    // Serialize those subtrees, with yields after each one.
+    const writes = [];
+    for (const [key, substate] of updatedSubstates) {
+      writes.push([key, serializer(substate)]);
+      await new Promise(setTimeout);
+    }
+
+    // Write them all out, in one multiset operation.
+    storage.multiSet(writes.map(([key, value]) => [createStorageKey(key), value]));
+    lastWrittenState = state;
+
+    // Set up for the next round.
+    if (store.getState() !== state) {
+      // We already need another round of writes.
+      writeTimer = setTimeout(write);
+    } else {
+      // Nothing to do now; let the `subscribe` callback kick one off when needed.
+      writeTimer = null;
+    }
+  }
 
   function passWhitelistBlacklist (key) {
     if (whitelist && whitelist.indexOf(key) === -1) return false
