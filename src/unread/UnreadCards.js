@@ -43,8 +43,11 @@ export default function UnreadCards(props: Props) {
       initialNumToRender={20}
       sections={unreadCards}
       keyExtractor={item => item.key}
-      renderSectionHeader={({ section }) =>
-        section.key === 'private' ? null : (
+      renderSectionHeader={({ section }) => {
+        if (section.key === 'private') {
+          return null;
+        }
+        return (
           <StreamItem
             name={section.streamName}
             iconSize={16}
@@ -56,12 +59,13 @@ export default function UnreadCards(props: Props) {
               setTimeout(() => dispatch(doNarrow(streamNarrow(stream))));
             }}
           />
-        )
-      }
-      renderItem={({ item, section }) =>
-        section.key === 'private' ? (
-          <PmConversationList {...item} />
-        ) : (
+        );
+      }}
+      renderItem={({ item, section }) => {
+        if (section.key === 'private') {
+          return <PmConversationList {...item} />;
+        }
+        return (
           <TopicItem
             name={item.topic}
             stream={section.streamName || ''}
@@ -72,8 +76,8 @@ export default function UnreadCards(props: Props) {
               setTimeout(() => dispatch(doNarrow(topicNarrow(stream, topic))));
             }}
           />
-        )
-      }
+        );
+      }}
     />
   );
 }
