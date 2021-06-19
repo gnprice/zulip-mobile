@@ -36,16 +36,37 @@ export default function createPersistor (store, config) {
   const storage = config.storage;
 
   let lastWrittenState = stateInit
-  let writeTimer = null
+  let writeInProgress = false
 
   store.subscribe(() => {
-    if (writeTimer === null)
-      writeTimer = setTimeout(write);
+    if (!writeInProgress)
+      write();
   })
 
   async function write() {
-    const state = store.getState();
+    // Take the lock.
+    writeInProgress = true;
+    // Then yield so the `subscribe` callback can promptly return.
+    await new Promise(setTimeout);
 
+    try {
+      let state = undefined;
+      while ((state = store.getState()) !== lastWrittenState) {
+        await writeOnce(state);
+      }
+    } finally {
+      // Release the lock, so the next `subscribe` will start the loop again.
+      writeInProgress = false;
+    }
+  }
+
+  /**
+   * Update the storage to the given state.
+   *
+   * The storage is assumed to already reflect `lastWrittenState`.
+   * On completion, sets `lastWrittenState` to `state`.
+   */
+  async function writeOnce(state) {
     // Atomically collect the subtrees that need to be written out.
     const updatedSubstates = [];
     for (const key of state.keys()) {
@@ -63,16 +84,9 @@ export default function createPersistor (store, config) {
 
     // Write them all out, in one multiset operation.
     storage.multiSet(writes.map(([key, value]) => [createStorageKey(key), value]));
-    lastWrittenState = state;
 
-    // Set up for the next round.
-    if (store.getState() !== state) {
-      // We already need another round of writes.
-      writeTimer = setTimeout(write);
-    } else {
-      // Nothing to do now; let the `subscribe` callback kick one off when needed.
-      writeTimer = null;
-    }
+    // Record success.
+    lastWrittenState = state;
   }
 
   function passWhitelistBlacklist (key) {
