@@ -31,7 +31,7 @@ import timing from '../utils/timing';
 
 const migrations = (state: MigrationsState = NULL_OBJECT): MigrationsState => state;
 
-const { enableReduxSlowReducerWarnings, slowReducersThreshold } = config;
+const { enableReduxPerfLogging, slowReducersThreshold } = config;
 
 function maybeLogSlowReducer(action, key, startMs, endMs) {
   if (endMs - startMs >= slowReducersThreshold) {
@@ -47,7 +47,7 @@ function applyReducer<Key: $Keys<GlobalState>, State>(
   globalState: void | GlobalState,
 ): State {
   let startMs = undefined;
-  if (enableReduxSlowReducerWarnings) {
+  if (enableReduxPerfLogging) {
     startMs = Date.now();
   }
 

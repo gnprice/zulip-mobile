@@ -17,7 +17,7 @@ export default class VariablesScreen extends PureComponent<Props> {
   render() {
     const variables = {
       enableReduxLogging: config.enableReduxLogging,
-      enableReduxSlowReducerWarnings: config.enableReduxSlowReducerWarnings,
+      enableReduxPerfLogging: config.enableReduxPerfLogging,
       'process.env.NODE_ENV': process.env.NODE_ENV ?? '(not defined)',
       'global.btoa': !!global.btoa,
     };
