@@ -18,6 +18,7 @@ import rootReducer from './reducers';
 import ZulipAsyncStorage from './ZulipAsyncStorage';
 import createMigration from '../redux-persist-migrate/index';
 import { objectFromEntries } from '../jsBackport';
+import timing from '../utils/timing';
 
 if (process.env.NODE_ENV === 'development') {
   // Chrome dev tools for Immutable.
@@ -395,7 +396,11 @@ const reduxPersistConfig: Config = {
 };
 
 /** Invoke redux-persist.  We do this once at launch. */
-export const restore = (onFinished?: () => void) =>
-  persistStore(store, reduxPersistConfig, onFinished);
+export const restore = () => {
+  timing.start('Store hydration');
+  persistStore(store, reduxPersistConfig, () => {
+    timing.end('Store hydration');
+  });
+};
 
 export default store;

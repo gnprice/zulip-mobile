@@ -7,7 +7,6 @@ import { observeStore } from '../redux';
 import * as logging from '../utils/logging';
 import { tryGetActiveAccount } from '../selectors';
 import store, { restore } from './store';
-import timing from '../utils/timing';
 
 type Props = $ReadOnly<{|
   children: React$Node,
@@ -17,10 +16,7 @@ export default class StoreProvider extends PureComponent<Props> {
   unsubscribeStoreObserver: () => void;
 
   componentDidMount() {
-    timing.start('Store hydration');
-    restore(() => {
-      timing.end('Store hydration');
-    });
+    restore();
 
     this.unsubscribeStoreObserver = observeStore(
       store,
