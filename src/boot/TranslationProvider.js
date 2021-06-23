@@ -34,6 +34,8 @@ export function withGetText<P: { +_: GetText, ... }, C: ComponentType<P>>(
   };
 }
 
+// TODO useGetText; just expands to `useContext(TranslationContext)`
+
 const makeGetText = (intl: IntlShape): GetText => {
   const _ = (message, values) =>
     intl.formatMessage(
