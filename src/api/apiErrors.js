@@ -83,8 +83,7 @@ export const isClientError = (e: Error): boolean =>
  * A Server (5xx) error may or may not be resolved by waiting a short
  * time and retrying the same request.
  */
-export const isServerError = (e: Error): boolean =>
-  e instanceof ApiError && e.httpStatus >= 500 && e.httpStatus <= 599;
+export const isServerError = (e: Error): boolean => e instanceof ServerError;
 
 /**
  * Is the error `fetch`'s network-request error?
