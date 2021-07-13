@@ -1,6 +1,5 @@
 /* @flow strict-local */
 import type { ApiErrorCode, ApiResponseErrorData } from './transportTypes';
-import * as logging from '../utils/logging';
 
 /** Runtime class of custom API error types. */
 export class ApiError extends Error {
@@ -67,7 +66,6 @@ export const makeErrorFromApi = (httpStatus: number, data: mixed): Error => {
 
   // Server has responded, but the response is not a valid error-object.
   // (This should never happen, even on old versions of the Zulip server.)
-  logging.warn(`Bad response from server: ${JSON.stringify(data) ?? 'undefined'}`);
   return new MalformedResponseError(httpStatus, data);
 };
 
