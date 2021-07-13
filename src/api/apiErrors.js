@@ -21,9 +21,15 @@ export class ApiError extends Error {
 export class ServerError extends Error {
   httpStatus: number;
 
-  constructor(httpStatus: number) {
-    super(`Network request failed: HTTP error ${httpStatus}`);
+  constructor(msg: string, httpStatus: number) {
+    super(msg);
     this.httpStatus = httpStatus;
+  }
+}
+
+export class Server5xxError extends ServerError {
+  constructor(httpStatus: number) {
+    super(`Network request failed: HTTP error ${httpStatus}`, httpStatus);
   }
 }
 
@@ -39,7 +45,7 @@ export const makeErrorFromApi = (httpStatus: number, data: mixed): Error => {
   if (httpStatus >= 500 && httpStatus <= 599) {
     // Server error.  Ignore `data`; it's unlikely to be a well-formed Zulip
     // API error blob, and its meaning is undefined if it somehow is.
-    return new ServerError(httpStatus);
+    return new Server5xxError(httpStatus);
   }
 
   // Validate `data`, and construct the resultant error object.
