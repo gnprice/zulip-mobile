@@ -6,7 +6,7 @@ import { getAuthHeaders } from './transport';
 import { encodeParamsForUrl } from '../utils/url';
 import userAgent from '../utils/userAgent';
 import { networkActivityStart, networkActivityStop } from '../utils/networkActivity';
-import { makeErrorFromApi, MalformedResponseError } from './apiErrors';
+import { makeErrorFromApi, MalformedResponseError, RequestError } from './apiErrors';
 import * as logging from '../utils/logging';
 
 const apiVersion = 'api/v1';
@@ -51,8 +51,10 @@ export const apiCall = async (
       return json;
     }
     throw makeErrorFromApi(response.status, json);
-  } catch (error) {
-    const { httpStatus, data } = (error: { httpStatus: number, data?: mixed, ... });
+  } catch (errorIllTyped) {
+    const error: mixed = errorIllTyped; // https://github.com/facebook/flow/issues/2470
+
+    const { httpStatus, data } = error instanceof RequestError ? error : {};
 
     // eslint-disable-next-line no-console
     console.log({ route, params, httpStatus, data });
