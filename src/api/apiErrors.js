@@ -1,8 +1,13 @@
 /* @flow strict-local */
 import type { ApiErrorCode, ApiResponseErrorData } from './transportTypes';
 
+export class RequestError extends Error {
+  +httpStatus: number | void;
+  +data: mixed;
+}
+
 /** Runtime class of custom API error types. */
-export class ApiError extends Error {
+export class ApiError extends RequestError {
   code: ApiErrorCode;
   data: $ReadOnly<{ ... }>;
   httpStatus: number;
@@ -17,7 +22,7 @@ export class ApiError extends Error {
   }
 }
 
-export class ServerError extends Error {
+export class ServerError extends RequestError {
   httpStatus: number;
 
   constructor(msg: string, httpStatus: number) {
@@ -33,8 +38,6 @@ export class Server5xxError extends ServerError {
 }
 
 export class MalformedResponseError extends ServerError {
-  data: mixed;
-
   constructor(httpStatus: number, data: mixed) {
     super(`Server responded with invalid message; HTTP status ${httpStatus}`, httpStatus);
     this.data = data;
@@ -49,7 +52,7 @@ export class MalformedResponseError extends ServerError {
  * returned error will be an {@link ApiError}; otherwise it will be a generic
  * Error.
  */
-export const makeErrorFromApi = (httpStatus: number, data: mixed): Error => {
+export const makeErrorFromApi = (httpStatus: number, data: mixed): RequestError => {
   if (httpStatus >= 500 && httpStatus <= 599) {
     // Server error.  Ignore `data`; it's unlikely to be a well-formed Zulip
     // API error blob, and its meaning is undefined if it somehow is.
