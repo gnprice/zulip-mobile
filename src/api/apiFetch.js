@@ -50,17 +50,20 @@ export const apiCall = async (
     if (response.ok && json !== undefined) {
       return json;
     }
-    const error = makeErrorFromApi(response.status, json);
+    throw makeErrorFromApi(response.status, json);
+  } catch (error) {
+    const { httpStatus, data } = (error: { httpStatus: number, data?: mixed, ... });
 
     // eslint-disable-next-line no-console
-    console.log({ route, params, httpStatus: response.status, json });
+    console.log({ route, params, httpStatus, data });
     Sentry.addBreadcrumb({
       category: 'api',
       level: 'info',
-      data: { route, params, httpStatus: response.status, json },
+      data: { route, params, httpStatus, data },
     });
+
     if (error instanceof MalformedResponseError) {
-      logging.warn(`Bad response from server: ${JSON.stringify(error.data) ?? 'undefined'}`);
+      logging.warn(`Bad response from server: ${JSON.stringify(data) ?? 'undefined'}`);
     }
 
     throw error;
