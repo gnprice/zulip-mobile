@@ -37,7 +37,7 @@ export class MalformedResponseError extends ServerError {
   data: mixed;
 
   constructor(httpStatus: number, data: mixed) {
-    super('Server responded with invalid message', httpStatus);
+    super(`Server responded with invalid message; HTTP status ${httpStatus}`, httpStatus);
     this.data = data;
   }
 }
