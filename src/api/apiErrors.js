@@ -99,8 +99,7 @@ export const isServerError = (e: Error): boolean => e instanceof ServerError;
  * There are several possible causes for this error:
  *   https://fetch.spec.whatwg.org/#ref-for-concept-network-error%E2%91%A5%E2%93%AA
  */
-export const isNetworkRequestFailedError = (e: Error): boolean =>
-  e instanceof TypeError && e.message === 'Network request failed';
+export const isNetworkRequestFailedError = (e: Error): boolean => e instanceof NetworkError;
 
 /**
  * Might the same request succeed if we retried it?
