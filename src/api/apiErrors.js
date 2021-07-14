@@ -1,5 +1,6 @@
 /* @flow strict-local */
 import type { ApiErrorCode, ApiResponseErrorData, ApiResponseSuccess } from './transportTypes';
+import * as logging from '../utils/logging';
 
 /**
  * Some kind of error from a Zulip API network request.
@@ -115,7 +116,21 @@ export const interpretApiResponse = (httpStatus: number, data: mixed): ApiRespon
 
     if (data.result !== 'success' || data.msg !== '') {
       // … but response wasn't a well-formed ApiResponseSuccess.  Server bug.
-      throw new MalformedResponseError(httpStatus, data);
+      // TODO: just do this:
+      //   throw new MalformedResponseError(httpStatus, data);
+      // after confirming that's fine in the wild.
+      // But for now, we're not 100% sure this matches server behavior;
+      // if not, let the app code muddle through anyway.
+      logging.warn('Invalid API success response', {
+        httpStatus,
+        // $FlowFixMe[incompatible-call]: really `data` is JSONable, should say so
+        result: data.result,
+        // $FlowFixMe[incompatible-call]: really `data` is JSONable, should say so
+        msg: data.msg,
+      });
+
+      // $FlowFixMe[incompatible-return]: see TODO above
+      return data;
     }
     /* $FlowFixMe[incompatible-type]: This should just be the refinement
          from the checks we just did; not sure why that doesn't work.
