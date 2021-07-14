@@ -1,16 +1,36 @@
 /* @flow strict-local */
 import type { ApiErrorCode, ApiResponseErrorData, ApiResponseSuccess } from './transportTypes';
 
+/**
+ * Some kind of error from a Zulip API network request.
+ *
+ * See subclasses: {@link ApiError}, {@link NetworkError}, {@link ServerError}.
+ */
 export class RequestError extends Error {
   +httpStatus: number | void;
   +data: mixed;
 }
 
-/** Runtime class of custom API error types. */
+/**
+ * An error returned by the Zulip server API.
+ *
+ * This always represents a situation where the server said there was a
+ * client-side error in the request, giving a 4xx HTTP status code.
+ *
+ * See docs: https://zulip.com/api/rest-error-handling
+ */
 export class ApiError extends RequestError {
   code: ApiErrorCode;
-  data: $ReadOnly<{ ... }>;
+
   httpStatus: number;
+
+  /**
+   * This error's data, if any, beyond the properties common to all errors.
+   *
+   * This consists of the properties in the response other than `result`,
+   * `code`, and `msg`.
+   */
+  data: $ReadOnly<{ ... }>;
 
   constructor(httpStatus: number, data: $ReadOnly<ApiResponseErrorData>) {
     // eslint-disable-next-line no-unused-vars
@@ -22,8 +42,18 @@ export class ApiError extends RequestError {
   }
 }
 
+/**
+ * A network-level error that prevented even getting an HTTP response.
+ */
 export class NetworkError extends RequestError {}
 
+/**
+ * Some kind of server-side error in handling the request.
+ *
+ * This should always represent either some kind of operational issue on the
+ * server, or a bug in the server where its responses don't agree with the
+ * documented API.
+ */
 export class ServerError extends RequestError {
   httpStatus: number;
 
@@ -33,12 +63,21 @@ export class ServerError extends RequestError {
   }
 }
 
+/**
+ * A server error, acknowledged by the server via a 5xx HTTP status code.
+ */
 export class Server5xxError extends ServerError {
   constructor(httpStatus: number) {
     super(`Network request failed: HTTP status ${httpStatus}`, httpStatus);
   }
 }
 
+/**
+ * An error where the server's response doesn't match the general Zulip API.
+ *
+ * This means the server's response didn't contain appropriately-shaped JSON
+ * as documented at the page https://zulip.com/api/rest-error-handling .
+ */
 export class MalformedResponseError extends ServerError {
   constructor(httpStatus: number, data: mixed) {
     super(`Server responded with invalid message; HTTP status ${httpStatus}`, httpStatus);
@@ -46,6 +85,12 @@ export class MalformedResponseError extends ServerError {
   }
 }
 
+/**
+ * An error where the server gave an HTTP status it should never give.
+ *
+ * That is, the HTTP status wasn't one that the docs say the server may
+ * give: https://zulip.com/api/rest-error-handling
+ */
 export class UnexpectedHttpStatusError extends ServerError {
   constructor(httpStatus: number, data: mixed) {
     super(`Server gave unexpected HTTP status: ${httpStatus}`, httpStatus);
