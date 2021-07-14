@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import type { ApiErrorCode, ApiResponseErrorData } from './transportTypes';
+import type { ApiErrorCode, ApiResponseErrorData, ApiResponseSuccess } from './transportTypes';
 
 export class RequestError extends Error {
   +httpStatus: number | void;
@@ -49,17 +49,30 @@ export class MalformedResponseError extends ServerError {
 /**
  * Return the data on success; otherwise, throw a nice {@link RequestError}.
  */
-export const interpretApiResponse = (httpStatus: number, data: mixed): mixed => {
+export const interpretApiResponse = (httpStatus: number, data: mixed): ApiResponseSuccess => {
   if (httpStatus >= 200 && httpStatus <= 299) {
     // Status code says success…
 
-    if (data === undefined) {
-      // … but response couldn't be parsed as JSON.  Seems like a server bug.
+    if (typeof data !== 'object' || data == null) {
+      // … but response couldn't be parsed as JSON, or produced a non-object.
+      // Seems like a server bug.
       throw new MalformedResponseError(httpStatus, data);
     }
 
-    // … and we got a JSON response, too.  So we can return the data.
-    return data;
+    if (data.result !== 'success' || data.msg !== '') {
+      // … but response wasn't a well-formed ApiResponseSuccess.  Server bug.
+      throw new MalformedResponseError(httpStatus, data);
+    }
+    /* $FlowFixMe[incompatible-type]: This should just be the refinement
+         from the checks we just did; not sure why that doesn't work.
+       (A non-fixme workaround would use a spread, like we do below in the
+       error case.  But that likely causes an allocation and a copy.  Here
+       in the non-error case, for every successful API result, that feels
+       like a bit much.) */
+    const data2: { +result: 'success', +msg: '', ... } = data;
+
+    // … and the data has the right type, so we can return it.
+    return data2;
   }
 
   if (httpStatus >= 500 && httpStatus <= 599) {
