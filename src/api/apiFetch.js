@@ -42,12 +42,13 @@ export const apiFetch = async (
   params: $Diff<$Exact<RequestOptions>, {| headers: mixed |}>,
 ) => fetch(new URL(`/${apiVersion}/${route}`, auth.realm).toString(), getFetchParams(auth, params));
 
+/** (Caller beware! Return type is the magic `empty`.) */
 export const apiCall = async (
   auth: Auth,
   route: string,
   params: $Diff<$Exact<RequestOptions>, {| headers: mixed |}>,
   isSilent: boolean = false,
-) => {
+): Promise<empty> => {
   try {
     networkActivityStart(isSilent);
 
@@ -65,7 +66,10 @@ export const apiCall = async (
       throw error;
     }
 
-    return interpretApiResponse(response.status, json);
+    const result = interpretApiResponse(response.status, json);
+    /* $FlowFixMe[incompatible-type] We let the caller pretend this data
+         is whatever it wants it to be. */
+    return result;
   } catch (errorIllTyped) {
     const error: mixed = errorIllTyped; // https://github.com/facebook/flow/issues/2470
 
