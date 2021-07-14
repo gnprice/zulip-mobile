@@ -119,8 +119,7 @@ export const interpretApiResponse = (httpStatus: number, data: mixed): ApiRespon
  * A Client (4xx) error will not be resolved by waiting and retrying
  * the same request.
  */
-export const isClientError = (e: Error): boolean =>
-  e instanceof ApiError && e.httpStatus >= 400 && e.httpStatus <= 499;
+export const isClientError = (e: Error): boolean => e instanceof ApiError;
 
 /**
  * Is exception caused by a Server Error (5xx)?
