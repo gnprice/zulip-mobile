@@ -46,9 +46,18 @@ export class MalformedResponseError extends ServerError {
   }
 }
 
+export class UnexpectedHttpStatusError extends ServerError {
+  constructor(httpStatus: number, data: mixed) {
+    super(`Server gave unexpected HTTP status: ${httpStatus}`, httpStatus);
+    this.data = data;
+  }
+}
+
 /**
  * Return the data on success; otherwise, throw a nice {@link RequestError}.
  */
+// For the spec this is implementing, see:
+//   https://zulip.com/api/rest-error-handling
 export const interpretApiResponse = (httpStatus: number, data: mixed): ApiResponseSuccess => {
   if (httpStatus >= 200 && httpStatus <= 299) {
     // Status code says success…
@@ -81,17 +90,24 @@ export const interpretApiResponse = (httpStatus: number, data: mixed): ApiRespon
     throw new Server5xxError(httpStatus);
   }
 
-  if (typeof data === 'object' && data !== null) {
-    const { result, msg, code = 'BAD_REQUEST' } = data;
-    if (result === 'error' && typeof msg === 'string' && typeof code === 'string') {
-      // Hooray, we have a well-formed Zulip API error blob.  Use that.
-      throw new ApiError(httpStatus, { ...data, result, msg, code });
+  if (httpStatus >= 400 && httpStatus <= 499) {
+    // Client error.  We should have a Zulip API error blob.
+
+    if (typeof data === 'object' && data !== null) {
+      const { result, msg, code = 'BAD_REQUEST' } = data;
+      if (result === 'error' && typeof msg === 'string' && typeof code === 'string') {
+        // Hooray, we have a well-formed Zulip API error blob.  Use that.
+        throw new ApiError(httpStatus, { ...data, result, msg, code });
+      }
     }
+
+    // No such luck.  Seems like a server bug, then.
+    throw new MalformedResponseError(httpStatus, data);
   }
 
-  // Server has responded, but the response is not a valid error-object.
-  // (This should never happen, even on old versions of the Zulip server.)
-  throw new MalformedResponseError(httpStatus, data);
+  // HTTP status was none of 2xx, 4xx, or 5xx.  That's a server bug --
+  // the API says that shouldn't happen.
+  throw new UnexpectedHttpStatusError(httpStatus, data);
 };
 
 /**
