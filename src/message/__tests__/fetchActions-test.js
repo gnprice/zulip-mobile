@@ -34,6 +34,7 @@ global.FormData = class FormData {};
 const BORING_RESPONSE = JSON.stringify({
   messages: [],
   result: 'success',
+  msg: '',
 });
 
 describe('fetchActions', () => {
@@ -197,6 +198,7 @@ describe('fetchActions', () => {
         const response = {
           messages: [serverMessage1],
           result: 'success',
+          msg: '',
         };
         fetch.mockResponseSuccess(JSON.stringify(response));
       });
@@ -255,6 +257,7 @@ describe('fetchActions', () => {
         const response = {
           messages: [message1, eg.streamMessage({ id: 2 }), eg.streamMessage({ id: 3 })],
           result: 'success',
+          msg: '',
         };
         fetch.mockResponseSuccess(JSON.stringify(response));
 
@@ -308,6 +311,7 @@ describe('fetchActions', () => {
           // day comes. It's badly shaped on purpose.
           messages: [{ ...serverMessage1, reactions: [faultyReaction] }],
           result: 'success',
+          msg: '',
         };
         fetch.mockResponseSuccess(JSON.stringify(response));
 
