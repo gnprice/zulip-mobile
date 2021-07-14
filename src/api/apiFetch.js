@@ -6,7 +6,12 @@ import { getAuthHeaders } from './transport';
 import { encodeParamsForUrl } from '../utils/url';
 import userAgent from '../utils/userAgent';
 import { networkActivityStart, networkActivityStop } from '../utils/networkActivity';
-import { interpretApiResponse, MalformedResponseError, RequestError } from './apiErrors';
+import {
+  interpretApiResponse,
+  MalformedResponseError,
+  NetworkError,
+  RequestError,
+} from './apiErrors';
 import * as logging from '../utils/logging';
 
 const apiVersion = 'api/v1';
@@ -45,8 +50,21 @@ export const apiCall = async (
 ) => {
   try {
     networkActivityStart(isSilent);
-    const response = await apiFetch(auth, route, params);
-    const json = await response.json().catch(() => undefined);
+
+    let response = undefined;
+    let json = undefined;
+    try {
+      response = await apiFetch(auth, route, params);
+      json = await response.json().catch(() => undefined);
+    } catch (error) {
+      if (error instanceof TypeError) {
+        // This really is how `fetch` is supposed to signal a network error:
+        //   https://fetch.spec.whatwg.org/#ref-for-concept-network-error⑥⓪
+        throw new NetworkError(error.message);
+      }
+      throw error;
+    }
+
     return interpretApiResponse(response.status, json);
   } catch (errorIllTyped) {
     const error: mixed = errorIllTyped; // https://github.com/facebook/flow/issues/2470

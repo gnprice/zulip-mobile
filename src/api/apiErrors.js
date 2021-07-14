@@ -22,6 +22,8 @@ export class ApiError extends RequestError {
   }
 }
 
+export class NetworkError extends RequestError {}
+
 export class ServerError extends RequestError {
   httpStatus: number;
 
