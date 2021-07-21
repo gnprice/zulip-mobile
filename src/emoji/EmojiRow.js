@@ -25,7 +25,7 @@ type Props = $ReadOnly<{|
   onPress: (name: string) => void,
 |}>;
 
-export default function EmojiRow(props: Props) {
+export default function EmojiRow(props: Props): React$Node {
   const { code, name, type, onPress } = props;
 
   const handlePress = useCallback(() => {

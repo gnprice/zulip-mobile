@@ -22,7 +22,7 @@ type Props = $ReadOnly<{|
  * Shows a right-facing arrow to indicate its purpose. If you need a
  * selectable option row instead, use `SelectableOptionRow`.
  */
-export default function NestedNavRow(props: Props) {
+export default function NestedNavRow(props: Props): React$Node {
   const { label, onPress, Icon } = props;
 
   const themeContext = useContext(ThemeContext);

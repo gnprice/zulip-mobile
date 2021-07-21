@@ -54,7 +54,7 @@ type Props = $ReadOnly<{|
   enablesReturnKeyAutomatically: boolean,
 |}>;
 
-export default function SmartUrlInput(props: Props) {
+export default function SmartUrlInput(props: Props): React$Node {
   const {
     defaultProtocol,
     defaultOrganization,

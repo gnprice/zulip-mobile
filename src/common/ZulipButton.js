@@ -121,7 +121,7 @@ type Props = $ReadOnly<{|
  * @prop [secondary] - Less prominent styling, the button is not as important.
  * @prop onPress - Event called on button press.
  */
-export default function ZulipButton(props: Props) {
+export default function ZulipButton(props: Props): React$Node {
   const {
     style,
     text,

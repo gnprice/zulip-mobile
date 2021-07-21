@@ -19,7 +19,7 @@ type Props = $ReadOnly<{|
  * @prop value - value of the switch.
  * @prop onValueChange - Event called on switch.
  */
-export default function ZulipSwitch(props: Props) {
+export default function ZulipSwitch(props: Props): React$Node {
   const { disabled = false, onValueChange, value } = props;
   return (
     <Switch

@@ -29,7 +29,7 @@ type Props = $ReadOnly<{|
  * @prop [autoFocus] - should the component be focused when mounted.
  * @prop onChangeText - Event called when search query is edited.
  */
-export default function SearchInput(props: Props) {
+export default function SearchInput(props: Props): React$Node {
   const { autoFocus = true, onChangeText } = props;
 
   return (

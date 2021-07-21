@@ -31,7 +31,7 @@ type Props = $ReadOnly<{|
   onAutocomplete: (input: string, completion: string, lastWordPrefix: string) => void,
 |}>;
 
-export default function AutocompleteView(props: Props) {
+export default function AutocompleteView(props: Props): React$Node {
   const { isFocused, text, onAutocomplete, selection } = props;
 
   const handleAutocomplete = useCallback(

@@ -11,7 +11,7 @@ type Props = $ReadOnly<{|
   route: RouteProp<'users', void>,
 |}>;
 
-export default function UsersScreen(props: Props) {
+export default function UsersScreen(props: Props): React$Node {
   const [filter, setFilter] = useState<string>('');
 
   const handleFilterChange = useCallback((_filter: string) => setFilter(_filter), []);

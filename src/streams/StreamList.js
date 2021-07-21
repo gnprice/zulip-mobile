@@ -46,7 +46,7 @@ type Props = $ReadOnly<{|
   onSwitch?: (streamName: string, newValue: boolean) => void,
 |}>;
 
-export default function StreamList(props: Props) {
+export default function StreamList(props: Props): React$Node {
   const {
     streams = [],
     showDescriptions = false,

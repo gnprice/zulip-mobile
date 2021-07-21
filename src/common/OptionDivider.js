@@ -10,7 +10,7 @@ const componentStyles = createStyleSheet({
   },
 });
 
-export default function OptionDivider(props: {||}) {
+export default function OptionDivider(props: {||}): React$Node {
   const themeContext = useContext(ThemeContext);
   return (
     <View style={[componentStyles.divider, { borderBottomColor: themeContext.dividerColor }]} />

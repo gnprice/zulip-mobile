@@ -25,7 +25,7 @@ const componentStyles = createStyleSheet({
 /**
  * A row with a label and a switch component.
  */
-export default function SwitchRow(props: Props) {
+export default function SwitchRow(props: Props): React$Node {
   const { label, value, onValueChange, style, Icon } = props;
 
   const themeContext = useContext(ThemeContext);

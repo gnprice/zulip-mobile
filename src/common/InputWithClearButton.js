@@ -22,7 +22,7 @@ type Props = $ReadOnly<$Diff<InputProps, {| textInputRef: mixed, value: mixed, _
  *
  * All props are passed through to `Input`.  See `Input` for descriptions.
  */
-export default function InputWithClearButton(props: Props) {
+export default function InputWithClearButton(props: Props): React$Node {
   const { onChangeText } = props;
 
   const [canBeCleared, setCanBeCleared] = useState<boolean>(false);

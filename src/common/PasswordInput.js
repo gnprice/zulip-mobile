@@ -35,7 +35,7 @@ type Props = $ReadOnly<$Diff<InputProps,
  *
  * All props are passed through to `Input`.  See `Input` for descriptions.
  */
-export default function PasswordInput(props: Props) {
+export default function PasswordInput(props: Props): React$Node {
   const [isHidden, setIsHidden] = useState<boolean>(true);
 
   const handleShow = useCallback(() => {

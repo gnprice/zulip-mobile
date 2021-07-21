@@ -11,7 +11,7 @@ const componentStyles = createStyleSheet({
   },
 });
 
-export default function LineSeparator(props: {||}) {
+export default function LineSeparator(props: {||}): React$Node {
   const themeContext = useContext(ThemeContext);
   return (
     <View style={[componentStyles.lineSeparator, { backgroundColor: themeContext.cardColor }]} />
