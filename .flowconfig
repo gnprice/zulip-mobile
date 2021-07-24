@@ -96,8 +96,6 @@ implicit-inexact-object=error
 [options]
 emoji=true
 
-well_formed_exports=true
-
 esproposal.optional_chaining=enable
 esproposal.nullish_coalescing=enable
 
