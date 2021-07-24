@@ -43,9 +43,14 @@ export function createStyleSheet<+S: ____Styles_Internal>(obj: S): S {
   return Object.freeze(obj);
 }
 
-export default createStyleSheet({
+const styles = Object.freeze({
   ...composeBoxStyles,
   ...miscStyles,
   ...navStyles,
   ...utilityStyles,
 });
+
+// eslint-disable-next-line no-unused-expressions
+() => createStyleSheet(styles);
+
+export default styles;
