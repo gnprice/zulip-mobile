@@ -9,7 +9,12 @@ const accountSwitchPlain = (index: number): Action => ({
   index,
 });
 
-export const accountSwitch = (index: number): ((dispatch: Dispatch, getState: GetState) => void) => (dispatch: Dispatch, getState: GetState) => {
+export const accountSwitch = (
+  index: number,
+): ((dispatch: Dispatch, getState: GetState) => void) => (
+  dispatch: Dispatch,
+  getState: GetState,
+) => {
   NavigationService.dispatch(resetToMainTabs());
   dispatch(accountSwitchPlain(index));
 };
@@ -26,7 +31,11 @@ const loginSuccessPlain = (realm: URL, email: string, apiKey: string): Action =>
   apiKey,
 });
 
-export const loginSuccess = (realm: URL, email: string, apiKey: string): ((dispatch: Dispatch, getState: GetState) => void) => (
+export const loginSuccess = (
+  realm: URL,
+  email: string,
+  apiKey: string,
+): ((dispatch: Dispatch, getState: GetState) => void) => (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
@@ -38,7 +47,10 @@ const logoutPlain = (): Action => ({
   type: LOGOUT,
 });
 
-export const logout = (): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (dispatch: Dispatch, getState: GetState) => {
+export const logout = (): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (
+  dispatch: Dispatch,
+  getState: GetState,
+) => {
   NavigationService.dispatch(resetToAccountPicker());
   dispatch(logoutPlain());
 };

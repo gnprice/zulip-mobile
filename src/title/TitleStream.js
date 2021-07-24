@@ -1,6 +1,7 @@
 /* @flow strict-local */
 
-import type {Node} from "React";import React, { useContext } from 'react';
+import type { Node } from 'React';
+import React, { useContext } from 'react';
 import { Text, View, TouchableWithoutFeedback } from 'react-native';
 // $FlowFixMe[untyped-import]
 import { useActionSheet } from '@expo/react-native-action-sheet';

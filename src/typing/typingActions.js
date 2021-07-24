@@ -30,10 +30,10 @@ const typingStatusExpiryLoop = () => async (dispatch: Dispatch, getState: GetSta
 };
 
 /** Start the typing-status expiry loop, if there isn't one already. */
-export const ensureTypingStatusExpiryLoop = (): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (
+export const ensureTypingStatusExpiryLoop = (): ((
   dispatch: Dispatch,
   getState: GetState,
-) => {
+) => Promise<void>) => async (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   if (Object.keys(state.typing).length === 0) {
     dispatch(typingStatusExpiryLoop());

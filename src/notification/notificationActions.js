@@ -36,7 +36,9 @@ const ackPushToken = (pushToken: string, identity: Identity): Action => ({
   pushToken,
 });
 
-export const narrowToNotification = (data: ?Notification): ((dispatch: Dispatch, getState: GetState) => void) => (
+export const narrowToNotification = (
+  data: ?Notification,
+): ((dispatch: Dispatch, getState: GetState) => void) => (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
@@ -79,7 +81,10 @@ const sendPushToken = async (dispatch: Dispatch, account: Account | void, pushTo
 };
 
 /** Tell all logged-in accounts' servers about our device token, as needed. */
-export const sendAllPushToken = (): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (dispatch: Dispatch, getState: GetState) => {
+export const sendAllPushToken = (): ((
+  dispatch: Dispatch,
+  getState: GetState,
+) => Promise<void>) => async (dispatch: Dispatch, getState: GetState) => {
   const { pushToken } = getSession(getState());
   if (pushToken === null) {
     return;
@@ -89,7 +94,10 @@ export const sendAllPushToken = (): ((dispatch: Dispatch, getState: GetState) =>
 };
 
 /** Tell the active account's server about our device token, if needed. */
-export const initNotifications = (): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (dispatch: Dispatch, getState: GetState) => {
+export const initNotifications = (): ((
+  dispatch: Dispatch,
+  getState: GetState,
+) => Promise<void>) => async (dispatch: Dispatch, getState: GetState) => {
   const { pushToken } = getSession(getState());
   if (pushToken === null) {
     // Probably, we just don't have the token yet.  When we learn it,
@@ -112,7 +120,10 @@ export const initNotifications = (): ((dispatch: Dispatch, getState: GetState) =
   await sendPushToken(dispatch, account, pushToken);
 };
 
-export const tryStopNotifications = (): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (dispatch: Dispatch, getState: GetState) => {
+export const tryStopNotifications = (): ((
+  dispatch: Dispatch,
+  getState: GetState,
+) => Promise<void>) => async (dispatch: Dispatch, getState: GetState) => {
   const auth = getAuth(getState());
   const { ackedPushToken } = getActiveAccount(getState());
   innerStopNotifications(auth, ackedPushToken, dispatch);

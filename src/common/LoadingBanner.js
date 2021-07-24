@@ -1,6 +1,7 @@
 /* @flow strict-local */
 
-import type {Node} from "React";import React, { useContext } from 'react';
+import type { Node } from 'React';
+import React, { useContext } from 'react';
 import { View } from 'react-native';
 
 import { useSelector } from '../react-redux';

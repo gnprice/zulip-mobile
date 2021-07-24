@@ -1,5 +1,6 @@
 /* @flow strict-local */
-import type {Node} from "React";import React, { useState, useEffect } from 'react';
+import type { Node } from 'React';
+import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import type { ViewStyle } from 'react-native/Libraries/StyleSheet/StyleSheet';
 import * as AppleAuthentication from 'expo-apple-authentication';

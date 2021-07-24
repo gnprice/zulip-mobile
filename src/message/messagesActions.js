@@ -14,7 +14,10 @@ import { getOwnUserId } from '../users/userSelectors';
 /**
  * Navigate to the given narrow.
  */
-export const doNarrow = (narrow: Narrow, anchor: number = FIRST_UNREAD_ANCHOR): ((dispatch: Dispatch, getState: GetState) => void) => (
+export const doNarrow = (
+  narrow: Narrow,
+  anchor: number = FIRST_UNREAD_ANCHOR,
+): ((dispatch: Dispatch, getState: GetState) => void) => (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
@@ -22,7 +25,9 @@ export const doNarrow = (narrow: Narrow, anchor: number = FIRST_UNREAD_ANCHOR): 
   NavigationService.dispatch(navigateToChat(narrow));
 };
 
-export const messageLinkPress = (href: string): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (
+export const messageLinkPress = (
+  href: string,
+): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {

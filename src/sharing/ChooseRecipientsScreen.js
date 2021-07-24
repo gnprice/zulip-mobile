@@ -1,5 +1,6 @@
 /* @flow strict-local */
-import type {Node} from "React";import React, { useState, useCallback } from 'react';
+import type { Node } from 'React';
+import React, { useState, useCallback } from 'react';
 import type { UserId, UserOrBot } from '../types';
 import { Screen } from '../common';
 import UserPickerCard from '../user-picker/UserPickerCard';

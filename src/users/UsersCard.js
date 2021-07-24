@@ -1,6 +1,7 @@
 /* @flow strict-local */
 
-import type {Node} from "React";import React, { useCallback } from 'react';
+import type { Node } from 'React';
+import React, { useCallback } from 'react';
 
 import * as NavigationService from '../nav/NavigationService';
 import type { UserOrBot } from '../types';

@@ -1,5 +1,6 @@
 /* @flow strict-local */
-import type {Node as $IMPORTED_TYPE$_Node} from "React";import React, { PureComponent } from 'react';
+import type { Node as $IMPORTED_TYPE$_Node } from 'React';
+import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
@@ -34,7 +35,7 @@ type Props = $ReadOnly<{|
  * @prop [padding] - Specifies if the components should be padded.
  */
 export default class Centerer extends PureComponent<Props> {
-  static defaultProps: {|padding: boolean|} = {
+  static defaultProps: {| padding: boolean |} = {
     padding: false,
   };
 

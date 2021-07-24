@@ -1,5 +1,6 @@
 /* @flow strict-local */
-import type {Node} from "React";import React, { PureComponent } from 'react';
+import type { Node } from 'React';
+import React, { PureComponent } from 'react';
 import { Image, Text, View, Platform } from 'react-native';
 
 import { openLinkExternal } from '../utils/openLink';
@@ -51,7 +52,7 @@ export default class CompatibilityScreen extends PureComponent<{||}> {
       ? 'https://itunes.apple.com/app/zulip/id1203036395'
       : 'https://play.google.com/store/apps/details?id=com.zulipmobile';
 
-  openStoreURL: (() => void) = () => {
+  openStoreURL: () => void = () => {
     openLinkExternal(this.storeURL);
   };
 

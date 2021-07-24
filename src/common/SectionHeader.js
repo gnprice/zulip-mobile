@@ -1,5 +1,6 @@
 /* @flow strict-local */
-import type {Node, Context} from "React";import React, { PureComponent } from 'react';
+import type { Node, Context } from 'React';
+import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 
 import type { ThemeData } from '../styles';

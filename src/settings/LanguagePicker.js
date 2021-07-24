@@ -1,5 +1,6 @@
 /* @flow strict-local */
-import type {Node, Context} from "React";import React, { PureComponent } from 'react';
+import type { Node, Context } from 'React';
+import React, { PureComponent } from 'react';
 import { FlatList } from 'react-native';
 
 import type { GetText } from '../types';
@@ -18,7 +19,7 @@ export default class LanguagePicker extends PureComponent<Props> {
   static contextType: Context<GetText> = TranslationContext;
   context: GetText;
 
-  getTranslatedLanguages: (() => Array<Language>) = (): Language[] =>
+  getTranslatedLanguages: () => Array<Language> = (): Language[] =>
     languages.map((language: Language) => {
       const _ = this.context;
       const translatedName = _(language.name);
@@ -28,7 +29,7 @@ export default class LanguagePicker extends PureComponent<Props> {
       };
     });
 
-  getFilteredLanguageList: ((filter: string) => Array<Language>) = (filter: string): Language[] => {
+  getFilteredLanguageList: (filter: string) => Array<Language> = (filter: string): Language[] => {
     const list = this.getTranslatedLanguages();
 
     if (!filter) {

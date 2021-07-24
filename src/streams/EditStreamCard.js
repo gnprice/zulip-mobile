@@ -1,5 +1,6 @@
 /* @flow strict-local */
-import type {Node} from "React";import React, { PureComponent } from 'react';
+import type { Node } from 'React';
+import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 
 import { Input, Label, SwitchRow, ZulipButton } from '../common';
@@ -36,21 +37,21 @@ export default class EditStreamCard extends PureComponent<Props, State> {
     isPrivate: this.props.initialValues.invite_only,
   };
 
-  handlePerformAction: (() => void) = () => {
+  handlePerformAction: () => void = () => {
     const { onComplete } = this.props;
     const { name, description, isPrivate } = this.state;
     onComplete(name, description, isPrivate);
   };
 
-  handleNameChange: ((name: string) => void) = (name: string) => {
+  handleNameChange: (name: string) => void = (name: string) => {
     this.setState({ name });
   };
 
-  handleDescriptionChange: ((description: string) => void) = (description: string) => {
+  handleDescriptionChange: (description: string) => void = (description: string) => {
     this.setState({ description });
   };
 
-  handleIsPrivateChange: ((isPrivate: boolean) => void) = (isPrivate: boolean) => {
+  handleIsPrivateChange: (isPrivate: boolean) => void = (isPrivate: boolean) => {
     this.setState({ isPrivate });
   };
 

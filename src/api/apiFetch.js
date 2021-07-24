@@ -125,7 +125,11 @@ export const apiPut = async (auth: Auth, route: string, params: UrlParams = {}):
     body: encodeParamsForUrl(params),
   });
 
-export const apiDelete = async (auth: Auth, route: string, params: UrlParams = {}): Promise<empty> =>
+export const apiDelete = async (
+  auth: Auth,
+  route: string,
+  params: UrlParams = {},
+): Promise<empty> =>
   apiCall(auth, route, {
     method: 'delete',
     body: encodeParamsForUrl(params),

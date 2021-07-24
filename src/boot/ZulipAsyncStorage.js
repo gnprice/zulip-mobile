@@ -68,9 +68,10 @@ export default class ZulipAsyncStorage {
     );
   }
 
-  static removeItem: ((key: string, callback?: $FlowFixMe) => Promise<$FlowFixMe>) = AsyncStorage.removeItem;
+  static removeItem: (key: string, callback?: $FlowFixMe) => Promise<$FlowFixMe> =
+    AsyncStorage.removeItem;
 
-  static getAllKeys: ((callback?: $FlowFixMe) => Promise<$FlowFixMe>) = AsyncStorage.getAllKeys;
+  static getAllKeys: (callback?: $FlowFixMe) => Promise<$FlowFixMe> = AsyncStorage.getAllKeys;
 
-  static clear: ((callback?: $FlowFixMe) => Promise<$FlowFixMe>) = AsyncStorage.clear;
+  static clear: (callback?: $FlowFixMe) => Promise<$FlowFixMe> = AsyncStorage.clear;
 }

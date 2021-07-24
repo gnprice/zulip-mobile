@@ -181,6 +181,5 @@ export default (connect(
   null,
   null,
   { forwardRef: true },
-)(MentionWarnings): 
-  & Class<ConnectedComponent<$FlowFixMe, typeof MentionWarnings>>
-  & typeof MentionWarnings);
+)(MentionWarnings): Class<ConnectedComponent<$FlowFixMe, typeof MentionWarnings>> &
+  typeof MentionWarnings);

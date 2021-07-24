@@ -1,5 +1,6 @@
 /* @flow strict-local */
-import type {Node, Context} from "React";import invariant from 'invariant';
+import type { Node, Context } from 'React';
+import invariant from 'invariant';
 import React, { PureComponent } from 'react';
 import { Text } from 'react-native';
 

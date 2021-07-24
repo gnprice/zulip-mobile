@@ -19,7 +19,7 @@ export default class BackNavigationHandler extends PureComponent<Props> {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonPress);
   }
 
-  handleBackButtonPress: (() => boolean) = () => {
+  handleBackButtonPress: () => boolean = () => {
     const canGoBack = NavigationService.getState().index > 0;
     if (canGoBack) {
       NavigationService.dispatch(
