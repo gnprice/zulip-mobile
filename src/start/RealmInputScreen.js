@@ -23,13 +23,13 @@ type State = {|
 |};
 
 export default class RealmInputScreen extends PureComponent<Props, State> {
-  state = {
+  state: State = {
     progress: false,
     realmInputValue: '',
     error: null,
   };
 
-  tryRealm = async () => {
+  tryRealm: () => Promise<void> = async () => {
     const { realmInputValue } = this.state;
 
     const parsedRealm = tryParseUrl(realmInputValue);
@@ -60,9 +60,9 @@ export default class RealmInputScreen extends PureComponent<Props, State> {
     }
   };
 
-  handleRealmChange = (value: string) => this.setState({ realmInputValue: value });
+  handleRealmChange: string => void = value => this.setState({ realmInputValue: value });
 
-  render() {
+  render(): React$Node {
     const { navigation } = this.props;
     const { progress, error, realmInputValue } = this.state;
 
