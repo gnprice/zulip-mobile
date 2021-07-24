@@ -639,7 +639,7 @@ type SessionAction =
 
 /** Covers all actions we ever `dispatch`. */
 // The grouping here is completely arbitrary; don't worry about it.
-export type Action =
+export type Action = $ReadOnly<
   | EventAction
   | AccountAction
   | LoadingAction
@@ -651,4 +651,5 @@ export type Action =
   | PresenceResponseAction
   | SettingsChangeAction
   | InitTopicsAction
-  | ClearTypingAction;
+  | ClearTypingAction,
+>;

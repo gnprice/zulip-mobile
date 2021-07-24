@@ -561,18 +561,18 @@ export const realmState = (extra?: $Rest<RealmState, { ... }>): RealmState =>
  * Complete actions which need no further data.
  */
 
-export const action = deepFreeze({
-  account_switch: {
+export const action = {
+  account_switch: ({
     type: ACCOUNT_SWITCH,
     index: 0,
-  },
-  login_success: {
+  }: Action),
+  login_success: ({
     type: LOGIN_SUCCESS,
     realm: selfAccount.realm,
     email: selfAccount.email,
     apiKey: selfAccount.apiKey,
-  },
-  realm_init: {
+  }: Action),
+  realm_init: ({
     type: REALM_INIT,
     data: {
       last_event_id: 34,
@@ -678,14 +678,14 @@ export const action = deepFreeze({
       user_status: {},
     },
     zulipVersion,
-  },
-  message_fetch_start: {
+  }: Action & { type: typeof REALM_INIT, ... }),
+  message_fetch_start: ({
     type: MESSAGE_FETCH_START,
     narrow: HOME_NARROW,
     numBefore: 0,
     numAfter: 20,
-  },
-  message_fetch_complete: {
+  }: Action),
+  message_fetch_complete: ({
     type: MESSAGE_FETCH_COMPLETE,
     messages: [],
     narrow: HOME_NARROW,
@@ -695,10 +695,10 @@ export const action = deepFreeze({
     foundNewest: undefined,
     foundOldest: undefined,
     ownUserId: selfUser.user_id,
-  },
+  }: Action),
   // If a given action is only relevant to a single test file, no need to
   // provide a generic example of it here; just define it there.
-});
+};
 
 // Ensure every `eg.action.foo` is some well-typed action.  (We don't simply
 // annotate `action` itself, because we want to keep the information of
