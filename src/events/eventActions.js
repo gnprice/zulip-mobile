@@ -42,10 +42,10 @@ const handleEvent = (event: GeneralEvent, dispatch: Dispatch, getState: GetState
  * This is part of our use of the Zulip events system; see `doInitialFetch`
  * for discussion.
  */
-export const startEventPolling = (queueId: number, eventId: number) => async (
-  dispatch: Dispatch,
-  getState: GetState,
-) => {
+export const startEventPolling = (
+  queueId: number,
+  eventId: number,
+): ((Dispatch, GetState) => Promise<void>) => async (dispatch, getState) => {
   let lastEventId = eventId;
 
   const backoffMachine = new BackoffMachine();
