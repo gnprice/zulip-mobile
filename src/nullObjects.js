@@ -1,9 +1,9 @@
 /* @flow strict-local */
 import type { Subscription } from './types';
 
-export const NULL_OBJECT = Object.freeze({});
+export const NULL_OBJECT: {...} = Object.freeze(({}: {...}));
 
-export const NULL_ARRAY = Object.freeze([]);
+export const NULL_ARRAY: Array<$FlowFixMe> = Object.freeze([]);
 
 /*
  * All the below objects are DEPRECATED; rather than using one, choose the

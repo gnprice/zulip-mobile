@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useEffect } from 'react';
+import type {Node} from "React";import React, { useEffect } from 'react';
 import { FlatList } from 'react-native';
 
 import type { Narrow } from '../types';
@@ -24,7 +24,7 @@ type Props = $ReadOnly<{|
   onAutocomplete: (name: string) => void,
 |}>;
 
-export default function TopicAutocomplete(props: Props) {
+export default function TopicAutocomplete(props: Props): null | Node {
   const { narrow, isFocused, text, onAutocomplete } = props;
   const dispatch = useDispatch();
   const topics = useSelector(state => getTopicsForNarrow(state, narrow));

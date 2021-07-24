@@ -14,13 +14,13 @@ export const initTopics = (topics: Topic[], streamId: number): Action => ({
   streamId,
 });
 
-export const fetchTopics = (streamId: number) => async (dispatch: Dispatch, getState: GetState) => {
+export const fetchTopics = (streamId: number): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (dispatch: Dispatch, getState: GetState) => {
   const auth = getAuth(getState());
   const { topics } = await api.getTopics(auth, streamId);
   dispatch(initTopics(topics, streamId));
 };
 
-export const fetchTopicsForStream = (narrow: Narrow) => async (
+export const fetchTopicsForStream = (narrow: Narrow): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
@@ -40,7 +40,7 @@ export const fetchTopicsForStream = (narrow: Narrow) => async (
   dispatch(fetchTopics(stream.stream_id));
 };
 
-export const deleteMessagesForTopic = (streamId: number, topic: string) => async (
+export const deleteMessagesForTopic = (streamId: number, topic: string): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {

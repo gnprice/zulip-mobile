@@ -94,7 +94,7 @@ export const trySendMessages = (dispatch: Dispatch, getState: GetState): boolean
   }
 };
 
-export const sendOutbox = () => async (dispatch: Dispatch, getState: GetState) => {
+export const sendOutbox = (): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   if (state.outbox.length === 0 || state.session.outboxSending) {
     return;
@@ -166,7 +166,7 @@ const getContentPreview = (content: string, state: GlobalState): string => {
   }
 };
 
-export const addToOutbox = (narrow: Narrow, content: string) => async (
+export const addToOutbox = (narrow: Narrow, content: string): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {

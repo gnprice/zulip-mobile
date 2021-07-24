@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { PureComponent } from 'react';
+import type {Node} from "React";import React, { PureComponent } from 'react';
 import type { TextStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 import { BRAND_COLOR, createStyleSheet } from '../styles';
@@ -16,7 +16,7 @@ type Props = $ReadOnly<{|
 |}>;
 
 export default class NavButton extends PureComponent<Props> {
-  static defaultProps = {
+  static defaultProps: {|color: string|} = {
     color: BRAND_COLOR,
   };
 
@@ -26,7 +26,7 @@ export default class NavButton extends PureComponent<Props> {
     },
   });
 
-  render() {
+  render(): Node {
     const { name, style, color, onPress, accessibilityLabel } = this.props;
 
     return (

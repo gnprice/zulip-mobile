@@ -102,7 +102,7 @@ export const fetchMessages = (fetchArgs: {|
   anchor: number,
   numBefore: number,
   numAfter: number,
-|}) => async (dispatch: Dispatch, getState: GetState): Promise<Message[]> => {
+|}): ((dispatch: Dispatch, getState: GetState) => Promise<Array<Message>>) => async (dispatch: Dispatch, getState: GetState): Promise<Message[]> => {
   dispatch(messageFetchStart(fetchArgs.narrow, fetchArgs.numBefore, fetchArgs.numAfter));
   try {
     const { messages, found_newest, found_oldest } =
@@ -156,7 +156,7 @@ export const fetchMessages = (fetchArgs: {|
   }
 };
 
-export const fetchOlder = (narrow: Narrow) => (dispatch: Dispatch, getState: GetState) => {
+export const fetchOlder = (narrow: Narrow): ((dispatch: Dispatch, getState: GetState) => void) => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const firstMessageId = getFirstMessageId(state, narrow);
   const caughtUp = getCaughtUpForNarrow(state, narrow);
@@ -175,7 +175,7 @@ export const fetchOlder = (narrow: Narrow) => (dispatch: Dispatch, getState: Get
   }
 };
 
-export const fetchNewer = (narrow: Narrow) => (dispatch: Dispatch, getState: GetState) => {
+export const fetchNewer = (narrow: Narrow): ((dispatch: Dispatch, getState: GetState) => void) => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const lastMessageId = getLastMessageId(state, narrow);
   const caughtUp = getCaughtUpForNarrow(state, narrow);
@@ -207,7 +207,7 @@ const initialFetchAbortPlain = (reason: InitialFetchAbortReason): Action => ({
   reason,
 });
 
-export const initialFetchAbort = (reason: InitialFetchAbortReason) => async (
+export const initialFetchAbort = (reason: InitialFetchAbortReason): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
@@ -277,7 +277,7 @@ export const isFetchNeededAtAnchor = (
 export const fetchMessagesInNarrow = (
   narrow: Narrow,
   anchor: number = FIRST_UNREAD_ANCHOR,
-) => async (dispatch: Dispatch, getState: GetState): Promise<Message[] | void> => {
+): ((dispatch: Dispatch, getState: GetState) => Promise<Array<Message> | void>) => async (dispatch: Dispatch, getState: GetState): Promise<Message[] | void> => {
   if (!isFetchNeededAtAnchor(getState(), narrow, anchor)) {
     return undefined;
   }
@@ -399,7 +399,7 @@ export async function tryFetch<T>(
  * (`fetchOlder` and `fetchNewer`), and to grab search results
  * (`SearchMessagesScreen`).
  */
-export const doInitialFetch = () => async (dispatch: Dispatch, getState: GetState) => {
+export const doInitialFetch = (): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (dispatch: Dispatch, getState: GetState) => {
   dispatch(initialFetchStart());
   const auth = getAuth(getState());
 
@@ -479,7 +479,7 @@ export const doInitialFetch = () => async (dispatch: Dispatch, getState: GetStat
   dispatch(initNotifications());
 };
 
-export const uploadFile = (narrow: Narrow, uri: string, name: string) => async (
+export const uploadFile = (narrow: Narrow, uri: string, name: string): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {

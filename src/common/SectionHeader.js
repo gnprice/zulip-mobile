@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { PureComponent } from 'react';
+import type {Node, Context} from "React";import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 
 import type { ThemeData } from '../styles';
@@ -18,10 +18,10 @@ type Props = $ReadOnly<{|
 |}>;
 
 export default class SectionHeader extends PureComponent<Props> {
-  static contextType = ThemeContext;
+  static contextType: Context<ThemeData> = ThemeContext;
   context: ThemeData;
 
-  render() {
+  render(): Node {
     const { text } = this.props;
     return (
       <View style={[styles.header, { backgroundColor: this.context.backgroundColor }]}>

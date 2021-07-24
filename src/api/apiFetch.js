@@ -97,7 +97,7 @@ export const apiGet = async (
   route: string,
   params: UrlParams = {},
   isSilent: boolean = false,
-) =>
+): Promise<empty> =>
   apiCall(
     auth,
     `${route}?${encodeParamsForUrl(params)}`,
@@ -107,37 +107,37 @@ export const apiGet = async (
     isSilent,
   );
 
-export const apiPost = async (auth: Auth, route: string, params: UrlParams = {}) =>
+export const apiPost = async (auth: Auth, route: string, params: UrlParams = {}): Promise<empty> =>
   apiCall(auth, route, {
     method: 'post',
     body: encodeParamsForUrl(params),
   });
 
-export const apiFile = async (auth: Auth, route: string, body: FormData) =>
+export const apiFile = async (auth: Auth, route: string, body: FormData): Promise<empty> =>
   apiCall(auth, route, {
     method: 'post',
     body,
   });
 
-export const apiPut = async (auth: Auth, route: string, params: UrlParams = {}) =>
+export const apiPut = async (auth: Auth, route: string, params: UrlParams = {}): Promise<empty> =>
   apiCall(auth, route, {
     method: 'put',
     body: encodeParamsForUrl(params),
   });
 
-export const apiDelete = async (auth: Auth, route: string, params: UrlParams = {}) =>
+export const apiDelete = async (auth: Auth, route: string, params: UrlParams = {}): Promise<empty> =>
   apiCall(auth, route, {
     method: 'delete',
     body: encodeParamsForUrl(params),
   });
 
-export const apiPatch = async (auth: Auth, route: string, params: UrlParams = {}) =>
+export const apiPatch = async (auth: Auth, route: string, params: UrlParams = {}): Promise<empty> =>
   apiCall(auth, route, {
     method: 'patch',
     body: encodeParamsForUrl(params),
   });
 
-export const apiHead = async (auth: Auth, route: string, params: UrlParams = {}) =>
+export const apiHead = async (auth: Auth, route: string, params: UrlParams = {}): Promise<empty> =>
   apiCall(auth, `${route}?${encodeParamsForUrl(params)}`, {
     method: 'head',
   });

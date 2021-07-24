@@ -7,7 +7,7 @@ import type {
 } from '@react-navigation/native';
 
 export const isReadyRef = React.createRef<boolean>();
-export const navigationContainerRef = React.createRef<React$ElementRef<NavigationContainerType>>();
+export const navigationContainerRef: {|current: null | React$ElementRef<NavigationContainerType>|} = React.createRef<React$ElementRef<NavigationContainerType>>();
 
 const getContainer = () => {
   if (navigationContainerRef.current === null) {

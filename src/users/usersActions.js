@@ -9,7 +9,7 @@ import { isPmNarrow, userIdsOfPmNarrow } from '../utils/narrow';
 import { getUserForId } from './userSelectors';
 import { ZulipVersion } from '../utils/zulipVersion';
 
-export const reportPresence = (isActive: boolean = true, newUserInput: boolean = false) => async (
+export const reportPresence = (isActive: boolean = true, newUserInput: boolean = false): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
@@ -56,7 +56,7 @@ const typingWorker = (state: GlobalState) => {
   };
 };
 
-export const sendTypingStart = (narrow: Narrow) => async (
+export const sendTypingStart = (narrow: Narrow): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
@@ -70,7 +70,7 @@ export const sendTypingStart = (narrow: Narrow) => async (
 
 // TODO call this on more than send: blur, navigate away,
 //   delete all contents, etc.
-export const sendTypingStop = (narrow: Narrow) => async (
+export const sendTypingStop = (narrow: Narrow): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {

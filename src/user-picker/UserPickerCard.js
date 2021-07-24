@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useState, useRef, useEffect } from 'react';
+import type {Node} from "React";import React, { useState, useRef, useEffect } from 'react';
 import { View, FlatList } from 'react-native';
 import { createSelector } from 'reselect';
 
@@ -39,7 +39,7 @@ const getUsersToShow: Selector<User[]> = createSelector(
   (users, ownUserId) => users.filter(user => user.user_id !== ownUserId),
 );
 
-export default function UserPickerCard(props: Props) {
+export default function UserPickerCard(props: Props): Node {
   const { filter } = props;
 
   const users = useSelector(getUsersToShow);

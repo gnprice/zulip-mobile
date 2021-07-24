@@ -3,7 +3,7 @@ import type { Dispatch, GetState } from '../types';
 import * as api from '../api';
 import { getAuth } from '../selectors';
 
-export const updateUserAwayStatus = (away: boolean) => async (
+export const updateUserAwayStatus = (away: boolean): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {
@@ -11,7 +11,7 @@ export const updateUserAwayStatus = (away: boolean) => async (
   api.updateUserStatus(auth, { away });
 };
 
-export const updateUserStatusText = (statusText: string) => async (
+export const updateUserStatusText = (statusText: string): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (
   dispatch: Dispatch,
   getState: GetState,
 ) => {

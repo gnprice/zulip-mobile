@@ -173,7 +173,7 @@ class MentionWarnings extends PureComponent<Props, State> {
 }
 
 // $FlowFixMe[missing-annot]. TODO: Use a type checked connect call.
-export default connect(
+export default (connect(
   state => ({
     auth: getAuth(state),
     allUsersById: getAllUsersById(state),
@@ -181,4 +181,6 @@ export default connect(
   null,
   null,
   { forwardRef: true },
-)(MentionWarnings);
+)(MentionWarnings): 
+  & Class<ConnectedComponent<$FlowFixMe, typeof MentionWarnings>>
+  & typeof MentionWarnings);

@@ -8,6 +8,6 @@ export const setSubscriptionProperty = (
   streamId: number,
   property: SubscriptionProperty,
   value: boolean,
-) => async (dispatch: Dispatch, getState: GetState) => {
+): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (dispatch: Dispatch, getState: GetState) => {
   await api.setSubscriptionProperty(getAuth(getState()), streamId, property, value);
 };

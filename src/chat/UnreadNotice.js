@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React from 'react';
+import type {Node} from "React";import React from 'react';
 import { View } from 'react-native';
 
 import type { Narrow } from '../types';
@@ -39,7 +39,7 @@ type Props = $ReadOnly<{|
   narrow: Narrow,
 |}>;
 
-export default function UnreadNotice(props: Props) {
+export default function UnreadNotice(props: Props): Node {
   const { narrow } = props;
   const unreadCount = useSelector(state => getUnreadCountForNarrow(state, narrow));
 

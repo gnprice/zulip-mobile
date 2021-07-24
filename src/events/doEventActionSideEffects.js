@@ -48,7 +48,7 @@ const messageEvent = (state: GlobalState, message: Message): void => {
  *
  * To be dispatched before the event actions are dispatched.
  */
-export default (action: EventAction) => async (dispatch: Dispatch, getState: GetState) => {
+export default (action: EventAction): ((dispatch: Dispatch, getState: GetState) => Promise<void>) => async (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   switch (action.type) {
     case EVENT_NEW_MESSAGE: {
