@@ -13,10 +13,9 @@ const getCurrentRoute = (): void | Route<string> => getNavigationRoutes()[getNav
 
 export const getCurrentRouteName = (): void | string => getCurrentRoute()?.name;
 
-export const getCurrentRouteParams = (): void | ScreenParams => getCurrentRoute()?.params;
+export const getCurrentRouteParams = () => getCurrentRoute()?.params;
 
-export const getChatScreenParams = (): ScreenParams | {| narrow: void |} =>
-  getCurrentRouteParams() ?? { narrow: undefined };
+export const getChatScreenParams = () => getCurrentRouteParams() ?? { narrow: undefined };
 
 export const getSameRoutesCount = (): number => {
   const routes = getNavigationRoutes();

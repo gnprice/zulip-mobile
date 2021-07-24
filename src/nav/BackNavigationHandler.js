@@ -32,7 +32,7 @@ export default class BackNavigationHandler extends PureComponent<Props> {
     return canGoBack;
   };
 
-  render(): Node {
+  render(): React$Node {
     return this.props.children;
   }
 }

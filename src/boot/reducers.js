@@ -1,6 +1,5 @@
 /* @flow strict-local */
 import config from '../config';
-import { NULL_OBJECT } from '../nullObjects';
 import type { Action, GlobalState, MigrationsState } from '../types';
 
 import accounts from '../account/accountsReducer';
@@ -29,7 +28,7 @@ import userStatus from '../user-status/userStatusReducer';
 import users from '../users/usersReducer';
 import timing from '../utils/timing';
 
-const migrations = (state: MigrationsState = NULL_OBJECT): MigrationsState => state;
+const migrations = (state: MigrationsState = Object.freeze({})): MigrationsState => state;
 
 const { enableReduxSlowReducerWarnings, slowReducersThreshold } = config;
 
