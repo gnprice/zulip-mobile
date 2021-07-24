@@ -4,7 +4,6 @@ import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-import type { Node as React$Node } from 'react';
 import styles, { createStyleSheet } from '../styles';
 
 const componentStyles = createStyleSheet({
