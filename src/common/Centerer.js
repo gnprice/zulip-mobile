@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import type { Node as $IMPORTED_TYPE$_Node } from 'React';
+import type { Node as $IMPORTED_TYPE$_Node } from 'react';
 import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';

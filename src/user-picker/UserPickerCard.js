@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import type { Node } from 'React';
+import type { Node } from 'react';
 import React, { useState, useRef, useEffect } from 'react';
 import { View, FlatList } from 'react-native';
 import { createSelector } from 'reselect';

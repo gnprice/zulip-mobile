@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import type { Node } from 'React';
+import type { Node } from 'react';
 import React, { useState, useCallback } from 'react';
 import type { UserId, UserOrBot } from '../types';
 import { Screen } from '../common';

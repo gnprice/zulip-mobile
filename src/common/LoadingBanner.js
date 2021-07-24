@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import type { Node } from 'React';
+import type { Node } from 'react';
 import React, { useContext } from 'react';
 import { View } from 'react-native';
 

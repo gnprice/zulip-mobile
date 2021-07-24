@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import type { Node } from 'React';
+import type { Node } from 'react';
 import React, { useCallback } from 'react';
 
 import type { Narrow } from '../types';

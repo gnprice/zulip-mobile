@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import type { Node } from 'React';
+import type { Node } from 'react';
 import React, { useEffect } from 'react';
 import { FlatList } from 'react-native';
 

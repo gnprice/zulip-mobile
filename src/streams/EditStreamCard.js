@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import type { Node } from 'React';
+import type { Node } from 'react';
 import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 
