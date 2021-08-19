@@ -33,8 +33,6 @@ type Props = $ReadOnly<{|
  * @prop onChangeText - Event called when search query is edited.
  */
 export default function SearchInput(props: Props): Node {
-  const { autoFocus = true, onChangeText, onSubmitEditing } = props;
-
   return (
     <View style={styles.wrapper}>
       <InputWithClearButton
@@ -46,9 +44,8 @@ export default function SearchInput(props: Props): Node {
         autoCapitalize="none"
         placeholder="Search"
         returnKeyType="search"
-        onChangeText={onChangeText}
-        autoFocus={autoFocus}
-        onSubmitEditing={onSubmitEditing}
+        autoFocus
+        {...props}
       />
     </View>
   );
