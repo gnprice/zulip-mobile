@@ -12,6 +12,7 @@ import { persistStore, autoRehydrate } from '../third/redux-persist';
 import type { Config, Persistor } from '../third/redux-persist';
 
 import type { ReadWrite } from '../generics';
+import * as sqlite from '../sqlite';
 import { ZulipVersion } from '../utils/zulipVersion';
 import { stringify, parse } from './replaceRevive';
 import type { Action, GlobalState } from '../types';
