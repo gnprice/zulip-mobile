@@ -36,16 +36,23 @@ async function populateDb(db) {
     // TODO this needs a much better migration story!
 
     console.log('populateDb: DROP…');
+    tx.executeSql('DROP TABLE IF EXISTS version');
     tx.executeSql('DROP TABLE IF EXISTS accounts');
 
     console.log('populateDb: CREATE…');
+    tx.executeSql(`CREATE TABLE version (
+        version INTEGER NOT NULL
+    )`);
     tx.executeSql(`CREATE TABLE accounts (
         realm_url STRING NOT NULL,
         email STRING NOT NULL,
         user_id INTEGER,
-        api_key STRING,
-        -- etc.
+        api_key STRING
+        -- etc. more fields
     )`);
+
+    console.log('populateDb: INSERT…');
+    tx.executeSql('INSERT INTO version VALUES (1)');
   });
 }
 
