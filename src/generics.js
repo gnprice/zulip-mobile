@@ -6,6 +6,21 @@
 /* eslint-disable flowtype/generic-spacing */
 
 /**
+ * Like `$Shape`, but not broken (or less broken?)
+ *
+ * `$Shape` has at least two peculiar features:
+ *  * A `$Shape<T>` can "sometimes" be used as a `T`.
+ *  * Any object type can be used as a `$Shape<empty>`; that is,
+ *    `$Shape<empty>` is `{ ... }`.
+ *
+ * See https://github.com/facebook/flow/issues/5702 .  For an example of
+ * the latter issue, see 49c7eef3c.
+ *
+ * This does the job of `$Shape` but does it correctly.
+ */
+export type Partial<T> = $Rest<T, { ... }>;
+
+/**
  * The type `S`, plus a check that `S` is a supertype of `T`.
  *
  * Gives an error unless `S` is a supertype of `T` -- i.e., a `T` can always
