@@ -23,7 +23,7 @@ import type {
 
 export type InitialDataBase = $ReadOnly<{|
   last_event_id: number,
-  msg: string,
+  msg: string, // TODO cut? has same status as `result` which isn't here...
   queue_id: number,
 |}>;
 
