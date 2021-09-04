@@ -12,6 +12,7 @@
 // the Zulip server!  The latter takes `anchor: 0` literally -- and because
 // no message has ID less than 0, it effectively means "the very first
 // messages".
+// TODO(server-3.0): Use the fancy new explicit value 'oldest'.
 export const FIRST_UNREAD_ANCHOR = 0;
 
 /**
@@ -23,4 +24,5 @@ export const FIRST_UNREAD_ANCHOR = 0;
  */
 // This special value is understood by the server, corresponding to
 // LARGER_THAN_MAX_MESSAGE_ID there.  See #3654.
+// TODO(server-3.0): Use the fancy new explicit value 'newest'.
 export const LAST_MESSAGE_ANCHOR = 10000000000000000; // sixteen zeroes
