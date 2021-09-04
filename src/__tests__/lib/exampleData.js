@@ -595,7 +595,6 @@ export const action = Object.freeze({
       msg: '',
       queue_id: 1,
       alert_words: [],
-      max_message_id: 100,
       muted_topics: [],
       muted_users: [],
       presences: {},

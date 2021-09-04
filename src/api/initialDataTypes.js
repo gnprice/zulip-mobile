@@ -37,9 +37,7 @@ export type InitialDataAlertWords = $ReadOnly<{|
 
 // InitialDataHotspots omitted
 
-export type InitialDataMessage = $ReadOnly<{|
-  max_message_id: number,
-|}>;
+// InitialDataMessage omitted; we don't use it, and it's deprecated
 
 export type MuteTuple = [string, string];
 
@@ -354,7 +352,6 @@ export type InitialData = $ReadOnly<{|
   // event type.
   ...InitialDataBase,
   ...InitialDataAlertWords,
-  ...InitialDataMessage,
   ...InitialDataMutedTopics,
   ...InitialDataMutedUsers,
   ...InitialDataPresence,
