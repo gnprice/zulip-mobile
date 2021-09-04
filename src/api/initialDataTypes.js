@@ -21,36 +21,38 @@ import type {
 // see the comment on the main type `InitialData`, at the bottom.
 //
 
+/* eslint-disable flowtype/type-id-match */
+
 type InitialDataBase = $ReadOnly<{|
   last_event_id: number,
   msg: string, // TODO cut? has same status as `result` which isn't here...
   queue_id: number,
 |}>;
 
-type InitialDataAlertWords = $ReadOnly<{|
+type InitialData_alert_words = $ReadOnly<{|
   alert_words: $ReadOnlyArray<string>,
 |}>;
 
-// InitialDataCustomProfileFields omitted
+// InitialData_custom_profile_fields omitted
 
-// InitialDataDrafts?
+// InitialData_drafts?
 
-// InitialDataHotspots omitted
+// InitialData_hotspots omitted
 
-// InitialDataMessage omitted; we don't use it, and it's deprecated
+// InitialData_message omitted; we don't use it, and it's deprecated
 
 export type MuteTuple = [string, string];
 
-type InitialDataMutedTopics = $ReadOnly<{|
+type InitialData_muted_topics = $ReadOnly<{|
   muted_topics: $ReadOnlyArray<MuteTuple>,
 |}>;
 
 /** Added in server version 4.0, feature level 48 */
-type InitialDataMutedUsers = $ReadOnly<{|
+type InitialData_muted_users = $ReadOnly<{|
   muted_users?: $ReadOnlyArray<MutedUser>,
 |}>;
 
-type InitialDataPresence = $ReadOnly<{|
+type InitialData_presence = $ReadOnly<{|
   presences: {| +[email: string]: UserPresence |},
   // server_timestamp omitted
 |}>;
@@ -59,7 +61,7 @@ type AvailableVideoChatProviders = $ReadOnly<{|
   [providerName: string]: $ReadOnly<{| name: string, id: number |}>,
 |}>;
 
-type InitialDataRealm = $ReadOnly<{|
+type InitialData_realm = $ReadOnly<{|
   // TODO some properties omitted
 
   jitsi_server_url?: string,
@@ -115,19 +117,19 @@ type InitialDataRealm = $ReadOnly<{|
   zulip_feature_level?: number,
 |}>;
 
-// InitialDataRealmDomains omitted
+// InitialData_realm_domains omitted
 
-type InitialDataRealmEmoji = $ReadOnly<{|
+type InitialData_realm_emoji = $ReadOnly<{|
   realm_emoji: RealmEmojiById,
 |}>;
 
-type InitialDataRealmLinkifiers = $ReadOnly<{|
+type InitialData_realm_linkifiers = $ReadOnly<{|
   // Possibly absent: Not all servers can provide this. See
-  // `InitialDataRealmFilters`.
+  // `InitialData_realm_filters`.
   realm_linkifiers?: $ReadOnlyArray<RealmLinkifier>,
 |}>;
 
-type RawInitialDataRealmFilters = $ReadOnly<{|
+type RawInitialData_realm_filters = $ReadOnly<{|
   // We still request this, since not all servers can provide the
   // newer `realm_linkifiers` format.
   realm_filters?: $ReadOnlyArray<RealmFilter>,
@@ -143,20 +145,20 @@ type RawInitialDataRealmFilters = $ReadOnly<{|
  *
  * See notes on `RealmFilter` and `RealmLinkifier`.
  */
-type InitialDataRealmFilters = $ReadOnly<{|
+type InitialData_realm_filters = $ReadOnly<{|
   realm_filters: $ReadOnlyArray<RealmFilter>,
 |}>;
 
 // realm_playgrounds omitted
 
-type InitialDataRealmUserGroups = $ReadOnly<{|
+type InitialData_realm_user_groups = $ReadOnly<{|
   /**
    * Absent in servers prior to v1.8.0-rc1~2711 (or thereabouts).
    */
   realm_user_groups?: $ReadOnlyArray<UserGroup>,
 |}>;
 
-type RawInitialDataRealmUser = $ReadOnly<{|
+type RawInitialData_realm_user = $ReadOnly<{|
   // TODO some properties omitted
 
   avatar_source: 'G',
@@ -173,8 +175,8 @@ type RawInitialDataRealmUser = $ReadOnly<{|
   user_id: UserId,
 |}>;
 
-type InitialDataRealmUser = $ReadOnly<{|
-  ...RawInitialDataRealmUser,
+type InitialData_realm_user = $ReadOnly<{|
+  ...RawInitialData_realm_user,
   cross_realm_bots: $ReadOnlyArray<CrossRealmBot>,
   realm_non_active_users: $ReadOnlyArray<User>,
   realm_users: $ReadOnlyArray<User>,
@@ -186,7 +188,7 @@ type InitialDataRealmUser = $ReadOnly<{|
 
 // realm_incoming_webhook_bots omitted
 
-type InitialDataRecentPrivateConversations = $ReadOnly<{|
+type InitialData_recent_private_conversations = $ReadOnly<{|
   // * Added in server commit 2.1-dev-384-g4c3c669b41.
   // * `user_id` fields are sorted as of commit 2.2-dev-53-g405a529340, which
   //    was backported to 2.1.1-50-gd452ad31e0 -- meaning that they are _not_
@@ -204,11 +206,11 @@ type NeverSubscribedStream = $ReadOnly<{|
   stream_id: number,
 |}>;
 
-type InitialDataStream = $ReadOnly<{|
+type InitialData_stream = $ReadOnly<{|
   streams: $ReadOnlyArray<Stream>,
 |}>;
 
-type InitialDataSubscription = $ReadOnly<{|
+type InitialData_subscription = $ReadOnly<{|
   never_subscribed: $ReadOnlyArray<NeverSubscribedStream>,
 
   /**
@@ -225,7 +227,7 @@ type InitialDataSubscription = $ReadOnly<{|
   unsubscribed: $ReadOnlyArray<Subscription>,
 |}>;
 
-type InitialDataUpdateDisplaySettings = $ReadOnly<{|
+type InitialData_update_display_settings = $ReadOnly<{|
   default_language: string,
   emojiset: string,
   emojiset_choices: $ReadOnly<{| [string]: string |}>,
@@ -237,7 +239,7 @@ type InitialDataUpdateDisplaySettings = $ReadOnly<{|
   twenty_four_hour_time: boolean,
 |}>;
 
-type InitialDataUpdateGlobalNotifications = $ReadOnly<{|
+type InitialData_update_global_notifications = $ReadOnly<{|
   default_desktop_notifications: boolean,
   enable_desktop_notifications: boolean,
   enable_digest_emails: boolean,
@@ -291,7 +293,7 @@ export type PmsUnreadItem = $ReadOnly<{|
 |}>;
 
 /** Initial data for `update_message_flags` events. */
-type InitialDataUpdateMessageFlags = $ReadOnly<{|
+type InitialData_update_message_flags = $ReadOnly<{|
   /**
    * A summary of (almost) all unread messages, even those we don't have.
    *
@@ -360,7 +362,7 @@ type InitialDataUpdateMessageFlags = $ReadOnly<{|
 
 // TODO UpdateGlobalNotifications here
 
-type InitialDataUserStatus = $ReadOnly<{|
+type InitialData_user_status = $ReadOnly<{|
   /**
    * Older servers (through at least 1.9.1) don't send this.
    * A missing value is equivalent to empty.
@@ -386,29 +388,29 @@ export type InitialData = $ReadOnly<{|
   // in zerver/lib/events.py , for a more concise list organized by
   // event type.
   ...InitialDataBase,
-  ...InitialDataAlertWords,
-  ...InitialDataMutedTopics,
-  ...InitialDataMutedUsers,
-  ...InitialDataPresence,
-  ...InitialDataRealm,
-  ...InitialDataRealmEmoji,
-  ...InitialDataRealmFilters,
-  ...InitialDataRealmLinkifiers,
-  ...InitialDataRealmUser,
-  ...InitialDataRealmUserGroups,
-  ...InitialDataRecentPrivateConversations,
-  ...InitialDataStream,
-  ...InitialDataSubscription,
-  ...InitialDataUpdateDisplaySettings,
-  ...InitialDataUpdateGlobalNotifications,
-  ...InitialDataUpdateMessageFlags,
-  ...InitialDataUserStatus,
+  ...InitialData_alert_words,
+  ...InitialData_muted_topics,
+  ...InitialData_muted_users,
+  ...InitialData_presence,
+  ...InitialData_realm,
+  ...InitialData_realm_emoji,
+  ...InitialData_realm_filters,
+  ...InitialData_realm_linkifiers,
+  ...InitialData_realm_user,
+  ...InitialData_realm_user_groups,
+  ...InitialData_recent_private_conversations,
+  ...InitialData_stream,
+  ...InitialData_subscription,
+  ...InitialData_update_display_settings,
+  ...InitialData_update_global_notifications,
+  ...InitialData_update_message_flags,
+  ...InitialData_user_status,
 |}>;
 
 // Initial data snapshot sent in response to a `/register` request,
 // before validation and transformation.
 export type RawInitialData = $ReadOnly<{|
   ...InitialData,
-  ...RawInitialDataRealmUser,
-  ...RawInitialDataRealmFilters,
+  ...RawInitialData_realm_user,
+  ...RawInitialData_realm_filters,
 |}>;
