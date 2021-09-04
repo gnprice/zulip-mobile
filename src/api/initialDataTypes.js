@@ -194,6 +194,8 @@ export type InitialDataRecentPrivateConversations = $ReadOnly<{|
   recent_private_conversations?: $ReadOnlyArray<RecentPrivateConversation>,
 |}>;
 
+// TODO reorder next few
+
 type NeverSubscribedStream = $ReadOnly<{|
   description: string,
   invite_only: boolean,
@@ -344,6 +346,20 @@ export type InitialDataUpdateMessageFlags = $ReadOnly<{|
   |}>,
 |}>;
 
+// starred_messages omitted
+
+// TODO Stream here
+
+// default_streams omitted
+
+// default_stream_groups omitted
+
+// stop_words omitted
+
+// TODO UpdateDisplaySettings here
+
+// TODO UpdateGlobalNotifications here
+
 export type InitialDataUserStatus = $ReadOnly<{|
   /**
    * Older servers (through at least 1.9.1) don't send this.
@@ -351,6 +367,10 @@ export type InitialDataUserStatus = $ReadOnly<{|
    */
   user_status?: UserStatusMapObject,
 |}>;
+
+// video_calls omitted
+
+// giphy omitted
 
 // Initial data snapshot sent in response to a `/register` request,
 // after validation and transformation.
