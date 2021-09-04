@@ -21,13 +21,13 @@ import type {
 // see the comment on the main type `InitialData`, at the bottom.
 //
 
-export type InitialDataBase = $ReadOnly<{|
+type InitialDataBase = $ReadOnly<{|
   last_event_id: number,
   msg: string, // TODO cut? has same status as `result` which isn't here...
   queue_id: number,
 |}>;
 
-export type InitialDataAlertWords = $ReadOnly<{|
+type InitialDataAlertWords = $ReadOnly<{|
   alert_words: $ReadOnlyArray<string>,
 |}>;
 
@@ -41,25 +41,25 @@ export type InitialDataAlertWords = $ReadOnly<{|
 
 export type MuteTuple = [string, string];
 
-export type InitialDataMutedTopics = $ReadOnly<{|
+type InitialDataMutedTopics = $ReadOnly<{|
   muted_topics: $ReadOnlyArray<MuteTuple>,
 |}>;
 
 /** Added in server version 4.0, feature level 48 */
-export type InitialDataMutedUsers = $ReadOnly<{|
+type InitialDataMutedUsers = $ReadOnly<{|
   muted_users?: $ReadOnlyArray<MutedUser>,
 |}>;
 
-export type InitialDataPresence = $ReadOnly<{|
+type InitialDataPresence = $ReadOnly<{|
   presences: {| +[email: string]: UserPresence |},
   // server_timestamp omitted
 |}>;
 
-export type AvailableVideoChatProviders = $ReadOnly<{|
+type AvailableVideoChatProviders = $ReadOnly<{|
   [providerName: string]: $ReadOnly<{| name: string, id: number |}>,
 |}>;
 
-export type InitialDataRealm = $ReadOnly<{|
+type InitialDataRealm = $ReadOnly<{|
   // TODO some properties omitted
 
   jitsi_server_url?: string,
@@ -117,17 +117,17 @@ export type InitialDataRealm = $ReadOnly<{|
 
 // InitialDataRealmDomains omitted
 
-export type InitialDataRealmEmoji = $ReadOnly<{|
+type InitialDataRealmEmoji = $ReadOnly<{|
   realm_emoji: RealmEmojiById,
 |}>;
 
-export type InitialDataRealmLinkifiers = $ReadOnly<{|
+type InitialDataRealmLinkifiers = $ReadOnly<{|
   // Possibly absent: Not all servers can provide this. See
   // `InitialDataRealmFilters`.
   realm_linkifiers?: $ReadOnlyArray<RealmLinkifier>,
 |}>;
 
-export type RawInitialDataRealmFilters = $ReadOnly<{|
+type RawInitialDataRealmFilters = $ReadOnly<{|
   // We still request this, since not all servers can provide the
   // newer `realm_linkifiers` format.
   realm_filters?: $ReadOnlyArray<RealmFilter>,
@@ -143,20 +143,20 @@ export type RawInitialDataRealmFilters = $ReadOnly<{|
  *
  * See notes on `RealmFilter` and `RealmLinkifier`.
  */
-export type InitialDataRealmFilters = $ReadOnly<{|
+type InitialDataRealmFilters = $ReadOnly<{|
   realm_filters: $ReadOnlyArray<RealmFilter>,
 |}>;
 
 // realm_playgrounds omitted
 
-export type InitialDataRealmUserGroups = $ReadOnly<{|
+type InitialDataRealmUserGroups = $ReadOnly<{|
   /**
    * Absent in servers prior to v1.8.0-rc1~2711 (or thereabouts).
    */
   realm_user_groups?: $ReadOnlyArray<UserGroup>,
 |}>;
 
-export type RawInitialDataRealmUser = $ReadOnly<{|
+type RawInitialDataRealmUser = $ReadOnly<{|
   // TODO some properties omitted
 
   avatar_source: 'G',
@@ -173,7 +173,7 @@ export type RawInitialDataRealmUser = $ReadOnly<{|
   user_id: UserId,
 |}>;
 
-export type InitialDataRealmUser = $ReadOnly<{|
+type InitialDataRealmUser = $ReadOnly<{|
   ...RawInitialDataRealmUser,
   cross_realm_bots: $ReadOnlyArray<CrossRealmBot>,
   realm_non_active_users: $ReadOnlyArray<User>,
@@ -186,7 +186,7 @@ export type InitialDataRealmUser = $ReadOnly<{|
 
 // realm_incoming_webhook_bots omitted
 
-export type InitialDataRecentPrivateConversations = $ReadOnly<{|
+type InitialDataRecentPrivateConversations = $ReadOnly<{|
   // * Added in server commit 2.1-dev-384-g4c3c669b41.
   // * `user_id` fields are sorted as of commit 2.2-dev-53-g405a529340, which
   //    was backported to 2.1.1-50-gd452ad31e0 -- meaning that they are _not_
@@ -204,11 +204,11 @@ type NeverSubscribedStream = $ReadOnly<{|
   stream_id: number,
 |}>;
 
-export type InitialDataStream = $ReadOnly<{|
+type InitialDataStream = $ReadOnly<{|
   streams: $ReadOnlyArray<Stream>,
 |}>;
 
-export type InitialDataSubscription = $ReadOnly<{|
+type InitialDataSubscription = $ReadOnly<{|
   never_subscribed: $ReadOnlyArray<NeverSubscribedStream>,
 
   /**
@@ -225,7 +225,7 @@ export type InitialDataSubscription = $ReadOnly<{|
   unsubscribed: $ReadOnlyArray<Subscription>,
 |}>;
 
-export type InitialDataUpdateDisplaySettings = $ReadOnly<{|
+type InitialDataUpdateDisplaySettings = $ReadOnly<{|
   default_language: string,
   emojiset: string,
   emojiset_choices: $ReadOnly<{| [string]: string |}>,
@@ -237,7 +237,7 @@ export type InitialDataUpdateDisplaySettings = $ReadOnly<{|
   twenty_four_hour_time: boolean,
 |}>;
 
-export type InitialDataUpdateGlobalNotifications = $ReadOnly<{|
+type InitialDataUpdateGlobalNotifications = $ReadOnly<{|
   default_desktop_notifications: boolean,
   enable_desktop_notifications: boolean,
   enable_digest_emails: boolean,
@@ -254,7 +254,7 @@ export type InitialDataUpdateGlobalNotifications = $ReadOnly<{|
   realm_name_in_notifications: boolean,
 |}>;
 
-export type StreamUnreadItem = $ReadOnly<{|
+type StreamUnreadItem = $ReadOnly<{|
   stream_id: number,
   topic: string,
 
@@ -291,7 +291,7 @@ export type PmsUnreadItem = $ReadOnly<{|
 |}>;
 
 /** Initial data for `update_message_flags` events. */
-export type InitialDataUpdateMessageFlags = $ReadOnly<{|
+type InitialDataUpdateMessageFlags = $ReadOnly<{|
   /**
    * A summary of (almost) all unread messages, even those we don't have.
    *
@@ -360,7 +360,7 @@ export type InitialDataUpdateMessageFlags = $ReadOnly<{|
 
 // TODO UpdateGlobalNotifications here
 
-export type InitialDataUserStatus = $ReadOnly<{|
+type InitialDataUserStatus = $ReadOnly<{|
   /**
    * Older servers (through at least 1.9.1) don't send this.
    * A missing value is equivalent to empty.
