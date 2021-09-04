@@ -16,6 +16,11 @@ import type {
   UserStatusMapObject,
 } from './apiTypes';
 
+//
+// For the structure of which properties go in which of these types,
+// see the comment on the main type `InitialData`, at the bottom.
+//
+
 export type InitialDataBase = $ReadOnly<{|
   last_event_id: number,
   msg: string,
@@ -331,11 +336,14 @@ export type InitialDataUserStatus = $ReadOnly<{|
 export type InitialData = $ReadOnly<{|
   // The server sends different subsets of the full available data,
   // depending on what event types the client subscribes to with the
-  // `fetch_event_types` field of the `/register` request. We name these
+  // `fetch_event_types` field of the `/register` request.  We name these
   // subsets after the event types that cause them to be included.
   //
-  // See zerver/lib/events.py in fetch_initial_state_data for the
-  // server-side implementation.
+  // See docs: https://zulip.com/api/register-queue
+  //
+  // See also the implementation, at `fetch_initial_state_data`
+  // in zerver/lib/events.py , for a more concise list organized by
+  // event type.
   ...InitialDataBase,
   ...InitialDataAlertWords,
   ...InitialDataMessage,
