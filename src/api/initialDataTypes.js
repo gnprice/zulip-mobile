@@ -103,6 +103,8 @@ export type InitialDataRealm = $ReadOnly<{|
    * Same meaning as in the server_settings response:
    * https://zulip.com/api/get-server-settings
    */
+  // TODO(zulip-2.2): Since feature level 3, this is included
+  //   unconditionally, so would go in InitialDataBase.
   zulip_feature_level?: number,
 |}>;
 
