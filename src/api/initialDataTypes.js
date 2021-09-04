@@ -60,6 +60,8 @@ export type AvailableVideoChatProviders = $ReadOnly<{|
 |}>;
 
 export type InitialDataRealm = $ReadOnly<{|
+  // TODO some properties omitted
+
   jitsi_server_url?: string,
   max_icon_file_size: number,
   realm_add_emoji_by_admins_only: boolean,
@@ -145,7 +147,18 @@ export type InitialDataRealmFilters = $ReadOnly<{|
   realm_filters: $ReadOnlyArray<RealmFilter>,
 |}>;
 
+// realm_playgrounds omitted
+
+export type InitialDataRealmUserGroups = $ReadOnly<{|
+  /**
+   * Absent in servers prior to v1.8.0-rc1~2711 (or thereabouts).
+   */
+  realm_user_groups?: $ReadOnlyArray<UserGroup>,
+|}>;
+
 export type RawInitialDataRealmUser = $ReadOnly<{|
+  // TODO some properties omitted
+
   avatar_source: 'G',
   avatar_url: string | null,
   avatar_url_medium: string,
@@ -167,12 +180,11 @@ export type InitialDataRealmUser = $ReadOnly<{|
   realm_users: $ReadOnlyArray<User>,
 |}>;
 
-export type InitialDataRealmUserGroups = $ReadOnly<{|
-  /**
-   * Absent in servers prior to v1.8.0-rc1~2711 (or thereabouts).
-   */
-  realm_user_groups?: $ReadOnlyArray<UserGroup>,
-|}>;
+// realm_bot omitted
+
+// realm_embedded_bots omitted
+
+// realm_incoming_webhook_bots omitted
 
 export type InitialDataRecentPmConversations = $ReadOnly<{|
   // * Added in server commit 2.1-dev-384-g4c3c669b41.
