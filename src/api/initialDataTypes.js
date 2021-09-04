@@ -31,6 +31,12 @@ export type InitialDataAlertWords = $ReadOnly<{|
   alert_words: $ReadOnlyArray<string>,
 |}>;
 
+// InitialDataCustomProfileFields omitted
+
+// InitialDataDrafts?
+
+// InitialDataHotspots omitted
+
 export type InitialDataMessage = $ReadOnly<{|
   max_message_id: number,
 |}>;
