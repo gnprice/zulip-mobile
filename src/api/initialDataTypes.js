@@ -52,6 +52,7 @@ export type InitialDataMutedUsers = $ReadOnly<{|
 
 export type InitialDataPresence = $ReadOnly<{|
   presences: {| +[email: string]: UserPresence |},
+  // server_timestamp omitted
 |}>;
 
 export type AvailableVideoChatProviders = $ReadOnly<{|
@@ -112,8 +113,16 @@ export type InitialDataRealm = $ReadOnly<{|
   zulip_feature_level?: number,
 |}>;
 
+// InitialDataRealmDomains omitted
+
 export type InitialDataRealmEmoji = $ReadOnly<{|
   realm_emoji: RealmEmojiById,
+|}>;
+
+export type InitialDataRealmLinkifiers = $ReadOnly<{|
+  // Possibly absent: Not all servers can provide this. See
+  // `InitialDataRealmFilters`.
+  realm_linkifiers?: $ReadOnlyArray<RealmLinkifier>,
 |}>;
 
 export type RawInitialDataRealmFilters = $ReadOnly<{|
@@ -134,12 +143,6 @@ export type RawInitialDataRealmFilters = $ReadOnly<{|
  */
 export type InitialDataRealmFilters = $ReadOnly<{|
   realm_filters: $ReadOnlyArray<RealmFilter>,
-|}>;
-
-export type InitialDataRealmLinkifiers = $ReadOnly<{|
-  // Possibly absent: Not all servers can provide this. See
-  // `InitialDataRealmFilters`.
-  realm_linkifiers?: $ReadOnlyArray<RealmLinkifier>,
 |}>;
 
 export type RawInitialDataRealmUser = $ReadOnly<{|
