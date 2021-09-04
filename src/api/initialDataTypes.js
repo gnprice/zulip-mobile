@@ -105,11 +105,11 @@ export type InitialDataRealm = $ReadOnly<{|
   realm_waiting_period_threshold: number,
 
   /**
-   * Added in server version 2.2, feature level 1.
+   * Added in server version 3.0, feature level 1.
    * Same meaning as in the server_settings response:
    * https://zulip.com/api/get-server-settings
    */
-  // TODO(zulip-2.2): Since feature level 3, this is included
+  // TODO(zulip-3.0): Since feature level 3, this is included
   //   unconditionally, so would go in InitialDataBase.
   zulip_feature_level?: number,
 |}>;
