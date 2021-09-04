@@ -186,7 +186,7 @@ export type InitialDataRealmUser = $ReadOnly<{|
 
 // realm_incoming_webhook_bots omitted
 
-export type InitialDataRecentPmConversations = $ReadOnly<{|
+export type InitialDataRecentPrivateConversations = $ReadOnly<{|
   // * Added in server commit 2.1-dev-384-g4c3c669b41.
   // * `user_id` fields are sorted as of commit 2.2-dev-53-g405a529340, which
   //    was backported to 2.1.1-50-gd452ad31e0 -- meaning that they are _not_
@@ -376,7 +376,7 @@ export type InitialData = $ReadOnly<{|
   ...InitialDataRealmLinkifiers,
   ...InitialDataRealmUser,
   ...InitialDataRealmUserGroups,
-  ...InitialDataRecentPmConversations,
+  ...InitialDataRecentPrivateConversations,
   ...InitialDataStream,
   ...InitialDataSubscription,
   ...InitialDataUpdateDisplaySettings,
