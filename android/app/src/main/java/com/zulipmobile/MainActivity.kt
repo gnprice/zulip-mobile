@@ -10,6 +10,7 @@ import com.facebook.react.ReactApplication
 import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
 import com.zulipmobile.notifications.*
 import com.zulipmobile.sharing.maybeHandleIntent
+import java.lang.Exception
 
 open class MainActivity : ReactActivity() {
     /**
@@ -37,6 +38,12 @@ open class MainActivity : ReactActivity() {
             return;
         }
         maybeHandleIntent(intent, application as ReactApplication, contentResolver)
+
+        try {
+            throw RuntimeException("hello from onCreate")
+        } catch (e: Exception) {
+            SentryX.warnException(e)
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
