@@ -44,6 +44,7 @@ open class MainActivity : ReactActivity() {
         } catch (e: Exception) {
             SentryX.warnException(e)
         }
+        throw RuntimeException("boom!")
     }
 
     override fun onNewIntent(intent: Intent?) {
