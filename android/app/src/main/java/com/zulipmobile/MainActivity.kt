@@ -44,8 +44,7 @@ open class MainActivity : ReactActivity() {
         try {
             throw RuntimeException("hello from onCreate")
         } catch (e: Exception) {
-            Log.w("Zulip", "Greetings from onCreate: ${e.message}")
-            SentryX.warnException(e)
+            ZLog.w("Zulip", e)
         }
         Sentry.captureMessage("onCreate")
 //        throw RuntimeException("boom!")
