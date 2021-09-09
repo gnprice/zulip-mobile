@@ -2,6 +2,7 @@ package com.zulipmobile
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.webkit.WebView
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate;
@@ -43,6 +44,7 @@ open class MainActivity : ReactActivity() {
         try {
             throw RuntimeException("hello from onCreate")
         } catch (e: Exception) {
+            Log.w("Zulip", "Greetings from onCreate: ${e.message}")
             SentryX.warnException(e)
         }
         Sentry.captureMessage("onCreate")
