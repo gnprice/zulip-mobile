@@ -5,6 +5,7 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import io.sentry.Sentry;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -69,6 +70,9 @@ class TextCompressionModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void decompress(String input, Promise promise) {
+    Sentry.captureMessage("decompressing");
+    if (true)
+      throw new RuntimeException("ohno! decompressing");
     try {
       Inflater inflater = new Inflater();
       byte[] inputBytes = input.getBytes("ISO-8859-1");
