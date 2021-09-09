@@ -70,9 +70,12 @@ class TextCompressionModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void decompress(String input, Promise promise) {
-    Sentry.captureMessage("decompressing");
-    if (true)
-      throw new RuntimeException("ohno! decompressing");
+//    Sentry.captureMessage("decompressing");
+    if (true) {
+//      throw new RuntimeException("ohno! decompressing");
+      promise.reject(new RuntimeException("ohno! decompressing"));
+      return;
+    }
     try {
       Inflater inflater = new Inflater();
       byte[] inputBytes = input.getBytes("ISO-8859-1");
