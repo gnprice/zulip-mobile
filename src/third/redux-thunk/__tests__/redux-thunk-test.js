@@ -1,4 +1,4 @@
-import thunkMiddleware from '../index';
+import thunkMiddleware, { withExtraArgument } from '../index';
 
 describe('thunk middleware', () => {
   const doDispatch = () => {};
@@ -80,7 +80,7 @@ describe('thunk middleware', () => {
     it('must pass the third argument', () => {
       const extraArg = { lol: true };
       return new Promise(resolve => {
-        thunkMiddleware.withExtraArgument(extraArg)({
+        withExtraArgument(extraArg)({
           dispatch: doDispatch,
           getState: doGetState,
         })()((dispatch, getState, arg) => {
