@@ -25,7 +25,7 @@ Copyright: 2016-2017 Zack Story and contributors
 License: MIT
 
 Files: src/redux-third/*
-Copyright: 2015-2016 Dan Abramov
+Copyright: 2015-2018 Dan Abramov and contributors
 License: MIT
 
 Files: vendor/intl/*
