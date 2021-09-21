@@ -1,7 +1,6 @@
 // NB this test file doesn't yet actually get run.
 /* eslint-disable */
 import chai from 'chai';
-import { checkDirectory } from 'typings-tester';
 
 import thunkMiddleware from '../index';
 
@@ -93,14 +92,6 @@ describe('thunk middleware', () => {
         chai.assert.strictEqual(arg, extraArg);
         done();
       });
-    });
-  });
-
-  describe('TypeScript definitions', function test() {
-    this.timeout(0);
-
-    it('should compile against index.d.ts', () => {
-      checkDirectory(__dirname);
     });
   });
 });
