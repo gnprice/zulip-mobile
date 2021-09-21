@@ -3,7 +3,6 @@ import invariant from 'invariant';
 import configureStore from 'redux-mock-store';
 import Immutable from 'immutable';
 
-// $FlowFixMe[untyped-import]
 import thunk from '../../third/redux-thunk';
 
 import type { GlobalState } from '../../reduxTypes';
