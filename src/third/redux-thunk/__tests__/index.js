@@ -3,7 +3,6 @@
 import thunkMiddleware from '../index';
 
 /* eslint-disable jest/no-done-callback */
-/* eslint-disable jest/expect-expect */
 
 describe('thunk middleware', () => {
   const doDispatch = () => {};
@@ -72,12 +71,8 @@ describe('thunk middleware', () => {
   });
 
   describe('handle errors', () => {
-    it('must throw if argument is non-object', done => {
-      try {
-        thunkMiddleware();
-      } catch (err) {
-        done();
-      }
+    it('must throw if argument is non-object', () => {
+      expect(() => thunkMiddleware()).toThrow();
     });
   });
 
