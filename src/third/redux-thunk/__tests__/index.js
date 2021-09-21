@@ -2,8 +2,6 @@
 
 import thunkMiddleware from '../index';
 
-/* eslint-disable jest/no-done-callback */
-
 describe('thunk middleware', () => {
   const doDispatch = () => {};
   const doGetState = () => {};
@@ -23,25 +21,29 @@ describe('thunk middleware', () => {
     });
 
     describe('handle action', () => {
-      it('must run the given action function with dispatch and getState', done => {
+      it('must run the given action function with dispatch and getState', () => {
         const actionHandler = nextHandler();
 
-        actionHandler((dispatch, getState) => {
-          expect(dispatch).toStrictEqual(doDispatch);
-          expect(getState).toStrictEqual(doGetState);
-          done();
-        });
+        return new Promise(resolve =>
+          actionHandler((dispatch, getState) => {
+            expect(dispatch).toStrictEqual(doDispatch);
+            expect(getState).toStrictEqual(doGetState);
+            resolve();
+          }),
+        );
       });
 
-      it('must pass action to next if not a function', done => {
+      it('must pass action to next if not a function', () => {
         const actionObj = {};
 
-        const actionHandler = nextHandler(action => {
-          expect(action).toStrictEqual(actionObj);
-          done();
-        });
+        return new Promise(resolve => {
+          const actionHandler = nextHandler(action => {
+            expect(action).toStrictEqual(actionObj);
+            resolve();
+          });
 
-        actionHandler(actionObj);
+          actionHandler(actionObj);
+        });
       });
 
       it('must return the return value of next if not a function', () => {
@@ -77,16 +79,18 @@ describe('thunk middleware', () => {
   });
 
   describe('withExtraArgument', () => {
-    it('must pass the third argument', done => {
+    it('must pass the third argument', () => {
       const extraArg = { lol: true };
-      thunkMiddleware.withExtraArgument(extraArg)({
-        dispatch: doDispatch,
-        getState: doGetState,
-      })()((dispatch, getState, arg) => {
-        expect(dispatch).toStrictEqual(doDispatch);
-        expect(getState).toStrictEqual(doGetState);
-        expect(arg).toStrictEqual(extraArg);
-        done();
+      return new Promise(resolve => {
+        thunkMiddleware.withExtraArgument(extraArg)({
+          dispatch: doDispatch,
+          getState: doGetState,
+        })()((dispatch, getState, arg) => {
+          expect(dispatch).toStrictEqual(doDispatch);
+          expect(getState).toStrictEqual(doGetState);
+          expect(arg).toStrictEqual(extraArg);
+          resolve();
+        });
       });
     });
   });
