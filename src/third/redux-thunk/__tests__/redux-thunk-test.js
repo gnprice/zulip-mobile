@@ -1,5 +1,3 @@
-// NB this test file doesn't yet actually get run.
-
 import thunkMiddleware from '../index';
 
 describe('thunk middleware', () => {
