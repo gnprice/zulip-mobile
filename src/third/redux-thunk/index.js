@@ -38,6 +38,11 @@ function createThunkMiddleware<S = {}, A: Action = Action, E = void>(
 }
 
 const thunk = createThunkMiddleware();
-// thunk.withExtraArgument = createThunkMiddleware;
+// $FlowIgnore[prop-missing]: we're assembling this object
+thunk.withExtraArgument = createThunkMiddleware;
 
-export default (thunk: mixed);
+// $FlowIgnore[prop-missing]: we assembled this object
+export default (thunk: ThunkMiddleware<> & {
+  withExtraArgument: typeof createThunkMiddleware,
+  ...
+});

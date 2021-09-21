@@ -7,7 +7,6 @@ import { createLogger } from 'redux-logger';
 import createActionBuffer from 'redux-action-buffer';
 import Immutable from 'immutable';
 
-// $FlowFixMe[untyped-import]
 import thunkMiddleware from '../third/redux-thunk';
 import { persistStore, autoRehydrate } from '../third/redux-persist';
 import type { Config, Persistor } from '../third/redux-persist';
@@ -373,7 +372,7 @@ function listMiddleware() {
     // Handle the fancy "thunk" actions we often use, i.e. async
     // functions of `dispatch` and `state`.  See docs:
     //   https://github.com/reduxjs/redux-thunk
-    thunkMiddleware,
+    (thunkMiddleware: $FlowFixMe),
   ];
 
   if (config.enableReduxLogging) {
