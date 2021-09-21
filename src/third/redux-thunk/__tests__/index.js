@@ -3,7 +3,7 @@
 import chai from 'chai';
 import { checkDirectory } from 'typings-tester';
 
-import thunkMiddleware from '../src/index';
+import thunkMiddleware from '../index';
 
 describe('thunk middleware', () => {
   const doDispatch = () => {};
