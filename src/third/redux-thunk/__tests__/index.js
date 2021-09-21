@@ -1,8 +1,9 @@
 // NB this test file doesn't yet actually get run.
-/* eslint-disable */
-import chai from 'chai';
 
 import thunkMiddleware from '../index';
+
+/* eslint-disable jest/no-done-callback */
+/* eslint-disable jest/expect-expect */
 
 describe('thunk middleware', () => {
   const doDispatch = () => {};
@@ -10,16 +11,16 @@ describe('thunk middleware', () => {
   const nextHandler = thunkMiddleware({ dispatch: doDispatch, getState: doGetState });
 
   it('must return a function to handle next', () => {
-    chai.assert.isFunction(nextHandler);
-    chai.assert.strictEqual(nextHandler.length, 1);
+    expect(nextHandler).toBeFunction();
+    expect(nextHandler.length).toStrictEqual(1);
   });
 
   describe('handle next', () => {
     it('must return a function to handle action', () => {
       const actionHandler = nextHandler();
 
-      chai.assert.isFunction(actionHandler);
-      chai.assert.strictEqual(actionHandler.length, 1);
+      expect(actionHandler).toBeFunction();
+      expect(actionHandler.length).toStrictEqual(1);
     });
 
     describe('handle action', () => {
@@ -27,8 +28,8 @@ describe('thunk middleware', () => {
         const actionHandler = nextHandler();
 
         actionHandler((dispatch, getState) => {
-          chai.assert.strictEqual(dispatch, doDispatch);
-          chai.assert.strictEqual(getState, doGetState);
+          expect(dispatch).toStrictEqual(doDispatch);
+          expect(getState).toStrictEqual(doGetState);
           done();
         });
       });
@@ -37,7 +38,7 @@ describe('thunk middleware', () => {
         const actionObj = {};
 
         const actionHandler = nextHandler(action => {
-          chai.assert.strictEqual(action, actionObj);
+          expect(action).toStrictEqual(actionObj);
           done();
         });
 
@@ -49,7 +50,7 @@ describe('thunk middleware', () => {
         const actionHandler = nextHandler(() => expected);
 
         const outcome = actionHandler();
-        chai.assert.strictEqual(outcome, expected);
+        expect(outcome).toStrictEqual(expected);
       });
 
       it('must return value as expected if a function', () => {
@@ -57,7 +58,7 @@ describe('thunk middleware', () => {
         const actionHandler = nextHandler();
 
         const outcome = actionHandler(() => expected);
-        chai.assert.strictEqual(outcome, expected);
+        expect(outcome).toStrictEqual(expected);
       });
 
       it('must be invoked synchronously if a function', () => {
@@ -65,7 +66,7 @@ describe('thunk middleware', () => {
         let mutated = 0;
 
         actionHandler(() => mutated++);
-        chai.assert.strictEqual(mutated, 1);
+        expect(mutated).toStrictEqual(1);
       });
     });
   });
@@ -87,9 +88,9 @@ describe('thunk middleware', () => {
         dispatch: doDispatch,
         getState: doGetState,
       })()((dispatch, getState, arg) => {
-        chai.assert.strictEqual(dispatch, doDispatch);
-        chai.assert.strictEqual(getState, doGetState);
-        chai.assert.strictEqual(arg, extraArg);
+        expect(dispatch).toStrictEqual(doDispatch);
+        expect(getState).toStrictEqual(doGetState);
+        expect(arg).toStrictEqual(extraArg);
         done();
       });
     });
