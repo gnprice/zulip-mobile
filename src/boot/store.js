@@ -2,12 +2,13 @@
 import { applyMiddleware, compose, createStore } from 'redux';
 import type { Store } from 'redux';
 // $FlowFixMe[untyped-import]
-import thunkMiddleware from 'redux-thunk';
-// $FlowFixMe[untyped-import]
 import { createLogger } from 'redux-logger';
 // $FlowFixMe[untyped-import]
 import createActionBuffer from 'redux-action-buffer';
 import Immutable from 'immutable';
+
+// $FlowFixMe[untyped-import]
+import thunkMiddleware from '../third/redux-thunk';
 import { persistStore, autoRehydrate } from '../third/redux-persist';
 import type { Config, Persistor } from '../third/redux-persist';
 
