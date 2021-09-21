@@ -389,34 +389,8 @@ export type UsersState = $ReadOnlyArray<User>;
 
 /* eslint-disable no-use-before-define */
 
-/**
- * The portion of our Redux state with a single account's data.
- *
- * In a multi-account world (#5005), the full Redux state will contain one
- * of these per account.  Before that, in a multi-account-ready schema
- * (#5006), the full Redux state may contain just one of these but as a
- * subtree somewhere inside it.
- *
- * Initially, though, the full Redux state tree actually qualifies as a
- * value of this type, and the values of this type we pass around are
- * secretly just the full Redux state.  The purpose of this type is to
- * expose only the data that in a multi-account future will live on a single
- * account's state subtree, and to recruit Flow's help in tracking which
- * parts of our code will in that future operate on a particular account and
- * which parts will operate on all accounts' data or none.
- */
-type PerAccountStateImpl = $ReadOnly<{
-  // TODO(#5006): Secretly we assume these objects also have `Account` data,
-  //   like so:
-  // accounts: [Account, ...mixed],
-  //   which they do because they're always actually `GlobalState` objects.
-  //   Need to put that data somewhere that's less mixed up with other accounts'
-  //   data.  See `accountsSelectors` for where we make that assumption.
-
-  // Jumbles of per-account state and client state.
-  session: PerAccountSessionState,
-  settings: PerAccountSettingsState,
-
+/** (For most uses, see PerAccountState.) */
+export type StrictlyPerAccountState = $ReadOnly<{|
   // Per-account state that's *not* from the server.
   drafts: DraftsState,
   outbox: OutboxState,
@@ -441,6 +415,37 @@ type PerAccountStateImpl = $ReadOnly<{
   userGroups: UserGroupsState,
   userStatus: UserStatusState,
   users: UsersState,
+|}>;
+
+/**
+ * The portion of our Redux state with a single account's data.
+ *
+ * In a multi-account world (#5005), the full Redux state will contain one
+ * of these per account.  Before that, in a multi-account-ready schema
+ * (#5006), the full Redux state may contain just one of these but as a
+ * subtree somewhere inside it.
+ *
+ * Initially, though, the full Redux state tree actually qualifies as a
+ * value of this type, and the values of this type we pass around are
+ * secretly just the full Redux state.  The purpose of this type is to
+ * expose only the data that in a multi-account future will live on a single
+ * account's state subtree, and to recruit Flow's help in tracking which
+ * parts of our code will in that future operate on a particular account and
+ * which parts will operate on all accounts' data or none.
+ */
+type PerAccountStateImpl = $ReadOnly<{
+  // TODO(#5006): Secretly we assume these objects also have `Account` data,
+  //   like so:
+  // accounts: [Account, ...mixed],
+  //   which they do because they're always actually `GlobalState` objects.
+  //   Need to put that data somewhere that's less mixed up with other accounts'
+  //   data.  See `accountsSelectors` for where we make that assumption.
+
+  ...StrictlyPerAccountState,
+
+  // Jumbles of per-account state and client state.
+  session: PerAccountSessionState,
+  settings: PerAccountSettingsState,
 
   ...
 }>;
