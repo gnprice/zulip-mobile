@@ -2,7 +2,14 @@
 import { addBreadcrumb } from '@sentry/react-native';
 import { makeUserId } from '../api/idTypes';
 import type { Narrow, Stream, UserId } from '../types';
-import { topicNarrow, streamNarrow, specialNarrow, pmNarrowFromRecipients } from './narrow';
+import {
+  topicNarrow,
+  streamNarrow,
+  pmNarrowFromRecipients,
+  ALL_PRIVATE_NARROW,
+  MENTIONED_NARROW,
+  STARRED_NARROW,
+} from './narrow';
 import { pmKeyRecipientsFromIds } from './recipient';
 
 // TODO: Work out what this does, write a jsdoc for its interface, and
@@ -61,7 +68,7 @@ type LinkType =
   | 'external'
   | 'stream' | 'topic' | 'pm'
   | 'home'
-  | 'special'
+  | 'is-private' | 'starred' | 'mentioned'
   ;
 
 /**
@@ -100,10 +107,18 @@ export const getLinkType = (url: string, realm: URL): LinkType => {
   }
 
   if (paths.length === 2 && paths[0] === 'is' && /^(private|starred|mentioned)/i.test(paths[1])) {
-    return 'special';
+    switch (paths[1]) {
+      case 'private':
+        return 'is-private';
+      case 'starred':
+      case 'mentioned':
+        return paths[1];
+      default:
+        return 'home'; // TODO seems wrong
+    }
   }
 
-  return 'home';
+  return 'home'; // TODO seems wrong
 };
 
 /** Decode a dot-encoded string. */
@@ -179,12 +194,12 @@ export const getNarrowFromLink = (
       return topicNarrow(parseStreamOperand(paths[1], streamsById), parseTopicOperand(paths[3]));
     case 'stream':
       return streamNarrow(parseStreamOperand(paths[1], streamsById));
-    case 'special':
-      try {
-        return specialNarrow(paths[1]);
-      } catch (e) {
-        return null;
-      }
+    case 'is-private':
+      return ALL_PRIVATE_NARROW;
+    case 'mentioned':
+      return MENTIONED_NARROW;
+    case 'starred':
+      return STARRED_NARROW;
     default:
       return null;
   }
