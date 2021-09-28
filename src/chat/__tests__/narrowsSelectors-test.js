@@ -330,7 +330,7 @@ describe('getStreamInNarrow', () => {
 });
 
 describe('isNarrowValid', () => {
-  test('narrowing to a special narrow is always valid', () => {
+  test('narrowing to starred-messages narrow is always valid', () => {
     const state = eg.reduxState();
     const narrow = STARRED_NARROW;
 
