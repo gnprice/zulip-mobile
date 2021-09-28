@@ -118,28 +118,15 @@ export const pmNarrowFromUsersUnsafe = (recipients: UserOrBot[]): Narrow => {
  */
 export const pm1to1NarrowFromUser = (user: UserOrBot): Narrow => pmNarrowInternal([user.user_id]);
 
-export const specialNarrow = (operand: string): Narrow => {
-  if (operand === 'starred') {
-    return Object.freeze({ type: 'starred' });
-  }
-  if (operand === 'mentioned') {
-    return Object.freeze({ type: 'mentioned' });
-  }
-  if (operand === 'private') {
-    return Object.freeze({ type: 'all-pm' });
-  }
-  throw new Error(`specialNarrow: got unsupported operand: ${operand}`);
-};
-
-export const STARRED_NARROW: Narrow = specialNarrow('starred');
+export const STARRED_NARROW: Narrow = Object.freeze({ type: 'starred' });
 
 export const STARRED_NARROW_STR: string = keyFromNarrow(STARRED_NARROW);
 
-export const MENTIONED_NARROW: Narrow = specialNarrow('mentioned');
+export const MENTIONED_NARROW: Narrow = Object.freeze({ type: 'mentioned' });
 
 export const MENTIONED_NARROW_STR: string = keyFromNarrow(MENTIONED_NARROW);
 
-export const ALL_PRIVATE_NARROW: Narrow = specialNarrow('private');
+export const ALL_PRIVATE_NARROW: Narrow = Object.freeze({ type: 'all-pm' });
 
 export const ALL_PRIVATE_NARROW_STR: string = keyFromNarrow(ALL_PRIVATE_NARROW);
 
