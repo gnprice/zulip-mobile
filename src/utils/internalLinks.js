@@ -56,7 +56,13 @@ export const isInternalLink = (url: string, realm: URL): boolean => {
 export const isMessageLink = (url: string, realm: URL): boolean =>
   isInternalLink(url, realm) && url.includes('near');
 
-type LinkType = 'external' | 'home' | 'pm' | 'topic' | 'stream' | 'special';
+// prettier-ignore
+type LinkType =
+  | 'external'
+  | 'stream' | 'topic' | 'pm'
+  | 'home'
+  | 'special'
+  ;
 
 /**
  * PRIVATE -- exported only for tests.
