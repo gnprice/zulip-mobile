@@ -364,14 +364,6 @@ export const topicOfNarrow = (narrow: Narrow): string =>
 export const isPmNarrow = (narrow?: Narrow): boolean =>
   !!narrow && caseNarrowDefault(narrow, { pm: () => true }, () => false);
 
-export const isSpecialNarrow = (narrow?: Narrow): boolean =>
-  !!narrow
-  && caseNarrowDefault(
-    narrow,
-    { starred: () => true, mentioned: () => true, allPrivate: () => true },
-    () => false,
-  );
-
 export const isAllPrivateNarrow = (narrow?: Narrow): boolean =>
   !!narrow && caseNarrowDefault(narrow, { allPrivate: () => true }, () => false);
 

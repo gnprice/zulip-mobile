@@ -6,7 +6,6 @@ import {
   pm1to1NarrowFromUser,
   is1to1PmNarrow,
   pmNarrowFromUsersUnsafe,
-  isSpecialNarrow,
   ALL_PRIVATE_NARROW,
   streamNarrow,
   isStreamNarrow,
@@ -69,15 +68,6 @@ describe('isStreamOrTopicNarrow', () => {
       false,
     );
     expect(isStreamOrTopicNarrow(STARRED_NARROW)).toBe(false);
-  });
-});
-
-describe('specialNarrow', () => {
-  test('only narrowing with the "is" operator is special narrow', () => {
-    expect(isSpecialNarrow(undefined)).toBe(false);
-    expect(isSpecialNarrow(HOME_NARROW)).toBe(false);
-    expect(isSpecialNarrow(streamNarrow('some stream'))).toBe(false);
-    expect(isSpecialNarrow(STARRED_NARROW)).toBe(true);
   });
 });
 
