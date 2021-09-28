@@ -310,14 +310,14 @@ export const parseNarrow = (narrowStr: string): Narrow => {
   }
 };
 
-export const isHomeNarrow = (narrow?: Narrow): boolean =>
-  !!narrow && caseNarrowDefault(narrow, { home: () => true }, () => false);
+export const isHomeNarrow = (narrow: Narrow): boolean =>
+  caseNarrowDefault(narrow, { home: () => true }, () => false);
 
-export const is1to1PmNarrow = (narrow?: Narrow): boolean =>
-  !!narrow && caseNarrowDefault(narrow, { pm: ids => ids.length === 1 }, () => false);
+export const is1to1PmNarrow = (narrow: Narrow): boolean =>
+  caseNarrowDefault(narrow, { pm: ids => ids.length === 1 }, () => false);
 
-export const isGroupPmNarrow = (narrow?: Narrow): boolean =>
-  !!narrow && caseNarrowDefault(narrow, { pm: ids => ids.length > 1 }, () => false);
+export const isGroupPmNarrow = (narrow: Narrow): boolean =>
+  caseNarrowDefault(narrow, { pm: ids => ids.length > 1 }, () => false);
 
 /**
  * The "PM key recipients" IDs for a PM narrow; else error.
@@ -348,26 +348,26 @@ export const streamNameOfNarrow = (narrow: Narrow): string =>
 export const topicOfNarrow = (narrow: Narrow): string =>
   caseNarrowPartial(narrow, { topic: (streamName, topic) => topic });
 
-export const isPmNarrow = (narrow?: Narrow): boolean =>
-  !!narrow && caseNarrowDefault(narrow, { pm: () => true }, () => false);
+export const isPmNarrow = (narrow: Narrow): boolean =>
+  caseNarrowDefault(narrow, { pm: () => true }, () => false);
 
-export const isAllPrivateNarrow = (narrow?: Narrow): boolean =>
-  !!narrow && caseNarrowDefault(narrow, { allPrivate: () => true }, () => false);
+export const isAllPrivateNarrow = (narrow: Narrow): boolean =>
+  caseNarrowDefault(narrow, { allPrivate: () => true }, () => false);
 
-export const isStreamNarrow = (narrow?: Narrow): boolean =>
-  !!narrow && caseNarrowDefault(narrow, { stream: () => true }, () => false);
+export const isStreamNarrow = (narrow: Narrow): boolean =>
+  caseNarrowDefault(narrow, { stream: () => true }, () => false);
 
-export const isTopicNarrow = (narrow?: Narrow): boolean =>
-  !!narrow && caseNarrowDefault(narrow, { topic: () => true }, () => false);
+export const isTopicNarrow = (narrow: Narrow): boolean =>
+  caseNarrowDefault(narrow, { topic: () => true }, () => false);
 
-export const isStreamOrTopicNarrow = (narrow?: Narrow): boolean =>
-  !!narrow && caseNarrowDefault(narrow, { stream: () => true, topic: () => true }, () => false);
+export const isStreamOrTopicNarrow = (narrow: Narrow): boolean =>
+  caseNarrowDefault(narrow, { stream: () => true, topic: () => true }, () => false);
 
-export const isSearchNarrow = (narrow?: Narrow): boolean =>
-  !!narrow && caseNarrowDefault(narrow, { search: () => true }, () => false);
+export const isSearchNarrow = (narrow: Narrow): boolean =>
+  caseNarrowDefault(narrow, { search: () => true }, () => false);
 
-export const isMentionedNarrow = (narrow?: Narrow): boolean =>
-  !!narrow && caseNarrowDefault(narrow, { mentioned: () => true }, () => false);
+export const isMentionedNarrow = (narrow: Narrow): boolean =>
+  caseNarrowDefault(narrow, { mentioned: () => true }, () => false);
 
 /**
  * Whether the narrow represents a single whole conversation.
