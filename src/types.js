@@ -1,5 +1,6 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { IntlShape } from 'react-intl';
+// $FlowFixMe[nonstrict-import]
 import type { DangerouslyImpreciseStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 import type { SubsetProperties } from './generics';
