@@ -1,4 +1,4 @@
-// @flow
+// @flow strict-local
 
 import * as Sentry from '@sentry/react-native';
 import { isSentryActive } from '../sentry';
