@@ -33,7 +33,7 @@ const SERIALIZED_TYPE_FIELD_NAME_ESCAPED: '__serializedType__value' = '__seriali
 // Don't make this an arrow function -- we need `this` to be a special
 // value; see
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#The_replacer_parameter.
-function replacer(key, value) {
+function replacer(key: string, value: mixed) {
   // The value at the current path before JSON.stringify called its
   // `toJSON` method, if present.
   //
@@ -47,7 +47,7 @@ function replacer(key, value) {
   // set `data` to `value`, if we trust that `toJSON` gives the output
   // we want to store there. And it would mean we don't discard the
   // work `JSON.stringify` did by calling `toJSON`.
-  const origValue = this[key];
+  const origValue: mixed = this[key];
 
   if (typeof origValue !== 'object' || origValue === null) {
     // `origValue` can't be one of our interesting data types, so,
@@ -55,28 +55,34 @@ function replacer(key, value) {
     return origValue;
   }
 
+  // prettier-ignore
   switch (Object.getPrototypeOf(origValue)) {
     // Flow bug: https://github.com/facebook/flow/issues/6110
     case (ZulipVersion.prototype: $FlowIssue):
-      return { data: value.raw(), [SERIALIZED_TYPE_FIELD_NAME]: 'ZulipVersion' };
+      // $FlowIssue[incompatible-cast]: should refine on the prototype
+      return { data: (origValue: ZulipVersion).raw(), [SERIALIZED_TYPE_FIELD_NAME]: 'ZulipVersion' };
     case (URL.prototype: $FlowIssue):
       return { data: origValue.toString(), [SERIALIZED_TYPE_FIELD_NAME]: 'URL' };
     case (GravatarURL.prototype: $FlowIssue):
-      return { data: GravatarURL.serialize(value), [SERIALIZED_TYPE_FIELD_NAME]: 'GravatarURL' };
+      // $FlowIssue[incompatible-call]: should refine on the prototype
+      return { data: GravatarURL.serialize(origValue), [SERIALIZED_TYPE_FIELD_NAME]: 'GravatarURL' };
     case (UploadedAvatarURL.prototype: $FlowIssue):
       return {
-        data: UploadedAvatarURL.serialize(value),
+        // $FlowIssue[incompatible-call]: should refine on the prototype
+        data: UploadedAvatarURL.serialize(origValue),
         [SERIALIZED_TYPE_FIELD_NAME]: 'UploadedAvatarURL',
       };
     case (FallbackAvatarURL.prototype: $FlowIssue):
       return {
-        data: FallbackAvatarURL.serialize(value),
+        // $FlowIssue[incompatible-call]: should refine on the prototype
+        data: FallbackAvatarURL.serialize(origValue),
         [SERIALIZED_TYPE_FIELD_NAME]: 'FallbackAvatarURL',
       };
     case (Immutable.List.prototype: $FlowIssue):
       return { data: value, [SERIALIZED_TYPE_FIELD_NAME]: 'ImmutableList' };
     case (Immutable.Map.prototype: $FlowIssue): {
-      const firstKey = origValue.keySeq().first();
+      // $FlowIssue[incompatible-cast]: should refine on the prototype
+      const firstKey = (origValue: Immutable.Map<mixed, mixed>).keySeq().first();
       return {
         data: value,
         // We assume that any `Immutable.Map` will have
@@ -136,7 +142,7 @@ function replacer(key, value) {
  * reviving logic must also appear in `replacer` so they stay in
  * sync.
  */
-function reviver(key, value) {
+function reviver(key: string, value: $FlowFixMe) {
   if (value !== null && typeof value === 'object' && SERIALIZED_TYPE_FIELD_NAME in value) {
     const data = value.data;
     switch (value[SERIALIZED_TYPE_FIELD_NAME]) {
