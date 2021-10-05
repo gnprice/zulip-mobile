@@ -379,7 +379,8 @@ export async function tryFetch<T>(
           }
           try {
             return await func();
-          } catch (e) {
+          } catch (errorIllTyped) {
+            const e: mixed = errorIllTyped; // https://github.com/facebook/flow/issues/2470
             if (!(shouldRetry && (e instanceof Server5xxError || e instanceof NetworkError))) {
               throw e;
             }
@@ -389,7 +390,8 @@ export async function tryFetch<T>(
       })(),
       config.requestLongTimeoutMs,
     );
-  } catch (e) {
+  } catch (errorIllTyped) {
+    const e: mixed = errorIllTyped; // https://github.com/facebook/flow/issues/2470
     if (e instanceof TimeoutError) {
       timerHasExpired = true;
     }
