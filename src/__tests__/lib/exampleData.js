@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import deepFreeze from 'deep-freeze';
 import { createStore } from 'redux';
 import Immutable from 'immutable';
@@ -40,9 +40,11 @@ import {
   MESSAGE_FETCH_START,
   MESSAGE_FETCH_COMPLETE,
 } from '../../actionConstants';
+// $FlowFixMe[nonstrict-import]
 import rootReducer from '../../boot/reducers';
 import { authOfAccount } from '../../account/accountMisc';
 import { HOME_NARROW } from '../../utils/narrow';
+// $FlowFixMe[nonstrict-import]
 import type { BackgroundData } from '../../webview/MessageList';
 import { getStreamsById, getStreamsByName } from '../../selectors';
 
