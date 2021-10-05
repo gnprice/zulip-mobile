@@ -23,6 +23,26 @@ export const SERIALIZED_TYPE_FIELD_NAME: '__serializedType__' = '__serializedTyp
  */
 const SERIALIZED_TYPE_FIELD_NAME_ESCAPED: '__serializedType__value' = '__serializedType__value';
 
+// prettier-ignore
+type ActivelySerialized =
+ | {| __serializedType__: 'ZulipVersion', data: string |}
+ | {| __serializedType__: 'URL', data: string |}
+ | {| __serializedType__: 'GravatarURL' | 'UploadedAvatarURL' | 'FallbackAvatarURL',
+     data: string |}
+ | {| __serializedType__: 'ImmutableList', data: $ReadOnlyArray<mixed> |}
+ | {| __serializedType__: 'ImmutableMap' | 'ImmutableMapNumKeys', data: { ... } |}
+ | {| __serializedType__: 'Object',
+      data: { ... }, __serializedType__value: mixed |}
+ ;
+
+// prettier-ignore
+type Serialized =
+ ActivelySerialized
+ //  | { ... } // but actually any object *without* a __serializedType__ property
+ | $ReadOnlyArray<mixed>
+ | null | string | number | boolean
+ ;
+
 /**
  * Custom replacer for inventive data types JSON doesn't handle.
  *
@@ -33,7 +53,7 @@ const SERIALIZED_TYPE_FIELD_NAME_ESCAPED: '__serializedType__value' = '__seriali
 // Don't make this an arrow function -- we need `this` to be a special
 // value; see
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#The_replacer_parameter.
-function replacer(key: string, value: mixed) {
+function replacer(key: string, value: mixed): Serialized {
   // The value at the current path before JSON.stringify called its
   // `toJSON` method, if present.
   //
@@ -55,36 +75,40 @@ function replacer(key: string, value: mixed) {
     return origValue;
   }
 
+  /* eslint-disable id-match */
   // prettier-ignore
   switch (Object.getPrototypeOf(origValue)) {
     // Flow bug: https://github.com/facebook/flow/issues/6110
     case (ZulipVersion.prototype: $FlowIssue):
       // $FlowIssue[incompatible-cast]: should refine on the prototype
-      return { data: (origValue: ZulipVersion).raw(), [SERIALIZED_TYPE_FIELD_NAME]: 'ZulipVersion' };
+      return { data: (origValue: ZulipVersion).raw(), __serializedType__: 'ZulipVersion' };
     case (URL.prototype: $FlowIssue):
-      return { data: origValue.toString(), [SERIALIZED_TYPE_FIELD_NAME]: 'URL' };
+      return { data: origValue.toString(), __serializedType__: 'URL' };
     case (GravatarURL.prototype: $FlowIssue):
       // $FlowIssue[incompatible-call]: should refine on the prototype
-      return { data: GravatarURL.serialize(origValue), [SERIALIZED_TYPE_FIELD_NAME]: 'GravatarURL' };
+      return { data: GravatarURL.serialize(origValue), __serializedType__: 'GravatarURL' };
     case (UploadedAvatarURL.prototype: $FlowIssue):
       return {
         // $FlowIssue[incompatible-call]: should refine on the prototype
         data: UploadedAvatarURL.serialize(origValue),
-        [SERIALIZED_TYPE_FIELD_NAME]: 'UploadedAvatarURL',
+        __serializedType__: 'UploadedAvatarURL',
       };
     case (FallbackAvatarURL.prototype: $FlowIssue):
       return {
         // $FlowIssue[incompatible-call]: should refine on the prototype
         data: FallbackAvatarURL.serialize(origValue),
-        [SERIALIZED_TYPE_FIELD_NAME]: 'FallbackAvatarURL',
+        __serializedType__: 'FallbackAvatarURL',
       };
     case (Immutable.List.prototype: $FlowIssue):
-      return { data: value, [SERIALIZED_TYPE_FIELD_NAME]: 'ImmutableList' };
+      // $FlowIgnore[incompatible-cast]: List#toJSON returns an array
+      return { data: (value: $ReadOnlyArray<mixed>), __serializedType__: 'ImmutableList' };
     case (Immutable.Map.prototype: $FlowIssue): {
       // $FlowIssue[incompatible-cast]: should refine on the prototype
       const firstKey = (origValue: Immutable.Map<mixed, mixed>).keySeq().first();
       return {
-        data: value,
+        // $FlowIgnore[incompatible-cast]: Map#toJSON returns an object
+        data: (value: { ... }),
+
         // We assume that any `Immutable.Map` will have
         //   - all string keys,
         //   - all numeric keys, or
@@ -95,7 +119,7 @@ function replacer(key: string, value: mixed) {
         // maps with either one of those (chosen arbitrarily) because
         // the reviver will give the same output for both of them
         // (i.e., an empty `Immutable.Map`).
-        [SERIALIZED_TYPE_FIELD_NAME]:
+        __serializedType__:
           typeof firstKey === 'number' ? 'ImmutableMapNumKeys' : 'ImmutableMap',
       };
     }
@@ -142,30 +166,32 @@ function replacer(key: string, value: mixed) {
  * reviving logic must also appear in `replacer` so they stay in
  * sync.
  */
-function reviver(key: string, value: $FlowFixMe) {
-  if (value !== null && typeof value === 'object' && SERIALIZED_TYPE_FIELD_NAME in value) {
-    const data = value.data;
-    switch (value[SERIALIZED_TYPE_FIELD_NAME]) {
+function reviver(key: string, actualValue: mixed) {
+  const value1: Serialized = actualValue;
+  if (value1 !== null && typeof value1 === 'object' && SERIALIZED_TYPE_FIELD_NAME in value1) {
+    const value: ActivelySerialized = value1;
+    switch (value.__serializedType__) {
       case 'ZulipVersion':
-        return new ZulipVersion(data);
+        return new ZulipVersion(value.data);
       case 'URL':
-        return new URL(data);
+        return new URL(value.data);
       case 'GravatarURL':
-        return GravatarURL.deserialize(data);
+        return GravatarURL.deserialize(value.data);
       case 'UploadedAvatarURL':
-        return UploadedAvatarURL.deserialize(data);
+        return UploadedAvatarURL.deserialize(value.data);
       case 'FallbackAvatarURL':
-        return FallbackAvatarURL.deserialize(data);
+        return FallbackAvatarURL.deserialize(value.data);
       case 'ImmutableList':
-        return Immutable.List(data);
+        return Immutable.List(value.data);
       case 'ImmutableMap':
-        return Immutable.Map(data);
+        return Immutable.Map(value.data);
       case 'ImmutableMapNumKeys': {
+        const data = value.data;
         return Immutable.Map(Object.keys(data).map(k => [Number.parseInt(k, 10), data[k]]));
       }
       case 'Object':
         return {
-          ...data,
+          ...value.data,
           [SERIALIZED_TYPE_FIELD_NAME]: value[SERIALIZED_TYPE_FIELD_NAME_ESCAPED],
         };
       default:
