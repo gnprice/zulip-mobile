@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import invariant from 'invariant';
 import configureStore from 'redux-mock-store';
 // $FlowFixMe[untyped-import]

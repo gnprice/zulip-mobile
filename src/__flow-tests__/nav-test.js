@@ -1,7 +1,7 @@
 /**
  * Type-tests for navigation.
  *
- * @flow strict-local
+ * @flow strict
  */
 
 import React, { type ComponentType } from 'react';

@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import reducers from '../reducers';
 import { discardKeys, storeKeys, cacheKeys } from '../store';
 import * as eg from '../../__tests__/lib/exampleData';

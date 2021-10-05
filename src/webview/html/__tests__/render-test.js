@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import messageTypingAsHtml from '../messageTypingAsHtml';
 import * as eg from '../../../__tests__/lib/exampleData';
 

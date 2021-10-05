@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { Message, Narrow, Outbox, MessageListElement } from '../types';
 import { isConversationNarrow, isStreamNarrow } from '../utils/narrow';
 import { isSameRecipient } from '../utils/recipient';

@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import template from './template';
 import type { TimeMessageListElement } from '../../types';
 import { humanDate } from '../../utils/date';

@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import { authFromCallbackUrl } from '../webAuth';
 import * as eg from '../../__tests__/lib/exampleData';
 

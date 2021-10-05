@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 import type { Notification } from './types';

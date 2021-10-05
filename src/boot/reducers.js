@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import config from '../config';
 import type { Action, GlobalState, MigrationsState } from '../types';
 

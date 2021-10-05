@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import configureStore from 'redux-mock-store';
 // $FlowFixMe[untyped-import]
 import thunk from 'redux-thunk';

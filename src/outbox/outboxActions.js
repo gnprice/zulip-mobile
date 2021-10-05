@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 // $FlowFixMe[untyped-import]
 import parseMarkdown from 'zulip-markdown-parser';
 import invariant from 'invariant';

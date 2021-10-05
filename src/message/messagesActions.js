@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import * as NavigationService from '../nav/NavigationService';
 import type { Narrow, ThunkAction } from '../types';
 import { getAuth } from '../selectors';

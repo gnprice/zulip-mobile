@@ -1,7 +1,7 @@
 /**
  * Helpers for using react-navigation and its relatives.
  *
- * @flow strict-local
+ * @flow strict
  */
 
 import { type ElementConfig } from 'react';

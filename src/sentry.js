@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import * as Sentry from '@sentry/react-native';
 import type { Breadcrumb, BreadcrumbHint } from '@sentry/react-native';
 import { nativeApplicationVersion } from 'expo-application';

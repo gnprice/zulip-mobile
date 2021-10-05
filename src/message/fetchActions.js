@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import * as logging from '../utils/logging';
 import * as NavigationService from '../nav/NavigationService';
 import type { Narrow, GlobalState, Message, Action, ThunkAction, UserId } from '../types';

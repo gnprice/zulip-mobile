@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { WebViewOutboundEvent } from '../handleOutboundEvents';
 
 export default (msg: WebViewOutboundEvent) => {
