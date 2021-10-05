@@ -86,8 +86,8 @@ const asDict = (obj: JSONableInput | void): JSONableInputDict | void => {
 
 /** Local error type. */
 class ApnsMsgValidationError extends Error {
-  extras: JSONable;
-  constructor(message, extras: JSONable) {
+  extras: JSONableDict;
+  constructor(message, extras: JSONableDict) {
     super(message);
     this.extras = extras;
   }
@@ -223,7 +223,9 @@ export const fromAPNsImpl = (rawData: ?JSONableDict): Notification | void => {
 const fromAPNs = (data: ?JSONableDict): Notification | void => {
   try {
     return fromAPNsImpl(data);
-  } catch (err) {
+  } catch (errorIllTyped) {
+    const err: mixed = errorIllTyped; // https://github.com/facebook/flow/issues/2470
+
     if (err instanceof ApnsMsgValidationError) {
       logging.warn(err.message, err.extras);
       return undefined;
