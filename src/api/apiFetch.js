@@ -1,11 +1,13 @@
-/* @flow strict-local */
+/* @flow strict */
 import * as Sentry from '@sentry/react-native';
 import type { UrlParams } from '../utils/url';
 import type { Auth } from './transportTypes';
 import type { FixmeUntypedFetchResult } from './apiTypes';
 import { getAuthHeaders } from './transport';
 import { encodeParamsForUrl } from '../utils/url';
+// $FlowFixMe[nonstrict-import]
 import userAgent from '../utils/userAgent';
+// $FlowFixMe[nonstrict-import]
 import { networkActivityStart, networkActivityStop } from '../utils/networkActivity';
 import {
   interpretApiResponse,
