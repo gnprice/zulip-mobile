@@ -1,5 +1,7 @@
-/* @flow strict-local */
+/* @flow strict */
+// $FlowFixMe[nonstrict-import]
 import { Platform } from 'react-native';
+
 import type { ThemeName } from '../../types';
 import cssPygments from './cssPygments';
 import cssEmojis from './cssEmojis';
