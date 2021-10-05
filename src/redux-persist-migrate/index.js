@@ -15,9 +15,12 @@ const processKey = key => {
 
 /* eslint-disable no-use-before-define */
 
+// A general version of this would want some type variables like:
+//   `VersionKey: string, State: { [VersionKey]: {| version?: number |}, ... }`
+// We just hardcode 'migrations' and use our GlobalState, which satisfies that.
 export default function createMigration(
   manifest: {| [string]: (State) => State |},
-  versionSelector: string,
+  versionSelector: 'migrations',
   versionSetter?: (State, number) => State,
 ): StoreEnhancer<State, Action, Dispatch<Action>> {
   const reducerKey = versionSelector;
@@ -30,9 +33,8 @@ export default function createMigration(
       );
       return state;
     }
-    state[reducerKey] = state[reducerKey] || {};
-    state[reducerKey].version = version;
-    return state;
+    // $FlowFixMe[incompatible-cast] TODO MigrationsState should probably say number?
+    return { ...state, [reducerKey]: { version: (version: string) } };
   };
   return createMigrationImpl(manifest, realVersionSelector, realVersionSetter);
 }
