@@ -1,4 +1,5 @@
-/* @flow strict-local */
+/* @flow strict */
+// $FlowFixMe[nonstrict-import]
 import userAgent from '../utils/userAgent';
 
 // check with server if current mobile app is compatible with latest backend
