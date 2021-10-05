@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import { streamNarrow } from '../../utils/narrow';
 import { getMessageUpdateStrategy } from '../messageUpdates';
 

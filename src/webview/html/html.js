@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import template from './template';
 import type { Auth, ThemeName } from '../../types';
 import css from '../css/css';

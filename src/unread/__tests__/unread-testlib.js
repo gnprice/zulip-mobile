@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 
 import { reducer } from '../unreadModel';
 import type { UnreadState } from '../unreadModelTypes';

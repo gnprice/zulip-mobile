@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import Immutable from 'immutable';
 import deepFreeze from 'deep-freeze';
 

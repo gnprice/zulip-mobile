@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import deepFreeze from 'deep-freeze';
 
 import { SETTINGS_CHANGE, EVENT_UPDATE_GLOBAL_NOTIFICATIONS_SETTINGS } from '../../actionConstants';

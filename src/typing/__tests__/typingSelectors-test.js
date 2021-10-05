@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 
 import { getCurrentTypingUsers } from '../typingSelectors';
 import { HOME_NARROW, pm1to1NarrowFromUser, pmNarrowFromUsersUnsafe } from '../../utils/narrow';

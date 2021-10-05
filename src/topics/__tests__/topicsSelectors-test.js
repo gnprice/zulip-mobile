@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import { getTopicsForNarrow, getTopicsForStream } from '../topicSelectors';
 import { HOME_NARROW, streamNarrow } from '../../utils/narrow';
 import { reducer as unreadReducer } from '../../unread/unreadModel';

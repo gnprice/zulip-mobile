@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import Immutable from 'immutable';
 
 import { ACCOUNT_SWITCH, EVENT_UPDATE_MESSAGE_FLAGS } from '../../actionConstants';

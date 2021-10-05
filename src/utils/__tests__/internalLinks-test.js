@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 
 import { streamNarrow, topicNarrow, pmNarrowFromUsersUnsafe, STARRED_NARROW } from '../narrow';
 import {

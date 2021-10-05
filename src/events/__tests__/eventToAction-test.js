@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import * as logging from '../../utils/logging';
 import * as eg from '../../__tests__/lib/exampleData';
 import eventToAction from '../eventToAction';

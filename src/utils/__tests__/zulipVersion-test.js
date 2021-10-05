@@ -1,4 +1,4 @@
-// @flow strict-local
+// @flow strict
 
 import { randString } from '../../__tests__/lib/exampleData';
 import { ZulipVersion } from '../zulipVersion';
