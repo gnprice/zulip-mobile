@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { ThunkAction } from '../types';
 import { getAuth } from '../selectors';
 import type { SubscriptionProperty } from '../api/subscriptions/setSubscriptionProperty';

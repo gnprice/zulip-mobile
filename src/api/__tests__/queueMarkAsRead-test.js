@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import queueMarkAsRead, { resetAll } from '../queueMarkAsRead';
 import * as messagesFlags from '../messages/messagesFlags';
 import * as eg from '../../__tests__/lib/exampleData';

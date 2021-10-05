@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import { migrateMessages } from '../getMessages';
 import { identityOfAuth } from '../../../account/accountMisc';
 import * as eg from '../../../__tests__/lib/exampleData';

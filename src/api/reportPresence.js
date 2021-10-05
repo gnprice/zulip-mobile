@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { ApiResponseSuccess, Auth } from './transportTypes';
 import type { UserPresence } from './apiTypes';
 import { apiPost } from './apiFetch';

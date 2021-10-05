@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { RawInitialData, InitialData } from './initialDataTypes';
 import type { Auth } from './transportTypes';
 import type { ApiNarrow } from './apiTypes';

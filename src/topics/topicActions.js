@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { Narrow, Topic, Action, ThunkAction, Outbox } from '../types';
 import * as api from '../api';
 import { INIT_TOPICS } from '../actionConstants';

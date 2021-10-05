@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { Auth } from '../transportTypes';
 import messagesFlags from './messagesFlags';
 import type { ApiResponseMessagesFlags } from './messagesFlags';

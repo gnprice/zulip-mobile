@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import * as NavigationService from '../nav/NavigationService';
 import type { Action, ThunkAction } from '../types';
 import { ACCOUNT_SWITCH, ACCOUNT_REMOVE, LOGIN_SUCCESS, LOGOUT } from '../actionConstants';

@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { GeneralEvent, ThunkAction } from '../types';
 import * as api from '../api';
 import { logout } from '../account/accountActions';

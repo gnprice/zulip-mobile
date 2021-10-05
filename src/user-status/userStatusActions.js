@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { ThunkAction } from '../types';
 import * as api from '../api';
 import { getAuth } from '../selectors';
