@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { RealmState, Action, RealmEmojiById, VideoChatProvider } from '../types';
 import {
   REALM_INIT,

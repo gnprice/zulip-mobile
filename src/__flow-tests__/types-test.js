@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { Action } from '../types';
 
 // Assert that Action does not allow arbitrary objects.

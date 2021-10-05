@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 // $FlowFixMe[untyped-import]
 import omit from 'lodash.omit';
 import Immutable from 'immutable';

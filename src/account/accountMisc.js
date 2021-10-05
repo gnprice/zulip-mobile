@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { Account, Auth, Identity } from '../types';
 
 const identitySlice = ({ realm, email }): Identity => ({ realm, email });

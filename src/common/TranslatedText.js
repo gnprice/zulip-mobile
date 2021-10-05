@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import React from 'react';
 import type { Node } from 'react';
 import { FormattedMessage } from 'react-intl';

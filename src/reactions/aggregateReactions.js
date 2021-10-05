@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { Reaction, AggregatedReaction, UserId } from '../types';
 
 export default (

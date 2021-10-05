@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { Subscription } from './types';
 
 export const NULL_OBJECT: {||} = Object.freeze({});

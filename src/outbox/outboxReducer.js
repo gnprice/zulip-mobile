@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { OutboxState, Action, Outbox } from '../types';
 import {
   INITIAL_FETCH_COMPLETE,

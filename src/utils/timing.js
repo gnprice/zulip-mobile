@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { TimingItemType } from '../types';
 
 const startMsMap: {| [string]: number |} = {};

@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { Narrow, UserId, UserOrBot, LocalizableText } from '../types';
 import { caseNarrowDefault } from '../utils/narrow';
 

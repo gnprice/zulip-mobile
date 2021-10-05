@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 // import { Vibration } from 'react-native';
 
 import type { ThunkAction } from '../types';

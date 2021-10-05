@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { CaughtUp, CaughtUpState, PerAccountState, Narrow } from '../types';
 import { NULL_OBJECT } from '../nullObjects';
 import { keyFromNarrow } from '../utils/narrow';

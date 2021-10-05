@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { MuteState } from '../types';
 
 export const isTopicMuted = (stream: string, topic: string, mute: MuteState): boolean =>

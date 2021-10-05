@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { UserStatusState, Action } from '../types';
 import {
   LOGOUT,

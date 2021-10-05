@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { GlobalState, Debug, Orientation, Action } from '../types';
 import {
   REHYDRATE,

@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { DraftsState, Action } from '../types';
 import { DRAFT_UPDATE, LOGOUT, ACCOUNT_SWITCH } from '../actionConstants';
 import { NULL_OBJECT } from '../nullObjects';

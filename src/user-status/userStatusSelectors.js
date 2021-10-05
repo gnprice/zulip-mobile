@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { PerAccountState, Selector, UserId, UserStatus } from '../types';
 import { getUserStatus } from '../directSelectors';
 import { getOwnUserId } from '../users/userSelectors';

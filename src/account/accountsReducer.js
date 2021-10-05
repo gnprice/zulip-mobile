@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import {
   EVENT,
   REALM_INIT,

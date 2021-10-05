@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { ImageEmojiType, EmojiType } from '../types';
 import { objectFromEntries } from '../jsBackport';
 import { unicodeCodeByName, override } from './codePointMap';

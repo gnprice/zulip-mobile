@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import invariant from 'invariant';
 
 import type { Action, FlagsState, Message } from '../types';

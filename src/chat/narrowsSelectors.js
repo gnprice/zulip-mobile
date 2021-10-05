@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 // $FlowFixMe[untyped-import]
 import isEqual from 'lodash.isequal';
 import { createSelector } from 'reselect';

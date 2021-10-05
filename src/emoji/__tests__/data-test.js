@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import { codeToEmojiMap, getFilteredEmojis } from '../data';
 
 // Prettier disabled in .prettierignore ; it misparses this file, apparently

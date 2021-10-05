@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { Fetching, PerAccountState, Narrow } from '../types';
 import { getFetching } from '../directSelectors';
 import { keyFromNarrow } from '../utils/narrow';

@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { InitialData, Action } from '../types';
 import { REALM_INIT } from '../actionConstants';
 

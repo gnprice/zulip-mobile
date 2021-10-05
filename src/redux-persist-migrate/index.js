@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { Dispatch, StoreEnhancer } from 'redux';
 
 import { REHYDRATE } from '../actionConstants';

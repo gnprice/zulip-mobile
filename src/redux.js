@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { Store } from 'redux';
 
 import type { GlobalSelector, GlobalState, Action } from './reduxTypes';

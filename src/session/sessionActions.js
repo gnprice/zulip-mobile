@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { Action, Orientation } from '../types';
 import {
   APP_ONLINE,

@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import { EventTypes } from '../api/eventTypes';
 
 import * as logging from '../utils/logging';

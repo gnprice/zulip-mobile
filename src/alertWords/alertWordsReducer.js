@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { AlertWordsState, Action } from '../types';
 import { REALM_INIT, EVENT_ALERT_WORDS, ACCOUNT_SWITCH, LOGOUT } from '../actionConstants';
 import { NULL_ARRAY } from '../nullObjects';

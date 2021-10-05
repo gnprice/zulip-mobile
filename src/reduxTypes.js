@@ -5,7 +5,7 @@
  * those go under `src/api/` (typically in `src/api/modelTypes.js`)
  * and can be imported here as needed.
  *
- * @flow strict-local
+ * @flow strict
  */
 import type Immutable from 'immutable';
 import type { InputSelector } from 'reselect';

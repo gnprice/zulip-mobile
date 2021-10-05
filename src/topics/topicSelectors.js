@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import { createSelector } from 'reselect';
 
 import type { Narrow, Selector, StreamsState, TopicExtended, TopicsState } from '../types';

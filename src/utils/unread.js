@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { FlagsState, Message, Outbox } from '../types';
 
 export const filterUnreadMessageIds = (messageIds: number[], flags: FlagsState): number[] =>

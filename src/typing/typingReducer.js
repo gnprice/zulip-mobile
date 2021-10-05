@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { Action, TypingState } from '../types';
 import {
   EVENT_TYPING_START,

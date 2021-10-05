@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { HuddlesUnreadItem, PmsUnreadItem, UserId } from '../types';
 import { addItemsToArray, removeItemsFromArray, filterArray } from '../utils/immutability';
 

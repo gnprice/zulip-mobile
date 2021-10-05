@@ -1,5 +1,5 @@
 /** @jest-environment jsdom-global */
-// @flow strict-local
+// @flow strict
 
 import rewriteHtml from '../rewriteHtml';
 import type { Auth } from '../../../types';

@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { Action, ThunkAction } from '../types';
 
 import { sleep } from '../utils/async';

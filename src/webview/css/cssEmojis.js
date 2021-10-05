@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import { codeToEmojiMap } from '../../emoji/data';
 
 const codeToCss = (code: string): string =>

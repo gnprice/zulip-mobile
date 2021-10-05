@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 
 import { makeUserId } from '../api/idTypes';
 import type { ApiNarrow, Message, Outbox, UserId, UserOrBot } from '../types';

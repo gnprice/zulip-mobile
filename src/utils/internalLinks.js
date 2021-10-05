@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import { addBreadcrumb } from '@sentry/react-native';
 import { makeUserId } from '../api/idTypes';
 import type { Narrow, Stream, UserId } from '../types';

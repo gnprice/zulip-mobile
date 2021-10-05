@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-use-before-define */
 // $FlowFixMe[untyped-import]
