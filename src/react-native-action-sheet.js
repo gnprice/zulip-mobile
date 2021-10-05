@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { ComponentType, ElementConfig } from 'react';
 // $FlowFixMe[untyped-import]
 import { connectActionSheet as connectActionSheetInner } from '@expo/react-native-action-sheet';

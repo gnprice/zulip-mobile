@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 
 /**
  * An identity, plus secret, authenticating this user in some Zulip org.

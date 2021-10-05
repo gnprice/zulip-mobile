@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 
 /**
  * Collapse an open spoiler block with animation.

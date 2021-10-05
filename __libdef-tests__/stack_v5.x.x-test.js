@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import { type NavigationProp } from '@react-navigation/stack';
 
 /* eslint-disable no-unused-vars */

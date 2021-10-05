@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { Scope, SeverityType } from '@sentry/react-native';
 import {
   captureException,

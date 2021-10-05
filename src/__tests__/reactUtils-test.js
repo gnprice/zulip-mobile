@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import React from 'react';
 import type { ComponentType } from 'react';
 // $FlowFixMe[untyped-import]

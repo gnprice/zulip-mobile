@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import messages from '../i18n/messages';
 
 export type Language = {|

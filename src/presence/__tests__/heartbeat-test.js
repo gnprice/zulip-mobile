@@ -1,4 +1,4 @@
-// @flow strict-local
+// @flow strict
 import Heartbeat from '../heartbeat';
 
 // (hopefully) restrictive type alias for Jest's mock callback functions

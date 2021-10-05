@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 type Config = {|

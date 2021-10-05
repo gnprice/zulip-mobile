@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import type { ComponentType, ElementConfig } from 'react';
 import {
   withSafeAreaInsets as withSafeAreaInsetsInner,

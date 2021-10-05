@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 // $FlowFixMe[untyped-import]
 import escape from 'lodash.escape';
 import template from '../template';

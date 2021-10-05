@@ -9,7 +9,7 @@
  *    or late-stage proposals for future versions
  *  * `generics.js`, for things that operate on types
  *
- * @flow strict-local
+ * @flow strict
  */
 
 /**

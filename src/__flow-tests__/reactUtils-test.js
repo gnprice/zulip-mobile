@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import { usePrevious } from '../reactUtils';
 
 function test_usePrevious() {

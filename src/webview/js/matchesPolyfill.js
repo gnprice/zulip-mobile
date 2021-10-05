@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 // Official MDN polyfill for Element.matches
 // Source: https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
 export default `

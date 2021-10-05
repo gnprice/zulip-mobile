@@ -1,5 +1,5 @@
 /** @jest-environment jest-environment-jsdom-global */
-// @flow strict-local
+// @flow strict
 
 import { assertUsingModernFakeTimers } from './lib/fakeTimers';
 

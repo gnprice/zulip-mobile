@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import {
   base64ToHex,
   hexToBase64,

@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 
 /**
  * The Sentry "client key" aka "DSN".

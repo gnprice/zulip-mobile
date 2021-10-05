@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 
 /**
  * A special value we internally take to mean "first unread message".

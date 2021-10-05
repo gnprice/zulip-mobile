@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 
 export class TimeoutError extends Error {
   name: string = 'TimeoutError';

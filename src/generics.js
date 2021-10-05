@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 /**
  * Tools for manipulating generic types in the Flow type system.
  */

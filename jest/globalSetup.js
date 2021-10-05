@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 
 // This is supposed to be an async function:
 //   https://jestjs.io/docs/26.x/configuration#globalsetup-string.

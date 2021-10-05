@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 
 /**
  * Temporary placeholder for the resolve type of a `fetch`.

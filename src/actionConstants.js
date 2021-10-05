@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 export const REHYDRATE: 'persist/REHYDRATE' = 'persist/REHYDRATE';
 
 export const APP_ONLINE: 'APP_ONLINE' = 'APP_ONLINE';

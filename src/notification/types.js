@@ -1,4 +1,4 @@
-// @flow strict-local
+// @flow strict
 
 /**
  * The data we need in JS/React code for acting on a notification.

@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import invariant from 'invariant';
 import { useRef, useEffect, useState } from 'react';
 

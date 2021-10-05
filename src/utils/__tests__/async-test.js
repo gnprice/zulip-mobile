@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import { sleep, BackoffMachine } from '../async';
 import { assertUsingModernFakeTimers } from '../../__tests__/lib/fakeTimers';
 

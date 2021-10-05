@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import { CONTROL_SIZE } from './constants';
 
 export const statics = {

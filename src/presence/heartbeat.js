@@ -1,4 +1,4 @@
-// @flow strict-local
+// @flow strict
 
 /**
  * Heartbeat: Perform callbacks at regular intervals.

@@ -1,4 +1,4 @@
-/* @flow strict-local */
+/* @flow strict */
 import { promiseTimeout, TimeoutError } from '../async';
 import { fakeSleep } from '../../__tests__/lib/fakeTimers';
 
