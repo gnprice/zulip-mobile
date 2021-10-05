@@ -20,7 +20,6 @@
     "prettier": "tools/fmt",
     "prettier-full": "tools/fmt --all",
     "test:flow-coverage": "flow-coverage-report -i 'src/**/*.js' -x '**/__tests__/**' -t html",
-    "test:flow-todo": "eslint --no-eslintrc -c tools/flow-todo.eslintrc.yaml src/",
     "update-libdefs": "yarn install && rm -rf flow-typed/npm/ && flow-typed update"
   },
   "dependencies": {
