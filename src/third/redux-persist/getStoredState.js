@@ -106,3 +106,25 @@ export default function getStoredState(config, onComplete) {
 function defaultDeserializer(serial) {
   return JSON.parse(serial);
 }
+
+/* eslint-disable */
+
+function g(): Promise<{ ... }> {
+  return new Promise(r => r(undefined)); // expected error!
+      // This turns out to be a bug in RN's libdef `flow/Promise.js`:
+      // has `result?:`, should be `result:`.
+}
+
+/*
+// This demonstrates a weirder Flow issue, but thankfully not unsound.
+
+function g(): Promise<{ ... }> {
+  return new Promise(r => r(undefined)); // expected error!
+}
+
+function f(): ?Promise<void> {
+  if (!!Promise) {
+    return;
+  };
+}
+*/
