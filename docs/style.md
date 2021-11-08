@@ -575,6 +575,30 @@ code where we're using a given aspect of the `display_recipient`
 semantics, which makes refactoring easier.
 
 
+<div id="our-redux" />
+
+### Redux
+
+<div id="plain-action-types" />
+
+**Use general plain-action types like `PerAccountAction`, not
+individual action types**: The individual action types like
+`RegisterCompleteAction` exist to help internally organize our
+definitions of action types, and for use in some test fixtures.  To
+reduce the proliferation of different names, we keep them within
+`actionTypes.js` where possible, and in the rest of the app we use
+more general names that express what information is relevant.
+
+In particular, in a plain-action creator, make the return type
+`PerAccountAction` or one of the other "primary subtypes" defined in
+`actionTypes.js`.
+
+(In some test fixtures, we annotate with specific action types because
+that allows the fixture to be adapted by spreading the object.  In
+non-test code, there's rarely a good reason to start from one action
+object and make a slightly-modified version of it.)
+
+
 <div id="webview" />
 
 ## WebView: HTML, CSS, JS
