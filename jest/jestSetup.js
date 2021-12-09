@@ -67,6 +67,8 @@ jest.mock('react-native', () => {
   return ReactNative;
 });
 
+jest.mock('expo-sqlite', () => require('./mock-expo-sqlite'));
+
 /**
  * Boring mocks
  *
