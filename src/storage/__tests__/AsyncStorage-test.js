@@ -106,7 +106,7 @@ describe('AsyncStorage: migration from legacy AsyncStorage', () => {
     const db = new SQLDatabase('zulip.db');
     await db.transaction(tx => {
       // … and that the migration didn't record success.
-      tx.executeSql('DELETE FROM migrations');
+      tx.executeSql('DELETE FROM migration');
     });
 
     // Expect to get the original legacy data, re-migrated.
