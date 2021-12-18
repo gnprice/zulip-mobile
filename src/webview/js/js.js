@@ -145,6 +145,28 @@ setTimeout(() => {
   eventLogger.reset();
 }, 10000);
 
+const requireAttribute = (e: Element, name: string): string => {
+  const value = e.getAttribute(name);
+  if (value === null || value === undefined) {
+    throw new Error(`Missing expected attribute ${name}`);
+  }
+  return value;
+};
+
+/**
+ * Returns the integer parsed value of a DOM element attribute.
+ *
+ * Throws if parsing fails.
+ */
+const requireNumericAttribute = (e: Element, name: string): number => {
+  const value = requireAttribute(e, name);
+  const parsedValue = parseInt(value, 10);
+  if (Number.isNaN(parsedValue)) {
+    throw new Error(`Could not parse attribute ${name} value '${value}' as integer`);
+  }
+  return parsedValue;
+};
+
 const showHideElement = (elementId: string, show: boolean) => {
   const element = document.getElementById(elementId);
   if (element) {
@@ -750,28 +772,6 @@ const revealMutedMessages = (message_: Element) => {
     message.setAttribute('data-mute-state', 'shown');
     message = nextMessage(message);
   } while (message && message.classList.contains('message-brief'));
-};
-
-const requireAttribute = (e: Element, name: string): string => {
-  const value = e.getAttribute(name);
-  if (value === null || value === undefined) {
-    throw new Error(`Missing expected attribute ${name}`);
-  }
-  return value;
-};
-
-/**
- * Returns the integer parsed value of a DOM element attribute.
- *
- * Throws if parsing fails.
- */
-const requireNumericAttribute = (e: Element, name: string): number => {
-  const value = requireAttribute(e, name);
-  const parsedValue = parseInt(value, 10);
-  if (Number.isNaN(parsedValue)) {
-    throw new Error(`Could not parse attribute ${name} value '${value}' as integer`);
-  }
-  return parsedValue;
 };
 
 documentBody.addEventListener('click', (e: MouseEvent) => {

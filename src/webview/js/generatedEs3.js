@@ -391,6 +391,27 @@ var compiledWebviewJs = (function (exports) {
     eventLogger.reset();
   }, 10000);
 
+  const requireAttribute = (e, name) => {
+    const value = e.getAttribute(name);
+
+    if (value === null || value === undefined) {
+      throw new Error("Missing expected attribute ".concat(name));
+    }
+
+    return value;
+  };
+
+  const requireNumericAttribute = (e, name) => {
+    const value = requireAttribute(e, name);
+    const parsedValue = parseInt(value, 10);
+
+    if (Number.isNaN(parsedValue)) {
+      throw new Error("Could not parse attribute ".concat(name, " value '").concat(value, "' as integer"));
+    }
+
+    return parsedValue;
+  };
+
   const showHideElement = (elementId, show) => {
     const element = document.getElementById(elementId);
 
@@ -811,27 +832,6 @@ var compiledWebviewJs = (function (exports) {
       message.setAttribute('data-mute-state', 'shown');
       message = nextMessage(message);
     } while (message && message.classList.contains('message-brief'));
-  };
-
-  const requireAttribute = (e, name) => {
-    const value = e.getAttribute(name);
-
-    if (value === null || value === undefined) {
-      throw new Error("Missing expected attribute ".concat(name));
-    }
-
-    return value;
-  };
-
-  const requireNumericAttribute = (e, name) => {
-    const value = requireAttribute(e, name);
-    const parsedValue = parseInt(value, 10);
-
-    if (Number.isNaN(parsedValue)) {
-      throw new Error("Could not parse attribute ".concat(name, " value '").concat(value, "' as integer"));
-    }
-
-    return parsedValue;
   };
 
   documentBody.addEventListener('click', e => {
