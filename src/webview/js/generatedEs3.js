@@ -508,13 +508,7 @@ var compiledWebviewJs = (function (exports) {
   }
 
   function idFromMessage(element) {
-    const idStr = element.getAttribute('data-msg-id');
-
-    if (idStr === null || idStr === undefined) {
-      throw new Error('Bad message element');
-    }
-
-    return +idStr;
+    return requireNumericAttribute(element, 'data-msg-id');
   }
 
   function visibleReadMessageIds() {

@@ -374,11 +374,7 @@ function someVisibleReadMessage(top: number, bottom: number): ?Element {
  * The Zulip message ID of the given message element; throw if not a message.
  */
 function idFromMessage(element: Element): number {
-  const idStr = element.getAttribute('data-msg-id');
-  if (idStr === null || idStr === undefined) {
-    throw new Error('Bad message element');
-  }
-  return +idStr;
+  return requireNumericAttribute(element, 'data-msg-id');
 }
 
 /**
