@@ -377,6 +377,15 @@ function idFromMessage(element: Element): number {
   return requireNumericAttribute(element, 'data-msg-id');
 }
 
+/** The Zulip message ID of the enclosing message element; throw if none. */
+const requireEnclosingMessageId = (element: Element): number => {
+  const messageElement = element.closest('.message');
+  if (!messageElement) {
+    throw new Error('Message element not found');
+  }
+  return idFromMessage(messageElement);
+};
+
 /**
  * Returns the IDs of the first and last visible read messages, if any.
  *
@@ -411,12 +420,6 @@ function visibleReadMessageIds(): {| first: number, last: number |} {
 
   return { first, last };
 }
-
-/** DEPRECATED */
-const getMessageIdFromElement = (element: Element, defaultValue: number = -1): number => {
-  const msgElement = element.closest('.msglist-element');
-  return msgElement ? +msgElement.getAttribute('data-msg-id') : defaultValue;
-};
 
 /**
  * Set the 'data-read' attribute to a given range of message elements.
@@ -828,7 +831,7 @@ documentBody.addEventListener('click', (e: MouseEvent) => {
     sendMessage({
       type: 'image',
       src: requireAttribute(inlineImageLink, 'href'), // TODO: should be `src` / `data-src-fullsize`.
-      messageId: getMessageIdFromElement(inlineImageLink),
+      messageId: requireEnclosingMessageId(inlineImageLink),
     });
     return;
   }
@@ -839,17 +842,13 @@ documentBody.addEventListener('click', (e: MouseEvent) => {
       name: requireAttribute(target, 'data-name'),
       code: requireAttribute(target, 'data-code'),
       reactionType: requireAttribute(target, 'data-type'),
-      messageId: getMessageIdFromElement(target),
+      messageId: requireEnclosingMessageId(target),
       voted: target.classList.contains('self-voted'),
     });
     return;
   }
 
   if (target.matches('.poll-vote')) {
-    const messageElement = target.closest('.message');
-    if (!messageElement) {
-      throw new Error('Message element not found');
-    }
     // This duplicates some logic from PollData.handle.vote.outbound in
     // @zulip/shared/js/poll_data.js, but it's much simpler to just duplicate
     // it than it is to thread a callback all the way over here.
@@ -857,7 +856,7 @@ documentBody.addEventListener('click', (e: MouseEvent) => {
     const vote = current_vote ? -1 : 1;
     sendMessage({
       type: 'vote',
-      messageId: requireNumericAttribute(messageElement, 'data-msg-id'),
+      messageId: requireEnclosingMessageId(target),
       key: requireAttribute(target, 'data-key'),
       vote,
     });
@@ -879,7 +878,7 @@ documentBody.addEventListener('click', (e: MouseEvent) => {
     sendMessage({
       type: 'url',
       href: requireAttribute(closestA, 'href'),
-      messageId: getMessageIdFromElement(closestA),
+      messageId: requireEnclosingMessageId(closestA),
     });
     return;
   }
@@ -911,7 +910,7 @@ const handleLongPress = (target: Element) => {
   if (reactionElement) {
     sendMessage({
       type: 'reactionDetails',
-      messageId: getMessageIdFromElement(target),
+      messageId: requireEnclosingMessageId(target),
       reactionName: requireAttribute(reactionElement, 'data-name'),
     });
     return;

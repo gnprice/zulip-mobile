@@ -511,6 +511,16 @@ var compiledWebviewJs = (function (exports) {
     return requireNumericAttribute(element, 'data-msg-id');
   }
 
+  const requireEnclosingMessageId = element => {
+    const messageElement = element.closest('.message');
+
+    if (!messageElement) {
+      throw new Error('Message element not found');
+    }
+
+    return idFromMessage(messageElement);
+  };
+
   function visibleReadMessageIds() {
     const top = 0;
     const bottom = viewportHeight;
@@ -539,11 +549,6 @@ var compiledWebviewJs = (function (exports) {
       last
     };
   }
-
-  const getMessageIdFromElement = (element, defaultValue = -1) => {
-    const msgElement = element.closest('.msglist-element');
-    return msgElement ? +msgElement.getAttribute('data-msg-id') : defaultValue;
-  };
 
   const setMessagesReadAttributes = rangeHull => {
     let element = document.querySelector("[data-msg-id='".concat(rangeHull.first, "']"));
@@ -880,7 +885,7 @@ var compiledWebviewJs = (function (exports) {
       sendMessage({
         type: 'image',
         src: requireAttribute(inlineImageLink, 'href'),
-        messageId: getMessageIdFromElement(inlineImageLink)
+        messageId: requireEnclosingMessageId(inlineImageLink)
       });
       return;
     }
@@ -891,24 +896,18 @@ var compiledWebviewJs = (function (exports) {
         name: requireAttribute(target, 'data-name'),
         code: requireAttribute(target, 'data-code'),
         reactionType: requireAttribute(target, 'data-type'),
-        messageId: getMessageIdFromElement(target),
+        messageId: requireEnclosingMessageId(target),
         voted: target.classList.contains('self-voted')
       });
       return;
     }
 
     if (target.matches('.poll-vote')) {
-      const messageElement = target.closest('.message');
-
-      if (!messageElement) {
-        throw new Error('Message element not found');
-      }
-
       const current_vote = requireAttribute(target, 'data-voted') === 'true';
       const vote = current_vote ? -1 : 1;
       sendMessage({
         type: 'vote',
-        messageId: requireNumericAttribute(messageElement, 'data-msg-id'),
+        messageId: requireEnclosingMessageId(target),
         key: requireAttribute(target, 'data-key'),
         vote
       });
@@ -931,7 +930,7 @@ var compiledWebviewJs = (function (exports) {
       sendMessage({
         type: 'url',
         href: requireAttribute(closestA, 'href'),
-        messageId: getMessageIdFromElement(closestA)
+        messageId: requireEnclosingMessageId(closestA)
       });
       return;
     }
@@ -962,7 +961,7 @@ var compiledWebviewJs = (function (exports) {
     if (reactionElement) {
       sendMessage({
         type: 'reactionDetails',
-        messageId: getMessageIdFromElement(target),
+        messageId: requireEnclosingMessageId(target),
         reactionName: requireAttribute(reactionElement, 'data-name')
       });
       return;
