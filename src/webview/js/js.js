@@ -941,7 +941,7 @@ const handleLongPress = (target: Element) => {
   if (messageElement) {
     sendMessage({
       type: 'longPressMessage',
-      messageId: requireNumericAttribute(messageElement, 'data-msg-id'),
+      messageId: idFromMessage(messageElement),
     });
     return;
   }
