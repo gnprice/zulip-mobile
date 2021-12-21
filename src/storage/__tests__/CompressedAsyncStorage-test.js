@@ -1,7 +1,7 @@
 /* @flow strict-local */
 import { Platform, NativeModules } from 'react-native';
 
-import { AsyncStorage } from '../AsyncStorage';
+import { AsyncStorage, AsyncStorageImpl } from '../AsyncStorage';
 import CompressedAsyncStorage from '../CompressedAsyncStorage';
 import * as logging from '../../utils/logging';
 import { randString } from '../../utils/misc';
@@ -33,7 +33,7 @@ describe('setItem', () => {
   const value = '123!';
 
   // For checking that AsyncStorage.setItem is called in ways we expect.
-  const asyncStorageSetItemSpy = jest.spyOn(AsyncStorage, 'setItem');
+  const asyncStorageSetItemSpy = jest.spyOn(AsyncStorageImpl.prototype, 'setItem');
   beforeEach(() => asyncStorageSetItemSpy.mockClear());
 
   const run = async () => CompressedAsyncStorage.setItem(key, value);
@@ -59,16 +59,16 @@ describe('setItem', () => {
        it'd probably make those tests not work at all, so we'd know; see
          https://chat.zulip.org/#narrow/stream/243-mobile-team/topic/Flow.20158.20errors/near/1375705
     */
-    const savedMethod = AsyncStorage.setItem;
+    const savedMethod = AsyncStorageImpl.prototype.setItem;
     beforeEach(() => {
       // $FlowFixMe[cannot-write] Make Flow understand about mocking.
-      AsyncStorage.setItem = jest.fn(async (k: string, v: string): Promise<null> => {
+      AsyncStorageImpl.prototype.setItem = jest.fn(async (k: string, v: string): Promise<null> => {
         throw new Error();
       });
     });
     afterAll(() => {
       // $FlowFixMe[cannot-write] Make Flow understand about mocking.
-      AsyncStorage.setItem = savedMethod;
+      AsyncStorageImpl.prototype.setItem = savedMethod;
     });
 
     test('rejects correctly', async () => {
@@ -84,7 +84,7 @@ describe('multiSet', () => {
   ];
 
   // For checking that AsyncStorage.multiSet is called in ways we expect.
-  const asyncStorageMultiSetSpy = jest.spyOn(AsyncStorage, 'multiSet');
+  const asyncStorageMultiSetSpy = jest.spyOn(AsyncStorageImpl.prototype, 'multiSet');
   beforeEach(() => asyncStorageMultiSetSpy.mockClear());
 
   const run = async () => CompressedAsyncStorage.multiSet(keyValuePairs);
@@ -112,16 +112,16 @@ describe('multiSet', () => {
        it'd probably make those tests not work at all, so we'd know; see
          https://chat.zulip.org/#narrow/stream/243-mobile-team/topic/Flow.20158.20errors/near/1375705
     */
-    const savedMethod = AsyncStorage.multiSet;
+    const savedMethod = AsyncStorageImpl.prototype.multiSet;
     beforeEach(() => {
       // $FlowFixMe[cannot-write] Make Flow understand about mocking.
-      AsyncStorage.multiSet = jest.fn(async (p: string[][]): Promise<null> => {
+      AsyncStorageImpl.prototype.multiSet = jest.fn(async (p: string[][]): Promise<null> => {
         throw new Error();
       });
     });
     afterAll(() => {
       // $FlowFixMe[cannot-write] Make Flow understand about mocking.
-      AsyncStorage.multiSet = savedMethod;
+      AsyncStorageImpl.prototype.multiSet = savedMethod;
     });
 
     test('rejects correctly', async () => {
@@ -135,7 +135,7 @@ describe('getItem', () => {
   const value = '123!';
 
   // For checking that AsyncStorage.getItem is called in ways we expect.
-  const asyncStorageGetItemSpy = jest.spyOn(AsyncStorage, 'getItem');
+  const asyncStorageGetItemSpy = jest.spyOn(AsyncStorageImpl.prototype, 'getItem');
   beforeEach(() => asyncStorageGetItemSpy.mockClear());
 
   beforeAll(async () => {
@@ -171,16 +171,16 @@ describe('getItem', () => {
        it'd probably make those tests not work at all, so we'd know; see
          https://chat.zulip.org/#narrow/stream/243-mobile-team/topic/Flow.20158.20errors/near/1375705
     */
-    const savedMethod = AsyncStorage.getItem;
+    const savedMethod = AsyncStorageImpl.prototype.getItem;
     beforeEach(() => {
       // $FlowFixMe[cannot-write] Make Flow understand about mocking.
-      AsyncStorage.getItem = jest.fn(async (k: string): Promise<string | null> => {
+      AsyncStorageImpl.prototype.getItem = jest.fn(async (k: string): Promise<string | null> => {
         throw new Error();
       });
     });
     afterAll(() => {
       // $FlowFixMe[cannot-write] Make Flow understand about mocking.
-      AsyncStorage.getItem = savedMethod;
+      AsyncStorageImpl.prototype.getItem = savedMethod;
     });
 
     test('rejects correctly', async () => {
