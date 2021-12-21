@@ -1,7 +1,7 @@
 /* @flow strict-local */
 import { Platform, NativeModules } from 'react-native';
 
-import { AsyncStorage } from '../AsyncStorage';
+import { AsyncStorage, BaseAsyncStorage } from '../AsyncStorage';
 import CompressedAsyncStorage from '../CompressedAsyncStorage';
 import * as logging from '../../utils/logging';
 import * as eg from '../../__tests__/lib/exampleData';
@@ -11,7 +11,7 @@ describe('setItem', () => {
   const value = '123!';
 
   // For checking that AsyncStorage.setItem is called in ways we expect.
-  const asyncStorageSetItemSpy = jest.spyOn(AsyncStorage, 'setItem');
+  const asyncStorageSetItemSpy = jest.spyOn(BaseAsyncStorage.prototype, 'setItem');
   beforeEach(() => asyncStorageSetItemSpy.mockClear());
 
   const run = async () => CompressedAsyncStorage.setItem(key, value);
@@ -33,16 +33,16 @@ describe('setItem', () => {
 
   describe('failure', () => {
     // Mock `.setItem` to simulate failure, and reset when we're done.
-    const globalMock = AsyncStorage.setItem;
+    const globalMock = BaseAsyncStorage.prototype.setItem;
     beforeEach(() => {
       // $FlowFixMe[cannot-write] Make Flow understand about mocking.
-      AsyncStorage.setItem = jest.fn(async (k: string, v: string): Promise<null> => {
+      BaseAsyncStorage.prototype.setItem = jest.fn(async (k: string, v: string): Promise<null> => {
         throw new Error();
       });
     });
     afterAll(() => {
       // $FlowFixMe[cannot-write] Make Flow understand about mocking.
-      AsyncStorage.setItem = globalMock;
+      BaseAsyncStorage.prototype.setItem = globalMock;
     });
 
     test('rejects correctly', async () => {
@@ -58,7 +58,7 @@ describe('multiSet', () => {
   ];
 
   // For checking that AsyncStorage.multiSet is called in ways we expect.
-  const asyncStorageMultiSetSpy = jest.spyOn(AsyncStorage, 'multiSet');
+  const asyncStorageMultiSetSpy = jest.spyOn(BaseAsyncStorage.prototype, 'multiSet');
   beforeEach(() => asyncStorageMultiSetSpy.mockClear());
 
   const run = async () => CompressedAsyncStorage.multiSet(keyValuePairs);
@@ -82,16 +82,16 @@ describe('multiSet', () => {
 
   describe('failure', () => {
     // Mock `.multiSet` to simulate failure, and reset when we're done.
-    const globalMock = AsyncStorage.multiSet;
+    const globalMock = BaseAsyncStorage.prototype.multiSet;
     beforeEach(() => {
       // $FlowFixMe[cannot-write] Make Flow understand about mocking.
-      AsyncStorage.multiSet = jest.fn(async (p: string[][]): Promise<null> => {
+      BaseAsyncStorage.prototype.multiSet = jest.fn(async (p: string[][]): Promise<null> => {
         throw new Error();
       });
     });
     afterAll(() => {
       // $FlowFixMe[cannot-write] Make Flow understand about mocking.
-      AsyncStorage.multiSet = globalMock;
+      BaseAsyncStorage.prototype.multiSet = globalMock;
     });
 
     test('rejects correctly', async () => {
@@ -105,7 +105,7 @@ describe('getItem', () => {
   const value = '123!';
 
   // For checking that AsyncStorage.getItem is called in ways we expect.
-  const asyncStorageGetItemSpy = jest.spyOn(AsyncStorage, 'getItem');
+  const asyncStorageGetItemSpy = jest.spyOn(BaseAsyncStorage.prototype, 'getItem');
   beforeEach(() => asyncStorageGetItemSpy.mockClear());
 
   beforeAll(async () => {
@@ -137,16 +137,16 @@ describe('getItem', () => {
 
   describe('failure', () => {
     // Mock `.getItem` to simulate failure, and reset when we're done.
-    const globalMock = AsyncStorage.getItem;
+    const globalMock = BaseAsyncStorage.prototype.getItem;
     beforeEach(() => {
       // $FlowFixMe[cannot-write] Make Flow understand about mocking.
-      AsyncStorage.getItem = jest.fn(async (k: string): Promise<string | null> => {
+      BaseAsyncStorage.prototype.getItem = jest.fn(async (k: string): Promise<string | null> => {
         throw new Error();
       });
     });
     afterAll(() => {
       // $FlowFixMe[cannot-write] Make Flow understand about mocking.
-      AsyncStorage.getItem = globalMock;
+      BaseAsyncStorage.prototype.getItem = globalMock;
     });
 
     test('rejects correctly', async () => {
