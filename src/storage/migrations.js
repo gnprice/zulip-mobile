@@ -1,4 +1,6 @@
 // @flow strict-local
+import invariant from 'invariant';
+
 import type { ReadWrite, SubsetProperties } from '../generics';
 import { ZulipVersion } from '../utils/zulipVersion';
 import type { GlobalState, MigrationsState } from '../types';
@@ -84,7 +86,7 @@ function dropCache(state: LessPartialState): LessPartialState {
 }
 
 // This is the inward-facing type; see later export for jsdoc.
-const migrationsInner: {| [string]: (LessPartialState) => LessPartialState |} = {
+const legacyMigrationsInner: {| [string]: (LessPartialState) => LessPartialState |} = {
   // The type is a lie, in several ways:
   //  * The actual object contains only the properties we persist:
   //    those in `storeKeys` and `cacheKeys`, but not `discardKeys`.
@@ -442,24 +444,19 @@ const migrationsInner: {| [string]: (LessPartialState) => LessPartialState |} = 
   // Add allowEditHistory to state.realm.
   '50': dropCache,
 
-  // TIP: When adding a migration, consider just using `dropCache`.
-  //   (See its jsdoc for guidance on when that's the right answer.)
+  // END.  Don't add more of these.
 };
 
 /**
  * Migrations for data persisted by previous versions of the app.
  *
- * These are run by `redux-persist-migrate` when the previously persisted
- * state is loaded ("rehydrated") by `redux-persist`; they transform that
- * state object before it's applied to our live state.  The state includes
- * a version number to track which migrations are already reflected in it,
- * so that each only has to be run once.
+ * These are run as part of `migrationLegacyRollup` below.
  */
 /* $FlowFixMe[incompatible-type] This discrepancy between PartialState
      (which the exported type claims to accept) and LessPartialState (the
-     type actually accepted by the implementation, migrationsInner) is where
-     we pretend that the storeKeys are all present. */
-export const migrations: {| [string]: (PartialState) => PartialState |} = migrationsInner;
+     type actually accepted by the implementation, legacyMigrationsInner)
+     is where we pretend that the storeKeys are all present. */
+const legacyMigrations: {| [string]: (PartialState) => PartialState |} = legacyMigrationsInner;
 
 /* eslint-disable no-underscore-dangle */
 
@@ -475,6 +472,8 @@ export const migrationLegacyRollup: CompressedMigration = new CompressedMigratio
     const storeKeys = ['migrations', 'accounts', 'drafts', 'outbox', 'settings'];
     // The `KEY_PREFIX` in src/third/redux-persist/constants.js .
     const reduxPersistKeyPrefix = 'reduxPersist:';
+    // The last legacy-style migration above.
+    const finalLegacyMigration = 50;
 
     // These are references to outside code, where we're counting on not
     // changing that code in incompatible ways.  (They have comments saying
@@ -504,10 +503,11 @@ export const migrationLegacyRollup: CompressedMigration = new CompressedMigratio
     //
     // Apply migrations to the stored state.  Like redux-persist-migrate.
 
-    const versionKeys = Object.keys(migrations)
+    const versionKeys = Object.keys(legacyMigrations)
       .map(k => parseInt(k, 10))
       .sort((a, b) => a - b);
     const currentVersion = versionKeys[versionKeys.length - 1];
+    invariant(currentVersion === finalLegacyMigration, 'There should be no new legacy migrations');
 
     // flowlint-next-line unnecessary-optional-chain:off
     const storedVersion = storedState.migrations?.version;
@@ -533,7 +533,7 @@ export const migrationLegacyRollup: CompressedMigration = new CompressedMigratio
       if (v <= storedVersion) {
         continue;
       }
-      state = migrations[v.toString()](state);
+      state = legacyMigrations[v.toString()](state);
     }
     state = { ...state, migrations: { version: currentVersion } };
 
