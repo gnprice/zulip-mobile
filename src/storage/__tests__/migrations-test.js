@@ -3,6 +3,7 @@ import invariant from 'invariant';
 
 import {
   migrationLegacyRollup,
+  WIP_migrationAccountId as migrationAccountId,
   WIP_migrationSplitSettings as migrationSplitSettings,
 } from '../migrations';
 import { objectEntries } from '../../flowPonyfill';
@@ -280,6 +281,15 @@ describe('migrations where one top-level subtree is still exactly one key', () =
       ...rest,
       globalSettings: settings,
       perAccountSettings: settings,
+    });
+  });
+
+  test('migrationAccountId', async () => {
+    await prep(base);
+    expect(await fetchAfter(migrationAccountId)).toEqual({
+      ...base,
+      // TODO test with multiple accounts
+      accounts: [{ ...base.accounts[0], accountId: 1 }],
     });
   });
 });

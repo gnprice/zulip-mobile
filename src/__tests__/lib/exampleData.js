@@ -213,6 +213,7 @@ export const realm: URL = new URL('https://zulip.example.org');
 export const recentZulipVersion: ZulipVersion = new ZulipVersion('6.0-dev-511-g7a3abcc7ef');
 export const recentZulipFeatureLevel = 132;
 
+const randAccountId: () => number = makeUniqueRandInt('account IDs', 100);
 export const makeAccount = (
   args: {|
     user?: User,
@@ -238,6 +239,7 @@ export const makeAccount = (
     lastDismissedServerPushSetupNotice = null,
   } = args;
   return deepFreeze({
+    accountId: randAccountId(),
     realm: realmInner,
     userId,
     email,

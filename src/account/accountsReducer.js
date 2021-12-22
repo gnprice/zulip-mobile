@@ -51,6 +51,7 @@ const loginSuccess = (state, action) => {
   if (accountIndex === -1) {
     return [
       {
+        accountId: 23, // TODO need to actually assign these distinctly
         realm,
         email,
         apiKey,
