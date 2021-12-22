@@ -1,22 +1,13 @@
 // @flow strict-local
 import invariant from 'invariant';
 
-import { historicalStoreKeys, migrationLegacyRollup } from '../migrations';
-import { storeKeys } from '../../boot/store';
+import { migrationLegacyRollup } from '../migrations';
 import { objectEntries } from '../../flowPonyfill';
 import { Migration } from '../AsyncStorage';
 import { CompressedAsyncStorageImpl } from '../CompressedAsyncStorage';
 import { parse, stringify } from '../replaceRevive';
 import { objectFromEntries } from '../../jsBackport';
 import { ZulipVersion } from '../../utils/zulipVersion';
-
-describe('historicalStoreKeys', () => {
-  test('equals current storeKeys', () => {
-    // If this test starts failing, we'll want to clone historicalStoreKeys
-    // into one with the old value and one with the new.  See comment there.
-    expect(historicalStoreKeys).toEqual(storeKeys);
-  });
-});
 
 // These are copied from the implementation.
 const reduxPersistKeyPrefix = 'reduxPersist:';
