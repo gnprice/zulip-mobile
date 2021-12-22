@@ -1,7 +1,10 @@
 // @flow strict-local
 import invariant from 'invariant';
 
-import { migrationLegacyRollup } from '../migrations';
+import {
+  migrationLegacyRollup,
+  WIP_migrationSplitSettings as migrationSplitSettings,
+} from '../migrations';
 import { objectEntries } from '../../flowPonyfill';
 import { Migration } from '../AsyncStorage';
 import { CompressedAsyncStorageImpl, type CompressedMigration } from '../CompressedAsyncStorage';
@@ -268,13 +271,15 @@ describe('migrations where one top-level subtree is still exactly one key', () =
     }
   });
 
-  //   const base = endBase;
+  const base = endBase;
 
-  //   describe('migrationAccountId', () => {
-  //     test('smoke', async () => {
-  //       // TODO fix prep/fetch
-  //       await prep(base);
-  //       expect(await fetch()).toEqual({ ...base, accounts: [{ ...base.accounts[0], accountId: 1 }] });
-  //     });
-  //   });
+  test('migrationSplitSettings', async () => {
+    await prep(base);
+    const { settings, ...rest } = base;
+    expect(await fetchAfter(migrationSplitSettings)).toEqual({
+      ...rest,
+      globalSettings: settings,
+      perAccountSettings: settings,
+    });
+  });
 });
