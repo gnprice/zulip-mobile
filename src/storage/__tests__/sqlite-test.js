@@ -5,6 +5,7 @@ import sqlite3 from 'sqlite3';
 import { openDatabase, deleteDatabase } from 'expo-sqlite';
 
 import { objectFromEntries } from '../../jsBackport';
+import { SQLDatabase } from '../sqlite';
 
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-return-assign */
@@ -170,5 +171,45 @@ describe('expo-sqlite', () => {
 
     // Instead, we get:
     expect(data).toEqual({ double: 8 }); // bad: missing the second INSERT
+  });
+});
+
+describe('our promisified sqlite', () => {
+  const dbName = 'test.db';
+
+  beforeAll(async () => {
+    await deleteDatabase(dbName);
+  });
+
+  afterEach(async () => {
+    await deleteDatabase(dbName);
+  });
+
+  test('smoke', async () => {
+    const db = new SQLDatabase(dbName);
+    const rows = await db.query<{ n: number }>('SELECT 42 AS n', []);
+    expect(rows).toEqual([{ n: 42 }]);
+  });
+
+  test('transaction with no internal await', async () => {
+    const db = new SQLDatabase(dbName);
+    await db.transaction(tx => {
+      tx.executeSql('CREATE TABLE foo (x INT)');
+      tx.executeSql('INSERT INTO foo (x) VALUES (?)', [1]);
+      tx.executeSql('INSERT INTO foo (x) VALUES (?)', [2]);
+    });
+    const rows = await db.query<{ x: number }>('SELECT x FROM foo', []);
+    expect(rows).toEqual([{ x: 1 }, { x: 2 }]);
+  });
+
+  test('transaction with internal await', async () => {
+    const db = new SQLDatabase(dbName);
+    await db.transaction(async tx => {
+      tx.executeSql('CREATE TABLE foo (x INT)');
+      await tx.executeSql('INSERT INTO foo (x) VALUES (?)', [1]);
+      tx.executeSql('INSERT INTO foo (x) VALUES (?)', [2]);
+    });
+    const rows = await db.query<{ x: number }>('SELECT x FROM foo', []);
+    expect(rows).toEqual([{ x: 1 }, { x: 2 }]); // FAILS -- no 2
   });
 });
