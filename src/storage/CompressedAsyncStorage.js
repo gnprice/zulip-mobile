@@ -153,4 +153,6 @@ export class CompressedAsyncStorageImpl {
   getAllKeys: () => Promise<string[]> = () => this.storage.getAllKeys();
 
   clear: () => Promise<void> = () => this.storage.clear();
+
+  devWipe: () => Promise<void> = () => this.storage.devWipe();
 }

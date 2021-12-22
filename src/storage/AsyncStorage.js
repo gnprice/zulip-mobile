@@ -216,6 +216,29 @@ export class AsyncStorageImpl {
   async devForgetState(): Promise<void> {
     this.dbSingleton = undefined;
   }
+
+  /**
+   * Like `clear` but also forget any migrations.
+   *
+   * This should only be used in tests.
+   */
+  async devWipe(): Promise<void> {
+    this.devForgetState();
+    // We bypass this._db(), in order to avoid potentially re-creating
+    // these tables that we're about to drop.
+    const db = new SQLDatabase('zulip.db');
+    return new Promise((resolve, reject) =>
+      db.db.exec([{ sql: 'DROP TABLE IF EXISTS keyvalue', args: [] }], false, err =>
+        // prettier-ignore
+        err
+          ? reject(err)
+          // eslint-disable-next-line no-shadow
+          : db.db.exec([{ sql: 'DROP TABLE IF EXISTS migration', args: [] }], false, err =>
+              err ? reject(err) : resolve(),
+            ),
+      ),
+    );
+  }
 }
 
 // The migration strategy.  How do we move the user's data from the old
