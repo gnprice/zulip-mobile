@@ -2,9 +2,11 @@
 import { Platform, NativeModules } from 'react-native';
 
 import { AsyncStorage, AsyncStorageImpl } from '../AsyncStorage';
-import CompressedAsyncStorage from '../CompressedAsyncStorage';
+import { CompressedAsyncStorageImpl } from '../CompressedAsyncStorage';
 import * as logging from '../../utils/logging';
 import { randString } from '../../utils/misc';
+
+const CompressedAsyncStorage = new CompressedAsyncStorageImpl(0, []);
 
 test('smoke-test all methods, end to end', async () => {
   await CompressedAsyncStorage.clear();
