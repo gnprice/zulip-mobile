@@ -26,31 +26,15 @@ export class SQLDatabase {
   // the transaction doesn't roll back, but instead hangs open, and future
   // attempted transactions fail.)
   // TODO can we extend keepQueueLiveWhile to fix that?
-  transaction(cb: SQLTransaction => void | Promise<void>): Promise<void> {
+  transaction(cb: SQLTransaction => void): Promise<void> {
     return new Promise((resolve, reject) =>
-      this.db.transaction(
-        tx =>
-          void keepQueueLiveWhile(tx, () => cb(new SQLTransactionImpl(this, tx))).catch(err =>
-            // Well, at least we can ensure the outer Promise rejects.
-            reject(err),
-          ),
-        reject,
-        resolve,
-      ),
+      this.db.transaction(tx => cb(new SQLTransactionImpl(this, tx)), reject, resolve),
     );
   }
 
-  readTransaction(cb: SQLTransaction => void | Promise<void>): Promise<void> {
+  readTransaction(cb: SQLTransaction => void): Promise<void> {
     return new Promise((resolve, reject) =>
-      this.db.readTransaction(
-        tx =>
-          void keepQueueLiveWhile(tx, () => cb(new SQLTransactionImpl(this, tx))).catch(err =>
-            // Well, at least we can ensure the outer Promise rejects.
-            reject(err),
-          ),
-        reject,
-        resolve,
-      ),
+      this.db.readTransaction(tx => cb(new SQLTransactionImpl(this, tx)), reject, resolve),
     );
   }
 
@@ -73,23 +57,6 @@ export class SQLDatabase {
     });
     invariant(p, 'transaction finished; statement promise should be initialized');
     return p;
-  }
-}
-
-// An absurd little workaround for expo-sqlite, or really
-// the @expo/websql library under it, being too eager to check a
-// transaction's queue and declare it complete.
-async function keepQueueLiveWhile(
-  tx: WebSQLTransaction,
-  f: () => void | Promise<void>,
-): Promise<void> {
-  let done = false;
-  const hold = () => tx.executeSql('SELECT 1', [], () => (done ? undefined : hold()));
-  hold();
-  try {
-    await f();
-  } finally {
-    done = true;
   }
 }
 
