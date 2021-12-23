@@ -29,11 +29,7 @@ export class SQLDatabase {
   transaction(cb: SQLTransaction => void | Promise<void>): Promise<void> {
     return new Promise((resolve, reject) =>
       this.db.transaction(
-        tx =>
-          void keepQueueLiveWhile(tx, () => cb(new SQLTransactionImpl(this, tx))).catch(err =>
-            // Well, at least we can ensure the outer Promise rejects.
-            reject(err),
-          ),
+        tx => void keepQueueLiveWhile(tx, () => cb(new SQLTransactionImpl(this, tx))),
         reject,
         resolve,
       ),
@@ -43,11 +39,7 @@ export class SQLDatabase {
   readTransaction(cb: SQLTransaction => void | Promise<void>): Promise<void> {
     return new Promise((resolve, reject) =>
       this.db.readTransaction(
-        tx =>
-          void keepQueueLiveWhile(tx, () => cb(new SQLTransactionImpl(this, tx))).catch(err =>
-            // Well, at least we can ensure the outer Promise rejects.
-            reject(err),
-          ),
+        tx => void keepQueueLiveWhile(tx, () => cb(new SQLTransactionImpl(this, tx))),
         reject,
         resolve,
       ),
@@ -84,13 +76,23 @@ async function keepQueueLiveWhile(
   f: () => void | Promise<void>,
 ): Promise<void> {
   let done = false;
-  const hold = () => tx.executeSql('SELECT 1', [], () => (done ? undefined : hold()));
+  let err = undefined;
+  const hold = () =>
+    tx.executeSql('SELECT 1', [], () => {
+      if (err) {
+        tx.executeSql('SELECT failed');
+      } else if (!done) {
+        hold();
+      }
+    });
   hold();
   try {
     await f();
-  } finally {
-    done = true;
+  } catch (e) {
+    err = e;
+    throw e;
   }
+  done = true;
 }
 
 class SQLTransactionImpl {
