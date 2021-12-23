@@ -2,7 +2,7 @@
 
 import sqlite3 from 'sqlite3';
 // $FlowFixMe[missing-export] -- present in test version of module
-import { openDatabase, deleteDatabase } from 'expo-sqlite';
+import { openDatabase, deleteDatabase, type SQLResultSet } from 'expo-sqlite';
 
 import { objectFromEntries } from '../../jsBackport';
 import { SQLDatabase } from '../sqlite';
@@ -210,6 +210,30 @@ describe('our promisified sqlite', () => {
       tx.executeSql('INSERT INTO foo (x) VALUES (?)', [2]);
     });
     const rows = await db.query<{ x: number }>('SELECT x FROM foo', []);
-    expect(rows).toEqual([{ x: 1 }, { x: 2 }]); // FAILS -- no 2
+    expect(rows).toEqual([{ x: 1 }, { x: 2 }]);
+  });
+
+  test('read-transaction with no internal await', async () => {
+    const db = new SQLDatabase(dbName);
+    let a: SQLResultSet | void = undefined;
+    let b: SQLResultSet | void = undefined;
+    await db.readTransaction(async tx => {
+      tx.executeSql('SELECT 1 AS n').then(r => (a = r));
+      tx.executeSql('SELECT 2 AS n').then(r => (b = r));
+    });
+    expect(a?.rows._array).toEqual([{ n: 1 }]);
+    expect(b?.rows._array).toEqual([{ n: 2 }]);
+  });
+
+  test('read-transaction with internal await', async () => {
+    const db = new SQLDatabase(dbName);
+    let a: SQLResultSet | void = undefined;
+    let b: SQLResultSet | void = undefined;
+    await db.readTransaction(async tx => {
+      a = await tx.executeSql('SELECT 1 AS n');
+      b = await tx.executeSql('SELECT 2 AS n');
+    });
+    expect(a?.rows._array).toEqual([{ n: 1 }]);
+    expect(b?.rows._array).toEqual([{ n: 2 }]);
   });
 });
