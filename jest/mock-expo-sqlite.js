@@ -55,8 +55,8 @@ class SQLiteDatabase {
   }
 
   async _exec(queries, callback) {
+    const results = [];
     try {
-      const results = [];
       for (const { sql, args } of queries) {
         /* eslint-disable no-shadow */
         const rows = await new Promise((resolve, reject) =>
@@ -80,11 +80,12 @@ class SQLiteDatabase {
         //   the one in the Android implementation.
         results.push({ rowsAffected: 0, rows });
       }
-
-      callback(null, results);
     } catch (e) {
       callback(e);
+      return;
     }
+
+    callback(null, results);
   }
 
   close() {
