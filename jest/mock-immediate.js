@@ -30,13 +30,30 @@ export function disallowUnhandled() {
   _allowUnhandled = false;
 }
 
+let unsettled = [];
 let unhandledErrors: mixed[] = [];
 
-// TODO also have a way to await for immediates to settle?
 export function takeUnhandled(): mixed[] {
   const e = unhandledErrors;
   unhandledErrors = [];
   return e;
+}
+
+export async function pumpOnce(): Promise<void> {
+  const ps = unsettled;
+  unsettled = [];
+  await Promise.all(ps);
+}
+
+// TODO also have afterEach assert settled
+export async function settle(): Promise<void> {
+  while (unhandledErrors.length === 0 && unsettled.length > 0) {
+    await pumpOnce();
+  }
+  if (unhandledErrors.length > 0) {
+    // throw unhandledErrors[0];
+    console.log(unhandledErrors[0]);
+  }
 }
 
 export function immediate(cb: () => void): void {
@@ -45,16 +62,20 @@ export function immediate(cb: () => void): void {
     return;
   }
 
-  Promise.resolve().then(() => {
-    try {
-      cb();
-    } catch (e) {
-      unhandledErrors.push(e);
-    }
-  });
+  unsettled.push(
+    Promise.resolve().then(() => {
+      try {
+        cb();
+      } catch (e) {
+        unhandledErrors.push(e);
+      }
+    }),
+  );
 }
 
 export default immediate;
 immediate.allowUnhandled = allowUnhandled;
 immediate.disallowUnhandled = disallowUnhandled;
 immediate.takeUnhandled = takeUnhandled;
+immediate.pumpOnce = pumpOnce;
+immediate.settle = settle;
