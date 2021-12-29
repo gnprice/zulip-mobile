@@ -21,19 +21,10 @@ export class SQLDatabase {
     this.db = openDatabase(name);
   }
 
-  // NB if cb rejects after some executeSql calls are already made, the
-  // transaction will be *committed*.  (In fact even if it outright throws,
-  // the transaction doesn't roll back, but instead hangs open, and future
-  // attempted transactions fail.)
-  // TODO can we extend keepQueueLiveWhile to fix that?
   transaction(cb: SQLTransaction => void | Promise<void>): Promise<void> {
     return new Promise((resolve, reject) =>
       this.db.transaction(
-        tx =>
-          void keepQueueLiveWhile(tx, () => cb(new SQLTransactionImpl(this, tx))).catch(err =>
-            // Well, at least we can ensure the outer Promise rejects.
-            reject(err),
-          ),
+        tx => void keepQueueLiveWhile(tx, () => cb(new SQLTransactionImpl(this, tx))),
         reject,
         resolve,
       ),
@@ -43,11 +34,7 @@ export class SQLDatabase {
   readTransaction(cb: SQLTransaction => void | Promise<void>): Promise<void> {
     return new Promise((resolve, reject) =>
       this.db.readTransaction(
-        tx =>
-          void keepQueueLiveWhile(tx, () => cb(new SQLTransactionImpl(this, tx))).catch(err =>
-            // Well, at least we can ensure the outer Promise rejects.
-            reject(err),
-          ),
+        tx => void keepQueueLiveWhile(tx, () => cb(new SQLTransactionImpl(this, tx))),
         reject,
         resolve,
       ),
@@ -79,18 +66,37 @@ export class SQLDatabase {
 // An absurd little workaround for expo-sqlite, or really
 // the @expo/websql library under it, being too eager to check a
 // transaction's queue and declare it complete.
-async function keepQueueLiveWhile(
-  tx: WebSQLTransaction,
-  f: () => void | Promise<void>,
-): Promise<void> {
+//
+// Also for it not handling errors in callbacks, so that an exception in a
+// transaction's application-level code causes it to commit (!) if the
+// transaction callback itself throws an exception, and to get the whole
+// database object stuck if a statement callback throws an exception.
+// Instead, on any such exception we cause the transaction to roll back.
+async function keepQueueLiveWhile(tx: WebSQLTransaction, f: () => void | Promise<void>) {
+  let error = false;
   let done = false;
-  const hold = () => tx.executeSql('SELECT 1', [], () => (done ? undefined : hold()));
+  const hold = () =>
+    tx.executeSql('SELECT 1', [], () =>
+      error ? tx.executeSql('SELECT error') : done ? undefined : hold(),
+    );
   hold();
   try {
     await f();
+  } catch (e) {
+    error = true;
   } finally {
     done = true;
   }
+
+  // A neat touch would be to pass through the actual error message.
+  // Sadly `tx.executeSql('SELECT ?, error', [String(error)])` doesn't
+  // produce any hint of the string; the resulting message is just
+  //   SQLITE_ERROR: no such column: error
+  // So, encode the error string as a SQL identifier?  (With a prefix
+  // to ensure it doesn't hit a builtin, or reserved word?)  Need to
+  // be darn sure the encoding is correct and doesn't cause injection.
+  //
+  // For now, we content ourselves with aborting the transaction at all.
 }
 
 class SQLTransactionImpl {
