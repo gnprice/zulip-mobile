@@ -163,7 +163,7 @@ describe('messagesReducer', () => {
     });
   });
 
-  describe('EVENT_UPDATE_MESSAGE', () => {
+  describe('EVENT update_message', () => {
     const mkAction = args => {
       const { message, ...restArgs } = args;
       // Include a user_id just if there's an edit_timestamp.  (Actual

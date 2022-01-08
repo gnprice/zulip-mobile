@@ -2,7 +2,7 @@
 import Immutable from 'immutable';
 import invariant from 'invariant';
 
-import type { Narrow, UserId } from '../types';
+import { type Narrow, type UserId, EventTypes } from '../types';
 import { userIdsOfPmNarrow } from '../utils/narrow';
 import { pmUnreadsKeyFromPmKeyIds } from '../utils/recipient';
 import type { PerAccountApplicableAction } from '../actionTypes';
@@ -19,9 +19,9 @@ import unreadHuddlesReducer from './unreadHuddlesReducer';
 import unreadMentionsReducer from './unreadMentionsReducer';
 import {
   ACCOUNT_SWITCH,
+  EVENT,
   EVENT_MESSAGE_DELETE,
   EVENT_NEW_MESSAGE,
-  EVENT_UPDATE_MESSAGE,
   EVENT_UPDATE_MESSAGE_FLAGS,
   LOGOUT,
   MESSAGE_FETCH_COMPLETE,
@@ -227,49 +227,57 @@ function streamsReducer(
       return deleteMessages(state, action.messages);
     }
 
-    case EVENT_UPDATE_MESSAGE: {
-      // The API uses "new" for the stream IDs and "orig" for the topics.
-      // Put them both in a consistent naming convention.
-      const origStreamId = action.stream_id;
-      if (origStreamId == null) {
-        // Not stream messages, or else a pure content edit (no stream/topic change.)
-        // TODO(server-5.0): Simplify comment: since FL 112 this means it's
-        //   just not a stream message.
-        return state;
-      }
-      const newStreamId = action.new_stream_id ?? origStreamId;
-      const origTopic = action.orig_subject;
-      const newTopic = action.subject ?? origTopic;
+    case EVENT: {
+      const { event } = action;
+      switch (event.type) {
+        case EventTypes.update_message: {
+          // The API uses "new" for the stream IDs and "orig" for the topics.
+          // Put them both in a consistent naming convention.
+          const origStreamId = event.stream_id;
+          if (origStreamId == null) {
+            // Not stream messages, or else a pure content edit (no stream/topic change.)
+            // TODO(server-5.0): Simplify comment: since FL 112 this means it's
+            //   just not a stream message.
+            return state;
+          }
+          const newStreamId = event.new_stream_id ?? origStreamId;
+          const origTopic = event.orig_subject;
+          const newTopic = event.subject ?? origTopic;
 
-      if (newTopic === origTopic && newStreamId === origStreamId) {
-        // Stream and topic didn't change.
-        return state;
-      }
+          if (newTopic === origTopic && newStreamId === origStreamId) {
+            // Stream and topic didn't change.
+            return state;
+          }
 
-      if (origTopic == null) {
-        // `orig_subject` is documented to be present when either the
-        // stream or topic changed.
-        logging.warn('Got update_message event with stream/topic change and no orig_subject');
-        return state;
-      }
-      invariant(newTopic != null, 'newTopic must be non-nullish when origTopic is, by `??`');
+          if (origTopic == null) {
+            // `orig_subject` is documented to be present when either the
+            // stream or topic changed.
+            logging.warn('Got update_message event with stream/topic change and no orig_subject');
+            return state;
+          }
+          invariant(newTopic != null, 'newTopic must be non-nullish when origTopic is, by `??`');
 
-      const actionIds = new Set(action.message_ids);
-      const matchingIds = state
-        .getIn([origStreamId, origTopic], Immutable.List())
-        .filter(id => actionIds.has(id));
-      if (matchingIds.size === 0) {
-        // None of the updated messages were unread.
-        return state;
-      }
+          const actionIds = new Set(event.message_ids);
+          const matchingIds = state
+            .getIn([origStreamId, origTopic], Immutable.List())
+            .filter(id => actionIds.has(id));
+          if (matchingIds.size === 0) {
+            // None of the updated messages were unread.
+            return state;
+          }
 
-      return state
-        .updateIn([origStreamId, origTopic], (messages = Immutable.List()) =>
-          messages.filter(id => !actionIds.has(id)),
-        )
-        .updateIn([newStreamId, newTopic], (messages = Immutable.List()) =>
-          messages.push(...matchingIds).sort(),
-        );
+          return state
+            .updateIn([origStreamId, origTopic], (messages = Immutable.List()) =>
+              messages.filter(id => !actionIds.has(id)),
+            )
+            .updateIn([newStreamId, newTopic], (messages = Immutable.List()) =>
+              messages.push(...matchingIds).sort(),
+            );
+        }
+
+        default:
+          return state;
+      }
     }
 
     default:

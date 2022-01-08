@@ -1,12 +1,7 @@
 /* @flow strict-local */
 import Immutable from 'immutable';
 
-import {
-  ACCOUNT_SWITCH,
-  EVENT_UPDATE_MESSAGE_FLAGS,
-  EVENT_UPDATE_MESSAGE,
-  EVENT,
-} from '../../actionConstants';
+import { ACCOUNT_SWITCH, EVENT_UPDATE_MESSAGE_FLAGS, EVENT } from '../../actionConstants';
 import { reducer } from '../unreadModel';
 import { type UnreadState } from '../unreadModelTypes';
 import * as eg from '../../__tests__/lib/exampleData';
@@ -69,7 +64,7 @@ describe('stream substate', () => {
     });
   });
 
-  describe('EVENT_UPDATE_MESSAGE', () => {
+  describe('EVENT update_message', () => {
     const mkAction = args => {
       const { message_ids, ...restArgs } = args;
       return {

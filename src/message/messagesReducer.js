@@ -3,7 +3,12 @@
 import omit from 'lodash.omit';
 import Immutable from 'immutable';
 
-import type { MessagesState, Message, PerAccountApplicableAction } from '../types';
+import {
+  type MessagesState,
+  type Message,
+  type PerAccountApplicableAction,
+  EventTypes,
+} from '../types';
 import {
   REGISTER_COMPLETE,
   LOGOUT,
@@ -15,7 +20,7 @@ import {
   EVENT_MESSAGE_DELETE,
   EVENT_REACTION_ADD,
   EVENT_REACTION_REMOVE,
-  EVENT_UPDATE_MESSAGE,
+  EVENT,
 } from '../actionConstants';
 import { getNarrowsForMessage, keyFromNarrow } from '../utils/narrow';
 
@@ -135,63 +140,71 @@ export default (
     case EVENT_MESSAGE_DELETE:
       return state.deleteAll(action.messageIds);
 
-    case EVENT_UPDATE_MESSAGE:
-      return state.update(action.message_id, <M: Message>(oldMessage: M): M => {
-        if (!oldMessage) {
-          return oldMessage;
-        }
-
-        const historyEntry = (() => {
-          if (action.edit_timestamp === undefined || action.user_id === undefined) {
-            // The update isn't a real edit; rather it's just filling in an
-            // inline URL preview (which can require the server to make an
-            // external request, so we don't let it block delivering the
-            // message to clients) and shouldn't appear in the edit history.
-            return null;
-          }
-          if (action.orig_rendered_content !== undefined) {
-            if (action.orig_subject !== undefined) {
-              return {
-                prev_rendered_content: action.orig_rendered_content,
-                prev_subject: oldMessage.subject,
-                timestamp: action.edit_timestamp,
-                prev_rendered_content_version: action.prev_rendered_content_version,
-                user_id: action.user_id,
-              };
-            } else {
-              return {
-                prev_rendered_content: action.orig_rendered_content,
-                timestamp: action.edit_timestamp,
-                prev_rendered_content_version: action.prev_rendered_content_version,
-                user_id: action.user_id,
-              };
+    case EVENT: {
+      const { event } = action;
+      switch (event.type) {
+        case EventTypes.update_message:
+          return state.update(event.message_id, <M: Message>(oldMessage: M): M => {
+            if (!oldMessage) {
+              return oldMessage;
             }
-          } else {
-            return {
-              prev_subject: oldMessage.subject,
-              timestamp: action.edit_timestamp,
-              user_id: action.user_id,
+
+            const historyEntry = (() => {
+              if (event.edit_timestamp === undefined || event.user_id === undefined) {
+                // The update isn't a real edit; rather it's just filling in an
+                // inline URL preview (which can require the server to make an
+                // external request, so we don't let it block delivering the
+                // message to clients) and shouldn't appear in the edit history.
+                return null;
+              }
+              if (event.orig_rendered_content !== undefined) {
+                if (event.orig_subject !== undefined) {
+                  return {
+                    prev_rendered_content: event.orig_rendered_content,
+                    prev_subject: oldMessage.subject,
+                    timestamp: event.edit_timestamp,
+                    prev_rendered_content_version: event.prev_rendered_content_version,
+                    user_id: event.user_id,
+                  };
+                } else {
+                  return {
+                    prev_rendered_content: event.orig_rendered_content,
+                    timestamp: event.edit_timestamp,
+                    prev_rendered_content_version: event.prev_rendered_content_version,
+                    user_id: event.user_id,
+                  };
+                }
+              } else {
+                return {
+                  prev_subject: oldMessage.subject,
+                  timestamp: event.edit_timestamp,
+                  user_id: event.user_id,
+                };
+              }
+            })();
+
+            const messageWithNewCommonFields: M = {
+              ...(oldMessage: M),
+              content: event.rendered_content ?? oldMessage.content,
+              edit_history: historyEntry
+                ? [historyEntry, ...(oldMessage.edit_history ?? [])]
+                : oldMessage.edit_history,
+              last_edit_timestamp: event.edit_timestamp ?? oldMessage.last_edit_timestamp,
             };
-          }
-        })();
 
-        const messageWithNewCommonFields: M = {
-          ...(oldMessage: M),
-          content: action.rendered_content ?? oldMessage.content,
-          edit_history: historyEntry
-            ? [historyEntry, ...(oldMessage.edit_history ?? [])]
-            : oldMessage.edit_history,
-          last_edit_timestamp: action.edit_timestamp ?? oldMessage.last_edit_timestamp,
-        };
+            return messageWithNewCommonFields.type === 'stream'
+              ? {
+                  ...messageWithNewCommonFields,
+                  subject: event.subject ?? messageWithNewCommonFields.subject,
+                  subject_links: event.subject_links ?? messageWithNewCommonFields.subject_links,
+                }
+              : messageWithNewCommonFields;
+          });
 
-        return messageWithNewCommonFields.type === 'stream'
-          ? {
-              ...messageWithNewCommonFields,
-              subject: action.subject ?? messageWithNewCommonFields.subject,
-              subject_links: action.subject_links ?? messageWithNewCommonFields.subject_links,
-            }
-          : messageWithNewCommonFields;
-      });
+        default:
+          return state;
+      }
+    }
 
     default:
       return state;
