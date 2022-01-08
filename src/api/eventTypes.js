@@ -141,6 +141,44 @@ export type StreamEvent =
       value: string,
     |}>;
 
+// This is current to feature level 109:
+//   https://zulip.com/api/get-events#update_message
+export type UpdateMessageEvent = $ReadOnly<{|
+  ...EventCommon,
+  type: typeof EventTypes.update_message,
+
+  user_id?: UserId,
+
+  // Any content changes apply to just message_id.
+  message_id: number,
+
+  // Any stream/topic changes apply to all of message_ids, which is
+  //   guaranteed to include message_id.
+  message_ids: $ReadOnlyArray<number>,
+
+  flags: $ReadOnlyArray<string>,
+  edit_timestamp?: number,
+  stream_name?: string,
+  stream_id?: number,
+  new_stream_id?: number,
+  propagate_mode?: 'change_one' | 'change_later' | 'change_all',
+  orig_subject?: string,
+  subject?: string,
+
+  // TODO(server-4.0): Changed in feat. 46 to array-of-objects shape, from $ReadOnlyArray<string>
+  topic_links?: $ReadOnlyArray<{| +text: string, +url: string |}> | $ReadOnlyArray<string>,
+
+  // TODO(server-3.0): Replaced in feat. 1 by topic_links
+  subject_links?: $ReadOnlyArray<string>,
+
+  orig_content?: string,
+  orig_rendered_content?: string,
+  prev_rendered_content_version?: number,
+  content?: string,
+  rendered_content?: string,
+  is_me_message?: boolean,
+|}>;
+
 export type UpdateMessageFlagsEvent = $ReadOnly<{|
   ...EventCommon,
   type: typeof EventTypes.update_message_flags,

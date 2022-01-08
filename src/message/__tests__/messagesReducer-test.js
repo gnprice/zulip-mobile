@@ -1,16 +1,16 @@
 /* @flow strict-local */
 import deepFreeze from 'deep-freeze';
 
-import type { Submessage, UserId } from '../../types';
+import { EventTypes, type Submessage, type UserId } from '../../types';
 import messagesReducer from '../messagesReducer';
 import { FIRST_UNREAD_ANCHOR } from '../../anchor';
 import {
   MESSAGE_FETCH_COMPLETE,
   EVENT_SUBMESSAGE,
   EVENT_MESSAGE_DELETE,
-  EVENT_UPDATE_MESSAGE,
   EVENT_REACTION_ADD,
   EVENT_REACTION_REMOVE,
+  EVENT,
 } from '../../actionConstants';
 import * as eg from '../../__tests__/lib/exampleData';
 import { ALL_PRIVATE_NARROW, HOME_NARROW, HOME_NARROW_STR } from '../../utils/narrow';
@@ -172,15 +172,18 @@ describe('messagesReducer', () => {
       const forEdit: { user_id?: UserId } =
         restArgs.edit_timestamp != null ? { user_id: message.sender_id } : Object.freeze({});
       return {
-        id: 1,
-        type: EVENT_UPDATE_MESSAGE,
-        ...forEdit,
-        message_id: message.id,
-        message_ids: [message.id],
-        flags: [],
-        propagate_mode: 'change_one',
-        is_me_message: false,
-        ...restArgs,
+        type: EVENT,
+        event: {
+          id: 1,
+          type: EventTypes.update_message,
+          ...forEdit,
+          message_id: message.id,
+          message_ids: [message.id],
+          flags: [],
+          propagate_mode: 'change_one',
+          is_me_message: false,
+          ...restArgs,
+        },
       };
     };
 

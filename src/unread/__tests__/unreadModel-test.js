@@ -5,11 +5,13 @@ import {
   ACCOUNT_SWITCH,
   EVENT_UPDATE_MESSAGE_FLAGS,
   EVENT_UPDATE_MESSAGE,
+  EVENT,
 } from '../../actionConstants';
 import { reducer } from '../unreadModel';
 import { type UnreadState } from '../unreadModelTypes';
 import * as eg from '../../__tests__/lib/exampleData';
 import { initialState } from './unread-testlib';
+import { EventTypes } from '../../types';
 
 // These are the tests corresponding to unreadStreamsReducer-test.js.
 // Ultimately we'll want to flip this way of organizing the tests, and
@@ -71,14 +73,17 @@ describe('stream substate', () => {
     const mkAction = args => {
       const { message_ids, ...restArgs } = args;
       return {
-        id: 1,
-        type: EVENT_UPDATE_MESSAGE,
-        user_id: eg.selfUser.user_id,
-        message_id: message_ids[0],
-        message_ids,
-        flags: [],
-        edit_timestamp: 10000,
-        ...restArgs,
+        type: EVENT,
+        event: {
+          id: 1,
+          type: EventTypes.update_message,
+          user_id: eg.selfUser.user_id,
+          message_id: message_ids[0],
+          message_ids,
+          flags: [],
+          edit_timestamp: 10000,
+          ...restArgs,
+        },
       };
     };
 
