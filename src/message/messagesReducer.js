@@ -3,12 +3,7 @@
 import omit from 'lodash.omit';
 import Immutable from 'immutable';
 
-import {
-  type MessagesState,
-  type Message,
-  type PerAccountApplicableAction,
-  EventTypes,
-} from '../types';
+import { type MessagesState, type Message, type PerAccountApplicableAction } from '../types';
 import {
   REGISTER_COMPLETE,
   LOGOUT,
@@ -22,6 +17,7 @@ import {
   EVENT_REACTION_REMOVE,
   EVENT,
 } from '../actionConstants';
+import { EventTypes } from '../api/eventTypes';
 import { getNarrowsForMessage, keyFromNarrow } from '../utils/narrow';
 
 const initialState: MessagesState = Immutable.Map([]);

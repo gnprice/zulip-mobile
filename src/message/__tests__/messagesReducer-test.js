@@ -1,7 +1,7 @@
 /* @flow strict-local */
 import deepFreeze from 'deep-freeze';
 
-import { EventTypes, type Submessage, type UserId } from '../../types';
+import { type Submessage, type UserId } from '../../types';
 import messagesReducer from '../messagesReducer';
 import { FIRST_UNREAD_ANCHOR } from '../../anchor';
 import {
@@ -15,6 +15,7 @@ import {
 import * as eg from '../../__tests__/lib/exampleData';
 import { ALL_PRIVATE_NARROW, HOME_NARROW, HOME_NARROW_STR } from '../../utils/narrow';
 import { makeUserId } from '../../api/idTypes';
+import { EventTypes } from '../../api/eventTypes';
 
 describe('messagesReducer', () => {
   describe('EVENT_NEW_MESSAGE', () => {

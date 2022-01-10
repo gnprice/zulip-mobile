@@ -2,10 +2,11 @@
 import Immutable from 'immutable';
 import invariant from 'invariant';
 
-import { type Narrow, type UserId, EventTypes } from '../types';
+import { type Narrow, type UserId } from '../types';
 import { userIdsOfPmNarrow } from '../utils/narrow';
 import { pmUnreadsKeyFromPmKeyIds } from '../utils/recipient';
 import type { PerAccountApplicableAction } from '../actionTypes';
+import { EventTypes } from '../api/eventTypes';
 import type {
   UnreadState,
   UnreadStreamsState,

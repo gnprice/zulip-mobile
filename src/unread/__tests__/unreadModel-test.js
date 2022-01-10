@@ -6,7 +6,7 @@ import { reducer } from '../unreadModel';
 import { type UnreadState } from '../unreadModelTypes';
 import * as eg from '../../__tests__/lib/exampleData';
 import { initialState } from './unread-testlib';
-import { EventTypes } from '../../types';
+import { EventTypes } from '../../api/eventTypes';
 
 // These are the tests corresponding to unreadStreamsReducer-test.js.
 // Ultimately we'll want to flip this way of organizing the tests, and
