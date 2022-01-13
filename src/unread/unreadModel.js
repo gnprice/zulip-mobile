@@ -285,13 +285,14 @@ function streamsReducer(
       }
 
       return {
-        byStream: state.byStream
-          .updateIn([origStreamId, origTopic], (messages = Immutable.List()) =>
+        byStream: state.byStream.withMutations(byStream => {
+          byStream.updateIn([origStreamId, origTopic], (messages = Immutable.List()) =>
             messages.filter(id => !actionIds.has(id)),
-          )
-          .updateIn([newStreamId, newTopic], (messages = Immutable.List()) =>
+          );
+          byStream.updateIn([newStreamId, newTopic], (messages = Immutable.List()) =>
             messages.push(...matchingIds).sort(),
-          ),
+          );
+        }),
         byMessage: state.byMessage.withMutations(byMessage => {
           for (const id of matchingIds) {
             byMessage.set(id, { streamId: newStreamId, topic: newTopic });
