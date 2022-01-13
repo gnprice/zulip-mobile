@@ -186,9 +186,6 @@ function deleteFromList<V>(list_: Immutable.List<V>, toDelete_: Iterable<V>): Im
 /**
  * Delete the given messages from the unreads state.
  *
- * Relies on `globalMessages` to look up exactly where in the unreads data
- * structure the messages are expected to appear.
- *
  * This is efficient at deleting some messages even when the total number of
  * existing messages is much larger.  Specifically the time spent should be
  * O(N' log n + c log C), where the messages to delete appear in c out of a
