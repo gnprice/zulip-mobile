@@ -14,11 +14,12 @@ import {
 import { foregroundColorFromBackground } from '../../utils/color';
 import { humanDate } from '../../utils/date';
 import {
-  pmUiRecipientsFromMessage,
   pmKeyRecipientsFromMessage,
+  pmUiRecipientsFromKeyRecipients,
   streamNameOfStreamMessage,
 } from '../../utils/recipient';
 import { base64Utf8Encode } from '../../utils/encoding';
+import * as logging from '../../utils/logging';
 
 const renderSubject = message =>
   // TODO: pin down if '' happens, and what its proper semantics are.
@@ -32,7 +33,7 @@ const renderSubject = message =>
  * This is a private helper of messageListElementHtml.
  */
 export default (
-  { ownUser, subscriptions }: BackgroundData,
+  { allUsersById, ownUser, streams, subscriptions }: BackgroundData,
   element: HeaderMessageListElement,
 ): string => {
   const { subsequentMessage: message, style: headerStyle } = element;
@@ -87,17 +88,23 @@ export default (
     const narrowObj = pmNarrowFromRecipients(keyRecipients);
     const narrowStr = keyFromNarrow(narrowObj);
 
-    const uiRecipients = pmUiRecipientsFromMessage(message, ownUser.user_id);
+    const uiRecipientIds = pmUiRecipientsFromKeyRecipients(keyRecipients, ownUser.user_id);
+    const uiRecipientNames = uiRecipientIds.map(id => {
+      const user = allUsersById.get(id);
+      if (!user) {
+        logging.warn('missing user for PM recipient');
+        return '???';
+      }
+      return user.full_name;
+    });
+
     return template`\
 <div
   class="msglist-element header-wrapper private-header header"
   data-narrow="${base64Utf8Encode(narrowStr)}"
   data-msg-id="${message.id}"
 >
-  ${uiRecipients
-    .map(r => r.full_name)
-    .sort()
-    .join(', ')}
+  ${uiRecipientNames.sort().join(', ')}
 </div>`;
   } else {
     ensureUnreachable(message.type);
