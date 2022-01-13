@@ -140,20 +140,6 @@ export const normalizeRecipientsAsUserIdsSansMe = (
  *  * `pmKeyRecipientsFromMessage`, which should be used when a consistent,
  *    unique key is needed for identifying different PM conversations in our
  *    data structures.
- *  * `pmUiRecipientsFromKeyRecipients`, which takes a `PmKeyRecipients`
- *    as input instead of a message.
- */
-export const pmUiRecipientsFromMessage = (
-  message: PmMessage | PmOutbox,
-  ownUserId: UserId,
-): $ReadOnlyArray<PmRecipientUser> =>
-  filterRecipients(recipientsOfPrivateMessage(message), ownUserId);
-
-/**
- * The set of users to show in the UI to identify a PM conversation.
- *
- * This produces the same set of users as `pmUiRecipientsFromMessage`,
- * just from a different form of input.  See there for more discussion.
  */
 export const pmUiRecipientsFromKeyRecipients = (
   recipients: PmKeyRecipients,
@@ -187,8 +173,8 @@ export const pmKeyRecipientsFromIds = (
  * preferred; see #3764.
  *
  * See also:
- *  * `pmUiRecipientsFromMessage`, which gives a set of users to show in the
- *    UI.
+ *  * `pmUiRecipientsFromKeyRecipients`, which gives a set of users to show
+ *    in the UI.
  *
  *  * The `Narrow` type and its constructors in `narrow.js`, which we use to
  *    make keys to identify narrows in general, including stream and topic
