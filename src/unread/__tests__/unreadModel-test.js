@@ -255,16 +255,20 @@ describe('stream substate', () => {
       };
     };
 
-    const streamAction = args => eg.mkActionEventNewMessage(eg.streamMessage(args));
+    const messages = [
+      eg.streamMessage({ stream_id: 123, subject: 'foo', id: 1 }),
+      eg.streamMessage({ stream_id: 123, subject: 'foo', id: 2 }),
+      eg.streamMessage({ stream_id: 123, subject: 'foo', id: 3 }),
+      eg.streamMessage({ stream_id: 234, subject: 'bar', id: 4 }),
+      eg.streamMessage({ stream_id: 234, subject: 'bar', id: 5 }),
+    ];
 
     const baseState = (() => {
       const r = (state, action) => reducer(state, action, eg.plusReduxState);
       let state = initialState;
-      state = r(state, streamAction({ stream_id: 123, subject: 'foo', id: 1 }));
-      state = r(state, streamAction({ stream_id: 123, subject: 'foo', id: 2 }));
-      state = r(state, streamAction({ stream_id: 123, subject: 'foo', id: 3 }));
-      state = r(state, streamAction({ stream_id: 234, subject: 'bar', id: 4 }));
-      state = r(state, streamAction({ stream_id: 234, subject: 'bar', id: 5 }));
+      for (const message of messages) {
+        state = r(state, eg.mkActionEventNewMessage(message));
+      }
       return state;
     })();
 
@@ -295,11 +299,8 @@ describe('stream substate', () => {
     });
 
     test("when removing, don't touch unaffected topics or streams", () => {
-      const state = reducer(
-        baseState,
-        streamAction({ stream_id: 123, subject: 'qux', id: 7 }),
-        eg.plusReduxState,
-      );
+      const message = eg.streamMessage({ stream_id: 123, subject: 'qux', id: 7 });
+      const state = reducer(baseState, eg.mkActionEventNewMessage(message), eg.plusReduxState);
       // prettier-ignore
       expect(summary(state)).toEqual(Immutable.Map([
         [123, Immutable.Map([['foo', [1, 2, 3]], ['qux', [7]]])],
