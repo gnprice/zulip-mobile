@@ -141,13 +141,10 @@ function updateAndPrune<K, V>(
 // commonly 1, i.e. there are commonly just ≤32 messages.  So the difference
 // between O(k log n) and O(k + log n) might be noticeable but is unlikely
 // to be catastrophic.
-function deleteFromList<V>(
-  list_: Immutable.List<V>,
-  toDelete_: Immutable.List<V>,
-): Immutable.List<V> {
+function deleteFromList<V>(list_: Immutable.List<V>, toDelete_: Iterable<V>): Immutable.List<V> {
   // Alias the parameters because Flow doesn't accept mutating them.
   let list = list_;
-  let toDelete = toDelete_;
+  let toDelete = Immutable.List(toDelete_);
 
   // First, see if some items to delete happen to be at the start, and
   // remove those.  This is the common case for marking messages as read,
@@ -212,20 +209,27 @@ function deleteMessages(
   ids: $ReadOnlyArray<number>,
 ): UnreadStreamsState {
   const stateByMessage = state.byMessage;
-  const todoByStream =
-    // prettier-ignore
-    (Immutable.Map(): Immutable.Map<number, Immutable.Map<string, Immutable.List<number>>>)
-    .withMutations(mut => {
-      for (const id of ids) {
-        const message = stateByMessage.get(id);
-        if (!message) {
-          // Not an unread we know about.  (Could be an ancient unread.)
-          continue;
-        }
-        const { streamId, topic } = message;
-        mut.updateIn([streamId, topic], (l = Immutable.List()) => l.push(id));
-      }
-    });
+
+  const todoByStream = new Map();
+  for (const id of ids) {
+    const message = stateByMessage.get(id);
+    if (!message) {
+      // Not an unread we know about.  (Could be an ancient unread.)
+      continue;
+    }
+    const { streamId, topic } = message;
+    let todoForStream = todoByStream.get(streamId);
+    if (!todoForStream) {
+      todoForStream = new Map();
+      todoByStream.set(streamId, todoForStream);
+    }
+    let todoForTopic = todoForStream.get(topic);
+    if (!todoForTopic) {
+      todoForTopic = [];
+      todoForStream.set(topic, todoForTopic);
+    }
+    todoForTopic.push(id);
+  }
 
   const emptyMap = Immutable.Map();
   const emptyList = Immutable.List();
