@@ -23,6 +23,9 @@ export type UnreadStreamsIndex =
  */
 export type UnreadStreamsState = {|
   +byStream: UnreadStreamsIndex,
+
+  /** A reverse index. */
+  +byMessage: Immutable.Map<number, {| +streamId: number, +topic: string |}>,
 |};
 
 /**

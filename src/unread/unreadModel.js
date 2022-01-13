@@ -90,7 +90,10 @@ export const getUnreadIdsForPmNarrow = (
 // Reducer.
 //
 
-const initialStreamsState: UnreadStreamsState = { byStream: Immutable.Map() };
+const initialStreamsState: UnreadStreamsState = {
+  byStream: Immutable.Map(),
+  byMessage: Immutable.Map(),
+};
 
 // Like `Immutable.Map#map`, but with the update-only-if-different semantics
 // of `Immutable.Map#update`.  Kept for comparison to `updateAllAndPrune`.
@@ -140,6 +143,7 @@ function deleteMessages(
         perTopic.find(toDelete) ? perTopic.filterNot(toDelete) : perTopic,
       ),
     ),
+    byMessage: state.byMessage.deleteAll(ids),
   };
 }
 
@@ -163,6 +167,7 @@ function streamsReducer(
       // First, collect together all the data for a given stream, just in a
       // plain old Array.
       const byStream = new Map();
+      const byMessage = [];
       for (const { stream_id, topic, unread_message_ids } of data) {
         let perStream = byStream.get(stream_id);
         if (!perStream) {
@@ -172,6 +177,9 @@ function streamsReducer(
         // unread_message_ids is already sorted; see comment at its
         // definition in src/api/initialDataTypes.js.
         perStream.push([topic, Immutable.List(unread_message_ids)]);
+        for (const id of unread_message_ids) {
+          byMessage.push([id, { streamId: stream_id, topic }]);
+        }
       }
 
       // Then, for each of those plain Arrays build an Immutable.Map from it
@@ -181,6 +189,7 @@ function streamsReducer(
       // in dozens of streams, so the effect is significant.
       return {
         byStream: Immutable.Map(Immutable.Seq.Keyed(byStream.entries()).map(Immutable.Map)),
+        byMessage: Immutable.Map(byMessage),
       };
     }
 
@@ -208,6 +217,10 @@ function streamsReducer(
           [message.stream_id, message.subject],
           (perTopic = Immutable.List()) => perTopic.push(message.id),
         ),
+        byMessage: state.byMessage.set(message.id, {
+          streamId: message.stream_id,
+          topic: message.subject,
+        }),
       };
     }
 
@@ -279,6 +292,11 @@ function streamsReducer(
           .updateIn([newStreamId, newTopic], (messages = Immutable.List()) =>
             messages.push(...matchingIds).sort(),
           ),
+        byMessage: state.byMessage.withMutations(byMessage => {
+          for (const id of matchingIds) {
+            byMessage.set(id, { streamId: newStreamId, topic: newTopic });
+          }
+        }),
       };
     }
 
