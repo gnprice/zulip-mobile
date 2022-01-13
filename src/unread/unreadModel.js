@@ -211,14 +211,13 @@ function deleteMessages(
   state: UnreadStreamsState,
   ids: $ReadOnlyArray<number>,
 ): UnreadStreamsState {
-  const { byMessage } = state;
-
-  const byConversation =
+  const stateByMessage = state.byMessage;
+  const todoByStream =
     // prettier-ignore
     (Immutable.Map(): Immutable.Map<number, Immutable.Map<string, Immutable.List<number>>>)
     .withMutations(mut => {
       for (const id of ids) {
-        const message = byMessage.get(id);
+        const message = stateByMessage.get(id);
         if (!message) {
           // Not an unread we know about.  (Could be an ancient unread.)
           continue;
@@ -231,14 +230,15 @@ function deleteMessages(
   const emptyMap = Immutable.Map();
   const emptyList = Immutable.List();
   return {
-    byStream: state.byStream.withMutations(stateMut => {
-      byConversation.forEach((byTopic, streamId) => {
+    byStream: state.byStream.withMutations(stateByStream => {
+      todoByStream.forEach((todoForStream, streamId) => {
         // prettier-ignore
-        updateAndPrune(stateMut, emptyMap, streamId, perStream =>
-          perStream && perStream.withMutations(perStreamMut => {
-            byTopic.forEach((msgIds, topic) => {
-              updateAndPrune(perStreamMut, emptyList, topic, perTopic =>
-                perTopic && deleteFromList(perTopic, msgIds),
+        updateAndPrune(stateByStream, emptyMap, streamId, stateForStream =>
+          // eslint-disable-next-line no-shadow
+          stateForStream && stateForStream.withMutations(stateForStream => {
+            todoForStream.forEach((todoForTopic, topic) => {
+              updateAndPrune(stateForStream, emptyList, topic, stateForTopic =>
+                stateForTopic && deleteFromList(stateForTopic, todoForTopic),
               );
             });
           }),
