@@ -20,7 +20,7 @@ describe('stream substate', () => {
   // Specifically just turn the inner `Immutable.List`s into arrays,
   // to shorten writing the expected data.
   const summary = (state: UnreadState) =>
-    state.streams.map(perStream => perStream.map(perTopic => perTopic.toArray()));
+    state.streams.byStream.map(perStream => perStream.map(perTopic => perTopic.toArray()));
 
   describe('ACCOUNT_SWITCH', () => {
     test('resets state to initial state', () => {
@@ -313,8 +313,10 @@ describe('stream substate', () => {
         [123, Immutable.Map([['foo', [3]], ['qux', [7]]])],
         [234, Immutable.Map([['bar', [4, 5]]])],
       ]));
-      expect(newState.streams.get(123)?.get('qux')).toBe(state.streams.get(123)?.get('qux'));
-      expect(newState.streams.get(234)).toBe(state.streams.get(234));
+      expect(newState.streams.byStream.get(123)?.get('qux')).toBe(
+        state.streams.byStream.get(123)?.get('qux'),
+      );
+      expect(newState.streams.byStream.get(234)).toBe(state.streams.byStream.get(234));
     });
 
     test('when operation is "remove" do nothing', () => {

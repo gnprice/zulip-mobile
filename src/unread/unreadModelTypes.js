@@ -4,19 +4,26 @@ import type Immutable from 'immutable';
 import type { HuddlesUnreadItem, PmsUnreadItem } from '../api/apiTypes';
 
 /**
- * A summary of (almost) all unread stream messages.
+ * The stream unreads, indexed by stream and topic.
  *
- * This is a map from stream IDs, to maps from topics, to lists of
- * message IDs.  Each list is sorted.  So e.g. for the number of unreads
- * in a given topic, say `.get(streamId).get(topic).size`.
+ * This is a map from stream IDs, to maps from topics, to lists of message
+ * IDs.  Each list is sorted.  So e.g. for the number of unreads in a
+ * given topic, say `.get(streamId).get(topic).size`.
+ */
+// prettier-ignore
+export type UnreadStreamsIndex =
+  Immutable.Map<number, Immutable.Map<string, Immutable.List<number>>>;
+
+/**
+ * A summary of (almost) all unread stream messages.
  *
  * NB this includes messages to muted streams and topics.
  *
  * Part of `UnreadState`; see there for more.
  */
-// prettier-ignore
-export type UnreadStreamsState =
-  Immutable.Map<number, Immutable.Map<string, Immutable.List<number>>>;
+export type UnreadStreamsState = {|
+  +byStream: UnreadStreamsIndex,
+|};
 
 /**
  * A summary of (almost) all unread group PMs.

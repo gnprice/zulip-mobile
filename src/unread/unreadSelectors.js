@@ -238,7 +238,7 @@ export const getUnreadCountForNarrow: Selector<number, Narrow> = createSelector(
         }
         // prettier-ignore
         return (
-          unread.streams
+          unread.streams.byStream
             .get(stream.stream_id)
             ?.entrySeq()
             .filterNot(([topic, _]) => isTopicMuted(name, topic, mute))

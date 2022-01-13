@@ -8,6 +8,7 @@ import { pmUnreadsKeyFromPmKeyIds } from '../utils/recipient';
 import type { PerAccountApplicableAction } from '../actionTypes';
 import type {
   UnreadState,
+  UnreadStreamsIndex,
   UnreadStreamsState,
   UnreadPmsState,
   UnreadHuddlesState,
@@ -39,8 +40,8 @@ import * as logging from '../utils/logging';
 /** The unread-messages state as a whole. */
 export const getUnread = (state: PerAccountState): UnreadState => state.unread;
 
-export const getUnreadStreams = (state: PerAccountState): UnreadStreamsState =>
-  state.unread.streams;
+export const getUnreadStreams = (state: PerAccountState): UnreadStreamsIndex =>
+  state.unread.streams.byStream;
 
 export const getUnreadPms = (state: PerAccountState): UnreadPmsState => state.unread.pms;
 
@@ -63,7 +64,7 @@ export const getUnreadCountForTopic = (
   unread: UnreadState,
   streamId: number,
   topic: string,
-): number => unread.streams.get(streamId)?.get(topic)?.size ?? 0;
+): number => unread.streams.byStream.get(streamId)?.get(topic)?.size ?? 0;
 
 /** All the unread message IDs for a given PM narrow. */
 export const getUnreadIdsForPmNarrow = (
@@ -89,7 +90,7 @@ export const getUnreadIdsForPmNarrow = (
 // Reducer.
 //
 
-const initialStreamsState: UnreadStreamsState = Immutable.Map();
+const initialStreamsState: UnreadStreamsState = { byStream: Immutable.Map() };
 
 // Like `Immutable.Map#map`, but with the update-only-if-different semantics
 // of `Immutable.Map#update`.  Kept for comparison to `updateAllAndPrune`.
@@ -133,11 +134,13 @@ function deleteMessages(
   const idSet = new Set(ids);
   const toDelete = id => idSet.has(id);
   const emptyList = Immutable.List();
-  return updateAllAndPrune(state, Immutable.Map(), perStream =>
-    updateAllAndPrune(perStream, emptyList, perTopic =>
-      perTopic.find(toDelete) ? perTopic.filterNot(toDelete) : perTopic,
+  return {
+    byStream: updateAllAndPrune(state.byStream, Immutable.Map(), perStream =>
+      updateAllAndPrune(perStream, emptyList, perTopic =>
+        perTopic.find(toDelete) ? perTopic.filterNot(toDelete) : perTopic,
+      ),
     ),
-  );
+  };
 }
 
 function streamsReducer(
@@ -176,7 +179,9 @@ function streamsReducer(
       // incrementally.  For a user with lots of unreads in a busy org, we
       // can be handling 50k message IDs here, across perhaps 2-5k threads
       // in dozens of streams, so the effect is significant.
-      return Immutable.Map(Immutable.Seq.Keyed(byStream.entries()).map(Immutable.Map));
+      return {
+        byStream: Immutable.Map(Immutable.Seq.Keyed(byStream.entries()).map(Immutable.Map)),
+      };
     }
 
     case MESSAGE_FETCH_COMPLETE:
@@ -198,9 +203,12 @@ function streamsReducer(
         return state;
       }
 
-      // prettier-ignore
-      return state.updateIn([message.stream_id, message.subject],
-        (perTopic = Immutable.List()) => perTopic.push(message.id));
+      return {
+        byStream: state.byStream.updateIn(
+          [message.stream_id, message.subject],
+          (perTopic = Immutable.List()) => perTopic.push(message.id),
+        ),
+      };
     }
 
     case EVENT_MESSAGE_DELETE:
@@ -255,7 +263,7 @@ function streamsReducer(
       invariant(newTopic != null, 'newTopic must be non-nullish when origTopic is, by `??`');
 
       const actionIds = new Set(action.message_ids);
-      const matchingIds = state
+      const matchingIds = state.byStream
         .getIn([origStreamId, origTopic], Immutable.List())
         .filter(id => actionIds.has(id));
       if (matchingIds.size === 0) {
@@ -263,13 +271,15 @@ function streamsReducer(
         return state;
       }
 
-      return state
-        .updateIn([origStreamId, origTopic], (messages = Immutable.List()) =>
-          messages.filter(id => !actionIds.has(id)),
-        )
-        .updateIn([newStreamId, newTopic], (messages = Immutable.List()) =>
-          messages.push(...matchingIds).sort(),
-        );
+      return {
+        byStream: state.byStream
+          .updateIn([origStreamId, origTopic], (messages = Immutable.List()) =>
+            messages.filter(id => !actionIds.has(id)),
+          )
+          .updateIn([newStreamId, newTopic], (messages = Immutable.List()) =>
+            messages.push(...matchingIds).sort(),
+          ),
+      };
     }
 
     default:
