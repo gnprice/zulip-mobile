@@ -21,7 +21,7 @@ import java.lang.RuntimeException
 
 /** The channel ID we use for our one notification channel, which we use for all notifications. */
 // Previous values: "default", "messages-1"
-val CHANNEL_ID = "messages-2"
+val CHANNEL_ID = "messages-2ankeuiv3"
 
 /** The vibration pattern we set. */
 // We try to set a vibration pattern that, with the phone in one's pocket,
