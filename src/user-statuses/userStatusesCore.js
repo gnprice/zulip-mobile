@@ -14,13 +14,9 @@ import type { UserStatus } from '../api/modelTypes';
  * This is the user-status you have if you've just created your account and
  * never interacted with the feature.
  *
- * It's effectively the user-status you have if you're on an old server that
- * doesn't support user statuses.
- *
  * See the corresponding "zero status" in the API described at
  * InitialDataUserStatus.
  */
-// TODO(server-2.0): Simplify jsdoc.
 // PRIVATE: Only to be used in this model's code.
 export const kUserStatusZero: UserStatus = {
   away: false,

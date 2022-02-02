@@ -53,12 +53,6 @@ describe('reducer', () => {
       ).toEqual(testUserStatusesState);
     });
 
-    test('handles older back-ends that do not have `user_status` data by resetting the state', () => {
-      expect(
-        reducer(testUserStatusesState, eg.mkActionRegisterComplete({ user_status: undefined })),
-      ).toEqual(Immutable.Map());
-    });
-
     test('away set', () => {
       expect(reducer(Immutable.Map(), mkAction([eg.selfUser.user_id, { away: true }]))).toEqual(
         Immutable.Map([[eg.selfUser.user_id, { ...kUserStatusZero, away: true }]]),

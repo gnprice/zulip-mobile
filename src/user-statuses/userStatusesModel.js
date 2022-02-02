@@ -66,20 +66,13 @@ export const reducer = (
     case RESET_ACCOUNT_DATA:
       return initialState;
 
-    case REGISTER_COMPLETE: {
-      const { user_status } = action.data;
-      if (!user_status) {
-        // TODO(server-2.0): Drop this.
-        return initialState;
-      }
-
+    case REGISTER_COMPLETE:
       return Immutable.Map(
-        objectEntries(user_status).map(([id, update]) => [
+        objectEntries(action.data.user_status).map(([id, update]) => [
           makeUserId(Number.parseInt(id, 10)),
           updateUserStatus(kUserStatusZero, update),
         ]),
       );
-    }
 
     case EVENT_USER_STATUS_UPDATE: {
       const oldUserStatus = state.get(action.user_id, kUserStatusZero);
