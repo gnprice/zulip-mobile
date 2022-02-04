@@ -19,6 +19,7 @@ import androidx.core.app.NotificationCompat
 import com.zulipmobile.R
 import com.zulipmobile.ZLog
 import java.io.IOException
+import java.lang.IllegalStateException
 import java.lang.RuntimeException
 
 /** The channel ID we use for our one notification channel, which we use for all notifications. */
@@ -70,105 +71,72 @@ private fun ensureInitNotificationSounds(context: Context): Uri {
         return defaultSoundUrl
     }
 
-    val resolver = context.contentResolver
-    Log.v(TAG, "time 0b: ${SystemClock.elapsedRealtimeNanos() - tStart}")
-    val collection = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-    Log.v(TAG, "time 0c: ${SystemClock.elapsedRealtimeNanos() - tStart}")
-
-    // The directory we store our notification sounds into,
-    // expressed as a relative path suitable for:
-    //   https://developer.android.com/reference/kotlin/android/provider/MediaStore.MediaColumns#RELATIVE_PATH:kotlin.String
-    val soundsDirectoryPath = "${Environment.DIRECTORY_NOTIFICATIONS}/Zulip/"
-    Log.v(TAG, "time 0d: ${SystemClock.elapsedRealtimeNanos() - tStart}")
 
     // First, look to see what notification sounds we've already stored,
     // and check against our list of sounds we have.
 
-    val soundsTodo = NotificationSound.values().map { it.fileDisplayName to it }.toMap().toMutableMap()
-    // Query and cursor-loop based on: https://developer.android.com/training/data-storage/shared/media#query-collection
+    val kvstore = context.getSharedPreferences(
+        "${context.packageName}.NOTIFICATION_SOUNDS_STORED", Context.MODE_PRIVATE)
+//    kvstore.edit().clear().commit()
     Log.v(TAG, "time 1: ${SystemClock.elapsedRealtimeNanos() - tStart}")
-    val cursor = resolver.query(
-        collection,
-        kotlin.arrayOf(
-            MediaStore.Audio.Media._ID,
-            MediaStore.Audio.Media.DISPLAY_NAME,
-            MediaStore.Audio.Media.OWNER_PACKAGE_NAME
-        ),
-        "${MediaStore.Audio.Media.RELATIVE_PATH}=?",
-        arrayOf(soundsDirectoryPath),
-        "${MediaStore.Audio.Media._ID} ASC"
-    ) ?: run {
-        ZLog.w(TAG, "ensureInitNotificationSounds: query failed")
-        return defaultSoundUrl
-    }
-    val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
-    val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
-    val ownerColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.OWNER_PACKAGE_NAME)
+    val stored = kvstore.all.keys
+    Log.v(TAG, "have: ${stored.toList().joinToString(" ")}")
     Log.v(TAG, "time 2: ${SystemClock.elapsedRealtimeNanos() - tStart}")
-    while (cursor.moveToNext()) {
-//        Log.v(TAG, "time 3[]: ${SystemClock.elapsedRealtimeNanos() - tStart}")
-        val name = cursor.getString(nameColumn)
+    val soundsTodo = NotificationSound.values().filterNot { stored.contains(it.name) }
+    Log.v(TAG, "time 3: ${SystemClock.elapsedRealtimeNanos() - tStart}")
 
-        // If the file is one we put there, and has the name we give to our
-        // default sound, then use it as the default sound.
-        val ownerPackageName = cursor.getString(ownerColumn)
-        if (name == kDefaultNotificationSound.fileDisplayName
-            && ownerPackageName == context.packageName) {
-            val id = cursor.getLong(idColumn)
-            defaultSoundUrl = ContentUris.withAppendedId(collection, id)
-        }
-
-        // If it has the name of any of our sounds, then don't try to add
-        // that sound.  This applies even if we didn't put it there: the
-        // name is taken, so if we tried adding it anyway it'd get some
-        // other name (like "Zulip - Chime #3 (1).m4a", with " (1)" added).
-        // Which means the *next* launch would try to add it again ad infinitum.
-        // We could avoid this given some other way to uniquely identify the
-        // file, but haven't found an obvious one.
-        //
-        // This does mean it's possible the file isn't the one we would have
-        // put there... but it probably is, just from a debug vs. release build
-        // of the app (because those have different package names).  And anyway,
-        // this is a file we're supplying for the user in case they want it, not
-        // something where the app depends on it having specific content.
-        soundsTodo.remove(name)
-    }
-    Log.v(TAG, "time 4: ${SystemClock.elapsedRealtimeNanos() - tStart}")
 
     // If that leaves any sounds we haven't yet put into shared storage
     // (e.g., because this is the first run after install, or after an
     // upgrade that added a sound), then store those.
+    if (soundsTodo.isNotEmpty()) {
+        val editor = kvstore.edit()
+        val resolver = context.contentResolver
+        val collection = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+        // The directory we store our notification sounds into,
+        // expressed as a relative path suitable for:
+        //   https://developer.android.com/reference/kotlin/android/provider/MediaStore.MediaColumns#RELATIVE_PATH:kotlin.String
+        val soundsDirectoryPath = "${Environment.DIRECTORY_NOTIFICATIONS}/Zulip/"
+        for (sound in soundsTodo) {
+            Log.v(TAG, "storing: ${sound.name}")
+            class ResolverFailedException(msg: String) : RuntimeException(msg)
+            try {
+                // Based on: https://developer.android.com/training/data-storage/shared/media#add-item
+                val url = resolver.insert(collection, ContentValues().apply {
+                    put(MediaStore.Audio.Media.DISPLAY_NAME, sound.fileDisplayName)
+                    put(MediaStore.Audio.Media.RELATIVE_PATH, soundsDirectoryPath)
+                    put(MediaStore.Audio.Media.IS_NOTIFICATION, 1)
+                    put(MediaStore.Audio.Media.IS_PENDING, 1)
+                }) ?: throw ResolverFailedException("resolver.insert failed")
 
-    for (sound in soundsTodo.values) {
-        class ResolverFailedException(msg: String) : RuntimeException(msg)
-        try {
-            // Based on: https://developer.android.com/training/data-storage/shared/media#add-item
-            val url = resolver.insert(collection, ContentValues().apply {
-                put(MediaStore.Audio.Media.DISPLAY_NAME, sound.fileDisplayName)
-                put(MediaStore.Audio.Media.RELATIVE_PATH, soundsDirectoryPath)
-                put(MediaStore.Audio.Media.IS_NOTIFICATION, 1)
-                put(MediaStore.Audio.Media.IS_PENDING, 1)
-            }) ?: throw ResolverFailedException("resolver.insert failed")
+                (resolver.openOutputStream(url, "wt")
+                    ?: throw ResolverFailedException("resolver.open… failed"))
+                    .use { outputStream ->
+                        context.resources.openRawResource(sound.resourceId)
+                            .use { it.copyTo(outputStream) }
+                    }
 
-            (resolver.openOutputStream(url, "wt")
-                ?: throw ResolverFailedException("resolver.open… failed"))
-                .use { outputStream ->
-                    context.resources.openRawResource(sound.resourceId)
-                        .use { it.copyTo(outputStream) }
-                }
-
-            resolver.update(
-                url, ContentValues().apply { put(MediaStore.Audio.Media.IS_PENDING, 0) },
-                null, null)
-
-            if (sound == kDefaultNotificationSound) {
-                defaultSoundUrl = url
+                Log.v(TAG, "stored to url: ${url}")
+                resolver.update(
+                    url, ContentValues().apply { put(MediaStore.Audio.Media.IS_PENDING, 0) },
+                    null, null)
+                editor.putString(sound.name, url.toString())
+            } catch (e: IllegalStateException) {
+                // E.g., because we already had "Zulip - Chime #3.m4a" through "Zulip - Chime #3 (31).m4a";
+                // it gives up rather than make a 33rd version "Zulip - Chime #3 (32).m4a".
+                ZLog.w(TAG, e)
+            } catch (e: ResolverFailedException) {
+                ZLog.w(TAG, e)
+            } catch (e: IOException) {
+                ZLog.w(TAG, e)
             }
-        } catch (e: ResolverFailedException) {
-            ZLog.w(TAG, e)
-        } catch (e: IOException) {
-            ZLog.w(TAG, e)
         }
+        editor.apply()
+    }
+    Log.v(TAG, "time 4: ${SystemClock.elapsedRealtimeNanos() - tStart}")
+
+    kvstore.getString(kDefaultNotificationSound.name, null)?.let {
+        defaultSoundUrl = Uri.parse(it)
     }
 
     val tEnd = SystemClock.elapsedRealtimeNanos()
