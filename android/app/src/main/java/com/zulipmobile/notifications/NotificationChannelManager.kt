@@ -48,6 +48,24 @@ fun createNotificationChannel(context: Context) {
         return
     }
 
+    val manager = context.notificationManager
+
+    // See if our current-version channel already exists; delete any obsolete previous channels.
+    var found = false
+    for (channel in manager.notificationChannels) {
+        if (channel.id == CHANNEL_ID) {
+            found = true
+        } else {
+            manager.deleteNotificationChannel(channel.id)
+        }
+    }
+    if (found) {
+        // The channel already exists; nothing to do.
+        return
+    }
+
+    // The channel doesn't exist.  Create it.
+
     // TODO: It'd be nice to use NotificationChannelCompat here: we get a nice builder class,
     //   plus should then be able to drop the Build.VERSION condition.
     //   Needs upgrading androidx.core to 1.5.0:
@@ -68,7 +86,6 @@ fun createNotificationChannel(context: Context) {
     //    settings for the channel -- like "override Do Not Disturb", or "use
     //    a different sound", or "don't pop on screen" -- their changes get
     //    reset.  So this has to be done sparingly.
-    val manager = context.notificationManager
     manager.createNotificationChannel(NotificationChannel(
         CHANNEL_ID,
         context.getString(R.string.notification_channel_name),
@@ -85,11 +102,4 @@ fun createNotificationChannel(context: Context) {
         setSound(getNotificationSoundUri(),
             AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION).build())
     })
-
-    // Delete any obsolete previous channels.
-    for (channel in manager.notificationChannels) {
-        if (channel.id != CHANNEL_ID) {
-            manager.deleteNotificationChannel(channel.id)
-        }
-    }
 }
