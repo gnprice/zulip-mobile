@@ -14,6 +14,7 @@ import android.os.Build
 import android.os.Environment
 import android.os.SystemClock
 import android.provider.MediaStore
+import android.provider.MediaStore.Audio.Media as AudioStore
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.zulipmobile.R
@@ -67,7 +68,7 @@ private fun ensureInitNotificationSounds(context: Context): Uri {
     }
 
     val resolver = context.contentResolver
-    val collection = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+    val collection = AudioStore.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
 
     // The directory we store our notification sounds into,
     // expressed as a relative path suitable for:
@@ -81,21 +82,16 @@ private fun ensureInitNotificationSounds(context: Context): Uri {
     // Query and cursor-loop based on: https://developer.android.com/training/data-storage/shared/media#query-collection
     val cursor = resolver.query(
         collection,
-        kotlin.arrayOf(
-            MediaStore.Audio.Media._ID,
-            MediaStore.Audio.Media.DISPLAY_NAME,
-            MediaStore.Audio.Media.OWNER_PACKAGE_NAME
-        ),
-        "${MediaStore.Audio.Media.RELATIVE_PATH}=?",
-        arrayOf(soundsDirectoryPath),
-        "${MediaStore.Audio.Media._ID} ASC"
+        kotlin.arrayOf(AudioStore._ID, AudioStore.DISPLAY_NAME, AudioStore.OWNER_PACKAGE_NAME),
+        "${AudioStore.RELATIVE_PATH}=?", arrayOf(soundsDirectoryPath),
+        "${AudioStore._ID} ASC"
     ) ?: run {
         ZLog.w(TAG, "ensureInitNotificationSounds: query failed")
         return defaultSoundUrl
     }
-    val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
-    val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
-    val ownerColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.OWNER_PACKAGE_NAME)
+    val idColumn = cursor.getColumnIndexOrThrow(AudioStore._ID)
+    val nameColumn = cursor.getColumnIndexOrThrow(AudioStore.DISPLAY_NAME)
+    val ownerColumn = cursor.getColumnIndexOrThrow(AudioStore.OWNER_PACKAGE_NAME)
     while (cursor.moveToNext()) {
         val name = cursor.getString(nameColumn)
 
@@ -133,10 +129,10 @@ private fun ensureInitNotificationSounds(context: Context): Uri {
         try {
             // Based on: https://developer.android.com/training/data-storage/shared/media#add-item
             val url = resolver.insert(collection, ContentValues().apply {
-                put(MediaStore.Audio.Media.DISPLAY_NAME, sound.fileDisplayName)
-                put(MediaStore.Audio.Media.RELATIVE_PATH, soundsDirectoryPath)
-                put(MediaStore.Audio.Media.IS_NOTIFICATION, 1)
-                put(MediaStore.Audio.Media.IS_PENDING, 1)
+                put(AudioStore.DISPLAY_NAME, sound.fileDisplayName)
+                put(AudioStore.RELATIVE_PATH, soundsDirectoryPath)
+                put(AudioStore.IS_NOTIFICATION, 1)
+                put(AudioStore.IS_PENDING, 1)
             }) ?: throw ResolverFailedException("resolver.insert failed")
 
             (resolver.openOutputStream(url, "wt")
@@ -147,7 +143,7 @@ private fun ensureInitNotificationSounds(context: Context): Uri {
                 }
 
             resolver.update(
-                url, ContentValues().apply { put(MediaStore.Audio.Media.IS_PENDING, 0) },
+                url, ContentValues().apply { put(AudioStore.IS_PENDING, 0) },
                 null, null)
 
             if (sound == kDefaultNotificationSound) {
