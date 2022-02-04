@@ -21,7 +21,7 @@ import java.lang.RuntimeException
 
 /** The channel ID we use for our one notification channel, which we use for all notifications. */
 // Previous values: "default", "messages-1"
-val CHANNEL_ID = "messages-2ankeuiv3"
+val CHANNEL_ID = "messages-2ankeuiv4"
 
 /** The vibration pattern we set. */
 // We try to set a vibration pattern that, with the phone in one's pocket,
@@ -49,7 +49,7 @@ private enum class NotificationSound constructor(
     chime5(R.raw.chime5, "Zulip - Chime #5.m4a")
 }
 
-private val kDefaultNotificationSound = NotificationSound.chime2
+private val kDefaultNotificationSound = NotificationSound.chime3
 
 // (Returns the URL of the default notification sound.)
 private fun ensureInitNotificationSounds(context: Context): Uri {
