@@ -67,6 +67,11 @@ private fun ensureInitNotificationSounds(context: Context): Uri {
     val resolver = context.contentResolver
     val collection = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
 
+    // The directory we store our notification sounds into,
+    // expressed as a relative path suitable for:
+    //   https://developer.android.com/reference/kotlin/android/provider/MediaStore.MediaColumns#RELATIVE_PATH:kotlin.String
+    val soundsDirectoryPath = "${Environment.DIRECTORY_NOTIFICATIONS}/Zulip/"
+
     // First, look to see what notification sounds we've already stored,
     // and check against our list of sounds we have.
 
@@ -76,10 +81,11 @@ private fun ensureInitNotificationSounds(context: Context): Uri {
         collection,
         kotlin.arrayOf(
             MediaStore.Audio.Media._ID,
-            MediaStore.Audio.Media.DISPLAY_NAME
+            MediaStore.Audio.Media.DISPLAY_NAME,
+            MediaStore.Audio.Media.OWNER_PACKAGE_NAME
         ),
-        "${MediaStore.Audio.Media.OWNER_PACKAGE_NAME}=?",
-        arrayOf(context.packageName),
+        "${MediaStore.Audio.Media.RELATIVE_PATH}=?",
+        arrayOf(soundsDirectoryPath),
         "${MediaStore.Audio.Media._ID} ASC"
     ) ?: run {
         ZLog.w(TAG, "ensureInitNotificationSounds: query failed")
@@ -87,22 +93,39 @@ private fun ensureInitNotificationSounds(context: Context): Uri {
     }
     val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
     val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
+    val ownerColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.OWNER_PACKAGE_NAME)
     while (cursor.moveToNext()) {
         val name = cursor.getString(nameColumn)
-        soundsTodo.remove(name)
-        if (name == kDefaultNotificationSound.fileDisplayName) {
+
+        // If the file is one we put there, and has the name we give to our
+        // default sound, then use it as the default sound.
+        val ownerPackageName = cursor.getString(ownerColumn)
+        if (name == kDefaultNotificationSound.fileDisplayName
+            && ownerPackageName == context.packageName) {
             val id = cursor.getLong(idColumn)
             defaultSoundUrl = ContentUris.withAppendedId(collection, id)
         }
+
+        // If it has the name of any of our sounds, then don't try to add
+        // that sound.  This applies even if we didn't put it there: the
+        // name is taken, so if we tried adding it anyway it'd get some
+        // other name (like "Zulip - Chime #3 (1).m4a", with " (1)" added).
+        // Which means the *next* launch would try to add it again ad infinitum.
+        // We could avoid this given some other way to uniquely identify the
+        // file, but haven't found an obvious one.
+        //
+        // This does mean it's possible the file isn't the one we would have
+        // put there... but it probably is, just from a debug vs. release build
+        // of the app (because those have different package names).  And anyway,
+        // this is a file we're supplying for the user in case they want it, not
+        // something where the app depends on it having specific content.
+        soundsTodo.remove(name)
     }
 
     // If that leaves any sounds we haven't yet put into shared storage
     // (e.g., because this is the first run after install, or after an
     // upgrade that added a sound), then store those.
 
-    // A relative path, suitable for:
-    //   https://developer.android.com/reference/kotlin/android/provider/MediaStore.MediaColumns#RELATIVE_PATH:kotlin.String
-    val soundsDirectoryPath = "${Environment.DIRECTORY_NOTIFICATIONS}/Zulip"
     for (sound in soundsTodo.values) {
         class ResolverFailedException(msg: String) : RuntimeException(msg)
         try {
