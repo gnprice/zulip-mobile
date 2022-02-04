@@ -156,8 +156,8 @@ private fun ensureInitNotificationSounds(context: Context): Uri {
                 defaultSoundUrl = url
             }
         } catch (e: IllegalStateException) {
-            // E.g., because we already had "Zulip - Chime.m4a" through "Zulip - Chime (31).m4a";
-            // it gives up rather than make a 33rd version "Zulip - Chime (32).m4a".
+            // If we already had "Zulip - Chime.m4a" through "Zulip - Chime (31).m4a", it gives up
+            // with this exception rather than make a 33rd version "Zulip - Chime (32).m4a".
             ZLog.w(TAG, e)
         } catch (e: ResolverFailedException) {
             ZLog.w(TAG, e)
