@@ -12,7 +12,9 @@ import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.os.SystemClock
 import android.provider.MediaStore
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.zulipmobile.R
 import com.zulipmobile.ZLog
@@ -53,10 +55,14 @@ private val kDefaultNotificationSound = NotificationSound.chime3
 
 // (Returns the URL of the default notification sound.)
 private fun ensureInitNotificationSounds(context: Context): Uri {
+    val tStart = SystemClock.elapsedRealtimeNanos()
+    Log.v(TAG, "time 0: ${tStart - tStart}")
+
     // The URL we'll return.
     // Typically this gets set in one of the loops below, but in case of error
     // or on old Android versions, we fall back to the internal resource.
     var defaultSoundUrl: Uri = context.resourceUrl(kDefaultNotificationSound.resourceId)
+    Log.v(TAG, "time 0a: ${SystemClock.elapsedRealtimeNanos() - tStart}")
 
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
         // Before Android 10 Q, we don't attempt to put the sounds in shared media storage.
@@ -65,18 +71,22 @@ private fun ensureInitNotificationSounds(context: Context): Uri {
     }
 
     val resolver = context.contentResolver
+    Log.v(TAG, "time 0b: ${SystemClock.elapsedRealtimeNanos() - tStart}")
     val collection = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+    Log.v(TAG, "time 0c: ${SystemClock.elapsedRealtimeNanos() - tStart}")
 
     // The directory we store our notification sounds into,
     // expressed as a relative path suitable for:
     //   https://developer.android.com/reference/kotlin/android/provider/MediaStore.MediaColumns#RELATIVE_PATH:kotlin.String
     val soundsDirectoryPath = "${Environment.DIRECTORY_NOTIFICATIONS}/Zulip/"
+    Log.v(TAG, "time 0d: ${SystemClock.elapsedRealtimeNanos() - tStart}")
 
     // First, look to see what notification sounds we've already stored,
     // and check against our list of sounds we have.
 
     val soundsTodo = NotificationSound.values().map { it.fileDisplayName to it }.toMap().toMutableMap()
     // Query and cursor-loop based on: https://developer.android.com/training/data-storage/shared/media#query-collection
+    Log.v(TAG, "time 1: ${SystemClock.elapsedRealtimeNanos() - tStart}")
     val cursor = resolver.query(
         collection,
         kotlin.arrayOf(
@@ -94,7 +104,9 @@ private fun ensureInitNotificationSounds(context: Context): Uri {
     val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
     val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
     val ownerColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.OWNER_PACKAGE_NAME)
+    Log.v(TAG, "time 2: ${SystemClock.elapsedRealtimeNanos() - tStart}")
     while (cursor.moveToNext()) {
+//        Log.v(TAG, "time 3[]: ${SystemClock.elapsedRealtimeNanos() - tStart}")
         val name = cursor.getString(nameColumn)
 
         // If the file is one we put there, and has the name we give to our
@@ -121,6 +133,7 @@ private fun ensureInitNotificationSounds(context: Context): Uri {
         // something where the app depends on it having specific content.
         soundsTodo.remove(name)
     }
+    Log.v(TAG, "time 4: ${SystemClock.elapsedRealtimeNanos() - tStart}")
 
     // If that leaves any sounds we haven't yet put into shared storage
     // (e.g., because this is the first run after install, or after an
@@ -158,6 +171,10 @@ private fun ensureInitNotificationSounds(context: Context): Uri {
         }
     }
 
+    val tEnd = SystemClock.elapsedRealtimeNanos()
+    Log.v(TAG, "time N: ${tEnd - tStart}")
+    Log.v(TAG, "elapsed: ${(tEnd - tStart)}ns")
+    Log.v(TAG, "using: ${defaultSoundUrl}")
     return defaultSoundUrl
 }
 
