@@ -45,11 +45,9 @@ fun Context.resourceUrl(resourceId: Int): Uri = with(resources) {
 
 private enum class NotificationSound constructor(
     val resourceId: Int, val fileDisplayName: String) {
-    chime1(R.raw.chime1, "Zulip - Chime #1.m4a"),
-    chime2(R.raw.chime2, "Zulip - Chime #2.m4a"),
-    chime3(R.raw.chime3, "Zulip - Chime #3.m4a"),
-    chime4(R.raw.chime4, "Zulip - Chime #4.m4a"),
-    chime5(R.raw.chime5, "Zulip - Chime #5.m4a")
+    chime2(R.raw.chime2, "Zulip - Low Chime.m4a"),
+    chime3(R.raw.chime3, "Zulip - Chime.m4a"),
+    chime4(R.raw.chime4, "Zulip - High Chime.m4a"),
 }
 
 private val kDefaultNotificationSound = NotificationSound.chime3
@@ -107,7 +105,7 @@ private fun ensureInitNotificationSounds(context: Context): Uri {
         // If it has the name of any of our sounds, then don't try to add
         // that sound.  This applies even if we didn't put it there: the
         // name is taken, so if we tried adding it anyway it'd get some
-        // other name (like "Zulip - Chime #3 (1).m4a", with " (1)" added).
+        // other name (like "Zulip - Chime (1).m4a", with " (1)" added).
         // Which means the *next* launch would try to add it again ad infinitum.
         // We could avoid this given some other way to uniquely identify the
         // file, but haven't found an obvious one.
@@ -150,8 +148,8 @@ private fun ensureInitNotificationSounds(context: Context): Uri {
                 defaultSoundUrl = url
             }
         } catch (e: IllegalStateException) {
-            // E.g., because we already had "Zulip - Chime #3.m4a" through "Zulip - Chime #3 (31).m4a";
-            // it gives up rather than make a 33rd version "Zulip - Chime #3 (32).m4a".
+            // E.g., because we already had "Zulip - Chime.m4a" through "Zulip - Chime (31).m4a";
+            // it gives up rather than make a 33rd version "Zulip - Chime (32).m4a".
             ZLog.w(TAG, e)
         } catch (e: ResolverFailedException) {
             ZLog.w(TAG, e)
