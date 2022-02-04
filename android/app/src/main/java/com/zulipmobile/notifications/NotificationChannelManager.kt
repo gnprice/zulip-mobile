@@ -52,7 +52,15 @@ private enum class NotificationSound constructor(
 
 private val kDefaultNotificationSound = NotificationSound.chime3
 
-// (Returns the URL of the default notification sound.)
+/**
+ * Prepare our notification sounds; return a URL for our default sound.
+ *
+ * Where possible, this copies each of our notification sounds into shared storage
+ * so that the user can choose between them in the system notification settings.
+ *
+ * Returns a URL for our default notification sound: either in shared storage
+ * if we successfully copied it there, or else as our internal resource file.
+ */
 private fun ensureInitNotificationSounds(context: Context): Uri {
     // The URL we'll return.
     // Typically this gets set in one of the loops below, but in case of error
