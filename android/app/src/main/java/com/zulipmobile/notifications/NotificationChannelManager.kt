@@ -5,7 +5,6 @@ package com.zulipmobile.notifications
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.ContentResolver
-import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.media.AudioAttributes
@@ -57,7 +56,7 @@ private val kDefaultNotificationSound = NotificationSound.chime3
 // (Returns the URL of the default notification sound.)
 private fun ensureInitNotificationSounds(context: Context): Uri {
     val tStart = SystemClock.elapsedRealtimeNanos()
-    Log.v(TAG, "time 0: ${tStart - tStart}")
+    Log.v(TAG, "time 0: ${tStart - tStart} (from ${tStart})")
 
     // The URL we'll return.
     // Typically this gets set in one of the loops below, but in case of error
@@ -139,10 +138,9 @@ private fun ensureInitNotificationSounds(context: Context): Uri {
         defaultSoundUrl = Uri.parse(it)
     }
 
-    val tEnd = SystemClock.elapsedRealtimeNanos()
-    Log.v(TAG, "time N: ${tEnd - tStart}")
-    Log.v(TAG, "elapsed: ${(tEnd - tStart)}ns")
+    Log.v(TAG, "time 5: ${SystemClock.elapsedRealtimeNanos() - tStart}")
     Log.v(TAG, "using: ${defaultSoundUrl}")
+    Log.v(TAG, "time N: ${SystemClock.elapsedRealtimeNanos() - tStart}")
     return defaultSoundUrl
 }
 
@@ -166,6 +164,9 @@ fun createNotificationChannel(context: Context) {
         return
     }
 
+    val tStart = SystemClock.elapsedRealtimeNanos()
+    Log.v(TAG, "Time 0: ${tStart - tStart} (from ${tStart})")
+
     val manager = context.notificationManager
 
     // See if our current-version channel already exists; delete any obsolete previous channels.
@@ -185,6 +186,7 @@ fun createNotificationChannel(context: Context) {
     // The channel doesn't exist.  Create it.
 
     val notificationSoundUrl = ensureInitNotificationSounds(context)
+    Log.v(TAG, "Time 1: ${SystemClock.elapsedRealtimeNanos() - tStart}")
 
     // TODO: It'd be nice to use NotificationChannelCompat here: we get a nice builder class,
     //   plus should then be able to drop the Build.VERSION condition.
@@ -206,11 +208,13 @@ fun createNotificationChannel(context: Context) {
     //    settings for the channel -- like "override Do Not Disturb", or "use
     //    a different sound", or "don't pop on screen" -- their changes get
     //    reset.  So this has to be done sparingly.
+    Log.v(TAG, "Time 2: ${SystemClock.elapsedRealtimeNanos() - tStart}")
     manager.createNotificationChannel(NotificationChannel(
         CHANNEL_ID,
         context.getString(R.string.notification_channel_name),
         NotificationManager.IMPORTANCE_HIGH
     ).apply {
+        Log.v(TAG, "Time 3: ${SystemClock.elapsedRealtimeNanos() - tStart}")
         // TODO: Is this the default value anyway for IMPORTANCE_HIGH?
         //   If so, perhaps just take it out.
         enableLights(true)
@@ -219,5 +223,8 @@ fun createNotificationChannel(context: Context) {
 
         setSound(notificationSoundUrl,
             AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION).build())
+        Log.v(TAG, "Time 4: ${SystemClock.elapsedRealtimeNanos() - tStart}")
     })
+
+    Log.v(TAG, "Time N: ${SystemClock.elapsedRealtimeNanos() - tStart}")
 }
