@@ -8,7 +8,6 @@ import { getMute, isTopicMuted } from '../mute/muteModel';
 import { getOwnUserId } from '../users/userSelectors';
 import { getSubscriptionsById, getStreamsById } from '../subscriptions/subscriptionSelectors';
 import { caseNarrow } from '../utils/narrow';
-import { NULL_SUBSCRIPTION } from '../nullObjects';
 import {
   getUnread,
   getUnreadPms,
@@ -133,9 +132,31 @@ export const getUnreadStreamsAndTopics: Selector<$ReadOnlyArray<UnreadStreamItem
   (subscriptionsById, unreadStreams, mute) => {
     const totals = new Map();
     for (const [streamId, streamData] of unreadStreams.entries()) {
-      const { name, color, in_home_view, invite_only, pin_to_top, is_web_public } =
-        subscriptionsById.get(streamId) || NULL_SUBSCRIPTION;
+      const subscription = subscriptionsById.get(streamId);
+      if (!subscription) {
+        // If you aren't subscribed to a stream, then conceptually you
+        // cannot have any messages unread in it.  In particular, if you
+        // unsubscribe from a stream where you have unreads, the server
+        // marks those messages as read.
+        //
+        // However, in the server API it's not quite an invariant that we
+        // can't be in a state where the unreads data says there are unreads
+        // but the subscriptions data says there's no subscription.  That's
+        // because there's a race in that unsubscribe flow: the marking as
+        // read happens as deferred work in the background.  See
+        // bulk_remove_subscriptions in zulip.git:zerver/lib/actions.py .
+        // So it is possible for us to reach this case; and in fact it's
+        // normal to enter it briefly, on unsubscribing from a stream with
+        // unreads.
+        //
+        // Fortunately, the simplest thing we can possibly do here is also
+        // the thing that covers over that delay and makes it as if the
+        // marking as unread happened instantly: we just ignore those
+        // unreads here in the UI.
+        continue;
+      }
 
+      const { name, color, in_home_view, invite_only, pin_to_top, is_web_public } = subscription;
       const total = {
         key: `stream:${name}`, // TODO(#3918): should use stream ID
         streamId,
