@@ -2,7 +2,7 @@
 
 import { doNotMarkMessagesAsRead } from './globals';
 import { setMessagesReadAttributes, visibleReadMessageIds } from './messages';
-import { clearLongPressTimeout } from './pressHandlers';
+import { clearLongPressTimeout } from './longPressTimeout';
 import sendMessage from './sendMessage';
 import { windowSmoothScroll } from './smoothScroll';
 

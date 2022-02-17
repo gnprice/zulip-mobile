@@ -6,6 +6,7 @@
  */
 
 import { makeUserId } from '../../api/idTypes';
+import { clearLongPressTimeout, setLongPressTimeout } from './longPressTimeout';
 
 import { nextMessage } from './messages';
 import { scrollToBottom } from './scroll';
@@ -13,13 +14,8 @@ import sendMessage from './sendMessage';
 import { toggleSpoiler } from './spoilers';
 
 let hasLongPressed = false;
-let longPressTimeout = undefined;
 let lastTouchPositionX = -1;
 let lastTouchPositionY = -1;
-
-export const clearLongPressTimeout = () => {
-  clearTimeout(longPressTimeout);
-};
 
 /** DEPRECATED */
 const getMessageIdFromElement = (element: Element, defaultValue: number = -1): number => {
@@ -63,7 +59,7 @@ const requireNumericAttribute = (e: Element, name: string): number => {
 
 const handleClickEvent = (e: MouseEvent) => {
   e.preventDefault();
-  clearTimeout(longPressTimeout);
+  clearLongPressTimeout();
 
   /* Without a flag `hasLongPressed`, both the short press and the long
    * press actions get triggered. See PR #3404 for more context. */
@@ -251,8 +247,8 @@ export function installPressHandlers() {
     lastTouchPositionX = e.changedTouches[0].pageX;
     lastTouchPositionY = e.changedTouches[0].pageY;
     hasLongPressed = false;
-    clearTimeout(longPressTimeout);
-    longPressTimeout = setTimeout(() => handleLongPress(target), 500);
+    clearLongPressTimeout();
+    setLongPressTimeout(() => handleLongPress(target), 500);
   });
 
   documentBody.addEventListener('touchend', (e: TouchEvent) => {
@@ -264,19 +260,19 @@ export function installPressHandlers() {
         e.changedTouches[0].pageY,
       )
     ) {
-      clearTimeout(longPressTimeout);
+      clearLongPressTimeout();
     }
   });
 
   documentBody.addEventListener('touchcancel', (e: TouchEvent) => {
-    clearTimeout(longPressTimeout);
+    clearLongPressTimeout();
   });
 
   documentBody.addEventListener('touchmove', (e: TouchEvent) => {
-    clearTimeout(longPressTimeout);
+    clearLongPressTimeout();
   });
 
   documentBody.addEventListener('drag', (e: DragEvent) => {
-    clearTimeout(longPressTimeout);
+    clearLongPressTimeout();
   });
 }
