@@ -646,36 +646,6 @@ const handleInboundEventContent = (uevent: WebViewInboundEventContent) => {
   });
 };
 
-/**
- * Called by the `script.js` template immediately after this module's toplevel.
- *
- * (This provides a way for the template to pass arguments for this code to
- * use at initialization.)
- */
-export const handleInitialLoad = (
-  scrollMessageId: number | null,
-  // The `realm` part of an `Auth` object is a URL object. It's passed
-  // in its stringified form.
-  rawAuth: {| ...$Diff<Auth, {| realm: mixed |}>, realm: string |},
-) => {
-  const auth: Auth = { ...rawAuth, realm: new URL(rawAuth.realm) };
-
-  // Since its version 5.x, the `react-native-webview` library dispatches our
-  // `message` events at `window` on iOS but `document` on Android.
-  if (platformOS === 'ios') {
-    /* eslint-disable-next-line no-use-before-define */
-    window.addEventListener('message', handleMessageEvent);
-  } else {
-    /* eslint-disable-next-line no-use-before-define */
-    document.addEventListener('message', handleMessageEvent);
-  }
-
-  scrollToMessage(scrollMessageId);
-  rewriteHtml(auth);
-  sendScrollMessageIfListShort();
-  scrollEventsDisabled = false;
-};
-
 /*
  *
  * Handling other message-from-outside events
@@ -739,7 +709,7 @@ const inboundEventHandlers = {
   read: handleInboundEventMessagesRead,
 };
 
-// See `handleInitialLoad` for how this gets subscribed to events.
+// See just below for how this gets subscribed to events.
 const handleMessageEvent: MessageEventListener = e => {
   scrollEventsDisabled = true;
   // This decoding inverts `base64Utf8Encode`.
@@ -762,6 +732,14 @@ const handleMessageEvent: MessageEventListener = e => {
   });
   scrollEventsDisabled = false;
 };
+
+// Since its version 5.x, the `react-native-webview` library dispatches our
+// `message` events at `window` on iOS but `document` on Android.
+if (platformOS === 'ios') {
+  window.addEventListener('message', handleMessageEvent);
+} else {
+  document.addEventListener('message', handleMessageEvent);
+}
 
 /*
  *
@@ -1020,3 +998,23 @@ documentBody.addEventListener('drag', (e: DragEvent) => {
 // However, I don't see that as being worth the possible bugs from things
 // loading too early.
 signalReadyForEvents();
+
+/**
+ * Called by the `script.js` template immediately after this module's toplevel.
+ *
+ * (This provides a way for the template to pass arguments for this code to
+ * use at initialization.)
+ */
+export const handleInitialLoad = (
+  scrollMessageId: number | null,
+  // The `realm` part of an `Auth` object is a URL object. It's passed
+  // in its stringified form.
+  rawAuth: {| ...$Diff<Auth, {| realm: mixed |}>, realm: string |},
+) => {
+  const auth: Auth = { ...rawAuth, realm: new URL(rawAuth.realm) };
+
+  scrollToMessage(scrollMessageId);
+  rewriteHtml(auth);
+  sendScrollMessageIfListShort();
+  scrollEventsDisabled = false;
+};
