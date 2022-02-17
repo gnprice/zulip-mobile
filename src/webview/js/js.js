@@ -37,7 +37,6 @@ import InboundEventLogger from './InboundEventLogger';
 import sendMessage from './sendMessage';
 import rewriteHtml from './rewriteHtml';
 import { ensureUnreachable } from '../../generics';
-import { windowSmoothScroll } from './smoothScroll';
 import { reportError } from './errors';
 import { platformOS, doNotMarkMessagesAsRead } from './globals';
 import { clearLongPressTimeout, installPressHandlers } from './pressHandlers';
@@ -48,6 +47,13 @@ import {
   visibleReadMessageIds,
 } from './messages';
 import { viewportHeight } from './viewport';
+import {
+  isNearBottom,
+  scrollToBottom,
+  scrollToBottomIfNearEnd,
+  scrollToMessage,
+  scrollToPreserve,
+} from './scroll';
 
 /*
  * Supported platforms:
@@ -201,28 +207,6 @@ type ScrollTarget =
   | {| type: 'anchor', messageId: number | null |}
   | {| type: 'preserve', msgId: number, prevBoundTop: number |};
 
-const scrollToBottom = () => {
-  windowSmoothScroll(0, documentBody.scrollHeight);
-};
-
-const isNearBottom = (): boolean =>
-  documentBody.scrollHeight - 100 < documentBody.scrollTop + documentBody.clientHeight;
-
-const scrollToBottomIfNearEnd = () => {
-  if (isNearBottom()) {
-    scrollToBottom();
-  }
-};
-
-const scrollToMessage = (messageId: number | null) => {
-  const targetNode = messageId !== null ? document.getElementById(`msg-${messageId}`) : null;
-  if (targetNode) {
-    targetNode.scrollIntoView({ block: 'start' });
-  } else {
-    window.scroll({ left: 0, top: documentBody.scrollHeight + 200 });
-  }
-};
-
 // Try to identify a message on screen and its location, so we can
 // scroll the corresponding message to the same place afterward.
 const findPreserveTarget = (): ScrollTarget => {
@@ -236,17 +220,6 @@ const findPreserveTarget = (): ScrollTarget => {
   const messageId = idFromMessage(message);
   const prevBoundRect = message.getBoundingClientRect();
   return { type: 'preserve', msgId: messageId, prevBoundTop: prevBoundRect.top };
-};
-
-// Scroll the given message to the same height it was at before.
-const scrollToPreserve = (msgId: number, prevBoundTop: number) => {
-  const newElement = document.getElementById(`msg-${msgId}`);
-  if (!newElement) {
-    // TODO log this -- it's an error which the user will notice.
-    return;
-  }
-  const newBoundRect = newElement.getBoundingClientRect();
-  window.scrollBy(0, newBoundRect.top - prevBoundTop);
 };
 
 /**

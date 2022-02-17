@@ -8,6 +8,7 @@
 import { makeUserId } from '../../api/idTypes';
 
 import { nextMessage } from './messages';
+import { scrollToBottom } from './scroll';
 import sendMessage from './sendMessage';
 import { toggleSpoiler } from './spoilers';
 
