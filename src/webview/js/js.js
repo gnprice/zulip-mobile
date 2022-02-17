@@ -41,6 +41,7 @@ import { toggleSpoiler } from './spoilers';
 import { ensureUnreachable } from '../../generics';
 import { windowSmoothScroll } from './smoothScroll';
 import { reportError } from './errors';
+import { platformOS, doNotMarkMessagesAsRead } from './globals';
 
 /*
  * Supported platforms:
@@ -63,27 +64,6 @@ import { reportError } from './errors';
  * * See docs/architecture/platform-versions.md for data and discussion
  *   about our version-support strategy.
  */
-
-/**
- * A copy of RN's `Platform.OS`.
- *
- * Provided by the template in `script.js`.
- */
-declare var platformOS: string;
-
-/**
- * The value of `process.env.NODE_ENV === 'development'` in RN-land.
- *
- * Provided by the template in `script.js`.
- */
-declare var isDevelopment: boolean;
-
-/**
- * used to control behavior based on debug settings.
- * defined in `handleInitialLoad`.
- * declared globally so as to use across functions.
- */
-declare var doNotMarkMessagesAsRead: boolean;
 
 // We pull out document.body in one place, and check it's not null, in order
 // to provide that assertion to the type-checker.

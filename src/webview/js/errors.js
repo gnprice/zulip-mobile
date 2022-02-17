@@ -1,5 +1,6 @@
 // @flow strict-local
 
+import { isDevelopment } from './globals';
 import sendMessage from './sendMessage';
 
 const escapeHtml = (text: string): string => {
