@@ -13,7 +13,7 @@ import { ensureUnreachable } from '../../generics';
 import sendMessage from './sendMessage';
 import InboundEventLogger from './InboundEventLogger';
 import rewriteHtml from './rewriteHtml';
-import { platformOS } from './globals';
+/*:: import { platformOS } from './globals'; */
 import { someVisibleMessage, idFromMessage } from './messages';
 import { viewportHeight } from './viewport';
 import {
