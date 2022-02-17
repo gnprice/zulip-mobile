@@ -2,7 +2,6 @@
 import { Platform } from 'react-native';
 
 import type { Auth } from '../../types';
-import smoothScroll from './smoothScroll.min';
 import matchesPolyfill from './matchesPolyfill';
 import compiledWebviewJs from './generatedEs3';
 
@@ -18,8 +17,6 @@ export default (
   doNotMarkMessagesAsRead: boolean,
 ): string => `
 <script>
-window.__forceSmoothScrollPolyfill__ = true;
-${smoothScroll}
 ${matchesPolyfill}
 document.addEventListener('DOMContentLoaded', function() {
   var platformOS = ${JSON.stringify(Platform.OS)};

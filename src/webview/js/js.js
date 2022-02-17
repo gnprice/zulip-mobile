@@ -39,6 +39,7 @@ import sendMessage from './sendMessage';
 import rewriteHtml from './rewriteHtml';
 import { toggleSpoiler } from './spoilers';
 import { ensureUnreachable } from '../../generics';
+import { windowSmoothScroll } from './smoothScroll.min';
 
 /*
  * Supported platforms:
@@ -535,7 +536,7 @@ type ScrollTarget =
   | {| type: 'preserve', msgId: number, prevBoundTop: number |};
 
 const scrollToBottom = () => {
-  window.scroll({ left: 0, top: documentBody.scrollHeight, behavior: 'smooth' });
+  windowSmoothScroll(0, documentBody.scrollHeight);
 };
 
 const isNearBottom = (): boolean =>
