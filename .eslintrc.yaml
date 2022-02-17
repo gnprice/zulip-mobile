@@ -211,6 +211,8 @@ rules:
   # of Array#reduce.  Too noisy.
   no-param-reassign: off
 
+  # This is Flow's job.
+  no-undef: off
 
   #
   # ================================================================
