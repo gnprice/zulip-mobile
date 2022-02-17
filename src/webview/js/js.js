@@ -39,7 +39,7 @@ import sendMessage from './sendMessage';
 import rewriteHtml from './rewriteHtml';
 import { toggleSpoiler } from './spoilers';
 import { ensureUnreachable } from '../../generics';
-import { windowSmoothScroll } from './smoothScroll.min';
+import { windowSmoothScroll } from './smoothScroll';
 
 /*
  * Supported platforms:
