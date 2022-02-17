@@ -38,21 +38,20 @@ import sendMessage from './sendMessage';
 import rewriteHtml from './rewriteHtml';
 import { ensureUnreachable } from '../../generics';
 import { reportError } from './errors';
-import { platformOS, doNotMarkMessagesAsRead } from './globals';
-import { clearLongPressTimeout, installPressHandlers } from './pressHandlers';
-import {
-  someVisibleMessage,
-  idFromMessage,
-  setMessagesReadAttributes,
-  visibleReadMessageIds,
-} from './messages';
+import { platformOS } from './globals';
+import { installPressHandlers } from './pressHandlers';
+import { someVisibleMessage, idFromMessage } from './messages';
 import { viewportHeight } from './viewport';
 import {
+  disableScrollEvents,
+  enableScrollEvents,
+  installScrollHandler,
   isNearBottom,
   scrollToBottom,
   scrollToBottomIfNearEnd,
   scrollToMessage,
   scrollToPreserve,
+  sendScrollMessageIfListShort,
 } from './scroll';
 
 /*
@@ -118,82 +117,7 @@ const showHideElement = (elementId: string, show: boolean) => {
  *
  */
 
-/*
- *
- * Reporting scrolls to outside, to mark messages as read
- *
- */
-
-/**
- * The range of message IDs that were both visible and read whenever we last
- * checked.
- */
-let prevMessageRange = visibleReadMessageIds();
-
-const sendScrollMessage = () => {
-  const messageRange = visibleReadMessageIds();
-  // rangeHull is the convex hull of the previous range and the new one.
-  // When the user is actively scrolling, the browser gives us scroll events
-  // only occasionally, so we use this to interpolate scrolling past the
-  // messages in between, as a partial workaround.
-  const rangeHull = {
-    first: Math.min(prevMessageRange.first, messageRange.first),
-    last: Math.max(prevMessageRange.last, messageRange.last),
-  };
-  sendMessage({
-    type: 'scroll',
-    // See WebViewOutboundEventScroll for the meanings of these properties.
-    offsetHeight: documentBody.offsetHeight,
-    innerHeight: window.innerHeight,
-    scrollY: window.scrollY,
-    startMessageId: rangeHull.first,
-    endMessageId: rangeHull.last,
-  });
-  if (!doNotMarkMessagesAsRead) {
-    setMessagesReadAttributes(rangeHull);
-  }
-  // If there are no visible + read messages (for instance, the entire screen
-  // is taken up by a single large message), then we don't want to update
-  // prevMessageRange.  This way, if the user scrolled past some messages to
-  // get here, then even though `messageRange` was empty this time and so we
-  // didn't mark any messages as read just now, we'll include those in
-  // `rangeHull` the next time the user scrolls and so we'll mark them as read
-  // then.
-  if (messageRange.first < messageRange.last) {
-    prevMessageRange = messageRange;
-  }
-};
-
-// If the message list is too short to scroll, fake a scroll event
-// in order to cause the messages to be marked as read.
-const sendScrollMessageIfListShort = () => {
-  if (documentBody.scrollHeight === documentBody.clientHeight) {
-    sendScrollMessage();
-  }
-};
-
-/**
- * Disable reporting scrolls to the outside to mark messages as read.
- *
- * This is set while we're first setting up after the content loads, and
- * while we're handling `message` events from the outside and potentially
- * rewriting the content.
- */
-let scrollEventsDisabled = true;
-
-const handleScrollEvent = () => {
-  clearLongPressTimeout();
-  if (scrollEventsDisabled) {
-    return;
-  }
-
-  sendScrollMessage();
-
-  const nearEnd = documentBody.offsetHeight - window.scrollY - window.innerHeight > 100;
-  showHideElement('scroll-bottom', nearEnd);
-};
-
-window.addEventListener('scroll', handleScrollEvent);
+installScrollHandler();
 
 /*
  *
@@ -350,7 +274,7 @@ const inboundEventHandlers = {
 
 // See just below for how this gets subscribed to events.
 const handleMessageEvent: MessageEventListener = e => {
-  scrollEventsDisabled = true;
+  disableScrollEvents();
   // This decoding inverts `base64Utf8Encode`.
   const decodedData = decodeURIComponent(escape(window.atob(e.data)));
   const rawInboundEvents = JSON.parse(decodedData);
@@ -369,7 +293,7 @@ const handleMessageEvent: MessageEventListener = e => {
     // $FlowFixMe[prop-missing]
     inboundEventHandlers[uevent.type](uevent);
   });
-  scrollEventsDisabled = false;
+  enableScrollEvents();
 };
 
 // Since its version 5.x, the `react-native-webview` library dispatches our
@@ -405,5 +329,5 @@ export const handleInitialLoad = (
   scrollToMessage(scrollMessageId);
   rewriteHtml(auth);
   sendScrollMessageIfListShort();
-  scrollEventsDisabled = false;
+  enableScrollEvents();
 };
