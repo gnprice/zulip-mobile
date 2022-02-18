@@ -50,6 +50,7 @@ type Props = $ReadOnly<{|
 
   unreadCount?: number,
   iconSize: number,
+  showDescription?: boolean,
   showSwitch?: boolean,
   // These stream names are here for a mix of good reasons and (#3918) bad ones.
   // To audit all uses, change `name` to write-only (`-name:`), and run Flow.
@@ -83,6 +84,7 @@ export default function StreamItem(props: Props): Node {
     isMuted,
     isSubscribed = false,
     iconSize,
+    showDescription = false,
     showSwitch = false,
     unreadCount,
     onPress,
@@ -143,7 +145,7 @@ export default function StreamItem(props: Props): Node {
             text={subscription.name}
             ellipsizeMode="tail"
           />
-          {subscription.description !== undefined && subscription.description !== '' && (
+          {showDescription && (
             <ZulipText
               numberOfLines={1}
               style={componentStyles.description}
