@@ -45,7 +45,6 @@ type Props = $ReadOnly<{|
 
   isMuted: boolean,
   isSubscribed?: boolean,
-  color?: string,
 
   unreadCount?: number,
   iconSize: number,
@@ -67,7 +66,6 @@ type Props = $ReadOnly<{|
  * @prop isMuted - false for a Stream; !sub.in_home_view for Subscription
  * @prop isSubscribed - whether the user is subscribed to the stream;
  *   ignored (and can be any value) unless showSwitch is true
- * @prop color - if provided, MUST be .color on a Subscription
  *
  * @prop unreadCount - number of unread messages
  * @prop iconSize
@@ -78,7 +76,6 @@ type Props = $ReadOnly<{|
 export default function StreamItem(props: Props): Node {
   const {
     subscription,
-    color,
     isMuted,
     isSubscribed = false,
     iconSize,
@@ -112,8 +109,8 @@ export default function StreamItem(props: Props): Node {
     isMuted && componentStyles.muted,
   ];
   const iconColor =
-    color !== undefined
-      ? color
+    !highlight && streamColor != null
+      ? streamColor
       : foregroundColorFromBackground(
           // $FlowFixMe invariant: highlight => have sub, with color
           highlight ? streamColor : themeBackgroundColor,

@@ -93,11 +93,6 @@ export default function StreamListCard(props: Props): Node {
             <StreamItem
               subscription={item}
               iconSize={16}
-              color={
-                /* Even if the user happens to be subscribed to this stream,
-                   we don't show their subscription color. */
-                undefined
-              }
               unreadCount={undefined}
               isMuted={
                 /* This stream may in reality be muted.
