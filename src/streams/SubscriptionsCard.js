@@ -67,12 +67,7 @@ export default function SubscriptionsCard(props: Props): Node {
           renderItem={({ item }: { item: Subscription, ... }) => (
             <StreamItem
               subscription={item}
-              streamId={item.stream_id}
-              name={item.name}
               iconSize={16}
-              isPrivate={item.invite_only}
-              isWebPublic={item.is_web_public}
-              description=""
               color={item.color}
               unreadCount={unreadByStream[item.stream_id]}
               isMuted={item.in_home_view === false} // if 'undefined' is not muted

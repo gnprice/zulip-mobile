@@ -92,12 +92,7 @@ export default function StreamListCard(props: Props): Node {
           renderItem={({ item }) => (
             <StreamItem
               subscription={item}
-              streamId={item.stream_id}
-              name={item.name}
               iconSize={16}
-              isPrivate={item.invite_only}
-              isWebPublic={item.is_web_public}
-              description={item.description}
               color={
                 /* Even if the user happens to be subscribed to this stream,
                    we don't show their subscription color. */

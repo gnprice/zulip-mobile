@@ -71,12 +71,8 @@ export default function UnreadCards(props: Props): Node {
         section.key === 'private' ? null : (
           <StreamItem
             subscription={section.subscription}
-            streamId={section.streamId}
-            name={section.subscription.name}
             iconSize={16}
             isMuted={!section.subscription.in_home_view}
-            isPrivate={section.subscription.invite_only}
-            isWebPublic={section.subscription.is_web_public}
             backgroundColor={section.subscription.color}
             unreadCount={section.unread}
             onPress={stream => {
