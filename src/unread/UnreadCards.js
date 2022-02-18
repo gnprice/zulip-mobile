@@ -74,7 +74,7 @@ export default function UnreadCards(props: Props): Node {
             streamId={section.streamId}
             iconSize={16}
             isMuted={!(section.subscription?.in_home_view ?? false)}
-            backgroundColor={section.subscription?.color ?? 'gray'}
+            highlight
             unreadCount={section.unread}
             onPress={(streamId: number) => {
               setTimeout(() => dispatch(doNarrow(streamNarrow(streamId))));
