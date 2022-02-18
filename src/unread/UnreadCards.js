@@ -4,6 +4,7 @@ import React from 'react';
 import type { Node } from 'react';
 import { SectionList } from 'react-native';
 
+import { type Subscription } from '../types';
 import { useDispatch, useSelector } from '../react-redux';
 import { SearchEmptyState } from '../common';
 import PmConversationList from '../pm-conversations/PmConversationList';
@@ -23,6 +24,7 @@ import { doNarrow } from '../actions';
  * the UI in this file happens to need.
  */
 export type UnreadStreamItem = {|
+  subscription: Subscription,
   key: string,
   streamId: number,
   streamName: string,

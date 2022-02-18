@@ -158,6 +158,7 @@ export const getUnreadStreamsAndTopics: Selector<$ReadOnlyArray<UnreadStreamItem
 
       const { name, color, in_home_view, invite_only, pin_to_top, is_web_public } = subscription;
       const total = {
+        subscription,
         key: `stream:${name}`, // TODO(#3918): should use stream ID
         streamId,
         streamName: name,
