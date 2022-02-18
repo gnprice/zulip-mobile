@@ -103,6 +103,7 @@ export default function StreamListCard(props: Props): Node {
                    But in this UI, we don't show that distinction. */
                 false
               }
+              showDescription
               showSwitch
               isSubscribed={subscriptions.has(item.stream_id)}
               onPress={handleNarrow}

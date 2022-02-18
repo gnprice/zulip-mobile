@@ -50,6 +50,7 @@ type Props = $ReadOnly<{|
 
   unreadCount?: number,
   iconSize: number,
+  showDescription?: boolean,
   showSwitch?: boolean,
   onPress: (streamId: number, streamName: string) => void,
   onSwitch?: (streamId: number, streamName: string, newValue: boolean) => void,
@@ -81,6 +82,7 @@ export default function StreamItem(props: Props): Node {
     isMuted,
     isSubscribed = false,
     iconSize,
+    showDescription = false,
     showSwitch = false,
     unreadCount,
     onPress,
@@ -141,7 +143,7 @@ export default function StreamItem(props: Props): Node {
             text={subscription.name}
             ellipsizeMode="tail"
           />
-          {subscription.description !== undefined && subscription.description !== '' && (
+          {showDescription && (
             <ZulipText
               numberOfLines={1}
               style={componentStyles.description}
