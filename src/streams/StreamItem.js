@@ -65,7 +65,6 @@ type Props = $ReadOnly<{|
  * @prop isSubscribed - whether the user is subscribed to the stream;
  *   ignored (and can be any value) unless showSwitch is true
  * @prop color - if provided, MUST be .color on a Subscription
- * @prop backgroundColor - if provided, MUST be .color on a Subscription
  *
  * @prop unreadCount - number of unread messages
  * @prop iconSize
