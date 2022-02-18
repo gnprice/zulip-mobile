@@ -27,13 +27,7 @@ export type UnreadStreamItem = {|
   subscription: Subscription,
   key: string,
   streamId: number,
-  streamName: string,
   unread: number,
-  color: string,
-  isMuted: boolean,
-  isPinned: boolean,
-  isPrivate: boolean,
-  isWebPublic: boolean | void,
   data: Array<{|
     key: string,
     topic: string,
@@ -77,12 +71,12 @@ export default function UnreadCards(props: Props): Node {
         section.key === 'private' ? null : (
           <StreamItem
             streamId={section.streamId}
-            name={section.streamName}
+            name={section.subscription.name}
             iconSize={16}
-            isMuted={section.isMuted}
-            isPrivate={section.isPrivate}
-            isWebPublic={section.isWebPublic}
-            backgroundColor={section.color}
+            isMuted={!section.subscription.in_home_view}
+            isPrivate={section.subscription.invite_only}
+            isWebPublic={section.subscription.is_web_public}
+            backgroundColor={section.subscription.color}
             unreadCount={section.unread}
             onPress={stream => {
               setTimeout(() => dispatch(doNarrow(streamNarrow(stream.stream_id))));
@@ -97,7 +91,7 @@ export default function UnreadCards(props: Props): Node {
           <TopicItem
             streamId={section.streamId}
             name={item.topic}
-            isMuted={section.isMuted || item.isMuted}
+            isMuted={!section.subscription.in_home_view || item.isMuted}
             isSelected={false}
             unreadCount={item.unread}
             onPress={(streamId: number, topic: string) => {
