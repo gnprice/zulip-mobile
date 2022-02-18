@@ -38,7 +38,7 @@ const componentStyles = createStyleSheet({
   },
 });
 
-type PseudoSubscription = Subscription | Stream;
+type PseudoSubscription = Subscription | $ReadOnly<{ ...Stream, color?: void }>;
 
 type Props = $ReadOnly<{|
   subscription: PseudoSubscription,
@@ -46,10 +46,10 @@ type Props = $ReadOnly<{|
   isMuted: boolean,
   isSubscribed?: boolean,
   color?: string,
-  backgroundColor?: string,
 
   unreadCount?: number,
   iconSize: number,
+  highlight?: boolean,
   showDescription?: boolean,
   showSwitch?: boolean,
   // These stream names are here for a mix of good reasons and (#3918) bad ones.
@@ -68,7 +68,6 @@ type Props = $ReadOnly<{|
  * @prop isSubscribed - whether the user is subscribed to the stream;
  *   ignored (and can be any value) unless showSwitch is true
  * @prop color - if provided, MUST be .color on a Subscription
- * @prop backgroundColor - if provided, MUST be .color on a Subscription
  *
  * @prop unreadCount - number of unread messages
  * @prop iconSize
@@ -80,10 +79,10 @@ export default function StreamItem(props: Props): Node {
   const {
     subscription,
     color,
-    backgroundColor,
     isMuted,
     isSubscribed = false,
     iconSize,
+    highlight = false,
     showDescription = false,
     showSwitch = false,
     unreadCount,
@@ -106,17 +105,21 @@ export default function StreamItem(props: Props): Node {
 
   const { backgroundColor: themeBackgroundColor, color: themeColor } = useContext(ThemeContext);
 
-  const wrapperStyle = [styles.listItem, { backgroundColor }, isMuted && componentStyles.muted];
+  const streamColor = subscription.color ?? undefined;
+  const wrapperStyle = [
+    styles.listItem,
+    { backgroundColor: highlight ? streamColor : undefined },
+    isMuted && componentStyles.muted,
+  ];
   const iconColor =
     color !== undefined
       ? color
       : foregroundColorFromBackground(
-          backgroundColor !== undefined ? backgroundColor : themeBackgroundColor,
+          // $FlowFixMe invariant: highlight => have sub, with color
+          highlight ? streamColor : themeBackgroundColor,
         );
-  const textColor =
-    backgroundColor !== undefined
-      ? (foregroundColorFromBackground(backgroundColor): string)
-      : themeColor;
+  // $FlowFixMe invariant: highlight => have sub, with color
+  const textColor = highlight ? (foregroundColorFromBackground(streamColor): string) : themeColor;
 
   return (
     <Touchable
