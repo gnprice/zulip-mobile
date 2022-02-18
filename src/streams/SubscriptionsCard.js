@@ -66,6 +66,7 @@ export default function SubscriptionsCard(props: Props): Node {
           keyExtractor={item => item.stream_id}
           renderItem={({ item }: { item: Subscription, ... }) => (
             <StreamItem
+              subscription={item}
               streamId={item.stream_id}
               name={item.name}
               iconSize={16}

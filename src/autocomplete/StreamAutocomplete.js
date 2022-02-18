@@ -44,6 +44,7 @@ export default function StreamAutocomplete(props: Props): Node {
         keyExtractor={item => item.stream_id.toString()}
         renderItem={({ item }) => (
           <StreamItem
+            subscription={item}
             streamId={item.stream_id}
             name={item.name}
             isMuted={!item.in_home_view}

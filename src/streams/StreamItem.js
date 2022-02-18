@@ -5,6 +5,7 @@ import { View } from 'react-native';
 // $FlowFixMe[untyped-import]
 import { useActionSheet } from '@expo/react-native-action-sheet';
 
+import type { Stream, Subscription } from '../types';
 import { showStreamActionSheet } from '../action-sheets';
 import type { ShowActionSheetWithOptions } from '../action-sheets';
 import { TranslationContext } from '../boot/TranslationProvider';
@@ -37,7 +38,11 @@ const componentStyles = createStyleSheet({
   },
 });
 
+type PseudoSubscription = Subscription | Stream;
+
 type Props = $ReadOnly<{|
+  subscription: PseudoSubscription,
+
   name: string,
   streamId: number,
   description?: string,

@@ -91,6 +91,7 @@ export default function StreamListCard(props: Props): Node {
           keyExtractor={item => item.stream_id.toString()}
           renderItem={({ item }) => (
             <StreamItem
+              subscription={item}
               streamId={item.stream_id}
               name={item.name}
               iconSize={16}
