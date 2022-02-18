@@ -169,8 +169,12 @@ export const getUnreadStreamsAndTopics: Selector<$ReadOnlyArray<UnreadStreamItem
     }
 
     const sortedStreams = Array.from(totals.values())
-      .sort((a, b) => caseInsensitiveCompareFunc(a.streamName, b.streamName))
-      .sort((a, b) => +b.isPinned - +a.isPinned);
+      .sort((a, b) =>
+        caseInsensitiveCompareFunc(a.subscription?.name ?? '', b.subscription?.name ?? ''),
+      )
+      .sort(
+        (a, b) => +(b.subscription?.pin_to_top ?? false) - +(a.subscription?.pin_to_top ?? false),
+      );
 
     sortedStreams.forEach(stream => {
       stream.data.sort((a, b) => b.lastUnreadMsgId - a.lastUnreadMsgId);
@@ -198,7 +202,7 @@ export const getUnreadStreamsAndTopicsSansMuted: Selector<
       ...stream,
       data: stream.data.filter(topic => !topic.isMuted),
     }))
-    .filter(stream => !stream.isMuted && stream.data.length > 0),
+    .filter(stream => !!(stream.subscription?.in_home_view ?? false) && stream.data.length > 0),
 );
 
 /**
