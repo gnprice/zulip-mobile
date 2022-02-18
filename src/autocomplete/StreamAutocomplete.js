@@ -50,7 +50,6 @@ export default function StreamAutocomplete(props: Props): Node {
             subscription={item}
             isMuted={!item.in_home_view}
             iconSize={12}
-            color={item.color}
             onPress={handleStreamItemAutocomplete}
           />
         )}

@@ -45,7 +45,6 @@ type Props = $ReadOnly<{|
 
   isMuted: boolean,
   isSubscribed?: boolean,
-  color?: string,
 
   unreadCount?: number,
   iconSize: number,
@@ -77,7 +76,6 @@ type Props = $ReadOnly<{|
 export default function StreamItem(props: Props): Node {
   const {
     subscription,
-    color,
     isMuted,
     isSubscribed = false,
     iconSize,
@@ -111,8 +109,8 @@ export default function StreamItem(props: Props): Node {
     isMuted && componentStyles.muted,
   ];
   const iconColor =
-    color !== undefined
-      ? color
+    !highlight && streamColor != null
+      ? streamColor
       : foregroundColorFromBackground(
           // $FlowFixMe invariant: highlight => have sub, with color
           highlight ? streamColor : themeBackgroundColor,

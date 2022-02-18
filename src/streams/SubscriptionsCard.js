@@ -69,7 +69,6 @@ export default function SubscriptionsCard(props: Props): Node {
             <StreamItem
               subscription={item}
               iconSize={16}
-              color={item.color}
               unreadCount={unreadByStream[item.stream_id]}
               isMuted={!item.in_home_view}
               showSwitch={false}
