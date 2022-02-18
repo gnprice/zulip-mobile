@@ -69,7 +69,6 @@ export default function SubscriptionsCard(props: Props): Node {
               subscription={item}
               iconSize={16}
               unreadCount={unreadByStream[item.stream_id]}
-              isMuted={!item.in_home_view}
               showSwitch={false}
               // isSubscribed is ignored when showSwitch false
               onPress={handleNarrow}

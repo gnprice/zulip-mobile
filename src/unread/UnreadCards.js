@@ -72,7 +72,6 @@ export default function UnreadCards(props: Props): Node {
           <StreamItem
             subscription={section.subscription}
             iconSize={16}
-            isMuted={!section.subscription.in_home_view}
             highlight
             unreadCount={section.unread}
             onPress={stream => {

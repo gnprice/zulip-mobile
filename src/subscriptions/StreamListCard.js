@@ -94,11 +94,6 @@ export default function StreamListCard(props: Props): Node {
               subscription={item}
               iconSize={16}
               unreadCount={undefined}
-              isMuted={
-                /* This stream may in reality be muted.
-                   But in this UI, we don't show that distinction. */
-                false
-              }
               showDescription
               showSwitch
               isSubscribed={subscriptions.has(item.stream_id)}
