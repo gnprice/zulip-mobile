@@ -27,13 +27,7 @@ export type UnreadStreamItem = {|
   subscription: Subscription | void,
   key: string,
   streamId: number,
-  streamName: string,
   unread: number,
-  color: string,
-  isMuted: boolean,
-  isPinned: boolean,
-  isPrivate: boolean,
-  isWebPublic: boolean | void,
   data: Array<{|
     key: string,
     topic: string,

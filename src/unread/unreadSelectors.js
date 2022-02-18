@@ -8,7 +8,6 @@ import { getMute, isTopicMuted } from '../mute/muteModel';
 import { getOwnUserId } from '../users/userSelectors';
 import { getSubscriptionsById, getStreamsById } from '../subscriptions/subscriptionSelectors';
 import { caseNarrow } from '../utils/narrow';
-import { NULL_SUBSCRIPTION } from '../nullObjects';
 import {
   getUnread,
   getUnreadPms,
@@ -134,19 +133,10 @@ export const getUnreadStreamsAndTopics: Selector<$ReadOnlyArray<UnreadStreamItem
     const totals = new Map();
     for (const [streamId, streamData] of unreadStreams.entries()) {
       const subscription = subscriptionsById.get(streamId);
-      const { name, color, in_home_view, invite_only, pin_to_top, is_web_public } =
-        subscription || NULL_SUBSCRIPTION;
-
       const total = {
         subscription,
-        key: `stream:${name}`,
+        key: `stream:${subscription?.name ?? ''}`,
         streamId,
-        streamName: name,
-        isMuted: !in_home_view,
-        isPrivate: invite_only,
-        isPinned: pin_to_top,
-        isWebPublic: is_web_public,
-        color,
         unread: 0,
         data: [],
       };
