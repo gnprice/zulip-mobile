@@ -110,20 +110,23 @@ export default function StreamItem(props: Props): Node {
   const { backgroundColor: themeBackgroundColor, color: themeColor } = useContext(ThemeContext);
 
   const streamColor = subscription.color ?? undefined;
-  const wrapperStyle = [
-    styles.listItem,
-    { backgroundColor: highlight ? streamColor : undefined },
-    showMuted && componentStyles.muted,
-  ];
-  const iconColor =
-    !highlight && streamColor != null
-      ? streamColor
-      : foregroundColorFromBackground(
-          // $FlowFixMe invariant: highlight => have sub, with color
-          highlight ? streamColor : themeBackgroundColor,
-        );
-  // $FlowFixMe invariant: highlight => have sub, with color
-  const textColor = highlight ? (foregroundColorFromBackground(streamColor): string) : themeColor;
+
+  let backgroundColor = undefined;
+  let iconColor = undefined;
+  let textColor = undefined;
+  if (highlight) {
+    backgroundColor = streamColor;
+    // $FlowFixMe invariant: highlight => have sub, with color
+    iconColor = foregroundColorFromBackground(streamColor);
+    // $FlowFixMe invariant: highlight => have sub, with color
+    textColor = (foregroundColorFromBackground(streamColor): string);
+  } else {
+    backgroundColor = undefined;
+    iconColor = streamColor ?? foregroundColorFromBackground(themeBackgroundColor);
+    textColor = themeColor;
+  }
+
+  const wrapperStyle = [styles.listItem, { backgroundColor }, showMuted && componentStyles.muted];
 
   return (
     <Touchable
