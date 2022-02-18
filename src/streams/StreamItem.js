@@ -38,12 +38,13 @@ const componentStyles = createStyleSheet({
   },
 });
 
-type PseudoSubscription = Subscription | $ReadOnly<{ ...Stream, color?: void }>;
+type PseudoSubscription =
+  | Subscription
+  | $ReadOnly<{ ...Stream, color?: void, in_home_view?: void }>;
 
 type Props = $ReadOnly<{|
   subscription: PseudoSubscription,
 
-  isMuted: boolean,
   isSubscribed?: boolean,
 
   unreadCount?: number,
@@ -61,7 +62,6 @@ type Props = $ReadOnly<{|
  * Many of the props must correspond to certain properties of a Stream or
  * Subscription.
  *
- * @prop isMuted - false for a Stream; !sub.in_home_view for Subscription
  * @prop isSubscribed - whether the user is subscribed to the stream;
  *   ignored (and can be any value) unless showSwitch is true
  *
@@ -74,7 +74,6 @@ type Props = $ReadOnly<{|
 export default function StreamItem(props: Props): Node {
   const {
     subscription,
-    isMuted,
     isSubscribed = false,
     iconSize,
     highlight = false,
@@ -84,6 +83,14 @@ export default function StreamItem(props: Props): Node {
     onPress,
     onSwitch,
   } = props;
+
+  // prettier-ignore
+  const showMuted =
+    subscription.in_home_view !== undefined
+      ? !subscription.in_home_view
+      /* We have only a stream object, no subscription, and don't know if
+         in reality the stream is muted.  So this UI won't show that distinction. */
+      : false;
 
   const showActionSheetWithOptions: ShowActionSheetWithOptions = useActionSheet()
     .showActionSheetWithOptions;
@@ -104,7 +111,7 @@ export default function StreamItem(props: Props): Node {
   const wrapperStyle = [
     styles.listItem,
     { backgroundColor: highlight ? streamColor : undefined },
-    isMuted && componentStyles.muted,
+    showMuted && componentStyles.muted,
   ];
   const iconColor =
     !highlight && streamColor != null
@@ -132,7 +139,7 @@ export default function StreamItem(props: Props): Node {
         <StreamIcon
           size={iconSize}
           color={iconColor}
-          isMuted={isMuted}
+          isMuted={showMuted}
           isPrivate={subscription.invite_only}
           isWebPublic={subscription.is_web_public}
         />

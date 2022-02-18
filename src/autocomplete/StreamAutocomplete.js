@@ -46,12 +46,7 @@ export default function StreamAutocomplete(props: Props): Node {
         data={matchingSubscriptions}
         keyExtractor={item => item.stream_id.toString()}
         renderItem={({ item }) => (
-          <StreamItem
-            subscription={item}
-            isMuted={!item.in_home_view}
-            iconSize={12}
-            onPress={handleStreamItemAutocomplete}
-          />
+          <StreamItem subscription={item} iconSize={12} onPress={handleStreamItemAutocomplete} />
         )}
       />
     </Popup>
