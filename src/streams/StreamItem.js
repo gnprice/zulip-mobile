@@ -2,6 +2,7 @@
 import React, { useContext } from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
+import invariant from 'invariant';
 // $FlowFixMe[untyped-import]
 import { useActionSheet } from '@expo/react-native-action-sheet';
 
@@ -109,20 +110,18 @@ export default function StreamItem(props: Props): Node {
 
   const { backgroundColor: themeBackgroundColor, color: themeColor } = useContext(ThemeContext);
 
-  const streamColor = subscription.color ?? undefined;
-
   let backgroundColor = undefined;
   let iconColor = undefined;
   let textColor = undefined;
   if (highlight) {
+    const streamColor = subscription.color;
+    invariant(streamColor != null, 'StreamItem: must pass Subscription if highlight true');
     backgroundColor = streamColor;
-    // $FlowFixMe invariant: highlight => have sub, with color
     iconColor = foregroundColorFromBackground(streamColor);
-    // $FlowFixMe invariant: highlight => have sub, with color
     textColor = (foregroundColorFromBackground(streamColor): string);
   } else {
     backgroundColor = undefined;
-    iconColor = streamColor ?? foregroundColorFromBackground(themeBackgroundColor);
+    iconColor = subscription.color ?? foregroundColorFromBackground(themeBackgroundColor);
     textColor = themeColor;
   }
 
