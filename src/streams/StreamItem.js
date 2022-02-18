@@ -43,13 +43,8 @@ type PseudoSubscription = Subscription | Stream;
 type Props = $ReadOnly<{|
   subscription: PseudoSubscription,
 
-  name: string,
-  streamId: number,
-  description?: string,
   isMuted: boolean,
-  isPrivate: boolean,
   isSubscribed?: boolean,
-  isWebPublic: boolean | void,
   color?: string,
   backgroundColor?: string,
 
@@ -66,10 +61,7 @@ type Props = $ReadOnly<{|
  * Many of the props must correspond to certain properties of a Stream or
  * Subscription.
  *
- * @prop name - the stream's name
- * @prop description - the stream's description
  * @prop isMuted - false for a Stream; !sub.in_home_view for Subscription
- * @prop isPrivate - .invite_only for a Stream or a Subscription
  * @prop isSubscribed - whether the user is subscribed to the stream;
  *   ignored (and can be any value) unless showSwitch is true
  * @prop color - if provided, MUST be .color on a Subscription
@@ -83,14 +75,10 @@ type Props = $ReadOnly<{|
  */
 export default function StreamItem(props: Props): Node {
   const {
-    streamId,
-    name,
-    description,
+    subscription,
     color,
     backgroundColor,
-    isPrivate,
     isMuted,
-    isWebPublic,
     isSubscribed = false,
     iconSize,
     showSwitch = false,
@@ -128,13 +116,13 @@ export default function StreamItem(props: Props): Node {
 
   return (
     <Touchable
-      onPress={() => onPress(streamId, name)}
+      onPress={() => onPress(subscription.stream_id, subscription.name)}
       onLongPress={() => {
         showStreamActionSheet({
           showActionSheetWithOptions,
           callbacks: { dispatch, _ },
           backgroundData,
-          streamId,
+          streamId: subscription.stream_id,
         });
       }}
     >
@@ -143,21 +131,21 @@ export default function StreamItem(props: Props): Node {
           size={iconSize}
           color={iconColor}
           isMuted={isMuted}
-          isPrivate={isPrivate}
-          isWebPublic={isWebPublic}
+          isPrivate={subscription.invite_only}
+          isWebPublic={subscription.is_web_public}
         />
         <View style={componentStyles.text}>
           <ZulipText
             numberOfLines={1}
             style={{ color: textColor }}
-            text={name}
+            text={subscription.name}
             ellipsizeMode="tail"
           />
-          {description !== undefined && description !== '' && (
+          {subscription.description !== undefined && subscription.description !== '' && (
             <ZulipText
               numberOfLines={1}
               style={componentStyles.description}
-              text={description}
+              text={subscription.description}
               ellipsizeMode="tail"
             />
           )}
@@ -168,10 +156,10 @@ export default function StreamItem(props: Props): Node {
             value={!!isSubscribed}
             onValueChange={(newValue: boolean) => {
               if (onSwitch) {
-                onSwitch(streamId, name, newValue);
+                onSwitch(subscription.stream_id, subscription.name, newValue);
               }
             }}
-            disabled={!isSubscribed && isPrivate}
+            disabled={!isSubscribed && subscription.invite_only}
           />
         )}
       </View>
