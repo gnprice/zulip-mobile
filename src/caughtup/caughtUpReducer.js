@@ -51,7 +51,9 @@ function addMessages(
 
   const key = keyFromNarrow(narrow);
   let { older, newer } = state[key] || DEFAULT_CAUGHTUP;
+  console.log(`caughtUp addMessages at ${key}: was ${older}/${newer}`);
   if (!older && !newer) {
+    console.log('caughtUp addMessages: ..... not caught up, nothing to do');
     return state;
   }
 
@@ -60,20 +62,25 @@ function addMessages(
   if (firstMissing < 0) {
     // All messages were known, so we got to maintain our interval of
     // completeness.
+    console.log('caughtUp addMessages: ..... all messages known, nothing to do');
     return state;
   } else {
     // Some are missing.
     newer = false;
+    console.log(`caughtUp addMessages: ..... unknown message at ${firstMissing}`);
     if (older && firstMissing === 0) {
       // This is the *old* narrows state, from before this action.  (If it
       // were the new one, this could be a bit simpler: we'd clear `older`
       // just if there was a missing message ID and the narrows list is now
       // empty.)
       const narrowList = getAllNarrows(globalState).get(key);
+      console.log(`caughtUp addMessages: ........ and narrow had ${narrowList?.length ?? 0}`);
       if (!narrowList || narrowList.length === 0 || messageIds[firstMissing] < narrowList[0]) {
+        console.log('caughtUp addMessages: ........... clearing older');
         older = false;
       }
     }
+    console.log(`caughtUp addMessages: ..... result ${older}/${newer}`);
     return { ...state, [key]: { older, newer } };
   }
 
