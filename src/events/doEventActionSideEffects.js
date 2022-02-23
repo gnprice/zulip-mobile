@@ -10,6 +10,7 @@ import * as NavigationService from '../nav/NavigationService';
 import {
   isStreamNarrow,
   isTopicNarrow,
+  keyFromNarrow,
   streamIdOfNarrow,
   topicNarrow,
   topicOfNarrow,
@@ -38,6 +39,12 @@ export default (action: EventAction): ThunkAction<Promise<void>> => async (dispa
       }
 
       const navState = NavigationService.getState();
+      console.log(
+        `nav: index ${navState.index}; routes ${navState.routes
+          .map(r => (r.name === 'chat' ? `chat:${keyFromNarrow(r.params?.narrow)}` : r.name))
+          .join(', ')}`,
+      );
+
       for (const route of navState.routes) {
         if (route.name !== 'chat') {
           continue;
