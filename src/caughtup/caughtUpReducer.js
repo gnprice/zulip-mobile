@@ -22,11 +22,21 @@ function addMessages(state: CaughtUpState, narrow, messageIds): CaughtUpState {
   // NOTE: This behavior must stay parallel with how the narrows reducer
   //   handles the same cases.
   // See narrowsReducer.js for discussion.
-  const key = keyFromNarrow(narrow);
 
-  // eslint-disable-next-line no-unused-vars
-  const { [key]: ignored, ...rest } = state;
-  return rest;
+  // If we weren't caught up in a given direction, then we still aren't:
+  // there may be any number of messages there that we don't know about.
+  // (Possibly including some of these messages, because the narrows reducer
+  // won't have recorded them if they lay beyond the known-contiguous range
+  // of messages we already had.)
+  //
+  // If we were caught up, that means that before this event there weren't
+  // any messages in that direction which we didn't know about; and for any
+  // of these messages that lay in that direction, the narrows reducer added
+  // them to the narrows state.  So we once again know about the endmost
+  // messages in that direction, i.e. we are still caught up.
+  //
+  // Either way, the caught-up state doesn't change.
+  return state;
 }
 
 export default (

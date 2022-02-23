@@ -28,6 +28,7 @@ import {
   topicNarrow,
   streamNarrow,
 } from '../utils/narrow';
+import { getKnownRangeForNarrow } from './narrowsSelectors';
 
 const initialState: NarrowsState = Immutable.Map();
 
@@ -52,22 +53,34 @@ function removeMessages(state: NarrowsState, narrow, messageIds): NarrowsState {
 // full list of messages that actually exist in the narrow.  That can
 // prevent us from adding the messages to our record of the narrow, and
 // force us to instead downgrade how much we think we know about the narrow.
-function addMessages(state: NarrowsState, narrow, messageIds): NarrowsState {
+function addMessages(
+  state: NarrowsState,
+  narrow,
+  messageIds,
+  globalState: PerAccountState,
+): NarrowsState {
   // NOTE: This behavior must stay parallel with how the caughtUp reducer
   //   handles the same cases.
   const key = keyFromNarrow(narrow);
 
-  // TODO: If the state at the narrow covers the given messages, then
-  //   incorporate them.
+  // First: if the state at the narrow covers any of the given messages,
+  // then we can incorporate those and know the result is still contiguous.
+  const [knownStart, knownEnd] = getKnownRangeForNarrow(globalState, narrow);
+  const interiorIds = messageIds.filter(id => knownStart <= id && id <= knownEnd);
+  return interiorIds.length
+    ? state.update(key, existing => existing && [...existing, ...interiorIds].sort((a, b) => a - b))
+    : state;
 
+  // If not, though, then forget about them.  In particular, if we know
+  // nothing about the target narrow, we'll continue to know nothing.
+  //
+  // This includes (the topic narrow in) the typical case of a topic edit or
+  // stream move, where we know nothing about the target because this is the
+  // first time anyone's used that topic.
+  //
   // TODO: If the state at a *parent* narrow -- in particular the stream
   //   narrow, if this is a topic narrow -- covers the given messages, then
   //   use that.
-
-  // Do what's simple and always correct, even when not optimal: stop
-  // claiming to know anything about the narrow.  (The caughtUp reducer must
-  // also delete its record.)
-  return state.delete(key);
 }
 
 const messageFetchComplete = (state, action) => {
@@ -241,10 +254,15 @@ export default (
         // The edit changed topic and/or stream.
         const { orig_stream_id, orig_topic, new_stream_id, new_topic } = move;
         const messageIdSet = new Set(event.message_ids);
-        result = addMessages(result, topicNarrow(new_stream_id, new_topic), event.message_ids);
+        result = addMessages(
+          result,
+          topicNarrow(new_stream_id, new_topic),
+          event.message_ids,
+          globalState,
+        );
         result = removeMessages(result, topicNarrow(orig_stream_id, orig_topic), messageIdSet);
         if (new_stream_id !== orig_stream_id) {
-          result = addMessages(result, streamNarrow(new_stream_id), event.message_ids);
+          result = addMessages(result, streamNarrow(new_stream_id), event.message_ids, globalState);
           result = removeMessages(result, streamNarrow(orig_stream_id), messageIdSet);
         }
       }

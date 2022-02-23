@@ -181,6 +181,32 @@ export const getLastMessageId = (state: PerAccountState, narrow: Narrow): number
   return ids.length > 0 ? ids[ids.length - 1] : undefined;
 };
 
+/**
+ * The range of message IDs where we know we have all messages for this narrow.
+ *
+ * This is the widest range `[lower, upper]` for which we know that our
+ * narrows state contains all the messages in this narrow with an ID
+ * satisfying `lower <= id && id <= upper`.
+ *
+ * In particular:
+ *  * This is an inclusive range.
+ *  * This range will have `lower > upper` if we know nothing about what
+ *    messages might exist in this narrow.
+ *  * The endpoints `lower` and `upper` may not be actual message IDs.  In
+ *    particular, they may be infinite.
+ */
+export const getKnownRangeForNarrow = (
+  state: PerAccountState,
+  narrow: Narrow,
+): [number, number] => {
+  const ids = getFetchedMessageIdsForNarrow(state, narrow);
+  const caughtUp = getCaughtUpForNarrow(state, narrow);
+  return [
+    caughtUp.older ? -Infinity : ids.length ? ids[0] : Infinity,
+    caughtUp.newer ? Infinity : ids.length ? ids[ids.length - 1] : -Infinity,
+  ];
+};
+
 // Prettier mishandles this Flow syntax.
 // prettier-ignore
 // TODO: clean up what this returns; possibly to just `Stream`
