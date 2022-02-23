@@ -119,6 +119,13 @@ const useMessagesWithFetch = args => {
     // effect does its own checking of whether any work needs to be done.
   });
 
+  console.log(`useMessagesWithFetch at ${keyFromNarrow(narrow)}, ${messages.length} messages`, {
+    isFocused,
+    loading,
+    fetching,
+    shouldFetch: shouldFetchWhenNextFocused.current,
+  });
+
   return { fetchError, isFetching, messages, firstUnreadIdInNarrow };
 };
 
