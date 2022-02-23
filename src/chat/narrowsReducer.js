@@ -90,6 +90,7 @@ function addMessages(
     // Great, all the affected messages (that are in the already-known
     // range) are messages we have.  We can put them straight into the
     // narrow record.
+    console.log('narrow addMessages: ..... none missing');
     return state.update(
       key,
       existing => existing && [...existing, ...interiorIds].sort((a, b) => a - b),
@@ -102,6 +103,9 @@ function addMessages(
       ...existing.filter(id => id < cutoff),
       ...interiorIds.slice(0, firstMissing),
     ].sort((a, b) => a - b);
+    console.log(
+      `narrow addMessages: ..... missing at ${firstMissing}, id ${cutoff}; new len ${combined.length}`,
+    );
     return combined.length > 0 ? state.set(key, combined) : state.delete(key);
 
     // NOTE: In caughtUp we need to unset `newer`.  Also `older` if we ended
