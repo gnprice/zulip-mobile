@@ -142,6 +142,12 @@ export default (
         if (new_stream_id !== orig_stream_id) {
           result = addMessages(result, streamNarrow(new_stream_id), event.message_ids, globalState);
         }
+        // TODO(#3408): Also update the old narrow.  That's rare: it only
+        //   applies if (a) we were caught up in exactly one direction, and
+        //   (b) all the messages we had in the narrow were moved.
+        //   Typically (a) won't hold unless there are more messages than
+        //   we'd fetch at once; and then that's a lot of messages, so it's
+        //   unlikely they'd all be moved.
       }
 
       // We don't attempt to update search narrows.
