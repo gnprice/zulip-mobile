@@ -109,6 +109,7 @@ export const useEdgeTriggeredEffect = (
 ): void => {
   const prev = usePrevious(value, !includeStart);
   useEffect(() => {
+    console.log(`useEdgeTriggeredEffect: ${prev} -> ${value}`);
     if (value && !prev) {
       cb();
     }
