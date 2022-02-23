@@ -44,6 +44,7 @@ export default (action: EventAction): ThunkAction<Promise<void>> => async (dispa
           .map(r => (r.name === 'chat' ? `chat:${keyFromNarrow(r.params?.narrow)}` : r.name))
           .join(', ')}`,
       );
+      console.log(`nav: ... keys ${navState.routes.map(r => r.key).join(', ')}`);
 
       for (const route of navState.routes) {
         if (route.name !== 'chat') {
