@@ -38,7 +38,7 @@ import {
 } from '../actionConstants';
 import { FIRST_UNREAD_ANCHOR, LAST_MESSAGE_ANCHOR } from '../anchor';
 import { showErrorAlert } from '../utils/info';
-import { ALL_PRIVATE_NARROW, apiNarrowOfNarrow, caseNarrow } from '../utils/narrow';
+import { ALL_PRIVATE_NARROW, apiNarrowOfNarrow, caseNarrow, keyFromNarrow } from '../utils/narrow';
 import { BackoffMachine, promiseTimeout, TimeoutError } from '../utils/async';
 import { initNotifications } from '../notification/notifTokens';
 import { addToOutbox, sendOutbox } from '../outbox/outboxActions';
@@ -328,8 +328,10 @@ export const fetchMessagesInNarrow = (
   anchor: number = FIRST_UNREAD_ANCHOR,
 ): ThunkAction<Promise<$ReadOnlyArray<Message> | void>> => async (dispatch, getState) => {
   if (!isFetchNeededAtAnchor(getState(), narrow, anchor)) {
+    console.log(`fetchMessagesInNarrow ${keyFromNarrow(narrow)}: ignored`);
     return undefined;
   }
+  console.log(`fetchMessagesInNarrow ${keyFromNarrow(narrow)}: YES`);
   return dispatch(
     fetchMessages({
       narrow,
