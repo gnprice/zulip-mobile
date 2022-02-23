@@ -199,6 +199,11 @@ export const fetchNewer = (narrow: Narrow): ThunkAction<void> => (dispatch, getS
   const { loading } = getSession(state);
 
   if (!loading && !fetching.newer && !caughtUp.newer && lastMessageId !== undefined) {
+    console.log(
+      `fetchNewer YES: loading ${loading}, fetching ${fetching.newer}, caughtUp ${
+        caughtUp.newer
+      }, lack-messages ${lastMessageId === undefined}`,
+    );
     dispatch(
       fetchMessages({
         narrow,
@@ -206,6 +211,12 @@ export const fetchNewer = (narrow: Narrow): ThunkAction<void> => (dispatch, getS
         numBefore: 0,
         numAfter: config.messagesPerRequest,
       }),
+    );
+  } else {
+    console.log(
+      `fetchNewer ignored: loading ${loading}, fetching ${fetching.newer}, caughtUp ${
+        caughtUp.newer
+      }, lack-messages ${lastMessageId === undefined}`,
     );
   }
 };
