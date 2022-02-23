@@ -68,6 +68,9 @@ function addMessages(
   // then we can incorporate those and know the result is still contiguous.
   const [knownStart, knownEnd] = getKnownRangeForNarrow(globalState, narrow);
   const interiorIds = messageIds.filter(id => knownStart <= id && id <= knownEnd);
+  console.log(
+    `narrow addMessages at ${key}: known [${knownStart}, ${knownEnd}]; got ${messageIds.length}, of which ${interiorIds.length} interior`,
+  );
   if (interiorIds.length === 0) {
     return state;
   }
