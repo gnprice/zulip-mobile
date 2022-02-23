@@ -29,6 +29,7 @@ import {
   streamNarrow,
 } from '../utils/narrow';
 import { getKnownRangeForNarrow } from './narrowsSelectors';
+import { getMessages } from '../directSelectors';
 
 const initialState: NarrowsState = Immutable.Map();
 
@@ -67,9 +68,45 @@ function addMessages(
   // then we can incorporate those and know the result is still contiguous.
   const [knownStart, knownEnd] = getKnownRangeForNarrow(globalState, narrow);
   const interiorIds = messageIds.filter(id => knownStart <= id && id <= knownEnd);
-  return interiorIds.length
-    ? state.update(key, existing => existing && [...existing, ...interiorIds].sort((a, b) => a - b))
-    : state;
+  if (interiorIds.length === 0) {
+    return state;
+  }
+
+  // ... Though that only works if we actually have those messages.  If not,
+  // we can't put them in `state.narrows`, so we'll have to lose part of our
+  // range.
+  //
+  // In principle we have a choice whether to keep the existing messages
+  // that are older than all the new ones, or those that are newer.  To keep
+  // things simple, always keep the older.
+  const messages = getMessages(globalState);
+  // We're counting here on messageIds (and so on `action.event.message_ids`)
+  // being sorted.
+  const firstMissing = interiorIds.findIndex(id => !messages.has(id));
+  if (firstMissing < 0) {
+    // Great, all the affected messages (that are in the already-known
+    // range) are messages we have.  We can put them straight into the
+    // narrow record.
+    return state.update(
+      key,
+      existing => existing && [...existing, ...interiorIds].sort((a, b) => a - b),
+    );
+  } else {
+    // Some are missing.
+    const cutoff = interiorIds[firstMissing];
+    const existing = state.get(key) ?? [];
+    const combined = [
+      ...existing.filter(id => id < cutoff),
+      ...interiorIds.slice(0, firstMissing),
+    ].sort((a, b) => a - b);
+    return combined.length > 0 ? state.set(key, combined) : state.delete(key);
+
+    // NOTE: In caughtUp we need to unset `newer`.  Also `older` if we ended
+    //   up having no messages left, which happens if (a) we were caught up
+    //   in the `older` direction, (b) some of these messages were older
+    //   than any we had in the narrow, and (c) the oldest of those is one
+    //   we don't have message data for.
+  }
 
   // If not, though, then forget about them.  In particular, if we know
   // nothing about the target narrow, we'll continue to know nothing.
