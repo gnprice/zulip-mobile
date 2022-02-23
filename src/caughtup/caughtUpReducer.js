@@ -76,6 +76,35 @@ function addMessages(
     }
     return { ...state, [key]: { older, newer } };
   }
+
+  // TODO: There's a case here that, although this reducer itself handles it
+  //   correctly, we don't go on to properly act on.
+  //
+  //   Suppose we're looking at a conversation, caught up both ways (as we
+  //   will be if it's short.)  Then someone merges some other conversation
+  //   into it, in which at least the oldest message is one we don't have,
+  //   and is older than any of the messages already there.
+  //
+  //   We'll forget the narrow's whole message list, and then correctly set
+  //   caughtUp to false/false.  This means we don't know what's in the
+  //   narrow.
+  //
+  //   However: the existing ChatScreen that's showing the conversation
+  //   won't correctly update.  It will switch to saying there's no messages
+  //   (which isn't right -- the truth is we don't know what messages there
+  //   might be), and will not attempt any fetching.  The user must navigate
+  //   out and come back.
+  //
+  //   The basic cause of this is that we have two ways of fetching more
+  //   from ChatScreen, forming a bit of a patchwork, and neither covers this:
+  //    * We call fetchOlder and fetchNewer on scroll of MessageList.  These
+  //      duly check caughtUp to decide if they need to do anything.  But
+  //      when showing the "No messages" message, we have no MessageList, so
+  //      there's no way to trigger those.  (Even if there were, they only
+  //      act when there's already at least one message.)
+  //    * From ChatScreen itself, we fetch on first mount and when the event
+  //      queue changes.  But we don't consult caughtUp, so we don't notice
+  //      if it turns to false.
 }
 
 export default (
