@@ -1,7 +1,8 @@
 /* @flow strict-local */
 import Immutable from 'immutable';
 
-import { usersOfKey, keyOfExactUsers, reducer } from '../pmConversationsModel';
+import { reducer } from '../pmConversationsModel';
+import { usersOfKey, keyOfExactUsers } from '../pmConversationsModelCore';
 import * as eg from '../../__tests__/lib/exampleData';
 import { makeUserId } from '../../api/idTypes';
 

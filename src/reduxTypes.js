@@ -31,7 +31,7 @@ import type {
   SessionState,
 } from './session/sessionModelCore';
 import type { MuteState } from './mute/muteModelTypes';
-import type { PmConversationsState } from './pm-conversations/pmConversationsModel';
+import type { PmConversationsState } from './pm-conversations/pmConversationsModelCore';
 import type { UnreadState } from './unread/unreadModelTypes';
 import type { UserStatusesState } from './user-statuses/userStatusesCore';
 

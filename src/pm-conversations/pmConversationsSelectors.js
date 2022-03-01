@@ -15,7 +15,7 @@ import {
 } from '../utils/recipient';
 import { getServerVersion } from '../account/accountsSelectors';
 import * as model from './pmConversationsModel';
-import { type PmConversationsState } from './pmConversationsModel';
+import { type PmConversationsState } from './pmConversationsModelCore';
 
 function unreadCount(unreadsKey, unreadPms, unreadHuddles): number {
   // This business of looking in one place and then the other is kind
