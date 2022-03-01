@@ -24,7 +24,7 @@ import type {
   VideoChatProvider,
 } from './reduxTypes';
 import { type Debug } from './localModelTypes';
-import type { PerAccountSessionState, GlobalSessionState } from './session/sessionReducer';
+import type { PerAccountSessionState, GlobalSessionState } from './session/sessionModelCore';
 
 export const getAccounts = (state: GlobalState): AccountsState => state.accounts;
 

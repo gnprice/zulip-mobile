@@ -29,7 +29,7 @@ import type {
   PerAccountSessionState,
   GlobalSessionState,
   SessionState,
-} from './session/sessionReducer';
+} from './session/sessionModelCore';
 import type { MuteState } from './mute/muteModelTypes';
 import type { PmConversationsState } from './pm-conversations/pmConversationsModel';
 import type { UnreadState } from './unread/unreadModelTypes';
