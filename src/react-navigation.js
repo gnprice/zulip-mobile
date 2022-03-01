@@ -6,13 +6,13 @@
 
 import { type ElementConfig } from 'react';
 import {
-  useNavigation as useNavigationInner,
+  // useNavigation as useNavigationInner,
   type LeafRoute,
   type ScreenParams,
   type NavigationProp,
 } from '@react-navigation/native';
 
-import type { GlobalParamList } from './nav/globalTypes';
+// import type { GlobalParamList } from './nav/globalTypes';
 
 /**
  * A type to use for the `route` prop on a screen component.
@@ -76,11 +76,11 @@ export type RouteParamsOf<-C> = $PropertyType<
   'params',
 >;
 
-/**
- * Exactly like `useNavigation` upstream, but more typed.
- *
- * In particular, we use our `GlobalParamList` type.
- */
-export function useNavigation(): NavigationProp<GlobalParamList> {
-  return useNavigationInner<GlobalParamList>();
-}
+// /**
+//  * Exactly like `useNavigation` upstream, but more typed.
+//  *
+//  * In particular, we use our `GlobalParamList` type.
+//  */
+// export function useNavigation(): NavigationProp<GlobalParamList> {
+//   return useNavigationInner<GlobalParamList>();
+// }
