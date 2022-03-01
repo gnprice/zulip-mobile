@@ -5,7 +5,6 @@ import { TextInput, TouchableWithoutFeedback, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-import type { AppNavigationProp } from '../nav/AppNavigator';
 import { ThemeContext, createStyleSheet } from '../styles';
 import { autocompleteRealmPieces, autocompleteRealm, fixRealmUrl } from '../utils/url';
 import type { Protocol } from '../utils/url';
@@ -45,10 +44,7 @@ type Props = $ReadOnly<{|
    * it appears not to contain an explicit domain.
    */
   defaultDomain: string,
-  // TODO: Currently this type is acceptable because the only
-  // `navigation` prop we pass to a `SmartUrlInput` instance is the
-  // one from a component on AppNavigator.
-  navigation: AppNavigationProp<>,
+
   style?: ViewStyleProp,
   onChangeText: (value: string) => void,
   onSubmitEditing: () => Promise<void>,

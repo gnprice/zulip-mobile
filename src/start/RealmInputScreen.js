@@ -68,7 +68,6 @@ export default class RealmInputScreen extends PureComponent<Props, State> {
   handleRealmChange: string => void = value => this.setState({ realmInputValue: value });
 
   render(): Node {
-    const { navigation } = this.props;
     const { progress, error, realmInputValue } = this.state;
 
     const styles = {
@@ -89,7 +88,6 @@ export default class RealmInputScreen extends PureComponent<Props, State> {
         <ZulipTextIntl text="Enter your Zulip server URL:" />
         <SmartUrlInput
           style={styles.input}
-          navigation={navigation}
           defaultProtocol="https://"
           defaultOrganization="your-org"
           defaultDomain="zulipchat.com"
