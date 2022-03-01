@@ -5,28 +5,17 @@ import { WebView } from 'react-native-webview';
 
 import { connectActionSheet } from '../react-native-action-sheet';
 import type {
-  AlertWordsState,
-  Auth,
-  Debug,
   Dispatch,
   Fetching,
-  FlagsState,
   GetText,
   Message,
-  MuteState,
-  MutedUsersState,
   Narrow,
   Outbox,
-  ImageEmojiType,
   MessageListElement,
-  Subscription,
-  Stream,
-  ThemeName,
-  UserId,
-  User,
   UserOrBot,
   EditMessage,
 } from '../types';
+import type { BackgroundData } from './messageListTypes';
 import { assumeSecretlyGlobalState } from '../reduxTypes';
 import type { ThemeData } from '../styles';
 import { ThemeContext } from '../styles';
@@ -60,42 +49,12 @@ import { handleWebViewOutboundEvent } from './handleOutboundEvents';
 import { base64Utf8Encode } from '../utils/encoding';
 import * as logging from '../utils/logging';
 import { tryParseUrl } from '../utils/url';
-import type { UnreadState } from '../unread/unreadModelTypes';
 import { getUnread } from '../unread/unreadModel';
 import { caseNarrow } from '../utils/narrow';
 
 // ESLint doesn't notice how `this.props` escapes, and complains about some
 // props not being used here.
 /* eslint-disable react/no-unused-prop-types */
-
-/**
- * Data about the user, the realm, and all known messages.
- *
- * This data is all independent of the specific narrow or specific messages
- * we're displaying; data about those goes elsewhere.
- *
- * We pass this object down to a variety of lower layers and helper
- * functions, where it saves us from individually wiring through all the
- * overlapping subsets of this data they respectively need.
- */
-export type BackgroundData = $ReadOnly<{|
-  alertWords: AlertWordsState,
-  allImageEmojiById: $ReadOnly<{| [id: string]: ImageEmojiType |}>,
-  auth: Auth,
-  debug: Debug,
-  doNotMarkMessagesAsRead: boolean,
-  flags: FlagsState,
-  mute: MuteState,
-  allUsersById: Map<UserId, UserOrBot>,
-  mutedUsers: MutedUsersState,
-  ownUser: User,
-  streams: Map<number, Stream>,
-  subscriptions: Map<number, Subscription>,
-  unread: UnreadState,
-  theme: ThemeName,
-  twentyFourHourTime: boolean,
-  userSettingStreamNotification: boolean,
-|}>;
 
 type OuterProps = $ReadOnly<{|
   narrow: Narrow,

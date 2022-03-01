@@ -2,7 +2,7 @@
 
 import * as eg from '../../../__tests__/lib/exampleData';
 import header from '../header';
-import type { BackgroundData } from '../../MessageList';
+import type { BackgroundData } from '../../messageListTypes';
 
 const backgroundData: BackgroundData = ({
   ownEmail: eg.selfUser.email,
