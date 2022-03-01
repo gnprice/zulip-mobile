@@ -3,8 +3,7 @@ import React, { PureComponent } from 'react';
 import type { Node } from 'react';
 import { Keyboard } from 'react-native';
 
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import * as NavigationService from '../nav/NavigationService';
 import type { ApiResponseServerSettings } from '../api/settings/getServerSettings';
 import ErrorMsg from '../common/ErrorMsg';
@@ -17,8 +16,7 @@ import * as api from '../api';
 import { navigateToAuth } from '../actions';
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'realm-input'>,
-  route: RouteProp<'realm-input', {| initial: boolean | void |}>,
+  ...NavProps<'realm-input', {| initial: boolean | void |}>,
 |}>;
 
 type State = {|

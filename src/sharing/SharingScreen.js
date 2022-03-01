@@ -7,9 +7,8 @@ import {
 } from '@react-navigation/material-top-tabs';
 
 import type { GlobalParamList } from '../nav/globalTypes';
-import type { RouteParamsOf, RouteProp } from '../react-navigation';
+import type { RouteParamsOf, NavProps } from '../react-navigation';
 
-import type { AppNavigationProp } from '../nav/AppNavigator';
 import * as NavigationService from '../nav/NavigationService';
 import type { SharedData } from './types';
 import { createStyleSheet } from '../styles';
@@ -38,8 +37,7 @@ const Tab = createMaterialTopTabNavigator<
 >();
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'sharing'>,
-  route: RouteProp<'sharing', {| sharedData: SharedData |}>,
+  ...NavProps<'sharing', {| sharedData: SharedData |}>,
 |}>;
 
 const styles = createStyleSheet({

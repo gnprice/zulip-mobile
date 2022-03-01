@@ -4,8 +4,7 @@ import React from 'react';
 import type { Node } from 'react';
 import { FlatList } from 'react-native';
 
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import { useSelector } from '../react-redux';
 import Screen from '../common/Screen';
 import SizeItem from './SizeItem';
@@ -19,8 +18,7 @@ const calculateKeyStorageSizes = obj =>
     .sort((a, b) => b.size - a.size);
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'storage'>,
-  route: RouteProp<'storage', void>,
+  ...NavProps<'storage', void>,
 |}>;
 
 export default function StorageScreen(props: Props): Node {

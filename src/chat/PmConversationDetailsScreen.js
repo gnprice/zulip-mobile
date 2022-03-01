@@ -3,8 +3,7 @@ import React, { useCallback } from 'react';
 import type { Node } from 'react';
 import { FlatList } from 'react-native';
 
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import * as NavigationService from '../nav/NavigationService';
 import { useSelector } from '../react-redux';
 import type { UserOrBot } from '../types';
@@ -15,8 +14,7 @@ import { navigateToAccountDetails } from '../actions';
 import { getOwnUserId } from '../selectors';
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'pm-conversation-details'>,
-  route: RouteProp<'pm-conversation-details', {| recipients: PmKeyRecipients |}>,
+  ...NavProps<'pm-conversation-details', {| recipients: PmKeyRecipients |}>,
 |}>;
 
 export default function PmConversationDetailsScreen(props: Props): Node {

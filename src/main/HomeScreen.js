@@ -4,8 +4,7 @@ import React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
-import type { RouteProp } from '../react-navigation';
-import type { MainTabsNavigationProp } from './MainTabsScreen';
+import type { NavProps } from '../react-navigation';
 import * as NavigationService from '../nav/NavigationService';
 import { useDispatch } from '../react-redux';
 import { HOME_NARROW, MENTIONED_NARROW, STARRED_NARROW } from '../utils/narrow';
@@ -30,8 +29,7 @@ const styles = createStyleSheet({
 });
 
 type Props = $ReadOnly<{|
-  navigation: MainTabsNavigationProp<'home'>,
-  route: RouteProp<'home', void>,
+  ...NavProps<'home', void>,
 |}>;
 
 export default function HomeScreen(props: Props): Node {

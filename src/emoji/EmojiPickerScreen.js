@@ -5,8 +5,7 @@ import type { Node } from 'react';
 import { FlatList } from 'react-native';
 
 import { TranslationContext } from '../boot/TranslationProvider';
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import * as NavigationService from '../nav/NavigationService';
 import * as api from '../api';
 import { unicodeCodeByName } from './codePointMap';
@@ -22,8 +21,7 @@ import * as logging from '../utils/logging';
 import { showToast } from '../utils/info';
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'emoji-picker'>,
-  route: RouteProp<'emoji-picker', {| messageId: number |}>,
+  ...NavProps<'emoji-picker', {| messageId: number |}>,
 |}>;
 
 export default function EmojiPickerScreen(props: Props): Node {

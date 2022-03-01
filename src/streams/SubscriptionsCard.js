@@ -4,8 +4,7 @@ import React, { useCallback, useMemo } from 'react';
 import type { Node } from 'react';
 import { View, SectionList } from 'react-native';
 
-import type { RouteProp } from '../react-navigation';
-import type { StreamTabsNavigationProp } from '../main/StreamTabsScreen';
+import type { NavProps } from '../react-navigation';
 import type { Subscription } from '../types';
 import { createStyleSheet } from '../styles';
 import { useDispatch, useSelector } from '../react-redux';
@@ -31,8 +30,7 @@ const styles = createStyleSheet({
 });
 
 type Props = $ReadOnly<{|
-  navigation: StreamTabsNavigationProp<'subscribed'>,
-  route: RouteProp<'subscribed', void>,
+  ...NavProps<'subscribed', void>,
 |}>;
 
 export default function SubscriptionsCard(props: Props): Node {

@@ -8,8 +8,7 @@ import {
 
 import ZulipTextIntl from '../common/ZulipTextIntl';
 import { createStyleSheet } from '../styles';
-import type { RouteProp, RouteParamsOf } from '../react-navigation';
-import type { MainTabsNavigationProp } from './MainTabsScreen';
+import type { NavProps, RouteParamsOf } from '../react-navigation';
 import type { GlobalParamList } from '../nav/globalTypes';
 import { materialTopTabNavigatorConfig } from '../styles/tabs';
 import SubscriptionsCard from '../streams/SubscriptionsCard';
@@ -38,8 +37,7 @@ const styles = createStyleSheet({
 });
 
 type Props = $ReadOnly<{|
-  navigation: MainTabsNavigationProp<'stream-tabs'>,
-  route: RouteProp<'stream-tabs', void>,
+  ...NavProps<'stream-tabs', void>,
 |}>;
 
 export default function StreamTabsScreen(props: Props): Node {

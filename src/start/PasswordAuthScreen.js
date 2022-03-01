@@ -3,8 +3,7 @@ import React, { PureComponent } from 'react';
 import type { ComponentType } from 'react';
 import { View } from 'react-native';
 
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import type { Dispatch } from '../types';
 import { createStyleSheet } from '../styles';
 import { connect } from '../react-redux';
@@ -32,8 +31,7 @@ const styles = createStyleSheet({
 
 type OuterProps = $ReadOnly<{|
   // These should be passed from React Navigation
-  navigation: AppNavigationProp<'password-auth'>,
-  route: RouteProp<'password-auth', {| realm: URL, requireEmailFormat: boolean |}>,
+  ...NavProps<'password-auth', {| realm: URL, requireEmailFormat: boolean |}>,
 |}>;
 
 type SelectorProps = $ReadOnly<{||}>;

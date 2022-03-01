@@ -3,8 +3,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import type { Node } from 'react';
 
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import { useSelector, useDispatch } from '../react-redux';
 import Screen from '../common/Screen';
 import { topicNarrow } from '../utils/narrow';
@@ -14,8 +13,7 @@ import TopicList from './TopicList';
 import { fetchTopics, doNarrow } from '../actions';
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'topic-list'>,
-  route: RouteProp<'topic-list', {| streamId: number |}>,
+  ...NavProps<'topic-list', {| streamId: number |}>,
 |}>;
 
 export default function TopicListScreen(props: Props): Node {

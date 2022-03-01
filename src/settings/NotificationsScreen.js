@@ -3,8 +3,7 @@
 import React, { useCallback } from 'react';
 import type { Node } from 'react';
 
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import { useSelector } from '../react-redux';
 import { getAuth, getSettings } from '../selectors';
 import SwitchRow from '../common/SwitchRow';
@@ -13,8 +12,7 @@ import * as api from '../api';
 import ServerPushSetupBanner from '../common/ServerPushSetupBanner';
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'notifications'>,
-  route: RouteProp<'notifications', void>,
+  ...NavProps<'notifications', void>,
 |}>;
 
 /** (NB this is a per-account screen -- these are per-account settings.) */

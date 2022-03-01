@@ -3,8 +3,7 @@
 import React, { useCallback } from 'react';
 import type { Node } from 'react';
 
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import { useSelector } from '../react-redux';
 import Screen from '../common/Screen';
 import NestedNavRow from '../common/NestedNavRow';
@@ -13,8 +12,7 @@ import { openLinkEmbedded } from '../utils/openLink';
 import { getRealmUrl, getRealmName } from '../selectors';
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'legal'>,
-  route: RouteProp<'legal', void>,
+  ...NavProps<'legal', void>,
 |}>;
 
 /** (NB this is a per-account screen: it leads to this realm's policies.) */

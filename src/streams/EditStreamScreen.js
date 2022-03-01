@@ -2,8 +2,7 @@
 import React, { useCallback } from 'react';
 import type { Node } from 'react';
 
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import * as NavigationService from '../nav/NavigationService';
 import { useSelector, useDispatch } from '../react-redux';
 import { updateExistingStream, navigateBack } from '../actions';
@@ -12,8 +11,7 @@ import Screen from '../common/Screen';
 import EditStreamCard from './EditStreamCard';
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'edit-stream'>,
-  route: RouteProp<'edit-stream', {| streamId: number |}>,
+  ...NavProps<'edit-stream', {| streamId: number |}>,
 |}>;
 
 export default function EditStreamScreen(props: Props): Node {

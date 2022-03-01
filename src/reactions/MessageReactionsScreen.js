@@ -4,8 +4,7 @@ import type { Node, ComponentType } from 'react';
 import { View } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import * as NavigationService from '../nav/NavigationService';
 import * as logging from '../utils/logging';
 import ReactionUserList from './ReactionUserList';
@@ -32,8 +31,7 @@ const emojiTypeFromReactionType = (reactionType: ReactionType): EmojiType => {
 
 type OuterProps = $ReadOnly<{|
   // These should be passed from React Navigation
-  navigation: AppNavigationProp<'message-reactions'>,
-  route: RouteProp<'message-reactions', {| reactionName?: string, messageId: number |}>,
+  ...NavProps<'message-reactions', {| reactionName?: string, messageId: number |}>,
 |}>;
 
 type SelectorProps = $ReadOnly<{|

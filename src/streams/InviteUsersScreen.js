@@ -2,8 +2,7 @@
 import React, { useState, useCallback } from 'react';
 import type { Node } from 'react';
 
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import * as NavigationService from '../nav/NavigationService';
 import type { UserOrBot } from '../types';
 import { useSelector } from '../react-redux';
@@ -14,8 +13,7 @@ import { getAuth, getStreamForId } from '../selectors';
 import UserPickerCard from '../user-picker/UserPickerCard';
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'invite-users'>,
-  route: RouteProp<'invite-users', {| streamId: number |}>,
+  ...NavProps<'invite-users', {| streamId: number |}>,
 |}>;
 
 export default function InviteUsersScreen(props: Props): Node {

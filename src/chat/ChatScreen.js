@@ -4,8 +4,7 @@ import type { Node } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 
 import { useSelector, useDispatch } from '../react-redux';
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import { ThemeContext, createStyleSheet } from '../styles';
 import type { Narrow, EditMessage } from '../types';
 import KeyboardAvoider from '../common/KeyboardAvoider';
@@ -31,8 +30,7 @@ import { TranslationContext } from '../boot/TranslationProvider';
 import * as api from '../api';
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'chat'>,
-  route: RouteProp<'chat', {| narrow: Narrow, editMessage: EditMessage | null |}>,
+  ...NavProps<'chat', {| narrow: Narrow, editMessage: EditMessage | null |}>,
 |}>;
 
 const componentStyles = createStyleSheet({

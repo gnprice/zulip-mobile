@@ -3,8 +3,7 @@ import React from 'react';
 import type { ComponentType } from 'react';
 
 import type { ValidationError } from './ShareWrapper';
-import type { SharingNavigationProp } from './SharingScreen';
-import type { RouteProp } from '../react-navigation';
+import type { NavProps } from '../react-navigation';
 import type { Dispatch, Auth, GetText, Stream } from '../types';
 import type { SharedData } from './types';
 import { TranslationContext } from '../boot/TranslationProvider';
@@ -20,8 +19,7 @@ import ShareWrapper from './ShareWrapper';
 
 type OuterProps = $ReadOnly<{|
   // These should be passed from React Navigation
-  navigation: SharingNavigationProp<'share-to-stream'>,
-  route: RouteProp<'share-to-stream', {| sharedData: SharedData |}>,
+  ...NavProps<'share-to-stream', {| sharedData: SharedData |}>,
 |}>;
 
 type SelectorProps = $ReadOnly<{|

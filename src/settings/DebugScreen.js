@@ -4,13 +4,11 @@ import React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import Screen from '../common/Screen';
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'debug'>,
-  route: RouteProp<'debug', void>,
+  ...NavProps<'debug', void>,
 |}>;
 
 export default function DebugScreen(props: Props): Node {

@@ -3,8 +3,7 @@ import React, { PureComponent } from 'react';
 import type { ComponentType } from 'react';
 import type { EditingEvent } from 'react-native/Libraries/Components/TextInput/TextInput';
 
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import type { Auth, Dispatch, Message } from '../types';
 import Screen from '../common/Screen';
 import SearchMessagesCard from './SearchMessagesCard';
@@ -17,8 +16,7 @@ import { fetchMessages } from '../message/fetchActions';
 
 type OuterProps = $ReadOnly<{|
   // These should be passed from React Navigation
-  navigation: AppNavigationProp<'search-messages'>,
-  route: RouteProp<'search-messages', void>,
+  ...NavProps<'search-messages', void>,
 |}>;
 
 type SelectorProps = $ReadOnly<{|

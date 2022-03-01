@@ -2,8 +2,7 @@
 import React, { useCallback } from 'react';
 import type { Node } from 'react';
 
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import type { UserId } from '../types';
 import { createStyleSheet } from '../styles';
 import { useSelector, useDispatch } from '../react-redux';
@@ -29,8 +28,7 @@ const styles = createStyleSheet({
 });
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'account-details'>,
-  route: RouteProp<'account-details', {| userId: UserId |}>,
+  ...NavProps<'account-details', {| userId: UserId |}>,
 |}>;
 
 export default function AccountDetailsScreen(props: Props): Node {

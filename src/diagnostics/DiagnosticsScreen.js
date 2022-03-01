@@ -4,8 +4,7 @@ import React, { PureComponent } from 'react';
 import type { Node } from 'react';
 import { nativeApplicationVersion } from 'expo-application';
 
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import * as NavigationService from '../nav/NavigationService';
 import { createStyleSheet } from '../styles';
 import NestedNavRow from '../common/NestedNavRow';
@@ -27,8 +26,7 @@ const styles = createStyleSheet({
 });
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'diagnostics'>,
-  route: RouteProp<'diagnostics', void>,
+  ...NavProps<'diagnostics', void>,
 |}>;
 
 export default class DiagnosticsScreen extends PureComponent<Props> {

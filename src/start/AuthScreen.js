@@ -11,8 +11,7 @@ import type {
   AuthenticationMethods,
   ExternalAuthenticationMethod,
 } from '../api/settings/getServerSettings';
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import * as NavigationService from '../nav/NavigationService';
 import isAppOwnDomain from '../isAppOwnDomain';
 import type { Dispatch } from '../types';
@@ -173,8 +172,7 @@ export const activeAuthentications = (
 
 type OuterProps = $ReadOnly<{|
   // These should be passed from React Navigation
-  navigation: AppNavigationProp<'auth'>,
-  route: RouteProp<'auth', {| serverSettings: ApiResponseServerSettings |}>,
+  ...NavProps<'auth', {| serverSettings: ApiResponseServerSettings |}>,
 |}>;
 
 type SelectorProps = $ReadOnly<{|

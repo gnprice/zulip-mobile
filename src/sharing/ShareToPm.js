@@ -4,8 +4,7 @@ import type { Node, Context } from 'react';
 import { View, Modal } from 'react-native';
 
 import type { ValidationError } from './ShareWrapper';
-import type { RouteProp } from '../react-navigation';
-import type { SharingNavigationProp } from './SharingScreen';
+import type { NavProps } from '../react-navigation';
 import type { GetText, UserId } from '../types';
 import type { SharedData } from './types';
 import { createStyleSheet } from '../styles';
@@ -29,8 +28,7 @@ const styles = createStyleSheet({
 });
 
 type Props = $ReadOnly<{|
-  navigation: SharingNavigationProp<'share-to-pm'>,
-  route: RouteProp<'share-to-pm', {| sharedData: SharedData |}>,
+  ...NavProps<'share-to-pm', {| sharedData: SharedData |}>,
 |}>;
 
 type State = $ReadOnly<{|

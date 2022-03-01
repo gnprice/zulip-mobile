@@ -3,15 +3,13 @@ import React, { PureComponent } from 'react';
 import type { Node } from 'react';
 import { FlatList } from 'react-native';
 
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import config from '../config';
 import Screen from '../common/Screen';
 import InfoItem from './InfoItem';
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'variables'>,
-  route: RouteProp<'variables', void>,
+  ...NavProps<'variables', void>,
 |}>;
 
 export default class VariablesScreen extends PureComponent<Props> {

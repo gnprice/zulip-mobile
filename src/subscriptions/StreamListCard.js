@@ -4,8 +4,7 @@ import React, { useCallback, useMemo } from 'react';
 import type { Node } from 'react';
 import { View, FlatList } from 'react-native';
 
-import type { RouteProp } from '../react-navigation';
-import type { StreamTabsNavigationProp } from '../main/StreamTabsScreen';
+import type { NavProps } from '../react-navigation';
 import * as NavigationService from '../nav/NavigationService';
 import { createStyleSheet } from '../styles';
 import { useDispatch, useSelector } from '../react-redux';
@@ -35,8 +34,7 @@ const styles = createStyleSheet({
 });
 
 type Props = $ReadOnly<{|
-  navigation: StreamTabsNavigationProp<'allStreams'>,
-  route: RouteProp<'allStreams', void>,
+  ...NavProps<'allStreams', void>,
 |}>;
 
 export default function StreamListCard(props: Props): Node {

@@ -4,8 +4,7 @@ import type { Node } from 'react';
 import { ScrollView, View, Alert } from 'react-native';
 
 import { TranslationContext } from '../boot/TranslationProvider';
-import type { RouteProp } from '../react-navigation';
-import type { MainTabsNavigationProp } from '../main/MainTabsScreen';
+import type { NavProps } from '../react-navigation';
 import * as NavigationService from '../nav/NavigationService';
 import { createStyleSheet } from '../styles';
 import { useDispatch, useSelector } from '../react-redux';
@@ -107,8 +106,7 @@ function LogoutButton(props: {||}) {
 }
 
 type Props = $ReadOnly<{|
-  navigation: MainTabsNavigationProp<'profile'>,
-  route: RouteProp<'profile', void>,
+  ...NavProps<'profile', void>,
 |}>;
 
 /**

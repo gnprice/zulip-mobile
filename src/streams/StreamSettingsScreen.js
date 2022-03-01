@@ -3,8 +3,7 @@ import React, { useCallback } from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import * as NavigationService from '../nav/NavigationService';
 import { useSelector } from '../react-redux';
 import { delay } from '../utils/async';
@@ -22,8 +21,7 @@ import * as api from '../api';
 import getIsNotificationEnabled from './getIsNotificationEnabled';
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'stream-settings'>,
-  route: RouteProp<'stream-settings', {| streamId: number |}>,
+  ...NavProps<'stream-settings', {| streamId: number |}>,
 |}>;
 
 export default function StreamSettingsScreen(props: Props): Node {

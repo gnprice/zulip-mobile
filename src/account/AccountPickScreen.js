@@ -6,8 +6,7 @@ import { Alert } from 'react-native';
 
 import * as api from '../api';
 import { TranslationContext } from '../boot/TranslationProvider';
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import * as NavigationService from '../nav/NavigationService';
 import { useGlobalSelector, useGlobalDispatch } from '../react-redux';
 import { getAccountStatuses } from '../selectors';
@@ -27,8 +26,7 @@ import type { ApiResponseServerSettings } from '../api/settings/getServerSetting
 import { showErrorAlert } from '../utils/info';
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'account-pick'>,
-  route: RouteProp<'account-pick', void>,
+  ...NavProps<'account-pick', void>,
 |}>;
 
 export default function AccountPickScreen(props: Props): Node {

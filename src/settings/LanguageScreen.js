@@ -3,8 +3,7 @@
 import React, { useState, useCallback } from 'react';
 import type { Node } from 'react';
 
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import { useGlobalSelector, useDispatch } from '../react-redux';
 import Screen from '../common/Screen';
 import LanguagePicker from './LanguagePicker';
@@ -12,8 +11,7 @@ import { getGlobalSettings } from '../selectors';
 import { setGlobalSettings } from '../actions';
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'language'>,
-  route: RouteProp<'language', void>,
+  ...NavProps<'language', void>,
 |}>;
 
 export default function LanguageScreen(props: Props): Node {

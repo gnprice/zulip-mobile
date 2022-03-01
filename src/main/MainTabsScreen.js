@@ -7,10 +7,9 @@ import {
 } from '@react-navigation/bottom-tabs';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import type { RouteProp, RouteParamsOf } from '../react-navigation';
+import type { NavProps, RouteParamsOf } from '../react-navigation';
 import { getUnreadHuddlesTotal, getUnreadPmsTotal } from '../selectors';
 import { useSelector } from '../react-redux';
-import type { AppNavigationProp } from '../nav/AppNavigator';
 import type { GlobalParamList } from '../nav/globalTypes';
 import { bottomTabNavigatorConfig } from '../styles/tabs';
 import HomeScreen from './HomeScreen';
@@ -40,8 +39,7 @@ const Tab = createBottomTabNavigator<
 >();
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'main-tabs'>,
-  route: RouteProp<'main-tabs', void>,
+  ...NavProps<'main-tabs', void>,
 |}>;
 
 export default function MainTabsScreen(props: Props): Node {

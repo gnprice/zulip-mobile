@@ -5,8 +5,7 @@ import { FlatList, View } from 'react-native';
 import { TranslationContext } from '../boot/TranslationProvider';
 import { createStyleSheet } from '../styles';
 
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import * as NavigationService from '../nav/NavigationService';
 import { useSelector } from '../react-redux';
 import Input from '../common/Input';
@@ -34,8 +33,7 @@ const styles = createStyleSheet({
 });
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'user-status'>,
-  route: RouteProp<'user-status', void>,
+  ...NavProps<'user-status', void>,
 |}>;
 
 export default function UserStatusScreen(props: Props): Node {

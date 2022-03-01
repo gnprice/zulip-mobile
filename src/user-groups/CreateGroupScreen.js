@@ -2,8 +2,7 @@
 import React, { useState, useCallback } from 'react';
 import type { Node } from 'react';
 
-import type { RouteProp } from '../react-navigation';
-import type { AppNavigationProp } from '../nav/AppNavigator';
+import type { NavProps } from '../react-navigation';
 import * as NavigationService from '../nav/NavigationService';
 import type { UserOrBot } from '../types';
 import { useSelector, useDispatch } from '../react-redux';
@@ -15,8 +14,7 @@ import UserPickerCard from '../user-picker/UserPickerCard';
 import { getOwnUserId } from '../users/userSelectors';
 
 type Props = $ReadOnly<{|
-  navigation: AppNavigationProp<'create-group'>,
-  route: RouteProp<'create-group', void>,
+  ...NavProps<'create-group', void>,
 |}>;
 
 export default function CreateGroupScreen(props: Props): Node {
