@@ -430,7 +430,7 @@ type $Partial<T> = $Rest<T, {...}>;
   * Actions, state, etc.
   */
 
-export type ScreenParams = {| +[key: string]: mixed |};
+export type ScreenParams = { ... };
 
 export type BackAction = {|
   +type: 'GO_BACK',
@@ -832,7 +832,7 @@ type NavigationHelpers<
 };
 
 export type NavigationProp<
-  ParamList: ParamListBase,
+  +ParamList: ParamListBase,
   +RouteName: $Keys<ParamList> = $Keys<ParamList>,
   State: PossiblyStaleNavigationState = PossiblyStaleNavigationState,
   ScreenOptions: {...} = {...},

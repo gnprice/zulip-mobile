@@ -832,7 +832,7 @@ type NavigationHelpers<
 };
 
 export type NavigationProp<
-  ParamList: ParamListBase,
+  +ParamList: ParamListBase,
   +RouteName: $Keys<ParamList> = $Keys<ParamList>,
   State: PossiblyStaleNavigationState = PossiblyStaleNavigationState,
   ScreenOptions: {...} = {...},
