@@ -31,13 +31,6 @@ export type Style = DangerouslyImpreciseStyleProp;
 
 export type Orientation = 'LANDSCAPE' | 'PORTRAIT';
 
-export type Dimensions = {|
-  bottom: number,
-  left: number,
-  right: number,
-  top: number,
-|};
-
 export type InputSelection = {|
   +start: number,
   +end: number,
