@@ -35,6 +35,11 @@ export type RouteProp<+RouteName: string, +RouteParams: ScreenParams | void> = {
   +params: RouteParams,
 |};
 
+export type NavProps<RouteName: string, RouteParams: ScreenParams | void> = {|
+  +navigation: NavigationProp<{ +[RouteName]: RouteParams }, RouteName>,
+  +route: RouteProp<RouteName, RouteParams>,
+|};
+
 /**
  * The type of the route params on the given screen component.
  *
