@@ -2,15 +2,9 @@
 import { createSelector } from 'reselect';
 import invariant from 'invariant';
 
-import type {
-  Account,
-  Auth,
-  PerAccountState,
-  GlobalState,
-  Identity,
-  Selector,
-  GlobalSelector,
-} from '../types';
+import type { Auth } from '../api/apiTypes';
+import type { Account, Identity } from '../localModelTypes';
+import type { PerAccountState, GlobalState, Selector, GlobalSelector } from '../reduxTypes';
 import { dubPerAccountState, assumeSecretlyGlobalState } from '../reduxTypes';
 import { getAccounts } from '../directSelectors';
 import { identityOfAccount, keyOfIdentity, identityOfAuth, authOfAccount } from './accountMisc';

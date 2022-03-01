@@ -70,17 +70,11 @@ import type {
   SubmessageEvent,
   RestartEvent,
 } from './api/eventTypes';
-import type { MutedTopicTuple, PresenceSnapshot } from './api/apiTypes';
-
 import type {
-  Orientation,
-  GlobalState,
+  MutedTopicTuple,
+  PresenceSnapshot,
   Message,
-  MessagesState,
-  Outbox,
-  Narrow,
   Reaction,
-  Identity,
   User,
   UserGroup,
   InitialData,
@@ -88,11 +82,12 @@ import type {
   Subscription,
   Topic,
   RealmEmojiById,
-  GlobalSettingsState,
-  CaughtUpState,
   UserId,
   UserStatusEvent,
-} from './types';
+} from './api/apiTypes';
+import type { GlobalState, MessagesState, GlobalSettingsState, CaughtUpState } from './reduxTypes';
+import type { Orientation, Outbox, Identity } from './localModelTypes';
+import { type Narrow } from './utils/narrow';
 
 /**
  * Dispatched by redux-persist when the stored state is loaded.

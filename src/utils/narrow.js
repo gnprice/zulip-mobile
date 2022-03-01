@@ -1,7 +1,8 @@
 /* @flow strict-local */
 
 import { makeUserId } from '../api/idTypes';
-import type { ApiNarrow, Message, Outbox, Stream, UserId, UserOrBot } from '../types';
+import type { ApiNarrow, Message, Stream, UserId, UserOrBot } from '../api/apiTypes';
+import type { Outbox } from '../localModelTypes';
 import {
   normalizeRecipientsAsUserIdsSansMe,
   pmKeyRecipientsFromMessage,

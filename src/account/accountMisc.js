@@ -1,5 +1,6 @@
 /* @flow strict-local */
-import type { Account, Auth, Identity } from '../types';
+import type { Auth } from '../api/apiTypes';
+import type { Account, Identity } from '../localModelTypes';
 
 const identitySlice = ({ realm, email }): Identity => ({ realm, email });
 

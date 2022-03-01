@@ -1,6 +1,7 @@
 /* @flow strict-local */
 import Immutable from 'immutable';
 import invariant from 'invariant';
+
 import {
   ACCOUNT_SWITCH,
   EVENT_NEW_MESSAGE,
@@ -10,8 +11,9 @@ import {
   REGISTER_COMPLETE,
 } from '../actionConstants';
 import { makeUserId } from '../api/idTypes';
-
-import type { PerAccountApplicableAction, PmMessage, PmOutbox, UserId } from '../types';
+import type { PmMessage, UserId } from '../api/apiTypes';
+import type { PerAccountApplicableAction } from '../reduxTypes';
+import type { PmOutbox } from '../localModelTypes';
 import { recipientsOfPrivateMessage } from '../utils/recipient';
 import { ZulipVersion } from '../utils/zulipVersion';
 

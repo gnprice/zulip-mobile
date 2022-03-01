@@ -10,7 +10,7 @@
 import type Immutable from 'immutable';
 import type { InputSelector } from 'reselect';
 
-import type { Account, Outbox } from './types';
+import type { Account, Outbox } from './localModelTypes';
 import type { Action, DispatchableWithoutAccountAction } from './actionTypes';
 import type {
   Topic,

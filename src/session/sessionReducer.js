@@ -1,5 +1,6 @@
 /* @flow strict-local */
-import type { GlobalState, Debug, Orientation, Action } from '../types';
+import type { GlobalState, Action } from '../reduxTypes';
+import type { Debug, Orientation } from '../localModelTypes';
 import {
   REHYDRATE,
   DEAD_QUEUE,

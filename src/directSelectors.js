@@ -1,4 +1,5 @@
 /* @flow strict-local */
+import type { CrossRealmBot, RealmEmojiById, User } from './api/apiTypes';
 import type {
   PerAccountState,
   GlobalState,
@@ -16,16 +17,13 @@ import type {
   NarrowsState,
   TopicsState,
   PresenceState,
-  CrossRealmBot,
-  RealmEmojiById,
   RealmState,
   PerAccountSettingsState,
   GlobalSettingsState,
   TypingState,
-  Debug,
   VideoChatProvider,
-  User,
-} from './types';
+} from './reduxTypes';
+import { type Debug } from './localModelTypes';
 import type { PerAccountSessionState, GlobalSessionState } from './session/sessionReducer';
 
 export const getAccounts = (state: GlobalState): AccountsState => state.accounts;

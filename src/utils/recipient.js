@@ -9,12 +9,10 @@ import type {
   Message,
   StreamMessage,
   PmMessage,
-  Outbox,
-  StreamOutbox,
-  PmOutbox,
   UserId,
   UserOrBot,
-} from '../types';
+} from '../api/apiTypes';
+import type { Outbox, StreamOutbox, PmOutbox } from '../localModelTypes';
 
 /**
  * The stream name a stream message was sent to.
