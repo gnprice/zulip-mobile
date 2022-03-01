@@ -1,6 +1,5 @@
 /* @flow strict-local */
 
-import type { UserStatusUpdate } from './modelTypes';
 import type {
   CrossRealmBot,
   MutedTopicTuple,
@@ -15,7 +14,8 @@ import type {
   User,
   UserGroup,
   UserId,
-} from './apiTypes';
+  UserStatusUpdate,
+} from './modelTypes';
 
 /*
    The types in this file are organized by which `fetch_event_types` values
