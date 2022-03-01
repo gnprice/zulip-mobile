@@ -2,7 +2,7 @@
 import { createSelector } from 'reselect';
 
 import type { Narrow, Selector } from '../types';
-import type { UnreadStreamItem } from './UnreadCards';
+import type { UnreadStreamItem } from './unreadViewModel';
 import { caseInsensitiveCompareFunc } from '../utils/misc';
 import { getMute, isTopicMuted } from '../mute/muteModel';
 import { getOwnUserId } from '../users/userSelectors';
