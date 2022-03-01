@@ -19,7 +19,7 @@ type StyleObj =
   | {| [name: string]: $FlowFixMe |};
 type ViewStyleProp = StyleObj;
 type TextStyleProp = StyleObj;
-type AnimatedViewStyleProp = StyleObj;
+export type AnimatedViewStyleProp = StyleObj;
 type AnimatedTextStyleProp = StyleObj;
 
 // Vaguely copied from
@@ -293,7 +293,7 @@ type TouchableWithoutFeedbackProps = $ReadOnly<{|
 |}>;
 
 // Copied from react-native/Libraries/Image/ImageSource.js
-type ImageURISource = $ReadOnly<{
+export type ImageURISource = $ReadOnly<{
   uri?: ?string,
   bundle?: ?string,
   method?: ?string,
@@ -367,7 +367,7 @@ type $GestureHandlerProps<
   children?: React$Node,
 |}>;
 
-type PanGestureHandlerProps = $GestureHandlerProps<
+export type PanGestureHandlerProps = $GestureHandlerProps<
   {
     activeOffsetY?: number | [number, number],
     activeOffsetX?: number | [number, number],
@@ -1183,7 +1183,7 @@ export type StackHeaderLeftButtonProps = $Shape<{|
   +canGoBack: boolean,
 |}>;
 
-type StackHeaderTitleInputBase = {
+export type StackHeaderTitleInputBase = {
   +onLayout: LayoutEvent => void,
   +children: string,
   +allowFontScaling: ?boolean,
@@ -1287,7 +1287,7 @@ export type StackNavigationProp<
   * Miscellaneous stack exports
   */
 
-type StackNavigationConfig = {|
+export type StackNavigationConfig = {|
   +mode?: 'card' | 'modal',
   +headerMode?: 'float' | 'screen' | 'none',
   +keyboardHandlingEnabled?: boolean,
