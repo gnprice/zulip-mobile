@@ -2,8 +2,9 @@
 // $FlowFixMe[untyped-import]
 import isEqual from 'lodash.isequal';
 
+import type { SubsetProperties } from '../generics';
 import type { Auth, FlagsState } from '../types';
-import type { Props } from './MessageList';
+import type { Props as ComponentProps } from './MessageList';
 import type { ScrollStrategy } from '../message/scrollStrategy';
 import messageListElementHtml from './html/messageListElementHtml';
 import messageTypingAsHtml from './html/messageTypingAsHtml';
@@ -44,6 +45,26 @@ export type WebViewInboundEvent =
   | WebViewInboundEventTyping
   | WebViewInboundEventReady
   | WebViewInboundEventMessagesRead;
+
+type Props = $ReadOnly<{
+  ...SubsetProperties<
+    ComponentProps,
+    {|
+      narrow: mixed,
+      messages: mixed,
+      initialScrollMessageId: mixed,
+      showMessagePlaceholders: mixed,
+
+      backgroundData: mixed,
+      fetching: mixed,
+      messageListElementsForShownMessages: mixed,
+      typingUsers: mixed,
+
+      _: mixed,
+    |},
+  >,
+  ...
+}>;
 
 const updateContent = (prevProps: Props, nextProps: Props): WebViewInboundEventContent => {
   const scrollStrategy = getScrollStrategy(prevProps, nextProps);
