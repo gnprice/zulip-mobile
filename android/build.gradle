@@ -78,4 +78,7 @@ subprojects {
             }
         }
     }
+    afterEvaluate {
+        dependencies {} // WORK HERE -- attempt to synchronize RN version
+    }
 }
