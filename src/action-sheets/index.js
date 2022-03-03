@@ -40,6 +40,10 @@ import { deleteMessagesForTopic } from '../topics/topicActions';
 import * as logging from '../utils/logging';
 import { getUnreadCountForTopic } from '../unread/unreadModel';
 import getIsNotificationEnabled from '../streams/getIsNotificationEnabled';
+import { downloadImage } from '../lightbox/download';
+import share from '../lightbox/share';
+import shareImage from '../lightbox/shareImage';
+import { openLinkEmbedded } from '../utils/openLink';
 
 // TODO really this belongs in a libdef.
 export type ShowActionSheetWithOptions = (
@@ -81,6 +85,13 @@ type MessageArgs = {
   dispatch: Dispatch,
   _: GetText,
   startEditMessage: (editMessage: EditMessage) => void,
+  ...
+};
+
+type LightboxArgs = {
+  auth: Auth,
+  src: string,
+  _: GetText,
   ...
 };
 
@@ -335,6 +346,42 @@ const showReactions = {
   },
 };
 
+const tryToDownloadImage = {
+  title: 'Download image',
+  errorMessage: 'Failed to download image',
+  action: async ({ src, auth }) => {
+    const tempUrl = await api.tryGetFileTemporaryUrl(src, auth);
+    if (tempUrl === null) {
+      openLinkEmbedded(new URL(src, auth.realm).toString());
+      return;
+    }
+
+    const fileName = src.split('/').pop();
+    try {
+      await downloadImage(tempUrl, fileName, auth);
+      showToast('Download complete');
+    } catch (error) {
+      showToast(error.message);
+    }
+  },
+};
+
+const shareLink = {
+  title: 'Share link to image',
+  errorMessage: 'Failed to share link to image',
+  action: ({ src, auth }) => {
+    share(new URL(src, auth.realm).toString());
+  },
+};
+
+const shareImageDirectly = {
+  title: 'Share image',
+  errorMessage: 'Failed to share image',
+  action: ({ src, auth }) => {
+    shareImage(src, auth);
+  },
+};
+
 const cancel: Button<{ ... }> = {
   title: 'Cancel',
   errorMessage: 'Failed to hide menu',
@@ -494,6 +541,15 @@ export const constructMessageActionButtons = (args: {|
   return buttons;
 };
 
+export const constructLightboxActionButtons = (): Button<LightboxArgs>[] => {
+  const buttons = [];
+  buttons.push(tryToDownloadImage);
+  buttons.push(shareImageDirectly);
+  buttons.push(shareLink);
+  buttons.push(cancel);
+  return buttons;
+};
+
 //
 //
 // Actually showing an action sheet.
@@ -542,6 +598,22 @@ export const showMessageActionSheet = (args: {|
     showActionSheetWithOptions,
     options: constructMessageActionButtons({ backgroundData, message, narrow }),
     args: { ...backgroundData, ...callbacks, message, narrow },
+  });
+};
+
+export const showLightboxActionSheet = (args: {|
+  showActionSheetWithOptions: ShowActionSheetWithOptions,
+  callbacks: {|
+    _: GetText,
+  |},
+  backgroundData: $ReadOnly<{ auth: Auth, ... }>,
+  src: string,
+|}): void => {
+  const { showActionSheetWithOptions, callbacks, backgroundData, src } = args;
+  showActionSheet({
+    showActionSheetWithOptions,
+    options: constructLightboxActionButtons(),
+    args: { ...backgroundData, ...callbacks, src },
   });
 };
 

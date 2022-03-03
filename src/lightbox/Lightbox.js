@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 import type { Node } from 'react';
 import { View, Dimensions, LayoutAnimation } from 'react-native';
 // $FlowFixMe[untyped-import]
@@ -11,16 +11,16 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import * as NavigationService from '../nav/NavigationService';
 import type { Message } from '../types';
 import { useGlobalSelector, useSelector } from '../react-redux';
-import type { ShowActionSheetWithOptions } from '../action-sheets';
+import { type ShowActionSheetWithOptions, showLightboxActionSheet } from '../action-sheets';
 import { getAuth, getGlobalSession } from '../selectors';
 import { getResource } from '../utils/url';
 import LightboxHeader from './LightboxHeader';
 import LightboxFooter from './LightboxFooter';
-import { constructActionSheetButtons, executeActionSheetAction } from './LightboxActionSheet';
 import { createStyleSheet } from '../styles';
 import { navigateBack } from '../actions';
 import { streamNameOfStreamMessage } from '../utils/recipient';
 import ZulipStatusBar from '../common/ZulipStatusBar';
+import { TranslationContext } from '../boot/TranslationProvider';
 
 const styles = createStyleSheet({
   img: {
@@ -50,6 +50,7 @@ export default function Lightbox(props: Props): Node {
   const showActionSheetWithOptions: ShowActionSheetWithOptions = useActionSheet()
     .showActionSheetWithOptions;
   const auth = useSelector(getAuth);
+  const _ = useContext(TranslationContext);
 
   // Pulled out here just because this function is used twice.
   const handleImagePress = useCallback(() => {
@@ -120,21 +121,12 @@ export default function Lightbox(props: Props): Node {
           <LightboxFooter
             displayMessage={footerMessage}
             onOptionsPress={() => {
-              const options = constructActionSheetButtons();
-              const cancelButtonIndex = options.length - 1;
-              showActionSheetWithOptions(
-                {
-                  options,
-                  cancelButtonIndex,
-                },
-                buttonIndex => {
-                  executeActionSheetAction({
-                    title: options[buttonIndex],
-                    src,
-                    auth,
-                  });
-                },
-              );
+              showLightboxActionSheet({
+                src,
+                callbacks: { _ },
+                backgroundData: { auth },
+                showActionSheetWithOptions,
+              });
             }}
           />
         </View>
