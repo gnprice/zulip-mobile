@@ -1,9 +1,13 @@
 // @flow strict-local
+import invariant from 'invariant';
 
-import type { GlobalState } from '../../types';
-import { historicalStoreKeys, migrations } from '../migrations';
+import { historicalStoreKeys, migrationLegacyRollup } from '../migrations';
 import { storeKeys } from '../../boot/store';
-import { createMigrationFunction } from '../../redux-persist-migrate';
+import { objectEntries } from '../../flowPonyfill';
+import { Migration } from '../AsyncStorage';
+import { CompressedAsyncStorageImpl } from '../CompressedAsyncStorage';
+import { parse, stringify } from '../replaceRevive';
+import { objectFromEntries } from '../../jsBackport';
 import { ZulipVersion } from '../../utils/zulipVersion';
 
 describe('historicalStoreKeys', () => {
@@ -14,8 +18,39 @@ describe('historicalStoreKeys', () => {
   });
 });
 
-describe('migrations', () => {
-  const migrate = createMigrationFunction(migrations, 'migrations');
+// These are copied from the implementation.
+const reduxPersistKeyPrefix = 'reduxPersist:';
+const encodeKey = k => `${reduxPersistKeyPrefix}${k}`;
+const decodeKey = k => k.slice(reduxPersistKeyPrefix.length);
+const deserializer = parse;
+const serializer = stringify;
+
+describe('migrationLegacyRollup', () => {
+  const baseStorage = new CompressedAsyncStorageImpl(1, [new Migration(0, 1, async () => {})]);
+
+  beforeAll(() => baseStorage.devWipe());
+  afterEach(() => baseStorage.devWipe());
+
+  async function prep(state: { ... }) {
+    await baseStorage.multiSet(objectEntries(state).map(([k, v]) => [encodeKey(k), serializer(v)]));
+  }
+
+  async function fetch(): Promise<{ ... }> {
+    const storage = new CompressedAsyncStorageImpl(2, [
+      new Migration(0, 1, async () => {}),
+      migrationLegacyRollup,
+    ]);
+    const keys = await storage.getAllKeys();
+    const pairs = await Promise.all(
+      keys.map(async k => {
+        expect(k).toStartWith(reduxPersistKeyPrefix);
+        const v = await storage.getItem(k);
+        invariant(v != null, 'just saw item; should be present');
+        return [decodeKey(k), deserializer(v)];
+      }),
+    );
+    return objectFromEntries(pairs);
+  }
 
   // A plausible-ish state from before all surviving migrations.
   const base = {
@@ -95,29 +130,18 @@ describe('migrations', () => {
     // of the specific migrations.
     ['empty state -> just store version', {}, { migrations: endBase.migrations }],
     [
-      'no migration state -> just store version, leave everything else',
+      'no migration state -> just clear and store version',
       { nonsense: [1, 2, 3] },
-      { migrations: endBase.migrations, nonsense: [1, 2, 3] },
+      { migrations: endBase.migrations },
     ],
 
     // Test the whole sequence all together.  This covers many of the
     // individual migrations.  (This might not be a good design if we were
-    // going to be adding more migrations in this sequence; but pretty soon
-    // we aren't.)
+    // going to be adding more migrations in this sequence; but we aren't.)
     ['whole sequence', base, endBase],
-
-    // Test the latest use of `dropCache`.  All the earlier uses are
-    // redundant with this one, because none of the migration steps notice
-    // whether any properties outside `storeKeys` are present or not.
-    [
-      'check dropCache at 50',
-      { ...endBase, migrations: { version: 49 }, mute: [], nonsense: [1, 2, 3] },
-      endBase,
-    ],
 
     //
     // Now test individual migrations further, where needed.
-    // Ignore `dropCache`, which we covered above.
 
     // 6 is redundant with 9
     // 9 covered by whole
@@ -242,14 +266,9 @@ describe('migrations', () => {
       },
     ],
   ]) {
-    /* eslint-disable no-loop-func */
     test(desc, async () => {
-      // $FlowIgnore[incompatible-exact]
-      // $FlowIgnore[incompatible-type]
-      /* $FlowIgnore[prop-missing]
-         this really is a lie -- and kind of central to migration */
-      const incomingState: $Rest<GlobalState, { ... }> = before;
-      expect(migrate(incomingState)).toEqual(after);
+      await prep(before);
+      expect(await fetch()).toEqual(after);
     });
   }
 });
