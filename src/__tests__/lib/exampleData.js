@@ -638,16 +638,7 @@ export const reduxState = (extra?: $Rest<GlobalState, { ... }>): GlobalState & P
  * See `baseReduxState` for a minimal version of the state.
  */
 export const plusReduxState: GlobalState & PerAccountState = reduxState({
-  accounts: [
-    {
-      ...selfAuth,
-      userId: selfUser.user_id,
-      ackedPushToken: null,
-      zulipVersion: recentZulipVersion,
-      zulipFeatureLevel: recentZulipFeatureLevel,
-      lastDismissedServerPushSetupNotice: null,
-    },
-  ],
+  accounts: [makeAccount({ user: selfUser, realm })],
   realm: {
     ...baseReduxState.realm,
     user_id: selfUser.user_id,
