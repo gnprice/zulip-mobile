@@ -5,6 +5,7 @@ import type { ReadWrite, SubsetProperties } from '../generics';
 import { ZulipVersion } from '../utils/zulipVersion';
 import type { GlobalState, MigrationsState } from '../types';
 import { objectFromEntries } from '../jsBackport';
+import { migrationFromLegacyAsyncStorage } from './AsyncStorage';
 import { CompressedMigration } from './CompressedAsyncStorage';
 import { parse, stringify } from './replaceRevive';
 
@@ -551,3 +552,6 @@ export const migrationLegacyRollup: CompressedMigration = new CompressedMigratio
 // Migration: they identify the keys they care about, and either just
 // UPDATE the keys themselves (to move things around) or SELECT the data,
 // decode, shuffle/munge data as needed, encode, then INSERT / DELETE.
+
+export const migrations = [migrationFromLegacyAsyncStorage, migrationLegacyRollup];
+export const migrationsEndVersion: number = migrations[migrations.length - 1].endVersion;
