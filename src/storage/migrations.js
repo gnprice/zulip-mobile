@@ -10,9 +10,6 @@ import { migrationFromLegacyAsyncStorage } from './AsyncStorage';
 import { CompressedMigration } from './CompressedAsyncStorage';
 import { parse, stringify } from './replaceRevive';
 
-// Like GlobalState, but making all properties optional.
-type PartialState = $ReadOnly<$Rest<GlobalState, { ... }>>;
-
 // Like GlobalState, but with only the properties from historicalStoreKeys.
 type StoreKeysState = SubsetProperties<
   GlobalState,
@@ -38,8 +35,12 @@ const historicalStoreKeys: $ReadOnlyArray<$Keys<StoreKeysState>> = [
   // have the same value.
 ];
 
-// This is the inward-facing type; see later export for jsdoc.
-const legacyMigrationsInner: {| [string]: (LessPartialState) => LessPartialState |} = {
+/**
+ * Migrations for data persisted by previous versions of the app.
+ *
+ * These are run as part of `migrationLegacyRollup` below.
+ */
+const legacyMigrations: {| [string]: (LessPartialState) => LessPartialState |} = {
   // The type is a lie, in several ways:
   // TODO these may need updating
   //  * The actual object contains only the properties we persist:
@@ -315,17 +316,6 @@ const legacyMigrationsInner: {| [string]: (LessPartialState) => LessPartialState
 
   // END.  Don't add more of these.
 };
-
-/**
- * Migrations for data persisted by previous versions of the app.
- *
- * These are run as part of `migrationLegacyRollup` below.
- */
-/* $FlowFixMe[incompatible-type] This discrepancy between PartialState
-     (which the exported type claims to accept) and LessPartialState (the
-     type actually accepted by the implementation, legacyMigrationsInner)
-     is where we pretend that the storeKeys are all present. */
-const legacyMigrations: {| [string]: (PartialState) => PartialState |} = legacyMigrationsInner;
 
 /* eslint-disable no-underscore-dangle */
 
