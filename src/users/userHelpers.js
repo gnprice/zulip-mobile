@@ -59,13 +59,6 @@ export const sortUserList = (
       || x1.full_name.toLowerCase().localeCompare(x2.full_name.toLowerCase()),
   );
 
-export type AutocompleteOption = $ReadOnly<{
-  user_id: UserId,
-  email: string,
-  full_name: string,
-  ...
-}>;
-
 export const filterUserList = (
   users: $ReadOnlyArray<UserOrBot>,
   filter: string,
@@ -76,6 +69,13 @@ export const filterUserList = (
       || user.full_name.toLowerCase().includes(filter.toLowerCase())
       || user.email.toLowerCase().includes(filter.toLowerCase()),
   );
+
+export type AutocompleteOption = $ReadOnly<{
+  user_id: UserId,
+  email: string,
+  full_name: string,
+  ...
+}>;
 
 export const filterUserStartWith = (
   users: $ReadOnlyArray<AutocompleteOption>,
