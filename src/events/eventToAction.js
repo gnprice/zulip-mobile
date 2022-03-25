@@ -95,22 +95,6 @@ export default (state: PerAccountState, event_: $FlowFixMe): EventAction | null 
   {
     const event: KnownEvent = event_;
     switch (event.type) {
-    }
-  }
-
-  {
-    const event = event_;
-    const type = (event.type: EventType);
-    switch (type) {
-      // For reference on each type of event, see:
-      // https://zulip.com/api/get-events#events
-
-      case 'alert_words':
-        return {
-          type: EVENT_ALERT_WORDS,
-          alert_words: event.alert_words,
-        };
-
       case 'message':
         return {
           type: EVENT_NEW_MESSAGE,
@@ -130,6 +114,24 @@ export default (state: PerAccountState, event_: $FlowFixMe): EventAction | null 
           local_message_id: event.local_message_id,
           caughtUp: state.caughtUp,
           ownUserId: getOwnUserId(state),
+        };
+
+      default:
+        break;
+    }
+  }
+
+  {
+    const event = event_;
+    const type = (event.type: EventType);
+    switch (type) {
+      // For reference on each type of event, see:
+      // https://zulip.com/api/get-events#events
+
+      case 'alert_words':
+        return {
+          type: EVENT_ALERT_WORDS,
+          alert_words: event.alert_words,
         };
 
       case 'delete_message':
@@ -395,11 +397,22 @@ export default (state: PerAccountState, event_: $FlowFixMe): EventAction | null 
         return null;
 
       default:
-        // Note there are also some event types that are mentioned above
-        // (so don't reach this default case), but that at some later stage
-        // we don't fully handle: #3408.
-        ensureUnreachable(type);
+        // This case is impossible, if we've correctly modeled the API types
+        // and if the server is behaving accordingly.
+        //
+        // Though note there are also some event types that are mentioned
+        // above (so don't reach this default case), but that at some later
+        // stage we don't fully handle: #3408.
+
+        // First, have the type-checker confirm that our types say this is
+        // impossible.  The only cases not covered in this `switch` should
+        // be those covered in the previous `switch`... which are those in
+        // KnownEvent.
+        ((t: $ElementType<KnownEvent, 'type'>) => {})(type);
+
+        // Then, if we do get here, log an error.
         logging.error(`Unhandled Zulip API event type: ${event.type}`);
+
         return null;
     }
   }
