@@ -139,11 +139,10 @@ export default (state: PerAccountState, event_: $FlowFixMe): EventAction | null 
         };
 
       case 'restart':
+        return { type: EVENT, event };
+
       case 'stream':
-        return {
-          type: EVENT,
-          event,
-        };
+        return { type: EVENT, event };
 
       case 'update_message':
         return {
@@ -153,13 +152,16 @@ export default (state: PerAccountState, event_: $FlowFixMe): EventAction | null 
         };
 
       case 'presence':
+        return { ...event, type: actionTypeOfEventType[event.type] };
+
       case 'muted_users':
+        return { ...event, type: actionTypeOfEventType[event.type] };
+
       case 'submessage':
+        return { ...event, type: actionTypeOfEventType[event.type] };
+
       case 'user_status':
-        return {
-          ...event,
-          type: actionTypeOfEventType[event.type],
-        };
+        return { ...event, type: actionTypeOfEventType[event.type] };
 
       case 'heartbeat':
         return null;
