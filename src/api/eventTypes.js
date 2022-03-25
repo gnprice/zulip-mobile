@@ -80,6 +80,29 @@ export type GeneralEvent = $ReadOnly<{
   ...
 }>;
 
+/* eslint-disable no-use-before-define */
+// prettier-ignore
+export type KnownEvent =
+  | HeartbeatEvent
+  | MessageEvent
+  | MutedUsersEvent
+  | SubmessageEvent
+  | PresenceEvent
+  | UserStatusEvent
+  | StreamListEvent
+  | StreamEvent
+  | UpdateMessageFlagsEvent
+  | RestartEvent
+  | RealmUpdateEvent
+  | RealmUpdateDictEvent
+  | UpdateMessageEvent
+  /* eslint-disable-next-line semi-style */
+  ;
+
+// Confirm that every known event conforms to GeneralEvent.
+// eslint-disable-next-line no-unused-expressions
+(e: KnownEvent): GeneralEvent => e;
+
 export type HeartbeatEvent = $ReadOnly<{|
   ...EventCommon,
   type: typeof EventTypes.heartbeat,

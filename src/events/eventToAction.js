@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import { EventTypes, type EventType } from '../api/eventTypes';
+import { EventTypes, type EventType, type KnownEvent } from '../api/eventTypes';
 
 import * as logging from '../utils/logging';
 import type { PerAccountState, EventAction } from '../types';
@@ -91,55 +91,63 @@ const actionTypeOfEventType = {
  */
 // This FlowFixMe is because this function encodes a large number of
 // assumptions about the events the server sends, and doesn't check them.
-export default (state: PerAccountState, event: $FlowFixMe): EventAction | null => {
-  const type = (event.type: EventType);
-  switch (type) {
-    // For reference on each type of event, see:
-    // https://zulip.com/api/get-events#events
+export default (state: PerAccountState, event_: $FlowFixMe): EventAction | null => {
+  {
+    const event: KnownEvent = event_;
+    switch (event.type) {
+    }
+  }
 
-    case 'alert_words':
-      return {
-        type: EVENT_ALERT_WORDS,
-        alert_words: event.alert_words,
-      };
+  {
+    const event = event_;
+    const type = (event.type: EventType);
+    switch (type) {
+      // For reference on each type of event, see:
+      // https://zulip.com/api/get-events#events
 
-    case 'message':
-      return {
-        type: EVENT_NEW_MESSAGE,
-        id: event.id,
-        message: {
-          ...event.message,
-          // Move `flags` key from `event` to `event.message` for
-          // consistency; default to empty if `event.flags` is not set.
-          flags: event.message.flags ?? event.flags ?? [],
-          avatar_url: AvatarURL.fromUserOrBotData({
-            rawAvatarUrl: event.message.avatar_url,
-            email: event.message.sender_email,
-            userId: event.message.sender_id,
-            realm: getRealmUrl(state),
-          }),
-        },
-        local_message_id: event.local_message_id,
-        caughtUp: state.caughtUp,
-        ownUserId: getOwnUserId(state),
-      };
+      case 'alert_words':
+        return {
+          type: EVENT_ALERT_WORDS,
+          alert_words: event.alert_words,
+        };
 
-    case 'delete_message':
-      return {
-        type: EVENT_MESSAGE_DELETE,
-        // Before server feature level 13 (or if we didn't specify the
-        // `bulk_message_deletion` client capability, which we do), this
-        // event has `message_id` instead of `message_ids`.
-        // TODO(server-3.0): Simplify this.
-        messageIds: event.message_ids ?? [event.message_id],
-      };
+      case 'message':
+        return {
+          type: EVENT_NEW_MESSAGE,
+          id: event.id,
+          message: {
+            ...event.message,
+            // Move `flags` key from `event` to `event.message` for
+            // consistency; default to empty if `event.flags` is not set.
+            flags: event.message.flags ?? event.flags ?? [],
+            avatar_url: AvatarURL.fromUserOrBotData({
+              rawAvatarUrl: event.message.avatar_url,
+              email: event.message.sender_email,
+              userId: event.message.sender_id,
+              realm: getRealmUrl(state),
+            }),
+          },
+          local_message_id: event.local_message_id,
+          caughtUp: state.caughtUp,
+          ownUserId: getOwnUserId(state),
+        };
 
-    case 'realm':
-      return {
-        type: EVENT,
-        event:
-          /* prettier-ignore */
-          event.op === 'update'
+      case 'delete_message':
+        return {
+          type: EVENT_MESSAGE_DELETE,
+          // Before server feature level 13 (or if we didn't specify the
+          // `bulk_message_deletion` client capability, which we do), this
+          // event has `message_id` instead of `message_ids`.
+          // TODO(server-3.0): Simplify this.
+          messageIds: event.message_ids ?? [event.message_id],
+        };
+
+      case 'realm':
+        return {
+          type: EVENT,
+          event:
+            /* prettier-ignore */
+            event.op === 'update'
             // Convert to an equivalent `update_dict` event, so reducers only have
             //   to handle that one form.
             // TODO: handle `extra_data` hack property in the `update`
@@ -154,244 +162,245 @@ export default (state: PerAccountState, event: $FlowFixMe): EventAction | null =
                 },
               }
             : event,
-      };
+        };
 
-    case 'restart':
-    case 'stream':
-      return {
-        type: EVENT,
-        event,
-      };
+      case 'restart':
+      case 'stream':
+        return {
+          type: EVENT,
+          event,
+        };
 
-    case 'update_message':
-      return {
-        type: EVENT_UPDATE_MESSAGE,
-        event: { ...event, message_ids: event.message_ids.sort((a, b) => a - b) },
-        move: messageMoved(event),
-      };
+      case 'update_message':
+        return {
+          type: EVENT_UPDATE_MESSAGE,
+          event: { ...event, message_ids: event.message_ids.sort((a, b) => a - b) },
+          move: messageMoved(event),
+        };
 
-    case 'subscription':
-    case 'presence':
-    case 'muted_topics':
-    case 'muted_users':
-    case 'realm_emoji':
-    case 'submessage':
-    case 'update_global_notifications':
-    case 'update_display_settings':
-    case 'user_status':
-      return {
-        ...event,
-        type: actionTypeOfEventType[event.type],
-      };
+      case 'subscription':
+      case 'presence':
+      case 'muted_topics':
+      case 'muted_users':
+      case 'realm_emoji':
+      case 'submessage':
+      case 'update_global_notifications':
+      case 'update_display_settings':
+      case 'user_status':
+        return {
+          ...event,
+          type: actionTypeOfEventType[event.type],
+        };
 
-    // See notes on `RealmFilter` and `RealmLinkifier` types.
-    case 'realm_filters': {
-      return {
-        ...event,
-        type: EVENT_REALM_FILTERS,
-        realm_filters: event.realm_filters,
-      };
-    }
-
-    // See notes on `RealmFilter` and `RealmLinkifier` types.
-    //
-    // Empirically, servers that know about the new format send two
-    // events for every change to the linkifiers: one in this new
-    // format and one in the 'realm_filters' format. That's whether we
-    // put 'realm_linkifiers' or 'realm_filters' in
-    // `fetch_event_types`.
-    //
-    // Shrug, because we can handle both events, and both events give
-    // the whole array of linkifiers, which we're happy to clobber the
-    // old state with.
-    case 'realm_linkifiers': {
-      return {
-        ...event,
-        type: EVENT_REALM_FILTERS,
-        // We do the same in `registerForEvents`'s transform function.
-        realm_filters: event.realm_linkifiers.map(({ pattern, url_format, id }) => [
-          pattern,
-          url_format,
-          id,
-        ]),
-      };
-    }
-
-    case 'realm_user': {
-      const realm = getRealmUrl(state);
-
-      switch (event.op) {
-        case 'add': {
-          const { avatar_url: rawAvatarUrl, user_id: userId, email } = event.person;
-          return {
-            type: EVENT_USER_ADD,
-            id: event.id,
-            // TODO: Validate and rebuild `event.person`.
-            person: {
-              ...event.person,
-              avatar_url: AvatarURL.fromUserOrBotData({
-                rawAvatarUrl,
-                userId,
-                email,
-                realm,
-              }),
-            },
-          };
-        }
-
-        case 'update': {
-          const { user_id: userId } = event.person;
-          const existingUser = tryGetUserForId(state, userId);
-          if (!existingUser) {
-            // If we get one of these events and don't have
-            // information on the user, there's nothing to do about
-            // it. But it's probably a bug, so, tell Sentry.
-            logging.warn(
-              "`realm_user` event with op `update` received for a user we don't know about",
-              { userId },
-            );
-            return null;
-          }
-          return {
-            type: EVENT_USER_UPDATE,
-            id: event.id,
-            userId,
-            // Just the fields we want to overwrite.
-            person: {
-              // Note: The `avatar_url` field will be out of sync with
-              // some related, documented properties, but we don't
-              // currently use them: `avatar_source`,
-              // `avatar_url_medium`, and `avatar_version`.
-              ...(event.person.avatar_url !== undefined
-                ? {
-                    avatar_url: AvatarURL.fromUserOrBotData({
-                      rawAvatarUrl: event.person.avatar_url,
-                      userId,
-                      email: existingUser.email,
-                      realm,
-                    }),
-                  }
-                : undefined),
-            },
-          };
-        }
-
-        case 'remove':
-          // TODO: Handle this event and properly form this action.
-          return {
-            type: EVENT_USER_REMOVE,
-          };
-
-        default:
-          return null;
+      // See notes on `RealmFilter` and `RealmLinkifier` types.
+      case 'realm_filters': {
+        return {
+          ...event,
+          type: EVENT_REALM_FILTERS,
+          realm_filters: event.realm_filters,
+        };
       }
+
+      // See notes on `RealmFilter` and `RealmLinkifier` types.
+      //
+      // Empirically, servers that know about the new format send two
+      // events for every change to the linkifiers: one in this new
+      // format and one in the 'realm_filters' format. That's whether we
+      // put 'realm_linkifiers' or 'realm_filters' in
+      // `fetch_event_types`.
+      //
+      // Shrug, because we can handle both events, and both events give
+      // the whole array of linkifiers, which we're happy to clobber the
+      // old state with.
+      case 'realm_linkifiers': {
+        return {
+          ...event,
+          type: EVENT_REALM_FILTERS,
+          // We do the same in `registerForEvents`'s transform function.
+          realm_filters: event.realm_linkifiers.map(({ pattern, url_format, id }) => [
+            pattern,
+            url_format,
+            id,
+          ]),
+        };
+      }
+
+      case 'realm_user': {
+        const realm = getRealmUrl(state);
+
+        switch (event.op) {
+          case 'add': {
+            const { avatar_url: rawAvatarUrl, user_id: userId, email } = event.person;
+            return {
+              type: EVENT_USER_ADD,
+              id: event.id,
+              // TODO: Validate and rebuild `event.person`.
+              person: {
+                ...event.person,
+                avatar_url: AvatarURL.fromUserOrBotData({
+                  rawAvatarUrl,
+                  userId,
+                  email,
+                  realm,
+                }),
+              },
+            };
+          }
+
+          case 'update': {
+            const { user_id: userId } = event.person;
+            const existingUser = tryGetUserForId(state, userId);
+            if (!existingUser) {
+              // If we get one of these events and don't have
+              // information on the user, there's nothing to do about
+              // it. But it's probably a bug, so, tell Sentry.
+              logging.warn(
+                "`realm_user` event with op `update` received for a user we don't know about",
+                { userId },
+              );
+              return null;
+            }
+            return {
+              type: EVENT_USER_UPDATE,
+              id: event.id,
+              userId,
+              // Just the fields we want to overwrite.
+              person: {
+                // Note: The `avatar_url` field will be out of sync with
+                // some related, documented properties, but we don't
+                // currently use them: `avatar_source`,
+                // `avatar_url_medium`, and `avatar_version`.
+                ...(event.person.avatar_url !== undefined
+                  ? {
+                      avatar_url: AvatarURL.fromUserOrBotData({
+                        rawAvatarUrl: event.person.avatar_url,
+                        userId,
+                        email: existingUser.email,
+                        realm,
+                      }),
+                    }
+                  : undefined),
+              },
+            };
+          }
+
+          case 'remove':
+            // TODO: Handle this event and properly form this action.
+            return {
+              type: EVENT_USER_REMOVE,
+            };
+
+          default:
+            return null;
+        }
+      }
+
+      case 'realm_bot':
+        // If implementing, don't forget to convert `avatar_url` on
+        // `op: 'add'`, and (where `avatar_url` is present) on
+        // `op: 'update'`.
+        return null;
+
+      case 'reaction':
+        return {
+          ...event,
+
+          // Raw reaction events from the server have a variation on the
+          // properties of `Reaction`: instead of `user_id: UserId`, they have
+          // `user: {| email: string, full_name: string, user_id: UserId |}`.
+          // NB this is different from the reactions in a `/messages` response;
+          // see `getMessages` to compare.
+          user_id: event.user.user_id,
+
+          type: opToActionReaction[event.op],
+        };
+
+      case 'heartbeat':
+        return null;
+
+      case 'update_message_flags':
+        return {
+          ...event,
+          type: EVENT_UPDATE_MESSAGE_FLAGS,
+
+          // Servers with feature level 32+ send `op`. Servers will eventually
+          // stop sending `operation`; see #4238.
+          // TODO(server-4.0): Simplify to just use `op`.
+          op: event.op ?? event.operation,
+
+          allMessages: state.messages,
+        };
+
+      case 'typing':
+        return {
+          ...event,
+          ownUserId: getOwnUserId(state),
+          type: opToActionTyping[event.op],
+          time: new Date().getTime(),
+        };
+
+      case 'user_group':
+        return {
+          ...event,
+          type: opToActionUserGroup[event.op],
+        };
+
+      case 'user_settings':
+        // TODO(#4933): Start handling these `user_settings` events.
+        return null;
+
+      case 'pointer':
+        // Ignore these `pointer` events.  We've never used this information.
+        // TODO(server-3.0): The server stopped sending these; drop the case.
+        return null;
+
+      case 'hotspots':
+        // Ignore these `hotspots` events.  They're about the tutorial
+        // experience which is specific to the Zulip web app:
+        //   https://zulip.com/api/get-events#hotspots
+        return null;
+
+      case 'attachment':
+        // Ignore these `attachment` events.  We'd want them in a future
+        // where we add a UI that lists the attachments you've uploaded:
+        //   https://zulip.com/api/get-events#attachment-add
+        return null;
+
+      case 'has_zoom_token':
+        // Ignore these `has_zoom_token` events.  We'd want them if
+        // supporting creating a Zoom call:
+        //   https://zulip.com/api/get-events#has_zoom_token
+        return null;
+
+      case 'drafts':
+        // Ignore these `drafts` events.  We'll need them as part of #4932,
+        // syncing drafts with the server.
+        return null;
+
+      case 'default_streams':
+      case 'default_stream_groups':
+      case 'invites_changed':
+      case 'realm_domains':
+        // Ignore these event types.  We'll need them as part of #3962 or
+        // followup tasks to that, supporting inviting other users to Zulip.
+        // We'd also need them as part of a full org-settings UI.
+        return null;
+
+      case 'custom_profile_fields':
+      case 'realm_export':
+      case 'realm_playgrounds':
+      case 'realm_user_settings_defaults':
+        // Ignore these event types.  We'll need them eventually as part of a
+        // full org-settings UI.
+        return null;
+
+      default:
+        // Note there are also some event types that are mentioned above
+        // (so don't reach this default case), but that at some later stage
+        // we don't fully handle: #3408.
+        ensureUnreachable(type);
+        logging.error(`Unhandled Zulip API event type: ${event.type}`);
+        return null;
     }
-
-    case 'realm_bot':
-      // If implementing, don't forget to convert `avatar_url` on
-      // `op: 'add'`, and (where `avatar_url` is present) on
-      // `op: 'update'`.
-      return null;
-
-    case 'reaction':
-      return {
-        ...event,
-
-        // Raw reaction events from the server have a variation on the
-        // properties of `Reaction`: instead of `user_id: UserId`, they have
-        // `user: {| email: string, full_name: string, user_id: UserId |}`.
-        // NB this is different from the reactions in a `/messages` response;
-        // see `getMessages` to compare.
-        user_id: event.user.user_id,
-
-        type: opToActionReaction[event.op],
-      };
-
-    case 'heartbeat':
-      return null;
-
-    case 'update_message_flags':
-      return {
-        ...event,
-        type: EVENT_UPDATE_MESSAGE_FLAGS,
-
-        // Servers with feature level 32+ send `op`. Servers will eventually
-        // stop sending `operation`; see #4238.
-        // TODO(server-4.0): Simplify to just use `op`.
-        op: event.op ?? event.operation,
-
-        allMessages: state.messages,
-      };
-
-    case 'typing':
-      return {
-        ...event,
-        ownUserId: getOwnUserId(state),
-        type: opToActionTyping[event.op],
-        time: new Date().getTime(),
-      };
-
-    case 'user_group':
-      return {
-        ...event,
-        type: opToActionUserGroup[event.op],
-      };
-
-    case 'user_settings':
-      // TODO(#4933): Start handling these `user_settings` events.
-      return null;
-
-    case 'pointer':
-      // Ignore these `pointer` events.  We've never used this information.
-      // TODO(server-3.0): The server stopped sending these; drop the case.
-      return null;
-
-    case 'hotspots':
-      // Ignore these `hotspots` events.  They're about the tutorial
-      // experience which is specific to the Zulip web app:
-      //   https://zulip.com/api/get-events#hotspots
-      return null;
-
-    case 'attachment':
-      // Ignore these `attachment` events.  We'd want them in a future
-      // where we add a UI that lists the attachments you've uploaded:
-      //   https://zulip.com/api/get-events#attachment-add
-      return null;
-
-    case 'has_zoom_token':
-      // Ignore these `has_zoom_token` events.  We'd want them if
-      // supporting creating a Zoom call:
-      //   https://zulip.com/api/get-events#has_zoom_token
-      return null;
-
-    case 'drafts':
-      // Ignore these `drafts` events.  We'll need them as part of #4932,
-      // syncing drafts with the server.
-      return null;
-
-    case 'default_streams':
-    case 'default_stream_groups':
-    case 'invites_changed':
-    case 'realm_domains':
-      // Ignore these event types.  We'll need them as part of #3962 or
-      // followup tasks to that, supporting inviting other users to Zulip.
-      // We'd also need them as part of a full org-settings UI.
-      return null;
-
-    case 'custom_profile_fields':
-    case 'realm_export':
-    case 'realm_playgrounds':
-    case 'realm_user_settings_defaults':
-      // Ignore these event types.  We'll need them eventually as part of a
-      // full org-settings UI.
-      return null;
-
-    default:
-      // Note there are also some event types that are mentioned above
-      // (so don't reach this default case), but that at some later stage
-      // we don't fully handle: #3408.
-      ensureUnreachable(type);
-      logging.error(`Unhandled Zulip API event type: ${event.type}`);
-      return null;
   }
 };
