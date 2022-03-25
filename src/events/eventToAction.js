@@ -139,8 +139,6 @@ export default (state: PerAccountState, event_: $FlowFixMe): EventAction | null 
         };
 
       case 'restart':
-        return { type: EVENT, event };
-
       case 'stream':
         return { type: EVENT, event };
 
