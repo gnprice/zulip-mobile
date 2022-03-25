@@ -113,6 +113,7 @@ export default (state: PerAccountState, event_: $FlowFixMe): EventAction | null 
             // consistency; default to empty if `event.flags` is not set.
             flags: event.message.flags ?? event.flags ?? [],
             avatar_url: AvatarURL.fromUserOrBotData({
+              // $FlowFixMe[incompatible-call]: TODO handle AvatarURL mismatch
               rawAvatarUrl: event.message.avatar_url,
               email: event.message.sender_email,
               userId: event.message.sender_id,
@@ -155,6 +156,7 @@ export default (state: PerAccountState, event_: $FlowFixMe): EventAction | null 
       case 'update_message':
         return {
           type: EVENT_UPDATE_MESSAGE,
+          // $FlowFixMe[prop-missing]: TODO handle ReadOnlyArray mismatch
           event: { ...event, message_ids: event.message_ids.sort((a, b) => a - b) },
           move: messageMoved(event),
         };
@@ -185,6 +187,7 @@ export default (state: PerAccountState, event_: $FlowFixMe): EventAction | null 
           // Servers with feature level 32+ send `op`. Servers will eventually
           // stop sending `operation`; see #4238.
           // TODO(server-4.0): Simplify to just use `op`.
+          // $FlowFixMe[incompatible-return]: TODO handle possibility both missing
           op: event.op ?? event.operation,
 
           allMessages: state.messages,
