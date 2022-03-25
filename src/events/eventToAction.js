@@ -162,6 +162,7 @@ export default (state: PerAccountState, event_: $FlowFixMe): EventAction | null 
         };
 
       case 'presence':
+        // TODO just inline this actionTypeOfEventType lookup, and similarly below
         return { ...event, type: actionTypeOfEventType[event.type] };
 
       case 'muted_users':
