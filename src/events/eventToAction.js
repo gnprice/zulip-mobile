@@ -191,7 +191,14 @@ export default (state: PerAccountState, event_: $FlowFixMe): EventAction | null 
         };
 
       default:
+        // Verify that all the KnownEvent cases are covered above.
         ensureUnreachable(event);
+
+        // But in reality, the event might not be in KnownEvent, because
+        // that type doesn't cover all the events we handle (just the ones
+        // where we've described types for specifically the events.)  So if
+        // we get here, it just means the event needs to be handled by the
+        // less-well-typed code below.
         break;
     }
   }
