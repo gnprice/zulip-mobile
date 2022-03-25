@@ -1,5 +1,6 @@
 /* @flow strict-local */
 import { EventTypes, type EventType, type KnownEvent } from '../api/eventTypes';
+import { type RealmDataForUpdate } from '../api/realmDataTypes';
 
 import * as logging from '../utils/logging';
 import type { PerAccountState, EventAction } from '../types';
@@ -70,6 +71,13 @@ const actionTypeOfEventType = {
   user_status: EVENT_USER_STATUS_UPDATE,
 };
 
+function single<O: { ... }, K: $Keys<O>>(
+  property: K,
+  value: $ElementType<O, K>,
+): $Rest<O, { ... }> {
+  return { [property]: value };
+}
+
 /**
  * Translate a Zulip event from the server into one of our Redux actions.
  *
@@ -131,9 +139,11 @@ export default (state: PerAccountState, event_: $FlowFixMe): EventAction | null 
                   type: EventTypes.realm,
                   op: 'update_dict',
                   property: 'default',
-                  data: {
-                    [event.property]: event.value,
-                  },
+                  data: single<RealmDataForUpdate, typeof event.property>(
+                    event.property,
+                    // $FlowFixMe[incompatible-call]: See todo on RealmUpdateEvent
+                    event.value
+                  ),
                 }
               : event,
         };
