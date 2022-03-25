@@ -168,8 +168,11 @@ export default (state: PerAccountState, event_: $FlowFixMe): EventAction | null 
 
       case 'update_message_flags':
         return {
-          ...event,
           type: EVENT_UPDATE_MESSAGE_FLAGS,
+          id: event.id,
+          flag: event.flag,
+          all: event.all,
+          messages: event.messages,
 
           // Servers with feature level 32+ send `op`. Servers will eventually
           // stop sending `operation`; see #4238.
