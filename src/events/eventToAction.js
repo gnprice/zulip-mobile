@@ -116,7 +116,69 @@ export default (state: PerAccountState, event_: $FlowFixMe): EventAction | null 
           ownUserId: getOwnUserId(state),
         };
 
+      case 'realm':
+        return {
+          type: EVENT,
+          event:
+            /* prettier-ignore */
+            event.op === 'update'
+              // Convert to an equivalent `update_dict` event, so reducers only have
+              //   to handle that one form.
+              // TODO: handle `extra_data` hack property in the `update`
+              //   event, as long as servers still send it
+              ? {
+                  id: event.id,
+                  type: EventTypes.realm,
+                  op: 'update_dict',
+                  property: 'default',
+                  data: {
+                    [event.property]: event.value,
+                  },
+                }
+              : event,
+        };
+
+      case 'restart':
+      case 'stream':
+        return {
+          type: EVENT,
+          event,
+        };
+
+      case 'update_message':
+        return {
+          type: EVENT_UPDATE_MESSAGE,
+          event: { ...event, message_ids: event.message_ids.sort((a, b) => a - b) },
+          move: messageMoved(event),
+        };
+
+      case 'presence':
+      case 'muted_users':
+      case 'submessage':
+      case 'user_status':
+        return {
+          ...event,
+          type: actionTypeOfEventType[event.type],
+        };
+
+      case 'heartbeat':
+        return null;
+
+      case 'update_message_flags':
+        return {
+          ...event,
+          type: EVENT_UPDATE_MESSAGE_FLAGS,
+
+          // Servers with feature level 32+ send `op`. Servers will eventually
+          // stop sending `operation`; see #4238.
+          // TODO(server-4.0): Simplify to just use `op`.
+          op: event.op ?? event.operation,
+
+          allMessages: state.messages,
+        };
+
       default:
+        ensureUnreachable(event);
         break;
     }
   }
@@ -142,42 +204,6 @@ export default (state: PerAccountState, event_: $FlowFixMe): EventAction | null 
           // event has `message_id` instead of `message_ids`.
           // TODO(server-3.0): Simplify this.
           messageIds: event.message_ids ?? [event.message_id],
-        };
-
-      case 'realm':
-        return {
-          type: EVENT,
-          event:
-            /* prettier-ignore */
-            event.op === 'update'
-            // Convert to an equivalent `update_dict` event, so reducers only have
-            //   to handle that one form.
-            // TODO: handle `extra_data` hack property in the `update`
-            //   event, as long as servers still send it
-            ? {
-                id: event.id,
-                type: EventTypes.realm,
-                op: 'update_dict',
-                property: 'default',
-                data: {
-                  [event.property]: event.value,
-                },
-              }
-            : event,
-        };
-
-      case 'restart':
-      case 'stream':
-        return {
-          type: EVENT,
-          event,
-        };
-
-      case 'update_message':
-        return {
-          type: EVENT_UPDATE_MESSAGE,
-          event: { ...event, message_ids: event.message_ids.sort((a, b) => a - b) },
-          move: messageMoved(event),
         };
 
       case 'subscription':
@@ -315,22 +341,6 @@ export default (state: PerAccountState, event_: $FlowFixMe): EventAction | null 
           user_id: event.user.user_id,
 
           type: opToActionReaction[event.op],
-        };
-
-      case 'heartbeat':
-        return null;
-
-      case 'update_message_flags':
-        return {
-          ...event,
-          type: EVENT_UPDATE_MESSAGE_FLAGS,
-
-          // Servers with feature level 32+ send `op`. Servers will eventually
-          // stop sending `operation`; see #4238.
-          // TODO(server-4.0): Simplify to just use `op`.
-          op: event.op ?? event.operation,
-
-          allMessages: state.messages,
         };
 
       case 'typing':

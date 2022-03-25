@@ -134,7 +134,7 @@ export type MutedUsersEvent = $ReadOnly<{|
 /** A new submessage.  See the `Submessage` type for details. */
 export type SubmessageEvent = $ReadOnly<{|
   ...EventCommon,
-  type: typeof EventTypes.submessage,
+  type: 'submessage',
   submessage_id: number,
   message_id: number,
   sender_id: UserId,
