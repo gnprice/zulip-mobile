@@ -2,6 +2,7 @@
 import { EventTypes } from '../api/eventTypes';
 import type { SubscriptionsState, PerAccountApplicableAction } from '../types';
 import { ensureUnreachable } from '../types';
+import { updateStreamProperties } from '../streams/streamsReducer';
 import {
   LOGOUT,
   LOGIN_SUCCESS,
@@ -14,11 +15,6 @@ import { NULL_ARRAY } from '../nullObjects';
 import { filterArray } from '../utils/immutability';
 
 const initialState: SubscriptionsState = NULL_ARRAY;
-
-const updateSubscription = (state, event) =>
-  state.map(sub =>
-    sub.stream_id === event.stream_id ? { ...sub, [event.property]: event.value } : sub,
-  );
 
 export default (
   state: SubscriptionsState = initialState,
@@ -46,7 +42,9 @@ export default (
           );
 
         case 'update':
-          return updateSubscription(state, action);
+          return state.map(sub =>
+            sub.stream_id === action.stream_id ? { ...sub, [action.property]: action.value } : sub,
+          );
 
         case 'peer_add':
         case 'peer_remove':
@@ -64,7 +62,9 @@ export default (
         case EventTypes.stream:
           switch (event.op) {
             case 'update':
-              return updateSubscription(state, event);
+              return state.map(sub =>
+                sub.stream_id === event.stream_id ? updateStreamProperties(sub, event) : sub,
+              );
 
             case 'delete':
               return filterArray(
