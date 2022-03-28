@@ -22,8 +22,16 @@ export default function CreateStreamScreen(props: Props): Node {
   const ownEmail = useSelector(getOwnEmail);
 
   const handleComplete = useCallback(
-    (name: string, description: string, isPrivate: boolean) => {
-      api.createStream(auth, name, description, [ownEmail], isPrivate);
+    (
+      name: string,
+      description: string,
+      accessPolicy: {
+        invite_only: boolean,
+        is_web_public: boolean,
+        history_public_to_subscribers: boolean,
+      },
+    ) => {
+      api.createStream(auth, name, description, [ownEmail], accessPolicy.invite_only);
       NavigationService.dispatch(navigateBack());
     },
     [auth, ownEmail],
@@ -33,7 +41,13 @@ export default function CreateStreamScreen(props: Props): Node {
     <Screen title="Create new stream" padding>
       <EditStreamCard
         isNewStream
-        initialValues={{ name: '', description: '', invite_only: false }}
+        initialValues={{
+          name: '',
+          description: '',
+          invite_only: false,
+          is_web_public: false,
+          history_public_to_subscribers: false,
+        }}
         onComplete={handleComplete}
       />
     </Screen>
