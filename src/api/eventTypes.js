@@ -157,10 +157,22 @@ type StreamUpdateEventBase = $ReadOnly<{|
   name: string,
 |}>;
 
+// https://zulip.com/api/get-events#stream-update
+// The set of properties present on this event may change depending
+// on the value of 'property'.
 export type StreamUpdateEvent =
   | {| ...StreamUpdateEventBase, +property: 'name', +value: string |}
   | {| ...StreamUpdateEventBase, +property: 'description', +value: string |}
-  | {| ...StreamUpdateEventBase, +property: 'invite_only', +value: boolean |};
+  | {| ...StreamUpdateEventBase, +property: 'is_web_public', +value: boolean |}
+  | {| ...StreamUpdateEventBase, +property: 'history_public_to_subscribers', +value: boolean |}
+  | {| ...StreamUpdateEventBase, +property: 'is_announcement_only', +value: boolean |}
+  | {|
+      ...StreamUpdateEventBase,
+      +property: 'invite_only',
+      +value: boolean,
+      +is_web_public: boolean,
+      +history_public_to_subscribers: boolean,
+    |};
 
 // prettier-ignore
 export type StreamEvent =
