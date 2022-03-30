@@ -409,7 +409,7 @@ PODS:
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
-  - Zulip (0.0.2)
+  - zulip (0.0.2)
 
 DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
@@ -489,7 +489,7 @@ DEPENDENCIES:
   - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
-  - Zulip (from `./zulip.podspec`)
+  - zulip (from `./`)
 
 SPEC REPOS:
   trunk:
@@ -621,8 +621,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-vector-icons"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
-  Zulip:
-    :path: "./zulip.podspec"
+  zulip:
+    :path: "./"
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
@@ -695,8 +695,8 @@ SPEC CHECKSUMS:
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   Yoga: e6ecf3fa25af9d4c87e94ad7d5d292eedef49749
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
-  Zulip: 59a7681d601b960c7b44025d8e705c7fcfe51110
+  zulip: 6690d4d5ceb8d179e108b9eb65337e2573d21d34
 
-PODFILE CHECKSUM: b96faf836775962108ffcb8afa9b5bed4ddc65bd
+PODFILE CHECKSUM: b1120753271c16d49cbcd21862d6b2b2db4b5e3d
 
 COCOAPODS: 1.11.2
