@@ -409,6 +409,7 @@ PODS:
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
+  - Zulip (0.0.2)
 
 DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
@@ -488,6 +489,7 @@ DEPENDENCIES:
   - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
+  - Zulip (from `./zulip.podspec`)
 
 SPEC REPOS:
   trunk:
@@ -619,6 +621,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-vector-icons"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
+  Zulip:
+    :path: "./zulip.podspec"
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
@@ -637,7 +641,7 @@ SPEC CHECKSUMS:
   EXSQLite: 908e34753a9dcfbef6a0f3a543ad32a5a6ced452
   EXWebBrowser: f9435daf809a688e0cb63675da208196007573b6
   FBLazyVector: c71c5917ec0ad2de41d5d06a5855f6d5eda06971
-  FBReactNativeSpec: ddd61666683147c613f5c89e2ce4e6c5e4f90d63
+  FBReactNativeSpec: c3b9c60df47c58c0bfea4e6f7fa22427f35d1657
   Flipper: d3da1aa199aad94455ae725e9f3aa43f3ec17021
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
   Flipper-Folly: 755929a4f851b2fb2c347d533a23f191b008554c
@@ -691,7 +695,8 @@ SPEC CHECKSUMS:
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   Yoga: e6ecf3fa25af9d4c87e94ad7d5d292eedef49749
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
+  Zulip: 59a7681d601b960c7b44025d8e705c7fcfe51110
 
-PODFILE CHECKSUM: a3f311c266417d7f8789c2be02de52991612bc15
+PODFILE CHECKSUM: b96faf836775962108ffcb8afa9b5bed4ddc65bd
 
 COCOAPODS: 1.11.2

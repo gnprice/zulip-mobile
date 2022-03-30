@@ -9,6 +9,8 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 target 'ZulipMobile' do
   config = use_native_modules!
 
+  pod 'Zulip', :path => './zulip.podspec'
+
   use_react_native!(
     :path => config[:reactNativePath],
     # to enable hermes on iOS, change `false` to `true` and then install pods
