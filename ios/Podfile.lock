@@ -489,7 +489,7 @@ DEPENDENCIES:
   - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
-  - zulip (from `./`)
+  - zulip (from `../`)
 
 SPEC REPOS:
   trunk:
@@ -622,7 +622,7 @@ EXTERNAL SOURCES:
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
   zulip:
-    :path: "./"
+    :path: "../"
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
@@ -695,8 +695,8 @@ SPEC CHECKSUMS:
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   Yoga: e6ecf3fa25af9d4c87e94ad7d5d292eedef49749
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
-  zulip: 6690d4d5ceb8d179e108b9eb65337e2573d21d34
+  zulip: b748dbee6ef28165b28b3670ef1104fde3b71f32
 
-PODFILE CHECKSUM: b1120753271c16d49cbcd21862d6b2b2db4b5e3d
+PODFILE CHECKSUM: f8c910c2cea535e9bcca4f4e077f658f17ba4fad
 
 COCOAPODS: 1.11.2

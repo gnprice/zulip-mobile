@@ -9,5 +9,5 @@ Pod::Spec.new do |s|
   s.homepage = "https://zulip.com/"
   s.source = { :git => "" } # https://github.com/zulip/zulip-mobile.git", :tag => 'ignoreme-${version}' }
 
-  s.resources = '*.mp3'
+  s.resources = 'static/assets/fonts/*.ttf'
 end

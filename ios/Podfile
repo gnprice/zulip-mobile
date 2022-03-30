@@ -9,7 +9,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 target 'ZulipMobile' do
   config = use_native_modules!
 
-  pod 'zulip', :path => './'
+  pod 'zulip', :path => '../'
 
   use_react_native!(
     :path => config[:reactNativePath],
