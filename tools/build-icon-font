@@ -1,0 +1,52 @@
+#!/usr/bin/env node
+/* eslint-env node */
+
+const fs = require('fs');
+const os = require('os');
+const webfontsGenerator = require('@vusion/webfonts-generator');
+
+const iconNames = ['globe'];
+
+// TODO use root dir, not cwd
+
+const destDir = 'static/assets/fonts';
+const fontName = 'zulip-icons';
+
+async function main() {
+  const tmpDir = fs.mkdtempSync(`${os.tmpdir()}/build-icon-font-`);
+
+  // This gets mutated by `webfonts-generator` with its generated choices.
+  const codepoints = {};
+
+  await new Promise((resolve, reject) =>
+    webfontsGenerator(
+      {
+        dest: tmpDir,
+        codepoints,
+        fontName,
+        files: iconNames.map(name => require.resolve(`@zulip/shared/icons/${name}.svg`)),
+
+        types: ['ttf'],
+        css: false,
+        // Useful for debugging:
+        //   html: true,
+      },
+      err => (err ? reject(err) : resolve()),
+    ),
+  );
+
+  /* eslint-disable-next-line no-useless-concat */
+  const generatedMarker = '@' + 'generated';
+
+  fs.copyFileSync(`${tmpDir}/${fontName}.ttf`, `${destDir}/${fontName}.ttf`);
+  fs.writeFileSync(
+    `${destDir}/${fontName}.map.js`,
+    `\
+// ${generatedMarker}
+// @flow strict
+export default ${JSON.stringify(codepoints)};
+`,
+  );
+}
+
+main();
