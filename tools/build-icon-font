@@ -1,10 +1,23 @@
 #!/usr/bin/env node
+/**
+ * Rebuild our custom icon font.
+ *
+ * TODO WORK HERE write up how to add/update icons
+ */
+
 /* eslint-env node */
 
 const fs = require('fs');
 const os = require('os');
 const webfontsGenerator = require('@vusion/webfonts-generator');
 
+/**
+ * The list of icons we use from `@zulip/shared/icons`.
+ *
+ * To use more such icons, just edit this and rerun.
+ */
+// TODO: Just compute this automatically to include all the shared icons;
+//   it's a short list, and that saves a step in using a new one.
 const iconNames = ['globe'];
 
 // TODO use root dir, not cwd
@@ -15,7 +28,7 @@ const fontName = 'zulip-icons';
 async function main() {
   const tmpDir = fs.mkdtempSync(`${os.tmpdir()}/build-icon-font-`);
 
-  // This gets mutated by `webfonts-generator` with its generated choices.
+  // This gets mutated by `webfonts-generator` to tell us the generated mapping.
   const codepoints = {};
 
   await new Promise((resolve, reject) =>
@@ -41,9 +54,11 @@ async function main() {
   fs.copyFileSync(`${tmpDir}/${fontName}.ttf`, `${destDir}/${fontName}.ttf`);
   fs.writeFileSync(
     `${destDir}/${fontName}.map.js`,
-    `\
-// ${generatedMarker}
-// @flow strict
+    `/*
+ * This file is ${generatedMarker} -- do not edit.
+ * To make changes, see tools/build-icon-font.
+ * @flow strict
+ */
 export default ${JSON.stringify(codepoints)};
 `,
   );
