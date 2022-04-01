@@ -53,6 +53,8 @@ export const getFilteredEmojis = (
 ): $ReadOnlyArray<{| emoji_type: EmojiType, name: string, code: string |}> => {
   type LocalEmoji = { emoji_name: string, emoji_code: string };
 
+  const matcher = typeahead.get_emoji_matcher(query);
+
   const matchingUnicodeEmoji: Array<[string, LocalEmoji]> = [];
   for (const [name, code] of objectEntries(unicodeCodeByName)) {
     // This logic does not do any special handling for things like
@@ -67,18 +69,20 @@ export const getFilteredEmojis = (
     // emoji with a modifier than it is to show them the non-modified
     // emoji, hence the very simple matching.
     const matchesEmojiLiteral = parseUnicodeEmojiCode(code) === query;
-    if (!matchesEmojiLiteral && name.indexOf(query) !== -1) {
+    const emoji = { emoji_name: name, emoji_code: code };
+    if (!matchesEmojiLiteral && !matcher(emoji)) {
       continue;
     }
-    matchingUnicodeEmoji.push([name, { emoji_name: name, emoji_code: code }]);
+    matchingUnicodeEmoji.push([name, emoji]);
   }
 
   const matchingImageEmoji: Array<[string, LocalEmoji]> = [];
   for (const x of Object.keys(activeImageEmojiByName)) {
-    if (x.indexOf(query) === -1) {
+    const emoji = { emoji_name: x, emoji_code: activeImageEmojiByName[x].code };
+    if (!matcher(emoji)) {
       continue;
     }
-    matchingImageEmoji.push([x, { emoji_name: x, emoji_code: activeImageEmojiByName[x].code }]);
+    matchingImageEmoji.push([x, emoji]);
   }
 
   const allMatchingEmoji: Map<string, LocalEmoji> = new Map([
