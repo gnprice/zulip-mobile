@@ -1,4 +1,6 @@
 /* @flow strict-local */
+import * as typeahead from '@zulip/shared/js/typeahead';
+
 import type { ImageEmojiType, EmojiType, ReactionType } from '../types';
 import { objectFromEntries } from '../jsBackport';
 import { unicodeCodeByName, override } from './codePointMap';
@@ -68,23 +70,37 @@ export const getFilteredEmojis = (
       // emoji, hence the very simple matching.
       const matchesEmojiLiteral = parseUnicodeEmojiCode(code) === query;
       const matchesEmojiName = Math.min(1, name.indexOf(query));
-      return [name, matchesEmojiLiteral ? 0 : matchesEmojiName];
+      return [
+        name,
+        {
+          emoji_name: name,
+          emoji_code: code,
+          priority: matchesEmojiLiteral ? 0 : matchesEmojiName,
+        },
+      ];
     })
-    .filter(([_, i]) => i !== -1);
+    .filter(([_, { priority }]) => priority !== -1);
 
   const matchingImageEmoji = Object.keys(activeImageEmojiByName)
-    .map(x => [x, Math.min(1, x.indexOf(query))])
-    .filter(([_, i]) => i !== -1);
+    .map(x => [
+      x,
+      {
+        emoji_name: x,
+        emoji_code: activeImageEmojiByName[x].code,
+        priority: Math.min(1, x.indexOf(query)),
+      },
+    ])
+    .filter(([_, { priority }]) => priority !== -1);
 
-  const allMatchingEmoji: Map<string, number> = new Map([
-    ...matchingUnicodeEmoji,
-    ...matchingImageEmoji,
-  ]);
+  const allMatchingEmoji: Map<
+    string,
+    { emoji_name: string, emoji_code: string, priority: number },
+  > = new Map([...matchingUnicodeEmoji, ...matchingImageEmoji]);
   const distinctEmoji = Array.from(allMatchingEmoji.keys());
 
   const emoji = distinctEmoji.sort((a, b) => {
     // `.get` will never return `undefined` here, but Flow doesn't know that
-    const n = +allMatchingEmoji.get(a) - +allMatchingEmoji.get(b);
+    const n = +allMatchingEmoji.get(a)?.priority - +allMatchingEmoji.get(b)?.priority;
     // Prefix matches first, then non-prefix, each in lexicographic order.
     return n !== 0 ? n : a < b ? -1 : 1;
   });
