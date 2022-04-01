@@ -55,31 +55,29 @@ export const getFilteredEmojis = (
   // representing how good a match it is: 0 for a prefix match, 1 for a
   // match anywhere else in the string.
 
-  const matchingUnicodeEmoji = objectEntries(unicodeCodeByName)
-    .map(([name, code]) => {
-      // This logic does not do any special handling for things like
-      // skin-tone modifiers or gender modifiers, since Zulip does not
-      // currently support those: https://github.com/zulip/zulip/issues/992.
-      // Once support is added for that, we may want to come back here and
-      // modify this logic, if for instance, there is a default skin-tone
-      // setting in the webapp that we want to also surface here. (or
-      // perhaps it will be best to leave it as is - that's a product
-      // decision that's yet to be made.) For the time being, it seems
-      // better to not show the user anything if they've searched for an
-      // emoji with a modifier than it is to show them the non-modified
-      // emoji, hence the very simple matching.
-      const matchesEmojiLiteral = parseUnicodeEmojiCode(code) === query;
-      const matchesEmojiName = Math.min(1, name.indexOf(query));
-      return [
-        name,
-        {
-          emoji_name: name,
-          emoji_code: code,
-          priority: matchesEmojiLiteral ? 0 : matchesEmojiName,
-        },
-      ];
-    })
-    .filter(([_, { priority }]) => priority !== -1);
+  type LocalEmoji = { emoji_name: string, emoji_code: string, priority: number };
+
+  const matchingUnicodeEmoji: Array<[string, LocalEmoji]> = [];
+  for (const [name, code] of objectEntries(unicodeCodeByName)) {
+    // This logic does not do any special handling for things like
+    // skin-tone modifiers or gender modifiers, since Zulip does not
+    // currently support those: https://github.com/zulip/zulip/issues/992.
+    // Once support is added for that, we may want to come back here and
+    // modify this logic, if for instance, there is a default skin-tone
+    // setting in the webapp that we want to also surface here. (or
+    // perhaps it will be best to leave it as is - that's a product
+    // decision that's yet to be made.) For the time being, it seems
+    // better to not show the user anything if they've searched for an
+    // emoji with a modifier than it is to show them the non-modified
+    // emoji, hence the very simple matching.
+    const matchesEmojiLiteral = parseUnicodeEmojiCode(code) === query;
+    const matchesEmojiName = Math.min(1, name.indexOf(query));
+    const priority = matchesEmojiLiteral ? 0 : matchesEmojiName;
+    if (priority === -1) {
+      continue;
+    }
+    matchingUnicodeEmoji.push([name, { emoji_name: name, emoji_code: code, priority }]);
+  }
 
   const matchingImageEmoji = Object.keys(activeImageEmojiByName)
     .map(x => [
@@ -92,10 +90,10 @@ export const getFilteredEmojis = (
     ])
     .filter(([_, { priority }]) => priority !== -1);
 
-  const allMatchingEmoji: Map<
-    string,
-    { emoji_name: string, emoji_code: string, priority: number },
-  > = new Map([...matchingUnicodeEmoji, ...matchingImageEmoji]);
+  const allMatchingEmoji: Map<string, LocalEmoji> = new Map([
+    ...matchingUnicodeEmoji,
+    ...matchingImageEmoji,
+  ]);
 
   const emoji = typeahead.sort_emojis(Array.from(allMatchingEmoji.values()), query);
 
