@@ -80,8 +80,9 @@ export const getFilteredEmojis = (
     ...matchingUnicodeEmoji,
     ...matchingImageEmoji,
   ]);
+  const distinctEmoji = Array.from(allMatchingEmoji.keys());
 
-  const emoji = Array.from(allMatchingEmoji.keys()).sort((a, b) => {
+  const emoji = distinctEmoji.sort((a, b) => {
     // `.get` will never return `undefined` here, but Flow doesn't know that
     const n = +allMatchingEmoji.get(a) - +allMatchingEmoji.get(b);
     // Prefix matches first, then non-prefix, each in lexicographic order.
