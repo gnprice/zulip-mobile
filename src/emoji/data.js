@@ -51,11 +51,9 @@ export const getFilteredEmojis = (
   query: string,
   activeImageEmojiByName: $ReadOnly<{| [string]: ImageEmojiType |}>,
 ): $ReadOnlyArray<{| emoji_type: EmojiType, name: string, code: string |}> => {
-  type LocalEmoji = { emoji_name: string, emoji_code: string };
-
   const matcher = typeahead.get_emoji_matcher(query);
+  const matchingEmoji: Map<string, typeahead.Emoji> = new Map();
 
-  const matchingEmoji: Map<string, LocalEmoji> = new Map();
   for (const [name, code] of objectEntries(unicodeCodeByName)) {
     // TODO: Put this matchesEmojiLiteral logic into shared code,
     //   and use in web.
