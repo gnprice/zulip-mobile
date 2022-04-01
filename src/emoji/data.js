@@ -57,6 +57,8 @@ export const getFilteredEmojis = (
 
   const matchingEmoji: Map<string, LocalEmoji> = new Map();
   for (const [name, code] of objectEntries(unicodeCodeByName)) {
+    // TODO: Put this matchesEmojiLiteral logic into shared code,
+    //   and use in web.
     // This logic does not do any special handling for things like
     // skin-tone modifiers or gender modifiers, since Zulip does not
     // currently support those: https://github.com/zulip/zulip/issues/992.
@@ -69,7 +71,10 @@ export const getFilteredEmojis = (
     // emoji with a modifier than it is to show them the non-modified
     // emoji, hence the very simple matching.
     const matchesEmojiLiteral = parseUnicodeEmojiCode(code) === query;
+
+    // TODO: Precompute these emoji objects once and for all.
     const emoji = { emoji_name: name, emoji_code: code };
+
     if (!matchesEmojiLiteral && !matcher(emoji)) {
       continue;
     }
@@ -77,7 +82,10 @@ export const getFilteredEmojis = (
   }
 
   for (const x of Object.keys(activeImageEmojiByName)) {
+    // TODO: Memoize the set of these emoji objects.  (Or find where we already do?)
+    //   Or reconcile the property names: `name, code` vs `emoji_name, emoji_code`
     const emoji = { emoji_name: x, emoji_code: activeImageEmojiByName[x].code };
+
     if (!matcher(emoji)) {
       continue;
     }
@@ -88,9 +96,12 @@ export const getFilteredEmojis = (
 
   return emoji.map(({ emoji_name: emojiName }) => {
     const isImageEmoji = activeImageEmojiByName[emojiName] !== undefined;
+    // TODO: Find a way to not be constructing another new object here for each match.
     return {
       name: emojiName,
       emoji_type: isImageEmoji ? 'image' : 'unicode',
+      // TODO: Is this different from the emoji_code we now have?
+      //   (Probably isn't)
       code: isImageEmoji ? activeImageEmojiByName[emojiName].code : unicodeCodeByName[emojiName],
     };
   });
