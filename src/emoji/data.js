@@ -55,7 +55,7 @@ export const getFilteredEmojis = (
 
   const matcher = typeahead.get_emoji_matcher(query);
 
-  const matchingEmoji: Array<[string, LocalEmoji]> = [];
+  const matchingEmoji: Map<string, LocalEmoji> = new Map();
   for (const [name, code] of objectEntries(unicodeCodeByName)) {
     // This logic does not do any special handling for things like
     // skin-tone modifiers or gender modifiers, since Zulip does not
@@ -73,7 +73,7 @@ export const getFilteredEmojis = (
     if (!matchesEmojiLiteral && !matcher(emoji)) {
       continue;
     }
-    matchingEmoji.push([name, emoji]);
+    matchingEmoji.set(name, emoji);
   }
 
   for (const x of Object.keys(activeImageEmojiByName)) {
@@ -81,12 +81,10 @@ export const getFilteredEmojis = (
     if (!matcher(emoji)) {
       continue;
     }
-    matchingEmoji.push([x, emoji]);
+    matchingEmoji.set(x, emoji);
   }
 
-  const allMatchingEmoji: Map<string, LocalEmoji> = new Map(matchingEmoji);
-
-  const emoji = typeahead.sort_emojis(Array.from(allMatchingEmoji.values()), query);
+  const emoji = typeahead.sort_emojis(Array.from(matchingEmoji.values()), query);
 
   return emoji.map(({ emoji_name: emojiName }) => {
     const isImageEmoji = activeImageEmojiByName[emojiName] !== undefined;
