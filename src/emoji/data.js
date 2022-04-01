@@ -79,16 +79,17 @@ export const getFilteredEmojis = (
     matchingUnicodeEmoji.push([name, { emoji_name: name, emoji_code: code, priority }]);
   }
 
-  const matchingImageEmoji = Object.keys(activeImageEmojiByName)
-    .map(x => [
+  const matchingImageEmoji: Array<[string, LocalEmoji]> = [];
+  for (const x of Object.keys(activeImageEmojiByName)) {
+    const priority = Math.min(1, x.indexOf(query));
+    if (priority === -1) {
+      continue;
+    }
+    matchingImageEmoji.push([
       x,
-      {
-        emoji_name: x,
-        emoji_code: activeImageEmojiByName[x].code,
-        priority: Math.min(1, x.indexOf(query)),
-      },
-    ])
-    .filter(([_, { priority }]) => priority !== -1);
+      { emoji_name: x, emoji_code: activeImageEmojiByName[x].code, priority },
+    ]);
+  }
 
   const allMatchingEmoji: Map<string, LocalEmoji> = new Map([
     ...matchingUnicodeEmoji,
