@@ -71,9 +71,7 @@ export const getFilteredEmojis = (
     // emoji with a modifier than it is to show them the non-modified
     // emoji, hence the very simple matching.
     const matchesEmojiLiteral = parseUnicodeEmojiCode(code) === query;
-    const matchesEmojiName = Math.min(1, name.indexOf(query));
-    const priority = matchesEmojiLiteral ? 0 : matchesEmojiName;
-    if (priority === -1) {
+    if (!matchesEmojiLiteral && name.indexOf(query) !== -1) {
       continue;
     }
     matchingUnicodeEmoji.push([name, { emoji_name: name, emoji_code: code }]);
@@ -81,8 +79,7 @@ export const getFilteredEmojis = (
 
   const matchingImageEmoji: Array<[string, LocalEmoji]> = [];
   for (const x of Object.keys(activeImageEmojiByName)) {
-    const priority = Math.min(1, x.indexOf(query));
-    if (priority === -1) {
+    if (x.indexOf(query) === -1) {
       continue;
     }
     matchingImageEmoji.push([x, { emoji_name: x, emoji_code: activeImageEmojiByName[x].code }]);
