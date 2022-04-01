@@ -55,7 +55,7 @@ export const getFilteredEmojis = (
   // representing how good a match it is: 0 for a prefix match, 1 for a
   // match anywhere else in the string.
 
-  type LocalEmoji = { emoji_name: string, emoji_code: string, priority: number };
+  type LocalEmoji = { emoji_name: string, emoji_code: string };
 
   const matchingUnicodeEmoji: Array<[string, LocalEmoji]> = [];
   for (const [name, code] of objectEntries(unicodeCodeByName)) {
@@ -76,7 +76,7 @@ export const getFilteredEmojis = (
     if (priority === -1) {
       continue;
     }
-    matchingUnicodeEmoji.push([name, { emoji_name: name, emoji_code: code, priority }]);
+    matchingUnicodeEmoji.push([name, { emoji_name: name, emoji_code: code }]);
   }
 
   const matchingImageEmoji: Array<[string, LocalEmoji]> = [];
@@ -85,10 +85,7 @@ export const getFilteredEmojis = (
     if (priority === -1) {
       continue;
     }
-    matchingImageEmoji.push([
-      x,
-      { emoji_name: x, emoji_code: activeImageEmojiByName[x].code, priority },
-    ]);
+    matchingImageEmoji.push([x, { emoji_name: x, emoji_code: activeImageEmojiByName[x].code }]);
   }
 
   const allMatchingEmoji: Map<string, LocalEmoji> = new Map([
