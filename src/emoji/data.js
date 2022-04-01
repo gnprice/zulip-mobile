@@ -96,16 +96,10 @@ export const getFilteredEmojis = (
     string,
     { emoji_name: string, emoji_code: string, priority: number },
   > = new Map([...matchingUnicodeEmoji, ...matchingImageEmoji]);
-  const distinctEmoji = Array.from(allMatchingEmoji.keys());
 
-  const emoji = distinctEmoji.sort((a, b) => {
-    // `.get` will never return `undefined` here, but Flow doesn't know that
-    const n = +allMatchingEmoji.get(a)?.priority - +allMatchingEmoji.get(b)?.priority;
-    // Prefix matches first, then non-prefix, each in lexicographic order.
-    return n !== 0 ? n : a < b ? -1 : 1;
-  });
+  const emoji = typeahead.sort_emojis(Array.from(allMatchingEmoji.values()), query);
 
-  return emoji.map(emojiName => {
+  return emoji.map(({ emoji_name: emojiName }) => {
     const isImageEmoji = activeImageEmojiByName[emojiName] !== undefined;
     return {
       name: emojiName,
