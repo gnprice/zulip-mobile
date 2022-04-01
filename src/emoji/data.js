@@ -51,10 +51,6 @@ export const getFilteredEmojis = (
   query: string,
   activeImageEmojiByName: $ReadOnly<{| [string]: ImageEmojiType |}>,
 ): $ReadOnlyArray<{| emoji_type: EmojiType, name: string, code: string |}> => {
-  // We start by making a map from matching emoji names to a number
-  // representing how good a match it is: 0 for a prefix match, 1 for a
-  // match anywhere else in the string.
-
   type LocalEmoji = { emoji_name: string, emoji_code: string };
 
   const matchingUnicodeEmoji: Array<[string, LocalEmoji]> = [];
