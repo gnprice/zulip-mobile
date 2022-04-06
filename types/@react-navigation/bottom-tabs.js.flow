@@ -9,12 +9,20 @@ Largely copied from @react-navigation/bottom-tabs_v5.x.x from flow-typed.
 import type {
   CreateNavigator,
   TabNavigationState,
-  BottomTabOptions,
-  BottomTabNavigationEventMap,
-  ExtraBottomTabNavigatorProps,
-  BottomTabBarProps,
-  BottomTabNavigationConfig,
-  BottomTabNavigationBuilderResult,
+  TouchableWithoutFeedbackProps,
+  PressEvent,
+  TextStyleProp,
+  EventMapCore,
+  ParamListBase,
+  EventMapBase,
+  NavigationProp,
+  InexactTabNavigationProp,
+  SimpleNavigate,
+  Descriptor,
+  ViewStyleProp,
+  EdgeInsets,
+  ExtraNavigatorPropsBase,
+  TabRouterOptions,
 } from './shared';
 
 //---------------------------------------------------------------------------
@@ -25,9 +33,127 @@ import type {
 
 export {
   NavigationProp,
-  BottomTabNavigationProp,
-  ExtraBottomTabNavigatorProps,
 } from './shared';
+
+
+/**
+  * Bottom tab options
+  */
+
+ type BottomTabBarButtonProps = {|
+  ...$Diff<
+    TouchableWithoutFeedbackProps,
+    {| onPress?: ?(event: PressEvent) => mixed |},
+  >,
+  +to?: string,
+  +children: React$Node,
+  +onPress?: (MouseEvent | PressEvent) => void,
+|};
+
+export type BottomTabOptions = $Shape<{|
+  +title: string,
+  +tabBarLabel:
+    | string
+    | ({| focused: boolean, color: string |}) => React$Node,
+  +tabBarIcon: ({|
+    focused: boolean,
+    color: string,
+    size: number,
+  |}) => React$Node,
+  +tabBarBadge?: number | string;
+  +tabBarBadgeStyle?: TextStyleProp;
+  +tabBarAccessibilityLabel: string,
+  +tabBarTestID: string,
+  +tabBarVisible: boolean,
+  +tabBarButton: BottomTabBarButtonProps => React$Node,
+  +unmountOnBlur: boolean,
+|}>;
+
+/**
+  * Bottom tab navigation prop
+  */
+
+export type BottomTabNavigationEventMap = {|
+  ...EventMapCore<TabNavigationState>,
+  +tabPress: {| +data: void, +canPreventDefault: true |},
+  +tabLongPress: {| +data: void, +canPreventDefault: false |},
+|};
+
+type InexactBottomTabNavigationProp<
+  ParamList: ParamListBase = ParamListBase,
+  +RouteName: $Keys<ParamList> = $Keys<ParamList>,
+  Options: {...} = BottomTabOptions,
+  EventMap: EventMapBase = BottomTabNavigationEventMap,
+> = InexactTabNavigationProp<
+  ParamList,
+  RouteName,
+  Options,
+  EventMap,
+>;
+
+export type BottomTabNavigationProp<
+  ParamList: ParamListBase = ParamListBase,
+  +RouteName: $Keys<ParamList> = $Keys<ParamList>,
+  Options: {...} = BottomTabOptions,
+  EventMap: EventMapBase = BottomTabNavigationEventMap,
+> = $Exact<InexactBottomTabNavigationProp<
+  ParamList,
+  RouteName,
+  Options,
+  EventMap,
+>>;
+
+/**
+  * Miscellaneous bottom tab exports
+  */
+
+type BottomTabDescriptor = Descriptor<
+  BottomTabNavigationProp<>,
+  BottomTabOptions,
+>;
+
+type BottomTabBarOptions = $Shape<{|
+  +keyboardHidesTabBar: boolean,
+  +activeTintColor: string,
+  +inactiveTintColor: string,
+  +activeBackgroundColor: string,
+  +inactiveBackgroundColor: string,
+  +allowFontScaling: boolean,
+  +showLabel: boolean,
+  +showIcon: boolean,
+  +labelStyle: TextStyleProp,
+  +iconStyle: TextStyleProp,
+  +tabStyle: ViewStyleProp,
+  +labelPosition: 'beside-icon' | 'below-icon',
+  +adaptive: boolean,
+  +safeAreaInsets: $Shape<EdgeInsets>,
+  +style: ViewStyleProp,
+|}>;
+
+export type BottomTabNavigationBuilderResult = {|
+  +state: TabNavigationState,
+  +navigation: BottomTabNavigationProp<>,
+  +descriptors: {| +[key: string]: BottomTabDescriptor |},
+|};
+
+export type BottomTabBarProps = {|
+  ...BottomTabBarOptions,
+  ...BottomTabNavigationBuilderResult,
+|}
+
+export type BottomTabNavigationConfig = {|
+  +lazy?: boolean,
+  +tabBar?: BottomTabBarProps => React$Node,
+  +tabBarOptions?: BottomTabBarOptions,
+|};
+
+export type ExtraBottomTabNavigatorProps = {|
+  ...$Exact<ExtraNavigatorPropsBase>,
+  ...TabRouterOptions,
+  ...BottomTabNavigationConfig,
+|};
+
+
 
 /**
   * createBottomTabNavigator

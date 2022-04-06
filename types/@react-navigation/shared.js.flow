@@ -262,7 +262,7 @@ type AccessibilityValue = $ReadOnly<{|
 // react-native/Libraries/Components/Touchable/TouchableWithoutFeedback.js
 type Stringish = string;
 type EdgeInsetsProp = $ReadOnly<$Shape<EdgeInsets>>;
-type TouchableWithoutFeedbackProps = $ReadOnly<{|
+export type TouchableWithoutFeedbackProps = $ReadOnly<{|
   accessibilityActions?: ?$ReadOnlyArray<AccessibilityActionInfo>,
   accessibilityElementsHidden?: ?boolean,
   accessibilityHint?: ?Stringish,
@@ -1024,49 +1024,10 @@ export type TransitionSpec =
     |};
 
 /**
-  * Bottom tab options
-  */
-
-type BottomTabBarButtonProps = {|
-  ...$Diff<
-    TouchableWithoutFeedbackProps,
-    {| onPress?: ?(event: PressEvent) => mixed |},
-  >,
-  +to?: string,
-  +children: React$Node,
-  +onPress?: (MouseEvent | PressEvent) => void,
-|};
-
-export type BottomTabOptions = $Shape<{|
-  +title: string,
-  +tabBarLabel:
-    | string
-    | ({| focused: boolean, color: string |}) => React$Node,
-  +tabBarIcon: ({|
-    focused: boolean,
-    color: string,
-    size: number,
-  |}) => React$Node,
-  +tabBarBadge?: number | string;
-  +tabBarBadgeStyle?: TextStyleProp;
-  +tabBarAccessibilityLabel: string,
-  +tabBarTestID: string,
-  +tabBarVisible: boolean,
-  +tabBarButton: BottomTabBarButtonProps => React$Node,
-  +unmountOnBlur: boolean,
-|}>;
-
-/**
   * Bottom tab navigation prop
   */
 
-export type BottomTabNavigationEventMap = {|
-  ...EventMapCore<TabNavigationState>,
-  +tabPress: {| +data: void, +canPreventDefault: true |},
-  +tabLongPress: {| +data: void, +canPreventDefault: false |},
-|};
-
-type InexactTabNavigationProp<
+export type InexactTabNavigationProp<
   ParamList: ParamListBase,
   +RouteName: $Keys<ParamList>,
   Options: {...},
@@ -1082,80 +1043,6 @@ type InexactTabNavigationProp<
   +jumpTo: SimpleNavigate<ParamList>,
   ...
 };
-
-type InexactBottomTabNavigationProp<
-  ParamList: ParamListBase = ParamListBase,
-  +RouteName: $Keys<ParamList> = $Keys<ParamList>,
-  Options: {...} = BottomTabOptions,
-  EventMap: EventMapBase = BottomTabNavigationEventMap,
-> = InexactTabNavigationProp<
-  ParamList,
-  RouteName,
-  Options,
-  EventMap,
->;
-
-export type BottomTabNavigationProp<
-  ParamList: ParamListBase = ParamListBase,
-  +RouteName: $Keys<ParamList> = $Keys<ParamList>,
-  Options: {...} = BottomTabOptions,
-  EventMap: EventMapBase = BottomTabNavigationEventMap,
-> = $Exact<InexactBottomTabNavigationProp<
-  ParamList,
-  RouteName,
-  Options,
-  EventMap,
->>;
-
-/**
-  * Miscellaneous bottom tab exports
-  */
-
-type BottomTabDescriptor = Descriptor<
-  BottomTabNavigationProp<>,
-  BottomTabOptions,
->;
-
-type BottomTabBarOptions = $Shape<{|
-  +keyboardHidesTabBar: boolean,
-  +activeTintColor: string,
-  +inactiveTintColor: string,
-  +activeBackgroundColor: string,
-  +inactiveBackgroundColor: string,
-  +allowFontScaling: boolean,
-  +showLabel: boolean,
-  +showIcon: boolean,
-  +labelStyle: TextStyleProp,
-  +iconStyle: TextStyleProp,
-  +tabStyle: ViewStyleProp,
-  +labelPosition: 'beside-icon' | 'below-icon',
-  +adaptive: boolean,
-  +safeAreaInsets: $Shape<EdgeInsets>,
-  +style: ViewStyleProp,
-|}>;
-
-export type BottomTabNavigationBuilderResult = {|
-  +state: TabNavigationState,
-  +navigation: BottomTabNavigationProp<>,
-  +descriptors: {| +[key: string]: BottomTabDescriptor |},
-|};
-
-export type BottomTabBarProps = {|
-  ...BottomTabBarOptions,
-  ...BottomTabNavigationBuilderResult,
-|}
-
-export type BottomTabNavigationConfig = {|
-  +lazy?: boolean,
-  +tabBar?: BottomTabBarProps => React$Node,
-  +tabBarOptions?: BottomTabBarOptions,
-|};
-
-export type ExtraBottomTabNavigatorProps = {|
-  ...$Exact<ExtraNavigatorPropsBase>,
-  ...TabRouterOptions,
-  ...BottomTabNavigationConfig,
-|};
 
 /**
   * Material bottom tab options
