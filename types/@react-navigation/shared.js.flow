@@ -25,7 +25,7 @@ type StyleObj =
 export type ViewStyleProp = StyleObj;
 export type TextStyleProp = StyleObj;
 export type AnimatedViewStyleProp = StyleObj;
-type AnimatedTextStyleProp = StyleObj;
+export type AnimatedTextStyleProp = StyleObj;
 
 // Vaguely copied from
 // react-native/Libraries/Animated/src/animations/Animation.js
@@ -138,7 +138,7 @@ type Layout = $ReadOnly<{|
   width: number,
   height: number,
 |}>;
-type LayoutEvent = SyntheticEvent<
+export type LayoutEvent = SyntheticEvent<
   $ReadOnly<{|
     layout: Layout,
   |}>,
@@ -202,7 +202,7 @@ type InterpolationConfigType = {
   extrapolateRight?: ExtrapolateType,
   ...
 };
-interface AnimatedInterpolation {
+export interface AnimatedInterpolation {
   interpolate(config: InterpolationConfigType): AnimatedInterpolation;
 }
 
@@ -584,54 +584,6 @@ export type Router<
 |};
 
 /**
-  * Stack actions and router
-  */
-
-export type StackNavigationState = {|
-  ...NavigationState,
-  +type: 'stack',
-|};
-
-type ReplaceAction = {|
-  +type: 'REPLACE',
-  +payload: {| +name: string, +key?: ?string, +params?: ScreenParams |},
-  +source?: string,
-  +target?: string,
-|};
-type PushAction = {|
-  +type: 'PUSH',
-  +payload: {| +name: string, +key?: ?string, +params?: ScreenParams |},
-  +source?: string,
-  +target?: string,
-|};
-export type PopAction = {|
-  +type: 'POP',
-  +payload: {| +count: number |},
-  +source?: string,
-  +target?: string,
-|};
-type PopToTopAction = {|
-  +type: 'POP_TO_TOP',
-  +source?: string,
-  +target?: string,
-|};
-export type StackAction =
-  | CommonAction
-  | ReplaceAction
-  | PushAction
-  | PopAction
-  | PopToTopAction;
-
-export type StackActionsType = {|
-  +replace: (routeName: string, params?: ScreenParams) => ReplaceAction,
-  +push: (routeName: string, params?: ScreenParams) => PushAction,
-  +pop: (count?: number) => PopAction,
-  +popToTop: () => PopToTopAction,
-|};
-
-export type StackRouterOptions = $Exact<DefaultRouterOptions>;
-
-/**
   * Tab actions and router
   */
 
@@ -710,7 +662,7 @@ export type DrawerRouterOptions = {|
   * Events
   */
 
-type EventMapBase = {|
+export type EventMapBase = {|
   +[name: string]: {|
     +data?: mixed,
     +canPreventDefault?: boolean,
@@ -739,7 +691,7 @@ type EventArg<
 type GlobalEventMap<State: PossiblyStaleNavigationState> = {|
   +state: {| +data: {| +state: State |}, +canPreventDefault: false |},
 |};
-type EventMapCore<State: PossiblyStaleNavigationState> = {|
+export type EventMapCore<State: PossiblyStaleNavigationState> = {|
   ...GlobalEventMap<State>,
   +focus: {| +data: void, +canPreventDefault: false |},
   +blur: {| +data: void, +canPreventDefault: false |},
@@ -770,7 +722,7 @@ type EventListenerCallback<
   * Navigation prop
   */
 
-type SimpleNavigate<ParamList> =
+export type SimpleNavigate<ParamList> =
   <DestinationRouteName: $Keys<ParamList>>(
     routeName: DestinationRouteName,
     params: $ElementType<ParamList, DestinationRouteName>,
@@ -958,7 +910,7 @@ type ScreenOptionsProp<ScreenOptions: {...}, NavProp> = {|
     | ScreenOptions
     | ({| route: LeafRoute<>, navigation: NavProp |}) => ScreenOptions,
 |};
-type ExtraNavigatorPropsBase = {
+export type ExtraNavigatorPropsBase = {
   ...$Exact<DefaultRouterOptions>,
   +children?: React$Node,
   ...
@@ -1012,7 +964,7 @@ export type CreateNavigatorFactory = <
   * useNavigationBuilder
   */
 
-type Descriptor<
+export type Descriptor<
   NavProp,
   ScreenOptions: {...} = {...},
 > = {|
@@ -1044,7 +996,7 @@ export type UseNavigationBuilder = <
   * EdgeInsets
   */
 
-type EdgeInsets = {|
+export type EdgeInsets = {|
   +top: number,
   +right: number,
   +bottom: number,
@@ -1070,234 +1022,6 @@ export type TransitionSpec =
         { toValue: number | AnimatedValue, ... },
       >,
     |};
-
-export type StackCardInterpolationProps = {|
-  +current: {|
-    +progress: AnimatedInterpolation,
-  |},
-  +next?: {|
-    +progress: AnimatedInterpolation,
-  |},
-  +index: number,
-  +closing: AnimatedInterpolation,
-  +swiping: AnimatedInterpolation,
-  +inverted: AnimatedInterpolation,
-  +layouts: {|
-    +screen: {| +width: number, +height: number |},
-  |},
-  +insets: EdgeInsets,
-|};
-type StackCardInterpolatedStyle = {|
-  containerStyle?: AnimatedViewStyleProp,
-  cardStyle?: AnimatedViewStyleProp,
-  overlayStyle?: AnimatedViewStyleProp,
-  shadowStyle?: AnimatedViewStyleProp,
-|};
-export type StackCardStyleInterpolator = (
-  props: StackCardInterpolationProps,
-) => StackCardInterpolatedStyle;
-
-type StackHeaderInterpolationProps = {|
-  +current: {|
-    +progress: AnimatedInterpolation,
-  |},
-  +next?: {|
-    +progress: AnimatedInterpolation,
-  |},
-  +layouts: {|
-    +header: {| +width: number, +height: number |},
-    +screen: {| +width: number, +height: number |},
-    +title?: {| +width: number, +height: number |},
-    +leftLabel?: {| +width: number, +height: number |},
-  |},
-|};
-type StackHeaderInterpolatedStyle = {|
-  leftLabelStyle?: AnimatedViewStyleProp,
-  leftButtonStyle?: AnimatedViewStyleProp,
-  rightButtonStyle?: AnimatedViewStyleProp,
-  titleStyle?: AnimatedViewStyleProp,
-  backgroundStyle?: AnimatedViewStyleProp,
-|};
-export type StackHeaderStyleInterpolator = (
-  props: StackHeaderInterpolationProps,
-) => StackHeaderInterpolatedStyle;
-
-type GestureDirection =
-  | 'horizontal'
-  | 'horizontal-inverted'
-  | 'vertical'
-  | 'vertical-inverted';
-
-export type TransitionPreset = {|
-  +gestureDirection: GestureDirection,
-  +transitionSpec: {|
-    +open: TransitionSpec,
-    +close: TransitionSpec,
-  |},
-  +cardStyleInterpolator: StackCardStyleInterpolator,
-  +headerStyleInterpolator: StackHeaderStyleInterpolator,
-|};
-
-/**
-  * Stack options
-  */
-
-export type StackDescriptor = Descriptor<
-  StackNavigationProp<>,
-  StackOptions,
->;
-
-type Scene<T> = {|
-  +route: T,
-  +descriptor: StackDescriptor,
-  +progress: {|
-    +current: AnimatedInterpolation,
-    +next?: AnimatedInterpolation,
-    +previous?: AnimatedInterpolation,
-  |},
-|};
-
-export type StackHeaderProps = {|
-  +mode: 'float' | 'screen',
-  +layout: {| +width: number, +height: number |},
-  +insets: EdgeInsets,
-  +scene: Scene<Route<>>,
-  +previous?: Scene<Route<>>,
-  +navigation: StackNavigationProp<ParamListBase>,
-  +styleInterpolator: StackHeaderStyleInterpolator,
-|};
-
-export type StackHeaderLeftButtonProps = $Shape<{|
-  +onPress: (() => void),
-  +pressColorAndroid: string;
-  +backImage: (props: {| tintColor: string |}) => React$Node,
-  +tintColor: string,
-  +label: string,
-  +truncatedLabel: string,
-  +labelVisible: boolean,
-  +labelStyle: AnimatedTextStyleProp,
-  +allowFontScaling: boolean,
-  +onLabelLayout: LayoutEvent => void,
-  +screenLayout: {| +width: number, +height: number |},
-  +titleLayout: {| +width: number, +height: number |},
-  +canGoBack: boolean,
-|}>;
-
-export type StackHeaderTitleInputBase = {
-  +onLayout: LayoutEvent => void,
-  +children: string,
-  +allowFontScaling: ?boolean,
-  +tintColor: ?string,
-  +style: ?AnimatedTextStyleProp,
-  ...
-};
-
-type StackHeaderTitleInputProps =
-  $Exact<StackHeaderTitleInputBase>;
-
-export type StackOptions = $Shape<{|
-  +title: string,
-  +header: StackHeaderProps => React$Node,
-  +headerShown: boolean,
-  +cardShadowEnabled: boolean,
-  +cardOverlayEnabled: boolean,
-  +cardOverlay: {| style: ViewStyleProp |} => React$Node,
-  +cardStyle: ViewStyleProp,
-  +animationEnabled: boolean,
-  +animationTypeForReplace: 'push' | 'pop',
-  +gestureEnabled: boolean,
-  +gestureResponseDistance: {| vertical?: number, horizontal?: number |},
-  +gestureVelocityImpact: number,
-  +safeAreaInsets: $Shape<EdgeInsets>,
-  // Transition
-  ...TransitionPreset,
-  // Header
-  +headerTitle: string | (StackHeaderTitleInputProps => React$Node),
-  +headerTitleAlign: 'left' | 'center',
-  +headerTitleStyle: AnimatedTextStyleProp,
-  +headerTitleContainerStyle: ViewStyleProp,
-  +headerTintColor: string,
-  +headerTitleAllowFontScaling: boolean,
-  +headerBackAllowFontScaling: boolean,
-  +headerBackTitle: string | null,
-  +headerBackTitleStyle: TextStyleProp,
-  +headerBackTitleVisible: boolean,
-  +headerTruncatedBackTitle: string,
-  +headerLeft: StackHeaderLeftButtonProps => React$Node,
-  +headerLeftContainerStyle: ViewStyleProp,
-  +headerRight: {| tintColor?: string |} => React$Node,
-  +headerRightContainerStyle: ViewStyleProp,
-  +headerBackImage: $PropertyType<StackHeaderLeftButtonProps, 'backImage'>,
-  +headerPressColorAndroid: string,
-  +headerBackground: ({| style: ViewStyleProp |}) => React$Node,
-  +headerStyle: ViewStyleProp,
-  +headerTransparent: boolean,
-  +headerStatusBarHeight: number,
-|}>;
-
-/**
-  * Stack navigation prop
-  */
-
-export type StackNavigationEventMap = {|
-  ...EventMapCore<StackNavigationState>,
-  +transitionStart: {|
-    +data: {| +closing: boolean |},
-    +canPreventDefault: false,
-  |},
-  +transitionEnd: {|
-    +data: {| +closing: boolean |},
-    +canPreventDefault: false,
-  |},
-|};
-
-type InexactStackNavigationProp<
-  ParamList: ParamListBase = ParamListBase,
-  +RouteName: $Keys<ParamList> = $Keys<ParamList>,
-  Options: {...} = StackOptions,
-  EventMap: EventMapBase = StackNavigationEventMap,
-> = {
-  ...$Exact<NavigationProp<
-    ParamList,
-    RouteName,
-    StackNavigationState,
-    Options,
-    EventMap,
-  >>,
-  +replace: SimpleNavigate<ParamList>,
-  +push: SimpleNavigate<ParamList>,
-  +pop: (count?: number) => void,
-  +popToTop: () => void,
-  ...
-};
-
-export type StackNavigationProp<
-  ParamList: ParamListBase = ParamListBase,
-  +RouteName: $Keys<ParamList> = $Keys<ParamList>,
-  Options: {...} = StackOptions,
-  EventMap: EventMapBase = StackNavigationEventMap,
-> = $Exact<InexactStackNavigationProp<
-  ParamList,
-  RouteName,
-  Options,
-  EventMap,
->>;
-
-/**
-  * Miscellaneous stack exports
-  */
-
-export type StackNavigationConfig = {|
-  +mode?: 'card' | 'modal',
-  +headerMode?: 'float' | 'screen' | 'none',
-  +keyboardHandlingEnabled?: boolean,
-|};
-
-export type ExtraStackNavigatorProps = {|
-  ...$Exact<ExtraNavigatorPropsBase>,
-  ...StackRouterOptions,
-  ...StackNavigationConfig,
-|};
 
 /**
   * Bottom tab options

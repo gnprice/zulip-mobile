@@ -8,16 +8,12 @@ Largely copied from @react-navigation/native_v5.x.x from flow-typed.
 
 import type {
   CommonActionsType,
-  StackActionsType,
   TabActionsType,
   DrawerActionsType,
   RouterFactory,
   NavigationState,
   CommonAction,
   DefaultRouterOptions,
-  StackNavigationState,
-  StackAction,
-  StackRouterOptions,
   TabNavigationState,
   TabAction,
   TabRouterOptions,
@@ -45,6 +41,13 @@ import type {
   ScreenParams,
 } from './shared';
 
+import type {
+  StackActionsType,
+  StackNavigationState,
+  StackAction,
+  StackRouterOptions,
+} from './stack';
+
 //---------------------------------------------------------------------------
 // SECTION 2: EXPORTED MODULE
 // This section defines the module exports and contains exported types that
@@ -56,10 +59,13 @@ export {
   NavigationState,
   NavigationContainerType,
   ScreenParams,
-  PopAction,
   LeafRoute,
   NavigationProp,
 } from './shared';
+
+export {
+  PopAction,
+} from './stack';
 
 /**
   * Actions and routers
