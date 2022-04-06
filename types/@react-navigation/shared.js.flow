@@ -1725,7 +1725,7 @@ export type MaterialTopTabDescriptor = Descriptor<
   MaterialBottomTabOptions,
 >;
 
-type MaterialTopTabNavigationBuilderResult = {|
+export type MaterialTopTabNavigationBuilderResult = {|
   +state: TabNavigationState,
   +navigation: MaterialTopTabNavigationProp<>,
   +descriptors: {| +[key: string]: MaterialTopTabDescriptor |},
