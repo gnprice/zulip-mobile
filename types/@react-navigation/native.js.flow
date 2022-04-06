@@ -9,7 +9,6 @@ Largely copied from @react-navigation/native_v5.x.x from flow-typed.
 import type {
   CommonActionsType,
   TabActionsType,
-  DrawerActionsType,
   RouterFactory,
   NavigationState,
   CommonAction,
@@ -17,9 +16,6 @@ import type {
   TabNavigationState,
   TabAction,
   TabRouterOptions,
-  DrawerNavigationState,
-  DrawerAction,
-  DrawerRouterOptions,
   BaseNavigationContainerProps,
   BaseNavigationContainerInterface,
   CreateNavigatorFactory,
@@ -47,6 +43,13 @@ import type {
   StackAction,
   StackRouterOptions,
 } from './stack';
+
+import type {
+  DrawerActionsType,
+  DrawerNavigationState,
+  DrawerAction,
+  DrawerRouterOptions,
+} from './drawer';
 
 //---------------------------------------------------------------------------
 // SECTION 2: EXPORTED MODULE
