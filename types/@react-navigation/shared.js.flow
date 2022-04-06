@@ -424,7 +424,7 @@ type $Partial<T> = $Rest<T, {...}>;
 
 export type ScreenParams = {| +[key: string]: mixed |};
 
-export type BackAction = {|
+type BackAction = {|
   +type: 'GO_BACK',
   +source?: string,
   +target?: string,
@@ -437,13 +437,13 @@ export type NavigateAction = {|
   +source?: string,
   +target?: string,
 |};
-export type ResetAction = {|
+type ResetAction = {|
   +type: 'RESET',
   +payload: StaleNavigationState,
   +source?: string,
   +target?: string,
 |};
-export type SetParamsAction = {|
+type SetParamsAction = {|
   +type: 'SET_PARAMS',
   +payload: {| +params?: ScreenParams |},
   +source?: string,
@@ -481,7 +481,7 @@ export type LeafRoute<RouteName: string = string> = {|
   +name: RouteName,
   +params?: ScreenParams,
 |};
-export type StateRoute<RouteName: string = string> = {|
+type StateRoute<RouteName: string = string> = {|
   ...LeafRoute<RouteName>,
   +state: NavigationState | StaleNavigationState,
 |};
@@ -499,19 +499,19 @@ export type NavigationState = {|
   +stale: false,
 |};
 
-export type StaleLeafRoute<RouteName: string = string> = {|
+type StaleLeafRoute<RouteName: string = string> = {|
   +key?: string,
   +name: RouteName,
   +params?: ScreenParams,
 |};
-export type StaleStateRoute<RouteName: string = string> = {|
+type StaleStateRoute<RouteName: string = string> = {|
   ...StaleLeafRoute<RouteName>,
   +state: StaleNavigationState,
 |};
-export type StaleRoute<RouteName: string = string> =
+type StaleRoute<RouteName: string = string> =
   | StaleLeafRoute<RouteName>
   | StaleStateRoute<RouteName>;
-export type StaleNavigationState = {|
+type StaleNavigationState = {|
   // It's possible to pass React Nav a StaleNavigationState with an undefined
   // index, but React Nav will always return one with the index set. This is
   // the same as for the type property below, but in the case of index we tend
@@ -526,7 +526,7 @@ export type StaleNavigationState = {|
 export type PossiblyStaleNavigationState =
   | NavigationState
   | StaleNavigationState;
-export type PossiblyStaleRoute<RouteName: string = string> =
+type PossiblyStaleRoute<RouteName: string = string> =
   | Route<RouteName>
   | StaleRoute<RouteName>;
 
@@ -554,7 +554,7 @@ export type RouterFactory<
 
 export type ParamListBase = {| +[key: string]: ?ScreenParams |};
 
-export type RouterConfigOptions = {|
+type RouterConfigOptions = {|
   +routeNames: $ReadOnlyArray<string>,
   +routeParamList: ParamListBase,
 |};
@@ -592,13 +592,13 @@ export type StackNavigationState = {|
   +type: 'stack',
 |};
 
-export type ReplaceAction = {|
+type ReplaceAction = {|
   +type: 'REPLACE',
   +payload: {| +name: string, +key?: ?string, +params?: ScreenParams |},
   +source?: string,
   +target?: string,
 |};
-export type PushAction = {|
+type PushAction = {|
   +type: 'PUSH',
   +payload: {| +name: string, +key?: ?string, +params?: ScreenParams |},
   +source?: string,
@@ -610,7 +610,7 @@ export type PopAction = {|
   +source?: string,
   +target?: string,
 |};
-export type PopToTopAction = {|
+type PopToTopAction = {|
   +type: 'POP_TO_TOP',
   +source?: string,
   +target?: string,
@@ -641,7 +641,7 @@ export type TabNavigationState = {|
   +history: $ReadOnlyArray<{| type: 'route', key: string |}>,
 |};
 
-export type JumpToAction = {|
+type JumpToAction = {|
   +type: 'JUMP_TO',
   +payload: {| +name: string, +params?: ScreenParams |},
   +source?: string,
@@ -673,17 +673,17 @@ export type DrawerNavigationState = {|
   +history: $ReadOnlyArray<DrawerHistoryEntry>,
 |};
 
-export type OpenDrawerAction = {|
+type OpenDrawerAction = {|
   +type: 'OPEN_DRAWER',
   +source?: string,
   +target?: string,
 |};
-export type CloseDrawerAction = {|
+type CloseDrawerAction = {|
   +type: 'CLOSE_DRAWER',
   +source?: string,
   +target?: string,
 |};
-export type ToggleDrawerAction = {|
+type ToggleDrawerAction = {|
   +type: 'TOGGLE_DRAWER',
   +source?: string,
   +target?: string,
@@ -710,7 +710,7 @@ export type DrawerRouterOptions = {|
   * Events
   */
 
-export type EventMapBase = {|
+type EventMapBase = {|
   +[name: string]: {|
     +data?: mixed,
     +canPreventDefault?: boolean,
@@ -770,7 +770,7 @@ type EventListenerCallback<
   * Navigation prop
   */
 
-export type SimpleNavigate<ParamList> =
+type SimpleNavigate<ParamList> =
   <DestinationRouteName: $Keys<ParamList>>(
     routeName: DestinationRouteName,
     params: $ElementType<ParamList, DestinationRouteName>,
@@ -852,7 +852,7 @@ export type NavigationProp<
   * CreateNavigator
   */
 
-export type RouteProp<
+type RouteProp<
   ParamList: ParamListBase,
   RouteName: $Keys<ParamList>,
 > = {|
@@ -860,7 +860,7 @@ export type RouteProp<
   +params: $ElementType<ParamList, RouteName>,
 |};
 
-export type ScreenListeners<
+type ScreenListeners<
   State: NavigationState = NavigationState,
   EventMap: EventMapBase = EventMapCore<State>,
 > = $ObjMapi<
@@ -892,7 +892,7 @@ type BaseScreenProps<
   +initialParams?: $Shape<$ElementType<ParamList, RouteName>>,
 |};
 
-export type ScreenProps<
+type ScreenProps<
   ParamList: ParamListBase,
   NavProp,
   RouteName: $Keys<ParamList> = $Keys<ParamList>,
@@ -929,7 +929,7 @@ export type ScreenProps<
       |}) => React$Node,
     |};
 
-export type ScreenComponent<
+type ScreenComponent<
   GlobalParamList: ParamListBase,
   ParamList: ParamListBase,
   State: NavigationState = NavigationState,
@@ -958,12 +958,12 @@ type ScreenOptionsProp<ScreenOptions: {...}, NavProp> = {|
     | ScreenOptions
     | ({| route: LeafRoute<>, navigation: NavProp |}) => ScreenOptions,
 |};
-export type ExtraNavigatorPropsBase = {
+type ExtraNavigatorPropsBase = {
   ...$Exact<DefaultRouterOptions>,
   +children?: React$Node,
   ...
 };
-export type NavigatorPropsBase<ScreenOptions: {...}, NavProp> = {
+type NavigatorPropsBase<ScreenOptions: {...}, NavProp> = {
   ...$Exact<ExtraNavigatorPropsBase>,
   ...ScreenOptionsProp<ScreenOptions, NavProp>,
   ...
@@ -1017,7 +1017,7 @@ export type CreateNavigatorFactory = <
   * useNavigationBuilder
   */
 
-export type Descriptor<
+type Descriptor<
   NavProp,
   ScreenOptions: {...} = {...},
 > = {|
@@ -1092,7 +1092,7 @@ export type StackCardInterpolationProps = {|
   |},
   +insets: EdgeInsets,
 |};
-export type StackCardInterpolatedStyle = {|
+type StackCardInterpolatedStyle = {|
   containerStyle?: AnimatedViewStyleProp,
   cardStyle?: AnimatedViewStyleProp,
   overlayStyle?: AnimatedViewStyleProp,
@@ -1102,7 +1102,7 @@ export type StackCardStyleInterpolator = (
   props: StackCardInterpolationProps,
 ) => StackCardInterpolatedStyle;
 
-export type StackHeaderInterpolationProps = {|
+type StackHeaderInterpolationProps = {|
   +current: {|
     +progress: AnimatedInterpolation,
   |},
@@ -1116,7 +1116,7 @@ export type StackHeaderInterpolationProps = {|
     +leftLabel?: {| +width: number, +height: number |},
   |},
 |};
-export type StackHeaderInterpolatedStyle = {|
+type StackHeaderInterpolatedStyle = {|
   leftLabelStyle?: AnimatedViewStyleProp,
   leftButtonStyle?: AnimatedViewStyleProp,
   rightButtonStyle?: AnimatedViewStyleProp,
@@ -1197,7 +1197,7 @@ export type StackHeaderTitleInputBase = {
   ...
 };
 
-export type StackHeaderTitleInputProps =
+type StackHeaderTitleInputProps =
   $Exact<StackHeaderTitleInputBase>;
 
 export type StackOptions = $Shape<{|
@@ -1304,7 +1304,7 @@ export type ExtraStackNavigatorProps = {|
   ...StackNavigationConfig,
 |};
 
-export type StackNavigatorProps<
+type StackNavigatorProps<
   NavProp: InexactStackNavigationProp<> = StackNavigationProp<>,
 > = {|
   ...ExtraStackNavigatorProps,
@@ -1315,7 +1315,7 @@ export type StackNavigatorProps<
   * Bottom tab options
   */
 
-export type BottomTabBarButtonProps = {|
+type BottomTabBarButtonProps = {|
   ...$Diff<
     TouchableWithoutFeedbackProps,
     {| onPress?: ?(event: PressEvent) => mixed |},
@@ -1371,7 +1371,7 @@ type InexactTabNavigationProp<
   ...
 };
 
-export type InexactBottomTabNavigationProp<
+type InexactBottomTabNavigationProp<
   ParamList: ParamListBase = ParamListBase,
   +RouteName: $Keys<ParamList> = $Keys<ParamList>,
   Options: {...} = BottomTabOptions,
@@ -1399,12 +1399,12 @@ export type BottomTabNavigationProp<
   * Miscellaneous bottom tab exports
   */
 
-export type BottomTabDescriptor = Descriptor<
+type BottomTabDescriptor = Descriptor<
   BottomTabNavigationProp<>,
   BottomTabOptions,
 >;
 
-export type BottomTabBarOptions = $Shape<{|
+type BottomTabBarOptions = $Shape<{|
   +keyboardHidesTabBar: boolean,
   +activeTintColor: string,
   +inactiveTintColor: string,
@@ -1445,7 +1445,7 @@ export type ExtraBottomTabNavigatorProps = {|
   ...BottomTabNavigationConfig,
 |};
 
-export type BottomTabNavigatorProps<
+type BottomTabNavigatorProps<
   NavProp: InexactBottomTabNavigationProp<> = BottomTabNavigationProp<>,
 > = {|
   ...ExtraBottomTabNavigatorProps,
@@ -1456,7 +1456,7 @@ export type BottomTabNavigatorProps<
   * Material bottom tab options
   */
 
-export type MaterialBottomTabOptions = $Shape<{|
+type MaterialBottomTabOptions = $Shape<{|
   +title: string,
   +tabBarColor: string,
   +tabBarLabel: string,
@@ -1472,12 +1472,12 @@ export type MaterialBottomTabOptions = $Shape<{|
   * Material bottom tab navigation prop
   */
 
-export type MaterialBottomTabNavigationEventMap = {|
+type MaterialBottomTabNavigationEventMap = {|
   ...EventMapCore<TabNavigationState>,
   +tabPress: {| +data: void, +canPreventDefault: true |},
 |};
 
-export type InexactMaterialBottomTabNavigationProp<
+type InexactMaterialBottomTabNavigationProp<
   ParamList: ParamListBase = ParamListBase,
   +RouteName: $Keys<ParamList> = $Keys<ParamList>,
   Options: {...} = MaterialBottomTabOptions,
@@ -1489,7 +1489,7 @@ export type InexactMaterialBottomTabNavigationProp<
   EventMap,
 >;
 
-export type MaterialBottomTabNavigationProp<
+type MaterialBottomTabNavigationProp<
   ParamList: ParamListBase = ParamListBase,
   +RouteName: $Keys<ParamList> = $Keys<ParamList>,
   Options: {...} = MaterialBottomTabOptions,
@@ -1505,7 +1505,7 @@ export type MaterialBottomTabNavigationProp<
   * Miscellaneous material bottom tab exports
   */
 
-export type PaperFont = {|
+type PaperFont = {|
   +fontFamily: string,
   +fontWeight?:
     | 'normal'
@@ -1523,14 +1523,14 @@ export type PaperFont = {|
 
 type Font = $FlowFixMe; // TODO: Fill this in (from @react-navigation/material-bottom-tabs?)
 
-export type PaperFonts = {|
+type PaperFonts = {|
   +regular: Font,
   +medium: Font,
   +light: Font,
   +thin: Font,
 |};
 
-export type PaperTheme = {|
+type PaperTheme = {|
   +dark: boolean,
   +mode?: 'adaptive' | 'exact',
   +roundness: number,
@@ -1554,7 +1554,7 @@ export type PaperTheme = {|
   |},
 |};
 
-export type PaperRoute = {|
+type PaperRoute = {|
   +key: string,
   +title?: string,
   +icon?: $FlowFixMe,
@@ -1564,7 +1564,7 @@ export type PaperRoute = {|
   +testID?: string,
 |};
 
-export type PaperTouchableProps = {|
+type PaperTouchableProps = {|
   ...TouchableWithoutFeedbackProps,
   +key: string,
   +route: PaperRoute,
@@ -1574,7 +1574,7 @@ export type PaperTouchableProps = {|
   +rippleColor?: string,
 |};
 
-export type MaterialBottomTabNavigationConfig = {|
+type MaterialBottomTabNavigationConfig = {|
   +shifting?: boolean,
   +labeled?: boolean,
   +renderTouchable?: PaperTouchableProps => React$Node,
@@ -1587,13 +1587,13 @@ export type MaterialBottomTabNavigationConfig = {|
   +theme?: PaperTheme,
 |};
 
-export type ExtraMaterialBottomTabNavigatorProps = {|
+type ExtraMaterialBottomTabNavigatorProps = {|
   ...$Exact<ExtraNavigatorPropsBase>,
   ...TabRouterOptions,
   ...MaterialBottomTabNavigationConfig,
 |};
 
-export type MaterialBottomTabNavigatorProps<
+type MaterialBottomTabNavigatorProps<
   NavProp: InexactMaterialBottomTabNavigationProp<> =
     MaterialBottomTabNavigationProp<>,
 > = {|
@@ -1627,7 +1627,7 @@ export type MaterialTopTabNavigationEventMap = {|
   +swipeEnd: {| +data: void, +canPreventDefault: false |},
 |};
 
-export type InexactMaterialTopTabNavigationProp<
+type InexactMaterialTopTabNavigationProp<
   ParamList: ParamListBase = ParamListBase,
   +RouteName: $Keys<ParamList> = $Keys<ParamList>,
   Options: {...} = MaterialTopTabOptions,
@@ -1672,7 +1672,7 @@ type MaterialTopTabPagerCommonProps = {|
   |}>,
 |};
 
-export type MaterialTopTabPagerProps = {|
+type MaterialTopTabPagerProps = {|
   ...MaterialTopTabPagerCommonProps,
   +onSwipeStart?: () => void,
   +onSwipeEnd?: () => void,
@@ -1690,14 +1690,14 @@ export type MaterialTopTabPagerProps = {|
   +gestureHandlerProps: PanGestureHandlerProps,
 |};
 
-export type MaterialTopTabBarIndicatorProps = {|
+type MaterialTopTabBarIndicatorProps = {|
   +navigationState: TabNavigationState,
   +width: string,
   +style?: ViewStyleProp,
   +getTabWidth: number => number,
 |};
 
-export type MaterialTopTabBarOptions = $Shape<{|
+type MaterialTopTabBarOptions = $Shape<{|
   +scrollEnabled: boolean,
   +bounces: boolean,
   +pressColor: string,
@@ -1720,7 +1720,7 @@ export type MaterialTopTabBarOptions = $Shape<{|
   +allowFontScaling: boolean,
 |}>;
 
-export type MaterialTopTabDescriptor = Descriptor<
+type MaterialTopTabDescriptor = Descriptor<
   MaterialBottomTabNavigationProp<>,
   MaterialBottomTabOptions,
 >;
@@ -1762,7 +1762,7 @@ export type ExtraMaterialTopTabNavigatorProps = {|
   ...MaterialTopTabNavigationConfig,
 |};
 
-export type MaterialTopTabNavigatorProps<
+type MaterialTopTabNavigatorProps<
   NavProp: InexactMaterialTopTabNavigationProp<> =
     MaterialTopTabNavigationProp<>,
 > = {|
@@ -1799,7 +1799,7 @@ export type DrawerNavigationEventMap = {|
   +drawerClose: {| +data: void, +canPreventDefault: false |},
 |};
 
-export type InexactDrawerNavigationProp<
+type InexactDrawerNavigationProp<
   ParamList: ParamListBase = ParamListBase,
   +RouteName: $Keys<ParamList> = $Keys<ParamList>,
   Options: {...} = DrawerOptions,
@@ -1819,7 +1819,7 @@ export type InexactDrawerNavigationProp<
   ...
 };
 
-export type DrawerNavigationProp<
+type DrawerNavigationProp<
   ParamList: ParamListBase = ParamListBase,
   +RouteName: $Keys<ParamList> = $Keys<ParamList>,
   Options: {...} = DrawerOptions,
@@ -1835,7 +1835,7 @@ export type DrawerNavigationProp<
   * Miscellaneous drawer exports
   */
 
-export type DrawerDescriptor = Descriptor<
+type DrawerDescriptor = Descriptor<
   DrawerNavigationProp<>,
   DrawerOptions,
 >;
@@ -1849,7 +1849,7 @@ export type DrawerItemListBaseOptions = $Shape<{|
   +labelStyle: TextStyleProp,
 |}>;
 
-export type DrawerContentOptions = $Shape<{|
+type DrawerContentOptions = $Shape<{|
   ...DrawerItemListBaseOptions,
   +contentContainerStyle: ViewStyleProp,
   +style: ViewStyleProp,
@@ -1890,7 +1890,7 @@ export type ExtraDrawerNavigatorProps = {|
   ...DrawerNavigationConfig,
 |};
 
-export type DrawerNavigatorProps<
+type DrawerNavigatorProps<
   NavProp: InexactDrawerNavigationProp<> = DrawerNavigationProp<>,
 > = {|
   ...ExtraDrawerNavigatorProps,
@@ -1908,7 +1908,7 @@ export type BaseNavigationContainerProps = {|
   +independent?: boolean,
 |};
 
-export type ContainerEventMap = {|
+type ContainerEventMap = {|
   ...GlobalEventMap<PossiblyStaleNavigationState>,
   +options: {|
     +data: {| +options: {| +[key: string]: mixed |} |},
@@ -1955,7 +1955,7 @@ export type GetFocusedRouteNameFromRoute =
   * Linking
   */
 
-export type ScreenLinkingConfig = {|
+type ScreenLinkingConfig = {|
   +path?: string,
   +exact?: boolean,
   +parse?: {| +[param: string]: string => mixed |},
@@ -1964,11 +1964,11 @@ export type ScreenLinkingConfig = {|
   +initialRouteName?: string,
 |};
 
-export type ScreenLinkingConfigMap = {|
+type ScreenLinkingConfigMap = {|
   +[routeName: string]: string | ScreenLinkingConfig,
 |};
 
-export type LinkingConfig = {|
+type LinkingConfig = {|
   +initialRouteName?: string,
   +screens: ScreenLinkingConfigMap,
 |};
