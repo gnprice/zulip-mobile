@@ -22,8 +22,8 @@ type StyleObj =
   | ''
   | $ReadOnlyArray<StyleObj>
   | {| [name: string]: $FlowFixMe |};
-type ViewStyleProp = StyleObj;
-type TextStyleProp = StyleObj;
+export type ViewStyleProp = StyleObj;
+export type TextStyleProp = StyleObj;
 type AnimatedViewStyleProp = StyleObj;
 type AnimatedTextStyleProp = StyleObj;
 
@@ -372,7 +372,7 @@ type $GestureHandlerProps<
   children?: React$Node,
 |}>;
 
-type PanGestureHandlerProps = $GestureHandlerProps<
+export type PanGestureHandlerProps = $GestureHandlerProps<
   {
     activeOffsetY?: number | [number, number],
     activeOffsetX?: number | [number, number],
@@ -1855,7 +1855,7 @@ export type DrawerContentOptions = $Shape<{|
   +style: ViewStyleProp,
 |}>;
 
-type DrawerNavigationBuilderResult = {|
+export type DrawerNavigationBuilderResult = {|
   +state: DrawerNavigationState,
   +navigation: DrawerNavigationProp<>,
   +descriptors: {| +[key: string]: DrawerDescriptor |},
