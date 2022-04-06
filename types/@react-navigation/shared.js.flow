@@ -963,11 +963,6 @@ type ExtraNavigatorPropsBase = {
   +children?: React$Node,
   ...
 };
-type NavigatorPropsBase<ScreenOptions: {...}, NavProp> = {
-  ...$Exact<ExtraNavigatorPropsBase>,
-  ...ScreenOptionsProp<ScreenOptions, NavProp>,
-  ...
-};
 
 export type CreateNavigator<
   State: NavigationState,
@@ -1304,13 +1299,6 @@ export type ExtraStackNavigatorProps = {|
   ...StackNavigationConfig,
 |};
 
-type StackNavigatorProps<
-  NavProp: InexactStackNavigationProp<> = StackNavigationProp<>,
-> = {|
-  ...ExtraStackNavigatorProps,
-  ...ScreenOptionsProp<StackOptions, NavProp>,
-|};
-
 /**
   * Bottom tab options
   */
@@ -1445,13 +1433,6 @@ export type ExtraBottomTabNavigatorProps = {|
   ...BottomTabNavigationConfig,
 |};
 
-type BottomTabNavigatorProps<
-  NavProp: InexactBottomTabNavigationProp<> = BottomTabNavigationProp<>,
-> = {|
-  ...ExtraBottomTabNavigatorProps,
-  ...ScreenOptionsProp<BottomTabOptions, NavProp>,
-|};
-
 /**
   * Material bottom tab options
   */
@@ -1504,102 +1485,6 @@ type MaterialBottomTabNavigationProp<
 /**
   * Miscellaneous material bottom tab exports
   */
-
-type PaperFont = {|
-  +fontFamily: string,
-  +fontWeight?:
-    | 'normal'
-    | 'bold'
-    | '100'
-    | '200'
-    | '300'
-    | '400'
-    | '500'
-    | '600'
-    | '700'
-    | '800'
-    | '900',
-|};
-
-type Font = $FlowFixMe; // TODO: Fill this in (from @react-navigation/material-bottom-tabs?)
-
-type PaperFonts = {|
-  +regular: Font,
-  +medium: Font,
-  +light: Font,
-  +thin: Font,
-|};
-
-type PaperTheme = {|
-  +dark: boolean,
-  +mode?: 'adaptive' | 'exact',
-  +roundness: number,
-  +colors: {|
-    +primary: string,
-    +background: string,
-    +surface: string,
-    +accent: string,
-    +error: string,
-    +text: string,
-    +onSurface: string,
-    +onBackground: string,
-    +disabled: string,
-    +placeholder: string,
-    +backdrop: string,
-    +notification: string,
-  |},
-  +fonts: PaperFonts,
-  +animation: {|
-    +scale: number,
-  |},
-|};
-
-type PaperRoute = {|
-  +key: string,
-  +title?: string,
-  +icon?: $FlowFixMe,
-  +badge?: string | number | boolean,
-  +color?: string,
-  +accessibilityLabel?: string,
-  +testID?: string,
-|};
-
-type PaperTouchableProps = {|
-  ...TouchableWithoutFeedbackProps,
-  +key: string,
-  +route: PaperRoute,
-  +children: React$Node,
-  +borderless?: boolean,
-  +centered?: boolean,
-  +rippleColor?: string,
-|};
-
-type MaterialBottomTabNavigationConfig = {|
-  +shifting?: boolean,
-  +labeled?: boolean,
-  +renderTouchable?: PaperTouchableProps => React$Node,
-  +activeColor?: string,
-  +inactiveColor?: string,
-  +sceneAnimationEnabled?: boolean,
-  +keyboardHidesNavigationBar?: boolean,
-  +barStyle?: ViewStyleProp,
-  +style?: ViewStyleProp,
-  +theme?: PaperTheme,
-|};
-
-type ExtraMaterialBottomTabNavigatorProps = {|
-  ...$Exact<ExtraNavigatorPropsBase>,
-  ...TabRouterOptions,
-  ...MaterialBottomTabNavigationConfig,
-|};
-
-type MaterialBottomTabNavigatorProps<
-  NavProp: InexactMaterialBottomTabNavigationProp<> =
-    MaterialBottomTabNavigationProp<>,
-> = {|
-  ...ExtraMaterialBottomTabNavigatorProps,
-  ...ScreenOptionsProp<MaterialBottomTabOptions, NavProp>,
-|};
 
 /**
   * Material top tab options
@@ -1762,14 +1647,6 @@ export type ExtraMaterialTopTabNavigatorProps = {|
   ...MaterialTopTabNavigationConfig,
 |};
 
-type MaterialTopTabNavigatorProps<
-  NavProp: InexactMaterialTopTabNavigationProp<> =
-    MaterialTopTabNavigationProp<>,
-> = {|
-  ...ExtraMaterialTopTabNavigatorProps,
-  ...ScreenOptionsProp<MaterialTopTabOptions, NavProp>,
-|};
-
 /**
   * Drawer options
   */
@@ -1888,13 +1765,6 @@ export type ExtraDrawerNavigatorProps = {|
   ...$Exact<ExtraNavigatorPropsBase>,
   ...DrawerRouterOptions,
   ...DrawerNavigationConfig,
-|};
-
-type DrawerNavigatorProps<
-  NavProp: InexactDrawerNavigationProp<> = DrawerNavigationProp<>,
-> = {|
-  ...ExtraDrawerNavigatorProps,
-  ...ScreenOptionsProp<DrawerOptions, NavProp>,
 |};
 
 /**
