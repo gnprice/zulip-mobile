@@ -175,7 +175,7 @@ type ResponderSyntheticEvent<T> = $ReadOnly<{|
     >,
   |}>,
 |}>;
-type PressEvent = ResponderSyntheticEvent<
+export type PressEvent = ResponderSyntheticEvent<
   $ReadOnly<{|
     changedTouches: $ReadOnlyArray<$PropertyType<PressEvent, 'nativeEvent'>>,
     force: number,
@@ -791,7 +791,7 @@ export type Navigate<ParamList> =
           |},
     ) => void;
 
-type NavigationHelpers<
+export type NavigationHelpers<
   ParamList: ParamListBase,
   State: PossiblyStaleNavigationState = PossiblyStaleNavigationState,
   EventMap: EventMapBase = EventMapCore<State>,
