@@ -559,7 +559,7 @@ type RouterConfigOptions = {|
   +routeParamList: ParamListBase,
 |};
 
-export type Router<
+type Router<
   State: NavigationState,
   Action: GenericNavigationAction,
 > = {|
@@ -682,7 +682,7 @@ export type SimpleNavigate<ParamList> =
     params: $ElementType<ParamList, DestinationRouteName>,
   ) => void;
 
-export type Navigate<ParamList> =
+type Navigate<ParamList> =
   & SimpleNavigate<ParamList>
   & <DestinationRouteName: $Keys<ParamList>>(
       route:
