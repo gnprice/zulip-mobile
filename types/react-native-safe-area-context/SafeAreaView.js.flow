@@ -2,13 +2,16 @@
  * Types for the NPM package `react-native-safe-area-context`.
  *
  * Translated from
- *   node_modules/react-native-safe-area-context/lib/typescript/src/SafeAreaView.d.ts
+ *   node_modules/react-native-safe-area-context/lib/typescript/SafeAreaView.d.ts
  *
  * @flow strict-local
  */
 
-// Not sure why Prettier wants to remove this.
-// prettier-ignore
+import * as React from "react";
 import type { NativeSafeAreaViewProps } from './SafeArea.types';
 
-declare export function SafeAreaView(x: NativeSafeAreaViewProps): React$Node;
+export type SafeAreaViewProps = NativeSafeAreaViewProps;
+declare export var SafeAreaView: React.ComponentType<{|
+  ...$Exact<NativeSafeAreaViewProps>,
+  +ref?: React.Ref<React.ComponentType<NativeSafeAreaViewProps>>,
+|}>;

@@ -2,31 +2,35 @@
  * Types for the NPM package `react-native-safe-area-context`.
  *
  * Translated from
- *   node_modules/react-native-safe-area-context/lib/typescript/src/SafeAreaContext.d.ts
+ *   node_modules/react-native-safe-area-context/lib/typescript/SafeAreaContext.d.ts
  *
  * @flow strict-local
  */
 
 import * as React from 'react';
-import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
-import { EdgeInsets, Metrics, Rect } from "./SafeArea.types";
+import type { ViewProps } from 'react-native/Libraries/Components/View/ViewPropTypes';
+import type { EdgeInsets, Metrics, Rect } from "./SafeArea.types";
 declare export var SafeAreaInsetsContext: React.Context<EdgeInsets | null>;
 declare export var SafeAreaFrameContext: React.Context<Rect | null>;
-export interface SafeAreaViewProps {
-  children?: React.Node;
-  initialMetrics?: Metrics | null;
+export type SafeAreaProviderProps = {
+  ...ViewProps,
+
+  children?: React.Node,
+  initialMetrics?: Metrics | null,
 
   /**
    * @deprecated
    */
-  initialSafeAreaInsets?: EdgeInsets | null;
-  style?: ViewStyleProp;
-}
-declare export function SafeAreaProvider(x: SafeAreaViewProps): React$Node;
+  initialSafeAreaInsets?: EdgeInsets | null,
+};
+declare export function SafeAreaProvider(x: SafeAreaProviderProps): React$Node;
 declare export function useSafeAreaInsets(): EdgeInsets;
 declare export function useSafeAreaFrame(): Rect;
+export type WithSafeAreaInsetsProps = {|
+  insets: EdgeInsets,
+|};
 declare export function withSafeAreaInsets<T>(
-  WrappedComponent: React.ComponentType<T>
+  WrappedComponent: React.ComponentType<{ ...T, ...WithSafeAreaInsetsProps }>
 ): React.ComponentType<{|
   ...T,
   +ref?: mixed,
