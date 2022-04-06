@@ -7,15 +7,13 @@
  * @flow strict-local
  */
 
-import type { Node, Context } from 'react';
+import * as React from 'react';
 import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
-
-import type { Rect, EdgeInsets, Metrics } from './SafeArea.types';
-
-declare export var SafeAreaInsetsContext: Context<EdgeInsets | null>;
-declare export var SafeAreaFrameContext: Context<Rect | null>;
-export type SafeAreaViewProps = {|
-  children?: Node;
+import { EdgeInsets, Metrics, Rect } from "./SafeArea.types";
+declare export var SafeAreaInsetsContext: React.Context<EdgeInsets | null>;
+declare export var SafeAreaFrameContext: React.Context<Rect | null>;
+export interface SafeAreaViewProps {
+  children?: React.Node;
   initialMetrics?: Metrics | null;
 
   /**
@@ -23,13 +21,16 @@ export type SafeAreaViewProps = {|
    */
   initialSafeAreaInsets?: EdgeInsets | null;
   style?: ViewStyleProp;
-|}
+}
 declare export function SafeAreaProvider(x: SafeAreaViewProps): React$Node;
 declare export function useSafeAreaInsets(): EdgeInsets;
 declare export function useSafeAreaFrame(): Rect;
-declare export function withSafeAreaInsets<P: { ... }>(
-  WrappedComponent: React$ComponentType<$Exact<P>>,
-): React$ComponentType<{| ...$Exact<P>, +ref?: React$Ref<$Exact<P>> |}>;
+declare export function withSafeAreaInsets<T>(
+  WrappedComponent: React.ComponentType<T>
+): React.ComponentType<{|
+  ...T,
+  +ref?: mixed,
+|}>;
 
 /**
  * @deprecated
@@ -39,8 +40,8 @@ declare export function useSafeArea(): EdgeInsets;
 /**
  * @deprecated
  */
-declare export var SafeAreaConsumer: typeof SafeAreaInsetsContext.Consumer;
+declare export var SafeAreaConsumer: React.ComponentType<{ children: (EdgeInsets | null) => React.Node, ... }>;
 /**
  * @deprecated
  */
-declare export var SafeAreaContext: Context<EdgeInsets | null>;
+declare export var SafeAreaContext: React.Context<EdgeInsets | null>;
