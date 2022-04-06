@@ -1422,7 +1422,7 @@ export type BottomTabBarOptions = $Shape<{|
   +style: ViewStyleProp,
 |}>;
 
-type BottomTabNavigationBuilderResult = {|
+export type BottomTabNavigationBuilderResult = {|
   +state: TabNavigationState,
   +navigation: BottomTabNavigationProp<>,
   +descriptors: {| +[key: string]: BottomTabDescriptor |},
@@ -1433,7 +1433,7 @@ export type BottomTabBarProps = {|
   ...BottomTabNavigationBuilderResult,
 |}
 
-type BottomTabNavigationConfig = {|
+export type BottomTabNavigationConfig = {|
   +lazy?: boolean,
   +tabBar?: BottomTabBarProps => React$Node,
   +tabBarOptions?: BottomTabBarOptions,
