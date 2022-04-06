@@ -5,8 +5,6 @@ import { Platform, UIManager } from 'react-native';
 import 'react-native-url-polyfill/auto';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 // $FlowFixMe[untyped-import]
-import { enableScreens } from 'react-native-screens';
-// $FlowFixMe[untyped-import]
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 import RootErrorBoundary from './RootErrorBoundary';
@@ -23,8 +21,6 @@ import { initializeSentry } from './sentry';
 import FullScreenLoading from './common/FullScreenLoading';
 
 initializeSentry();
-
-enableScreens(false);
 
 // $FlowFixMe[prop-missing]
 console.disableYellowBox = true; // eslint-disable-line
