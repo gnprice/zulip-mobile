@@ -30,14 +30,58 @@ import assert from 'assert';
 /* eslint-disable one-var-declaration-per-line */
 /* eslint-disable flowtype/no-types-missing-file-annotation */
 
-export const parser = 'flow';
-
 const rewrites = {
   'react-native': {
     TextProps: 'react-native/Libraries/Text/TextPropTypes',
     TextStyle: 'react-native/Libraries/StyleSheet/StyleSheet',
     ViewProps: 'react-native/Libraries/Components/View/ViewPropTypes',
     ViewStyle: 'react-native/Libraries/StyleSheet/StyleSheet',
+  },
+};
+
+const importRedirectVisitor: recast.types.Visitor = {
+  visitImportDeclaration(path) {
+    const { source, specifiers, importKind, comments } = path.node;
+    if (source.type !== 'StringLiteral') {
+      return false;
+    }
+
+    const moves = new Map();
+    const map = rewrites[source.value];
+    if (!map) {
+      return false;
+    }
+
+    for (const specifier of specifiers) {
+      if (!n.ImportSpecifier.check(specifier)) {
+        continue;
+      }
+      const { imported } = specifier;
+      const rewritten = map[imported.name];
+      if (rewritten) {
+        moves.set(specifier, rewritten);
+      }
+    }
+
+    if (!moves.size) {
+      return false;
+    }
+
+    for (const [specifier, sourceName] of moves.entries()) {
+      const added = b.importDeclaration([specifier], b.stringLiteral(sourceName), importKind);
+      path.insertAfter(added);
+    }
+
+    const remaining = specifiers.filter(s => !moves.has(s));
+    if (remaining.length) {
+      const shorter = b.importDeclaration(remaining, source, importKind);
+      shorter.comments = comments;
+      path.replace(shorter);
+    } else {
+      path.prune();
+    }
+
+    return false;
   },
 };
 
@@ -61,81 +105,37 @@ const nonvalues = new Map([
   ],
 ]);
 
+const importTypeAsTypeVisitor: recast.types.Visitor = {
+  visitImportSpecifier(path) {
+    const parent = path.parentPath.node;
+    let source, imported;
+    if (
+      n.ImportDeclaration.check(parent)
+      && parent.importKind === 'value'
+      && ((source = parent.source), true)
+      && n.StringLiteral.check(source)
+      // @ts-expect-error importKind missing in ast-types, but does exist
+      && path.node.importKind !== 'type'
+      && ((imported = path.node.imported), true)
+      && nonvalues.get(source.value)?.has(imported.name)
+    ) {
+      const { local, comments } = path.node;
+      const r = b.importSpecifier(imported, local);
+      // @ts-expect-error importKind missing in ast-types, but does get used
+      r.importKind = 'type';
+      r.comments = comments;
+      path.replace(r);
+    }
+    return false;
+  },
+};
+
+export const parser = 'flow';
+
 export default function (fileInfo: any, { jscodeshift: j, report }: any) {
   // Adapted loosely from zulip/zulip@02511bff1.
-
   const ast = recast.parse(fileInfo.source, { parser: flowParser });
-
-  recast.visit(ast, {
-    visitImportDeclaration(path) {
-      const { source, specifiers, importKind, comments } = path.node;
-      if (source.type !== 'StringLiteral') {
-        return false;
-      }
-
-      const moves = new Map();
-      const map = rewrites[source.value];
-      if (!map) {
-        return false;
-      }
-
-      for (const specifier of specifiers) {
-        if (!n.ImportSpecifier.check(specifier)) {
-          continue;
-        }
-        const { imported } = specifier;
-        const rewritten = map[imported.name];
-        if (rewritten) {
-          moves.set(specifier, rewritten);
-        }
-      }
-
-      if (!moves.size) {
-        return false;
-      }
-
-      for (const [specifier, sourceName] of moves.entries()) {
-        const added = b.importDeclaration([specifier], b.stringLiteral(sourceName), importKind);
-        path.insertAfter(added);
-      }
-
-      const remaining = specifiers.filter(s => !moves.has(s));
-      if (remaining.length) {
-        const shorter = b.importDeclaration(remaining, source, importKind);
-        shorter.comments = comments;
-        path.replace(shorter);
-      } else {
-        path.prune();
-      }
-
-      return false;
-    },
-  });
-
-  recast.visit(ast, {
-    visitImportSpecifier(path) {
-      const parent = path.parentPath.node;
-      let source, imported;
-      if (
-        n.ImportDeclaration.check(parent)
-        && parent.importKind === 'value'
-        && ((source = parent.source), true)
-        && n.StringLiteral.check(source)
-        // @ts-expect-error importKind missing in ast-types, but does exist
-        && path.node.importKind !== 'type'
-        && ((imported = path.node.imported), true)
-        && nonvalues.get(source.value)?.has(imported.name)
-      ) {
-        const { local, comments } = path.node;
-        const r = b.importSpecifier(imported, local);
-        // @ts-expect-error importKind missing in ast-types, but does get used
-        r.importKind = 'type';
-        r.comments = comments;
-        path.replace(r);
-      }
-      return false;
-    },
-  });
-
+  recast.visit(ast, importRedirectVisitor);
+  recast.visit(ast, importTypeAsTypeVisitor);
   return recast.print(ast).code;
 }
