@@ -6,7 +6,7 @@
  */
 
 import * as React from "react";
-// TODO automate this import.  Sadly Flow's `$Export` only works when the
+// TODO automate this import.  Sadly Flow's `$Exports` only works when the
 //   module it refers to was defined *in a libdef*, as a builtin.
 //   Details here:
 //     https://github.com/facebook/flow/commit/3182f731a0

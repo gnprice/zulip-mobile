@@ -21,10 +21,14 @@ declare type Props = {
   ...StackNavigationConfig,
 };
 declare function StackNavigator(x: Props): React$Node;
-// TODO ad-hoc fix $Export
+// TODO ad-hoc fix $Exports
 import * as $rnav$native from '@react-navigation/native';
 declare var _default: <
   // TODO(flowgen-fix): somehow automate this covariance -- both of them
   ParamList: { +[key: string]: { +[key: string]: any } | void, ... }
->() => $PropertyType<typeof $rnav$native, "TypedNavigator">;
+>() =>
+ // TODO(flowgen): Oh yikes -- these had type arguments.  They got dropped!
+ //   Dropped perhaps related to the $Exports thing?  That means it probably
+ //   requires a fix in flowgen itself...
+ $rnav$native.TypedNavigator;
 declare export default typeof _default;
