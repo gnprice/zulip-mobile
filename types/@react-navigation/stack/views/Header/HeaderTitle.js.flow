@@ -8,6 +8,7 @@
 import { Animated } from "react-native";
 
 import { type TextStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
+
 import { TextProps } from "react-native/Libraries/Text/TextPropTypes";
 declare type Props = {
   ...$Diff<TextProps, { style: any }>,
@@ -20,4 +21,4 @@ declare type Props = {
 };
 declare export default function HeaderTitle(x: Props): React$Node;
 declare export {};
-type $ReactNative$GenericStyleProp<T> = null | void | T | false | "" | $ReadOnlyArray<$ReactNative$GenericStyleProp<T>>;
+type $ReactNative$GenericStyleProp<+T> = null | void | T | false | "" | $ReadOnlyArray<$ReactNative$GenericStyleProp<T>>;

@@ -7,8 +7,8 @@
 
 import * as React from "react";
 import type { Animated, LayoutChangeEvent } from "react-native";
-import type { ViewStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
 import type { TextStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
+import type { ViewStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
 import type { EdgeInsets } from "react-native-safe-area-context";
 import type {
   NavigationProp,
@@ -795,4 +795,4 @@ export type TransitionPreset = {
   headerStyleInterpolator: StackHeaderStyleInterpolator,
   ...
 };
-type $ReactNative$GenericStyleProp<T> = null | void | T | false | "" | $ReadOnlyArray<$ReactNative$GenericStyleProp<T>>;
+type $ReactNative$GenericStyleProp<+T> = null | void | T | false | "" | $ReadOnlyArray<$ReactNative$GenericStyleProp<T>>;

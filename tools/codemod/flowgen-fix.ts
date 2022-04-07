@@ -252,10 +252,19 @@ const ReactNativeTranslateVisitor: () => recast.types.Visitor = () => {
       if (needGenericStyleProp) {
         // We inserted a reference to genericStylePropIdentifier.
         // Add a definition for it.
+        /* Compare `react-native/Libraries/StyleSheet/StyleSheetTypes.js`:
+             type GenericStyleProp<+T> =
+               | null
+               | void
+               | T
+               | false
+               | ''
+               | $ReadOnlyArray<GenericStyleProp<T>>;
+        */
         path.node.body.push(
           b.declareTypeAlias(
             genericStylePropIdentifier,
-            b.typeParameterDeclaration([b.typeParameter('T')]),
+            b.typeParameterDeclaration([b.typeParameter('T', 'plus')]),
             b.unionTypeAnnotation([
               b.nullTypeAnnotation(),
               b.voidTypeAnnotation(),

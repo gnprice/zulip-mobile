@@ -37,4 +37,4 @@ export type Props = {
   ...
 };
 declare export default function HeaderContainer(x: Props): React$Node;
-type $ReactNative$GenericStyleProp<T> = null | void | T | false | "" | $ReadOnlyArray<$ReactNative$GenericStyleProp<T>>;
+type $ReactNative$GenericStyleProp<+T> = null | void | T | false | "" | $ReadOnlyArray<$ReactNative$GenericStyleProp<T>>;

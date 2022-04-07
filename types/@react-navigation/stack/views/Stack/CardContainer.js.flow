@@ -109,4 +109,4 @@ declare type Props = {
 declare function CardContainer(x: Props): React$Node;
 declare var _default: React.MemoExoticComponent<typeof CardContainer>;
 declare export default typeof _default;
-type $ReactNative$GenericStyleProp<T> = null | void | T | false | "" | $ReadOnlyArray<$ReactNative$GenericStyleProp<T>>;
+type $ReactNative$GenericStyleProp<+T> = null | void | T | false | "" | $ReadOnlyArray<$ReactNative$GenericStyleProp<T>>;
