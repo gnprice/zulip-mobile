@@ -17,3 +17,5 @@ import * as K from './kinds';
 declare var namedTypes: any;
 
       declare var npm$namespace$namedTypes: any;
+
+export type NamedTypes = any;

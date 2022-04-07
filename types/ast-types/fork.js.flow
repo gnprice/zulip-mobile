@@ -6,32 +6,40 @@
  */
 
 import { type Def, type Plugin } from "./types";
+import * as types from './lib/types';
+import * as namedTypes from './gen/namedTypes';
+import * as builders from './gen/builders';
+import * as path from './lib/path';
+import * as nodePath from './lib/node-path';
+import * as pathVisitor from './lib/path-visitor';
+import * as main from './main';
+
 declare export default function fn(defs: Def[]): {
   Type: {
-    or(...types: any[]): $PropertyType<$Exports<"./lib/types">, "Type">,
+    or(...types: any[]): types.Type<any>,
     from<T>(
       value: any,
       name?: string | void
-    ): $PropertyType<$Exports<"./lib/types">, "Type">,
-    def(typeName: string): $PropertyType<$Exports<"./lib/types">, "Def">,
+    ): types.Type<any>,
+    def(typeName: string): types.Def<any>,
     hasDef(typeName: string): boolean,
     ...
   },
   builtInTypes: {
-    string: $PropertyType<$Exports<"./lib/types">, "Type">,
-    function: $PropertyType<$Exports<"./lib/types">, "Type">,
-    array: $PropertyType<$Exports<"./lib/types">, "Type">,
-    object: $PropertyType<$Exports<"./lib/types">, "Type">,
-    RegExp: $PropertyType<$Exports<"./lib/types">, "Type">,
-    Date: $PropertyType<$Exports<"./lib/types">, "Type">,
-    number: $PropertyType<$Exports<"./lib/types">, "Type">,
-    boolean: $PropertyType<$Exports<"./lib/types">, "Type">,
-    null: $PropertyType<$Exports<"./lib/types">, "Type">,
-    undefined: $PropertyType<$Exports<"./lib/types">, "Type">,
+    string: types.Type<any>,
+    function: types.Type<any>,
+    array: types.Type<any>,
+    object: types.Type<any>,
+    RegExp: types.Type<any>,
+    Date: types.Type<any>,
+    number: types.Type<any>,
+    boolean: types.Type<any>,
+    null: types.Type<any>,
+    undefined: types.Type<any>,
     ...
   },
-  namedTypes: $PropertyType<$Exports<"./gen/namedTypes">, "NamedTypes">,
-  builders: $PropertyType<$Exports<"./gen/builders">, "builders">,
+  namedTypes: namedTypes.NamedTypes,
+  builders: builders.builders,
   defineMethod: (name: any, func?: Function | void) => Function,
   getFieldNames: (object: any) => string[],
   getFieldValue: (object: any, fieldName: any) => any,
@@ -53,16 +61,13 @@ declare export default function fn(defs: Def[]): {
     ...
   },
   finalize: () => void,
-  Path: $PropertyType<$Exports<"./lib/path">, "PathConstructor">,
-  NodePath: $PropertyType<$Exports<"./lib/node-path">, "NodePathConstructor">,
-  PathVisitor: $PropertyType<
-    $Exports<"./lib/path-visitor">,
-    "PathVisitorConstructor"
-  >,
+  Path: path.PathConstructor,
+  NodePath: nodePath.NodePathConstructor,
+  PathVisitor: pathVisitor.PathVisitorConstructor,
   use: <T_1>(plugin: Plugin<T_1>) => T_1,
   visit: <M>(
-    node: $PropertyType<$Exports<"./lib/types">, "ASTNode">,
-    methods?: $PropertyType<$Exports<"./main">, "Visitor"> | void
+    node: types.ASTNode,
+    methods?: main.Visitor<M> | void
   ) => any,
   ...
 };
