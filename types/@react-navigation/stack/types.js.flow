@@ -74,7 +74,8 @@ export type StackNavigationHelpers = {
 };
 export type StackNavigationProp<
   ParamList: ParamListBase,
-  RouteName: $Keys<ParamList> = string
+  // TODO(flowgen-fix): somehow automate this covariance
+  +RouteName: $Keys<ParamList> = string
 > = {
   ...NavigationProp<
     ParamList,
