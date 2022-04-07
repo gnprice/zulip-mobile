@@ -152,6 +152,26 @@ const reactTranslateVisitor: recast.types.Visitor = {
         r.comments = path.node.comments;
         path.replace(r);
       }
+
+      // React.RefAttributes -> expand its definition.
+      if (
+        // TODO this is ugly -- relying on names rather than bindings.
+        n.QualifiedTypeIdentifier.check(id)
+        && n.Identifier.check(id.qualification)
+        && id.qualification.name === 'React'
+        && n.Identifier.check(id.id)
+        && id.id.name === 'RefAttributes'
+      ) {
+        const property = b.objectTypeProperty(
+          b.identifier('ref'),
+          b.typeofTypeAnnotation(typeParameters.params[0]),
+          true,
+        );
+        property.variance = 'plus';
+        const r = b.objectTypeAnnotation([property]);
+        r.comments = path.node.comments;
+        path.replace(r);
+      }
     }
     this.traverse(path);
   },
