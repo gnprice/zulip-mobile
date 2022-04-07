@@ -26,6 +26,8 @@ import assert from 'assert';
 /* eslint-disable no-cond-assign */
 /* eslint-disable consistent-return */
 /* eslint-disable no-console */
+/* eslint-disable one-var */
+/* eslint-disable one-var-declaration-per-line */
 /* eslint-disable flowtype/no-types-missing-file-annotation */
 
 export const parser = 'flow';
@@ -100,17 +102,17 @@ export default function (fileInfo: any, { jscodeshift: j, report }: any) {
   recast.visit(ast, {
     visitImportSpecifier(path) {
       const parent = path.parentPath.node;
-      if (!n.ImportDeclaration.check(parent)) {
-        return false;
-      }
-      const { source } = parent;
-      if (!n.StringLiteral.check(source)) {
-        return false;
-      }
-      const { imported, local, comments } = path.node;
-      // @ts-expect-error importKind missing in ast-types, but does exist
-      const { importKind } = path.node;
-      if (importKind !== 'type' && nonvalues.get(source.value)?.has(imported.name)) {
+      let source, imported;
+      if (
+        n.ImportDeclaration.check(parent)
+        && ((source = parent.source), true)
+        && n.StringLiteral.check(source)
+        // @ts-expect-error importKind missing in ast-types, but does exist
+        && path.node.importKind !== 'type'
+        && ((imported = path.node.imported), true)
+        && nonvalues.get(source.value)?.has(imported.name)
+      ) {
+        const { local, comments } = path.node;
         const r = b.importSpecifier(imported, local);
         // @ts-expect-error importKind missing in ast-types, but does get used
         r.importKind = 'type';
@@ -118,7 +120,6 @@ export default function (fileInfo: any, { jscodeshift: j, report }: any) {
         path.replace(r);
         changed = true;
       }
-
       return false;
     },
   });
