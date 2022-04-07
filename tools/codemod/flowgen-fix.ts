@@ -30,7 +30,11 @@ import assert from 'assert';
 
 export const parser = 'flow';
 
-// const checkStatement = (node: n.Node): boolean => n.Statement.check(node);
+const rewrites = {
+  'react-native': {
+    ViewStyle: 'react-native/Libraries/StyleSheet/StyleSheet',
+  },
+};
 
 export default function (fileInfo: any, { jscodeshift: j, report }: any) {
   // Adapted loosely from zulip/zulip@02511bff1.
@@ -48,44 +52,44 @@ export default function (fileInfo: any, { jscodeshift: j, report }: any) {
       // console.log(source.value, specifiers);
 
       const moves = new Map();
-      // eslint-disable-next-line default-case
-      switch (source.value) {
-        case 'react-native': {
-          for (const specifier of specifiers) {
-            if (!n.ImportSpecifier.check(specifier)) {
-              continue;
-            }
-            const { imported } = specifier;
-            if (imported.name === 'ViewStyle') {
-              moves.set(specifier, 'react-native/Libraries/StyleSheet/StyleSheet');
-            }
-          }
-          break;
+      const map = rewrites[source.value];
+      if (!map) {
+        return false;
+      }
+
+      for (const specifier of specifiers) {
+        if (!n.ImportSpecifier.check(specifier)) {
+          continue;
+        }
+        const { imported } = specifier;
+        const rewritten = map[imported.name];
+        if (rewritten) {
+          moves.set(specifier, rewritten);
         }
       }
 
-      if (moves.size) {
-        console.log(moves);
-
-        for (const [specifier, sourceName] of moves.entries()) {
-          const added = b.importDeclaration([specifier], b.stringLiteral(sourceName), importKind);
-          console.log(added);
-          path.insertAfter(added);
-        }
-
-        const remaining = specifiers.filter(s => !moves.has(s));
-        if (remaining.length) {
-          const shorter = b.importDeclaration(remaining, source, importKind);
-          shorter.comments = comments;
-          console.log(shorter);
-          path.replace(shorter);
-        } else {
-          console.log('pruning');
-          path.prune();
-        }
-
-        changed = true;
+      if (!moves.size) {
+        return false;
       }
+
+      for (const [specifier, sourceName] of moves.entries()) {
+        const added = b.importDeclaration([specifier], b.stringLiteral(sourceName), importKind);
+        console.log(added);
+        path.insertAfter(added);
+      }
+
+      const remaining = specifiers.filter(s => !moves.has(s));
+      if (remaining.length) {
+        const shorter = b.importDeclaration(remaining, source, importKind);
+        shorter.comments = comments;
+        console.log(shorter);
+        path.replace(shorter);
+      } else {
+        console.log('pruning');
+        path.prune();
+      }
+
+      changed = true;
       return false;
     },
   });
