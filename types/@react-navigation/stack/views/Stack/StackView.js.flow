@@ -5,6 +5,7 @@
  * @flow
  */
 
+import * as $Flowgen$Import$_react_navigation_native from "@react-navigation/native";
 import * as React from "react";
 import {
   type StackNavigationState,
@@ -84,9 +85,28 @@ declare export default class StackView mixins React.Component<Props, State> {
                   stale: false,
                   ...
                 }>
-              | $PropertyType<
-                  $Exports<"@react-navigation/native">,
-                  "PartialState"
+              | $Flowgen$Import$_react_navigation_native.PartialState<
+                  $ReadOnly<{
+                    key: string,
+                    index: number,
+                    routeNames: string[],
+                    history?: mixed[] | void,
+                    routes: {
+                      ...$ReadOnly<{
+                        key: string,
+                        name: string,
+                        ...
+                      }>,
+                      ...$ReadOnly<{
+                        params?: { [key: string]: any } | void,
+                        ...
+                      }>,
+                      ...any,
+                    }[],
+                    type: string,
+                    stale: false,
+                    ...
+                  }>
                 >
               | void,
             ...
@@ -125,9 +145,28 @@ declare export default class StackView mixins React.Component<Props, State> {
                   stale: false,
                   ...
                 }>
-              | $PropertyType<
-                  $Exports<"@react-navigation/native">,
-                  "PartialState"
+              | $Flowgen$Import$_react_navigation_native.PartialState<
+                  $ReadOnly<{
+                    key: string,
+                    index: number,
+                    routeNames: string[],
+                    history?: mixed[] | void,
+                    routes: {
+                      ...$ReadOnly<{
+                        key: string,
+                        name: string,
+                        ...
+                      }>,
+                      ...$ReadOnly<{
+                        params?: { [key: string]: any } | void,
+                        ...
+                      }>,
+                      ...any,
+                    }[],
+                    type: string,
+                    stale: false,
+                    ...
+                  }>
                 >
               | void,
             ...

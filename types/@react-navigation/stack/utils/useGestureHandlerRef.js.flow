@@ -5,7 +5,6 @@
  * @flow
  */
 
+import * as $Flowgen$Import$react_native_gesture_handler from "react-native-gesture-handler";
 import * as React from "react";
-declare export default function useGestureHandlerRef(): React.Ref<
-  $PropertyType<$Exports<"react-native-gesture-handler">, "PanGestureHandler">
->;
+declare export default function useGestureHandlerRef(): React.Ref<$Flowgen$Import$react_native_gesture_handler.PanGestureHandler>;

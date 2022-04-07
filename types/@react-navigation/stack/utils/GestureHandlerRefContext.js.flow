@@ -5,10 +5,9 @@
  * @flow
  */
 
+import * as $Flowgen$Import$react_native_gesture_handler from "react-native-gesture-handler";
 import * as React from "react";
 declare var _default: React.Context<
-  React.Ref<
-    $PropertyType<$Exports<"react-native-gesture-handler">, "PanGestureHandler">
-  >
+  React.Ref<$Flowgen$Import$react_native_gesture_handler.PanGestureHandler>
 >;
 declare export default typeof _default;

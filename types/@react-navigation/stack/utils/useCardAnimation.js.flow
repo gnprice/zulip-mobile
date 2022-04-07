@@ -5,7 +5,5 @@
  * @flow
  */
 
-declare export default function useCardAnimation(): $PropertyType<
-  $Exports<"..">,
-  "StackCardInterpolationProps"
->;
+import * as $Flowgen$Import$ from "undefined";
+declare export default function useCardAnimation(): $Flowgen$Import$;

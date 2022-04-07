@@ -5,18 +5,10 @@
  * @flow
  */
 
+import * as $Flowgen$Import$_react_native_community_masked_view from "@react-native-community/masked-view";
 import * as React from "react";
-// TODO automate this import.  Sadly Flow's `$Exports` only works when the
-//   module it refers to was defined *in a libdef*, as a builtin.
-//   Details here:
-//     https://github.com/facebook/flow/commit/3182f731a0
-//   and briefly mentioned in changelog here:
-//     https://github.com/facebook/flow/blob/main/Changelog.md#01230
-//   (This fact really should go in the actual docs:
-//     https://flow.org/en/docs/types/utilities/#toc-exports
-//   .)
-import * as mv from "@react-native-community/masked-view";
-type MaskedViewType = typeof mv.default;
+declare type MaskedViewType =
+  $Flowgen$Import$_react_native_community_masked_view.default;
 declare type Props = {
   ...React.ElementConfig<MaskedViewType>,
   ...{
