@@ -8,11 +8,7 @@
 
 
 import {
-            ([obj, keys]) => {
-    return `$Diff<${printers.node.printType(obj)},${Record([keys, {
-      kind: _typescript.default.SyntaxKind.AnyKeyword
-    }], false)}>`;
-  }
+            Omit
             } from '../types';
 import {
             Type

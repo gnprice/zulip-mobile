@@ -8,11 +8,7 @@
 
 
 import {
-            Fork,([obj, keys]) => {
-    return `$Diff<${printers.node.printType(obj)},${Record([keys, {
-      kind: _typescript.default.SyntaxKind.AnyKeyword
-    }], false)}>`;
-  }
+            Fork,Omit
             } from '../types';
 import {
             ASTNode
