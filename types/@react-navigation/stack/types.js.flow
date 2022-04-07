@@ -158,7 +158,7 @@ export type StackHeaderOptions = {
   /**
    * Style object for the title component.
    */
-  headerTitleStyle?: Animated.WithAnimatedValue<$ReactNative$GenericStyleProp<TextStyle>>,
+  headerTitleStyle?: $ReactNative$Animated$WithAnimatedValue<$ReactNative$GenericStyleProp<TextStyle>>,
 
   /**
    * Style object for the container of the `headerTitle` component, for example to add padding.
@@ -166,7 +166,7 @@ export type StackHeaderOptions = {
    * This may lead to white space or overlap between `headerLeft` and `headerTitle` if a customized `headerLeft` is used.
    * It can be solved by adjusting `left` and `right` style in `headerTitleContainerStyle` and `marginHorizontal` in `headerTitleStyle`.
    */
-  headerTitleContainerStyle?: Animated.WithAnimatedValue<$ReactNative$GenericStyleProp<ViewStyle>>,
+  headerTitleContainerStyle?: $ReactNative$Animated$WithAnimatedValue<$ReactNative$GenericStyleProp<ViewStyle>>,
 
   /**
    * Tint color for the header.
@@ -219,7 +219,7 @@ export type StackHeaderOptions = {
   /**
    * Style object for the container of the `headerLeft` component, for example to add padding.
    */
-  headerLeftContainerStyle?: Animated.WithAnimatedValue<$ReactNative$GenericStyleProp<ViewStyle>>,
+  headerLeftContainerStyle?: $ReactNative$Animated$WithAnimatedValue<$ReactNative$GenericStyleProp<ViewStyle>>,
 
   /**
    * Function which returns a React Element to display on the right side of the header.
@@ -232,7 +232,7 @@ export type StackHeaderOptions = {
   /**
    * Style object for the container of the `headerRight` component, for example to add padding.
    */
-  headerRightContainerStyle?: Animated.WithAnimatedValue<$ReactNative$GenericStyleProp<ViewStyle>>,
+  headerRightContainerStyle?: $ReactNative$Animated$WithAnimatedValue<$ReactNative$GenericStyleProp<ViewStyle>>,
 
   /**
    * Function which returns a React Element to display custom image in header's back button.
@@ -259,7 +259,7 @@ export type StackHeaderOptions = {
   /**
    * Style object for the header. You can specify a custom background color here, for example.
    */
-  headerStyle?: Animated.WithAnimatedValue<$ReactNative$GenericStyleProp<ViewStyle>>,
+  headerStyle?: $ReactNative$Animated$WithAnimatedValue<$ReactNative$GenericStyleProp<ViewStyle>>,
 
   /**
    * Defaults to `false`. If `true`, the header will not have a background unless you explicitly provide it with `headerBackground`.
@@ -359,7 +359,7 @@ export type StackNavigationOptions = {
      * Function that returns a React Element to display as a overlay for the card.
      */
     cardOverlay?: (props: {
-      style: Animated.WithAnimatedValue<$ReactNative$GenericStyleProp<ViewStyle>>,
+      style: $ReactNative$Animated$WithAnimatedValue<$ReactNative$GenericStyleProp<ViewStyle>>,
       ...
     }) => React.Node,
 
@@ -507,7 +507,7 @@ export type StackHeaderLeftButtonProps = {
   /**
    * Style object for the label.
    */
-  labelStyle?: Animated.WithAnimatedValue<$ReactNative$GenericStyleProp<TextStyle>>,
+  labelStyle?: $ReactNative$Animated$WithAnimatedValue<$ReactNative$GenericStyleProp<TextStyle>>,
 
   /**
    * Whether label font should scale to respect Text Size accessibility settings.
@@ -569,7 +569,7 @@ export type StackHeaderTitleProps = {
   /**
    * Style object for the title element.
    */
-  style?: Animated.WithAnimatedValue<$ReactNative$GenericStyleProp<TextStyle>>,
+  style?: $ReactNative$Animated$WithAnimatedValue<$ReactNative$GenericStyleProp<TextStyle>>,
   ...
 };
 export type TransitionSpec =
@@ -796,3 +796,6 @@ export type TransitionPreset = {
   ...
 };
 type $ReactNative$GenericStyleProp<+T> = null | void | T | false | "" | $ReadOnlyArray<$ReactNative$GenericStyleProp<T>>;
+
+// TODO(flowgen-fix): actually implement this
+type $ReactNative$Animated$WithAnimatedValue<T> = T;

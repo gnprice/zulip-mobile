@@ -185,6 +185,9 @@ const ReactNativeTranslateVisitor: () => recast.types.Visitor = () => {
   const genericStylePropIdentifier = b.identifier('$ReactNative$GenericStyleProp');
   let needGenericStyleProp = false;
 
+  const withAnimatedValueIdentifier = b.identifier('$ReactNative$Animated$WithAnimatedValue');
+  let needwithAnimatedValue = false;
+
   return {
     visitImportSpecifier(path) {
       const parent = path.parentPath.node;
@@ -219,6 +222,23 @@ const ReactNativeTranslateVisitor: () => recast.types.Visitor = () => {
           }),
         );
       }
+
+      // Rewrite Animated.WithAnimatedValue.
+      // This is a clever type in the TS definition.
+      if (
+        n.Identifier.check(path.node.qualification)
+        && path.node.qualification.name === 'Animated'
+        && path.node.id.name === 'WithAnimatedValue'
+      ) {
+        needwithAnimatedValue = true;
+        path.replace(
+          b.identifier.from({
+            ...withAnimatedValueIdentifier,
+            comments: path.node.comments ?? null,
+          }),
+        );
+      }
+
       this.traverse(path);
     },
 
@@ -249,6 +269,7 @@ const ReactNativeTranslateVisitor: () => recast.types.Visitor = () => {
 
     visitProgram(path) {
       this.traverse(path);
+
       if (needGenericStyleProp) {
         // We inserted a reference to genericStylePropIdentifier.
         // Add a definition for it.
@@ -282,6 +303,33 @@ const ReactNativeTranslateVisitor: () => recast.types.Visitor = () => {
               ),
             ]),
           ),
+        );
+      }
+
+      if (needwithAnimatedValue) {
+        /* Compare TS definition:
+    interface WithAnimatedArray<P> extends Array<WithAnimatedValue<P>> {}
+    type WithAnimatedObject<T> = {
+        [K in keyof T]: WithAnimatedValue<T[K]>;
+    };
+
+    export type WithAnimatedValue<T> = T extends Builtin | Nullable
+        ? T
+        : T extends Primitive
+        ? T | Value | AnimatedInterpolation // add `Value` and `AnimatedInterpolation` but also preserve original T
+        : T extends Array<infer P>
+        ? WithAnimatedArray<P>
+        : T extends {}
+        ? WithAnimatedObject<T>
+        : T; // in case it's something we don't yet know about (for .e.g bigint)
+        */
+        path.node.body.push(
+          b.declareTypeAlias.from({
+            id: withAnimatedValueIdentifier,
+            typeParameters: b.typeParameterDeclaration([b.typeParameter('T')]),
+            right: b.typeParameter('T'),
+            comments: [b.commentLine(' TODO(flowgen-fix): actually implement this')],
+          }),
         );
       }
     },

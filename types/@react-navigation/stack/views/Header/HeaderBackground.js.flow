@@ -12,7 +12,7 @@ import { type ViewProps } from "react-native/Libraries/Components/View/ViewPropT
 declare type Props = {
   ...ViewProps,
   ...{
-    style?: Animated.WithAnimatedValue<$ReactNative$GenericStyleProp<ViewStyle>>,
+    style?: $ReactNative$Animated$WithAnimatedValue<$ReactNative$GenericStyleProp<ViewStyle>>,
     children?: React.Node,
     ...
   },
@@ -20,3 +20,6 @@ declare type Props = {
 declare export default function HeaderBackground(x: Props): React$Node;
 declare export {};
 type $ReactNative$GenericStyleProp<+T> = null | void | T | false | "" | $ReadOnlyArray<$ReactNative$GenericStyleProp<T>>;
+
+// TODO(flowgen-fix): actually implement this
+type $ReactNative$Animated$WithAnimatedValue<T> = T;
