@@ -5,10 +5,10 @@
  * @flow
  */
 
-import * as $Flowgen$Import$_react_native_community_masked_view from "@react-native-community/masked-view";
+import * as $Flowgen$Import$_40_react_2d_native_2d_community_2f_masked_2d_view from "@react-native-community/masked-view";
 import * as React from "react";
 declare type MaskedViewType =
-  $Flowgen$Import$_react_native_community_masked_view.default;
+  $Flowgen$Import$_40_react_2d_native_2d_community_2f_masked_2d_view.default;
 declare type Props = {
   ...React.ElementConfig<MaskedViewType>,
   ...{
