@@ -32,6 +32,9 @@ export const parser = 'flow';
 
 const rewrites = {
   'react-native': {
+    TextProps: 'react-native/Libraries/Text/TextPropTypes',
+    TextStyle: 'react-native/Libraries/StyleSheet/StyleSheet',
+    ViewProps: 'react-native/Libraries/Components/View/ViewPropTypes',
     ViewStyle: 'react-native/Libraries/StyleSheet/StyleSheet',
   },
 };
