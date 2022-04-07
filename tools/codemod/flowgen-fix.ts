@@ -162,15 +162,19 @@ const reactTranslateVisitor: recast.types.Visitor = {
         && n.Identifier.check(id.id)
         && id.id.name === 'RefAttributes'
       ) {
-        const property = b.objectTypeProperty(
-          b.identifier('ref'),
-          b.typeofTypeAnnotation(typeParameters.params[0]),
-          true,
+        path.replace(
+          b.objectTypeAnnotation.from({
+            comments: path.node.comments ?? null,
+            properties: [
+              b.objectTypeProperty.from({
+                variance: 'plus',
+                key: b.identifier('ref'),
+                optional: true,
+                value: b.typeofTypeAnnotation(typeParameters.params[0]),
+              }),
+            ],
+          }),
         );
-        property.variance = 'plus';
-        const r = b.objectTypeAnnotation([property]);
-        r.comments = path.node.comments;
-        path.replace(r);
       }
     }
     this.traverse(path);
