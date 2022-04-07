@@ -121,6 +121,7 @@ export default function (fileInfo: any, { jscodeshift: j, report }: any) {
       let source, imported;
       if (
         n.ImportDeclaration.check(parent)
+        && parent.importKind === 'value'
         && ((source = parent.source), true)
         && n.StringLiteral.check(source)
         // @ts-expect-error importKind missing in ast-types, but does exist
