@@ -39,6 +39,10 @@ const rewrites = {
   },
 };
 
+const nonvalues = new Map([
+  ['react-native/Libraries/Components/View/ViewPropTypes', new Set(['ViewProps'])],
+]);
+
 export default function (fileInfo: any, { jscodeshift: j, report }: any) {
   // Adapted loosely from zulip/zulip@02511bff1.
 
@@ -89,6 +93,28 @@ export default function (fileInfo: any, { jscodeshift: j, report }: any) {
       }
 
       changed = true;
+      return false;
+    },
+  });
+
+  recast.visit(ast, {
+    visitImportSpecifier(path) {
+      const parent = path.parentPath.node;
+      if (!n.ImportDeclaration.check(parent)) {
+        return false;
+      }
+      const { source } = parent;
+      if (!n.StringLiteral.check(source)) {
+        return false;
+      }
+      const { imported, local, importKind, comment } = path.node;
+      if (importKind !== 'type' && nonvalues.get(source.value)?.has(imported)) {
+        const r = b.importSpecifier(imported, local, 'type');
+        r.comment = comment;
+        path.replace(r);
+        changed = true;
+      }
+
       return false;
     },
   });
