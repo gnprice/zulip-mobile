@@ -8,7 +8,7 @@
 import * as React from "react";
 import { BaseButton } from "react-native-gesture-handler";
 declare type Props = {
-  ...React.ComponentProps<typeof BaseButton>,
+  ...React.ElementConfig<typeof BaseButton>,
   ...{
     pressOpacity: number,
     ...

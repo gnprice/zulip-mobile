@@ -158,6 +158,24 @@ const reactTranslateVisitor: recast.types.Visitor = {
         path.replace(r);
       }
 
+      // React.ComponentProps -> React.ElementConfig
+      // which is just the Flow name for (basically?) the same thing.
+      if (
+        n.QualifiedTypeIdentifier.check(id)
+        && n.Identifier.check(id.qualification)
+        && id.qualification.name === 'React'
+        && n.Identifier.check(id.id)
+        && id.id.name === 'ComponentProps'
+      ) {
+        path.replace(
+          b.genericTypeAnnotation.from({
+            comments: path.node.comments ?? null,
+            id: b.qualifiedTypeIdentifier(id.qualification, b.identifier('ElementConfig')),
+            typeParameters,
+          }),
+        );
+      }
+
       // React.RefAttributes -> expand its definition.
       if (
         n.QualifiedTypeIdentifier.check(id)

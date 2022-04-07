@@ -11,7 +11,7 @@ declare type MaskedViewType = $PropertyType<
   "default"
 >;
 declare type Props = {
-  ...React.ComponentProps<MaskedViewType>,
+  ...React.ElementConfig<MaskedViewType>,
   ...{
     children: React.Element<>,
     ...
