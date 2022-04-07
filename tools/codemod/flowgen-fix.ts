@@ -130,6 +130,33 @@ const importTypeAsTypeVisitor: recast.types.Visitor = {
   },
 };
 
+const reactTranslateVisitor: recast.types.Visitor = {
+  visitFlowType(path) {
+    if (n.GenericTypeAnnotation.check(path.node) && path.node.typeParameters) {
+      const { id, typeParameters } = path.node;
+
+      // React.ForwardRefExoticComponent -> React.ComponentType.
+      // Loses some nuance, but not sure if that nuance is even meaningful.
+      if (
+        // TODO this is ugly -- relying on names rather than bindings.
+        n.QualifiedTypeIdentifier.check(id)
+        && n.Identifier.check(id.qualification)
+        && id.qualification.name === 'React'
+        && n.Identifier.check(id.id)
+        && id.id.name === 'ForwardRefExoticComponent'
+      ) {
+        const r = b.genericTypeAnnotation(
+          b.qualifiedTypeIdentifier(b.identifier('React'), b.identifier('ComponentType')),
+          typeParameters,
+        );
+        r.comments = path.node.comments;
+        path.replace(r);
+      }
+    }
+    this.traverse(path);
+  },
+};
+
 export const parser = 'flow';
 
 export default function (fileInfo: any, { jscodeshift: j, report }: any) {
@@ -137,5 +164,6 @@ export default function (fileInfo: any, { jscodeshift: j, report }: any) {
   const ast = recast.parse(fileInfo.source, { parser: flowParser });
   recast.visit(ast, importRedirectVisitor);
   recast.visit(ast, importTypeAsTypeVisitor);
+  recast.visit(ast, reactTranslateVisitor);
   return recast.print(ast).code;
 }

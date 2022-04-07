@@ -8,7 +8,7 @@
 import * as React from "react";
 import { View } from "react-native";
 import { type ViewProps } from "react-native/Libraries/Components/View/ViewPropTypes";
-declare var _default: React.ForwardRefExoticComponent<{
+declare var _default: React.ComponentType<{
   ...ViewProps,
   ...{
     enabled: boolean,
