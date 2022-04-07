@@ -60,7 +60,7 @@ declare type Props = {
     styleInterpolator: StackCardStyleInterpolator,
     containerStyle?: $ReactNative$GenericStyleProp<ViewStyle>,
     contentStyle?: $ReactNative$GenericStyleProp<ViewStyle>,
-    ...
+    // TODO(flowgen): when spreading into exact, make also exact
   },
 };
 declare export default class Card mixins React.Component<Props> {
