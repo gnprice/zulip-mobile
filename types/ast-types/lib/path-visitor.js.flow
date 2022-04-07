@@ -8,14 +8,15 @@
 
 
 import {
-            Fork,Omit
+            type Fork, type Omit
             } from '../types';
 import {
             ASTNode
             } from './types';
 import {
-            NodePath
+            type NodePath
             } from './node-path';
+          import * as visitor from '../gen/visitor';
 export interface PathVisitor {
 _reusableContextStack: any,
 _methodNameTable: any,
@@ -35,10 +36,10 @@ releaseContext(context: any): void,
 reportChanged(): void,
 wasChangeReported(): any,
 } export interface PathVisitorStatics {
-fromMethodsObject(methods?: any): Visitor,
+fromMethodsObject(methods?: any): visitor.Visitor<any>,
 visit<M>(
 node: ASTNode,
-methods?: $PropertyType<$Exports<"../gen/visitor">, "Visitor">): any,
+methods?: visitor.Visitor<M>): any,
 } export type PathVisitorConstructor = {
 new (): PathVisitor,...
 } & PathVisitorStatics
@@ -48,7 +49,7 @@ export type VisitorConstructor = {
 new (): Visitor,...
 } & PathVisitorStatics
 export interface VisitorMethods {
-[visitorMethod: string]: (path: NodePath) => any,
+[visitorMethod: string]: (path: NodePath<any, any>) => any,
 } export interface SharedContextMethods {
 currentPath: any,
 needToCallTraverse: boolean,

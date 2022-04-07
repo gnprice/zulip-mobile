@@ -19,6 +19,8 @@ type $FlowGen$Assignable<A, B> = $Call<
 >;
 
 import { type Fork } from "../types";
+import { type NamedTypes } from "../gen/namedTypes";
+import { builders } from "../gen/builders";
 declare type Deep = boolean | ((type: Type<any>, value: any) => void);
 export type Type<T> =
   | ArrayType<T>
@@ -39,10 +41,10 @@ declare class BaseType<T> {
   arrayOf(): Type<T[]>;
 }
 declare class ArrayType<T> mixins BaseType<T> {
-  +elemType: Type<$FlowGen$If<$FlowGen$Assignable<T, E[]>, E, empty>>;
+  +elemType: Type<$Call<(<E>($ReadOnlyArray<E>) => E) & <T>(T) => empty, T>>;
   +kind: "ArrayType";
   constructor(
-    elemType: Type<$FlowGen$If<$FlowGen$Assignable<T, E[]>, E, empty>>
+    elemType: Type<$Call<(<E>($ReadOnlyArray<E>) => E) & <T>(T) => empty, T>>
   ): this;
   toString(): string;
   check(value: any, deep?: Deep): boolean;
@@ -109,7 +111,7 @@ declare export class Def<T = any> {
   field(name: string, type: any, defaultFn?: Function, hidden?: boolean): this;
   finalize(): void;
 }
-declare class Field<T> {
+declare class Field$class<T> {
   +name: string;
   +type: Type<T>;
   +defaultFn?: Function | void;
@@ -126,8 +128,7 @@ declare class Field<T> {
     ...
   }): any;
 }
-declare type FieldType<T> = Field<T>;
-declare export { FieldType as Field };
+export type Field<T> = Field$class<T>;
 export interface ASTNode {
   type: string;
 }
@@ -167,11 +168,11 @@ declare export default function typesPlugin(_fork: Fork): {
     [typeName: string]: any,
     ...
   },
-  builders: $PropertyType<$Exports<"../gen/builders">, "builders">,
+  builders: builders,
   defineMethod: (name: any, func?: Function | void) => Function,
   getBuilderName: (typeName: any) => any,
   getStatementBuilderName: (typeName: any) => any,
-  namedTypes: $PropertyType<$Exports<"../gen/namedTypes">, "NamedTypes">,
+  namedTypes: NamedTypes,
   getFieldNames: (object: any) => string[],
   getFieldValue: (object: any, fieldName: any) => any,
   eachField: (

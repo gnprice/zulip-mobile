@@ -5,8 +5,8 @@
  * @flow
  */
 
-import { NodePath } from "../lib/node-path";
-import { Context } from "../lib/path-visitor";
+import { type NodePath } from "../lib/node-path";
+import { type Context } from "../lib/path-visitor";
 import { namedTypes } from "./namedTypes";
 export interface Visitor<M = { ... }> {
   visitPrintable?: (path: NodePath<any>) => any;

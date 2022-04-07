@@ -6,8 +6,9 @@
  */
 
 import { type Fork } from "../types";
+import { type Type } from '../lib/types'
 declare export default function fn(fork: Fork): {
-  geq: (than: any) => $PropertyType<$Exports<"./types">, "Type">,
+  geq: (than: any) => Type<any>,
   defaults: {
     null: () => null,
     emptyArray: () => empty[],
@@ -17,6 +18,6 @@ declare export default function fn(fork: Fork): {
     "use strict": () => string,
     ...
   },
-  isPrimitive: $PropertyType<$Exports<"./types">, "Type">,
+  isPrimitive: Type<any>,
   ...
 };

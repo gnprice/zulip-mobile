@@ -8,13 +8,13 @@
 
 
 import {
-            Omit
+            type Omit
             } from '../types';
 import {
-            Type
+            type Type
             } from '../lib/types';
 import * as K from './kinds';
-declare var namedTypes: any;
+declare export var namedTypes: any;
 
       declare var npm$namespace$namedTypes: any;
 

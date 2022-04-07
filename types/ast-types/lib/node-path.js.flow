@@ -13,7 +13,7 @@ export type NodePath<N = any, V = any> = {
   node: N,
   parent: any,
   scope: any,
-  replace: $PropertyType<Path, "replace">,
+  replace: $PropertyType<Path<V>, "replace">,
   prune(...args: any[]): any,
   _computeNode(): any,
   _computeParent(): any,

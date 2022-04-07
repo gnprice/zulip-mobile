@@ -5,8 +5,9 @@
  * @flow
  */
 
-import { ASTNode, Type, AnyType, Field } from "./lib/types";
-import { NodePath } from "./lib/node-path";
+import { ASTNode, AnyType, type Field } from "./lib/types";
+import * as types from './lib/types';
+// import { type NodePath } from "./lib/node-path";
 import { namedTypes } from "./gen/namedTypes";
 import { builders } from "./gen/builders";
 import { Visitor } from "./gen/visitor";
@@ -15,7 +16,6 @@ declare var astNodesAreEquivalent: {
   assert(a: any, b: any): void,
   ...
 };
-declare var builders: builders;
 declare var builtInTypes: {
   string: Type<string>,
   function: Type<Function>,
@@ -43,29 +43,28 @@ declare var getBuilderName: (typeName: any) => any;
 declare var getFieldNames: (object: any) => string[];
 declare var getFieldValue: (object: any, fieldName: any) => any;
 declare var getSupertypeNames: (typeName: string) => string[];
-declare var NodePath: $PropertyType<
-  $Exports<"./lib/node-path">,
-  "NodePathConstructor"
->;
-declare var Path: $PropertyType<$Exports<"./lib/path">, "PathConstructor">;
-declare var PathVisitor: $PropertyType<
-  $Exports<"./lib/path-visitor">,
-  "PathVisitorConstructor"
->;
+import { NodePathConstructor } from './lib/node-path'
+declare var NodePath: NodePathConstructor;
+import { PathConstructor } from './lib/path'
+declare var Path: PathConstructor;
+import { type PathVisitorConstructor } from './lib/path-visitor'
+declare var PathVisitor: PathVisitorConstructor;
 declare var someField: (
   object: any,
   callback: (name: any, value: any) => any,
   context?: any
 ) => boolean;
 declare var Type: {
-  or(...types: any[]): Type<any>,
-  from<T>(value: any, name?: string | void): Type<T>,
-  def(typeName: string): $PropertyType<$Exports<"./lib/types">, "Def">,
+  or(...types: any[]): types.Type<any>,
+  from<T>(value: any, name?: string | void): types.Type<T>,
+  def(typeName: string): types.Def<any>,
   hasDef(typeName: string): boolean,
   ...
 };
-declare var use: <T>(plugin: $PropertyType<$Exports<"./types">, "Plugin">) => T;
+import { type Plugin } from './types'
+declare var use: <T>(plugin: Plugin<T>) => T;
 declare var visit: <M>(node: ASTNode, methods?: Visitor<M> | void) => any;
+// export { type Field } from './lib/types';
 declare export {
   AnyType,
   ASTNode,
@@ -74,7 +73,6 @@ declare export {
   builtInTypes,
   defineMethod,
   eachField,
-  Field,
   finalize,
   getBuilderName,
   getFieldNames,
