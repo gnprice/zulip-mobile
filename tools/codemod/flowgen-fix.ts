@@ -66,8 +66,6 @@ export default function (fileInfo: any, { jscodeshift: j, report }: any) {
 
   const ast = recast.parse(fileInfo.source, { parser: flowParser });
 
-  let changed = false;
-
   recast.visit(ast, {
     visitImportDeclaration(path) {
       const { source, specifiers, importKind, comments } = path.node;
@@ -110,7 +108,6 @@ export default function (fileInfo: any, { jscodeshift: j, report }: any) {
         path.prune();
       }
 
-      changed = true;
       return false;
     },
   });
@@ -135,15 +132,10 @@ export default function (fileInfo: any, { jscodeshift: j, report }: any) {
         r.importKind = 'type';
         r.comments = comments;
         path.replace(r);
-        changed = true;
       }
       return false;
     },
   });
 
-  if (changed) {
-    console.log('Writing', fileInfo.path);
-    return recast.print(ast).code;
-  }
-  return fileInfo.source;
+  return recast.print(ast).code;
 }
