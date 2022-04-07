@@ -121,19 +121,19 @@ export type Scene<T> = {
     /**
      * Progress value of the current screen.
      */
-    current: Animated.AnimatedInterpolation,
+    current: Animated.Interpolation,
 
     /**
      * Progress value for the screen after this one in the stack.
      * This can be `undefined` in case the screen animating is the last one.
      */
-    next?: Animated.AnimatedInterpolation,
+    next?: Animated.Interpolation,
 
     /**
      * Progress value for the screen before this one in the stack.
      * This can be `undefined` in case the screen animating is the first one.
      */
-    previous?: Animated.AnimatedInterpolation,
+    previous?: Animated.Interpolation,
     ...
   },
   ...
@@ -597,7 +597,7 @@ export type StackCardInterpolationProps = {
     /**
      * Animated node representing the progress value of the current screen.
      */
-    progress: Animated.AnimatedInterpolation,
+    progress: Animated.Interpolation,
     ...
   },
 
@@ -609,7 +609,7 @@ export type StackCardInterpolationProps = {
     /**
      * Animated node representing the progress value of the next screen.
      */
-    progress: Animated.AnimatedInterpolation,
+    progress: Animated.Interpolation,
     ...
   },
 
@@ -621,17 +621,17 @@ export type StackCardInterpolationProps = {
   /**
    * Animated node representing whether the card is closing (1 - closing, 0 - not closing).
    */
-  closing: Animated.AnimatedInterpolation,
+  closing: Animated.Interpolation,
 
   /**
    * Animated node representing whether the card is being swiped (1 - swiping, 0 - not swiping).
    */
-  swiping: Animated.AnimatedInterpolation,
+  swiping: Animated.Interpolation,
 
   /**
    * Animated node representing multiplier when direction is inverted (-1 - inverted, 1 - normal).
    */
-  inverted: Animated.AnimatedInterpolation,
+  inverted: Animated.Interpolation,
 
   /**
    * Layout measurements for various items we use for animation.
@@ -689,7 +689,7 @@ export type StackHeaderInterpolationProps = {
     /**
      * Animated node representing the progress value of the current screen.
      */
-    progress: Animated.AnimatedInterpolation,
+    progress: Animated.Interpolation,
     ...
   },
 
@@ -701,7 +701,7 @@ export type StackHeaderInterpolationProps = {
     /**
      * Animated node representing the progress value of the next screen.
      */
-    progress: Animated.AnimatedInterpolation,
+    progress: Animated.Interpolation,
     ...
   },
 

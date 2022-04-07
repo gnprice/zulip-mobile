@@ -14,7 +14,7 @@ import { Animated } from "react-native";
  * @param fallback Animated Node to use if the condition is `false`
  */
 declare export default function conditional(
-  condition: Animated.AnimatedInterpolation,
-  main: Animated.AnimatedInterpolation,
-  fallback: Animated.AnimatedInterpolation
+  condition: Animated.Interpolation,
+  main: Animated.Interpolation,
+  fallback: Animated.Interpolation
 ): Animated.AnimatedAddition;

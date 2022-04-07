@@ -202,6 +202,26 @@ const ReactNativeTranslateVisitor: () => recast.types.Visitor = () => {
       return false;
     },
 
+    visitQualifiedTypeIdentifier(path) {
+      // Rewrite Animated.AnimatedInterpolation -> Animated.Interpolation.
+      // TODO: Implicitly assuming `import { Animated } from 'react-native'`.
+      // This seems like just an error in the TS definitions.
+      if (
+        n.Identifier.check(path.node.qualification)
+        && path.node.qualification.name === 'Animated'
+        && path.node.id.name === 'AnimatedInterpolation'
+      ) {
+        path.replace(
+          b.qualifiedTypeIdentifier.from({
+            comments: path.node.comments ?? null,
+            qualification: path.node.qualification,
+            id: b.identifier('Interpolation'),
+          }),
+        );
+      }
+      this.traverse(path);
+    },
+
     visitGenericTypeAnnotation(path) {
       // TODO these matchers are ugly -- relying on names rather than bindings.
 

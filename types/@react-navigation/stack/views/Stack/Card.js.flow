@@ -21,8 +21,8 @@ declare type Props = {
   ...{
     index: number,
     closing: boolean,
-    next?: Animated.AnimatedInterpolation,
-    current: Animated.AnimatedInterpolation,
+    next?: Animated.Interpolation,
+    current: Animated.Interpolation,
     gesture: Animated.Value,
     layout: Layout,
     insets: EdgeInsets,
