@@ -32,7 +32,7 @@ import assert from 'assert';
 
 const rewrites = {
   'react-native': {
-    TextProps: 'react-native/Libraries/Text/TextPropTypes',
+    TextProps: 'react-native/Libraries/Text/TextProps',
     TextStyle: 'react-native/Libraries/StyleSheet/StyleSheet',
     ViewProps: 'react-native/Libraries/Components/View/ViewPropTypes',
     ViewStyle: 'react-native/Libraries/StyleSheet/StyleSheet',
@@ -99,6 +99,7 @@ const importRedirectVisitor: recast.types.Visitor = {
 const nonvalues = new Map([
   ['react-native/Libraries/Components/View/ViewPropTypes', new Set(['ViewProps'])],
   ['react-native/Libraries/StyleSheet/StyleSheet', new Set(['TextStyle', 'ViewStyle'])],
+  ['react-native/Libraries/Text/TextProps', new Set(['TextProps'])],
   [
     '@react-navigation/native',
     new Set(['ParamListBase', 'Route', 'StackRouterOptions', 'StackNavigationState']),

@@ -9,7 +9,7 @@ import { Animated } from "react-native";
 
 import { type TextStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
 
-import { TextProps } from "react-native/Libraries/Text/TextPropTypes";
+import { type TextProps } from "react-native/Libraries/Text/TextProps";
 declare type Props = {
   ...$Diff<TextProps, { style: any }>,
   ...{
