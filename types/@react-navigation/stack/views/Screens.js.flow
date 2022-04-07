@@ -6,7 +6,8 @@
  */
 
 import * as React from "react";
-import { Animated, ViewProps } from "react-native";
+import { Animated } from "react-native";
+import { ViewProps } from "react-native/Libraries/Components/View/ViewPropTypes";
 declare export var shouldUseActivityState: any;
 declare export var MaybeScreenContainer: (x: {
   ...ViewProps,

@@ -5,7 +5,11 @@
  * @flow
  */
 
-import { Animated, TextProps, StyleProp, TextStyle } from "react-native";
+import { Animated, StyleProp } from "react-native";
+
+import { TextStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
+
+import { TextProps } from "react-native/Libraries/Text/TextPropTypes";
 declare type Props = {
   ...$Diff<TextProps, { style: any }>,
   ...{

@@ -5,7 +5,9 @@
  * @flow
  */
 
-import { StyleProp, ViewStyle } from "react-native";
+import { StyleProp } from "react-native";
+
+import { ViewStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
 import { Route } from "@react-navigation/native";
 import type { EdgeInsets } from "react-native-safe-area-context";
 import type {

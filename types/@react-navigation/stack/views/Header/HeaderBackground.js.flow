@@ -6,7 +6,9 @@
  */
 
 import * as React from "react";
-import { Animated, ViewProps, StyleProp, ViewStyle } from "react-native";
+import { Animated, StyleProp } from "react-native";
+import { ViewStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
+import { ViewProps } from "react-native/Libraries/Components/View/ViewPropTypes";
 declare type Props = {
   ...ViewProps,
   ...{
