@@ -7,7 +7,7 @@
 
 import { StyleProp } from "react-native";
 
-import { ViewStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
+import { type ViewStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
 import { Route } from "@react-navigation/native";
 import type { EdgeInsets } from "react-native-safe-area-context";
 import type {

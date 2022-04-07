@@ -7,7 +7,7 @@
 
 import { Animated, StyleProp } from "react-native";
 
-import { TextStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
+import { type TextStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
 
 import { TextProps } from "react-native/Libraries/Text/TextPropTypes";
 declare type Props = {

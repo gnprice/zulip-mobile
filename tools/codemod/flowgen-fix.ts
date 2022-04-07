@@ -43,6 +43,7 @@ const rewrites = {
 
 const nonvalues = new Map([
   ['react-native/Libraries/Components/View/ViewPropTypes', new Set(['ViewProps'])],
+  ['react-native/Libraries/StyleSheet/StyleSheet', new Set(['TextStyle', 'ViewStyle'])],
 ]);
 
 export default function (fileInfo: any, { jscodeshift: j, report }: any) {
