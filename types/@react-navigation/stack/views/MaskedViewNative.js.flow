@@ -6,10 +6,9 @@
  */
 
 import * as React from "react";
-declare type MaskedViewType = $PropertyType<
-  $Exports<"@react-native-community/masked-view">,
-  "default"
->;
+// TODO automate this import (though seems like a Flow bug that it doesn't work in the first place)
+import * as mv from "@react-native-community/masked-view";
+type MaskedViewType = typeof mv.default;
 declare type Props = {
   ...React.ElementConfig<MaskedViewType>,
   ...{
