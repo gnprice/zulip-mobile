@@ -77,7 +77,6 @@ export default function (fileInfo: any, { jscodeshift: j, report }: any) {
 
       for (const [specifier, sourceName] of moves.entries()) {
         const added = b.importDeclaration([specifier], b.stringLiteral(sourceName), importKind);
-        console.log(added);
         path.insertAfter(added);
       }
 
@@ -85,10 +84,8 @@ export default function (fileInfo: any, { jscodeshift: j, report }: any) {
       if (remaining.length) {
         const shorter = b.importDeclaration(remaining, source, importKind);
         shorter.comments = comments;
-        console.log(shorter);
         path.replace(shorter);
       } else {
-        console.log('pruning');
         path.prune();
       }
 
