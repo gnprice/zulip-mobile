@@ -8,7 +8,7 @@
 import * as React from "react";
 import { Animated, StyleProp } from "react-native";
 import { ViewStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
-import { ViewProps } from "react-native/Libraries/Components/View/ViewPropTypes";
+import { type ViewProps } from "react-native/Libraries/Components/View/ViewPropTypes";
 import type { EdgeInsets } from "react-native-safe-area-context";
 import type {
   TransitionSpec,
