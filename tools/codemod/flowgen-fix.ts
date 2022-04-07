@@ -107,10 +107,14 @@ export default function (fileInfo: any, { jscodeshift: j, report }: any) {
       if (!n.StringLiteral.check(source)) {
         return false;
       }
-      const { imported, local, importKind, comment } = path.node;
-      if (importKind !== 'type' && nonvalues.get(source.value)?.has(imported)) {
-        const r = b.importSpecifier(imported, local, 'type');
-        r.comment = comment;
+      const { imported, local, comments } = path.node;
+      // @ts-expect-error importKind missing in ast-types, but does exist
+      const { importKind } = path.node;
+      if (importKind !== 'type' && nonvalues.get(source.value)?.has(imported.name)) {
+        const r = b.importSpecifier(imported, local);
+        // @ts-expect-error importKind missing in ast-types, but does get used
+        r.importKind = 'type';
+        r.comments = comments;
         path.replace(r);
         changed = true;
       }
