@@ -22,6 +22,7 @@ declare type Props = {
 };
 declare function StackNavigator(x: Props): React$Node;
 declare var _default: <
-  ParamList: { [key: string]: { [key: string]: any } | void, ... }
+  // TODO(flowgen-fix): somehow automate this covariance
+  ParamList: { +[key: string]: { [key: string]: any } | void, ... }
 >() => $PropertyType<$Exports<"@react-navigation/native">, "TypedNavigator">;
 declare export default typeof _default;
