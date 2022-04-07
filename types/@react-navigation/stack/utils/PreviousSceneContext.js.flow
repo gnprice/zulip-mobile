@@ -6,7 +6,7 @@
  */
 
 import * as React from "react";
-import type { Route } from "@react-navigation/native";
+import type { type Route } from "@react-navigation/native";
 import type { Scene } from "../types";
 declare var PreviousSceneContext: React.Context<Scene<
   Route<string, { [key: string]: any } | void>

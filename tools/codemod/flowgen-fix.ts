@@ -41,9 +41,24 @@ const rewrites = {
   },
 };
 
+/** Fixes for Flow `import-type-as-value` errors. */
+/* Ideally we'd get these from running Flow and seeing the errors.
+   That could start with something like:
+   $ npx flow --strip-root --json \
+     | jq '.errors[]
+           | select(.error_codes[0] == "import-type-as-value")
+           | .message[0]
+           | { path, descr }  # for a JSON object
+           # or: | "\(.path):\(.line):\n    \(.descr)\n"  # for a human-convenient format
+          ' -r
+ */
 const nonvalues = new Map([
   ['react-native/Libraries/Components/View/ViewPropTypes', new Set(['ViewProps'])],
   ['react-native/Libraries/StyleSheet/StyleSheet', new Set(['TextStyle', 'ViewStyle'])],
+  [
+    '@react-navigation/native',
+    new Set(['ParamListBase', 'Route', 'StackRouterOptions', 'StackNavigationState']),
+  ],
 ]);
 
 export default function (fileInfo: any, { jscodeshift: j, report }: any) {

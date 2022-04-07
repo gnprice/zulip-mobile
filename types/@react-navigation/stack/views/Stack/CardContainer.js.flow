@@ -8,7 +8,7 @@
 import * as React from "react";
 import { Animated, StyleProp } from "react-native";
 import { type ViewStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
-import { Route } from "@react-navigation/native";
+import { type Route } from "@react-navigation/native";
 import type { Props as HeaderContainerProps } from "../Header/HeaderContainer";
 import type {
   Scene,

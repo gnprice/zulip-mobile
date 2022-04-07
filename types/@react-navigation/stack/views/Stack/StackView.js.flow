@@ -7,9 +7,9 @@
 
 import * as React from "react";
 import {
-  StackNavigationState,
-  Route,
-  ParamListBase,
+  type StackNavigationState,
+  type Route,
+  type ParamListBase,
 } from "@react-navigation/native";
 import type {
   StackNavigationHelpers,

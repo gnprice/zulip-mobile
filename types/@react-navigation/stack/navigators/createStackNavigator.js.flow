@@ -7,8 +7,8 @@
 
 import {
   DefaultNavigatorOptions,
-  StackRouterOptions,
-  StackNavigationState,
+  type StackRouterOptions,
+  type StackNavigationState,
 } from "@react-navigation/native";
 import type {
   StackNavigationConfig,
