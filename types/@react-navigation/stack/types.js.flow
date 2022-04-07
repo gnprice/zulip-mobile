@@ -7,8 +7,8 @@
 
 import * as React from "react";
 import type { Animated, StyleProp, LayoutChangeEvent } from "react-native";
-import type { type TextStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
-import type { type ViewStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
+import type { TextStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
+import type { ViewStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
 import type { EdgeInsets } from "react-native-safe-area-context";
 import type {
   NavigationProp,
