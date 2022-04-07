@@ -133,12 +133,13 @@ const importTypeAsTypeVisitor: recast.types.Visitor = {
 const reactTranslateVisitor: recast.types.Visitor = {
   visitFlowType(path) {
     if (n.GenericTypeAnnotation.check(path.node) && path.node.typeParameters) {
+      // TODO these matchers are ugly -- relying on names rather than bindings.
+
       const { id, typeParameters } = path.node;
 
       // React.ForwardRefExoticComponent -> React.ComponentType.
       // Loses some nuance, but not sure if that nuance is even meaningful.
       if (
-        // TODO this is ugly -- relying on names rather than bindings.
         n.QualifiedTypeIdentifier.check(id)
         && n.Identifier.check(id.qualification)
         && id.qualification.name === 'React'
@@ -155,7 +156,6 @@ const reactTranslateVisitor: recast.types.Visitor = {
 
       // React.RefAttributes -> expand its definition.
       if (
-        // TODO this is ugly -- relying on names rather than bindings.
         n.QualifiedTypeIdentifier.check(id)
         && n.Identifier.check(id.qualification)
         && id.qualification.name === 'React'
@@ -181,6 +181,84 @@ const reactTranslateVisitor: recast.types.Visitor = {
   },
 };
 
+const ReactNativeTranslateVisitor: () => recast.types.Visitor = () => {
+  const genericStylePropIdentifier = b.identifier('$ReactNative$GenericStyleProp');
+  let needGenericStyleProp = false;
+
+  return {
+    visitImportSpecifier(path) {
+      const parent = path.parentPath.node;
+      let source, imported;
+      if (
+        n.ImportDeclaration.check(parent)
+        && ((source = parent.source), true)
+        && n.StringLiteral.check(source)
+        && source.value === 'react-native'
+        && ((imported = path.node.imported), true)
+        && imported.name === 'StyleProp'
+      ) {
+        path.prune();
+      }
+      return false;
+    },
+
+    visitGenericTypeAnnotation(path) {
+      // TODO these matchers are ugly -- relying on names rather than bindings.
+
+      const { id, typeParameters } = path.node;
+
+      // StyleProp is in TS definitions; upstream has GenericStyleProp but
+      // doesn't export it.
+      if (
+        // TODO super ugly -- what if you happen to have same name?
+        n.Identifier.check(id)
+        && id.name === 'StyleProp'
+      ) {
+        needGenericStyleProp = true;
+        path.replace(
+          b.genericTypeAnnotation.from({
+            comments: path.node.comments ?? null,
+            id: genericStylePropIdentifier,
+            typeParameters,
+          }),
+        );
+      }
+
+      this.traverse(path);
+    },
+
+    visitProgram(path) {
+      this.traverse(path);
+      if (needGenericStyleProp) {
+        // We inserted a reference to genericStylePropIdentifier.
+        // Add a definition for it.
+        path.node.body.push(
+          b.declareTypeAlias(
+            genericStylePropIdentifier,
+            b.typeParameterDeclaration([b.typeParameter('T')]),
+            b.unionTypeAnnotation([
+              b.nullTypeAnnotation(),
+              b.voidTypeAnnotation(),
+              b.typeParameter('T'),
+              b.booleanLiteralTypeAnnotation(false, 'false'),
+              b.stringLiteralTypeAnnotation('', "''"),
+              b.genericTypeAnnotation(
+                b.identifier('$ReadOnlyArray'),
+                b.typeParameterInstantiation([
+                  b.genericTypeAnnotation(
+                    genericStylePropIdentifier,
+                    b.typeParameterInstantiation([b.typeParameter('T')]),
+                  ),
+                ]),
+              ),
+            ]),
+          ),
+        );
+      }
+    },
+  };
+};
+
 export const parser = 'flow';
 
 export default function (fileInfo: any, { jscodeshift: j, report }: any) {
@@ -189,5 +267,6 @@ export default function (fileInfo: any, { jscodeshift: j, report }: any) {
   recast.visit(ast, importRedirectVisitor);
   recast.visit(ast, importTypeAsTypeVisitor);
   recast.visit(ast, reactTranslateVisitor);
+  recast.visit(ast, ReactNativeTranslateVisitor());
   return recast.print(ast).code;
 }

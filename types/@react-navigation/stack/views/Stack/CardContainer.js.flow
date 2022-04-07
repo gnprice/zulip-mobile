@@ -6,7 +6,7 @@
  */
 
 import * as React from "react";
-import { Animated, StyleProp } from "react-native";
+import { Animated } from "react-native";
 import { type ViewStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
 import { type Route } from "@react-navigation/native";
 import type { Props as HeaderContainerProps } from "../Header/HeaderContainer";
@@ -32,12 +32,12 @@ declare type Props = {
     safeAreaInsetBottom: number,
     safeAreaInsetLeft: number,
     cardOverlay?: (props: {
-      style: Animated.WithAnimatedValue<StyleProp<ViewStyle>>,
+      style: Animated.WithAnimatedValue<$ReactNative$GenericStyleProp<ViewStyle>>,
       ...
     }) => React.Node,
     cardOverlayEnabled?: boolean,
     cardShadowEnabled?: boolean,
-    cardStyle?: StyleProp<ViewStyle>,
+    cardStyle?: $ReactNative$GenericStyleProp<ViewStyle>,
     getPreviousScene: (props: {
       route: Route<string>,
       ...
@@ -109,3 +109,4 @@ declare type Props = {
 declare function CardContainer(x: Props): React$Node;
 declare var _default: React.MemoExoticComponent<typeof CardContainer>;
 declare export default typeof _default;
+type $ReactNative$GenericStyleProp<T> = null | void | T | false | "" | $ReadOnlyArray<$ReactNative$GenericStyleProp<T>>;

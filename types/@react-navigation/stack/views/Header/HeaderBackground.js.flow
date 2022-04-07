@@ -6,16 +6,17 @@
  */
 
 import * as React from "react";
-import { Animated, StyleProp } from "react-native";
+import { Animated } from "react-native";
 import { type ViewStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
 import { type ViewProps } from "react-native/Libraries/Components/View/ViewPropTypes";
 declare type Props = {
   ...ViewProps,
   ...{
-    style?: Animated.WithAnimatedValue<StyleProp<ViewStyle>>,
+    style?: Animated.WithAnimatedValue<$ReactNative$GenericStyleProp<ViewStyle>>,
     children?: React.Node,
     ...
   },
 };
 declare export default function HeaderBackground(x: Props): React$Node;
 declare export {};
+type $ReactNative$GenericStyleProp<T> = null | void | T | false | "" | $ReadOnlyArray<$ReactNative$GenericStyleProp<T>>;

@@ -6,7 +6,7 @@
  */
 
 import * as React from "react";
-import type { Animated, StyleProp, LayoutChangeEvent } from "react-native";
+import type { Animated, LayoutChangeEvent } from "react-native";
 import type { ViewStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
 import type { TextStyle } from "react-native/Libraries/StyleSheet/StyleSheet";
 import type { EdgeInsets } from "react-native-safe-area-context";
@@ -158,7 +158,7 @@ export type StackHeaderOptions = {
   /**
    * Style object for the title component.
    */
-  headerTitleStyle?: Animated.WithAnimatedValue<StyleProp<TextStyle>>,
+  headerTitleStyle?: Animated.WithAnimatedValue<$ReactNative$GenericStyleProp<TextStyle>>,
 
   /**
    * Style object for the container of the `headerTitle` component, for example to add padding.
@@ -166,7 +166,7 @@ export type StackHeaderOptions = {
    * This may lead to white space or overlap between `headerLeft` and `headerTitle` if a customized `headerLeft` is used.
    * It can be solved by adjusting `left` and `right` style in `headerTitleContainerStyle` and `marginHorizontal` in `headerTitleStyle`.
    */
-  headerTitleContainerStyle?: Animated.WithAnimatedValue<StyleProp<ViewStyle>>,
+  headerTitleContainerStyle?: Animated.WithAnimatedValue<$ReactNative$GenericStyleProp<ViewStyle>>,
 
   /**
    * Tint color for the header.
@@ -197,7 +197,7 @@ export type StackHeaderOptions = {
   /**
    * Style object for the back title.
    */
-  headerBackTitleStyle?: StyleProp<TextStyle>,
+  headerBackTitleStyle?: $ReactNative$GenericStyleProp<TextStyle>,
 
   /**
    * A reasonable default is supplied for whether the back button title should be visible or not.
@@ -219,7 +219,7 @@ export type StackHeaderOptions = {
   /**
    * Style object for the container of the `headerLeft` component, for example to add padding.
    */
-  headerLeftContainerStyle?: Animated.WithAnimatedValue<StyleProp<ViewStyle>>,
+  headerLeftContainerStyle?: Animated.WithAnimatedValue<$ReactNative$GenericStyleProp<ViewStyle>>,
 
   /**
    * Function which returns a React Element to display on the right side of the header.
@@ -232,7 +232,7 @@ export type StackHeaderOptions = {
   /**
    * Style object for the container of the `headerRight` component, for example to add padding.
    */
-  headerRightContainerStyle?: Animated.WithAnimatedValue<StyleProp<ViewStyle>>,
+  headerRightContainerStyle?: Animated.WithAnimatedValue<$ReactNative$GenericStyleProp<ViewStyle>>,
 
   /**
    * Function which returns a React Element to display custom image in header's back button.
@@ -252,14 +252,14 @@ export type StackHeaderOptions = {
    * You can use this with `headerTransparent` to render a blur view, for example, to create a translucent header.
    */
   headerBackground?: (props: {
-    style: StyleProp<ViewStyle>,
+    style: $ReactNative$GenericStyleProp<ViewStyle>,
     ...
   }) => React.Node,
 
   /**
    * Style object for the header. You can specify a custom background color here, for example.
    */
-  headerStyle?: Animated.WithAnimatedValue<StyleProp<ViewStyle>>,
+  headerStyle?: Animated.WithAnimatedValue<$ReactNative$GenericStyleProp<ViewStyle>>,
 
   /**
    * Defaults to `false`. If `true`, the header will not have a background unless you explicitly provide it with `headerBackground`.
@@ -359,7 +359,7 @@ export type StackNavigationOptions = {
      * Function that returns a React Element to display as a overlay for the card.
      */
     cardOverlay?: (props: {
-      style: Animated.WithAnimatedValue<StyleProp<ViewStyle>>,
+      style: Animated.WithAnimatedValue<$ReactNative$GenericStyleProp<ViewStyle>>,
       ...
     }) => React.Node,
 
@@ -372,7 +372,7 @@ export type StackNavigationOptions = {
      * If you use [`react-native-screens`](https://github.com/kmagiera/react-native-screens), you should also specify `mode: 'modal'`
      * in the stack view config when using a transparent background so previous screens aren't detached.
      */
-    cardStyle?: StyleProp<ViewStyle>,
+    cardStyle?: $ReactNative$GenericStyleProp<ViewStyle>,
 
     /**
      * Whether transition animation should be enabled the screen.
@@ -507,7 +507,7 @@ export type StackHeaderLeftButtonProps = {
   /**
    * Style object for the label.
    */
-  labelStyle?: Animated.WithAnimatedValue<StyleProp<TextStyle>>,
+  labelStyle?: Animated.WithAnimatedValue<$ReactNative$GenericStyleProp<TextStyle>>,
 
   /**
    * Whether label font should scale to respect Text Size accessibility settings.
@@ -542,7 +542,7 @@ export type StackHeaderLeftButtonProps = {
   /**
    * Style object for the button.
    */
-  style?: StyleProp<ViewStyle>,
+  style?: $ReactNative$GenericStyleProp<ViewStyle>,
   ...
 };
 export type StackHeaderTitleProps = {
@@ -569,7 +569,7 @@ export type StackHeaderTitleProps = {
   /**
    * Style object for the title element.
    */
-  style?: Animated.WithAnimatedValue<StyleProp<TextStyle>>,
+  style?: Animated.WithAnimatedValue<$ReactNative$GenericStyleProp<TextStyle>>,
   ...
 };
 export type TransitionSpec =
@@ -795,3 +795,4 @@ export type TransitionPreset = {
   headerStyleInterpolator: StackHeaderStyleInterpolator,
   ...
 };
+type $ReactNative$GenericStyleProp<T> = null | void | T | false | "" | $ReadOnlyArray<$ReactNative$GenericStyleProp<T>>;
