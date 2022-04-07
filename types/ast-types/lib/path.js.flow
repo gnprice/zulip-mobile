@@ -5,7 +5,7 @@
  * @flow
  */
 
-import { Fork } from "../types";
+import { type Fork } from "../types";
 import { ASTNode } from "./types";
 export interface Path<V = any> {
   value: V;

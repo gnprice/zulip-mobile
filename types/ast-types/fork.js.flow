@@ -5,7 +5,7 @@
  * @flow
  */
 
-import { Def, Plugin } from "./types";
+import { type Def, type Plugin } from "./types";
 declare export default function fn(defs: Def[]): {
   Type: {
     or(...types: any[]): $PropertyType<$Exports<"./lib/types">, "Type">,

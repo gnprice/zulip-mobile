@@ -5,5 +5,5 @@
  * @flow
  */
 
-import { Fork } from "../types";
+import { type Fork } from "../types";
 declare export default function fn(fork: Fork): void;

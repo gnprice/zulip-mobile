@@ -18,7 +18,7 @@ type $FlowGen$Assignable<A, B> = $Call<
   A
 >;
 
-import { Fork } from "../types";
+import { type Fork } from "../types";
 declare type Deep = boolean | ((type: Type<any>, value: any) => void);
 export type Type<T> =
   | ArrayType<T>
