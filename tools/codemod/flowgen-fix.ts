@@ -2,7 +2,7 @@
  *
  *
  * Sample usage:
- *   npx jscodeshift -t tools/codemod/….js src/
+ *   npx jscodeshift -t tools/codemod/….js src/ --extensions=js,flow
  *
  * Tips for future codemods:
  *  * A `recast` example user:
@@ -14,7 +14,11 @@
  *  * For bringing in fancier analyses from an external tool like Flow, see
  *    the technique used here -- it ends up being super simple, thankfully:
  *      https://github.com/flowtype/flow-codemod/tree/master/transforms/strict-type-args
- *
+ *    (IOW: Let the user/caller run that other tool in advance, spitting out
+ *    a JSON file with all the desired information.  Then in the codemod,
+ *    load that, taking its path as a CLI option; and cache that load/parse
+ *    between files.  In that example, the external tool is `flow --json`,
+ *    so we get Flow errors.)
  */
 
 import * as recast from 'recast';
