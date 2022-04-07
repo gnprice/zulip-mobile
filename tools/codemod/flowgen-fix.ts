@@ -52,7 +52,6 @@ export default function (fileInfo: any, { jscodeshift: j, report }: any) {
       if (source.type !== 'StringLiteral') {
         return false;
       }
-      // console.log(source.value, specifiers);
 
       const moves = new Map();
       const map = rewrites[source.value];
