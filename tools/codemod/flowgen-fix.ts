@@ -139,13 +139,16 @@ const reactTranslateVisitor: recast.types.Visitor = {
 
       // React.ForwardRefExoticComponent -> React.ComponentType
       // React.MemoExoticComponent -> React.ComponentType
+      // React.NamedExoticComponent -> React.ComponentType
       // Lose some nuances, but not sure if those nuances are even meaningful.
       if (
         n.QualifiedTypeIdentifier.check(id)
         && n.Identifier.check(id.qualification)
         && id.qualification.name === 'React'
         && n.Identifier.check(id.id)
-        && (id.id.name === 'ForwardRefExoticComponent' || id.id.name === 'MemoExoticComponent')
+        && (id.id.name === 'ForwardRefExoticComponent'
+          || id.id.name === 'MemoExoticComponent'
+          || id.id.name === 'NamedExoticComponent')
       ) {
         const r = b.genericTypeAnnotation(
           b.qualifiedTypeIdentifier(b.identifier('React'), b.identifier('ComponentType')),

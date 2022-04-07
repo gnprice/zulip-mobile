@@ -7,5 +7,5 @@
 
 import * as React from "react";
 import type { StackHeaderProps } from "../../types";
-declare var _default: React.NamedExoticComponent<StackHeaderProps>;
+declare var _default: React.ComponentType<StackHeaderProps>;
 declare export default typeof _default;
