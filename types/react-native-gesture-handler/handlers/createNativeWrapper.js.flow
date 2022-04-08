@@ -12,5 +12,8 @@ declare export default function createNativeWrapper<P>(
   config?: $ReadOnly<NativeViewGestureHandlerProps>
 ): React.ComponentType<{
   ...React.PropsWithoutRef<{ ...P, ...NativeViewGestureHandlerProps }>,
-  ...{ +ref?: typeof React.ComponentType<any> },
+  ...{
+    +ref?: React.ComponentType<any>,
+    ...
+  },
 }>;

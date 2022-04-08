@@ -34,7 +34,10 @@ export type BorderlessButtonProps = {
 declare export var RawButton: React.ComponentType<{
   ...RawButtonProps,
   ...NativeViewGestureHandlerProps,
-  ...{ +ref?: typeof React.ComponentType<any> },
+  ...{
+    +ref?: React.ComponentType<any>,
+    ...
+  },
 }>;
 declare export class BaseButton mixins React.Component<BaseButtonProps> {
   constructor(props: BaseButtonProps): this;

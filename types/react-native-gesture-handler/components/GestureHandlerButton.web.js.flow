@@ -7,5 +7,8 @@
 
 import * as React from "react";
 import { View } from "react-native";
-declare var _default: React.ComponentType<{ +ref?: typeof View }>;
+declare var _default: React.ComponentType<{
+  +ref?: View,
+  ...
+}>;
 declare export default typeof _default;

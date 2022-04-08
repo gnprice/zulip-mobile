@@ -180,29 +180,6 @@ const reactTranslateVisitor: recast.types.Visitor = {
           }),
         );
       }
-
-      // React.RefAttributes -> expand its definition.
-      if (
-        n.QualifiedTypeIdentifier.check(id)
-        && n.Identifier.check(id.qualification)
-        && id.qualification.name === 'React'
-        && n.Identifier.check(id.id)
-        && id.id.name === 'RefAttributes'
-      ) {
-        path.replace(
-          b.objectTypeAnnotation.from({
-            comments: path.node.comments ?? null,
-            properties: [
-              b.objectTypeProperty.from({
-                variance: 'plus',
-                key: b.identifier('ref'),
-                optional: true,
-                value: b.typeofTypeAnnotation(typeParameters.params[0]),
-              }),
-            ],
-          }),
-        );
-      }
     }
     this.traverse(path);
   },
