@@ -363,6 +363,73 @@ const ReactNativeTranslateVisitor: () => recast.types.Visitor = () => {
   };
 };
 
+const adhocRewriteVisitor = (filePath: string): recast.types.Visitor => {
+  const x = 1;
+  return {
+    visitProgram(path) {
+      if (filePath.endsWith('/@react-navigation/stack/types.js.flow')) {
+        for (let i = 0; i < path.node.body.length; i++) {
+          const p = path.get('body', i);
+          const s = p.node;
+          if (
+            n.ExportNamedDeclaration.check(s)
+            && n.TypeAlias.check(s.declaration)
+            && s.declaration.id.name === 'StackNavigationProp'
+          ) {
+            const pp = p.get('declaration', 'typeParameters', 'params', 1);
+            const nn = pp.node;
+            if (!n.TypeParameter.check(nn) || nn.name !== 'RouteName') {
+              console.warn(
+                'WARNING: types.js.flow > StackNavigationProp: param RouteName not found as expected',
+              );
+              return false;
+            }
+            pp.replace(b.typeParameter.from({ ...nn, variance: 'plus' }));
+            return false;
+          }
+        }
+      } else if (
+        filePath.endsWith('/@react-navigation/stack/navigators/createStackNavigator.js.flow')
+      ) {
+        for (let i = 0; i < path.node.body.length; i++) {
+          const p = path.get('body', i);
+          const s = p.node;
+          if (n.DeclareVariable.check(s) && s.id.name === '_default') {
+            if (
+              !n.TypeAnnotation.check(s.id.typeAnnotation)
+              || !n.FunctionTypeAnnotation.check(s.id.typeAnnotation.typeAnnotation)
+              || !n.TypeParameter.check(s.id.typeAnnotation.typeAnnotation.typeParameters.params[0])
+              || !n.ObjectTypeAnnotation.check(
+                s.id.typeAnnotation.typeAnnotation.typeParameters.params[0].bound.typeAnnotation,
+              )
+            ) {
+              return false;
+            }
+            // TODO Eugh, what a mess.
+            const pp = p.get(
+              'id',
+              'typeAnnotation',
+              'typeAnnotation',
+              'typeParameters',
+              'params',
+              0,
+              'bound',
+              'typeAnnotation',
+            );
+            // const nn = pp.node;
+            pp.get('indexers', 0, 'variance').replace('plus');
+            const ppp = pp.get('indexers', 0, 'value');
+            // console.log(ppp.node);
+            ppp.get('types', 0, 'indexers', 0, 'variance').replace('plus');
+            // console.log(nn);
+          }
+        }
+      }
+      return false;
+    },
+  };
+};
+
 export const parser = 'flow';
 
 export default function (fileInfo: any, { jscodeshift: j, report }: any) {
@@ -372,5 +439,6 @@ export default function (fileInfo: any, { jscodeshift: j, report }: any) {
   recast.visit(ast, importTypeAsTypeVisitor);
   recast.visit(ast, reactTranslateVisitor);
   recast.visit(ast, ReactNativeTranslateVisitor());
+  recast.visit(ast, adhocRewriteVisitor(fileInfo.path));
   return recast.print(ast).code;
 }

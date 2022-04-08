@@ -23,7 +23,7 @@ declare type Props = {
 };
 declare function StackNavigator(x: Props): React$Node;
 declare var _default: <
-  ParamList: { [key: string]: { [key: string]: any } | void, ... }
+  ParamList: { +[key: string]: { +[key: string]: any } | void, ... }
 >() => $Flowgen$Import$_40_react_2d_navigation_2f_native.TypedNavigator<
   ParamList,
   StackNavigationState<{ [key: string]: { [key: string]: any } | void, ... }>,
