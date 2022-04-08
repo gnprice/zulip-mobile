@@ -20,6 +20,9 @@ declare var _default: React.ComponentType<{
     children: React.Node,
     ...
   },
-  ...{ +ref?: typeof View },
+  ...{
+    +ref?: View,
+    ...
+  },
 }>;
 declare export default typeof _default;
