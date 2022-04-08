@@ -3,6 +3,7 @@
 
 ; We fork some components by platform
 .*/*[.]android.js
+.*/*[.]web.js
 
 ; Ignore polyfills
 node_modules/react-native/Libraries/polyfills/.*
