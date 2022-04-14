@@ -39,10 +39,10 @@ root_dir="$(readlink -f "${this_dir}"/..)"
 bin_dir="${root_dir}"/node_modules/.bin
 
 ( cd "${src}" && find -name '*.d.ts' ) \
-| while read f; do
-    f="${f#./}"
+| while read long_f; do
+    f="${long_f#./}"
     echo "${f}"
-    mkdir -p "${dest}"/"${f%/*}"
+    mkdir -p "${dest}"/"${long_f%/*}"
     "${bin_dir}"/flowgen "${src}/${f}" -o "${dest}/${f%.d.ts}.js.flow" \
         --add-flow-header
 done
