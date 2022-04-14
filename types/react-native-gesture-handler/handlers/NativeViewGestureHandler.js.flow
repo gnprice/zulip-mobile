@@ -5,6 +5,7 @@
  * @flow
  */
 
+import * as $Flowgen$Import$react from "react";
 import { BaseGestureHandlerProps } from "./gestureHandlers";
 export type NativeViewGestureHandlerProps = {
   shouldActivateOnStart?: boolean,
@@ -34,4 +35,7 @@ declare export var nativeViewProps: [
   "disallowInterruption"
 ];
 export type NativeViewGestureHandlerType = typeof NativeViewGestureHandler;
-declare export var NativeViewGestureHandler: $Exports<"react">;
+declare export var NativeViewGestureHandler: $Flowgen$Import$react.ComponentType<{
+  ...NativeViewGestureHandlerProps,
+  ...$Flowgen$Import$react.RefAttributes<any>,
+}>;
