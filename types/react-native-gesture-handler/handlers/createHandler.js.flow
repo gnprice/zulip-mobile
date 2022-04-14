@@ -21,11 +21,5 @@ declare export default function createHandler<
   U: { [key: string]: mixed, ... }
 >(
   x: CreateHandlerArgs<T>
-): React.ComponentType<{
-  ...T,
-  ...{
-    +ref?: any,
-    ...
-  },
-}>;
+): React.ComponentType<{ ...T, ...React.RefAttributes<any> }>;
 declare export {};

@@ -13,9 +13,6 @@ declare var TouchableWithoutFeedback: React.ComponentType<{
     children?: React.Node,
     ...
   },
-  ...{
-    +ref?: GenericTouchable,
-    ...
-  },
+  ...React.RefAttributes<GenericTouchable>,
 }>;
 declare export default typeof TouchableWithoutFeedback;

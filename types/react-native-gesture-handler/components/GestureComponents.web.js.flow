@@ -12,39 +12,24 @@ import { FlatListProps } from "react-native";
 declare export var ScrollView: React.ComponentType<{
   ...$Flowgen$Import$react_2d_native.ScrollViewProps,
   ...$Flowgen$Import$_2e__2e_.NativeViewGestureHandlerProps,
-  ...{
-    +ref?: React.ComponentType<any>,
-    ...
-  },
+  ...React.RefAttributes<React.ComponentType<any>>,
 }>;
 declare export var Switch: React.ComponentType<{
   ...$Flowgen$Import$react_2d_native.SwitchProps,
   ...$Flowgen$Import$_2e__2e_.NativeViewGestureHandlerProps,
-  ...{
-    +ref?: React.ComponentType<any>,
-    ...
-  },
+  ...React.RefAttributes<React.ComponentType<any>>,
 }>;
 declare export var TextInput: React.ComponentType<{
   ...$Flowgen$Import$react_2d_native.TextInputProps,
   ...$Flowgen$Import$_2e__2e_.NativeViewGestureHandlerProps,
-  ...{
-    +ref?: React.ComponentType<any>,
-    ...
-  },
+  ...React.RefAttributes<React.ComponentType<any>>,
 }>;
 declare export var DrawerLayoutAndroid: React.ComponentType<{
   ...$Flowgen$Import$react_2d_native.DrawerLayoutAndroidProps,
   ...$Flowgen$Import$_2e__2e_.NativeViewGestureHandlerProps,
-  ...{
-    +ref?: React.ComponentType<any>,
-    ...
-  },
+  ...React.RefAttributes<React.ComponentType<any>>,
 }>;
 declare export var FlatList: React.ComponentType<{
   ...FlatListProps<mixed>,
-  ...{
-    +ref?: mixed,
-    ...
-  },
+  ...React.RefAttributes<mixed>,
 }>;

@@ -22,10 +22,7 @@ declare export var ScrollView: React.ComponentType<{
     ...
   },
   ...NativeViewGestureHandlerProps,
-  ...{
-    +ref?: React.ComponentType<any>,
-    ...
-  },
+  ...React.RefAttributes<React.ComponentType<any>>,
 }>;
 export type ScrollViewType = {
   ...typeof ScrollView,
@@ -52,19 +49,13 @@ export type ScrollViewType = {
 declare export var Switch: React.ComponentType<{
   ...RNSwitchProps,
   ...NativeViewGestureHandlerProps,
-  ...{
-    +ref?: React.ComponentType<any>,
-    ...
-  },
+  ...React.RefAttributes<React.ComponentType<any>>,
 }>;
 export type SwitchType = typeof Switch;
 declare export var TextInput: React.ComponentType<{
   ...RNTextInputProps,
   ...NativeViewGestureHandlerProps,
-  ...{
-    +ref?: React.ComponentType<any>,
-    ...
-  },
+  ...React.RefAttributes<React.ComponentType<any>>,
 }>;
 export type TextInputType = typeof TextInput;
 declare export var DrawerLayoutAndroid: React.ComponentType<{
@@ -74,27 +65,18 @@ declare export var DrawerLayoutAndroid: React.ComponentType<{
     ...
   },
   ...NativeViewGestureHandlerProps,
-  ...{
-    +ref?: React.ComponentType<any>,
-    ...
-  },
+  ...React.RefAttributes<React.ComponentType<any>>,
 }>;
 export type DrawerLayoutAndroidType = typeof DrawerLayoutAndroid;
 declare export var FlatList: React.ComponentType<{
   ...RNFlatListProps<any>,
-  ...{
-    +ref?: RNFlatList<any>,
-    ...
-  },
+  ...React.RefAttributes<RNFlatList<any>>,
 }>;
 export type FlatListType<ItemT> = {
   ...React.ComponentType<{
     ...RNFlatListProps<ItemT>,
     ...NativeViewGestureHandlerProps,
-    ...{
-      +ref?: any,
-      ...
-    },
+    ...React.RefAttributes<any>,
   }>,
   ...{
     scrollToEnd: (params?: {

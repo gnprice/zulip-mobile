@@ -109,10 +109,7 @@ export type TapGestureHandlerProps = {
 export type TapGestureHandlerType = typeof TapGestureHandler;
 declare export var TapGestureHandler: React.ComponentType<{
   ...TapGestureHandlerProps,
-  ...{
-    +ref?: any,
-    ...
-  },
+  ...React.RefAttributes<any>,
 }>;
 export type FlingGestureHandlerEventPayload = {
   x: number,
@@ -129,10 +126,7 @@ export type FlingGestureHandlerProps = {
 export type FlingGestureHandlerType = typeof FlingGestureHandler;
 declare export var FlingGestureHandler: React.ComponentType<{
   ...FlingGestureHandlerProps,
-  ...{
-    +ref?: any,
-    ...
-  },
+  ...React.RefAttributes<any>,
 }>;
 declare class ForceTouchFallback mixins React.Component<> {
   static forceTouchAvailable: boolean;
@@ -163,21 +157,12 @@ export type ForceTouchGestureHandlerType = {
 declare export var ForceTouchGestureHandler:
   | typeof ForceTouchFallback
   | React.ComponentClass<
-      {
-        ...ForceTouchGestureHandlerProps,
-        ...{
-          +ref?: any,
-          ...
-        },
-      },
+      { ...ForceTouchGestureHandlerProps, ...React.RefAttributes<any> },
       any
     >
   | React.FunctionComponent<{
       ...ForceTouchGestureHandlerProps,
-      ...{
-        +ref?: any,
-        ...
-      },
+      ...React.RefAttributes<any>,
     }>;
 export type LongPressGestureHandlerEventPayload = {
   x: number,
@@ -194,10 +179,7 @@ export type LongPressGestureHandlerProps = {
 export type LongPressGestureHandlerType = typeof LongPressGestureHandler;
 declare export var LongPressGestureHandler: React.ComponentType<{
   ...LongPressGestureHandlerProps,
-  ...{
-    +ref?: any,
-    ...
-  },
+  ...React.RefAttributes<any>,
 }>;
 export type PanGestureHandlerEventPayload = {
   x: number,
@@ -257,10 +239,7 @@ export type PanGestureHandlerProps = {
 export type PanGestureHandlerType = typeof PanGestureHandler;
 declare export var PanGestureHandler: React.ComponentType<{
   ...PanGestureHandlerProps,
-  ...{
-    +ref?: any,
-    ...
-  },
+  ...React.RefAttributes<any>,
 }>;
 export type PinchGestureHandlerEventPayload = {
   scale: number,
@@ -275,10 +254,7 @@ export type PinchGestureHandlerProps = {
 export type PinchGestureHandlerType = typeof PinchGestureHandler;
 declare export var PinchGestureHandler: React.ComponentType<{
   ...PinchGestureHandlerProps,
-  ...{
-    +ref?: any,
-    ...
-  },
+  ...React.RefAttributes<any>,
 }>;
 export type RotationGestureHandlerEventPayload = {
   rotation: number,
@@ -293,9 +269,6 @@ export type RotationGestureHandlerProps = {
 export type RotationGestureHandlerType = typeof RotationGestureHandler;
 declare export var RotationGestureHandler: React.ComponentType<{
   ...RotationGestureHandlerProps,
-  ...{
-    +ref?: any,
-    ...
-  },
+  ...React.RefAttributes<any>,
 }>;
 declare export {};
