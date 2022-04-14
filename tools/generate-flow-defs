@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+set -e
+
+this_dir=${BASH_SOURCE[0]%/*}
+. "${this_dir}"/lib/ensure-coreutils.sh
+
+
+## CLI PARSING
+
+usage() {
+    cat >&2 <<EOF
+usage: tools/generate-flow-defs SRC DEST
+
+Generate Flow type definitions from a tree of TypeScript type definitions.
+EOF
+    exit 2
+}
+
+while (( $# )); do
+    case "$1" in
+        --help) usage; exit 1;;
+        *) break;;
+    esac
+done
+
+if (( $# != 2 )); then
+    usage
+    exit 1
+fi
+
+src="$1"
+dest="$2"
+
+
+## EXECUTION
+
+root_dir="$(readlink -f "${this_dir}"/..)"
+bin_dir="${root_dir}"/node_modules/.bin
+
+( cd "${src}" && find -name '*.d.ts' ) \
+| while read f; do
+    f="${f#./}"
+    echo "${f}"
+    mkdir -p "${dest}"/"${f%/*}"
+    "${bin_dir}"/flowgen "${src}/${f}" -o "${dest}/${f%.d.ts}.js.flow" \
+        --add-flow-header
+done
+
+echo "Flowgen complete; fixing up..."
+"${bin_dir}"/jscodeshift -t "${root_dir}"/tools/codemod/flowgen-fix.ts \
+  "${dest}"/ --extensions=js,flow
