@@ -7,17 +7,20 @@
 
 import * as React from "react";
 import * as ReactNative from "react-native";
+import { type NativeMethods } from 'react-native/Libraries/Renderer/shims/ReactNativeTypes'
+import { type ViewProps } from 'react-native/Libraries/Components/View/ViewPropTypes';
+
 declare type MaskedViewProps = {
   maskElement: React.Element<>,
   ...
-} & ReactNative.ViewProps;
+} & ViewProps;
 
 /**
  * @see https ://github.com/react-native-community/react-native-masked-view
  */
 declare class MaskedViewComponent mixins React.Component<MaskedViewProps> {}
 declare var MaskedViewBase: {
-  ...ReactNative.Constructor<ReactNative.NativeMethodsMixin>,
+  ...ReactNative.Constructor<NativeMethods>,
   ...typeof MaskedViewComponent,
   ...
 };
