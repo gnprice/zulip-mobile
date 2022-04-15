@@ -19,5 +19,6 @@ declare class MaskedViewComponent mixins React.Component<MaskedViewProps> {}
 declare var MaskedViewBase: {
   ...ReactNative.Constructor<ReactNative.NativeMethodsMixin>,
   ...typeof MaskedViewComponent,
+  ...
 };
 declare export default class MaskedView mixins MaskedViewBase {}
