@@ -6,6 +6,8 @@ import {
   type BottomTabNavigationProp,
 } from '@react-navigation/bottom-tabs';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import type { ParamListBase, NavigationProp } from '@react-navigation/native';
+import type { CompositeNavigationProp } from '@react-navigation/core/lib/typescript/src/types';
 
 import type { RouteProp, RouteParamsOf } from '../react-navigation';
 import { getUnreadHuddlesTotal, getUnreadPmsTotal } from '../selectors';
@@ -28,6 +30,8 @@ export type MainTabsNavigatorParamList = {|
   +profile: RouteParamsOf<typeof ProfileScreen>,
 |};
 
+/* eslint-disable */
+
 export type MainTabsNavigationProp<
   +RouteName: $Keys<MainTabsNavigatorParamList> = $Keys<MainTabsNavigatorParamList>,
 > =
@@ -36,6 +40,28 @@ export type MainTabsNavigationProp<
   BottomTabNavigationProp<MainTabsNavigatorParamList, RouteName> &
     // … plus the methods it gets from its parent navigator.
     AppNavigationMethods;
+
+// Trying to define it this way fails (with the errors appearing where
+// MainTabsNavigationProp gets instantiated, at those screens that actually
+// go on to use a value of that type):
+//   CompositeNavigationProp<
+//     BottomTabNavigationProp<MainTabsNavigatorParamList, RouteName>,
+//     AppNavigationProp<>,
+//   >;
+//
+// The reason is (though the Flow error messages are not good) that the
+// bounds on CompositeNavigationProp aren't met.
+//
+// In particular, this errors -- BottomTabNavigationProp can't flow to
+// NavigationProp:
+(
+  n: BottomTabNavigationProp<{| +home: void |}, 'home'>,
+): NavigationProp<ParamListBase, string, $FlowFixMe, $FlowFixMe, $FlowFixMe> => n;
+//
+// These don't, though:
+(n: MainTabsNavigatorParamList): ParamListBase => n;
+(n: {| +home: void |}): ParamListBase => n;
+// so the problem isn't that piece.
 
 const Tab = createBottomTabNavigator<
   MainTabsNavigatorParamList,
