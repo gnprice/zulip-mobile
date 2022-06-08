@@ -129,8 +129,8 @@ export type EventEmitter<EventMap: EventMapBase> = {
   ...
 };
 
-declare export class PrivateValueStore<+A, +B, C> {
-  _placeholder: { +a: A, +b: B, c: C };
+export type PrivateValueStore<+A, +B, +C> = {
+  +_placeholder: { +a: A, +b: B, +c: C },
   $tsflower$property$0: $FlowFixMe /* 
     /**
      * UGLY HACK! DO NOT USE THE TYPE!!!
@@ -146,8 +146,9 @@ declare export class PrivateValueStore<+A, +B, C> {
         a: A;
         b: B;
         c: C;
-    }; */ /* tsflower-unimplemented: empty-named property on class or interface */;
-}
+    }; */ /* tsflower-unimplemented: empty-named property on class or interface */,
+  ...
+};
 
 type NavigationHelpersCommon<
   +ParamList: ParamListBase,
@@ -222,9 +223,10 @@ export type RouteProp<+ParamList: ParamListBase, +RouteName: $Keys<ParamList>> =
 >;
 
 export type CompositeNavigationProp<
-  A: NavigationProp<ParamListBase, string, any, any>,
-  B: NavigationHelpersCommon<ParamListBase, any>,
-> = $Diff<A & B, {| [key: $Keys<NavigationProp<any>>]: mixed |}> &
+  +A: NavigationProp<ParamListBase, string, any, any>,
+  +B: NavigationHelpersCommon<ParamListBase, any>,
+> =
+  // $Diff<A & B, {| [key: $Keys<NavigationProp<any>>]: mixed |}> &
   NavigationProp<
     /**
      * Param list from both navigation objects needs to be combined
@@ -243,20 +245,21 @@ export type CompositeNavigationProp<
     /**
      * The type of state should refer to the state specified in the first type
      */
-    $Call<A, <T>({ getState(): T, ... }) => T>,
+    $Call<<T>({ getState(): T, ... }) => T, A>,
     /**
      * Screen options from both navigation objects needs to be combined
      * This allows typechecking `setOptions`
      */
     {
-      ...$Call<A, <O>({ setOptions(O): void, ... }) => O>,
-      ...$Call<B, <O>({ setOptions(O): void, ... }) => O>,
+      ...$Call<<O>({ setOptions(O): void, ... }) => O, A>,
+      ...$Call<<O>({ setOptions(O): void, ... }) => O, B>,
     },
     /**
      * Event consumer config should refer to the config specified in the first type
      * This allows typechecking `addListener`/`removeListener`
      */
-    $ElementType<$ElementType<A, '_placeholder'>, 'c'>,
+    // Puzzling why $Exact is needed here.
+    $Exact<$ElementType<$ElementType<A, '_placeholder'>, 'c'>>,
   >;
 
 export type Descriptor<
