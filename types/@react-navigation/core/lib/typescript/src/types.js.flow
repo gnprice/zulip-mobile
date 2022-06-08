@@ -130,6 +130,7 @@ export type EventEmitter<EventMap: EventMapBase> = {
 };
 
 declare export class PrivateValueStore<+A, +B, C> {
+  _placeholder: { +a: A, +b: B, c: C };
   $tsflower$property$0: $FlowFixMe /* 
     /**
      * UGLY HACK! DO NOT USE THE TYPE!!!
@@ -225,27 +226,37 @@ export type CompositeNavigationProp<
   B: NavigationHelpersCommon<ParamListBase, any>,
 > = $Diff<A & B, {| [key: $Keys<NavigationProp<any>>]: mixed |}> &
   NavigationProp<
-    $FlowFixMe /* A extends NavigationHelpersCommon<infer T> ? T : never */ /* tsflower-unimplemented: ConditionalType */ &
-      $FlowFixMe /* B extends NavigationHelpersCommon<infer U> ? U : never */ /* tsflower-unimplemented: ConditionalType */,
-    $FlowFixMe /*  
-/**
- * The route name should refer to the route name specified in the first type
- * Ideally it should work for any of them, but it's not possible to infer that way
- * /
-A extends NavigationProp<any, infer R> ? R : string */ /* tsflower-unimplemented: ConditionalType */,
-    $FlowFixMe /*  
-/**
- * The type of state should refer to the state specified in the first type
- * /
-A extends NavigationProp<any, any, infer S> ? S : NavigationState */ /* tsflower-unimplemented: ConditionalType */,
-    $FlowFixMe /* A extends NavigationProp<any, any, any, infer O> ? O : {} */ /* tsflower-unimplemented: ConditionalType */ &
-      $FlowFixMe /* B extends NavigationProp<any, any, any, infer P> ? P : {} */ /* tsflower-unimplemented: ConditionalType */,
-    $FlowFixMe /*  
-/**
- * Event consumer config should refer to the config specified in the first type
- * This allows typechecking `addListener`/`removeListener`
- * /
-A extends NavigationProp<any, any, any, any, infer E> ? E : {} */ /* tsflower-unimplemented: ConditionalType */,
+    /**
+     * Param list from both navigation objects needs to be combined
+     * For example, we should be able to navigate to screens in both A and B
+     */
+    {
+      ...$ElementType<$ElementType<A, '_placeholder'>, 'a'>,
+      ...$ElementType<$ElementType<B, '_placeholder'>, 'a'>,
+    },
+    /**
+     * The route name should refer to the route name specified in the first type
+     * Ideally it should work for any of them, but [in TS] it's not possible to infer that way
+     */
+    | $ElementType<$ElementType<A, '_placeholder'>, 'b'>
+    | $ElementType<$ElementType<B, '_placeholder'>, 'b'>,
+    /**
+     * The type of state should refer to the state specified in the first type
+     */
+    $Call<A, <T>({ getState(): T, ... }) => T>,
+    /**
+     * Screen options from both navigation objects needs to be combined
+     * This allows typechecking `setOptions`
+     */
+    {
+      ...$Call<A, <O>({ setOptions(O): void, ... }) => O>,
+      ...$Call<B, <O>({ setOptions(O): void, ... }) => O>,
+    },
+    /**
+     * Event consumer config should refer to the config specified in the first type
+     * This allows typechecking `addListener`/`removeListener`
+     */
+    $ElementType<$ElementType<A, '_placeholder'>, 'c'>,
   >;
 
 export type Descriptor<
