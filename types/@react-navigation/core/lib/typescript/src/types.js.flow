@@ -87,7 +87,7 @@ export type EventArg<EventName: string, CanPreventDefault: boolean | void = fals
     readonly data: Readonly<Data>;
 } */ /* tsflower-unimplemented: ConditionalType */;
 
-export type EventListenerCallback<EventMap: EventMapBase, EventName: $Keys<EventMap>> = (
+export type EventListenerCallback<-EventMap: EventMapBase, EventName: $Keys<EventMap>> = (
   e: EventArg<
     Extract<EventName, string>,
     $ElementType<$ElementType<EventMap, EventName>, 'canPreventDefault'>,
@@ -95,7 +95,7 @@ export type EventListenerCallback<EventMap: EventMapBase, EventName: $Keys<Event
   >,
 ) => void;
 
-export type EventConsumer<EventMap: EventMapBase> = {
+export type EventConsumer<+EventMap: EventMapBase> = {
   addListener<EventName: Extract<$Keys<EventMap>, string>>(
     type: EventName,
     callback: EventListenerCallback<EventMap, EventName>,
@@ -129,7 +129,7 @@ export type EventEmitter<EventMap: EventMapBase> = {
   ...
 };
 
-declare export class PrivateValueStore<+A, +B, C> {
+declare export class PrivateValueStore<+A, +B, +C> {
   $tsflower$property$0: $FlowFixMe /* 
     /**
      * UGLY HACK! DO NOT USE THE TYPE!!!
@@ -207,12 +207,12 @@ export type NavigationProp<
   +RouteName: $Keys<ParamList> = $Keys<ParamList>,
   State: NavigationState<ParamList> = NavigationState<ParamList>,
   ScreenOptions: { ... } = { ... },
-  EventMap: EventMapBase = EventMapBase,
+  +EventMap: EventMapBase = EventMapBase,
 > = NavigationHelpersCommon<ParamList, State> & {
   setParams(params: Partial<$ElementType<ParamList, RouteName>>): void,
   setOptions(options: Partial<ScreenOptions>): void,
   ...
-} & EventConsumer<{| ...EventMap, ...EventMapCore<State> |}> &
+} & EventConsumer<{ ...EventMapBase, ...EventMapCore<State>, ...EventMap }> &
   PrivateValueStore<ParamList, RouteName, EventMap>;
 
 export type RouteProp<+ParamList: ParamListBase, +RouteName: $Keys<ParamList>> = Route<
