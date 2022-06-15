@@ -6,9 +6,11 @@ import {
   typeof NavigationContainer,
 } from '@react-navigation/native';
 
+import type { AppNavigatorParamList } from './AppNavigator';
+
 export const isReadyRef: {| current: null | boolean |} = React.createRef();
 export const navigationContainerRef: {|
-  current: null | React$ElementRef<NavigationContainer>,
+  current: null | React$ElementRef<NavigationContainer<AppNavigatorParamList>>,
 |} = React.createRef();
 
 const getContainer = () => {
