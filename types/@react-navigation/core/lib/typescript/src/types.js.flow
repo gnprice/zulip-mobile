@@ -9,34 +9,55 @@ import type {
   ComponentProps as $tsflower_subst$React$ComponentProps,
 } from 'tsflower/subst/react';
 
-import * as React from 'react';
-
 import {
   type DefaultRouterOptions,
-  type NavigationState,
-  type NavigationAction,
   type InitialState,
+  type NavigationAction,
+  type NavigationState,
+  type ParamListBase,
   type PartialState,
   type Route,
-  type ParamListBase,
 } from '@react-navigation/routers';
 
+import * as React from 'react';
+
+/* tsflower-unimplemented: ModuleDeclaration */
+/* 
+declare global {
+    namespace ReactNavigation {
+        interface RootParamList {
+        }
+    }
+} */
+
+type Keyof<T: { ... }> = Extract<$Keys<T>, string>;
+
 export type DefaultNavigatorOptions<
+  ParamList: ParamListBase,
+  State: NavigationState<>,
   ScreenOptions: { ... },
-  ParamList: ParamListBase = ParamListBase,
+  EventMap: EventMapBase,
 > = DefaultRouterOptions<string> & {
+  id?: string,
   children: $tsflower_subst$React$ReactNode,
+  screenListeners?:
+    | ScreenListeners<State, EventMap>
+    | ((props: {
+        route: RouteProp<ParamList>,
+        navigation: any,
+        ...
+      }) => ScreenListeners<State, EventMap>),
   screenOptions?:
     | ScreenOptions
     | ((props: {
-        route: RouteProp<ParamList, $Keys<ParamList>>,
+        route: RouteProp<ParamList>,
         navigation: any,
         ...
       }) => ScreenOptions),
   defaultScreenOptions?:
     | ScreenOptions
     | ((props: {
-        route: RouteProp<ParamList, $Keys<ParamList>>,
+        route: RouteProp<ParamList>,
         navigation: any,
         options: ScreenOptions,
         ...
@@ -96,11 +117,11 @@ export type EventListenerCallback<EventMap: EventMapBase, EventName: $Keys<Event
 ) => void;
 
 export type EventConsumer<EventMap: EventMapBase> = {
-  addListener<EventName: Extract<$Keys<EventMap>, string>>(
+  addListener<EventName: Keyof<EventMap>>(
     type: EventName,
     callback: EventListenerCallback<EventMap, EventName>,
   ): () => void,
-  removeListener<EventName: Extract<$Keys<EventMap>, string>>(
+  removeListener<EventName: Keyof<EventMap>>(
     type: EventName,
     callback: EventListenerCallback<EventMap, EventName>,
   ): void,
@@ -108,7 +129,7 @@ export type EventConsumer<EventMap: EventMapBase> = {
 };
 
 export type EventEmitter<EventMap: EventMapBase> = {
-  emit<EventName: Extract<$Keys<EventMap>, string>>(
+  emit<EventName: Keyof<EventMap>>(
     options: {
       type: EventName,
       target?: string,
@@ -129,7 +150,7 @@ export type EventEmitter<EventMap: EventMapBase> = {
   ...
 };
 
-declare export class PrivateValueStore<+A, +B, C> {
+declare export class PrivateValueStore<T: [any, any, any]> {
   $tsflower$property$0: $FlowFixMe /* 
     /**
      * UGLY HACK! DO NOT USE THE TYPE!!!
@@ -141,11 +162,7 @@ declare export class PrivateValueStore<+A, +B, C> {
      * Adding private keyword works, but the annotation is stripped away in declaration.
      * Turns out if we use an empty string, it doesn't show up in intelliSense.
      * /
-    protected ''?: {
-        a: A;
-        b: B;
-        c: C;
-    }; */ /* tsflower-unimplemented: empty-named property on class or interface */;
+    protected ''?: T; */ /* tsflower-unimplemented: empty-named property on class or interface */;
 }
 
 type NavigationHelpersCommon<
@@ -155,19 +172,21 @@ type NavigationHelpersCommon<
   dispatch(action: NavigationAction | ((state: State) => NavigationAction)): void,
   // prettier-ignore
   navigate<RouteName: $Keys<ParamList>>(
-    ...args: $FlowFixMe /*  undefined extends ParamList[RouteName] ? [RouteName] | [RouteName, ParamList[RouteName]] : [RouteName, ParamList[RouteName]] */ /* tsflower-unimplemented: ConditionalType */
+    ...args: $FlowFixMe /*  undefined extends ParamList[RouteName] ? [screen: RouteName] | [screen: RouteName, params: ParamList[RouteName]] : [screen: RouteName, params: ParamList[RouteName]] */ /* tsflower-unimplemented: ConditionalType */
   ): void,
   navigate<RouteName: $Keys<ParamList>>(
-    route:
+    options:
       | {
           key: string,
           params?: $ElementType<ParamList, RouteName>,
+          merge?: boolean,
           ...
         }
       | {
           name: RouteName,
           key?: string,
           params: $ElementType<ParamList, RouteName>,
+          merge?: boolean,
           ...
         },
   ): void,
@@ -175,12 +194,14 @@ type NavigationHelpersCommon<
   goBack(): void,
   isFocused(): boolean,
   canGoBack(): boolean,
-  getParent<T = NavigationProp<ParamListBase> | void>(): T,
+  getId(): string | void,
+  getParent<T = NavigationHelpers<ParamListBase> | void>(id?: string): T,
   getState(): State,
-  dangerouslyGetParent<T = NavigationProp<ParamListBase> | void>(): T,
-  dangerouslyGetState(): State,
   ...
-} & PrivateValueStore<ParamList, $Keys<ParamList>, { ... }>;
+} & PrivateValueStore<
+  // $FlowIgnore[incompatible-variance] PrivateValueStore's tuple type can't express read-only
+  [ParamList, mixed, mixed],
+>;
 
 export type NavigationHelpers<
   ParamList: ParamListBase,
@@ -203,25 +224,28 @@ export type NavigationContainerProps = {
 };
 
 export type NavigationProp<
-  +ParamList: ParamListBase,
-  +RouteName: $Keys<ParamList> = $Keys<ParamList>,
+  +ParamList: { ... },
+  +RouteName: $Keys<ParamList> = Keyof<ParamList>,
+  NavigatorID: string | void = void,
   State: NavigationState<ParamList> = NavigationState<ParamList>,
   ScreenOptions: { ... } = { ... },
   EventMap: EventMapBase = EventMapBase,
-> = NavigationHelpersCommon<ParamList, State> & {
+> = $Diff<NavigationHelpersCommon<ParamList, State>, {| getParent: mixed |}> & {
+  getParent<T = NavigationProp<ParamListBase> | void>(id?: NavigatorID): T,
   setParams(params: Partial<$ElementType<ParamList, RouteName>>): void,
   setOptions(options: Partial<ScreenOptions>): void,
   ...
 } & EventConsumer<{| ...EventMap, ...EventMapCore<State> |}> &
-  PrivateValueStore<ParamList, RouteName, EventMap>;
+  // $FlowIgnore[incompatible-variance] PrivateValueStore's tuple type can't express read-only
+  PrivateValueStore<[ParamList, RouteName, EventMap]>;
 
-export type RouteProp<+ParamList: ParamListBase, +RouteName: $Keys<ParamList>> = Route<
-  Extract<RouteName, string>,
-  $ElementType<ParamList, RouteName>,
->;
+export type RouteProp<
+  +ParamList: ParamListBase,
+  +RouteName: $Keys<ParamList> = Keyof<ParamList>,
+> = Route<Extract<RouteName, string>, $ElementType<ParamList, RouteName>>;
 
 export type CompositeNavigationProp<
-  A: NavigationProp<ParamListBase, string, any, any>,
+  A: NavigationProp<ParamListBase, string, any, any, any>,
   B: NavigationHelpersCommon<ParamListBase, any>,
 > = $Diff<A & B, {| [key: $Keys<NavigationProp<any>>]: mixed |}> &
   NavigationProp<
@@ -233,31 +257,45 @@ export type CompositeNavigationProp<
  * Ideally it should work for any of them, but it's not possible to infer that way
  * /
 A extends NavigationProp<any, infer R> ? R : string */ /* tsflower-unimplemented: ConditionalType */,
+    | $FlowFixMe /* A extends NavigationProp<any, any, infer I> ? I : never */ /* tsflower-unimplemented: ConditionalType */
+    | $FlowFixMe /* B extends NavigationProp<any, any, infer J> ? J : never */ /* tsflower-unimplemented: ConditionalType */,
     $FlowFixMe /*  
 /**
  * The type of state should refer to the state specified in the first type
  * /
-A extends NavigationProp<any, any, infer S> ? S : NavigationState */ /* tsflower-unimplemented: ConditionalType */,
-    $FlowFixMe /* A extends NavigationProp<any, any, any, infer O> ? O : {} */ /* tsflower-unimplemented: ConditionalType */ &
-      $FlowFixMe /* B extends NavigationProp<any, any, any, infer P> ? P : {} */ /* tsflower-unimplemented: ConditionalType */,
+A extends NavigationProp<any, any, any, infer S> ? S : NavigationState */ /* tsflower-unimplemented: ConditionalType */,
+    $FlowFixMe /* A extends NavigationProp<any, any, any, any, infer O> ? O : {} */ /* tsflower-unimplemented: ConditionalType */ &
+      $FlowFixMe /* B extends NavigationProp<any, any, any, any, infer P> ? P : {} */ /* tsflower-unimplemented: ConditionalType */,
     $FlowFixMe /*  
 /**
  * Event consumer config should refer to the config specified in the first type
  * This allows typechecking `addListener`/`removeListener`
  * /
-A extends NavigationProp<any, any, any, any, infer E> ? E : {} */ /* tsflower-unimplemented: ConditionalType */,
+A extends NavigationProp<any, any, any, any, any, infer E> ? E : {} */ /* tsflower-unimplemented: ConditionalType */,
   >;
 
+export type CompositeScreenProps<
+  A: {
+    navigation: NavigationProp<ParamListBase, string, string | void, any, any, any>,
+    route: RouteProp<ParamListBase>,
+    ...
+  },
+  B: { navigation: NavigationHelpersCommon<any, any>, ... },
+> = {
+  navigation: CompositeNavigationProp<$ElementType<A, 'navigation'>, $ElementType<B, 'navigation'>>,
+  route: $ElementType<A, 'route'>,
+  ...
+};
+
 export type Descriptor<
-  ParamList: ParamListBase,
-  RouteName: $Keys<ParamList> = string,
-  State: NavigationState<> = NavigationState<>,
-  ScreenOptions: { ... } = { ... },
-  EventMap: EventMapBase = EventMapBase,
+  ScreenOptions: { ... },
+  Navigation: NavigationProp<any, any, any, any, any, any>,
+  Route: RouteProp<any, any>,
 > = {
   render(): $tsflower_subst$React$JSX$Element,
   options: ScreenOptions,
-  navigation: NavigationProp<ParamList, RouteName, State, ScreenOptions, EventMap>,
+  route: Route,
+  navigation: Navigation,
   ...
 };
 
@@ -268,32 +306,7 @@ export type ScreenListeners<
     [EventName in keyof (EventMap & EventMapCore<State>)]: EventListenerCallback<EventMap, EventName>;
 } */ /* tsflower-unimplemented: MappedType */>;
 
-export type RouteConfig<
-  ParamList: ParamListBase,
-  RouteName: $Keys<ParamList>,
-  State: NavigationState<>,
-  ScreenOptions: { ... },
-  EventMap: EventMapBase,
-> = {
-  name: RouteName,
-  options?:
-    | ScreenOptions
-    | ((props: {
-        route: RouteProp<ParamList, RouteName>,
-        navigation: any,
-        ...
-      }) => ScreenOptions),
-  listeners?:
-    | ScreenListeners<State, EventMap>
-    | ((props: {
-        route: RouteProp<ParamList, RouteName>,
-        navigation: any,
-        ...
-      }) => ScreenListeners<State, EventMap>),
-  getId?: ({ params: $ElementType<ParamList, RouteName>, ... }) => string | void,
-  initialParams?: $ElementType<ParamList, RouteName>,
-  ...
-} & (
+export type RouteConfigComponent<ParamList: ParamListBase, RouteName: $Keys<ParamList>> =
   | {
       component: React.ComponentType<any>,
       getComponent?: empty,
@@ -315,8 +328,48 @@ export type RouteConfig<
       component?: empty,
       getComponent?: empty,
       ...
-    }
-);
+    };
+
+export type RouteConfig<
+  ParamList: ParamListBase,
+  RouteName: $Keys<ParamList>,
+  State: NavigationState<>,
+  ScreenOptions: { ... },
+  EventMap: EventMapBase,
+> = {
+  navigationKey?: string,
+  name: RouteName,
+  options?:
+    | ScreenOptions
+    | ((props: {
+        route: RouteProp<ParamList, RouteName>,
+        navigation: any,
+        ...
+      }) => ScreenOptions),
+  listeners?:
+    | ScreenListeners<State, EventMap>
+    | ((props: {
+        route: RouteProp<ParamList, RouteName>,
+        navigation: any,
+        ...
+      }) => ScreenListeners<State, EventMap>),
+  getId?: ({ params: $ElementType<ParamList, RouteName>, ... }) => string | void,
+  initialParams?: $ElementType<ParamList, RouteName>,
+  ...
+} & RouteConfigComponent<ParamList, RouteName>;
+
+export type RouteGroupConfig<ParamList: ParamListBase, ScreenOptions: { ... }> = {
+  navigationKey?: string,
+  screenOptions?:
+    | ScreenOptions
+    | ((props: {
+        route: RouteProp<ParamList, $Keys<ParamList>>,
+        navigation: any,
+        ...
+      }) => ScreenOptions),
+  children: $tsflower_subst$React$ReactNode,
+  ...
+};
 
 export type NavigationContainerEventMap = {|
   state: {| data: { state: NavigationState<> | PartialState<NavigationState<>> | void, ... } |},
@@ -325,19 +378,24 @@ export type NavigationContainerEventMap = {|
     data: {
       action: NavigationAction,
       noop: boolean,
+      stack: string | void,
       ...
     },
   |},
 |};
 
-export type NavigationContainerRef = NavigationHelpers<ParamListBase> &
+export type NavigationContainerRef<ParamList: { ... }> = NavigationHelpers<ParamList> &
   EventConsumer<NavigationContainerEventMap> & {
     resetRoot(state?: PartialState<NavigationState<>> | NavigationState<>): void,
     getRootState(): NavigationState<>,
     getCurrentRoute(): Route<string> | void,
     getCurrentOptions(): { ... } | void,
+    isReady(): boolean,
     ...
   };
+
+export type NavigationContainerRefWithCurrent<ParamList: { ... }> =
+  NavigationContainerRef<ParamList> & { current: NavigationContainerRef<ParamList> | null, ... };
 
 export type TypedNavigator<
   ParamList: ParamListBase,
@@ -349,10 +407,11 @@ export type TypedNavigator<
   Navigator: React.ComponentType<
     $Diff<
       $tsflower_subst$React$ComponentProps<Navigator>,
-      {| [key: $Keys<DefaultNavigatorOptions<any, any>>]: mixed |},
+      {| [key: $Keys<DefaultNavigatorOptions<any, any, any, any>>]: mixed |},
     > &
-      DefaultNavigatorOptions<ScreenOptions, ParamList>,
+      DefaultNavigatorOptions<ParamList, State, ScreenOptions, EventMap>,
   >,
+  Group: React.ComponentType<RouteGroupConfig<ParamList, ScreenOptions>>,
   Screen: <RouteName: $Keys<ParamList>>(
     _: RouteConfig<ParamList, RouteName, State, ScreenOptions, EventMap>,
   ) => null,
@@ -364,6 +423,7 @@ export type NavigatorScreenParams<ParamList, State: NavigationState<> = Navigati
       screen?: empty,
       params?: empty,
       initial?: empty,
+      path?: string,
       state: PartialState<State> | State | void,
       ...
     }
@@ -373,26 +433,31 @@ export type NavigatorScreenParams<ParamList, State: NavigationState<> = Navigati
         screen: RouteName;
         params?: ParamList[RouteName];
         initial?: boolean;
+        path?: string;
         state?: never;
     } : {
         screen: RouteName;
         params: ParamList[RouteName];
         initial?: boolean;
+        path?: string;
         state?: never;
     };
 } */ /* tsflower-unimplemented: MappedType */,
       $Keys<ParamList>,
     >;
 
-export type PathConfig = {
+export type PathConfig<ParamList: { ... }> = {
   path?: string,
   exact?: boolean,
   parse?: { [key: string]: (value: string) => any },
   stringify?: { [key: string]: (value: any) => string },
-  screens?: PathConfigMap,
-  initialRouteName?: string,
+  screens?: PathConfigMap<ParamList>,
+  initialRouteName?: $Keys<ParamList>,
   ...
 };
 
-export type PathConfigMap = { [routeName: string]: string | PathConfig, ... };
+export type PathConfigMap<ParamList: { ... }> = $FlowFixMe /*  {
+    [RouteName in keyof ParamList]?: NonNullable<ParamList[RouteName]> extends NavigatorScreenParams<infer T, any> ? string | PathConfig<T> : string | Omit<PathConfig<{}>, 'screens' | 'initialRouteName'>;
+} */ /* tsflower-unimplemented: MappedType */;
+
 export {};

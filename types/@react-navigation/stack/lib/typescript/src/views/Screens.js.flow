@@ -13,7 +13,6 @@ import type {
 
 import * as React from 'react';
 import { Animated } from 'react-native';
-declare export var shouldUseActivityState: any;
 
 declare export var MaybeScreenContainer: (
   $tsflower_subst$RN$ViewProps & {
@@ -26,7 +25,7 @@ declare export var MaybeScreenContainer: (
 declare export var MaybeScreen: (
   $tsflower_subst$RN$ViewProps & {
     enabled: boolean,
-    active: 0 | 1 | 2 | $tsflower_subst$RN$Animated$AnimatedInterpolation,
+    active: 0 | 1 | $tsflower_subst$RN$Animated$AnimatedInterpolation,
     children: $tsflower_subst$React$ReactNode,
     ...
   },

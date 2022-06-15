@@ -24,6 +24,7 @@ export type Action = $Exact<
             key: string,
             name?: void,
             params?: { ... },
+            path?: string,
             merge?: boolean,
             ...
           }
@@ -31,6 +32,7 @@ export type Action = $Exact<
             name: string,
             key?: string,
             params?: { ... },
+            path?: string,
             merge?: boolean,
             ...
           },
@@ -57,16 +59,20 @@ export type Action = $Exact<
 declare export function goBack(): Action;
 
 declare export function navigate(
-  route:
+  options:
     | {
         key: string,
         params?: { ... },
+        path?: string,
+        merge?: boolean,
         ...
       }
     | {
         name: string,
         key?: string,
         params?: { ... },
+        path?: string,
+        merge?: boolean,
         ...
       },
 ): Action;

@@ -6,9 +6,11 @@ import type {
   RefAttributes as $tsflower_subst$React$RefAttributes,
 } from 'tsflower/subst/react';
 
+import { type ParamListBase } from '@react-navigation/routers';
 import * as React from 'react';
-import { type NavigationContainerRef, type NavigationContainerProps } from './types';
+import { type NavigationContainerProps, type NavigationContainerRef } from './types';
 declare var BaseNavigationContainer: $tsflower_subst$React$ForwardRefExoticComponent<
-  NavigationContainerProps & $tsflower_subst$React$RefAttributes<NavigationContainerRef>,
+  NavigationContainerProps &
+    $tsflower_subst$React$RefAttributes<NavigationContainerRef<ParamListBase>>,
 >;
 export default BaseNavigationContainer;

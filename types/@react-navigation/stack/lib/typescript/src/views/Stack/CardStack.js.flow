@@ -6,28 +6,20 @@ import type {
   JSX$Element as $tsflower_subst$React$JSX$Element,
 } from 'tsflower/subst/react';
 
-import * as React from 'react';
-import { Animated } from 'react-native';
-import { type EdgeInsets } from 'react-native-safe-area-context';
+import type { Partial } from 'tsflower/subst/lib';
 import {
   type ParamListBase,
   type Route,
   type StackNavigationState,
 } from '@react-navigation/native';
+import * as React from 'react';
+import { Animated } from 'react-native';
+import { type EdgeInsets } from 'react-native-safe-area-context';
+import { type Layout, type Scene, type StackDescriptorMap } from '../../types';
 import { type Props as HeaderContainerProps } from '../Header/HeaderContainer';
-
-import {
-  type Layout,
-  type StackHeaderMode,
-  type StackCardMode,
-  type Scene,
-  type StackDescriptorMap,
-} from '../../types';
-
 type GestureValues = { [key: string]: Animated.Value, ... };
 
 type Props = {
-  mode: StackCardMode,
   insets: EdgeInsets,
   state: StackNavigationState<ParamListBase>,
   descriptors: StackDescriptorMap,
@@ -37,19 +29,15 @@ type Props = {
   onOpenRoute: (props: { route: Route<string>, ... }) => void,
   onCloseRoute: (props: { route: Route<string>, ... }) => void,
   getPreviousRoute: (props: { route: Route<string>, ... }) => Route<string> | void,
-  getGesturesEnabled: (props: { route: Route<string>, ... }) => boolean,
   renderHeader: (props: HeaderContainerProps) => $tsflower_subst$React$ReactNode,
   renderScene: (props: { route: Route<string>, ... }) => $tsflower_subst$React$ReactNode,
-  headerMode: StackHeaderMode,
   isParentHeaderShown: boolean,
+  isParentModal: boolean,
   onTransitionStart: (props: { route: Route<string>, ... }, closing: boolean) => void,
   onTransitionEnd: (props: { route: Route<string>, ... }, closing: boolean) => void,
-  onPageChangeStart?: () => void,
-  onPageChangeConfirm?: (force: boolean) => void,
-  onPageChangeCancel?: () => void,
-  onGestureStart?: (props: { route: Route<string>, ... }) => void,
-  onGestureEnd?: (props: { route: Route<string>, ... }) => void,
-  onGestureCancel?: (props: { route: Route<string>, ... }) => void,
+  onGestureStart: (props: { route: Route<string>, ... }) => void,
+  onGestureEnd: (props: { route: Route<string>, ... }) => void,
+  onGestureCancel: (props: { route: Route<string>, ... }) => void,
   detachInactiveScreens?: boolean,
   ...
 };
@@ -57,7 +45,7 @@ type Props = {
 type State = {
   routes: Route<string>[],
   descriptors: StackDescriptorMap,
-  scenes: Scene<Route<string>>[],
+  scenes: Scene[],
   gestures: GestureValues,
   layout: Layout,
   headerHeights: { [key: string]: number },
@@ -65,17 +53,7 @@ type State = {
 };
 
 declare export default class CardStack extends React.Component<Props, State> {
-  getDerivedStateFromProps(
-    props: Props,
-    state: State,
-  ): {
-    routes: Route<string, { ... } | void>[],
-    scenes: Scene<Route<string, { ... } | void>>[],
-    gestures: GestureValues,
-    descriptors: StackDescriptorMap,
-    headerHeights: { [key: string]: number },
-    ...
-  } | null;
+  getDerivedStateFromProps(props: Props, state: State): Partial<State> | null;
   constructor(props: Props): any;
   handleLayout: any;
   handleHeaderLayout: any;

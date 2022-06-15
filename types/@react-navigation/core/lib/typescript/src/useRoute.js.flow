@@ -3,4 +3,4 @@
  */
 import { type ParamListBase } from '@react-navigation/routers';
 import { type RouteProp } from './types';
-declare export default function useRoute<T: RouteProp<ParamListBase, string>>(): T;
+declare export default function useRoute<T: RouteProp<ParamListBase>>(): T;

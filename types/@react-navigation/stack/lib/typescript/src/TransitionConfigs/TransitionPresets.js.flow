@@ -8,5 +8,7 @@ declare export var ModalPresentationIOS: TransitionPreset;
 declare export var FadeFromBottomAndroid: TransitionPreset;
 declare export var RevealFromBottomAndroid: TransitionPreset;
 declare export var ScaleFromCenterAndroid: TransitionPreset;
+declare export var BottomSheetAndroid: TransitionPreset;
+declare export var ModalFadeTransition: TransitionPreset;
 declare export var DefaultTransition: TransitionPreset;
 declare export var ModalTransition: TransitionPreset;

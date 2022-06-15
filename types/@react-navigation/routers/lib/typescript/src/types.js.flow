@@ -56,6 +56,7 @@ export type PartialState<+State: NavigationState<>> = Partial<
 export type Route<+RouteName: string, +Params: { ... } | void = { ... } | void> = $ReadOnly<{
   key: string,
   name: RouteName,
+  path?: string,
   params?: Params, // for conditional below
   ...
 }> /* undefined extends Params ? Readonly<{
@@ -110,7 +111,10 @@ export type Router<State: NavigationState<>, Action: NavigationAction> = {
     partialState: PartialState<State> | State,
     options: RouterConfigOptions,
   ): State,
-  getStateForRouteNamesChange(state: State, options: RouterConfigOptions): State,
+  getStateForRouteNamesChange(
+    state: State,
+    options: RouterConfigOptions & { routeKeyChanges: string[], ... },
+  ): State,
   getStateForRouteFocus(state: State, key: string): State,
   getStateForAction(
     state: State,

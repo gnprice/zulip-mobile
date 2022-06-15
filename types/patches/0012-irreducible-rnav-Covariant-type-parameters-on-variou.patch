@@ -1,0 +1,148 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Greg Price <greg@zulip.com>
+Date: Tue, 24 May 2022 23:09:28 -0700
+Subject: [irreducible] rnav: Covariant type parameters on various types
+
+Namely RouteProp, Route, NavigationRoute, {Foo,}NavigationProp,
+NavigationHelpersCommon, NavigationState, PartialState.
+---
+ .../bottom-tabs/lib/typescript/src/types.js.flow |  2 +-
+ .../core/lib/typescript/src/types.js.flow        | 16 ++++++++++------
+ .../lib/typescript/src/types.js.flow             |  2 +-
+ .../routers/lib/typescript/src/types.js.flow     |  8 ++++----
+ .../stack/lib/typescript/src/types.js.flow       |  2 +-
+ 5 files changed, 17 insertions(+), 13 deletions(-)
+
+diff --git types/@react-navigation/bottom-tabs/lib/typescript/src/types.js.flow types/@react-navigation/bottom-tabs/lib/typescript/src/types.js.flow
+index 9cd2f6d46..1bdb9de9c 100644
+--- types/@react-navigation/bottom-tabs/lib/typescript/src/types.js.flow
++++ types/@react-navigation/bottom-tabs/lib/typescript/src/types.js.flow
+@@ -59,7 +59,7 @@ export type BottomTabNavigationHelpers = NavigationHelpers<
+   TabActionHelpers<ParamListBase>;
+ export type BottomTabNavigationProp<
+   ParamList: ParamListBase,
+-  RouteName: $Keys<ParamList> = $Keys<ParamList>,
++  +RouteName: $Keys<ParamList> = $Keys<ParamList>,
+   NavigatorID: string | void = void,
+ > = NavigationProp<
+   ParamList,
+diff --git types/@react-navigation/core/lib/typescript/src/types.js.flow types/@react-navigation/core/lib/typescript/src/types.js.flow
+index 3b38515b5..0b574e491 100644
+--- types/@react-navigation/core/lib/typescript/src/types.js.flow
++++ types/@react-navigation/core/lib/typescript/src/types.js.flow
+@@ -163,7 +163,7 @@ declare export class PrivateValueStore<T: [any, any, any]> {
+ }
+ 
+ type NavigationHelpersCommon<
+-  ParamList: ParamListBase,
++  +ParamList: ParamListBase,
+   State: NavigationState<> = NavigationState<>,
+ > = {
+   dispatch(action: NavigationAction | ((state: State) => NavigationAction)): void,
+@@ -195,7 +195,10 @@ type NavigationHelpersCommon<
+   getParent<T = NavigationHelpers<ParamListBase> | void>(id?: string): T,
+   getState(): State,
+   ...
+-} & PrivateValueStore<[ParamList, mixed, mixed]>;
++} & PrivateValueStore<
++  // $FlowIgnore[incompatible-variance] PrivateValueStore's tuple type can't express read-only
++  [ParamList, mixed, mixed],
++>;
+ 
+ export type NavigationHelpers<
+   ParamList: ParamListBase,
+@@ -218,23 +221,24 @@ export type NavigationContainerProps = {
+ };
+ 
+ export type NavigationProp<
+-  ParamList: { ... },
+-  RouteName: $Keys<ParamList> = Keyof<ParamList>,
++  +ParamList: { ... },
++  +RouteName: $Keys<ParamList> = Keyof<ParamList>,
+   NavigatorID: string | void = void,
+   State: NavigationState<ParamList> = NavigationState<ParamList>,
+   ScreenOptions: { ... } = { ... },
+   EventMap: EventMapBase = EventMapBase,
+ > = $Diff<NavigationHelpersCommon<ParamList, State>, {| getParent: mixed |}> & {
+   getParent<T = NavigationProp<ParamListBase> | void>(id?: NavigatorID): T,
+   setParams(params: Partial<$ElementType<ParamList, RouteName>>): void,
+   setOptions(options: Partial<ScreenOptions>): void,
+   ...
+ } & EventConsumer<EventMap & EventMapCore<State>> &
++  // $FlowIgnore[incompatible-variance] PrivateValueStore's tuple type can't express read-only
+   PrivateValueStore<[ParamList, RouteName, EventMap]>;
+ 
+ export type RouteProp<
+-  ParamList: ParamListBase,
+-  RouteName: $Keys<ParamList> = Keyof<ParamList>,
++  +ParamList: ParamListBase,
++  +RouteName: $Keys<ParamList> = Keyof<ParamList>,
+ > = Route<Extract<RouteName, string>, $ElementType<ParamList, RouteName>>;
+ 
+ export type CompositeNavigationProp<
+diff --git types/@react-navigation/material-top-tabs/lib/typescript/src/types.js.flow types/@react-navigation/material-top-tabs/lib/typescript/src/types.js.flow
+index 4cc65b19b..bd2c1dd98 100644
+--- types/@react-navigation/material-top-tabs/lib/typescript/src/types.js.flow
++++ types/@react-navigation/material-top-tabs/lib/typescript/src/types.js.flow
+@@ -46,7 +46,7 @@ export type MaterialTopTabNavigationHelpers = NavigationHelpers<
+   TabActionHelpers<ParamListBase>;
+ export type MaterialTopTabNavigationProp<
+   ParamList: ParamListBase,
+-  RouteName: $Keys<ParamList> = $Keys<ParamList>,
++  +RouteName: $Keys<ParamList> = $Keys<ParamList>,
+   NavigatorID: string | void = void,
+ > = NavigationProp<
+   ParamList,
+diff --git types/@react-navigation/routers/lib/typescript/src/types.js.flow types/@react-navigation/routers/lib/typescript/src/types.js.flow
+index 55289cd4e..b63af87b7 100644
+--- types/@react-navigation/routers/lib/typescript/src/types.js.flow
++++ types/@react-navigation/routers/lib/typescript/src/types.js.flow
+@@ -4,12 +4,12 @@
+ import type { Extract, Readonly, Partial } from 'tsflower/subst/lib';
+ import * as CommonActions from './CommonActions';
+ export type CommonNavigationAction = CommonActions.Action;
+-type NavigationRoute<ParamList: ParamListBase, RouteName: $Keys<ParamList>> = Route<
++type NavigationRoute<+ParamList: ParamListBase, +RouteName: $Keys<ParamList>> = Route<
+   Extract<RouteName, string>,
+   $ElementType<ParamList, RouteName>,
+ > & { +state?: NavigationState<ParamList> | PartialState<NavigationState<ParamList>>, ... };
+ 
+-export type NavigationState<ParamList: ParamListBase = ParamListBase> = Readonly<{
++export type NavigationState<+ParamList: ParamListBase = ParamListBase> = $ReadOnly<{
+   key: string,
+   index: number,
+   routeNames: $ReadOnlyArray<Extract<$Keys<ParamList>, string>>,
+@@ -38,7 +38,7 @@ export type PartialRoute<R: Route<string>> = $Diff<R, {| key: mixed |}> & {
+   ...
+ };
+ 
+-export type PartialState<State: NavigationState<>> = Partial<
++export type PartialState<+State: NavigationState<>> = Partial<
+   $Diff<
+     State,
+     {|
+@@ -53,7 +53,7 @@ export type PartialState<State: NavigationState<>> = Partial<
+     ...
+   }>;
+ 
+-export type Route<RouteName: string, Params: { ... } | void = { ... } | void> = Readonly<{
++export type Route<+RouteName: string, +Params: { ... } | void = { ... } | void> = $ReadOnly<{
+   key: string,
+   name: RouteName,
+   path?: string,
+diff --git types/@react-navigation/stack/lib/typescript/src/types.js.flow types/@react-navigation/stack/lib/typescript/src/types.js.flow
+index f9c3c1ceb..bbe0017f8 100644
+--- types/@react-navigation/stack/lib/typescript/src/types.js.flow
++++ types/@react-navigation/stack/lib/typescript/src/types.js.flow
+@@ -54,7 +54,7 @@ export type StackNavigationHelpers = NavigationHelpers<ParamListBase, StackNavig
+   StackActionHelpers<ParamListBase>;
+ export type StackNavigationProp<
+   ParamList: ParamListBase,
+-  RouteName: $Keys<ParamList> = $Keys<ParamList>,
++  +RouteName: $Keys<ParamList> = $Keys<ParamList>,
+   NavigatorID: string | void = void,
+ > = NavigationProp<
+   ParamList,
+-- 
+2.32.0
+

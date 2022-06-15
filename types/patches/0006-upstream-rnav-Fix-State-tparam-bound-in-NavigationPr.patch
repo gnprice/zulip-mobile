@@ -10,18 +10,18 @@ not some other.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git types/@react-navigation/core/lib/typescript/src/types.js.flow types/@react-navigation/core/lib/typescript/src/types.js.flow
-index e3dd9a0d0..41f13ea18 100644
+index bfab1e949..3b38515b5 100644
 --- types/@react-navigation/core/lib/typescript/src/types.js.flow
 +++ types/@react-navigation/core/lib/typescript/src/types.js.flow
-@@ -202,7 +202,7 @@ export type NavigationContainerProps = {
- export type NavigationProp<
-   ParamList: ParamListBase,
-   RouteName: $Keys<ParamList> = $Keys<ParamList>,
+@@ -221,7 +221,7 @@ export type NavigationProp<
+   ParamList: { ... },
+   RouteName: $Keys<ParamList> = Keyof<ParamList>,
+   NavigatorID: string | void = void,
 -  State: NavigationState<> = NavigationState<ParamList>,
 +  State: NavigationState<ParamList> = NavigationState<ParamList>,
    ScreenOptions: { ... } = { ... },
    EventMap: EventMapBase = EventMapBase,
- > = NavigationHelpersCommon<ParamList, State> & {
+ > = $Diff<NavigationHelpersCommon<ParamList, State>, {| getParent: mixed |}> & {
 -- 
 2.32.0
 

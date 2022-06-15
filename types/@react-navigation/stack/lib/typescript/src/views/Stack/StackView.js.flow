@@ -4,17 +4,17 @@
 import type { PartialState as $tsflower_import_type$_$_40_react_2d_navigation_2f_native$PartialState } from '@react-navigation/native';
 import type { Readonly } from 'tsflower/subst/lib';
 import type { JSX$Element as $tsflower_subst$React$JSX$Element } from 'tsflower/subst/react';
-import * as React from 'react';
 import {
-  type StackNavigationState,
-  type Route,
   type ParamListBase,
+  type Route,
+  type StackNavigationState,
 } from '@react-navigation/native';
+import * as React from 'react';
 
 import {
-  type StackNavigationHelpers,
-  type StackNavigationConfig,
   type StackDescriptorMap,
+  type StackNavigationConfig,
+  type StackNavigationHelpers,
 } from '../../types';
 
 type Props = StackNavigationConfig & {
@@ -54,9 +54,10 @@ declare export default class StackView extends React.Component<Props, State> {
         routes: Readonly<{
           key: string,
           name: string,
+          path?: string | void,
           ...
         }> &
-          Readonly<{ params?: { ... } | void, ... }> &
+          Readonly<{ params?: Readonly<{ ... } | void>, ... }> &
           {
             state?:
               | Readonly<{
@@ -67,9 +68,10 @@ declare export default class StackView extends React.Component<Props, State> {
                   routes: Readonly<{
                     key: string,
                     name: string,
+                    path?: string | void,
                     ...
                   }> &
-                    Readonly<{ params?: { ... } | void, ... }> &
+                    Readonly<{ params?: Readonly<{ ... } | void>, ... }> &
                     any[],
                   type: string,
                   stale: false,
@@ -84,9 +86,10 @@ declare export default class StackView extends React.Component<Props, State> {
                     routes: Readonly<{
                       key: string,
                       name: string,
+                      path?: string | void,
                       ...
                     }> &
-                      Readonly<{ params?: { ... } | void, ... }> &
+                      Readonly<{ params?: Readonly<{ ... } | void>, ... }> &
                       any[],
                     type: string,
                     stale: false,
@@ -99,9 +102,10 @@ declare export default class StackView extends React.Component<Props, State> {
         previousRoutes: Readonly<{
           key: string,
           name: string,
+          path?: string | void,
           ...
         }> &
-          Readonly<{ params?: { ... } | void, ... }> &
+          Readonly<{ params?: Readonly<{ ... } | void>, ... }> &
           {
             state?:
               | Readonly<{
@@ -112,9 +116,10 @@ declare export default class StackView extends React.Component<Props, State> {
                   routes: Readonly<{
                     key: string,
                     name: string,
+                    path?: string | void,
                     ...
                   }> &
-                    Readonly<{ params?: { ... } | void, ... }> &
+                    Readonly<{ params?: Readonly<{ ... } | void>, ... }> &
                     any[],
                   type: string,
                   stale: false,
@@ -129,9 +134,10 @@ declare export default class StackView extends React.Component<Props, State> {
                     routes: Readonly<{
                       key: string,
                       name: string,
+                      path?: string | void,
                       ...
                     }> &
-                      Readonly<{ params?: { ... } | void, ... }> &
+                      Readonly<{ params?: Readonly<{ ... } | void>, ... }> &
                       any[],
                     type: string,
                     stale: false,
@@ -149,7 +155,6 @@ declare export default class StackView extends React.Component<Props, State> {
         ...
       };
   state: State;
-  getGesturesEnabled: any;
   getPreviousRoute: any;
   renderScene: any;
   renderHeader: any;

@@ -6,22 +6,28 @@ import type { JSX$Element as $tsflower_subst$React$JSX$Element } from 'tsflower/
 
 import {
   type DefaultNavigatorOptions,
-  type StackRouterOptions,
+  type ParamListBase,
   type StackNavigationState,
+  type StackRouterOptions,
 } from '@react-navigation/native';
 
 import {
   type StackNavigationConfig,
-  type StackNavigationOptions,
   type StackNavigationEventMap,
+  type StackNavigationOptions,
 } from '../types';
 
 type Props =
-  // DefaultNavigatorOptions<StackNavigationOptions> &
+  /* DefaultNavigatorOptions<
+  ParamListBase,
+  StackNavigationState<ParamListBase>,
+  StackNavigationOptions,
+  StackNavigationEventMap,
+> & */
   StackRouterOptions & StackNavigationConfig;
 declare function StackNavigator(Props): $tsflower_subst$React$JSX$Element;
 declare var _default: <
-  ParamList: { +[key: string]: { ... } | void },
+  ParamList: ParamListBase,
 >() => $tsflower_import_type$_$_40_react_2d_navigation_2f_native$TypedNavigator<
   ParamList,
   StackNavigationState<ParamList>,

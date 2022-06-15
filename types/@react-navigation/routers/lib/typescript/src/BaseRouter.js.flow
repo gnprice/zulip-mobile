@@ -14,9 +14,10 @@ declare var BaseRouter: {
       routes: Readonly<{
         key: string,
         name: string,
+        path?: string | void,
         ...
       }> &
-        Readonly<{ params?: { ... } | void, ... }> &
+        Readonly<{ params?: Readonly<{ ... } | void>, ... }> &
         { state?: Readonly<any> | PartialState<Readonly<any>> | void, ... }[],
       type: string,
       stale: false,

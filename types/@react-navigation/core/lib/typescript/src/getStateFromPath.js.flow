@@ -4,15 +4,15 @@
 import { type NavigationState, type PartialState } from '@react-navigation/routers';
 import { type PathConfigMap } from './types';
 
-type Options = {
+type Options<ParamList: { ... }> = {
   initialRouteName?: string,
-  screens: PathConfigMap,
+  screens: PathConfigMap<ParamList>,
   ...
 };
 
 type ResultState = PartialState<NavigationState<>> & { state?: ResultState, ... };
-declare export default function getStateFromPath(
+declare export default function getStateFromPath<ParamList: { ... }>(
   path: string,
-  options?: Options,
+  options?: Options<ParamList>,
 ): ResultState | void;
 export {};

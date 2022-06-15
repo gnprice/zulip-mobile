@@ -19,32 +19,33 @@ import { Animated } from 'react-native';
 import { type EdgeInsets } from 'react-native-safe-area-context';
 
 import {
-  type TransitionSpec,
-  type StackCardStyleInterpolator,
   type GestureDirection,
   type Layout,
+  type StackCardStyleInterpolator,
+  type TransitionSpec,
 } from '../../types';
 
 type Props = $tsflower_subst$RN$ViewProps & {
-  index: number,
+  interpolationIndex: number,
   closing: boolean,
   next?: $tsflower_subst$RN$Animated$AnimatedInterpolation,
   current: $tsflower_subst$RN$Animated$AnimatedInterpolation,
   gesture: Animated.Value,
   layout: Layout,
   insets: EdgeInsets,
+  headerDarkContent: boolean | void,
   pageOverflowEnabled: boolean,
   gestureDirection: GestureDirection,
   onOpen: () => void,
   onClose: () => void,
-  onTransition?: (props: {
+  onTransition: (props: {
     closing: boolean,
     gesture: boolean,
     ...
   }) => void,
-  onGestureBegin?: () => void,
-  onGestureCanceled?: () => void,
-  onGestureEnd?: () => void,
+  onGestureBegin: () => void,
+  onGestureCanceled: () => void,
+  onGestureEnd: () => void,
   children: $tsflower_subst$React$ReactNode,
   overlay: (props: {
     style: $tsflower_subst$RN$Animated$WithAnimatedValue<
@@ -55,11 +56,7 @@ type Props = $tsflower_subst$RN$ViewProps & {
   overlayEnabled: boolean,
   shadowEnabled: boolean,
   gestureEnabled: boolean,
-  gestureResponseDistance?: {
-    vertical?: number,
-    horizontal?: number,
-    ...
-  },
+  gestureResponseDistance?: number,
   gestureVelocityImpact: number,
   transitionSpec: {
     open: TransitionSpec,
@@ -74,7 +71,6 @@ type Props = $tsflower_subst$RN$ViewProps & {
 
 declare export default class Card extends React.Component<Props> {
   defaultProps: {
-    overlayEnabled: boolean,
     shadowEnabled: boolean,
     gestureEnabled: boolean,
     gestureVelocityImpact: number,
@@ -104,10 +100,13 @@ declare export default class Card extends React.Component<Props> {
   handleEndInteraction: any;
   handleGestureStateChange: any;
   getInterpolatedStyle: any;
-  getCardAnimationContext: any;
+  getCardAnimation: any;
   gestureActivationCriteria: any;
   contentRef: any;
   render(): $tsflower_subst$React$JSX$Element;
 }
 
+declare export var getIsModalPresentation: (
+  cardStyleInterpolator: StackCardStyleInterpolator,
+) => boolean;
 export {};

@@ -9,6 +9,7 @@ import type {
 import * as React from 'react';
 
 type ScrollOptions = {
+  x?: number,
   y?: number,
   animated?: boolean,
   ...

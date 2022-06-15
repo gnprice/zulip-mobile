@@ -8,10 +8,10 @@ Subject: [upstream] rnav: $ReadOnly on ResetState as param of reset()
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git types/@react-navigation/routers/lib/typescript/src/CommonActions.js.flow types/@react-navigation/routers/lib/typescript/src/CommonActions.js.flow
-index 0976fd765..dcd559b0a 100644
+index f0c56df1a..740318404 100644
 --- types/@react-navigation/routers/lib/typescript/src/CommonActions.js.flow
 +++ types/@react-navigation/routers/lib/typescript/src/CommonActions.js.flow
-@@ -71,6 +71,6 @@ declare export function navigate(
+@@ -77,6 +77,6 @@ declare export function navigate(
  ): Action;
  
  declare export function navigate(name: string, params?: { ... }): Action;

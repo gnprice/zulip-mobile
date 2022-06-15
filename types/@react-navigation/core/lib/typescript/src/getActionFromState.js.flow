@@ -3,11 +3,11 @@
  */
 import { type NavigationState, type PartialState } from '@react-navigation/routers';
 import * as CommonActions from '@react-navigation/routers/lib/typescript/src/CommonActions';
-import { type PathConfigMap, type NavigatorScreenParams } from './types';
+import { type NavigatorScreenParams, type PathConfigMap } from './types';
 
 type Options = {
   initialRouteName?: string,
-  screens: PathConfigMap,
+  screens: PathConfigMap<{ ... }>,
   ...
 };
 
@@ -16,6 +16,7 @@ type NavigateAction<State: NavigationState<>> = {
   payload: {
     name: string,
     params?: NavigatorScreenParams<State>,
+    path?: string,
     ...
   },
   ...

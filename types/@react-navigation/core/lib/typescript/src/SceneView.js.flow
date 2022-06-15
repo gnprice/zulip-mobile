@@ -3,16 +3,16 @@
  */
 import type { JSX$Element as $tsflower_subst$React$JSX$Element } from 'tsflower/subst/react';
 import {
-  type Route,
-  type ParamListBase,
   type NavigationState,
+  type ParamListBase,
   type PartialState,
+  type Route,
 } from '@react-navigation/routers';
-import { type NavigationProp, type RouteConfig, type EventMapBase } from './types';
+import { type NavigationProp, type RouteConfigComponent } from './types';
 
-type Props<State: NavigationState<>, ScreenOptions: { ... }, EventMap: EventMapBase> = {
-  screen: RouteConfig<ParamListBase, string, State, ScreenOptions, EventMap>,
-  navigation: NavigationProp<ParamListBase, string, State, ScreenOptions>,
+type Props<State: NavigationState<>, ScreenOptions: { ... }> = {
+  screen: RouteConfigComponent<ParamListBase, string> & { name: string, ... },
+  navigation: NavigationProp<ParamListBase, string, string | void, State, ScreenOptions>,
   route: Route<string>,
   routeState: NavigationState<> | PartialState<NavigationState<>> | void,
   getState: () => State,
@@ -22,11 +22,7 @@ type Props<State: NavigationState<>, ScreenOptions: { ... }, EventMap: EventMapB
   ...
 };
 
-declare export default function SceneView<
-  State: NavigationState<>,
-  ScreenOptions: { ... },
-  EventMap: EventMapBase,
->(
-  Props<State, ScreenOptions, EventMap>,
+declare export default function SceneView<State: NavigationState<>, ScreenOptions: { ... }>(
+  Props<State, ScreenOptions>,
 ): $tsflower_subst$React$JSX$Element;
 export {};

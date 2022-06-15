@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Greg Price <greg@zulip.com>
+Date: Wed, 15 Jun 2022 12:12:45 -0700
+Subject: [tsflower] Rewrite Parameter, from TS default library
+
+This is so close to being a definition we can just write down as a
+generic type alias and plug into our "subst" system.  Sadly there
+seems to be some Flow bug where if you do that and then instantiate
+the alias more than once, the different uses interfere with each
+other.  But we can make it a macro.
+---
+ .../material-top-tabs/lib/typescript/src/types.js.flow     | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git types/@react-navigation/material-top-tabs/lib/typescript/src/types.js.flow types/@react-navigation/material-top-tabs/lib/typescript/src/types.js.flow
+index b587f09fe..a6db257a2 100644
+--- types/@react-navigation/material-top-tabs/lib/typescript/src/types.js.flow
++++ types/@react-navigation/material-top-tabs/lib/typescript/src/types.js.flow
+@@ -88,8 +88,11 @@ export type MaterialTopTabNavigationOptions = {
+   tabBarIndicator?: (
+     props: $Diff<
+       $ElementType<
+-        Parameters<
+-          $ElementType<$tsflower_subst$React$ComponentProps<typeof TabBar>, 'renderIndicator'>,
++        $Call<
++          <T>(((...T) => empty) => mixed) => T,
++          (
++            $ElementType<$tsflower_subst$React$ComponentProps<typeof TabBar>, 'renderIndicator'>,
++          ) => mixed,
+         >,
+         0,
+       >,
+-- 
+2.32.0
+

@@ -9,7 +9,7 @@ I believe this could be expressed upstream, with `readonly Foo[]`.
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git types/@react-navigation/routers/lib/typescript/src/types.js.flow types/@react-navigation/routers/lib/typescript/src/types.js.flow
-index 574ad164b..65d187165 100644
+index ea5ec42e5..1b22c550d 100644
 --- types/@react-navigation/routers/lib/typescript/src/types.js.flow
 +++ types/@react-navigation/routers/lib/typescript/src/types.js.flow
 @@ -12,9 +12,9 @@ type NavigationRoute<ParamList: ParamListBase, RouteName: $Keys<ParamList>> = Ro

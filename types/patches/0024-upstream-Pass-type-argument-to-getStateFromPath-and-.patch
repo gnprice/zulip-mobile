@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Greg Price <greg@zulip.com>
+Date: Wed, 15 Jun 2022 11:48:24 -0700
+Subject: [upstream] Pass type argument to getStateFromPath and
+ getPathFromState
+
+These functions take a type argument.  It should be passed here;
+there's no way the type-checker could guess it.
+---
+ .../@react-navigation/native/lib/typescript/src/types.js.flow | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git types/@react-navigation/native/lib/typescript/src/types.js.flow types/@react-navigation/native/lib/typescript/src/types.js.flow
+index bfb0ac485..b009de532 100644
+--- types/@react-navigation/native/lib/typescript/src/types.js.flow
++++ types/@react-navigation/native/lib/typescript/src/types.js.flow
+@@ -34,8 +34,8 @@ export type LinkingOptions<ParamList: { ... }> = {
+   },
+   getInitialURL?: () => string | null | void | Promise<string | null | void>,
+   subscribe?: (listener: (url: string) => void) => void | void | (() => void),
+-  getStateFromPath?: getStateFromPathDefault,
+-  getPathFromState?: getPathFromStateDefault,
++  getStateFromPath?: getStateFromPathDefault<ParamList>,
++  getPathFromState?: getPathFromStateDefault<ParamList>,
+   getActionFromState?: getActionFromStateDefault,
+   ...
+ };
+-- 
+2.32.0
+

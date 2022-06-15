@@ -7,3 +7,5 @@ declare export var FadeInFromBottomAndroidSpec: TransitionSpec;
 declare export var FadeOutToBottomAndroidSpec: TransitionSpec;
 declare export var RevealFromBottomAndroidSpec: TransitionSpec;
 declare export var ScaleFromCenterAndroidSpec: TransitionSpec;
+declare export var BottomSheetSlideInSpec: TransitionSpec;
+declare export var BottomSheetSlideOutSpec: TransitionSpec;

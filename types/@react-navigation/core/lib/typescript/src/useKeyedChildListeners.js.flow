@@ -15,7 +15,7 @@ declare export default function useKeyedChildListeners(): {
     },
     ...
   },
-  addKeyedListener: <T: 'getState' | 'beforeRemove'>(
+  addKeyedListener: <T: $Keys<KeyedListenerMap>>(
     type: T,
     key: string,
     listener: $ElementType<KeyedListenerMap, T>,
