@@ -147,8 +147,8 @@ export default function AppNavigator(props: Props): Node {
   return (
     <Stack.Navigator
       initialRouteName={initialRouteName}
-      headerMode="none"
       screenOptions={{
+        headerShown: false,
         ...Platform.select({
           android: TransitionPresets.FadeFromBottomAndroid,
           ios: TransitionPresets.DefaultTransition,
