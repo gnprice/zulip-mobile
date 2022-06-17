@@ -33,6 +33,8 @@ export const bottomTabNavigatorConfig = (): $Exact<BottomTabNavigationOptions> =
 });
 
 export const materialTopTabNavigatorConfig = (): $Exact<MaterialTopTabNavigationOptions> => ({
+  swipeEnabled: true,
+
   tabBarShowLabel: true,
   tabBarShowIcon: false,
   tabBarActiveTintColor: BRAND_COLOR,

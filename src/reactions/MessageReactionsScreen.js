@@ -85,7 +85,6 @@ export default function MessageReactionsScreen(props: Props): Node {
               aggregatedReactions.some(aR => aR.name === reactionName) ? reactionName : undefined
             }
             screenOptions={materialTopTabNavigatorConfig()}
-            swipeEnabled
           >
             {
               // Generate tabs for the reaction list. The tabs depend
