@@ -1,11 +1,13 @@
 /* @flow strict-local */
 import { Platform } from 'react-native';
-import type { MaterialTopTabBarOptions } from '@react-navigation/material-top-tabs';
-import type { BottomTabBarOptions } from '@react-navigation/bottom-tabs';
 
 import { BRAND_COLOR } from './constants';
 
-export const bottomTabNavigatorConfig = (): {| tabBarOptions: BottomTabBarOptions |} => ({
+// React Navigation v6 deprecated tabBarOptions and removed it from the types,
+// but it still works:
+//   https://reactnavigation.org/docs/upgrading-from-5.x/#the-tabbaroptions-prop-is-removed-in-favor-of-more-flexible-options-for-bottom-tabs
+// We'll convert to the new API shortly.
+export const bottomTabNavigatorConfig = (): {| tabBarOptions: $FlowFixMe |} => ({
   tabBarOptions: {
     // TODO: Find a way to tell if we're on an Android tablet,
     //   and use that -- we don't want to assume Android users
@@ -34,7 +36,11 @@ export const bottomTabNavigatorConfig = (): {| tabBarOptions: BottomTabBarOption
   },
 });
 
-export const materialTopTabNavigatorConfig = (): {| tabBarOptions: MaterialTopTabBarOptions |} => ({
+// React Navigation v6 deprecated tabBarOptions and removed it from the types,
+// but it still works:
+//   https://reactnavigation.org/docs/upgrading-from-5.x/#the-tabbaroptions-prop-is-removed-in-favor-of-more-flexible-options-for-material-top-tabs
+// We'll convert to the new API shortly.
+export const materialTopTabNavigatorConfig = (): {| tabBarOptions: $FlowFixMe |} => ({
   tabBarOptions: {
     showLabel: true,
     showIcon: false,
