@@ -56,8 +56,7 @@ export default function MainTabsScreen(props: Props): Node {
     <SafeAreaView mode="padding" edges={['top']} style={[styles.flexed, { backgroundColor }]}>
       <OfflineNotice />
       <Tab.Navigator
-        screenOptions={{ headerShown: false, ...bottomTabNavigatorConfig() }}
-        lazy={false}
+        screenOptions={{ lazy: false, headerShown: false, ...bottomTabNavigatorConfig() }}
         backBehavior="none"
       >
         <Tab.Screen
