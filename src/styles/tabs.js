@@ -1,38 +1,33 @@
 /* @flow strict-local */
 import { Platform } from 'react-native';
+import type { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
 
 import { BRAND_COLOR } from './constants';
 
-// React Navigation v6 deprecated tabBarOptions and removed it from the types,
-// but it still works:
-//   https://reactnavigation.org/docs/upgrading-from-5.x/#the-tabbaroptions-prop-is-removed-in-favor-of-more-flexible-options-for-bottom-tabs
-// We'll convert to the new API shortly.
-export const bottomTabNavigatorConfig = (): {| tabBarOptions: $FlowFixMe |} => ({
-  tabBarOptions: {
-    // TODO: Find a way to tell if we're on an Android tablet,
-    //   and use that -- we don't want to assume Android users
-    //   aren't on tablets, but `isPad` is iOS only and `Platform`
-    //   doesn't have something else for Android (yet):
-    //   https://reactnative.dev/docs/platform#ispad-ios
-    showLabel: Platform.OS === 'ios' && Platform.isPad,
-    showIcon: true,
+export const bottomTabNavigatorConfig = (): $Exact<BottomTabNavigationOptions> => ({
+  // TODO: Find a way to tell if we're on an Android tablet,
+  //   and use that -- we don't want to assume Android users
+  //   aren't on tablets, but `isPad` is iOS only and `Platform`
+  //   doesn't have something else for Android (yet):
+  //   https://reactnative.dev/docs/platform#ispad-ios
+  tabBarShowLabel: Platform.OS === 'ios' && Platform.isPad,
+  // showIcon: true, // TODO was this doing something?
 
-    activeTintColor: BRAND_COLOR,
-    inactiveTintColor: 'gray',
-    labelStyle: {
-      fontSize: 13,
-      margin: 0,
-    },
-    tabStyle: {
-      flex: 1,
-    },
-    style: {
-      backgroundColor: 'transparent',
+  tabBarActiveTintColor: BRAND_COLOR,
+  tabBarInactiveTintColor: 'gray',
+  tabBarLabelStyle: {
+    fontSize: 13,
+    margin: 0,
+  },
+  tabBarItemStyle: {
+    flex: 1,
+  },
+  tabBarStyle: {
+    backgroundColor: 'transparent',
 
-      // Fix a bug introduced in React Navigation v5 that is exposed
-      // by setting `backgroundColor` to 'transparent', as we do.
-      elevation: 0,
-    },
+    // Fix a bug introduced in React Navigation v5 that is exposed
+    // by setting `backgroundColor` to 'transparent', as we do.
+    elevation: 0,
   },
 });
 
