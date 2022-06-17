@@ -1,16 +1,13 @@
 /* @flow strict-local */
 import React from 'react';
-import {
-  type NavigationAction,
-  type NavigationState,
-  typeof NavigationContainer,
-} from '@react-navigation/native';
+import { type NavigationAction, type NavigationState } from '@react-navigation/native';
+import type { NavigationContainerOf } from '@react-navigation/native/lib/typescript/src/NavigationContainer';
 
 import type { AppNavigatorParamList } from './AppNavigator';
 
 export const isReadyRef: {| current: null | boolean |} = React.createRef();
 export const navigationContainerRef: {|
-  current: null | React$ElementRef<NavigationContainer<AppNavigatorParamList>>,
+  current: null | React$ElementRef<NavigationContainerOf<AppNavigatorParamList>>,
 |} = React.createRef();
 
 const getContainer = () => {

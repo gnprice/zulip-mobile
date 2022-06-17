@@ -2,14 +2,18 @@
 import React, { useContext, useEffect } from 'react';
 import type { Node } from 'react';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import type { NavigationContainerOf } from '@react-navigation/native/lib/typescript/src/NavigationContainer';
 
 import { useGlobalSelector } from '../react-redux';
 import { ThemeContext } from '../styles';
 import * as NavigationService from './NavigationService';
 import { getGlobalSettings } from '../selectors';
 import AppNavigator from './AppNavigator';
+import type { AppNavigatorParamList } from './AppNavigator';
 
 type Props = $ReadOnly<{||}>;
+
+const AppNavigationContainer: NavigationContainerOf<AppNavigatorParamList> = NavigationContainer;
 
 /**
  * Wrapper for React Nav's component given by `createAppContainer`.
@@ -51,7 +55,11 @@ export default function ZulipAppContainer(props: Props): Node {
   };
 
   return (
-    <NavigationContainer
+    <AppNavigationContainer
+      /* $FlowIssue[incompatible-type] This gets an error that simplifies down to:
+(c: React$ElementRef<NavigationContainerOf<AppNavigatorParamList>>
+ ): React$ElementRef<NavigationContainerOf<AppNavigatorParamList>> => c; // error here
+       */
       ref={NavigationService.navigationContainerRef}
       onReady={() => {
         NavigationService.isReadyRef.current = true;
@@ -59,6 +67,6 @@ export default function ZulipAppContainer(props: Props): Node {
       theme={theme}
     >
       <AppNavigator />
-    </NavigationContainer>
+    </AppNavigationContainer>
   );
 }
