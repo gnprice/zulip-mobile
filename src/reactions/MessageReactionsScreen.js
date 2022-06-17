@@ -84,7 +84,7 @@ export default function MessageReactionsScreen(props: Props): Node {
             initialRouteName={
               aggregatedReactions.some(aR => aR.name === reactionName) ? reactionName : undefined
             }
-            {...materialTopTabNavigatorConfig()}
+            screenOptions={materialTopTabNavigatorConfig()}
             swipeEnabled
           >
             {
