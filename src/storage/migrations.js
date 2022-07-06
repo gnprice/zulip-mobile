@@ -38,18 +38,6 @@ export const historicalStoreKeys: $ReadOnlyArray<$Keys<StoreKeysState>> = [
 ];
 
 /**
- * The value of `cacheKeys` as of migration 24.
- */
-// prettier-ignore
-export const historicalCacheKeys24: $ReadOnlyArray<$Keys<GlobalState>> = [
-  // Never edit this list.
-  'flags', 'messages', 'mute', 'narrows', 'pmConversations', 'realm', 'streams',
-  'subscriptions', 'unread', 'userGroups', 'users',
-  // Why never edit?  Much like for `historicalStoreKeys` above, but in this
-  // case this is about a one-off migration we don't expect to repeat.
-];
-
-/**
  * Drop all server data, as a rehydrate-time migration.
  *
  * For any change to our Redux state affecting the data we fetch from the
@@ -239,7 +227,9 @@ const legacyMigrationsInner: {| [string]: (LessPartialState) => LessPartialState
   '23': dropCache,
 
   // Dummy `dropCache` for #4458.
-  // See `purge` call in src/third/redux-persist/persistStore.js.
+  // (Originally this went with a `purge` call in src/third/redux-persist/persistStore.js.
+  // Now `migrationLegacyRollup` takes care of that comprehensively as part
+  // of running these legacy migrations.)
   '24': dropCache,
 
   // Convert `unread.streams` from over-the-wire array to `Immutable.Map`.
