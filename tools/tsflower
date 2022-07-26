@@ -247,6 +247,12 @@ check_consistent()
         return 1
     fi
 
+    if git ls-files --others --exclude-standard -- types/ \
+            | grep -q .; then
+        echo >&2 "There are untracked files in types/.  Aborting, to avoid losing your work."
+        return 1
+    fi
+
     unapply_patches
 
     # TODO: also catch if one patch touches something and another reverts
@@ -256,7 +262,7 @@ check_consistent()
     fi
     echo >&2 "Patches are clean.  Running TsFlower..."
 
-    git add -u
+    git add -- types/
 
     run_only
 
