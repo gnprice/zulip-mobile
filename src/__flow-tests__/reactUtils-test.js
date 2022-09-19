@@ -1,4 +1,10 @@
 /* @flow strict-local */
+import type AnimatedValue from 'react-native/Libraries/Animated/nodes/AnimatedValue';
+import type { DimensionValue } from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
+import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
+
+import type { IsSupertype } from '../generics';
+
 import { usePrevious } from '../reactUtils';
 
 function test_usePrevious() {
