@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useMemo } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { LogBox, View } from 'react-native';
 
@@ -84,7 +84,7 @@ export default function SelectableOptionsScreen<TItemKey: string | number>(
   const { route } = props;
   const { title, description, items, onRequestSelectionChange } = route.params;
 
-  const styles = useMemo(
+  const styles = React.useMemo(
     () =>
       createStyleSheet({
         descriptionWrapper: { padding: 16 },

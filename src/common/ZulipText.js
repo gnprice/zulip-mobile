@@ -1,13 +1,13 @@
 /* @flow strict-local */
 import invariant from 'invariant';
-import React, { useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { Text } from 'react-native';
 
 import { ThemeContext } from '../styles';
 
 type Props = $ReadOnly<{|
-  ...$Exact<React$ElementConfig<typeof Text>>,
+  ...$Exact<React.ElementConfig<typeof Text>>,
   text?: string,
 |}>;
 
@@ -25,7 +25,7 @@ type Props = $ReadOnly<{|
  */
 export default function ZulipText(props: Props): Node {
   const { text, children, style, ...restProps } = props;
-  const themeData = useContext(ThemeContext);
+  const themeData = React.useContext(ThemeContext);
 
   invariant(
     text != null || children != null,

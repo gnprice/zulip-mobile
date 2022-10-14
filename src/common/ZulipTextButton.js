@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useMemo } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
@@ -100,7 +100,7 @@ type Props = $ReadOnly<{|
 export default function ZulipTextButton(props: Props): Node {
   const { variant = 'standard', leftMargin, rightMargin, label, onPress } = props;
 
-  const variantStyles = useMemo(() => styleSheetForVariant(variant), [variant]);
+  const variantStyles = React.useMemo(() => styleSheetForVariant(variant), [variant]);
 
   return (
     <Touchable

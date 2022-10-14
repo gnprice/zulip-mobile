@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useState, useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
@@ -37,9 +37,9 @@ type Props = $ReadOnly<$Diff<InputProps,
  * All props are passed through to `Input`.  See `Input` for descriptions.
  */
 export default function PasswordInput(props: Props): Node {
-  const [isHidden, setIsHidden] = useState<boolean>(true);
+  const [isHidden, setIsHidden] = React.useState<boolean>(true);
 
-  const handleShow = useCallback(() => {
+  const handleShow = React.useCallback(() => {
     setIsHidden(prevIsHidden => !prevIsHidden);
   }, []);
 

@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { Platform, StatusBar } from 'react-native';
 // $FlowFixMe[untyped-import]
@@ -11,7 +11,7 @@ import { useGlobalSelector } from '../react-redux';
 import { foregroundColorFromBackground } from '../utils/color';
 import { getGlobalSession, getGlobalSettings } from '../selectors';
 
-type BarStyle = React$ElementConfig<typeof StatusBar>['barStyle'];
+type BarStyle = React.ElementConfig<typeof StatusBar>['barStyle'];
 
 export const getStatusBarColor = (backgroundColor: string | void, theme: ThemeName): string =>
   backgroundColor ?? (theme === 'night' ? 'hsl(212, 28%, 18%)' : 'white');

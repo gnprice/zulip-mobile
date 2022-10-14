@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useRef, useState, useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
@@ -26,15 +26,15 @@ type Props = $ReadOnly<$Diff<InputProps, {| textInputRef: mixed, value: mixed, _
 export default function InputWithClearButton(props: Props): Node {
   const { onChangeText } = props;
 
-  const [text, setText] = useState<string>('');
+  const [text, setText] = React.useState<string>('');
 
   // We should replace the fixme with
   // `React$ElementRef<typeof TextInput>` when we can. Currently, that
   // would make `.current` be `any(implicit)`, which we don't want;
   // this is probably down to bugs in Flow's special support for React.
-  const textInputRef = useRef<$FlowFixMe>();
+  const textInputRef = React.useRef<$FlowFixMe>();
 
-  const handleChangeText = useCallback(
+  const handleChangeText = React.useCallback(
     (_text: string) => {
       setText(_text);
       if (onChangeText) {
@@ -44,7 +44,7 @@ export default function InputWithClearButton(props: Props): Node {
     [onChangeText],
   );
 
-  const handleClear = useCallback(() => {
+  const handleClear = React.useCallback(() => {
     handleChangeText('');
     if (textInputRef.current) {
       // `.current` is not type-checked; see definition.

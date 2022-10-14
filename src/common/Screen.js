@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { ScrollView, View } from 'react-native';
 import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
@@ -77,7 +77,7 @@ type Props = $ReadOnly<{|
  *                 Required unless `search` is true.
  */
 export default function Screen(props: Props): Node {
-  const { backgroundColor } = useContext(ThemeContext);
+  const { backgroundColor } = React.useContext(ThemeContext);
   const {
     autoFocus = false,
     canGoBack = true,

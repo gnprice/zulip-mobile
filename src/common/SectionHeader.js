@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
@@ -19,7 +19,7 @@ type Props = $ReadOnly<{|
 
 export default function SectionHeader(props: Props): Node {
   const { text } = props;
-  const themeData = useContext(ThemeContext);
+  const themeData = React.useContext(ThemeContext);
 
   return (
     <View style={[styles.header, { backgroundColor: themeData.backgroundColor }]}>

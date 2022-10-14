@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
@@ -39,7 +39,7 @@ const componentStyles = createStyleSheet({
 export default function SwitchRow(props: Props): Node {
   const { label, value, onValueChange, Icon } = props;
 
-  const themeContext = useContext(ThemeContext);
+  const themeContext = React.useContext(ThemeContext);
 
   return (
     <View style={componentStyles.container}>

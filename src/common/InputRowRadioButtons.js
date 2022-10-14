@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useCallback, useRef, useMemo, useEffect, useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 import invariant from 'invariant';
@@ -73,12 +73,12 @@ export default function InputRowRadioButtons<TItemKey: string | number>(
 ): Node {
   const { navigation, label, description, valueKey, items, onValueChange } = props;
 
-  const screenKey: string = useRef(`selectable-options-${randString()}`).current;
+  const screenKey: string = React.useRef(`selectable-options-${randString()}`).current;
 
   const selectedItem = items.find(c => c.key === valueKey);
   invariant(selectedItem != null, 'InputRowRadioButtons: exactly one choice must be selected');
 
-  const screenParams = useMemo(
+  const screenParams = React.useMemo(
     () => ({
       title: label,
       description,
@@ -101,7 +101,7 @@ export default function InputRowRadioButtons<TItemKey: string | number>(
     [navigation, label, description, items, valueKey, onValueChange],
   );
 
-  const handleRowPressed = useCallback(() => {
+  const handleRowPressed = React.useCallback(() => {
     // Normally we'd use `.push`, to avoid `.navigate`'s funky
     // rewind-history behavior. But `.push` doesn't accept a custom key, so
     // we use `.navigate`. This is fine because the funky rewind-history
@@ -115,7 +115,7 @@ export default function InputRowRadioButtons<TItemKey: string | number>(
   }, [navigation, screenKey, screenParams]);
 
   // Live-update the selectable-options screen.
-  useEffect(() => {
+  React.useEffect(() => {
     navigation.dispatch(state =>
       /* eslint-disable operator-linebreak */
       state.routes.find(route => route.key === screenKey)
@@ -131,8 +131,8 @@ export default function InputRowRadioButtons<TItemKey: string | number>(
   // It'll also be its width.
   const kRightArrowIconSize = 24;
 
-  const themeData = useContext(ThemeContext);
-  const styles = useMemo(
+  const themeData = React.useContext(ThemeContext);
+  const styles = React.useMemo(
     () =>
       createStyleSheet({
         wrapper: {

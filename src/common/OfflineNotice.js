@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useEffect } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
@@ -58,7 +58,7 @@ export default function OfflineNotice(props: Props): Node {
     16 * 1000,
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (shouldShowUncertaintyNotice) {
       NetInfo.fetch().then(state => {
         logging.warn(

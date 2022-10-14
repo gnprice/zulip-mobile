@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
@@ -33,7 +33,7 @@ type Props = $ReadOnly<{|
  */
 export default function LoadingBanner(props: Props): Node {
   const loading = useSelector(getLoading);
-  const themeContext = useContext(ThemeContext);
+  const themeContext = React.useContext(ThemeContext);
 
   if (!loading) {
     return <View key={key} style={styles.none} />;

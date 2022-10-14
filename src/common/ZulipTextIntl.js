@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -8,7 +8,7 @@ import ZulipText from './ZulipText';
 import type { LocalizableReactText } from '../types';
 
 type Props = $ReadOnly<{|
-  ...BoundedDiff<$Exact<React$ElementConfig<typeof ZulipText>>, {| +children: ?Node |}>,
+  ...BoundedDiff<$Exact<React.ElementConfig<typeof ZulipText>>, {| +children: ?Node |}>,
   text: LocalizableReactText,
 |}>;
 

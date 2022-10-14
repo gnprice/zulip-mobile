@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
@@ -44,7 +44,7 @@ type Props = $ReadOnly<{|
  * other constants in its styles.
  */
 export default function Popup(props: Props): Node {
-  const themeContext = useContext(ThemeContext);
+  const themeContext = React.useContext(ThemeContext);
   // TODO(color/theme): find a cleaner way to express this
   const isDarkTheme = useGlobalSelector(state => getGlobalSettings(state).theme !== 'default');
   return (

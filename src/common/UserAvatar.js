@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { Image, View, PixelRatio } from 'react-native';
 
@@ -41,7 +41,7 @@ function UserAvatar(props: Props): Node {
     textAlign: 'center',
   };
 
-  const { color } = useContext(ThemeContext);
+  const { color } = React.useContext(ThemeContext);
 
   const auth = useSelector(state => getAuth(state));
 

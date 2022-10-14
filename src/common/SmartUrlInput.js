@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useState, useRef, useCallback, useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { TextInput, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
@@ -39,17 +39,17 @@ export default function SmartUrlInput(props: Props): Node {
   // `React$ElementRef<typeof TextInput>` when we can. Currently, that
   // would make `.current` be `any(implicit)`, which we don't want;
   // this is probably down to bugs in Flow's special support for React.
-  const textInputRef = useRef<$FlowFixMe>();
+  const textInputRef = React.useRef<$FlowFixMe>();
 
-  const [value, setValue] = useState<string>('');
+  const [value, setValue] = React.useState<string>('');
 
-  const themeContext = useContext(ThemeContext);
+  const themeContext = React.useContext(ThemeContext);
 
   // When the route is focused in the navigation, focus the input.
   // Otherwise, if you go back to this screen from the auth screen, the
   // input won't be focused.
   useFocusEffect(
-    useCallback(() => {
+    React.useCallback(() => {
       if (textInputRef.current) {
         // Sometimes the effect of this `.focus()` is immediately undone
         // (the keyboard is closed) by a Keyboard.dismiss() from React
@@ -65,7 +65,7 @@ export default function SmartUrlInput(props: Props): Node {
     }, []),
   );
 
-  const handleChange = useCallback(
+  const handleChange = React.useCallback(
     (_value: string) => {
       setValue(_value);
       onChangeText(_value);

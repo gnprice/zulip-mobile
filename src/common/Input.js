@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useState, useCallback, useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { TextInput, Platform } from 'react-native';
 
@@ -8,10 +8,10 @@ import { createStyleSheet, ThemeContext, HALF_COLOR, BORDER_COLOR } from '../sty
 import { TranslationContext } from '../boot/TranslationProvider';
 
 export type Props = $ReadOnly<{|
-  ...React$ElementConfig<typeof TextInput>,
+  ...React.ElementConfig<typeof TextInput>,
   placeholder: LocalizableText,
   onChangeText?: (text: string) => void,
-  textInputRef?: React$Ref<typeof TextInput>,
+  textInputRef?: React.Ref<typeof TextInput>,
 |}>;
 
 const componentStyles = createStyleSheet({
@@ -44,18 +44,18 @@ const componentStyles = createStyleSheet({
 export default function Input(props: Props): Node {
   const { style, placeholder, textInputRef, ...restProps } = props;
 
-  const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [isFocused, setIsFocused] = React.useState<boolean>(false);
 
-  const handleFocus = useCallback(() => {
+  const handleFocus = React.useCallback(() => {
     setIsFocused(true);
   }, []);
 
-  const handleBlur = useCallback(() => {
+  const handleBlur = React.useCallback(() => {
     setIsFocused(false);
   }, []);
 
-  const themeContext = useContext(ThemeContext);
-  const _ = useContext(TranslationContext);
+  const themeContext = React.useContext(ThemeContext);
+  const _ = React.useContext(TranslationContext);
 
   return (
     <TextInput

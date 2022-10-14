@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
@@ -33,7 +33,7 @@ type Props = $ReadOnly<{|
  * @prop children - Components to be centered.
  * @prop [padding] - Specifies if the components should be padded.
  */
-export default class Centerer extends PureComponent<Props> {
+export default class Centerer extends React.PureComponent<Props> {
   static defaultProps: {| padding: boolean |} = {
     padding: false,
   };

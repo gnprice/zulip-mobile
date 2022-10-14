@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
@@ -12,7 +12,7 @@ const componentStyles = createStyleSheet({
 });
 
 export default function OptionDivider(props: {||}): Node {
-  const themeContext = useContext(ThemeContext);
+  const themeContext = React.useContext(ThemeContext);
   return (
     <View style={[componentStyles.divider, { borderBottomColor: themeContext.dividerColor }]} />
   );

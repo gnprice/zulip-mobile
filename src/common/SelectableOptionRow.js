@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useContext, useMemo } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
@@ -65,10 +65,10 @@ export default function SelectableOptionRow<TItemKey: string | number>(
 
   const globalSettings = useGlobalSelector(getGlobalSettings);
 
-  const _ = useContext(TranslationContext);
-  const themeData = useContext(ThemeContext);
+  const _ = React.useContext(TranslationContext);
+  const themeData = React.useContext(ThemeContext);
 
-  const styles = useMemo(
+  const styles = React.useMemo(
     () =>
       createStyleSheet({
         textWrapper: {

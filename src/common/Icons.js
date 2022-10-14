@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React from 'react';
+import * as React from 'react';
 import type { ComponentType } from 'react';
 import { Text } from 'react-native';
 import type { IconProps as IconPropsBusted } from 'react-native-vector-icons';
@@ -27,7 +27,7 @@ import ZulipIcon from './ZulipIcon';
  *    it should be `allowFontScaling?: ?boolean`.
  */
 type IconProps<Glyphs: string> = {|
-  ...$Exact<React$ElementConfig<typeof Text>>,
+  ...$Exact<React.ElementConfig<typeof Text>>,
   name: Glyphs,
 
   /**

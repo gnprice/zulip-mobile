@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useContext, useMemo } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
@@ -31,9 +31,9 @@ type Props = $ReadOnly<{|
 export default function NestedNavRow(props: Props): Node {
   const { label, labelBoldUppercase, onPress, Icon } = props;
 
-  const themeContext = useContext(ThemeContext);
+  const themeContext = React.useContext(ThemeContext);
 
-  const styles = useMemo(
+  const styles = React.useMemo(
     () =>
       createStyleSheet({
         container: {

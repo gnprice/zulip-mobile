@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
@@ -68,7 +68,7 @@ function MaybeOpaqueBackgroundWrapper(
   |}>,
 ) {
   const { useOpaqueBackground, style, children } = props;
-  const { backgroundColor } = useContext(ThemeContext);
+  const { backgroundColor } = React.useContext(ThemeContext);
   return (
     <View
       style={[

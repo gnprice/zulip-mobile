@@ -1,12 +1,12 @@
 // @flow strict-local
-import React, { type Node } from 'react';
+import * as React from 'react';
 import { Text, View } from 'react-native';
 
 // eslint-disable-next-line import/extensions
 import codePointMap from '../../static/assets/fonts/zulip-icons.map.js';
 
 type Props = $ReadOnly<{|
-  ...$Exact<React$ElementConfig<typeof Text>>,
+  ...$Exact<React.ElementConfig<typeof Text>>,
   name: $Keys<typeof codePointMap>,
   size: number,
   color?: string,
@@ -35,7 +35,7 @@ const fontFamily = 'zulip-icons';
  * parent.  If you want some style that's also present on the parent, pass
  * it explicitly.
  */
-export default function ZulipIcon(props: Props): Node {
+export default function ZulipIcon(props: Props): React.Node {
   const { name, size, color, style: styleOuter, ...restProps } = props;
 
   const codePoint = codePointMap[name];
