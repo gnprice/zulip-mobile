@@ -1,7 +1,8 @@
 // @//flow strict-local
 
 import * as recast from 'recast';
-import * as flowParser from 'recast/parsers/flow';
+import * as babelParser from 'recast/parsers/babel';
+import baseBabelOptions from 'recast/parsers/_babel_options';
 import { builders as b, namedTypes as n } from 'ast-types';
 import { NodePath } from 'ast-types/lib/node-path';
 import assert from 'assert';
@@ -11,14 +12,22 @@ import assert from 'assert';
 /* eslint-disable no-console */
 /* eslint-disable no-useless-return */ // wait, we have this?
 
-export const parser = 'flow';
+// export const parser = 'flow';
 
 // For the Flow `%checks` syntax, see:
 //   https://flow.org/en/docs/types/functions/#toc-predicate-functions
 const checkStatement = (node: n.Node): boolean %checks => n.Statement.check(node);
 
+const parser = {
+  parse(source, options) {
+    const babelOptions = baseBabelOptions(options);
+    babelOptions.plugins.push('jsx', 'flow', 'transform-flow-enums');
+    return babelParser.parser.parse(source, babelOptions);
+  },
+};
+
 export default function (fileInfo: any, { jscodeshift: j, report }: any) {
-  const ast = recast.parse(fileInfo.source, { parser: flowParser });
+  const ast = recast.parse(fileInfo.source, { parser });
 
   let changed = false;
   const nameMap = new Map();
