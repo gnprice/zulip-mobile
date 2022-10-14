@@ -74,7 +74,7 @@ export default function StreamSettingsScreen(props: Props): Node {
   }, [auth, stream, subscription, userSettingStreamNotification]);
 
   return (
-    (<Screen title="Stream">
+    <Screen title="Stream">
       <StreamCard stream={stream} subscription={subscription} />
       {subscription && (
         <>
@@ -108,13 +108,13 @@ export default function StreamSettingsScreen(props: Props): Node {
           //     https://callstack.github.io/react-native-paper/card-actions.html
           //   Or their `Surface`:
           //     https://callstack.github.io/react-native-paper/surface.html
-          (<ZulipButton
+          <ZulipButton
             style={styles.marginTop}
             Icon={IconEdit}
             text="Edit stream"
             secondary
             onPress={() => delay(handlePressEdit)}
-          />)
+          />
         )}
         <ZulipButton
           style={styles.marginTop}
@@ -139,6 +139,6 @@ export default function StreamSettingsScreen(props: Props): Node {
           />
         )}
       </View>
-    </Screen>)
+    </Screen>
   );
 }

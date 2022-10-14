@@ -35,7 +35,9 @@ type Props = $ReadOnly<{|
 export default function IosCompliantAppleAuthButton(props: Props): Node {
   const { style, onPress } = props;
   const theme = useGlobalSelector(state => getGlobalSettings(state).theme);
-  const [isNativeButtonAvailable, setIsNativeButtonAvailable] = React.useState<boolean | void>(undefined);
+  const [isNativeButtonAvailable, setIsNativeButtonAvailable] = React.useState<boolean | void>(
+    undefined,
+  );
 
   React.useEffect(() => {
     async function getAndSetIsAvailable() {

@@ -76,7 +76,7 @@ export default function MessageReactionsScreen(props: Props): Node {
       const aggregatedReactions = aggregateReactions(message.reactions, ownUserId);
 
       return (
-        (<View style={styles.flexed}>
+        <View style={styles.flexed}>
           <Tab.Navigator
             backBehavior="none"
             // The user may have originally navigated here to look at a reaction
@@ -93,7 +93,7 @@ export default function MessageReactionsScreen(props: Props): Node {
             }
             {aggregatedReactions.map(aggregatedReaction => (
               // Each tab corresponds to an aggregated reaction, and has a user list.
-              (<Tab.Screen
+              <Tab.Screen
                 key={aggregatedReaction.name}
                 name={aggregatedReaction.name}
                 component={() => <ReactionUserList reactedUserIds={aggregatedReaction.users} />}
@@ -108,10 +108,10 @@ export default function MessageReactionsScreen(props: Props): Node {
                     </View>
                   ),
                 }}
-              />)
+              />
             ))}
           </Tab.Navigator>
-        </View>)
+        </View>
       );
     }
   })();

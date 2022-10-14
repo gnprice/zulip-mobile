@@ -61,7 +61,7 @@ export default function withHaveServerDataGate<P: { ... }, C: React.ComponentTyp
         //
         // And avoid rendering any of our main UI, to maintain the
         // guarantee that it can all rely on server data existing.
-        (<FullScreenLoading />)
+        <FullScreenLoading />
       ),
   );
 }

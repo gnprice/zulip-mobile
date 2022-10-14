@@ -124,7 +124,8 @@ export default function StreamItem(props: Props): Node {
     userSettingStreamNotification: getSettings(state).streamNotification,
   }));
 
-  const { backgroundColor: themeBackgroundColor, color: themeColor } = React.useContext(ThemeContext);
+  const { backgroundColor: themeBackgroundColor, color: themeColor } =
+    React.useContext(ThemeContext);
 
   const wrapperStyle = [styles.listItem, { backgroundColor }, isMuted && componentStyles.muted];
   const iconColor =

@@ -43,7 +43,9 @@ function MentionWarningsInner(props: Props, ref): Node {
   const auth = useSelector(getAuth);
   const allUsersById = useSelector(getAllUsersById);
 
-  const [unsubscribedMentions, setUnsubscribedMentions] = React.useState<$ReadOnlyArray<UserId>>([]);
+  const [unsubscribedMentions, setUnsubscribedMentions] = React.useState<$ReadOnlyArray<UserId>>(
+    [],
+  );
 
   const _ = React.useContext(TranslationContext);
 

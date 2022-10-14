@@ -81,12 +81,12 @@ export default function PeopleAutocomplete(props: Props): Node {
         // synthetic "users" to represent @all and @everyone.
         // TODO display those in a UI that makes more sense for them,
         //   and drop the fake "users" and use the normal UserItem.
-        (<UserItemRaw
+        <UserItemRaw
           key={item.user_id}
           user={item}
           showEmail
           onPress={handleUserItemAutocomplete}
-        />)
+        />
       ),
     }: Section<AutocompleteOption>),
   ];
