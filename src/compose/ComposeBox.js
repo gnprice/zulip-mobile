@@ -115,7 +115,7 @@ export default function ComposeBox(props: Props): Node {
   const videoChatProvider = useSelector(getVideoChatProvider);
   const mandatoryTopics = useSelector(state => getRealm(state).mandatoryTopics);
 
-  const mentionWarnings = React.React.useRef<React.ElementRef<typeof MentionWarnings> | null>(null);
+  const mentionWarnings = React.useRef<React.ElementRef<typeof MentionWarnings> | null>(null);
 
   const inputBlurTimeoutId = React.useRef<?TimeoutID>(null);
 

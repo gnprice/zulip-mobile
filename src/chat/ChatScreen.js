@@ -77,7 +77,7 @@ const useMessagesWithFetch = args => {
 
   const [fetchError, setFetchError] = React.useState<mixed>(null);
 
-  const fetch = React.React.useCallback(async () => {
+  const fetch = React.useCallback(async () => {
     shouldFetchWhenNextFocused.current = false;
     try {
       await dispatch(fetchMessagesInNarrow(narrow));
@@ -126,7 +126,7 @@ const useMessagesWithFetch = args => {
 
 export default function ChatScreen(props: Props): Node {
   const { route, navigation } = props;
-  const { backgroundColor } = React.React.useContext(ThemeContext);
+  const { backgroundColor } = React.useContext(ThemeContext);
 
   const { narrow, editMessage } = route.params;
   const setEditMessage = React.useCallback(
