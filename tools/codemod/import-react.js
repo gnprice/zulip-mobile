@@ -21,8 +21,24 @@ const checkStatement = (node: n.Node): boolean %checks => n.Statement.check(node
 const parser = {
   parse(source, options) {
     const babelOptions = baseBabelOptions(options);
-    babelOptions.plugins.push('jsx', 'flow', 'transform-flow-enums');
-    return babelParser.parser.parse(source, babelOptions);
+    babelOptions.plugins.push(
+      'jsx',
+      ['@babel/plugin-syntax-flow', { enums: true }],
+      'flow',
+      // 'module:babel-plugin-transform-flow-enums',
+    );
+    return babelParser.parser.parse(source, {
+      presets: ['module:metro-react-native-babel-preset'],
+      plugins: [
+        '@babel/plugin-proposal-numeric-separator',
+        // '@babel/plugin-transform-flow-strip-types',
+        'flow',
+        ['@babel/plugin-syntax-flow', { enums: true }],
+        'transform-flow-enums',
+      ],
+
+      sourceType: 'module',
+    });
   },
 };
 
