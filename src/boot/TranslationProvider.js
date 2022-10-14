@@ -11,7 +11,7 @@ import { getGlobalSettings } from '../selectors';
 import messages from '../i18n/messages';
 
 // $FlowFixMe[incompatible-type] could put a well-typed mock value here, to help write tests
-export const TranslationContext: Context<GetText> = React.createContext(undefined);
+export const TranslationContext: React.Context<GetText> = React.createContext(undefined);
 
 /**
  * Provide `_` to the wrapped component, passing other props through.

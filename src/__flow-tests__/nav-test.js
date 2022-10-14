@@ -42,9 +42,9 @@ function testNavigatorTypes() {
     +navigation: NavigationProp<'Profile'>,
     +route: RouteProp<'Profile', {| +userId: string |}>,
   |};
-  declare var Profile: ComponentType<ProfileProps>;
+  declare var Profile: React.ComponentType<ProfileProps>;
 
-  declare var Profile12: ComponentType<{|
+  declare var Profile12: React.ComponentType<{|
     +navigation: NavigationProp<'Profile1'>,
     +route: RouteProp<'Profile2', {| +userId: string |}>,
   |}>;

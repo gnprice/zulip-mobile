@@ -283,7 +283,7 @@ const marksMessagesAsRead = (narrow: Narrow): boolean =>
     mentioned: () => false,
   });
 
-const MessageList: ComponentType<OuterProps> = connect<SelectorProps, _, _>(
+const MessageList: React.ComponentType<OuterProps> = connect<SelectorProps, _, _>(
   (state, props: OuterProps) => {
     // If this were a function component with Hooks, these would be
     // useGlobalSelector calls and would coexist perfectly smoothly with
