@@ -1,4 +1,4 @@
-// @flow strict-local
+// @//flow strict-local
 
 import * as recast from 'recast';
 import * as flowParser from 'recast/parsers/flow';
