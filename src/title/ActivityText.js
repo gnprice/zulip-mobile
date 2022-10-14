@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import type { TextStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';
 

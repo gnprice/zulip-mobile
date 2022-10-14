@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useContext, useCallback, useMemo } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { Platform } from 'react-native';
 import type { AppNavigationProp } from '../nav/AppNavigator';
@@ -42,13 +42,13 @@ export type Props = $ReadOnly<{|
 export default function EmojiInput(props: Props): Node {
   const { value, onChangeValue, navigation, rightMargin } = props;
 
-  const { color } = useContext(ThemeContext);
+  const { color } = React.useContext(ThemeContext);
 
-  const handlePress = useCallback(() => {
+  const handlePress = React.useCallback(() => {
     navigation.push('emoji-picker', { onPressEmoji: onChangeValue });
   }, [navigation, onChangeValue]);
 
-  const styles = useMemo(
+  const styles = React.useMemo(
     () =>
       createStyleSheet({
         touchable: {

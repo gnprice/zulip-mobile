@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import type { ComponentType } from 'react';
 import { ActivityIndicator, View, FlatList } from 'react-native';
 
@@ -53,7 +53,7 @@ type State = {|
   error: string,
 |};
 
-class DevAuthScreenInner extends PureComponent<Props, State> {
+class DevAuthScreenInner extends React.PureComponent<Props, State> {
   state = {
     progress: false,
     directAdmins: [],

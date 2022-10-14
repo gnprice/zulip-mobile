@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useCallback, useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
@@ -30,11 +30,11 @@ type Props = $ReadOnly<{|
 export default function UserGroupItem(props: Props): Node {
   const { name, description, onPress } = props;
 
-  const handlePress = useCallback(() => {
+  const handlePress = React.useCallback(() => {
     onPress(name);
   }, [onPress, name]);
 
-  const themeContext = useContext(ThemeContext);
+  const themeContext = React.useContext(ThemeContext);
 
   return (
     <Touchable onPress={handlePress}>

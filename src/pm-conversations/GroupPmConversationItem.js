@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useCallback, useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
@@ -35,11 +35,11 @@ export default function GroupPmConversationItem<U: $ReadOnlyArray<UserOrBot>>(
 ): Node {
   const { users, unreadCount, onPress } = props;
 
-  const handlePress = useCallback(() => {
+  const handlePress = React.useCallback(() => {
     onPress(users);
   }, [onPress, users]);
 
-  const _ = useContext(TranslationContext);
+  const _ = React.useContext(TranslationContext);
   const mutedUsers = useSelector(getMutedUsers);
   const names = users.map(user =>
     mutedUsers.has(user.user_id) ? _('Muted user') : user.full_name,

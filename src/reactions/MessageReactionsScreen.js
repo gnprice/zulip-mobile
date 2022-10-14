@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useEffect } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -44,7 +44,7 @@ export default function MessageReactionsScreen(props: Props): Node {
   const message = useSelector(state => state.messages.get(messageId));
   const ownUserId = useSelector(getOwnUserId);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (message === undefined) {
       logging.warn(
         'MessageReactionsScreen unexpectedly created without props.message; '
@@ -55,7 +55,7 @@ export default function MessageReactionsScreen(props: Props): Node {
   }, [message, messageId]);
 
   const prevMessage = usePrevious(message);
-  useEffect(() => {
+  React.useEffect(() => {
     if (prevMessage !== undefined && message === undefined) {
       // The message was present, but got purged (currently only caused by a
       // REGISTER_COMPLETE following a dead event queue), so go back.
@@ -76,7 +76,7 @@ export default function MessageReactionsScreen(props: Props): Node {
       const aggregatedReactions = aggregateReactions(message.reactions, ownUserId);
 
       return (
-        <View style={styles.flexed}>
+        (<View style={styles.flexed}>
           <Tab.Navigator
             backBehavior="none"
             // The user may have originally navigated here to look at a reaction
@@ -93,7 +93,7 @@ export default function MessageReactionsScreen(props: Props): Node {
             }
             {aggregatedReactions.map(aggregatedReaction => (
               // Each tab corresponds to an aggregated reaction, and has a user list.
-              <Tab.Screen
+              (<Tab.Screen
                 key={aggregatedReaction.name}
                 name={aggregatedReaction.name}
                 component={() => <ReactionUserList reactedUserIds={aggregatedReaction.users} />}
@@ -108,10 +108,10 @@ export default function MessageReactionsScreen(props: Props): Node {
                     </View>
                   ),
                 }}
-              />
+              />)
             ))}
           </Tab.Navigator>
-        </View>
+        </View>)
       );
     }
   })();

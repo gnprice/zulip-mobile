@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useMemo } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { Image } from 'react-native';
 
@@ -20,7 +20,7 @@ export default function Emoji(props: Props): Node {
   const imageEmoji = useSelector(state =>
     props.type === 'image' ? getAllImageEmojiByCode(state)[props.code] : undefined,
   );
-  const componentStyles = useMemo(
+  const componentStyles = React.useMemo(
     () => createStyleSheet({ image: { width: size, height: size } }),
     [size],
   );

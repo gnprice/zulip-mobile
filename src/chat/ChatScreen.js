@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useCallback, useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -71,13 +71,13 @@ const useMessagesWithFetch = args => {
   // like using instance variables in class components:
   //   https://reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables
   const shouldFetchWhenNextFocused = React.useRef<boolean>(false);
-  const scheduleFetch = useCallback(() => {
+  const scheduleFetch = React.useCallback(() => {
     shouldFetchWhenNextFocused.current = true;
   }, []);
 
   const [fetchError, setFetchError] = React.useState<mixed>(null);
 
-  const fetch = React.useCallback(async () => {
+  const fetch = React.React.useCallback(async () => {
     shouldFetchWhenNextFocused.current = false;
     try {
       await dispatch(fetchMessagesInNarrow(narrow));
@@ -126,10 +126,10 @@ const useMessagesWithFetch = args => {
 
 export default function ChatScreen(props: Props): Node {
   const { route, navigation } = props;
-  const { backgroundColor } = React.useContext(ThemeContext);
+  const { backgroundColor } = React.React.useContext(ThemeContext);
 
   const { narrow, editMessage } = route.params;
-  const setEditMessage = useCallback(
+  const setEditMessage = React.useCallback(
     (value: EditMessage | null) => navigation.setParams({ editMessage: value }),
     [navigation],
   );
@@ -148,9 +148,9 @@ export default function ChatScreen(props: Props): Node {
   const auth = useSelector(getAuth);
   const dispatch = useDispatch();
   const fetching = useSelector(state => getFetchingForNarrow(state, narrow));
-  const _ = useContext(TranslationContext);
+  const _ = React.useContext(TranslationContext);
 
-  const sendCallback = useCallback(
+  const sendCallback = React.useCallback(
     (message: string, destinationNarrow: Narrow) => {
       if (editMessage) {
         const content = editMessage.content !== message ? message : undefined;

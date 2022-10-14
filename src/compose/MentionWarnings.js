@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useState, useCallback, useContext, forwardRef, useImperativeHandle } from 'react';
+import * as React from 'react';
 import type { AbstractComponent, Node } from 'react';
 
 import type { Stream, Narrow, UserOrBot, Subscription, UserId } from '../types';
@@ -43,9 +43,9 @@ function MentionWarningsInner(props: Props, ref): Node {
   const auth = useSelector(getAuth);
   const allUsersById = useSelector(getAllUsersById);
 
-  const [unsubscribedMentions, setUnsubscribedMentions] = useState<$ReadOnlyArray<UserId>>([]);
+  const [unsubscribedMentions, setUnsubscribedMentions] = React.useState<$ReadOnlyArray<UserId>>([]);
 
-  const _ = useContext(TranslationContext);
+  const _ = React.useContext(TranslationContext);
 
   /**
    * Tries to parse a user object from an @-mention.
@@ -53,7 +53,7 @@ function MentionWarningsInner(props: Props, ref): Node {
    * @param completion The autocomplete option chosend by the user.
       See JSDoc for AutoCompleteView for details.
    */
-  const getUserFromMention = useCallback(
+  const getUserFromMention = React.useCallback(
     (completion: string): UserOrBot | void => {
       const unformattedMessage = completion.split('**')[1];
 
@@ -82,7 +82,7 @@ function MentionWarningsInner(props: Props, ref): Node {
     [allUsersById],
   );
 
-  const showSubscriptionStatusLoadError = useCallback(
+  const showSubscriptionStatusLoadError = React.useCallback(
     (mentionedUser: UserOrBot) => {
       showToast(
         _('Couldn’t load information about {fullName}', {
@@ -93,7 +93,7 @@ function MentionWarningsInner(props: Props, ref): Node {
     [_],
   );
 
-  useImperativeHandle(
+  React.useImperativeHandle(
     ref,
     () => ({
       handleMentionSubscribedCheck: async (completion: string) => {
@@ -137,7 +137,7 @@ function MentionWarningsInner(props: Props, ref): Node {
     ],
   );
 
-  const handleMentionWarningDismiss = useCallback((user: UserOrBot) => {
+  const handleMentionWarningDismiss = React.useCallback((user: UserOrBot) => {
     setUnsubscribedMentions(prevUnsubscribedMentions =>
       prevUnsubscribedMentions.filter(x => x !== user.user_id),
     );
@@ -169,6 +169,6 @@ function MentionWarningsInner(props: Props, ref): Node {
 }
 
 const MentionWarnings: AbstractComponent<Props, ImperativeHandle> =
-  forwardRef(MentionWarningsInner);
+  React.forwardRef(MentionWarningsInner);
 
 export default MentionWarnings;

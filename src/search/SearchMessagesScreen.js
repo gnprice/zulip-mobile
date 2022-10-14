@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import type { ComponentType } from 'react';
 import type { EditingEvent } from 'react-native/Libraries/Components/TextInput/TextInput';
 
@@ -50,7 +50,7 @@ type State = {|
   isFetching: boolean,
 |};
 
-class SearchMessagesScreenInner extends PureComponent<Props, State> {
+class SearchMessagesScreenInner extends React.PureComponent<Props, State> {
   state = {
     query: '',
     messages: null,

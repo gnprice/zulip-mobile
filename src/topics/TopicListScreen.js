@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useState, useCallback, useEffect } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 
 import type { RouteProp } from '../react-navigation';
@@ -23,16 +23,16 @@ export default function TopicListScreen(props: Props): Node {
   const stream = useSelector(state => getStreamForId(state, props.route.params.streamId));
   const topics = useSelector(state => getTopicsForStream(state, props.route.params.streamId));
 
-  const [filter, setFilter] = useState<string>('');
+  const [filter, setFilter] = React.useState<string>('');
 
-  const handlePress = useCallback(
+  const handlePress = React.useCallback(
     (streamId: number, topic: string) => {
       dispatch(doNarrow(topicNarrow(streamId, topic)));
     },
     [dispatch],
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     dispatch(fetchTopics(stream.stream_id));
   }, [stream, dispatch]);
 

@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useContext, useMemo } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -24,9 +24,9 @@ export default function ModalSearchNavBar(props: Props): Node {
   // For details, see comment at ModalNavBar.
 
   const { autoFocus, searchBarOnChange, canGoBack = true, searchBarOnSubmit, placeholder } = props;
-  const { backgroundColor } = useContext(ThemeContext);
+  const { backgroundColor } = React.useContext(ThemeContext);
 
-  const styles = useMemo(
+  const styles = React.useMemo(
     () => ({
       safeAreaView: {
         borderColor: 'hsla(0, 0%, 50%, 0.25)',

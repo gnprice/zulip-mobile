@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 
 import type { UserOrBot } from '../types';
@@ -22,7 +22,7 @@ export default function UsersCard(props: Props): Node {
   const presences = useSelector(getPresence);
 
   const navigation = useNavigation();
-  const handleUserNarrow = useCallback(
+  const handleUserNarrow = React.useCallback(
     (user: UserOrBot) => {
       navigation.dispatch(navigateBack());
       dispatch(doNarrow(pm1to1NarrowFromUser(user)));

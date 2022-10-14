@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 
 import * as api from '../api';
@@ -13,7 +13,7 @@ type State = {|
   compatibilityCheckFail: boolean,
 |};
 
-export default class CompatibilityChecker extends PureComponent<Props, State> {
+export default class CompatibilityChecker extends React.PureComponent<Props, State> {
   state: State = {
     compatibilityCheckFail: false,
   };

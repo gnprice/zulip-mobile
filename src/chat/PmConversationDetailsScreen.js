@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { FlatList } from 'react-native';
 
@@ -22,7 +22,7 @@ export default function PmConversationDetailsScreen(props: Props): Node {
   const { recipients } = props.route.params;
   const ownUserId = useSelector(getOwnUserId);
 
-  const handlePress = useCallback(
+  const handlePress = React.useCallback(
     (user: UserOrBot) => {
       navigation.push('account-details', { userId: user.user_id });
     },

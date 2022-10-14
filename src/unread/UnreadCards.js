@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { SectionList } from 'react-native';
 
@@ -50,7 +50,7 @@ export default function UnreadCards(props: Props): Node {
   const unreadStreamsAndTopics = useSelector(getUnreadStreamsAndTopicsSansMuted);
   type Card =
     | UnreadStreamItem
-    | {| key: 'private', data: $ReadOnlyArray<React$ElementConfig<typeof PmConversationList>> |};
+    | {| key: 'private', data: $ReadOnlyArray<React.ElementConfig<typeof PmConversationList>> |};
   const unreadCards: $ReadOnlyArray<Card> = [
     {
       key: 'private',
@@ -67,7 +67,7 @@ export default function UnreadCards(props: Props): Node {
     // $FlowFixMe[incompatible-type-arg]
     /* $FlowFixMe[prop-missing]
        SectionList libdef seems confused; should take $ReadOnly objects. */
-    <SectionList
+    (<SectionList
       stickySectionHeadersEnabled
       initialNumToRender={20}
       sections={unreadCards}
@@ -105,6 +105,6 @@ export default function UnreadCards(props: Props): Node {
           />
         )
       }
-    />
+    />)
   );
 }

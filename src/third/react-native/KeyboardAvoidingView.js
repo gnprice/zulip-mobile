@@ -10,7 +10,7 @@
 
 'use strict';
 
-import React from 'react';
+import * as React from 'react';
 import type { ElementRef, Node } from 'react';
 import { Keyboard, LayoutAnimation, Platform, StyleSheet, View } from 'react-native';
 import type { ViewStyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet';

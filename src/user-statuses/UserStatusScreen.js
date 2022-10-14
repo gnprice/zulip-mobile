@@ -1,7 +1,7 @@
 /* @flow strict-local */
 // $FlowFixMe[untyped-import]
 import isEqual from 'lodash.isequal';
-import React, { useState, useContext, useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { FlatList, View, Pressable } from 'react-native';
 
@@ -103,20 +103,20 @@ export default function UserStatusScreen(props: Props): Node {
 
   const serverEmojiData = useSelector(state => getRealm(state).serverEmojiData);
 
-  const _ = useContext(TranslationContext);
+  const _ = React.useContext(TranslationContext);
   const auth = useSelector(getAuth);
   const ownUserId = useSelector(getOwnUserId);
   const userStatusText = useSelector(state => getUserStatus(state, ownUserId).status_text);
   const userStatusEmoji = useSelector(state => getUserStatus(state, ownUserId).status_emoji);
 
-  const [textInputValue, setTextInputValue] = useState<string>(
+  const [textInputValue, setTextInputValue] = React.useState<string>(
     inputValueFromStatusText(userStatusText),
   );
-  const [emojiInputValue, setEmojiInputValue] = useState<EmojiInputValue>(
+  const [emojiInputValue, setEmojiInputValue] = React.useState<EmojiInputValue>(
     inputValueFromStatusEmoji(userStatusEmoji),
   );
 
-  const sendToServer = useCallback(
+  const sendToServer = React.useCallback(
     partialUserStatus => {
       const copy = { ...partialUserStatus };
       // TODO: Put conditional inside `api.updateUserStatus` itself; see
@@ -130,14 +130,14 @@ export default function UserStatusScreen(props: Props): Node {
     [serverSupportsEmojiStatus, navigation, auth],
   );
 
-  const handlePressSave = useCallback(() => {
+  const handlePressSave = React.useCallback(() => {
     sendToServer({
       status_text: statusTextFromInputValue(textInputValue),
       status_emoji: statusEmojiFromInputValue(emojiInputValue),
     });
   }, [textInputValue, emojiInputValue, sendToServer]);
 
-  const handlePressClear = useCallback(() => {
+  const handlePressClear = React.useCallback(() => {
     setTextInputValue(inputValueFromStatusText(null));
     setEmojiInputValue(inputValueFromStatusEmoji(null));
   }, []);

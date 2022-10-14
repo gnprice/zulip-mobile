@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
@@ -36,45 +36,45 @@ export default function StreamSettingsScreen(props: Props): Node {
   );
   const userSettingStreamNotification = useSelector(state => getSettings(state).streamNotification);
 
-  const handleTogglePinStream = useCallback(
+  const handleTogglePinStream = React.useCallback(
     (newValue: boolean) => {
       api.setSubscriptionProperty(auth, stream.stream_id, 'pin_to_top', newValue);
     },
     [auth, stream],
   );
 
-  const handleToggleMuteStream = useCallback(
+  const handleToggleMuteStream = React.useCallback(
     (newValue: boolean) => {
       api.setSubscriptionProperty(auth, stream.stream_id, 'is_muted', newValue);
     },
     [auth, stream],
   );
 
-  const handlePressEdit = useCallback(() => {
+  const handlePressEdit = React.useCallback(() => {
     navigation.push('edit-stream', { streamId: stream.stream_id });
   }, [navigation, stream.stream_id]);
 
-  const handlePressEditSubscribers = useCallback(() => {
+  const handlePressEditSubscribers = React.useCallback(() => {
     navigation.push('invite-users', { streamId: stream.stream_id });
   }, [navigation, stream.stream_id]);
 
-  const handlePressSubscribe = useCallback(() => {
+  const handlePressSubscribe = React.useCallback(() => {
     // This still uses a stream name (#3918) because the API method does; see there.
     api.subscriptionAdd(auth, [{ name: stream.name }]);
   }, [auth, stream]);
 
-  const handlePressUnsubscribe = useCallback(() => {
+  const handlePressUnsubscribe = React.useCallback(() => {
     // This still uses a stream name (#3918) because the API method does; see there.
     api.subscriptionRemove(auth, [stream.name]);
   }, [auth, stream]);
 
-  const handleToggleStreamPushNotification = useCallback(() => {
+  const handleToggleStreamPushNotification = React.useCallback(() => {
     const currentValue = getIsNotificationEnabled(subscription, userSettingStreamNotification);
     api.setSubscriptionProperty(auth, stream.stream_id, 'push_notifications', !currentValue);
   }, [auth, stream, subscription, userSettingStreamNotification]);
 
   return (
-    <Screen title="Stream">
+    (<Screen title="Stream">
       <StreamCard stream={stream} subscription={subscription} />
       {subscription && (
         <>
@@ -108,13 +108,13 @@ export default function StreamSettingsScreen(props: Props): Node {
           //     https://callstack.github.io/react-native-paper/card-actions.html
           //   Or their `Surface`:
           //     https://callstack.github.io/react-native-paper/surface.html
-          <ZulipButton
+          (<ZulipButton
             style={styles.marginTop}
             Icon={IconEdit}
             text="Edit stream"
             secondary
             onPress={() => delay(handlePressEdit)}
-          />
+          />)
         )}
         <ZulipButton
           style={styles.marginTop}
@@ -139,6 +139,6 @@ export default function StreamSettingsScreen(props: Props): Node {
           />
         )}
       </View>
-    </Screen>
+    </Screen>)
   );
 }

@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React from 'react';
+import * as React from 'react';
 import type { Node, ComponentType } from 'react';
 import { FlatList, ImageBackground, ScrollView, View, Text } from 'react-native';
 

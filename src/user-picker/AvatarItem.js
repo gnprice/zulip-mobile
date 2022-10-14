@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { Animated, Easing, View } from 'react-native';
 import type AnimatedValue from 'react-native/Libraries/Animated/nodes/AnimatedValue';
@@ -39,7 +39,7 @@ type Props = $ReadOnly<{|
 /**
  * Pressable avatar for items in the user-picker card.
  */
-export default class AvatarItem extends PureComponent<Props> {
+export default class AvatarItem extends React.PureComponent<Props> {
   animatedValue: AnimatedValue = new Animated.Value(0);
 
   componentDidMount() {

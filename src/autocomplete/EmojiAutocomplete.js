@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { FlatList } from 'react-native';
 
@@ -24,7 +24,7 @@ export default function EmojiAutocomplete(props: Props): Node {
   const serverEmojiData = useSelector(state => getRealm(state).serverEmojiData);
   const filteredEmojis = getFilteredEmojis(filter, activeImageEmoji, serverEmojiData);
 
-  const handlePress = useCallback(
+  const handlePress = React.useCallback(
     ({ type, code, name }) => {
       onAutocomplete(name);
     },

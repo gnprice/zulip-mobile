@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import type { Node, Context } from 'react';
 import { FlatList } from 'react-native';
 
@@ -16,7 +16,7 @@ type Props = $ReadOnly<{|
   filter: string,
 |}>;
 
-export default class LanguagePicker extends PureComponent<Props> {
+export default class LanguagePicker extends React.PureComponent<Props> {
   static contextType: Context<GetText> = TranslationContext;
   context: GetText;
 

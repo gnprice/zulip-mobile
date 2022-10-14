@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import type { Node, ComponentType } from 'react';
 import { AppState, View } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
@@ -49,7 +49,7 @@ const orientationLookup: OrientationLookup = {
   [ScreenOrientation.Orientation.LANDSCAPE_RIGHT]: 'LANDSCAPE',
 };
 
-class AppEventHandlersInner extends PureComponent<Props> {
+class AppEventHandlersInner extends React.PureComponent<Props> {
   /** NetInfo disconnection callback. */
   netInfoDisconnectCallback: (() => void) | null = null;
 

@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useState, useRef, useEffect } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View, FlatList } from 'react-native';
 import { createSelector } from 'reselect';
@@ -53,11 +53,11 @@ export default function UserPickerCard(props: Props): Node {
   const users = useSelector(state => getUsersToShow(state, showOwnUser));
   const presences = useSelector(getPresence);
 
-  const [selectedState, setSelectedState] = useState<$ReadOnlyArray<UserOrBot>>([]);
-  const listRef = useRef<FlatList<UserOrBot> | null>(null);
+  const [selectedState, setSelectedState] = React.useState<$ReadOnlyArray<UserOrBot>>([]);
+  const listRef = React.useRef<FlatList<UserOrBot> | null>(null);
 
   const prevSelectedState = usePrevious(selectedState);
-  useEffect(() => {
+  React.useEffect(() => {
     if (prevSelectedState && selectedState.length > prevSelectedState.length) {
       setTimeout(() => {
         listRef.current?.scrollToEnd();

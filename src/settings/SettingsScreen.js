@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 
 import type { RouteProp } from '../react-navigation';
@@ -34,7 +34,7 @@ export default function SettingsScreen(props: Props): Node {
   const dispatch = useDispatch();
   const { navigation } = props;
 
-  const handleThemeChange = useCallback(() => {
+  const handleThemeChange = React.useCallback(() => {
     dispatch(setGlobalSettings({ theme: theme === 'default' ? 'night' : 'default' }));
   }, [theme, dispatch]);
 

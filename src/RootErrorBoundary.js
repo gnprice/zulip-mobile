@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View, Text, Clipboard, TextInput, ScrollView, Button, Platform } from 'react-native';
 import Toast from 'react-native-simple-toast';
@@ -88,7 +88,7 @@ Call Stack:
 ${error.stack}`;
 
       return (
-        <View
+        (<View
           style={{
             // Fill the whole screen (well, the parent, which is
             // hopefully the whole screen).
@@ -135,7 +135,7 @@ ${error.stack}`;
             android: (
               // For Android-only symptoms like
               // facebook/react-native#23117
-              <ScrollView>
+              (<ScrollView>
                 <TextInput
                   style={{
                     // To not grow outside the parent View
@@ -148,10 +148,10 @@ ${error.stack}`;
                   editable={false}
                   value={details}
                 />
-              </ScrollView>
+              </ScrollView>)
             ),
           })}
-        </View>
+        </View>)
       );
     }
     return this.props.children;

@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useContext, useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 
 import * as api from '../api';
@@ -28,9 +28,9 @@ export default function AccountPickScreen(props: Props): Node {
   const { navigation } = props;
   const accounts = useGlobalSelector(getAccountStatuses);
   const dispatch = useGlobalDispatch();
-  const _ = useContext(TranslationContext);
+  const _ = React.useContext(TranslationContext);
 
-  const handleAccountSelect = useCallback(
+  const handleAccountSelect = React.useCallback(
     async (index: number) => {
       const { realm, isLoggedIn } = accounts[index];
       if (isLoggedIn) {
@@ -50,7 +50,7 @@ export default function AccountPickScreen(props: Props): Node {
     [accounts, dispatch, navigation, _],
   );
 
-  const handleAccountRemove = useCallback(
+  const handleAccountRemove = React.useCallback(
     (index: number) => {
       const { realm, email } = accounts[index];
       showConfirmationDialog({

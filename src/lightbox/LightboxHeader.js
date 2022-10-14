@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';

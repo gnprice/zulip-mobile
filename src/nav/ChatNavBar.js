@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useCallback, useContext } from 'react';
+import * as React from 'react';
 import type { Node, ComponentType } from 'react';
 import { View } from 'react-native';
 // $FlowFixMe[untyped-import]
@@ -46,7 +46,7 @@ function ExtraNavButtonTopic(props: {| +color: string, +narrow: Narrow |}): Node
   const { narrow, color } = props;
   const dispatch = useDispatch();
 
-  const handlePress = useCallback(() => {
+  const handlePress = React.useCallback(() => {
     dispatch(doNarrow(streamNarrow(streamIdOfNarrow(narrow))));
   }, [dispatch, narrow]);
 
@@ -142,7 +142,7 @@ export default function ChatNavBar(props: {|
   const streamColor = useSelector(state => getStreamColorForNarrow(state, narrow));
   const buttonColor =
     streamColor === undefined ? BRAND_COLOR : foregroundColorFromBackground(streamColor);
-  const themeColor = useContext(ThemeContext).color;
+  const themeColor = React.useContext(ThemeContext).color;
   const textColor =
     streamColor === undefined ? themeColor : foregroundColorFromBackground(streamColor);
   const spinnerColor =

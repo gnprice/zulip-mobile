@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useEffect } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import {
   createMaterialTopTabNavigator,
@@ -53,7 +53,7 @@ export default function SharingScreen(props: Props): Node {
   const { navigation } = props;
   const hasAuth = useGlobalSelector(getHasAuth);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!hasAuth) {
       // If there is no active logged-in account, abandon the sharing attempt,
       // and present the account picker screen to the user.

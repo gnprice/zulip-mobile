@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useState, useCallback, useMemo, useEffect, useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
@@ -168,7 +168,7 @@ function useStreamPrivacyOptions(initialValue: Privacy, isNewStream: boolean) {
   const ownUserRole = useSelector(getOwnUserRole);
   const realmUrl = useSelector(getRealmUrl);
 
-  const shouldDisableIfNotInitialValue = useCallback(
+  const shouldDisableIfNotInitialValue = React.useCallback(
     <T: mixed>(canCreate: boolean, explainPolicy: (T, string) => LocalizableText, policy: T) => {
       if (!isNewStream && !roleIsAtLeast(ownUserRole, Role.Admin)) {
         return {
@@ -193,7 +193,7 @@ function useStreamPrivacyOptions(initialValue: Privacy, isNewStream: boolean) {
     [isNewStream, ownUserRole, realmName, realmUrl],
   );
 
-  return useMemo(
+  return React.useMemo(
     () =>
       [
         !(webPublicStreamsEnabled && enableSpectatorAccess)
@@ -277,20 +277,20 @@ function useStreamPrivacyOptions(initialValue: Privacy, isNewStream: boolean) {
 
 export default function EditStreamCard(props: Props): Node {
   const { navigation, initialValues, isNewStream } = props;
-  const _ = useContext(TranslationContext);
+  const _ = React.useContext(TranslationContext);
 
-  const [name, setName] = useState<string>(props.initialValues.name);
-  const [description, setDescription] = useState<string>(props.initialValues.description);
-  const [privacy, setPrivacy] = useState<Privacy>(props.initialValues.privacy);
+  const [name, setName] = React.useState<string>(props.initialValues.name);
+  const [description, setDescription] = React.useState<string>(props.initialValues.description);
+  const [privacy, setPrivacy] = React.useState<Privacy>(props.initialValues.privacy);
   // When adding more, update areInputsTouched.
 
-  const [awaitingUserInput, setAwaitingUserInput] = useState<boolean>(true);
+  const [awaitingUserInput, setAwaitingUserInput] = React.useState<boolean>(true);
   const areInputsTouched =
     name !== initialValues.name
     || description !== initialValues.description
     || privacy !== initialValues.privacy;
 
-  useEffect(
+  React.useEffect(
     () =>
       navigation.addListener('beforeRemove', e => {
         if (!(awaitingUserInput && areInputsTouched)) {
@@ -310,7 +310,7 @@ export default function EditStreamCard(props: Props): Node {
     [_, areInputsTouched, navigation, awaitingUserInput],
   );
 
-  const handlePerformAction = useCallback(async () => {
+  const handlePerformAction = React.useCallback(async () => {
     setAwaitingUserInput(false);
     let result = false;
     try {

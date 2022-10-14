@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useContext, useEffect } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 
@@ -24,7 +24,7 @@ type Props = $ReadOnly<{||}>;
 export default function ZulipAppContainer(props: Props): Node {
   const themeName = useGlobalSelector(state => getGlobalSettings(state).theme);
 
-  useEffect(
+  React.useEffect(
     () =>
       // return a cleanup function:
       //   https://reactjs.org/docs/hooks-effect.html#example-using-hooks-1
@@ -34,7 +34,7 @@ export default function ZulipAppContainer(props: Props): Node {
     [],
   );
 
-  const themeContext = useContext(ThemeContext);
+  const themeContext = React.useContext(ThemeContext);
 
   const BaseTheme = themeName === 'night' ? DarkTheme : DefaultTheme;
 

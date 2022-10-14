@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useCallback, useRef, useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 
 import type { RouteProp } from '../react-navigation';
@@ -23,16 +23,16 @@ export default function EditStreamScreen(props: Props): Node {
   const { navigation } = props;
   const dispatch = useDispatch();
   const stream = useSelector(state => getStreamForId(state, props.route.params.streamId));
-  const _ = useContext(TranslationContext);
+  const _ = React.useContext(TranslationContext);
 
   // What we pass for EditStreamCard's `initialValues` should be constant.
-  const initialValues = useRef({
+  const initialValues = React.useRef({
     name: stream.name,
     description: stream.description,
     privacy: streamPropsToPrivacy(stream),
   }).current;
 
-  const handleComplete = useCallback(
+  const handleComplete = React.useCallback(
     async changedValues => {
       try {
         await dispatch(updateExistingStream(stream.stream_id, changedValues));

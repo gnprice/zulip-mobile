@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
@@ -22,7 +22,7 @@ export default function NotSubscribed(props: Props): Node {
     getStreamInNarrow(state, props.narrow),
   );
 
-  const subscribeToStream = useCallback(() => {
+  const subscribeToStream = React.useCallback(() => {
     // This still uses a stream name (#3918) because the API method does; see there.
     api.subscriptionAdd(auth, [{ name: stream.name }]);
   }, [auth, stream]);

@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { type ElementConfig, useCallback, useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
@@ -47,11 +47,11 @@ export function UserItemRaw<
     showEmail = false,
     size = 'large',
   } = props;
-  const _ = useContext(TranslationContext);
+  const _ = React.useContext(TranslationContext);
   const isMuted = useSelector(getMutedUsers).has(user.user_id);
   const userStatusEmoji = useSelector(state => getUserStatus(state, user.user_id)).status_emoji;
 
-  const handlePress = useCallback(() => {
+  const handlePress = React.useCallback(() => {
     if (onPress) {
       onPress(user);
     }
@@ -137,7 +137,7 @@ export function UserItemRaw<
 }
 
 type OuterProps = $ReadOnly<{|
-  ...$Exact<$Diff<ElementConfig<typeof UserItemRaw>, {| user: mixed |}>>,
+  ...$Exact<$Diff<React.ElementConfig<typeof UserItemRaw>, {| user: mixed |}>>,
   userId: UserId,
 |}>;
 

@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import type { ComponentType } from 'react';
 import { View } from 'react-native';
 
@@ -52,7 +52,7 @@ type State = {|
   progress: boolean,
 |};
 
-class PasswordAuthScreenInner extends PureComponent<Props, State> {
+class PasswordAuthScreenInner extends React.PureComponent<Props, State> {
   state = {
     progress: false,
     email: '',

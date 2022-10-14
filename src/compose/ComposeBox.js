@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useContext, useRef, useState, useEffect, useCallback, useMemo } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { Platform, View } from 'react-native';
 import type { DocumentPickerResponse } from 'react-native-document-picker';
@@ -99,7 +99,7 @@ export default function ComposeBox(props: Props): Node {
     autoFocusMessage,
   } = props;
 
-  const _ = useContext(TranslationContext);
+  const _ = React.useContext(TranslationContext);
 
   const dispatch = useDispatch();
   const auth = useSelector(getAuth);
@@ -115,18 +115,18 @@ export default function ComposeBox(props: Props): Node {
   const videoChatProvider = useSelector(getVideoChatProvider);
   const mandatoryTopics = useSelector(state => getRealm(state).mandatoryTopics);
 
-  const mentionWarnings = React.useRef<React$ElementRef<typeof MentionWarnings> | null>(null);
+  const mentionWarnings = React.React.useRef<React.ElementRef<typeof MentionWarnings> | null>(null);
 
-  const inputBlurTimeoutId = useRef<?TimeoutID>(null);
+  const inputBlurTimeoutId = React.useRef<?TimeoutID>(null);
 
   // TODO(#5141): Encapsulate this in a nice, plain action-sheet pattern
   //   instead of setting it all over the place
-  const [isMenuExpanded, setIsMenuExpanded] = useState<boolean>(false);
+  const [isMenuExpanded, setIsMenuExpanded] = React.useState<boolean>(false);
 
-  const [height, setHeight] = useState<number>(20);
-  const [numUploading, setNumUploading] = useState<number>(0);
+  const [height, setHeight] = React.useState<number>(20);
+  const [numUploading, setNumUploading] = React.useState<number>(0);
 
-  const [focusState, setFocusState] = useState<{|
+  const [focusState, setFocusState] = React.useState<{|
     message: boolean,
     topic: boolean,
 
@@ -157,7 +157,7 @@ export default function ComposeBox(props: Props): Node {
     messageInputCallbacks,
   ] = useUncontrolledInput({ value: initialMessage ?? '', selection: { start: 0, end: 0 } });
 
-  useEffect(
+  React.useEffect(
     () => () => {
       clearTimeout(inputBlurTimeoutId.current);
       inputBlurTimeoutId.current = null;
@@ -166,7 +166,7 @@ export default function ComposeBox(props: Props): Node {
   );
 
   const prevMessageInputState = usePrevious(messageInputState);
-  useEffect(() => {
+  React.useEffect(() => {
     const messageInputValue = messageInputState.value;
     const prevMessageInputValue = prevMessageInputState?.value;
 
@@ -184,7 +184,7 @@ export default function ComposeBox(props: Props): Node {
   }, [dispatch, isEditing, narrow, messageInputState, prevMessageInputState]);
 
   const prevTopicInputState = usePrevious(topicInputState);
-  useEffect(() => {
+  React.useEffect(() => {
     const topicInputValue = topicInputState.value;
     const prevTopicInputValue = prevTopicInputState?.value;
 
@@ -193,11 +193,11 @@ export default function ComposeBox(props: Props): Node {
     }
   }, [topicInputState, prevTopicInputState]);
 
-  const updateIsFocused = useCallback(() => {
+  const updateIsFocused = React.useCallback(() => {
     setFocusState(state => ({ ...state, either: state.message || state.topic }));
   }, []);
 
-  const canSelectTopic = useMemo(() => {
+  const canSelectTopic = React.useMemo(() => {
     if (isEditing) {
       return isStreamOrTopicNarrow(narrow);
     }
@@ -207,7 +207,7 @@ export default function ComposeBox(props: Props): Node {
     return focusState.either;
   }, [isEditing, narrow, focusState.either]);
 
-  const insertMessageTextAtCursorPosition = useCallback(
+  const insertMessageTextAtCursorPosition = React.useCallback(
     (text: string) => {
       setMessageInputValue(
         state =>
@@ -219,7 +219,7 @@ export default function ComposeBox(props: Props): Node {
     [setMessageInputValue],
   );
 
-  const insertVideoCallLinkAtCursorPosition = useCallback(
+  const insertVideoCallLinkAtCursorPosition = React.useCallback(
     (url: string) => {
       const linkMessage = _('Click to join video call');
       const linkText = `[${linkMessage}](${url})`;
@@ -229,7 +229,7 @@ export default function ComposeBox(props: Props): Node {
     [insertMessageTextAtCursorPosition, _],
   );
 
-  const insertVideoCallLink = useCallback(
+  const insertVideoCallLink = React.useCallback(
     (videoChatProvider: VideoChatProvider) => {
       if (videoChatProvider.name === 'jitsi_meet') {
         // This is meant to align with the way the webapp generates jitsi video
@@ -243,7 +243,7 @@ export default function ComposeBox(props: Props): Node {
     [insertVideoCallLinkAtCursorPosition],
   );
 
-  const insertAttachment = useCallback(
+  const insertAttachment = React.useCallback(
     async (attachments: $ReadOnlyArray<DocumentPickerResponse>) => {
       setNumUploading(n => n + 1);
       try {
@@ -288,15 +288,15 @@ export default function ComposeBox(props: Props): Node {
     [insertMessageTextAtCursorPosition, _, auth, setMessageInputValue],
   );
 
-  const handleComposeMenuToggle = useCallback(() => {
+  const handleComposeMenuToggle = React.useCallback(() => {
     setIsMenuExpanded(x => !x);
   }, []);
 
-  const handleLayoutChange = useCallback((event: LayoutEvent) => {
+  const handleLayoutChange = React.useCallback((event: LayoutEvent) => {
     setHeight(event.nativeEvent.layout.height);
   }, []);
 
-  const handleTopicAutocomplete = useCallback(
+  const handleTopicAutocomplete = React.useCallback(
     (topic: string) => {
       setTopicInputValue(topic);
       messageInputRef.current?.focus();
@@ -305,7 +305,7 @@ export default function ComposeBox(props: Props): Node {
   );
 
   // See JSDoc on 'onAutocomplete' in 'AutocompleteView.js'.
-  const handleMessageAutocomplete = useCallback(
+  const handleMessageAutocomplete = React.useCallback(
     (completedText: string, completion: string, lastWordPrefix: string) => {
       setMessageInputValue(completedText);
 
@@ -316,7 +316,7 @@ export default function ComposeBox(props: Props): Node {
     [setMessageInputValue],
   );
 
-  const handleMessageFocus = useCallback(() => {
+  const handleMessageFocus = React.useCallback(() => {
     if (
       !isEditing
       && isStreamNarrow(narrow)
@@ -333,7 +333,7 @@ export default function ComposeBox(props: Props): Node {
     }
   }, [isEditing, narrow, focusState.either, topicInputState.value, topicInputRef]);
 
-  const handleMessageBlur = useCallback(() => {
+  const handleMessageBlur = React.useCallback(() => {
     setFocusState(state => ({ ...state, message: false }));
     setIsMenuExpanded(false);
     dispatch(sendTypingStop(narrow));
@@ -342,12 +342,12 @@ export default function ComposeBox(props: Props): Node {
     inputBlurTimeoutId.current = setTimeout(updateIsFocused, FOCUS_DEBOUNCE_TIME_MS);
   }, [dispatch, narrow, updateIsFocused]);
 
-  const handleTopicFocus = useCallback(() => {
+  const handleTopicFocus = React.useCallback(() => {
     setFocusState(state => ({ ...state, topic: true, either: true }));
     setIsMenuExpanded(false);
   }, []);
 
-  const handleTopicBlur = useCallback(() => {
+  const handleTopicBlur = React.useCallback(() => {
     setFocusState(state => ({ ...state, topic: false }));
     setIsMenuExpanded(false);
     // give a chance to the message input to get the focus
@@ -355,11 +355,11 @@ export default function ComposeBox(props: Props): Node {
     inputBlurTimeoutId.current = setTimeout(updateIsFocused, FOCUS_DEBOUNCE_TIME_MS);
   }, [updateIsFocused]);
 
-  const handleInputTouchStart = useCallback(() => {
+  const handleInputTouchStart = React.useCallback(() => {
     setIsMenuExpanded(false);
   }, []);
 
-  const destinationNarrow = useMemo(() => {
+  const destinationNarrow = React.useMemo(() => {
     if (isStreamNarrow(narrow) || (isTopicNarrow(narrow) && isEditing)) {
       const streamId = streamIdOfNarrow(narrow);
       const topic = topicInputState.value.trim() || apiConstants.NO_TOPIC_TOPIC;
@@ -369,7 +369,7 @@ export default function ComposeBox(props: Props): Node {
     return narrow;
   }, [isEditing, narrow, topicInputState.value]);
 
-  const validationErrors = useMemo(() => {
+  const validationErrors = React.useMemo(() => {
     const { value: messageInputValue } = messageInputState;
 
     const result = [];
@@ -395,7 +395,7 @@ export default function ComposeBox(props: Props): Node {
 
   const submitButtonDisabled = validationErrors.length > 0;
 
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = React.useCallback(() => {
     const { value: messageInputValue } = messageInputState;
 
     if (validationErrors.length > 0) {
@@ -442,7 +442,7 @@ export default function ComposeBox(props: Props): Node {
     messageInputState,
   ]);
 
-  const inputMarginPadding = useMemo(
+  const inputMarginPadding = React.useMemo(
     () => ({
       paddingHorizontal: 8,
       paddingVertical: Platform.select({
@@ -453,8 +453,8 @@ export default function ComposeBox(props: Props): Node {
     [],
   );
 
-  const { backgroundColor } = useContext(ThemeContext);
-  const styles = useMemo(
+  const { backgroundColor } = React.useContext(ThemeContext);
+  const styles = React.useMemo(
     () =>
       createStyleSheet({
         wrapper: {
@@ -518,7 +518,7 @@ export default function ComposeBox(props: Props): Node {
     [inputMarginPadding, backgroundColor, height, submitButtonDisabled, canSelectTopic],
   );
 
-  const submitButtonHitSlop = useMemo(() => ({ top: 8, right: 8, bottom: 8, left: 8 }), []);
+  const submitButtonHitSlop = React.useMemo(() => ({ top: 8, right: 8, bottom: 8, left: 8 }), []);
 
   const { value: messageInputValue, selection: messageInputSelection } = messageInputState;
 

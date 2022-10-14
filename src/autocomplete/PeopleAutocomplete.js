@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { SectionList } from 'react-native';
 
@@ -29,14 +29,14 @@ export default function PeopleAutocomplete(props: Props): Node {
   const users = useSelector(getSortedUsers);
   const userGroups = useSelector(getUserGroups);
 
-  const handleUserGroupItemAutocomplete = useCallback(
+  const handleUserGroupItemAutocomplete = React.useCallback(
     (name: string): void => {
       onAutocomplete(`*${name}*`);
     },
     [onAutocomplete],
   );
 
-  const handleUserItemAutocomplete = useCallback(
+  const handleUserItemAutocomplete = React.useCallback(
     (user: AutocompleteOption): void => {
       // If another user with the same full name is found, we send the
       // user ID as well, to ensure the mentioned user is uniquely identified.
@@ -60,7 +60,7 @@ export default function PeopleAutocomplete(props: Props): Node {
 
   type Section<T> = {|
     +data: $ReadOnlyArray<T>,
-    +renderItem: ({ item: T, ... }) => React$MixedElement,
+    +renderItem: ({ item: T, ... }) => React.MixedElement,
   |};
   const sections = [
     ({
@@ -81,12 +81,12 @@ export default function PeopleAutocomplete(props: Props): Node {
         // synthetic "users" to represent @all and @everyone.
         // TODO display those in a UI that makes more sense for them,
         //   and drop the fake "users" and use the normal UserItem.
-        <UserItemRaw
+        (<UserItemRaw
           key={item.user_id}
           user={item}
           showEmail
           onPress={handleUserItemAutocomplete}
-        />
+        />)
       ),
     }: Section<AutocompleteOption>),
   ];

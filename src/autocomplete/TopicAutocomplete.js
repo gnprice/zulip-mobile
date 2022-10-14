@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useEffect } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { FlatList } from 'react-native';
 
@@ -34,7 +34,7 @@ export default function TopicAutocomplete(props: Props): Node {
   const dispatch = useDispatch();
   const topics = useSelector(state => (narrow ? getTopicsForNarrow(state, narrow) : []));
 
-  useEffect(() => {
+  React.useEffect(() => {
     // The following should be sufficient to ensure we're up-to-date
     // with the complete list of topics at all times that we need to
     // be:

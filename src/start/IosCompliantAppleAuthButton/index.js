@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 import type { ViewStyle } from 'react-native/Libraries/StyleSheet/StyleSheet';
@@ -35,9 +35,9 @@ type Props = $ReadOnly<{|
 export default function IosCompliantAppleAuthButton(props: Props): Node {
   const { style, onPress } = props;
   const theme = useGlobalSelector(state => getGlobalSettings(state).theme);
-  const [isNativeButtonAvailable, setIsNativeButtonAvailable] = useState<boolean | void>(undefined);
+  const [isNativeButtonAvailable, setIsNativeButtonAvailable] = React.useState<boolean | void>(undefined);
 
-  useEffect(() => {
+  React.useEffect(() => {
     async function getAndSetIsAvailable() {
       setIsNativeButtonAvailable(await AppleAuthentication.isAvailableAsync());
     }

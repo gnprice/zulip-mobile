@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 // $FlowFixMe[untyped-import]
@@ -68,7 +68,7 @@ export default function TopicItem(props: Props): Node {
 
   const showActionSheetWithOptions: ShowActionSheetWithOptions =
     useActionSheet().showActionSheetWithOptions;
-  const _ = useContext(TranslationContext);
+  const _ = React.useContext(TranslationContext);
   const dispatch = useDispatch();
   const backgroundData = useSelector(state => ({
     auth: getAuth(state),

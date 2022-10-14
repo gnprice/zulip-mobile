@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useContext, useMemo } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -32,9 +32,9 @@ export default function ModalNavBar(props: Props): Node {
   // wants another 4px padding at start.
 
   const { canGoBack, title } = props;
-  const { backgroundColor } = useContext(ThemeContext);
+  const { backgroundColor } = React.useContext(ThemeContext);
 
-  const styles = useMemo(
+  const styles = React.useMemo(
     () => ({
       text: [
         globalStyles.navTitle,

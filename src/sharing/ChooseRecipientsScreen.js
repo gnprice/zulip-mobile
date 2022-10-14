@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useState, useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import type { UserId, UserOrBot } from '../types';
 import Screen from '../common/Screen';
@@ -11,9 +11,9 @@ type Props = $ReadOnly<{|
 
 export default function ChooseRecipientsScreen(props: Props): Node {
   const { onComplete } = props;
-  const [filter, setFilter] = useState<string>('');
+  const [filter, setFilter] = React.useState<string>('');
 
-  const handleComplete = useCallback(
+  const handleComplete = React.useCallback(
     (selected: $ReadOnlyArray<UserOrBot>) => {
       onComplete(selected.map(u => u.user_id));
     },

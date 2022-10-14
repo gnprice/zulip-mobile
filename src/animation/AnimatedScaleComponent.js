@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { Animated, Easing } from 'react-native';
 import type AnimatedValue from 'react-native/Libraries/Animated/nodes/AnimatedValue';
@@ -16,7 +16,7 @@ type State = {|
   visible: boolean,
 |};
 
-export default class AnimatedScaleComponent extends PureComponent<Props, State> {
+export default class AnimatedScaleComponent extends React.PureComponent<Props, State> {
   state: State = {
     visible: this.props.visible,
   };

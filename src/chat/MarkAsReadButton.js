@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 
 import type { Narrow } from '../types';
@@ -38,19 +38,19 @@ export default function MarkAsReadButton(props: Props): Node {
   const unread = useSelector(getUnread);
   const ownUserId = useSelector(getOwnUserId);
 
-  const markAllAsRead = useCallback(() => {
+  const markAllAsRead = React.useCallback(() => {
     api.markAllAsRead(auth);
   }, [auth]);
 
-  const markStreamAsRead = useCallback(() => {
+  const markStreamAsRead = React.useCallback(() => {
     api.markStreamAsRead(auth, streamIdOfNarrow(narrow));
   }, [auth, narrow]);
 
-  const markTopicAsRead = useCallback(() => {
+  const markTopicAsRead = React.useCallback(() => {
     api.markTopicAsRead(auth, streamIdOfNarrow(narrow), topicOfNarrow(narrow));
   }, [auth, narrow]);
 
-  const markPmAsRead = useCallback(() => {
+  const markPmAsRead = React.useCallback(() => {
     // The message IDs come from our unread-messages data, which is
     //   initialized with "only" the most recent 50K unread messages. So
     //   we'll occasionally, but rarely, miss some messages here; see #5156.

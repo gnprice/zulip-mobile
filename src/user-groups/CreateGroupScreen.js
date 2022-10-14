@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useState, useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 
 import type { RouteProp } from '../react-navigation';
@@ -23,9 +23,9 @@ export default function CreateGroupScreen(props: Props): Node {
   const dispatch = useDispatch();
   const ownUserId = useSelector(getOwnUserId);
 
-  const [filter, setFilter] = useState<string>('');
+  const [filter, setFilter] = React.useState<string>('');
 
-  const handleCreateGroup = useCallback(
+  const handleCreateGroup = React.useCallback(
     (selected: $ReadOnlyArray<UserOrBot>) => {
       navigation.dispatch(navigateBack());
       dispatch(doNarrow(pmNarrowFromRecipients(pmKeyRecipientsFromUsers(selected, ownUserId))));

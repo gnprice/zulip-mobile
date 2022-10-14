@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View, Pressable } from 'react-native';
 // $FlowFixMe[untyped-import]
@@ -113,7 +113,7 @@ export default function StreamItem(props: Props): Node {
 
   const showActionSheetWithOptions: ShowActionSheetWithOptions =
     useActionSheet().showActionSheetWithOptions;
-  const _ = useContext(TranslationContext);
+  const _ = React.useContext(TranslationContext);
   const dispatch = useDispatch();
   const backgroundData = useSelector(state => ({
     auth: getAuth(state),
@@ -124,7 +124,7 @@ export default function StreamItem(props: Props): Node {
     userSettingStreamNotification: getSettings(state).streamNotification,
   }));
 
-  const { backgroundColor: themeBackgroundColor, color: themeColor } = useContext(ThemeContext);
+  const { backgroundColor: themeBackgroundColor, color: themeColor } = React.useContext(ThemeContext);
 
   const wrapperStyle = [styles.listItem, { backgroundColor }, isMuted && componentStyles.muted];
   const iconColor =

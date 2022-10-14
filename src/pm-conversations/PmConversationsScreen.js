@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -46,7 +46,7 @@ type Props = $ReadOnly<{|
 export default function PmConversationsScreen(props: Props): Node {
   const { navigation } = props;
   const conversations = useSelector(getRecentConversations);
-  const context = useContext(ThemeContext);
+  const context = React.useContext(ThemeContext);
 
   return (
     <SafeAreaView

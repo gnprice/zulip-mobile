@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { Image, Text, View, Platform } from 'react-native';
 
@@ -46,7 +46,7 @@ function GooglePlayBadge() {
   return <Image style={styles.googlePlayBadge} source={googlePlayBadgePNG} resizeMode="contain" />;
 }
 
-export default class CompatibilityScreen extends PureComponent<{||}> {
+export default class CompatibilityScreen extends React.PureComponent<{||}> {
   storeURL: string =
     Platform.OS === 'ios'
       ? 'https://itunes.apple.com/app/zulip/id1203036395'

@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 
 import type { RouteProp } from '../react-navigation';
@@ -27,7 +27,7 @@ export default function NotificationsScreen(props: Props): Node {
   // TODO(#3999): It'd be good to show "working on it" UI feedback while a
   //   request is pending, after the user touches a switch.
 
-  const handleOfflineNotificationChange = useCallback(() => {
+  const handleOfflineNotificationChange = React.useCallback(() => {
     api.toggleMobilePushSettings({
       auth,
       opp: 'offline_notification_change',
@@ -35,7 +35,7 @@ export default function NotificationsScreen(props: Props): Node {
     });
   }, [offlineNotification, auth]);
 
-  const handleOnlineNotificationChange = useCallback(() => {
+  const handleOnlineNotificationChange = React.useCallback(() => {
     api.toggleMobilePushSettings({
       auth,
       opp: 'online_notification_change',
@@ -43,7 +43,7 @@ export default function NotificationsScreen(props: Props): Node {
     });
   }, [onlineNotification, auth]);
 
-  const handleStreamNotificationChange = useCallback(() => {
+  const handleStreamNotificationChange = React.useCallback(() => {
     api.toggleMobilePushSettings({
       auth,
       opp: 'stream_notification_change',

@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { type ComponentType, type ElementConfig, useRef } from 'react';
+import * as React from 'react';
 
 import { connectGlobal } from './react-redux';
 import { getHaveServerDataGlobal } from './haveServerDataSelectors';
@@ -21,9 +21,9 @@ import FullScreenLoading from './common/FullScreenLoading';
  */
 // It sure seems like Flow should catch the `dispatch` / `haveServerData`
 // thing and reflect it in the types; it's not clear why it doesn't.
-export default function withHaveServerDataGate<P: { ... }, C: ComponentType<$Exact<P>>>(
+export default function withHaveServerDataGate<P: { ... }, C: React.ComponentType<$Exact<P>>>(
   Comp: C,
-): ComponentType<$Exact<ElementConfig<C>>> {
+): React.ComponentType<$Exact<React.ElementConfig<C>>> {
   // `connect` does something useful for us that `useSelector` doesn't
   // do: it interposes a new `ReactReduxContext.Provider` component,
   // which proxies subscriptions so that the descendant components only
@@ -61,7 +61,7 @@ export default function withHaveServerDataGate<P: { ... }, C: ComponentType<$Exa
         //
         // And avoid rendering any of our main UI, to maintain the
         // guarantee that it can all rely on server data existing.
-        <FullScreenLoading />
+        (<FullScreenLoading />)
       ),
   );
 }
@@ -73,10 +73,10 @@ export default function withHaveServerDataGate<P: { ... }, C: ComponentType<$Exa
  * `withHaveServerDataGate` would.  On re-render, it returns the same value
  * as on the previous render.
  */
-export function useHaveServerDataGate<P: { ... }, C: ComponentType<$Exact<P>>>(
+export function useHaveServerDataGate<P: { ... }, C: React.ComponentType<$Exact<P>>>(
   Comp: C,
-): ComponentType<$Exact<ElementConfig<C>>> {
+): React.ComponentType<$Exact<React.ElementConfig<C>>> {
   // Not `useMemo`, because that function's memoization is only a
   // performance optimization and not a semantic guarantee.
-  return useRef(withHaveServerDataGate(Comp)).current;
+  return React.useRef(withHaveServerDataGate(Comp)).current;
 }

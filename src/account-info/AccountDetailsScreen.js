@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
@@ -49,7 +49,7 @@ export default function AccountDetailsScreen(props: Props): Node {
   const user = useSelector(state => getUserForId(state, props.route.params.userId));
   const isActive = useSelector(state => getUserIsActive(state, props.route.params.userId));
 
-  const handleChatPress = useCallback(() => {
+  const handleChatPress = React.useCallback(() => {
     dispatch(doNarrow(pm1to1NarrowFromUser(user)));
   }, [user, dispatch]);
 

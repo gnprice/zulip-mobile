@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 
 import type { RouteProp } from '../react-navigation';
@@ -22,11 +22,11 @@ export default function LegalScreen(props: Props): Node {
   const realm = useSelector(getRealmUrl);
   const realmName = useSelector(getRealmName);
 
-  const openZulipPolicies = useCallback(() => {
+  const openZulipPolicies = React.useCallback(() => {
     openLinkEmbedded('https://zulip.com/policies/?nav=no');
   }, []);
 
-  const openRealmPolicies = useCallback(() => {
+  const openRealmPolicies = React.useCallback(() => {
     openLinkEmbedded(new URL('/policies/?nav=no', realm).toString());
   }, [realm]);
 

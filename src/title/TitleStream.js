@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { Text, View, TouchableWithoutFeedback } from 'react-native';
 // $FlowFixMe[untyped-import]
@@ -66,7 +66,7 @@ export default function TitleStream(props: Props): Node {
 
   const showActionSheetWithOptions: ShowActionSheetWithOptions =
     useActionSheet().showActionSheetWithOptions;
-  const _ = useContext(TranslationContext);
+  const _ = React.useContext(TranslationContext);
 
   return (
     <TouchableWithoutFeedback

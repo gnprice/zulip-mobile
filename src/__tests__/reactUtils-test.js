@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React from 'react';
+import * as React from 'react';
 import type { ComponentType } from 'react';
 // $FlowFixMe[untyped-import]
 import { create, act } from 'react-test-renderer';

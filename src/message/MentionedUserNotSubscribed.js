@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 
@@ -55,11 +55,11 @@ export default function MentionedUserNotSubscribed(props: Props): Node {
   const { user, stream, onDismiss } = props;
   const auth = useSelector(getAuth);
 
-  const handleDismiss = useCallback(() => {
+  const handleDismiss = React.useCallback(() => {
     onDismiss(user);
   }, [user, onDismiss]);
 
-  const subscribeToStream = useCallback(() => {
+  const subscribeToStream = React.useCallback(() => {
     // This still uses a stream name (#3918) because the API method does; see there.
     api.subscriptionAdd(auth, [{ name: stream.name }], [user.email]);
     handleDismiss();

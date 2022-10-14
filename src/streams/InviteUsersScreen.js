@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useState, useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 
 import type { RouteProp } from '../react-navigation';
@@ -22,9 +22,9 @@ export default function InviteUsersScreen(props: Props): Node {
   const auth = useSelector(getAuth);
   const stream = useSelector(state => getStreamForId(state, props.route.params.streamId));
 
-  const [filter, setFilter] = useState<string>('');
+  const [filter, setFilter] = React.useState<string>('');
 
-  const handleInviteUsers = useCallback(
+  const handleInviteUsers = React.useCallback(
     (selected: $ReadOnlyArray<UserOrBot>) => {
       const recipients = selected.map(user => user.email);
       // This still uses a stream name (#3918) because the API method does; see there.

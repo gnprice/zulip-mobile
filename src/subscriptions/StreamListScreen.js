@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useCallback, useMemo } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View, FlatList } from 'react-native';
 
@@ -47,12 +47,12 @@ export default function StreamListScreen(props: Props): Node {
   const subscriptions = useSelector(getSubscriptionsById);
   const streams = useSelector(getStreams);
 
-  const sortedStreams = useMemo(
+  const sortedStreams = React.useMemo(
     () => streams.slice().sort((a, b) => caseInsensitiveCompareFunc(a.name, b.name)),
     [streams],
   );
 
-  const handleSubscribeButtonPressed = useCallback(
+  const handleSubscribeButtonPressed = React.useCallback(
     (stream, value: boolean) => {
       if (value) {
         // This still uses a stream name (#3918) because the API method does; see there.
@@ -65,7 +65,7 @@ export default function StreamListScreen(props: Props): Node {
     [auth],
   );
 
-  const handleNarrow = useCallback(
+  const handleNarrow = React.useCallback(
     stream => dispatch(doNarrow(streamNarrow(stream.stream_id))),
     [dispatch],
   );

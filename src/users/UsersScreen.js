@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useState } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 
 import type { RouteProp } from '../react-navigation';
@@ -13,7 +13,7 @@ type Props = $ReadOnly<{|
 |}>;
 
 export default function UsersScreen(props: Props): Node {
-  const [filter, setFilter] = useState<string>('');
+  const [filter, setFilter] = React.useState<string>('');
 
   return (
     <Screen search scrollEnabled={false} searchBarOnChange={setFilter}>

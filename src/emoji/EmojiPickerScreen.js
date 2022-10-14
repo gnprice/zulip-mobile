@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useState, useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { FlatList, LogBox } from 'react-native';
 
@@ -48,13 +48,13 @@ export default function EmojiPickerScreen(props: Props): Node {
   const activeImageEmoji = useSelector(getActiveImageEmoji);
   const serverEmojiData = useSelector(state => getRealm(state).serverEmojiData);
 
-  const [filter, setFilter] = useState<string>('');
+  const [filter, setFilter] = React.useState<string>('');
 
-  const handleInputChange = useCallback((text: string) => {
+  const handleInputChange = React.useCallback((text: string) => {
     setFilter(text.toLowerCase());
   }, []);
 
-  const handlePressEmoji = useCallback(
+  const handlePressEmoji = React.useCallback(
     (...args) => {
       onPressEmoji(...args);
       navigation.goBack();

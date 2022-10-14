@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useCallback, useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 
 import { TranslationContext } from '../boot/TranslationProvider';
@@ -21,13 +21,13 @@ type Props = $ReadOnly<{|
 |}>;
 
 export default function CreateStreamScreen(props: Props): Node {
-  const _ = useContext(TranslationContext);
+  const _ = React.useContext(TranslationContext);
   const { navigation } = props;
 
   const auth = useSelector(getAuth);
   const streamsByName = useSelector(getStreamsByName);
 
-  const handleComplete = useCallback(
+  const handleComplete = React.useCallback(
     async ({ name, description, privacy }) => {
       // This will miss existing streams that the client can't know about;
       // for example, a private stream the user can't access. See comment

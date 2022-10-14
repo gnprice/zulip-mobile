@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useState, useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View, Dimensions, LayoutAnimation } from 'react-native';
 // $FlowFixMe[untyped-import]
@@ -47,13 +47,13 @@ type Props = $ReadOnly<{|
 
 export default function Lightbox(props: Props): Node {
   const navigation = useNavigation();
-  const [headerFooterVisible, setHeaderFooterVisible] = useState<boolean>(true);
+  const [headerFooterVisible, setHeaderFooterVisible] = React.useState<boolean>(true);
   const showActionSheetWithOptions: ShowActionSheetWithOptions =
     useActionSheet().showActionSheetWithOptions;
   const auth = useSelector(getAuth);
 
   // Pulled out here just because this function is used twice.
-  const handleImagePress = useCallback(() => {
+  const handleImagePress = React.useCallback(() => {
     LayoutAnimation.configureNext({
       ...LayoutAnimation.Presets.easeInEaseOut,
       duration: 100, // from 300

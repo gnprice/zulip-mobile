@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { type Context, useContext } from 'react';
+import * as React from 'react';
 import type { ComponentType, ElementConfig, Node } from 'react';
 import { Text } from 'react-native';
 import { IntlProvider, IntlContext } from 'react-intl';
@@ -61,7 +61,7 @@ const makeGetText = (intl: IntlShape): GetText => {
  * See the `GetTypes` type for why we like the new shape.
  */
 function TranslationContextTranslator(props: {| +children: Node |}): Node {
-  const intlContextValue = useContext(IntlContext);
+  const intlContextValue = React.useContext(IntlContext);
 
   return (
     <TranslationContext.Provider value={makeGetText(intlContextValue)}>

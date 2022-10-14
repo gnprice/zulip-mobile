@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { Animated, Easing } from 'react-native';
 import type AnimatedValue from 'react-native/Libraries/Animated/nodes/AnimatedValue';
@@ -11,7 +11,7 @@ type Props = $ReadOnly<{|
   children: Node,
 |}>;
 
-export default class AnimatedRotateComponent extends PureComponent<Props> {
+export default class AnimatedRotateComponent extends React.PureComponent<Props> {
   rotation: AnimatedValue = new Animated.Value(0);
 
   componentDidMount() {

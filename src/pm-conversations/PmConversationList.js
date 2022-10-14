@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { FlatList } from 'react-native';
 import { useDispatch, useSelector } from '../react-redux';
@@ -30,14 +30,14 @@ type Props = $ReadOnly<{|
 export default function PmConversationList(props: Props): Node {
   const dispatch = useDispatch();
 
-  const handleUserNarrow = useCallback(
+  const handleUserNarrow = React.useCallback(
     (user: UserOrBot) => {
       dispatch(doNarrow(pm1to1NarrowFromUser(user)));
     },
     [dispatch],
   );
 
-  const handleGroupNarrow = useCallback(
+  const handleGroupNarrow = React.useCallback(
     (users: PmKeyUsers) => {
       dispatch(doNarrow(pmNarrowFromUsers(users)));
     },

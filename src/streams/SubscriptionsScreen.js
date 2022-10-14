@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useCallback, useMemo } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View, SectionList } from 'react-native';
 
@@ -42,7 +42,7 @@ type FooterProps = $ReadOnly<{||}>;
 
 function AllStreamsButton(props: FooterProps): Node {
   const navigation = useNavigation();
-  const handlePressAllScreens = useCallback(() => {
+  const handlePressAllScreens = React.useCallback(() => {
     navigation.push('all-streams');
   }, [navigation]);
 
@@ -54,7 +54,7 @@ export default function SubscriptionsScreen(props: Props): Node {
   const subscriptions = useSelector(getSubscriptions);
   const unreadByStream = useSelector(getUnreadByStream);
 
-  const sections = useMemo(() => {
+  const sections = React.useMemo(() => {
     const sortedSubscriptions = subscriptions
       .slice()
       .sort((a, b) => caseInsensitiveCompareFunc(a.name, b.name));
@@ -64,7 +64,7 @@ export default function SubscriptionsScreen(props: Props): Node {
     ];
   }, [subscriptions]);
 
-  const handleNarrow = useCallback(
+  const handleNarrow = React.useCallback(
     stream => dispatch(doNarrow(streamNarrow(stream.stream_id))),
     [dispatch],
   );

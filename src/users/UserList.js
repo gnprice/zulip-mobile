@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { SectionList } from 'react-native';
 import { useSelector } from '../react-redux';
@@ -43,7 +43,7 @@ export default function UserList(props: Props): Node {
   }));
 
   return (
-    <SectionList
+    (<SectionList
       style={styles.list}
       stickySectionHeadersEnabled
       keyboardShouldPersistTaps="always"
@@ -61,9 +61,9 @@ export default function UserList(props: Props): Node {
       renderSectionHeader={({ section }) =>
         section.data.length === 0 ? null : (
           // $FlowFixMe[incompatible-type]
-          <SectionHeader text={section.key} />
+          (<SectionHeader text={section.key} />)
         )
       }
-    />
+    />)
   );
 }

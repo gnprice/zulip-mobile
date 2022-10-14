@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import type { ComponentType } from 'react';
 import { Platform, View, Alert, Linking } from 'react-native';
 import type { DocumentPickerResponse } from 'react-native-document-picker';
@@ -84,7 +84,7 @@ export const chooseUploadImageFilename = (uri: string, fileName: string): string
   return nameWithoutPrefix;
 };
 
-class ComposeMenuInner extends PureComponent<Props> {
+class ComposeMenuInner extends React.PureComponent<Props> {
   static contextType = TranslationContext;
   context: GetText;
 

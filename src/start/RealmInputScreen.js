@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { Keyboard } from 'react-native';
 
@@ -33,7 +33,7 @@ const urlFromInputValue = (realmInputValue: string): URL | void => {
   return tryParseUrl(withScheme);
 };
 
-export default class RealmInputScreen extends PureComponent<Props, State> {
+export default class RealmInputScreen extends React.PureComponent<Props, State> {
   state: State = {
     progress: false,
     realmInputValue: '',

@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 
@@ -30,7 +30,7 @@ type Props = $ReadOnly<{|
 export default function EmojiRow(props: Props): Node {
   const { code, name, type, onPress } = props;
 
-  const handlePress = useCallback(() => {
+  const handlePress = React.useCallback(() => {
     onPress({ type, code, name });
   }, [onPress, type, code, name]);
 

@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useEffect } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 
 import type { Dispatch } from '../reduxTypes';
@@ -18,7 +18,7 @@ type Props = $ReadOnly<{|
 |}>;
 
 export default function StoreProvider(props: Props): Node {
-  useEffect(
+  React.useEffect(
     () =>
       observeStore(
         store,
@@ -43,7 +43,7 @@ export default function StoreProvider(props: Props): Node {
     [],
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     timing.start('Store hydration');
     restore(() => {
       timing.end('Store hydration');

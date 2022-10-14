@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import type { ComponentType } from 'react';
 import { Linking, Platform } from 'react-native';
 import type { AppleAuthenticationCredential } from 'expo-apple-authentication';
@@ -206,7 +206,7 @@ type LinkingEvent = {
   ...
 };
 
-class AuthScreenInner extends PureComponent<Props> {
+class AuthScreenInner extends React.PureComponent<Props> {
   componentDidMount() {
     Linking.addEventListener('url', this.endWebAuth);
     Linking.getInitialURL().then((initialUrl: ?string) => {

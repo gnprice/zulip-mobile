@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useRef, useCallback, useEffect } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { Animated, Easing } from 'react-native';
 
@@ -34,9 +34,9 @@ export default function AnimatedComponent(props: Props): Node {
 
   const targetValue = visible ? fullValue : 0;
 
-  const animatedValue = useRef(new Animated.Value(targetValue));
+  const animatedValue = React.useRef(new Animated.Value(targetValue));
 
-  const animate = useCallback(() => {
+  const animate = React.useCallback(() => {
     Animated.timing(animatedValue.current, {
       toValue: targetValue,
       delay,
@@ -46,7 +46,7 @@ export default function AnimatedComponent(props: Props): Node {
     }).start();
   }, [delay, targetValue, useNativeDriver]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (prevVisible !== undefined && prevVisible !== visible) {
       animate();
     }

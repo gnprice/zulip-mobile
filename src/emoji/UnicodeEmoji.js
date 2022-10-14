@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useContext, useMemo, type Node } from 'react';
+import * as React from 'react';
 import { Text } from 'react-native';
 
 import { ThemeContext } from '../styles';
@@ -12,12 +12,12 @@ type Props = $ReadOnly<{|
   size: number,
 |}>;
 
-export default function UnicodeEmoji(props: Props): Node {
+export default function UnicodeEmoji(props: Props): React.Node {
   const { code, size } = props;
-  const { color } = useContext(ThemeContext);
+  const { color } = React.useContext(ThemeContext);
   const serverEmojiData = useSelector(state => getRealm(state).serverEmojiData);
 
-  const style = useMemo(
+  const style = React.useMemo(
     () => ({
       fontSize: size,
 

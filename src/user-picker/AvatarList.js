@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { FlatList } from 'react-native';
 
@@ -8,7 +8,7 @@ import AvatarItem from './AvatarItem';
 
 type Props = $ReadOnly<{|
   users: $ReadOnlyArray<UserOrBot>,
-  listRef: React$Ref<typeof FlatList>,
+  listRef: React.Ref<typeof FlatList>,
   onPress: UserId => void,
 |}>;
 

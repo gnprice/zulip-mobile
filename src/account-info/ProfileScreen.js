@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -89,7 +89,7 @@ function SwitchAccountButton(props: {||}) {
 
 function LogoutButton(props: {||}) {
   const dispatch = useDispatch();
-  const _ = useContext(TranslationContext);
+  const _ = React.useContext(TranslationContext);
   const identity = useSelector(getIdentity);
   return (
     <ZulipButton

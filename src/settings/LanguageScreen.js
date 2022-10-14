@@ -1,6 +1,6 @@
 /* @flow strict-local */
 
-import React, { useState, useCallback } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 
 import type { RouteProp } from '../react-navigation';
@@ -20,9 +20,9 @@ export default function LanguageScreen(props: Props): Node {
   const dispatch = useDispatch();
   const language = useGlobalSelector(state => getGlobalSettings(state).language);
 
-  const [filter, setFilter] = useState<string>('');
+  const [filter, setFilter] = React.useState<string>('');
 
-  const handleLocaleChange = useCallback(
+  const handleLocaleChange = React.useCallback(
     (value: string) => {
       dispatch(setGlobalSettings({ language: value }));
     },

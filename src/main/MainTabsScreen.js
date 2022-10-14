@@ -1,5 +1,5 @@
 /* @flow strict-local */
-import React, { useContext } from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 import { View } from 'react-native';
 import {
@@ -48,7 +48,7 @@ type Props = $ReadOnly<{|
 |}>;
 
 export default function MainTabsScreen(props: Props): Node {
-  const { backgroundColor } = useContext(ThemeContext);
+  const { backgroundColor } = React.useContext(ThemeContext);
 
   const unreadPmsCount = useSelector(getUnreadHuddlesTotal) + useSelector(getUnreadPmsTotal);
 
