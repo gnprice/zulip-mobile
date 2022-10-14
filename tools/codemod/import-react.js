@@ -21,6 +21,10 @@ const parser = {
   parse(source, options) {
     return babelParser.parse(source, {
       sourceType: 'module',
+
+      tokens: true,
+
+      // presets: ['module:metro-react-native-babel-preset'],
       plugins: ['jsx', ['flow', { enums: true }]],
     });
   },
