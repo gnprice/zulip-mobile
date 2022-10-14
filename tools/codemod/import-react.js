@@ -1,8 +1,7 @@
 // @//flow strict-local
 
 import * as recast from 'recast';
-import * as babelParser from 'recast/parsers/babel';
-import baseBabelOptions from 'recast/parsers/_babel_options';
+import * as babelParser from '@babel/parser';
 import { builders as b, namedTypes as n } from 'ast-types';
 import { NodePath } from 'ast-types/lib/node-path';
 import assert from 'assert';
@@ -20,29 +19,17 @@ const checkStatement = (node: n.Node): boolean %checks => n.Statement.check(node
 
 const parser = {
   parse(source, options) {
-    const babelOptions = baseBabelOptions(options);
-    babelOptions.plugins.push(
-      'jsx',
-      ['@babel/plugin-syntax-flow', { enums: true }],
-      'flow',
-      // 'module:babel-plugin-transform-flow-enums',
-    );
-    return babelParser.parser.parse(source, {
-      presets: ['module:metro-react-native-babel-preset'],
-      plugins: [
-        '@babel/plugin-proposal-numeric-separator',
-        // '@babel/plugin-transform-flow-strip-types',
-        'flow',
-        ['@babel/plugin-syntax-flow', { enums: true }],
-        'transform-flow-enums',
-      ],
-
+    return babelParser.parse(source, {
       sourceType: 'module',
+      plugins: ['jsx', ['flow', { enums: true }]],
     });
   },
 };
 
 export default function (fileInfo: any, { jscodeshift: j, report }: any) {
+  // const ast0 = parser.parse(fileInfo.source);
+  // console.log(ast0);
+
   const ast = recast.parse(fileInfo.source, { parser });
 
   let changed = false;
