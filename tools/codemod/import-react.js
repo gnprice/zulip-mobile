@@ -61,6 +61,7 @@ export default function (fileInfo: any, { jscodeshift: j, report }: any) {
       const mapped = nameMap.get(node.name);
       if (mapped !== undefined) {
         path.replace(b.memberExpression(b.identifier('React'), b.identifier(mapped)));
+        return false;
       } else if (node.name.startsWith('React$')) {
         path.replace(
           b.qualifiedTypeIdentifier(
@@ -68,8 +69,10 @@ export default function (fileInfo: any, { jscodeshift: j, report }: any) {
             b.identifier(node.name.substring('React$'.length)),
           ),
         );
+        return false;
+      } else {
+        this.traverse(path);
       }
-      return false;
     },
   });
 
