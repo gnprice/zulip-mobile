@@ -238,7 +238,11 @@ const handleLongPress = (
   }
 };
 
-export const handleWebViewOutboundEvent = (props: Props, event: WebViewOutboundEvent) => {
+export const handleWebViewOutboundEvent = (
+  props: Props,
+  event: WebViewOutboundEvent,
+  forceRender: () => void,
+) => {
   switch (event.type) {
     case 'ready':
       // handled by caller
@@ -247,6 +251,7 @@ export const handleWebViewOutboundEvent = (props: Props, event: WebViewOutboundE
     case 'scroll':
       fetchMore(props, event);
       markRead(props, event);
+      forceRender();
       break;
 
     case 'request-user-profile': {
