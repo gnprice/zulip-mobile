@@ -181,8 +181,10 @@ export function OfflineNoticeProvider(props: ProviderProps): Node {
   }, [isOnline, shouldShowUncertaintyNotice, _]);
 
   // Announce connectivity changes to screen-reader users.
-  const haveAnnouncedOffline = useRef(false);
-  const haveAnnouncedUncertain = useRef(false);
+  //
+  // Start state at "online" to reflect that the user can assume we're
+  // online if we don't announce otherwise.
+  const lastAnnouncedState = useRef<'online' | 'offline' | 'uncertain'>('online');
   useEffect(() => {
     // When announcing, mention Zulip so this doesn't sound like an
     // announcement from the OS. We don't speak for the OS, and the OS might
@@ -197,26 +199,17 @@ export function OfflineNoticeProvider(props: ProviderProps): Node {
     // you into giving it sensitive data that you meant for the OS or
     // another app.)
 
-    if (shouldShowUncertaintyNotice && !haveAnnouncedUncertain.current) {
-      // TODO(react-native-68): Use announceForAccessibilityWithOptions to
-      //   queue this behind any in-progress announcements
+    // TODO(react-native-68): Use announceForAccessibilityWithOptions to
+    //   queue these behind any in-progress announcements
+    if (shouldShowUncertaintyNotice && lastAnnouncedState.current !== 'uncertain') {
       AccessibilityInfo.announceForAccessibility(_('Zulip’s Internet connection is uncertain.'));
-      haveAnnouncedUncertain.current = true;
-    }
-
-    if (isOnline === false && (!haveAnnouncedOffline.current || haveAnnouncedUncertain.current)) {
+      lastAnnouncedState.current = 'uncertain';
+    } else if (isOnline === false && lastAnnouncedState.current !== 'offline') {
       AccessibilityInfo.announceForAccessibility(_('Zulip is offline.'));
-      haveAnnouncedOffline.current = true;
-      haveAnnouncedUncertain.current = false;
-    } else if (
-      isOnline === true
-      && (haveAnnouncedOffline.current || haveAnnouncedUncertain.current)
-    ) {
-      // TODO(react-native-68): Use announceForAccessibilityWithOptions to
-      //   queue this behind any in-progress announcements
+      lastAnnouncedState.current = 'offline';
+    } else if (isOnline === true && lastAnnouncedState.current !== 'online') {
       AccessibilityInfo.announceForAccessibility(_('Zulip is online.'));
-      haveAnnouncedOffline.current = false;
-      haveAnnouncedUncertain.current = false;
+      lastAnnouncedState.current = 'online';
     }
   }, [isOnline, shouldShowUncertaintyNotice, _]);
 
