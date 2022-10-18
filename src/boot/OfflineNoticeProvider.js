@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import type { ViewProps } from 'react-native/Libraries/Components/View/ViewPropTypes';
 import type { DimensionValue } from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
+import { clearTimeout, setTimeout } from 'react-native/Libraries/Core/Timers/JSTimers';
 import * as logging from '../utils/logging';
 import { useDispatch, useGlobalSelector } from '../react-redux';
 import { getGlobalSession } from '../directSelectors';
@@ -77,6 +78,23 @@ function useUpdateSessionOnConnectivityChange() {
       );
     });
   }, [dispatch]);
+
+  useEffect(() => {
+    // return;
+    let state = false;
+    let t;
+    const f = () => {
+      state = !state;
+      console.log(Date.now(), state);
+      dispatch(appOnline(state));
+
+      t = setTimeout(f, 4000);
+    };
+    f();
+    return () => {
+      t && clearTimeout(t);
+    };
+  }, []);
 }
 
 function useShouldShowUncertaintyNotice(): boolean {
