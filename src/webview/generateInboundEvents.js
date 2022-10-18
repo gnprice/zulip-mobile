@@ -101,6 +101,8 @@ export default function generateInboundEvents(
 ): WebViewInboundEvent[] {
   const uevents = [];
 
+  console.log('generateInboundEvents');
+
   if (
     !isEqual(
       prevProps.messageListElementsForShownMessages,

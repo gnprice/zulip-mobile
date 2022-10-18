@@ -236,6 +236,8 @@ export default function MessageList(outerProps: OuterProps): React.Node {
   //
   // See also docs/architecture/react.md .
 
+  console.log('msglist render');
+
   const props = useMessageListProps(outerProps);
 
   const theme = React.useContext(ThemeContext);
@@ -329,6 +331,7 @@ export default function MessageList(outerProps: OuterProps): React.Node {
   const htmlRef = React.useRef(null);
   const prevTheme = usePrevious(theme);
   if (htmlRef.current == null || theme !== prevTheme) {
+    console.log('msglist COMPUTE HTML');
     const {
       backgroundData,
       messageListElementsForShownMessages,

@@ -81,6 +81,8 @@ export default (React.memo(
   React.forwardRef<Props, React.ElementRef<typeof WebView>>(
     /* eslint-disable-next-line prefer-arrow-callback */
     function SinglePageWebView(props, ref) {
+      console.log('spwv render');
+
       const { html, baseUrl, ...moreProps } = props;
 
       // The `originWhitelist` and `onShouldStartLoadWithRequest` props are
