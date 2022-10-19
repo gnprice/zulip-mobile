@@ -1,12 +1,14 @@
 /* TODO: use tsflower
    @flow strict-local */
 import type { ComponentType, ElementConfig } from 'react';
-import { connectActionSheet as connectActionSheetInner } from '@expo/react-native-action-sheet';
-import type { ActionSheetOptions } from '@expo/react-native-action-sheet';
+import {
+  connectActionSheet as connectActionSheetInner,
+  type ActionSheetProps,
+} from '@expo/react-native-action-sheet';
 
 import type { BoundedDiff } from './generics';
 
-export type ShowActionSheetWithOptions = (ActionSheetOptions, (i?: number) => void) => void;
+export type ShowActionSheetWithOptions = ActionSheetProps['showActionSheetWithOptions'];
 
 /**
  * Exactly like the `connectActionSheet` in
