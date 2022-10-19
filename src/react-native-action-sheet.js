@@ -12,7 +12,7 @@ export type ShowActionSheetWithOptions = (ActionSheetOptions, (i?: number) => vo
  * Exactly like the `connectActionSheet` in
  *   `react-native-action-sheet` upstream, but more typed.
  */
-export function connectActionSheet<P, C: ComponentType<P>>(
+export function connectActionSheet<P: { ... }, C: ComponentType<P>>(
   WrappedComponent: C,
 ): ComponentType<
   BoundedDiff<
