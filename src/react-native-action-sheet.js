@@ -12,7 +12,10 @@ export type ShowActionSheetWithOptions = (ActionSheetOptions, (i?: number) => vo
  * Exactly like the `connectActionSheet` in
  *   `react-native-action-sheet` upstream, but more typed.
  */
-export function connectActionSheet<P: { ... }, C: ComponentType<P>>(
+export function connectActionSheet<
+  P: { +showActionSheetWithOptions: ShowActionSheetWithOptions, ... },
+  C: ComponentType<P>,
+>(
   WrappedComponent: C,
 ): ComponentType<
   BoundedDiff<
@@ -20,5 +23,6 @@ export function connectActionSheet<P: { ... }, C: ComponentType<P>>(
     {| +showActionSheetWithOptions: ShowActionSheetWithOptions |},
   >,
 > {
+  // $FlowFixMe[prop-missing]: upstream types use intersection
   return connectActionSheetInner(WrappedComponent);
 }
