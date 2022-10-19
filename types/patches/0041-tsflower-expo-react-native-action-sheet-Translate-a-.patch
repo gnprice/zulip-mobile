@@ -1,0 +1,33 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Greg Price <greg@zulip.com>
+Date: Wed, 19 Oct 2022 14:41:24 -0700
+Subject: [tsflower] @expo/react-native-action-sheet: Translate a double
+ declaration
+
+There's a couple of pieces TsFlower should implement to handle this:
+
+ * Currently it doesn't bother to handle variable declaration
+   statements that contain multiple declarations, just out of laziness
+   because those aren't common.  Should be easy to implement.
+
+ * We'll need substitutions for React.ExoticComponent and
+   React.ProviderExoticComponent.
+---
+ .../react-native-action-sheet/lib/typescript/context.js.flow   | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git types/@expo/react-native-action-sheet/lib/typescript/context.js.flow types/@expo/react-native-action-sheet/lib/typescript/context.js.flow
+index 30df06050..4c68e36ce 100644
+--- types/@expo/react-native-action-sheet/lib/typescript/context.js.flow
++++ types/@expo/react-native-action-sheet/lib/typescript/context.js.flow
+@@ -9,4 +9,7 @@ declare export function useActionSheet(): ActionSheetProps;
+ /* 
+ declare const Provider: React.ProviderExoticComponent<React.ProviderProps<ActionSheetProps>>, Consumer: React.ExoticComponent<React.ConsumerProps<ActionSheetProps>>; */
+ 
++declare var Provider: React.Context<ActionSheetProps>['Provider'];
++declare var Consumer: React.Context<ActionSheetProps>['Consumer'];
++
+ export { Provider, Consumer };
+-- 
+2.32.0
+

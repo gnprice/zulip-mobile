@@ -1,0 +1,27 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Greg Price <greg@zulip.com>
+Date: Wed, 19 Oct 2022 14:50:52 -0700
+Subject: [tsflower] Substitute React.ReactText in
+ @expo/react-native-action-sheet
+
+This substitution will be trivial, happily.
+---
+ .../lib/typescript/ActionSheet/ActionGroup.js.flow              | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git types/@expo/react-native-action-sheet/lib/typescript/ActionSheet/ActionGroup.js.flow types/@expo/react-native-action-sheet/lib/typescript/ActionSheet/ActionGroup.js.flow
+index 5c62b7619..fe35d449f 100644
+--- types/@expo/react-native-action-sheet/lib/typescript/ActionSheet/ActionGroup.js.flow
++++ types/@expo/react-native-action-sheet/lib/typescript/ActionSheet/ActionGroup.js.flow
+@@ -27,7 +27,7 @@ declare export default class ActionGroup extends React.Component<Props> {
+     ...
+   };
+   render(): $tsflower_subst$React$JSX$Element;
+-  _renderRowSeparator: (key: React.ReactText) => $tsflower_subst$React$JSX$Element;
++  _renderRowSeparator: (key: string | number) => $tsflower_subst$React$JSX$Element;
+   _renderTitleContent: () => $tsflower_subst$React$JSX$Element | null;
+   _renderIconElement: (
+     iconSource: $tsflower_subst$React$ReactNode,
+-- 
+2.32.0
+

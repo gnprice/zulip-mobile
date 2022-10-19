@@ -1,0 +1,64 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Greg Price <greg@zulip.com>
+Date: Wed, 19 Oct 2022 15:00:02 -0700
+Subject: wip action-sheet make properties ro
+
+---
+ .../lib/typescript/types.js.flow              | 40 +++++++++----------
+ 1 file changed, 20 insertions(+), 20 deletions(-)
+
+diff --git types/@expo/react-native-action-sheet/lib/typescript/types.js.flow types/@expo/react-native-action-sheet/lib/typescript/types.js.flow
+index 2eeb4b262..511fc10f6 100644
+--- types/@expo/react-native-action-sheet/lib/typescript/types.js.flow
++++ types/@expo/react-native-action-sheet/lib/typescript/types.js.flow
+@@ -19,27 +19,27 @@ export interface ActionSheetProps {
+ }
+ 
+ export interface ActionSheetIOSOptions {
+-  options: string[];
+-  title?: string;
+-  message?: string;
+-  tintColor?: string;
+-  cancelButtonIndex?: number;
+-  destructiveButtonIndex?: number | number[];
+-  anchor?: number;
+-  userInterfaceStyle?: 'light' | 'dark';
+-  disabledButtonIndices?: number[];
++  +options: string[];
++  +title?: string;
++  +message?: string;
++  +tintColor?: string;
++  +cancelButtonIndex?: number;
++  +destructiveButtonIndex?: number | number[];
++  +anchor?: number;
++  +userInterfaceStyle?: 'light' | 'dark';
++  +disabledButtonIndices?: number[];
+ }
+ 
+ export interface ActionSheetOptions extends ActionSheetIOSOptions {
+-  icons?: $tsflower_subst$React$ReactNode[];
+-  tintIcons?: boolean;
+-  textStyle?: $tsflower_subst$RN$TextStyle;
+-  titleTextStyle?: $tsflower_subst$RN$TextStyle;
+-  messageTextStyle?: $tsflower_subst$RN$TextStyle;
+-  autoFocus?: boolean;
+-  showSeparators?: boolean;
+-  containerStyle?: $tsflower_subst$RN$ViewStyle;
+-  separatorStyle?: $tsflower_subst$RN$ViewStyle;
+-  useModal?: boolean;
+-  destructiveColor?: string;
++  +icons?: $tsflower_subst$React$ReactNode[];
++  +tintIcons?: boolean;
++  +textStyle?: $tsflower_subst$RN$TextStyle;
++  +titleTextStyle?: $tsflower_subst$RN$TextStyle;
++  +messageTextStyle?: $tsflower_subst$RN$TextStyle;
++  +autoFocus?: boolean;
++  +showSeparators?: boolean;
++  +containerStyle?: $tsflower_subst$RN$ViewStyle;
++  +separatorStyle?: $tsflower_subst$RN$ViewStyle;
++  +useModal?: boolean;
++  +destructiveColor?: string;
+ }
+-- 
+2.32.0
+
