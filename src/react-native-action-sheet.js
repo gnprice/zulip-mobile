@@ -1,4 +1,5 @@
-/* @flow strict-local */
+/* TODO: use tsflower
+   @flow strict-local */
 import type { ComponentType, ElementConfig } from 'react';
 import type { TextStyle } from 'react-native/Libraries/StyleSheet/StyleSheet';
 // $FlowFixMe[untyped-import]
