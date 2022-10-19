@@ -6,7 +6,7 @@ import * as api from '../api';
 import config from '../config';
 import type { Dispatch, GetText, Message, Narrow, Outbox, EditMessage, UserId } from '../types';
 import type { BackgroundData } from './backgroundData';
-import type { ShowActionSheetWithOptions } from '../action-sheets';
+import type { ShowActionSheetWithOptions } from '../react-native-action-sheet';
 import type { JSONableDict } from '../utils/jsonable';
 import { showToast } from '../utils/info';
 import { pmKeyRecipientsFromMessage } from '../utils/recipient';

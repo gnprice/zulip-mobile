@@ -53,12 +53,7 @@ import { reactionTypeFromEmojiType } from '../emoji/data';
 import { Role, type RoleT } from '../api/permissionsTypes';
 import { roleIsAtLeast } from '../permissionSelectors';
 import { kNotificationBotEmail } from '../api/constants';
-
-// TODO really this belongs in a libdef.
-export type ShowActionSheetWithOptions = (
-  { options: string[], cancelButtonIndex: number, ... },
-  (number) => void,
-) => void;
+import type { ShowActionSheetWithOptions } from '../react-native-action-sheet';
 
 type StreamArgs = {
   auth: Auth,

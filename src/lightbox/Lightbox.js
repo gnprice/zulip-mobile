@@ -10,7 +10,7 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 
 import type { Message } from '../types';
 import { useGlobalSelector, useSelector } from '../react-redux';
-import type { ShowActionSheetWithOptions } from '../action-sheets';
+import type { ShowActionSheetWithOptions } from '../react-native-action-sheet';
 import { getAuth, getGlobalSession } from '../selectors';
 import { getResource } from '../utils/url';
 import LightboxHeader from './LightboxHeader';

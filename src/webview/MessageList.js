@@ -24,7 +24,7 @@ import {
   getGlobalSettings,
 } from '../selectors';
 import { withGetText } from '../boot/TranslationProvider';
-import type { ShowActionSheetWithOptions } from '../action-sheets';
+import type { ShowActionSheetWithOptions } from '../react-native-action-sheet';
 import { getMessageListElementsMemoized } from '../message/messageSelectors';
 import type { WebViewInboundEvent } from './generateInboundEvents';
 import type { WebViewOutboundEvent } from './handleOutboundEvents';

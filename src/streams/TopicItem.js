@@ -11,7 +11,7 @@ import ZulipText from '../common/ZulipText';
 import Touchable from '../common/Touchable';
 import UnreadCount from '../common/UnreadCount';
 import { showTopicActionSheet } from '../action-sheets';
-import type { ShowActionSheetWithOptions } from '../action-sheets';
+import type { ShowActionSheetWithOptions } from '../react-native-action-sheet';
 import { TranslationContext } from '../boot/TranslationProvider';
 import { useDispatch, useSelector } from '../react-redux';
 import {

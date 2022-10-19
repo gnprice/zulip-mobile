@@ -7,7 +7,7 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 
 import { showErrorAlert } from '../utils/info';
 import { showStreamActionSheet } from '../action-sheets';
-import type { ShowActionSheetWithOptions } from '../action-sheets';
+import type { ShowActionSheetWithOptions } from '../react-native-action-sheet';
 import { TranslationContext } from '../boot/TranslationProvider';
 import { useDispatch, useSelector, useGlobalSelector } from '../react-redux';
 import {

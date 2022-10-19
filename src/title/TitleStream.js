@@ -24,7 +24,7 @@ import {
 } from '../selectors';
 import { getMute } from '../mute/muteModel';
 import { showStreamActionSheet, showTopicActionSheet } from '../action-sheets';
-import type { ShowActionSheetWithOptions } from '../action-sheets';
+import type { ShowActionSheetWithOptions } from '../react-native-action-sheet';
 import { getUnread } from '../unread/unreadModel';
 import { getOwnUserRole } from '../permissionSelectors';
 
