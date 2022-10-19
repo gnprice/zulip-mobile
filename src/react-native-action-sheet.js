@@ -2,7 +2,6 @@
    @flow strict-local */
 import type { ComponentType, ElementConfig } from 'react';
 import type { TextStyle } from 'react-native/Libraries/StyleSheet/StyleSheet';
-// $FlowFixMe[untyped-import]
 import { connectActionSheet as connectActionSheetInner } from '@expo/react-native-action-sheet';
 
 import type { BoundedDiff } from './generics';

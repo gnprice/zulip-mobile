@@ -3,7 +3,6 @@ import React from 'react';
 import type { Node } from 'react';
 import { Platform, UIManager } from 'react-native';
 import 'react-native-url-polyfill/auto';
-// $FlowFixMe[untyped-import]
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 import RootErrorBoundary from './RootErrorBoundary';

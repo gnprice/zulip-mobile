@@ -2,7 +2,6 @@
 import React, { useContext } from 'react';
 import type { Node } from 'react';
 import { View, Pressable } from 'react-native';
-// $FlowFixMe[untyped-import]
 import { useActionSheet } from '@expo/react-native-action-sheet';
 
 import { showErrorAlert } from '../utils/info';
