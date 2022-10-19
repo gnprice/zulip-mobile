@@ -53,7 +53,7 @@ import { reactionTypeFromEmojiType } from '../emoji/data';
 import { Role, type RoleT } from '../api/permissionsTypes';
 import { roleIsAtLeast } from '../permissionSelectors';
 import { kNotificationBotEmail } from '../api/constants';
-import type { ShowActionSheetWithOptions } from '../react-native-action-sheet';
+import type { ActionSheetOptions, ShowActionSheetWithOptions } from '../react-native-action-sheet';
 
 type StreamArgs = {
   auth: Auth,
@@ -657,12 +657,12 @@ function makeButtonCallback<Args: { _: GetText, ... }>(buttonList: Button<Args>[
   };
 }
 
-function showActionSheet<Args: { _: GetText, ... }>(params: {
+function showActionSheet<Args: { _: GetText, ... }>(params: {|
+  ...$Rest<ActionSheetOptions, {| +cancelButtonIndex: mixed |}>,
   showActionSheetWithOptions: ShowActionSheetWithOptions,
   options: Array<Button<Args>>,
   args: Args,
-  ...
-}) {
+|}) {
   const { showActionSheetWithOptions, options, args, ...rest } = params;
   const titles = options.map(button => args._(button.title));
   showActionSheetWithOptions(

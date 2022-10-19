@@ -1,15 +1,19 @@
 /* @flow strict-local */
 import type { ComponentType, ElementConfig } from 'react';
+import type { TextStyle } from 'react-native/Libraries/StyleSheet/StyleSheet';
 // $FlowFixMe[untyped-import]
 import { connectActionSheet as connectActionSheetInner } from '@expo/react-native-action-sheet';
 
 import type { BoundedDiff } from './generics';
 
-export type ActionSheetOptions = {
-  options: string[],
-  cancelButtonIndex: number,
-  ...
-};
+// This is a subtype of the actual ActionSheetOptions upstream.  We'll get the
+// real thing in the future via TsFlower.
+export type ActionSheetOptions = {|
+  +options: string[],
+  +cancelButtonIndex: number,
+  +title?: string,
+  +titleTextStyle?: TextStyle,
+|};
 
 export type ShowActionSheetWithOptions = (ActionSheetOptions, (number) => void) => void;
 
