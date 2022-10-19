@@ -129,6 +129,11 @@ export default function Lightbox(props: Props): Node {
                   cancelButtonIndex,
                 },
                 buttonIndex => {
+                  if (buttonIndex === undefined) {
+                    // TODO what does this case mean?
+                    return;
+                  }
+
                   executeActionSheetAction({
                     title: options[buttonIndex],
                     src,

@@ -635,6 +635,11 @@ export const constructMessageActionButtons = (args: {|
 function makeButtonCallback<Args: { _: GetText, ... }>(buttonList: Button<Args>[], args: Args) {
   return buttonIndex => {
     (async () => {
+      if (buttonIndex === undefined) {
+        // TODO what does this case mean?
+        return;
+      }
+
       const pressedButton: Button<Args> = buttonList[buttonIndex];
       try {
         await pressedButton.action(args);

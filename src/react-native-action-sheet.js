@@ -15,7 +15,7 @@ export type ActionSheetOptions = {|
   +titleTextStyle?: TextStyle,
 |};
 
-export type ShowActionSheetWithOptions = (ActionSheetOptions, (number) => void) => void;
+export type ShowActionSheetWithOptions = (ActionSheetOptions, (i?: number) => void) => void;
 
 /**
  * Exactly like the `connectActionSheet` in
