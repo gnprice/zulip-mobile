@@ -2,6 +2,7 @@
 import { Clipboard, Share, Alert } from 'react-native';
 import invariant from 'invariant';
 import * as resolved_topic from '@zulip/shared/js/resolved_topic';
+import type { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescript/types';
 
 import * as NavigationService from '../nav/NavigationService';
 import type {
@@ -53,7 +54,7 @@ import { reactionTypeFromEmojiType } from '../emoji/data';
 import { Role, type RoleT } from '../api/permissionsTypes';
 import { roleIsAtLeast } from '../permissionSelectors';
 import { kNotificationBotEmail } from '../api/constants';
-import type { ActionSheetOptions, ShowActionSheetWithOptions } from '../react-native-action-sheet';
+import type { ShowActionSheetWithOptions } from '../react-native-action-sheet';
 
 type StreamArgs = {
   auth: Auth,
@@ -663,7 +664,7 @@ function makeButtonCallback<Args: { _: GetText, ... }>(buttonList: Button<Args>[
 }
 
 function showActionSheet<Args: { _: GetText, ... }>(params: {|
-  ...$Rest<ActionSheetOptions, {| +cancelButtonIndex: mixed |}>,
+  ...$Rest<$Exact<ActionSheetOptions>, {| +cancelButtonIndex: mixed |}>,
   showActionSheetWithOptions: ShowActionSheetWithOptions,
   options: Array<Button<Args>>,
   args: Args,
