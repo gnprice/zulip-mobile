@@ -5,10 +5,13 @@ import { connectActionSheet as connectActionSheetInner } from '@expo/react-nativ
 
 import type { BoundedDiff } from './generics';
 
-export type ShowActionSheetWithOptions = (
-  { options: string[], cancelButtonIndex: number, ... },
-  (number) => void,
-) => void;
+export type ActionSheetOptions = {
+  options: string[],
+  cancelButtonIndex: number,
+  ...
+};
+
+export type ShowActionSheetWithOptions = (ActionSheetOptions, (number) => void) => void;
 
 /**
  * Exactly like the `connectActionSheet` in
