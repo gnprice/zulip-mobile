@@ -28,6 +28,16 @@
 
 { pkgs ? import <nixpkgs> {} }:
 with pkgs;
+let
+  androidComposition = androidenv.composeAndroidPackages {
+    platformVersions = ["31"];
+    abiVersions = ["x86_64"];
+    includeEmulator = true;
+    includeSystemImages = true;
+    includeSources = false;
+    includeNDK = false;
+  };
+in
 mkShell {
 
   nativeBuildInputs = [
@@ -36,6 +46,8 @@ mkShell {
 
     jdk11
     android-studio
+    androidComposition.androidsdk
+    androidComposition.emulator
 
     # Used by various `tools/` scripts:
     git
@@ -51,4 +63,7 @@ mkShell {
   LD_LIBRARY_PATH = lib.makeLibraryPath [
     gcc11.cc  # Needed by Flow (the one from NPM.)
   ];
+
+  ANDROID_SDK_ROOT = "${androidComposition.androidsdk}/libexec/android-sdk";
+
 }
