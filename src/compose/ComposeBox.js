@@ -379,7 +379,7 @@ const ComposeBox: React$AbstractComponent<Props, ImperativeHandle> = forwardRef(
     [insertMessageTextAtCursorPosition, _, auth, setMessageInputValue],
   );
 
-  const activeInvocations = useRef<number[]>([]);
+  const activeInvocations = useRef<(number | void)[]>([]);
   const [activeQuoteAndRepliesCount, setActiveQuoteAndRepliesCount] = useState(0);
   const anyQuoteAndReplyInProgress = activeQuoteAndRepliesCount > 0;
   const doQuoteAndReply = useCallback(
@@ -390,11 +390,7 @@ const ComposeBox: React$AbstractComponent<Props, ImperativeHandle> = forwardRef(
       //   https://chat.zulip.org/#narrow/stream/243-mobile-team/topic/.23M1975.20Quote.20and.20reply/near/1455302
 
       setActiveQuoteAndRepliesCount(v => v + 1);
-      const invocationId =
-        activeInvocations.current.length > 0
-          ? activeInvocations.current[activeInvocations.current.length - 1] + 1
-          : 0;
-      activeInvocations.current.push(invocationId);
+      const invocationId = claimUnused(activeInvocations.current);
       try {
         const user = allUsersById.get(message.sender_id);
         if (!user) {
@@ -439,7 +435,15 @@ const ComposeBox: React$AbstractComponent<Props, ImperativeHandle> = forwardRef(
         setMessageInputValue(state => state.value.replace(quotingPlaceholder, quoteAndReplyText));
       } finally {
         setActiveQuoteAndRepliesCount(v => v - 1);
-        activeInvocations.current = activeInvocations.current.filter(x => x !== invocationId);
+        activeInvocations.current[invocationId] = undefined;
+      }
+
+      // prettier-ignore
+      function claimUnused(used: (number | void)[]): number {
+        let i = 0;
+        while (used[i] !== undefined) i++;
+        used[i] = i;
+        return i;
       }
     },
     [
