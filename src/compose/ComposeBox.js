@@ -390,11 +390,11 @@ const ComposeBox: React$AbstractComponent<Props, ImperativeHandle> = forwardRef(
       //   https://chat.zulip.org/#narrow/stream/243-mobile-team/topic/.23M1975.20Quote.20and.20reply/near/1455302
 
       setActiveQuoteAndRepliesCount(v => v + 1);
-      const serialNumber =
+      const invocationId =
         activeInvocations.current.length > 0
           ? activeInvocations.current[activeInvocations.current.length - 1] + 1
           : 0;
-      activeInvocations.current.push(serialNumber);
+      activeInvocations.current.push(invocationId);
       try {
         const user = allUsersById.get(message.sender_id);
         if (!user) {
@@ -408,8 +408,8 @@ const ComposeBox: React$AbstractComponent<Props, ImperativeHandle> = forwardRef(
         // Set to match quoting_placeholder in quote_and_reply in
         // static/js/compose_actions.js in the zulip/zulip repo.
         const quotingPlaceholder =
-          serialNumber > 0
-            ? _({ text: '[Quoting ({serialNumber})…]', values: { serialNumber } })
+          invocationId > 0
+            ? _({ text: '[Quoting ({serialNumber})…]', values: { serialNumber: invocationId } })
             : _('[Quoting…]');
         insertMessageTextAtCursorPosition(quotingPlaceholder, true);
 
@@ -439,7 +439,7 @@ const ComposeBox: React$AbstractComponent<Props, ImperativeHandle> = forwardRef(
         setMessageInputValue(state => state.value.replace(quotingPlaceholder, quoteAndReplyText));
       } finally {
         setActiveQuoteAndRepliesCount(v => v - 1);
-        activeInvocations.current = activeInvocations.current.filter(x => x !== serialNumber);
+        activeInvocations.current = activeInvocations.current.filter(x => x !== invocationId);
       }
     },
     [
