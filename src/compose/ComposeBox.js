@@ -438,10 +438,11 @@ const ComposeBox: React$AbstractComponent<Props, ImperativeHandle> = forwardRef(
         activeInvocations.current[invocationId] = undefined;
       }
 
-      // prettier-ignore
       function claimUnused(used: (number | void)[]): number {
         let i = 0;
-        while (used[i] !== undefined) i++;
+        while (used[i] !== undefined) {
+          i++;
+        }
         used[i] = i;
         return i;
       }
