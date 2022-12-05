@@ -30,40 +30,19 @@ export class AsyncStorageImpl {
 
   async _initDb() {
     const db = new SQLDatabase('zulip.db');
-    await db.transaction(tx => {
-      // This schema is just like the one in RN's AsyncStorage (see
-      // ReactDatabaseSupplier.java), except for a small fix: the latter
-      // doesn't mention NOT NULL on the `key` column.  In standard SQL
-      // that'd be redundant with PRIMARY KEY (though c'mon, EIBTI)… but
-      // SQLite has a quirk that PRIMARY KEY does *not* imply NOT NULL:
-      //   https://www.sqlite.org/lang_createtable.html#the_primary_key
-      tx.executeSql(`
-        CREATE TABLE IF NOT EXISTS keyvalue (
-          key TEXT PRIMARY KEY NOT NULL,
-          value TEXT NOT NULL
-        )
-      `);
-      // TODO consider adding STRICT to the schema; requires SQLite 3.37,
-      //   from 2021-11: https://www.sqlite.org/stricttables.html
-
-      // We'll use this to record successful migrations, such as from legacy
-      // AsyncStorage.
-      // There should only be one row.
-      tx.executeSql(`
-        CREATE TABLE IF NOT EXISTS migration (
-          version INTEGER NOT NULL
-        )
-      `);
-    });
-
     await this._migrate(db);
-
     return db;
   }
 
   /** Get the version of the existing database's schema. */
   async _getVersion(db): Promise<number> {
-    return (await db.query('SELECT version FROM migration LIMIT 1'))[0]?.version ?? 0;
+    let version: number | void = undefined;
+    try {
+      version = (await db.query('SELECT version FROM migration LIMIT 1'))[0]?.version;
+    } catch (err) {
+      // Presumably this means the table doesn't exist.
+    }
+    return version ?? 0;
   }
 
   /** Set the schema version in the database. */
@@ -86,21 +65,53 @@ export class AsyncStorageImpl {
       throw new Error('AsyncStorage: schema is from future');
     }
 
+    // Perform the migration.  For now, we're hardcoding that the only
+    // migration is from version 0 to version 1.
     invariant(this.version === 1, 'AsyncStorage._migrate currently assumes target version 1');
-    if (version !== 0) {
+    if (version === 0) {
+      await this._migration_0_1(db);
+    } else {
       logging.error('AsyncStorage: no migration path', {
         storedVersion: version,
         targetVersion: this.version,
       });
       throw new Error('AsyncStorage: no migration path');
     }
+  }
 
-    // Perform the migration.  For now, we're hardcoding that the only
-    // migration is from version 0 to version 1.
-    await db.transaction(async tx => {
+  /** Migrate from version 0 to version 1. */
+  _migration_0_1(db) {
+    return db.transaction(async tx => {
+      this._createTables(tx);
       await this._migrateFromLegacyAsyncStorage(tx);
       this._setVersion(tx, 1);
     });
+  }
+
+  _createTables(tx) {
+    // This schema is just like the one in RN's AsyncStorage (see
+    // ReactDatabaseSupplier.java), except for a small fix: the latter
+    // doesn't mention NOT NULL on the `key` column.  In standard SQL
+    // that'd be redundant with PRIMARY KEY (though c'mon, EIBTI)… but
+    // SQLite has a quirk that PRIMARY KEY does *not* imply NOT NULL:
+    //   https://www.sqlite.org/lang_createtable.html#the_primary_key
+    tx.executeSql(`
+      CREATE TABLE IF NOT EXISTS keyvalue (
+        key TEXT PRIMARY KEY NOT NULL,
+        value TEXT NOT NULL
+      )
+    `);
+    // TODO consider adding STRICT to the schema; requires SQLite 3.37,
+    //   from 2021-11: https://www.sqlite.org/stricttables.html
+
+    // We'll use this to record successful migrations, such as from legacy
+    // AsyncStorage.
+    // There should only be one row.
+    tx.executeSql(`
+      CREATE TABLE IF NOT EXISTS migration (
+        version INTEGER NOT NULL
+      )
+    `);
   }
 
   // The migration strategy.  How do we move the user's data from the old
