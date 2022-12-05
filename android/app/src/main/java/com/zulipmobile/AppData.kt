@@ -4,6 +4,9 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import java.io.File
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener
@@ -26,6 +29,22 @@ data class Account(
             )
         }
     }
+}
+
+/// App-facing API to access all the user's Zulip data.
+///
+/// The concept of "repository" here is taken from Android upstream's
+/// recommendations for handling data:
+///   https://developer.android.com/codelabs/android-room-with-a-view-kotlin#8
+///   https://developer.android.com/codelabs/android-room-with-a-view-kotlin#1
+class AppDataRepository(context: Context) {
+    private val db = ZulipDb(context)
+
+    fun account(realmUrl: String, userId: Int): Account? =
+        // TODO find how to get this blocking out of here
+        runBlocking {
+            withContext(Dispatchers.IO) { db.account(realmUrl, userId) }
+        }
 }
 
 /// Matches SERIALIZED_TYPE_FIELD_NAME in src/storage/replaceRevive.js .

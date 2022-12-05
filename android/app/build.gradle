@@ -195,6 +195,7 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0"
 
     implementation "androidx.core:core-ktx:1.7.0"
     implementation 'androidx.appcompat:appcompat:1.0.0'
