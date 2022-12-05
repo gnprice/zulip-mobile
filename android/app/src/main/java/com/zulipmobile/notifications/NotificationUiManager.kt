@@ -345,6 +345,8 @@ private fun updateNotification(
         setAutoCancel(true)
     }.build()
 
+    // TODO(#5115): Use the org's friendly name instead of its URL.
+    val realmLabel = fcmMessage.identity.realmUri.toString()
     val summaryNotification = NotificationCompat.Builder(context, CHANNEL_ID).apply {
         setGroup(groupKey)
         setGroupSummary(true)
@@ -355,8 +357,7 @@ private fun updateNotification(
         // For the summary we use an "inbox-style" notification, as recommended here:
         //   https://developer.android.com/training/notify-user/group#set_a_group_summary
         setStyle(NotificationCompat.InboxStyle()
-            // TODO(#5115): Use the org's friendly name instead of its URL.
-            .setSummaryText(fcmMessage.identity.realmUri.toString())
+            .setSummaryText(realmLabel)
             // TODO: Use addLine and setBigContentTitle to add some summary info when collapsed?
             //   (See example in the linked doc.)
         )
