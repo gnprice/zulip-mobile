@@ -61,8 +61,19 @@ export class AsyncStorageImpl {
     return db;
   }
 
+  /** Get the version of the existing database's schema. */
+  async _getVersion(db): Promise<number> {
+    return (await db.query('SELECT version FROM migration LIMIT 1'))[0]?.version ?? 0;
+  }
+
+  /** Set the schema version in the database. */
+  _setVersion(tx, version) {
+    tx.executeSql('DELETE FROM migration');
+    tx.executeSql('INSERT INTO migration (version) VALUES (?)', [version]);
+  }
+
   async _migrate(db) {
-    const version = (await db.query('SELECT version FROM migration LIMIT 1'))[0]?.version ?? 0;
+    const version = await this._getVersion(db);
     if (version === this.version) {
       return;
     }
@@ -88,9 +99,7 @@ export class AsyncStorageImpl {
     // migration is from version 0 to version 1.
     await db.transaction(async tx => {
       await this._migrateFromLegacyAsyncStorage(tx);
-
-      tx.executeSql('DELETE FROM migration');
-      tx.executeSql('INSERT INTO migration (version) VALUES (?)', [this.version]);
+      this._setVersion(tx, 1);
     });
   }
 
