@@ -104,12 +104,48 @@ describe('AsyncStorage: migration from legacy AsyncStorage', () => {
     const db = new SQLDatabase('zulip.db');
     await db.transaction(tx => {
       // … and that the migration didn't record success.
-      tx.executeSql('DELETE FROM migration');
+      tx.executeSql('PRAGMA user_version = 0');
     });
 
     // Expect to get the original legacy data, re-migrated.
     expect(await AsyncStorage.getAllKeys()).toEqual(['a', 'b']);
     expect(await AsyncStorage.getItem('a')).toEqual('1');
     expect(await AsyncStorage.getItem('b')).toEqual('2');
+  });
+
+  test('with legacy data migrated to version 1', async () => {
+    /* eslint-disable no-underscore-dangle */
+    // $FlowIgnore[incompatible-type]: We'll access private methods for testing.
+    const AsyncStorage_: empty = AsyncStorage;
+
+    LegacyAsyncStorage.setItem('a', '1');
+    LegacyAsyncStorage.setItem('b', '2');
+
+    // Get the underlying SQLite database, without applying migrations.
+    const db = AsyncStorage_._bareDb();
+    expect(await AsyncStorage_._getVersion(db)).toEqual(0);
+
+    // Migrate to version 1, like old versions of the app would have done.
+    await AsyncStorage_._migration_0_1_deprecated(db);
+    expect(await AsyncStorage_._getVersion(db)).toEqual(1);
+
+    // Now make some updates, while remaining at version 1,
+    // and simulate the program exiting and restarting.
+    await db.transaction(tx => {
+      // Like what `AsyncStorage.setItem('c', '3'); AsyncStorage.removeItem('b');`
+      // would do (on version 1, anyway), but without applying migrations.
+      tx.executeSql('INSERT OR REPLACE INTO keyvalue (key, value) VALUES (?, ?)', ['c', '3']);
+      tx.executeSql('DELETE FROM keyvalue WHERE key = ?', ['b']);
+    });
+    expect(await AsyncStorage_._getVersion(db)).toEqual(1);
+    await AsyncStorage.devForgetState();
+
+    // Expect to still get the updated state, not a state newly re-migrated
+    // from legacy storage…
+    expect(await AsyncStorage.getAllKeys()).toEqual(['a', 'c']);
+    expect(await AsyncStorage.getItem('a')).toEqual('1');
+    expect(await AsyncStorage.getItem('c')).toEqual('3');
+    // … and the schema version to have been updated.
+    expect(await AsyncStorage_._getVersion(db)).toEqual(AsyncStorage.version);
   });
 });

@@ -17,7 +17,7 @@ export class AsyncStorageImpl {
   // than unwrapping it up front and wrapping it in a new Promise on each call.
   dbSingleton: void | Promise<SQLDatabase> = undefined;
 
-  version: number = 1; // Hard-coded for now, with just the migration from legacy AsyncStorage.
+  version: number = 2; // Hard-coded for now.
 
   _db(): Promise<SQLDatabase> {
     if (this.dbSingleton) {
@@ -29,26 +29,45 @@ export class AsyncStorageImpl {
   }
 
   async _initDb() {
-    const db = new SQLDatabase('zulip.db');
+    const db = this._bareDb();
     await this._migrate(db);
     return db;
   }
 
+  _bareDb() {
+    return new SQLDatabase('zulip.db');
+  }
+
   /** Get the version of the existing database's schema. */
   async _getVersion(db): Promise<number> {
-    let version: number | void = undefined;
+    // For new versions, we use SQLite's `user_version` pragma:
+    //   https://www.sqlite.org/pragma.html#pragma_user_version
+    const pragmaVersion = (await db.query('PRAGMA user_version;'))[0].user_version;
+    if (pragmaVersion != null && pragmaVersion >= 2) {
+      return pragmaVersion;
+    }
+
+    // For version 1, unaware of that SQLite feature,
+    // we used a little ad-hoc table `migration`.
+    let tableVersion: number | void = undefined;
     try {
-      version = (await db.query('SELECT version FROM migration LIMIT 1'))[0]?.version;
+      tableVersion = (await db.query('SELECT version FROM migration LIMIT 1'))[0]?.version;
     } catch (err) {
       // Presumably this means the table doesn't exist.
     }
-    return version ?? 0;
+    if (tableVersion != null) {
+      invariant(tableVersion === 1, 'AsyncStorage old-style version should only be for 1');
+      return tableVersion;
+    }
+
+    // When neither is present, that's version 0.
+    return 0;
   }
 
   /** Set the schema version in the database. */
   _setVersion(tx, version) {
-    tx.executeSql('DELETE FROM migration');
-    tx.executeSql('INSERT INTO migration (version) VALUES (?)', [version]);
+    invariant(version >= 2, 'AsyncStorage._setVersion assumes new version at least 2');
+    tx.executeSql(`PRAGMA user_version = ${version}`);
   }
 
   async _migrate(db) {
@@ -65,11 +84,14 @@ export class AsyncStorageImpl {
       throw new Error('AsyncStorage: schema is from future');
     }
 
-    // Perform the migration.  For now, we're hardcoding that the only
-    // migration is from version 0 to version 1.
-    invariant(this.version === 1, 'AsyncStorage._migrate currently assumes target version 1');
+    // Perform the migrations.  For now, we're hardcoding that the only
+    // migrations are the legacy meta-migrations from versions 0 and 1 to 2.
+
+    invariant(this.version === 2, 'AsyncStorage._migrate currently assumes target version 2');
     if (version === 0) {
-      await this._migration_0_1(db);
+      await this._migration_0_2(db);
+    } else if (version === 1) {
+      await this._migration_1_2(db);
     } else {
       logging.error('AsyncStorage: no migration path', {
         storedVersion: version,
@@ -79,12 +101,48 @@ export class AsyncStorageImpl {
     }
   }
 
-  /** Migrate from version 0 to version 1. */
-  _migration_0_1(db) {
+  /**
+   * Migrate from version 0 to version 2.
+   *
+   * Should be equivalent to migrations 0->1 plus 1->2 in sequence,
+   * but simpler.
+   */
+  _migration_0_2(db) {
     return db.transaction(async tx => {
       this._createTables(tx);
       await this._migrateFromLegacyAsyncStorage(tx);
-      this._setVersion(tx, 1);
+      this._setVersion(tx, 2);
+    });
+  }
+
+  /**
+   * Migrate from version 0 to version 1.
+   *
+   * No longer used, but equivalent to what previous versions of the app did
+   * when schema version 1 was the latest.  Kept for use in tests.
+   */
+  _migration_0_1_deprecated(db) {
+    return db.transaction(async tx => {
+      this._createTables(tx);
+
+      tx.executeSql(`
+        CREATE TABLE IF NOT EXISTS migration (
+          version INTEGER NOT NULL
+        )
+      `);
+
+      await this._migrateFromLegacyAsyncStorage(tx);
+
+      tx.executeSql('DELETE FROM migration');
+      tx.executeSql('INSERT INTO migration (version) VALUES (?)', [1]);
+    });
+  }
+
+  /** Migrate from version 1 to version 2. */
+  _migration_1_2(db) {
+    return db.transaction(async tx => {
+      tx.executeSql('DROP TABLE migration');
+      this._setVersion(tx, 2);
     });
   }
 
@@ -103,15 +161,6 @@ export class AsyncStorageImpl {
     `);
     // TODO consider adding STRICT to the schema; requires SQLite 3.37,
     //   from 2021-11: https://www.sqlite.org/stricttables.html
-
-    // We'll use this to record successful migrations, such as from legacy
-    // AsyncStorage.
-    // There should only be one row.
-    tx.executeSql(`
-      CREATE TABLE IF NOT EXISTS migration (
-        version INTEGER NOT NULL
-      )
-    `);
   }
 
   // The migration strategy.  How do we move the user's data from the old
