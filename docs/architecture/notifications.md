@@ -51,8 +51,8 @@ For the implementation of our UI notifications, see:
    On iOS we let the system interpret each push message into one UI
    notification, without involving any client-side code of our own.
 
-[FcmMessage.kt]: ../../android/app/src/main/java/com/zulipmobile/notifications/FcmMessage.kt
-[NotificationUiManager.kt]: ../../android/app/src/main/java/com/zulipmobile/notifications/NotificationUiManager.kt
+[FcmMessage.kt]: ../../android/app/src/main/kotlin/notifications/FcmMessage.kt
+[NotificationUiManager.kt]: ../../android/app/src/main/kotlin/notifications/NotificationUiManager.kt
 [push_notifications.py]: https://github.com/zulip/zulip/blob/main/zerver/lib/push_notifications.py
 [apns-payload]: https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/generating_a_remote_notification
 

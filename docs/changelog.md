@@ -2157,7 +2157,7 @@ Many fixes and improvements, including:
   The same pattern works great in JS too, and we may gradually 
   also move to it there.
 
-[FcmMessage.kt]: ../android/app/src/main/java/com/zulipmobile/notifications/FcmMessage.kt
+[FcmMessage.kt]: ../android/app/src/main/kotlin/notifications/FcmMessage.kt
 
 * We've begun to put small single-use helper React components in the
   same file where they're used, and in general to put several React

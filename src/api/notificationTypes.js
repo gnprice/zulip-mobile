@@ -7,7 +7,7 @@ import { type UserId } from './idTypes';
 //
 // The code that consumes this part of the API is in:
 //   src/notification/extract.js
-//   android/app/src/main/java/com/zulipmobile/notifications/FcmMessage.kt
+//   android/app/src/main/kotlin/notifications/FcmMessage.kt
 // of which the latter is used on Android, and the former on iOS.
 //
 // The Android-side code doesn't use these because it's not in JS.

@@ -86,7 +86,7 @@ construction.  In particular [58e074b31][] and [cee71e005][] fix crash
 bugs in the app, in ways that were made easy and obvious by building
 the crunchy shell.
 
-[`FcmMessage.kt`]: ../../android/app/src/main/java/com/zulipmobile/notifications/FcmMessage.kt
+[`FcmMessage.kt`]: ../../android/app/src/main/kotlin/notifications/FcmMessage.kt
 [f85d3250f]: https://github.com/zulip/zulip-mobile/commit/f85d3250f
 [58e074b31]: https://github.com/zulip/zulip-mobile/commit/58e074b31
 [cee71e005]: https://github.com/zulip/zulip-mobile/commit/cee71e005
