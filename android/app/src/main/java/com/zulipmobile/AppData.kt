@@ -8,6 +8,26 @@ import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener
 
+data class Account(
+    val realmUrl: String,
+    val userId: Int,
+    val zulipFeatureLevel: Int?,
+    val name: String?,
+) {
+    companion object {
+        fun of(data: JSONObject): Account? {
+            val realmUrl = data.tryUrl("realm") ?: return null
+            val userId = data.tryInt("userId") ?: return null
+            return Account(
+                realmUrl,
+                userId,
+                data.tryInt("zulipFeatureLevel"),
+                data.tryString("name"),
+            )
+        }
+    }
+}
+
 /// Matches SERIALIZED_TYPE_FIELD_NAME in src/storage/replaceRevive.js .
 private const val SERIALIZED_TYPE_FIELD_NAME = "__serializedType__"
 
@@ -45,7 +65,17 @@ class ZulipDb(private val context: Context) {
     private val db get() = mDbOpenHelper.getReadableDatabase()
     private val store get() = ZulipKeyValueStore(db)
 
-    // TODO app-level getters here, using `store.getItem`
+    fun account(realmUrl: String, userId: Int): Account? {
+        val accounts = store.getItem("accounts") as? JSONArray ?: return null // state.accounts
+        for (i in 0 until accounts.length()) {
+            val account = accounts.tryJSONObject(i) ?: continue
+            if (account.tryUrl("realm") == realmUrl
+                && account.tryInt("userId") == userId
+            )
+                return Account.of(account)
+        }
+        return null
+    }
 }
 
 private class ZulipKeyValueStore(private val db: SQLiteDatabase) {
