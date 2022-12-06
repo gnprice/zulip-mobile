@@ -5,6 +5,49 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import java.io.File
 
+class ZulipDb(private val context: Context) {
+    private val mDbOpenHelper = ZulipDbOpenHelper(context)
+    private val db get() = mDbOpenHelper.getReadableDatabase()
+    private val store get() = ZulipKeyValueStore(db)
+
+    // TODO app-level getters here, using `store.getItem`
+}
+
+private class ZulipKeyValueStore(private val db: SQLiteDatabase) {
+    fun getItem(key: String): Any? {
+        val serialized = getItemSerialized(key) ?: return null
+        return JSONTokener(serialized).nextValue()
+    }
+
+    private fun getItemSerialized(key: String): String? {
+        return getItemDecompressed(encodeKey(key))
+    }
+
+    // The `KEY_PREFIX` in src/third/redux-persist/constants.js .
+    private val reduxPersistKeyPrefix = "reduxPersist:"
+
+    // Corresponds to createStorageKey in src/third/redux-persist/getStoredState.js .
+    private fun encodeKey(key: String) = reduxPersistKeyPrefix + key
+
+    /// Corresponds to CompressedAsyncStorage.getItem in src/storage/CompressedAsyncStorage.js.
+    private fun getItemDecompressed(key: String): String? {
+        val raw = getItemRaw(key) ?: return null
+        return decompressIfCompressed(raw)
+    }
+
+    /// Corresponds to AsyncStorage.getItem in src/storage/AsyncStorage.js.
+    private fun getItemRaw(key: String): String? {
+        val cur = db.query("keyvalue",
+            arrayOf("value"), "key = ?", arrayOf(key),
+            null, null, null)
+        cur.moveToFirst()
+        if (cur.isAfterLast) return null
+        val value = cur.getString(0)
+        cur.close()
+        return value
+    }
+}
+
 // Based loosely on android.database.sqlite.SQLiteOpenHelper .
 class ZulipDbOpenHelper(private val context: Context) {
     companion object {
