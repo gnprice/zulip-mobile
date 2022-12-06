@@ -17,10 +17,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.Person
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.os.bundleOf
-import com.zulipmobile.BuildConfig
-import com.zulipmobile.MainActivity
-import com.zulipmobile.R
-import com.zulipmobile.ZLog
+import com.zulipmobile.*
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
@@ -345,8 +342,10 @@ private fun updateNotification(
         setAutoCancel(true)
     }.build()
 
-    // TODO(#5115): Use the org's friendly name instead of its URL.
-    val realmLabel = fcmMessage.identity.realmUri.toString()
+    val repo = AppDataRepository(context)
+    val account = repo.account(fcmMessage)
+    val realmLabel = account?.name ?: fcmMessage.identity.realmUri.toString()
+
     val summaryNotification = NotificationCompat.Builder(context, CHANNEL_ID).apply {
         setGroup(groupKey)
         setGroupSummary(true)
@@ -374,3 +373,9 @@ private fun updateNotification(
         notify(conversationKey, NOTIFICATION_ID, notification)
     }
 }
+
+private fun AppDataRepository.account(fcmMessage: MessageFcmMessage): Account? =
+    fcmMessage.identity.let { identity ->
+        if (identity.userId == null) return null
+        this.account(identity.realmUri.toString(), identity.userId)
+    }
