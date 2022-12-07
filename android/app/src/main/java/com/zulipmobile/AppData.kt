@@ -8,6 +8,18 @@ import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener
 
+/// Matches SERIALIZED_TYPE_FIELD_NAME in src/storage/replaceRevive.js .
+private const val SERIALIZED_TYPE_FIELD_NAME = "__serializedType__"
+
+/// Matches behavior of reviver in src/storage/replaceRevive.js .
+private fun JSONObject.asUrl(): String? { // TODO return URL object
+    if (tryString(SERIALIZED_TYPE_FIELD_NAME) != "URL") return null
+    return tryString("data")
+}
+
+fun JSONObject.tryUrl(name: String) = tryJSONObject(name)?.asUrl()
+fun JSONArray.tryUrl(index: Int) = tryJSONObject(index)?.asUrl()
+
 // Many of the JSONObject / JSONArray "optFoo" methods have unsafe semantics:
 //   * they "coerce" values, parsing and unparsing strings;
 //   * they invent fake data like 0 or "" when no data exists.
