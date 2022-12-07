@@ -16,16 +16,16 @@ import java.util.zip.Inflater
 //   https://github.com/zulip/zulip-mobile/blob/main/docs/howto/testing.md#unit-tests-android.
 
 // TODO: Experiment what value gives the best performance.
-private const val bufferSize = 8192
+private const val kBufferSize = 8192
 
-private const val header = "z|zlib base64|"
+private const val kHeader = "z|zlib base64|"
 
 internal fun compress(input: String): String {
     val outputStream = ByteArrayOutputStream()
     val deflater = Deflater()
     deflater.setInput(input.toByteArray(charset("UTF-8")))
     deflater.finish()
-    val buffer = ByteArray(bufferSize)
+    val buffer = ByteArray(kBufferSize)
     while (!deflater.finished()) {
         val byteCount = deflater.deflate(buffer)
         outputStream.write(buffer, 0, byteCount)
@@ -39,7 +39,7 @@ internal fun compress(input: String): String {
     // Ultimately our ASCII data seems to end up going to SQLite with size
     // no more than about 1 byte/char (presumably the string gets encoded
     // as UTF-8 and it's exactly 1 byte/char), so this is pretty OK.
-    return header + Base64.encodeToString(outputStream.toByteArray(),
+    return kHeader + Base64.encodeToString(outputStream.toByteArray(),
         Base64.DEFAULT)
 }
 
@@ -47,11 +47,11 @@ internal fun decompress(input: String): String {
     val inflater = Inflater()
     val inputBytes = input.toByteArray(charset("ISO-8859-1"))
     inflater.setInput(Base64.decode(inputBytes,
-        header.length,
-        inputBytes.size - header.length,
+        kHeader.length,
+        inputBytes.size - kHeader.length,
         Base64.DEFAULT))
     val outputStream = ByteArrayOutputStream()
-    val buffer = ByteArray(bufferSize)
+    val buffer = ByteArray(kBufferSize)
     while (inflater.remaining != 0) {
         val byteCount = inflater.inflate(buffer)
         outputStream.write(buffer, 0, byteCount)
@@ -65,7 +65,7 @@ internal class TextCompressionModule(reactContext: ReactApplicationContext?) :
         ReactContextBaseJavaModule(reactContext) {
     override fun getName(): String = "TextCompressionModule"
 
-    override fun getConstants(): Map<String, Any> = hashMapOf("header" to header)
+    override fun getConstants(): Map<String, Any> = hashMapOf("header" to kHeader)
 
     @ReactMethod
     fun compress(input: String, promise: Promise) {
