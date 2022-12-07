@@ -87,7 +87,7 @@ private class ZulipKeyValueStore(private val db: SQLiteDatabase) {
 class ZulipDbOpenHelper(private val context: Context) {
     companion object {
         const val DATABASE_NAME = "zulip.db"
-        const val DATABASE_VERSION = 0
+        const val DATABASE_VERSION = 56
     }
 
     private var mDatabase: SQLiteDatabase? = null;
@@ -137,6 +137,8 @@ class ZulipDbOpenHelper(private val context: Context) {
     }
 
     private fun getVersion(db: SQLiteDatabase): Int {
-        return 0 // TODO inspect state.migrations.version
+        val store = ZulipKeyValueStore(db)
+        val migrations = store.getItem("migrations") as? JSONObject
+        return migrations?.tryInt("version") ?: 0
     }
 }
