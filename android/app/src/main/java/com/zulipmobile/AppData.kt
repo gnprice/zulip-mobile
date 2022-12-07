@@ -3,6 +3,7 @@ package com.zulipmobile
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
+import android.util.Log
 import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -100,6 +101,7 @@ class ZulipDb(private val context: Context) {
 private class ZulipKeyValueStore(private val db: SQLiteDatabase) {
     fun getItem(key: String): Any? {
         val serialized = getItemSerialized(key) ?: return null
+        Log.i("Zulip", serialized)
         return JSONTokener(serialized).nextValue()
     }
 
