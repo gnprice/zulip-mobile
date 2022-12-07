@@ -3,6 +3,7 @@ package com.zulipmobile;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
@@ -65,6 +66,12 @@ public class MainApplication extends Application implements ReactApplication {
         SoLoader.init(this, /* native exopackage */ false);
         initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
         ApplicationLifecycleDispatcher.onApplicationCreate(this);
+
+        Account account = new AppDataRepository(this).account("https://chat.zulip.org/", 13657);
+        Log.i("Zulip", account != null ?
+                "Zulip feature level at " + account.getRealmUrl() + " is: "
+                        + account.getZulipFeatureLevel().toString()
+                : "no such account");
     }
 
     @Override

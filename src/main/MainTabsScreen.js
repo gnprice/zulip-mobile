@@ -8,7 +8,7 @@ import {
 } from '@react-navigation/bottom-tabs';
 import type { RouteProp, RouteParamsOf } from '../react-navigation';
 import { getUnreadHuddlesTotal, getUnreadPmsTotal } from '../selectors';
-import { useSelector } from '../react-redux';
+import { useGlobalSelector, useSelector } from '../react-redux';
 import type { AppNavigationMethods, AppNavigationProp } from '../nav/AppNavigator';
 import { bottomTabNavigatorConfig } from '../styles/tabs';
 import HomeScreen from './HomeScreen';
@@ -47,6 +47,8 @@ type Props = $ReadOnly<{|
 |}>;
 
 export default function MainTabsScreen(props: Props): Node {
+  console.log(useGlobalSelector(state => state.accounts.map(a => [a.realm.href, a.userId])));
+
   const { backgroundColor } = useContext(ThemeContext);
 
   const unreadPmsCount = useSelector(getUnreadHuddlesTotal) + useSelector(getUnreadPmsTotal);
