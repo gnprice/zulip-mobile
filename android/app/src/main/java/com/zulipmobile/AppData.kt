@@ -4,6 +4,29 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import java.io.File
+import org.json.JSONArray
+import org.json.JSONObject
+import org.json.JSONTokener
+
+// Many of the JSONObject / JSONArray "optFoo" methods have unsafe semantics:
+//   * they "coerce" values, parsing and unparsing strings;
+//   * they invent fake data like 0 or "" when no data exists.
+// So we supply our own suite, and call them "tryFoo".
+fun JSONObject.tryBoolean(name: String): Boolean? = opt(name) as? Boolean
+fun JSONObject.tryDouble(name: String): Double? = opt(name) as? Double
+fun JSONObject.tryInt(name: String): Int? = opt(name) as? Int
+fun JSONObject.tryJSONArray(name: String): JSONArray? = optJSONArray(name)
+fun JSONObject.tryJSONObject(name: String): JSONObject? = optJSONObject(name)
+fun JSONObject.tryLong(name: String): Long? = opt(name) as? Long
+fun JSONObject.tryString(name: String): String? = opt(name) as? String
+
+fun JSONArray.tryBoolean(index: Int): Boolean? = opt(index) as? Boolean
+fun JSONArray.tryDouble(index: Int): Double? = opt(index) as? Double
+fun JSONArray.tryInt(index: Int): Int? = opt(index) as? Int
+fun JSONArray.tryJSONArray(index: Int): JSONArray? = optJSONArray(index)
+fun JSONArray.tryJSONObject(index: Int): JSONObject? = optJSONObject(index)
+fun JSONArray.tryLong(index: Int): Long? = opt(index) as? Long
+fun JSONArray.tryString(index: Int): String? = opt(index) as? String
 
 class ZulipDb(private val context: Context) {
     private val mDbOpenHelper = ZulipDbOpenHelper(context)
