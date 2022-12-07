@@ -61,6 +61,17 @@ internal fun decompress(input: String): String {
     return outputStream.toString("UTF-8")
 }
 
+/// Matches logic of CompressedAsyncStorage.getItem in src/storage/CompressedAsyncStorage.js .
+internal fun decompressIfCompressed(input: String): String {
+    if (!input.startsWith("z")) return input
+    val header = input.substring(0, input.indexOf('|', input.indexOf('|') + 1) + 1)
+    if (header != kHeader) {
+        // TODO log?
+        throw Error("No decompression module found for format $header")
+    }
+    return decompress(input)
+}
+
 internal class TextCompressionModule(reactContext: ReactApplicationContext?) :
         ReactContextBaseJavaModule(reactContext) {
     override fun getName(): String = "TextCompressionModule"
