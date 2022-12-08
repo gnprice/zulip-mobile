@@ -5,6 +5,7 @@ import androidx.test.filters.SmallTest
 import androidx.test.runner.AndroidJUnit4
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.Assert
 
 //import com.facebook.react.testing.ReactIntegrationTestCase;
 
@@ -14,6 +15,7 @@ import org.junit.runner.RunWith
 class StorageTest {
     @Test
     fun smoke() {
-        assert(false) { "hooray, reached test" }
+        Assert.assertEquals("foo", "foo")
+//        assert(false) { "hooray, reached test" }
     }
 }
