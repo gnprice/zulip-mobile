@@ -137,6 +137,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 196
         versionName "27.196"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
         // The RN v0.60 template app suggests configuring a debug
@@ -211,6 +212,12 @@ dependencies {
     testImplementation 'com.google.truth.extensions:truth-java8-extension:0.43'
     testImplementation 'org.mockito:mockito-core:1.10.19'
     testImplementation 'org.robolectric:robolectric:4.9'
+
+    androidTestImplementation("androidx.test:runner:1.5.1")
+    androidTestImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation( // TODO this isn't working
+        fileTree(dir: "../../node_modules/react-native/ReactAndroid/src/androidTest/java/com/facebook/react/testing",
+                 include: ["*.java"]))
 
     // ==== RN-related dependencies
 
