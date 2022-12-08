@@ -18,4 +18,9 @@ class StorageTest {
         Assert.assertEquals("foo", "foo")
 //        assert(false) { "hooray, reached test" }
     }
+
+    @Test
+    fun fire() {
+        Assert.assertEquals("foo", "bar")
+    }
 }
