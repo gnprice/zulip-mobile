@@ -67,11 +67,11 @@ public class MainApplication extends Application implements ReactApplication {
         initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
         ApplicationLifecycleDispatcher.onApplicationCreate(this);
 
-        Account account = new AppDataRepository(this).account("https://chat.zulip.org/", 13657);
-        Log.i("Zulip", account != null ?
-                "Zulip feature level at " + account.getRealmUrl() + " is: "
-                        + account.getZulipFeatureLevel().toString()
-                : "no such account");
+//        Account account = new AppDataRepository(this).account("https://chat.zulip.org/", 13657);
+//        Log.i("Zulip", account != null ?
+//                "Zulip feature level at " + account.getRealmUrl() + " is: "
+//                        + account.getZulipFeatureLevel().toString()
+//                : "no such account");
     }
 
     @Override
