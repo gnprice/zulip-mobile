@@ -7,12 +7,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.Assert
 
-//import com.facebook.react.testing.ReactIntegrationTestCase;
+import com.facebook.react.testing.ReactIntegrationTestCase
 
-//class StorageTest: ReactIntegrationTestCase {
 @SmallTest
 @RunWith(AndroidJUnit4::class)
-class StorageTest {
+class StorageTest: ReactIntegrationTestCase {
     @Test
     fun smoke() {
         Assert.assertEquals("foo", "foo")
