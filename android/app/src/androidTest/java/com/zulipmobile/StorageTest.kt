@@ -68,6 +68,8 @@ class StorageTest: ReactIntegrationTestCase() {
 
     @Test
     fun testToUpper() {
+        setUp()
+
         val testModule = mInstance!!.getJSModule(TestJSLocaleModule::class.java)
         waitForBridgeAndUIIdle()
 
