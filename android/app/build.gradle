@@ -219,6 +219,7 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit-ktx:1.1.4")
     androidTestImplementation("androidx.test:runner:1.5.1")
     androidTestImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation("com.google.android:android-test:4.1.1.4")
 
     // ==== RN-related dependencies
 

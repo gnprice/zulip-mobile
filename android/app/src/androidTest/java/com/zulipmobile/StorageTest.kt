@@ -11,7 +11,7 @@ import com.facebook.react.testing.ReactIntegrationTestCase
 
 @SmallTest
 @RunWith(AndroidJUnit4::class)
-class StorageTest: ReactIntegrationTestCase {
+class StorageTest: ReactIntegrationTestCase() {
     @Test
     fun smoke() {
         Assert.assertEquals("foo", "foo")
