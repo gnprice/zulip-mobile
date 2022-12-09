@@ -222,9 +222,6 @@ dependencies {
 //    androidTestImplementation( // TODO this isn't working
 //        fileTree(dir: "../../node_modules/react-native/ReactAndroid/src/androidTest/java/com/facebook/react/testing",
 //                 include: ["*.java"]))
-    androidTestImplementation "com.facebook.react:react-native:+"  // From node_modules
-    androidTestImplementation fileTree(dir: "libs", include: ["*.jar"])
-    androidTestImplementation jscFlavor
 
     // ==== RN-related dependencies
 
