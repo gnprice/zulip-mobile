@@ -16,7 +16,6 @@ class StorageTest {
     @Test
     fun smoke() {
         Assert.assertEquals("foo", "foo")
-//        assert(false) { "hooray, reached test" }
     }
 
     @Test
