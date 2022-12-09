@@ -189,6 +189,11 @@ android {
         assets.srcDirs += file("../../static/assets")
     }
     testOptions.unitTests.includeAndroidResources true
+    packagingOptions {
+        // ??? https://stackoverflow.com/a/60411533 ; cf https://stackoverflow.com/a/62166515
+        exclude 'AndroidManifest.xml'
+        exclude 'resources.arsc'
+    }
 }
 
 repositories {
