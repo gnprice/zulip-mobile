@@ -194,6 +194,8 @@ android {
         exclude 'AndroidManifest.xml'
         exclude 'resources.arsc'
     }
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.runner'
 }
 
 repositories {
@@ -224,7 +226,7 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit-ktx:1.1.4")
     androidTestImplementation("androidx.test:runner:1.5.1")
     androidTestImplementation("androidx.test:rules:1.5.0")
-    androidTestImplementation("com.google.android:android-test:4.1.1.4")
+//    androidTestImplementation("com.google.android:android-test:4.1.1.4")
     androidTestImplementation(fileTree(dir: "../../node_modules/react-native/ReactAndroid/src/main/third-party/java/buck-android-support/", include: ["*.jar"]))
     androidTestImplementation("org.mockito:mockito-core:2.26.0")
 
