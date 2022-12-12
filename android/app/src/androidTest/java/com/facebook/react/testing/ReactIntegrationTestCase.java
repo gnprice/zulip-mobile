@@ -9,11 +9,11 @@ package com.facebook.react.testing;
 
 import static org.mockito.Mockito.mock;
 
-import android.test.AndroidTestCase;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.test.InstrumentationRegistry;
+import androidx.test.core.app.ApplicationProvider;
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.BaseJavaModule;
 import com.facebook.react.bridge.CatalystInstance;
@@ -49,7 +49,7 @@ import java.util.concurrent.TimeUnit;
  *       testing purposes
  * </ol>
  */
-public abstract class ReactIntegrationTestCase extends AndroidTestCase {
+public abstract class ReactIntegrationTestCase {
 
   // we need a bigger timeout for CI builds because they run on a slow emulator
   private static final long IDLE_TIMEOUT_MS = 60000;
@@ -58,10 +58,9 @@ public abstract class ReactIntegrationTestCase extends AndroidTestCase {
   private @Nullable ReactBridgeIdleSignaler mBridgeIdleSignaler;
   private @Nullable ReactApplicationContext mReactContext;
 
-  @Override
   public ReactApplicationContext getContext() {
     if (mReactContext == null) {
-      mReactContext = new ReactApplicationContext(super.getContext());
+      mReactContext = new ReactApplicationContext(ApplicationProvider.getApplicationContext());
       Assertions.assertNotNull(mReactContext);
     }
 
@@ -173,15 +172,11 @@ public abstract class ReactIntegrationTestCase extends AndroidTestCase {
         Assertions.assertNotNull(mBridgeIdleSignaler), getContext(), IDLE_TIMEOUT_MS);
   }
 
-  @Override
   protected void setUp() throws Exception {
-    super.setUp();
     SoLoader.init(getContext(), /* native exopackage */ false);
   }
 
-  @Override
   protected void tearDown() throws Exception {
-    super.tearDown();
     shutDownContext();
   }
 

@@ -81,12 +81,12 @@ class StorageTest: ReactIntegrationTestCase() {
         waitForBridgeAndUIIdle()
 
         val answers = mStringRecordingModule!!.calls.toTypedArray()
-        assertEquals("TEST", answers[0])
-        assertEquals("W NIŻACH MÓGŁ ZJEŚĆ TRUFLĘ KOŃ BĄDŹ PSY", answers[1])
-        assertEquals("ШЕФ ВЗЪЯРЁН ТЧК ЩИПЦЫ С ЭХОМ ГУДБАЙ ЖЮЛЬ", answers[2])
-        assertEquals("ΓΑΖΊΕΣ ΚΑῚ ΜΥΡΤΙῈΣ ΔῈΝ ΘᾺ ΒΡΩ͂ ΠΙᾺ ΣΤῸ ΧΡΥΣΑΦῚ ΞΈΦΩΤΟ",
+        Assert.assertEquals("TEST", answers[0])
+        Assert.assertEquals("W NIŻACH MÓGŁ ZJEŚĆ TRUFLĘ KOŃ BĄDŹ PSY", answers[1])
+        Assert.assertEquals("ШЕФ ВЗЪЯРЁН ТЧК ЩИПЦЫ С ЭХОМ ГУДБАЙ ЖЮЛЬ", answers[2])
+        Assert.assertEquals("ΓΑΖΊΕΣ ΚΑῚ ΜΥΡΤΙῈΣ ΔῈΝ ΘᾺ ΒΡΩ͂ ΠΙᾺ ΣΤῸ ΧΡΥΣΑΦῚ ΞΈΦΩΤΟ",
             answers[3])
-        assertEquals("CHINESE: 幓 厏吪吙 鈊釿閍 碞碠粻 曮禷", answers[4])
+        Assert.assertEquals("CHINESE: 幓 厏吪吙 鈊釿閍 碞碠粻 曮禷", answers[4])
     }
 
 }
