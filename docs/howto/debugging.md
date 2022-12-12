@@ -9,6 +9,7 @@ A variety of tools are available to help us do that.
 * [Official advice](#rn-upstream) from React Native upstream
 * [Debugging our main app code](#main-codebase) in RN,
   especially React and Redux
+  * ... [with the Hermes debugger](#hermes)
   * ... [with the Chrome Developer Tools](#chrome-devtools) /
     Remote JS Debugging
   * ... [with React DevTools](#react-devtools)
@@ -55,6 +56,24 @@ sets up and most of our app code runs in.  They provide JS-level
 debugging there, plus useful hooks specific to React and Redux.
 
 
+<div id="hermes" />
+
+## Hermes debugger
+
+React Native supports debugging the app using Chrome's developer tools, in
+much the same way you would a web app.  This provides you with prettily
+formatted debug messages and helpful additional information.
+
+On iOS (where we don't use Hermes), see [the next section](#chrome-devtools).
+
+On Android (where we use Hermes),
+follow [upstream instructions][hermes-instructions] ([permalink][hermes-permalink])
+for debugging JS on Hermes.
+
+[hermes-instructions]: https://reactnative.dev/docs/hermes#debugging-js-on-hermes-using-google-chromes-devtools
+[hermes-permalink]: https://reactnative.dev/docs/0.68/hermes#debugging-js-on-hermes-using-google-chromes-devtools
+
+
 <div id="chrome-devtools" />
 
 ## Chrome Developer Tools / Remote JS Debugging
@@ -63,7 +82,11 @@ React Native supports debugging the app using Chrome's developer tools, in
 much the same way you would a web app.  This provides you with prettily
 formatted debug messages and helpful additional information.
 
-To use it, start the app.  (Either in the emulator, or see
+On Android (where we use Hermes), see [the previous section](#hermes).
+
+On iOS (where we don't use Hermes), proceed as follows:
+
+Start the app.  (Either in the emulator, or see
 [here][chrome-devtools-device] for additional instructions to do this
 on a physical device.)  Then, [open the Developer Menu][dev-menu].
 Here, select "Debug" (formerly "Debug JS Remotely").  This will open a
@@ -114,7 +137,8 @@ middleware [`redux-logger`](https://github.com/LogRocket/redux-logger).
 
 By default, we enable `redux-logger` just when using the Chrome
 Developer Tools, as described [above](#chrome-devtools).  To use it,
-open those or edit `src/storage/reduxLogging.js` to enable it.
+open those (if you're on iOS, where they're available because we don't
+use Hermes) or edit `src/storage/reduxLogging.js` to enable it.
 
 To control what's shown, edit the call to `createLogger` in
 `src/storage/reduxLogging.js`:

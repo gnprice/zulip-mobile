@@ -93,9 +93,8 @@ export default function ReadReceiptsScreen(props: Props): Node {
   // - MDN shows that our simple usage here is supported since iOS 10:
   //     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Collator
   //   And we desupported iOS 10 a long time ago.
-  // - On Android, I don't get an error that suggests an API is missing.
-  // And it looks like Hermes, which we hope to switch to soon, supports it:
-  //   https://github.com/facebook/hermes/issues/23#issuecomment-1156832485
+  // - On Android, Hermes supports it:
+  //     https://github.com/facebook/hermes/blob/v0.11.0/doc/IntlAPIs.md#supported
   const userSorter = useCallback(
     (a, b) => Intl.Collator(language).compare(a.full_name, b.full_name),
     [language],

@@ -77,7 +77,7 @@ apply plugin: "kotlin-android-extensions"
  */
 
 project.ext.react = [
-        enableHermes      : false, // clean and rebuild if changing
+        enableHermes      : true, // clean and rebuild if changing
         // quasi-unstable: see commits 8f8a266af and 833d083a9
         jsBundleDirRelease: "$buildDir/intermediates/merged_assets/release/out"
 ]

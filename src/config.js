@@ -9,7 +9,7 @@ const isDevelopment = process.env.NODE_ENV === 'development';
  */
 // The `btoa` global is present in Chrome, but absent in the RN environment
 // both in JavaScriptCore and in Hermes.
-// TODO(#4131,#5313): When we switch to Hermes completely, this will always be false;
+// TODO(#5313): When we switch to Hermes completely, this will always be false;
 //   simplify it away.
 export const inRemoteDebugChrome: boolean = isDevelopment && !!global.btoa;
 
