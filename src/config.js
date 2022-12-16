@@ -13,6 +13,9 @@ type Config = {|
 |};
 
 const config: Config = {
+  //
+  // Timing and tuning settings.
+
   // A completely unreasonable amount of time for a request, or
   // several retries of a request, to take. If this elapses, we're
   // better off giving up.
@@ -20,10 +23,18 @@ const config: Config = {
 
   messagesPerRequest: 100,
   messageListThreshold: 4000,
+
+  //
+  // Debugging settings.
+
   enableReduxLogging: isDevelopment && !!global.btoa,
   enableReduxSlowReducerWarnings: isDevelopment && !!global.btoa,
   slowReducersThreshold: 5,
   enableErrorConsoleLogging: true,
+
+  //
+  // Settings that depend on the publisher of the app.
+
   appOwnDomains: ['zulip.com', 'zulipchat.com', 'chat.zulip.org'],
 };
 
