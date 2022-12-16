@@ -1,11 +1,24 @@
 // @flow strict-local
 // $FlowFixMe[untyped-import]
 import { createLogger } from 'redux-logger';
+import Immutable from 'immutable';
 
 import type { Action } from '../actionTypes';
 import type { GlobalState } from '../reduxTypes';
 import { inRemoteDebugChrome } from '../config';
 import timing from '../utils/timing';
+
+if (process.env.NODE_ENV === 'development') {
+  // Chrome dev tools for Immutable.
+  //
+  // To enable, press F1 from the Chrome dev tools to open the
+  // settings. In the "Console" section, check "Enable custom
+  // formatters".
+  //
+  // $FlowFixMe[untyped-import]
+  const installDevTools = require('immutable-devtools'); // eslint-disable-line import/no-extraneous-dependencies, global-require
+  installDevTools(Immutable);
+}
 
 export const enableReduxLogging = inRemoteDebugChrome;
 export const enableReduxSlowReducerWarnings = inRemoteDebugChrome;

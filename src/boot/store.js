@@ -5,7 +5,6 @@ import type { Store } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 // $FlowFixMe[untyped-import]
 import createActionBuffer from 'redux-action-buffer';
-import Immutable from 'immutable';
 import { persistStore, autoRehydrate } from '../third/redux-persist';
 import type { Config, Persistor } from '../third/redux-persist';
 
@@ -19,18 +18,6 @@ import { getGlobalSession, getGlobalSettings } from '../directSelectors';
 import { migrations } from '../storage/migrations';
 import type { Dispatch, GlobalThunkExtras } from '../reduxTypes';
 import { createReduxLogger, enableReduxLogging } from '../storage/reduxLogging';
-
-if (process.env.NODE_ENV === 'development') {
-  // Chrome dev tools for Immutable.
-  //
-  // To enable, press F1 from the Chrome dev tools to open the
-  // settings. In the "Console" section, check "Enable custom
-  // formatters".
-  //
-  // $FlowFixMe[untyped-import]
-  const installDevTools = require('immutable-devtools'); // eslint-disable-line import/no-extraneous-dependencies, global-require
-  installDevTools(Immutable);
-}
 
 // AsyncStorage.clear(); // use to reset storage during development
 
