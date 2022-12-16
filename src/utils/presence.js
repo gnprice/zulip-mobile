@@ -1,5 +1,4 @@
 /* @flow strict-local */
-import differenceInSeconds from 'date-fns/differenceInSeconds';
 import differenceInDays from 'date-fns/differenceInDays';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
@@ -82,6 +81,9 @@ export const getAggregatedPresence = (presence: UserPresence): ClientPresence =>
   return { client, status, timestamp };
 };
 
+/** Like Date.now but in seconds. */
+const getNowSeconds = () => Date.now() / 1000;
+
 export const presenceToHumanTime = (
   presence: UserPresence,
   status: UserStatus,
@@ -102,7 +104,8 @@ export const presenceToHumanTime = (
     return 'today';
   }
 
-  return differenceInSeconds(Date.now(), lastTimeActive) < OFFLINE_THRESHOLD_SECS
+  const ageInSeconds = getNowSeconds() - presence.aggregated.timestamp;
+  return ageInSeconds < OFFLINE_THRESHOLD_SECS
     ? 'now'
     : `${formatDistanceToNow(lastTimeActive)} ago`;
 };
@@ -116,10 +119,8 @@ export const statusFromPresence = (presence: UserPresence | void): PresenceStatu
     return 'offline';
   }
 
-  const timestampDate = new Date(presence.aggregated.timestamp * 1000);
-  const diffToNowInSeconds = differenceInSeconds(Date.now(), timestampDate);
-
-  if (diffToNowInSeconds > OFFLINE_THRESHOLD_SECS) {
+  const ageInSeconds = getNowSeconds() - presence.aggregated.timestamp;
+  if (ageInSeconds > OFFLINE_THRESHOLD_SECS) {
     return 'offline';
   }
 
