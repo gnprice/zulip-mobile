@@ -20,7 +20,6 @@ type Config = {|
   enableReduxLogging: boolean,
   enableReduxSlowReducerWarnings: boolean,
   slowReducersThreshold: number,
-  enableErrorConsoleLogging: boolean,
   appOwnDomains: $ReadOnlyArray<string>,
 |};
 
@@ -42,7 +41,6 @@ const config: Config = {
   enableReduxLogging: inRemoteDebugChrome,
   enableReduxSlowReducerWarnings: inRemoteDebugChrome,
   slowReducersThreshold: 5,
-  enableErrorConsoleLogging: true,
 
   //
   // Settings that depend on the publisher of the app.

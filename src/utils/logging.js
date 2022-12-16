@@ -11,7 +11,6 @@ import {
 import type { ZulipVersion } from './zulipVersion';
 import type { JSONable } from './jsonable';
 import { objectEntries } from '../flowPonyfill';
-import config from '../config';
 
 /** Type of "extras" intended for Sentry. */
 export type Extras = {| +[key: string]: JSONable |};
@@ -125,16 +124,14 @@ const makeLogFunction = ({ consoleMethod, severity }: LogParams): LogFunction =>
   return (event: string | Error, extras: Extras = {}) => {
     logToSentry(event, severity, extras);
 
-    if (config.enableErrorConsoleLogging) {
-      toConsole(event);
+    toConsole(event);
 
-      const data = objectEntries(extras)
-        .map(([key, value]) => `    ${key}: ${JSON.stringify(value)}`)
-        .join('\n');
+    const data = objectEntries(extras)
+      .map(([key, value]) => `    ${key}: ${JSON.stringify(value)}`)
+      .join('\n');
 
-      if (data) {
-        toConsole(data);
-      }
+    if (data) {
+      toConsole(data);
     }
   };
 };
@@ -222,7 +219,5 @@ export const warn: (event: string | Error, extras?: Extras) => void = makeLogFun
  *  * `logging.warn` and `logging.error` for logging at higher severity
  */
 export const info = (event: string | Error | { ... }) => {
-  if (config.enableErrorConsoleLogging) {
-    console.log(event);
-  }
+  console.log(event);
 };
