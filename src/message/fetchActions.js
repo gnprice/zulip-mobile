@@ -37,6 +37,9 @@ import { addToOutbox } from '../outbox/outboxActions';
 import { getAllUsersById, getOwnUserId } from '../users/userSelectors';
 import type { ServerSettings } from '../api/settings/getServerSettings';
 
+/** How many messages to fetch in a given narrow at a time, approximately. */
+const kMessagesPerRequest = 100;
+
 const messageFetchStart = (
   narrow: Narrow,
   numBefore: number,
@@ -175,7 +178,7 @@ export const fetchOlder =
         fetchMessages({
           narrow,
           anchor: firstMessageId,
-          numBefore: config.messagesPerRequest,
+          numBefore: kMessagesPerRequest,
           numAfter: 0,
         }),
       );
@@ -197,7 +200,7 @@ export const fetchNewer =
           narrow,
           anchor: lastMessageId,
           numBefore: 0,
-          numAfter: config.messagesPerRequest,
+          numAfter: kMessagesPerRequest,
         }),
       );
     }
@@ -280,8 +283,8 @@ export const fetchMessagesInNarrow =
       fetchMessages({
         narrow,
         anchor,
-        numBefore: config.messagesPerRequest / 2,
-        numAfter: config.messagesPerRequest / 2,
+        numBefore: kMessagesPerRequest / 2,
+        numAfter: kMessagesPerRequest / 2,
       }),
     );
   };

@@ -3,7 +3,6 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 
 type Config = {|
   requestLongTimeoutMs: number,
-  messagesPerRequest: number,
   messageListThreshold: number,
   enableReduxLogging: boolean,
   enableReduxSlowReducerWarnings: boolean,
@@ -21,7 +20,6 @@ const config: Config = {
   // better off giving up.
   requestLongTimeoutMs: 60 * 1000,
 
-  messagesPerRequest: 100,
   messageListThreshold: 4000,
 
   //
