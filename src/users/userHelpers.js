@@ -48,6 +48,16 @@ const statusOrder = (presence: UserPresence): number => {
   }
 };
 
+function localeCompare(a, b) {
+  const s = Date.now();
+  const result = a.localeCompare(b);
+  const e = Date.now();
+  if (e - s > 100) {
+    console.log(`slow localeCompare: ${e - s}ms for '${a}' vs '${b}'`);
+  }
+  return result;
+}
+
 export const sortUserList = (
   users: $ReadOnlyArray<UserOrBot>,
   presences: PresenceState,
@@ -55,7 +65,7 @@ export const sortUserList = (
   [...users].sort(
     (x1, x2) =>
       statusOrder(presences[x1.email]) - statusOrder(presences[x2.email])
-      || x1.full_name.toLowerCase().localeCompare(x2.full_name.toLowerCase()),
+      || localeCompare(x1.full_name.toLowerCase(), x2.full_name.toLowerCase()),
   );
 
 export const filterUserList = (
