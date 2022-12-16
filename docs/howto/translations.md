@@ -174,16 +174,17 @@ to contribute translations into in the Zulip project on Transifex,
 which we do when someone expresses interest in contributing them.
 
 Each messages file in `static/translations/` should be reflected in
-two boring, more-or-less mechanical lists:
+certain boring, more-or-less mechanical lists:
  * `flow-typed/translations.js`
  * `src/i18n/messages.js`
+ * `src/i18n/polyfills.js`
 
-The first of these has a comment with a trivial command to help
+The first and last of these each has a comment with a trivial command to help
 automate updating it.  The other is smaller, and is maintained
-manually.  It'd be good to fully automate both of these; we haven't
+manually.  It'd be good to fully automate all of these; we haven't
 yet.
 
-So, when a new messages file appears, update those two lists.
+So, when a new messages file appears, update those lists.
 Then see if the next section applies too...
 
 
