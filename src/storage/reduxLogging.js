@@ -1,4 +1,6 @@
 // @flow strict-local
+// $FlowFixMe[untyped-import]
+import { createLogger } from 'redux-logger';
 
 import type { Action } from '../actionTypes';
 import type { GlobalState } from '../reduxTypes';
@@ -18,4 +20,20 @@ export function maybeLogSlowReducer(
   if (endMs - startMs >= slowReducersThreshold) {
     timing.add({ text: `${action.type} @ ${key}`, startMs, endMs });
   }
+}
+
+export function createReduxLogger(): mixed {
+  // See upstream docs:
+  //   https://github.com/LogRocket/redux-logger
+  // and ours:
+  //   https://github.com/zulip/zulip-mobile/blob/main/docs/howto/debugging.md#redux-logger
+  return createLogger({
+    duration: true,
+    // Example options to add for more focused information, depending on
+    // what you're investigating; see docs/howto/debugging.md (link above).
+    //   diff: true,
+    //   collapsed: true,
+    //   collapsed: (getState, action) => action.type !== 'MESSAGE_FETCH_COMPLETE',
+    //   predicate: (getState, action) => action.type === 'MESSAGE_FETCH_COMPLETE',
+  });
 }

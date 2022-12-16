@@ -4,8 +4,6 @@ import type { Store } from 'redux';
 // $FlowFixMe[untyped-import]
 import thunkMiddleware from 'redux-thunk';
 // $FlowFixMe[untyped-import]
-import { createLogger } from 'redux-logger';
-// $FlowFixMe[untyped-import]
 import createActionBuffer from 'redux-action-buffer';
 import Immutable from 'immutable';
 import { persistStore, autoRehydrate } from '../third/redux-persist';
@@ -20,7 +18,7 @@ import createMigration from '../redux-persist-migrate/index';
 import { getGlobalSession, getGlobalSettings } from '../directSelectors';
 import { migrations } from '../storage/migrations';
 import type { Dispatch, GlobalThunkExtras } from '../reduxTypes';
-import { enableReduxLogging } from '../storage/reduxLogging';
+import { createReduxLogger, enableReduxLogging } from '../storage/reduxLogging';
 
 if (process.env.NODE_ENV === 'development') {
   // Chrome dev tools for Immutable.
@@ -123,22 +121,7 @@ function listMiddleware() {
   ];
 
   if (enableReduxLogging) {
-    result.push(
-      // Log each action to the console -- often handy in development.
-      // See upstream docs:
-      //   https://github.com/LogRocket/redux-logger
-      // and ours:
-      //   https://github.com/zulip/zulip-mobile/blob/main/docs/howto/debugging.md#redux-logger
-      createLogger({
-        duration: true,
-        // Example options to add for more focused information, depending on
-        // what you're investigating; see docs/howto/debugging.md (link above).
-        //   diff: true,
-        //   collapsed: true,
-        //   collapsed: (getState, action) => action.type !== 'MESSAGE_FETCH_COMPLETE',
-        //   predicate: (getState, action) => action.type === 'MESSAGE_FETCH_COMPLETE',
-      }),
-    );
+    result.push(createReduxLogger());
   }
 
   return result;

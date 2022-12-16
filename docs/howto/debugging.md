@@ -115,7 +115,7 @@ Developer Tools; see above), thanks to the middleware
 
 By default, it logs the previous state and next state of every action that
 is dispatched.  You can control its behavior in more detail by editing the
-call to `createLogger` in `src/boot/store.js`.
+call to `createLogger` in `src/store/reduxLogging.js`.
 
 * `diff: true` will compute the diff (using
   [`deep-diff`](https://github.com/flitbit/diff#simple-examples)) between the
