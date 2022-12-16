@@ -11,15 +11,12 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 // both in JavaScriptCore and in Hermes.
 // TODO(#4131,#5313): When we switch to Hermes completely, this will always be false;
 //   simplify it away.
-const inRemoteDebugChrome = isDevelopment && !!global.btoa;
+export const inRemoteDebugChrome: boolean = isDevelopment && !!global.btoa;
 
 type Config = {|
   requestLongTimeoutMs: number,
   messagesPerRequest: number,
   messageListThreshold: number,
-  enableReduxLogging: boolean,
-  enableReduxSlowReducerWarnings: boolean,
-  slowReducersThreshold: number,
   appOwnDomains: $ReadOnlyArray<string>,
 |};
 
@@ -34,13 +31,6 @@ const config: Config = {
 
   messagesPerRequest: 100,
   messageListThreshold: 4000,
-
-  //
-  // Debugging settings.
-
-  enableReduxLogging: inRemoteDebugChrome,
-  enableReduxSlowReducerWarnings: inRemoteDebugChrome,
-  slowReducersThreshold: 5,
 
   //
   // Settings that depend on the publisher of the app.

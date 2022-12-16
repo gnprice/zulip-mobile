@@ -1,5 +1,4 @@
 /* @flow strict-local */
-import config from '../config';
 import type { Action, PerAccountApplicableAction, GlobalState, MigrationsState } from '../types';
 import { dubPerAccountState } from '../reduxTypes';
 import { isPerAccountApplicableAction } from '../actionTypes';
@@ -28,19 +27,11 @@ import { reducer as unread } from '../unread/unreadModel';
 import userGroups from '../user-groups/userGroupsReducer';
 import { reducer as userStatuses } from '../user-statuses/userStatusesModel';
 import users from '../users/usersReducer';
-import timing from '../utils/timing';
+import { enableReduxSlowReducerWarnings, maybeLogSlowReducer } from '../storage/reduxLogging';
 
 // The `Object.freeze` is to work around a Flow issue:
 //   https://github.com/facebook/flow/issues/2386#issuecomment-695064325
 const migrations = (state: MigrationsState = Object.freeze({})): MigrationsState => state;
-
-const { enableReduxSlowReducerWarnings, slowReducersThreshold } = config;
-
-function maybeLogSlowReducer(action, key: $Keys<GlobalState>, startMs, endMs) {
-  if (endMs - startMs >= slowReducersThreshold) {
-    timing.add({ text: `${action.type} @ ${key}`, startMs, endMs });
-  }
-}
 
 /**
  * Apply a sub-reducer, with perf logging if enabled.
@@ -80,7 +71,7 @@ function applyReducer<GS, A: Action, Key: $Keys<GS> & $Keys<GlobalState>, State>
 
   if (startMs !== undefined) {
     const endMs = Date.now();
-    maybeLogSlowReducer((action: Action), key, startMs, endMs);
+    maybeLogSlowReducer(action, key, startMs, endMs);
   }
 
   return nextState;

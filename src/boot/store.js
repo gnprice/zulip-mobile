@@ -13,7 +13,6 @@ import type { Config, Persistor } from '../third/redux-persist';
 
 import { stringify, parse } from '../storage/replaceRevive';
 import type { Action, GlobalState, ThunkExtras } from '../types';
-import config from '../config';
 import { REHYDRATE } from '../actionConstants';
 import rootReducer from './reducers';
 import CompressedAsyncStorage from '../storage/CompressedAsyncStorage';
@@ -21,6 +20,7 @@ import createMigration from '../redux-persist-migrate/index';
 import { getGlobalSession, getGlobalSettings } from '../directSelectors';
 import { migrations } from '../storage/migrations';
 import type { Dispatch, GlobalThunkExtras } from '../reduxTypes';
+import { enableReduxLogging } from '../storage/reduxLogging';
 
 if (process.env.NODE_ENV === 'development') {
   // Chrome dev tools for Immutable.
@@ -122,7 +122,7 @@ function listMiddleware() {
     thunkMiddleware.withExtraArgument(combinedThunkExtras),
   ];
 
-  if (config.enableReduxLogging) {
+  if (enableReduxLogging) {
     result.push(
       // Log each action to the console -- often handy in development.
       // See upstream docs:

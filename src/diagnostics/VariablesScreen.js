@@ -5,7 +5,6 @@ import { FlatList } from 'react-native';
 
 import type { RouteProp } from '../react-navigation';
 import type { AppNavigationProp } from '../nav/AppNavigator';
-import config from '../config';
 import Screen from '../common/Screen';
 import InfoItem from './InfoItem';
 
@@ -16,8 +15,6 @@ type Props = $ReadOnly<{|
 
 export default function VariablesScreen(props: Props): Node {
   const variables = {
-    enableReduxLogging: config.enableReduxLogging,
-    enableReduxSlowReducerWarnings: config.enableReduxSlowReducerWarnings,
     'process.env.NODE_ENV': process.env.NODE_ENV ?? '(not defined)',
   };
 
