@@ -6410,6 +6410,11 @@ has@^1.0.3:
   dependencies:
     function-bind "^1.1.1"
 
+hermes-engine-cli@0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/hermes-engine-cli/-/hermes-engine-cli-0.11.0.tgz#71229004168486d579d0b251e3f536a61a7c3a21"
+  integrity sha512-I0Y9nMSDFX2yyhyLBrRphcLoJgAU65O5ewQ8lPsEDc2W3Yw85cyDYOk7DY9tuv4yo+eH9IEh+cvE/i+cpOWAsg==
+
 hermes-engine@~0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/hermes-engine/-/hermes-engine-0.11.0.tgz#bb224730d230a02a5af02c4e090d1f52d57dd3db"
