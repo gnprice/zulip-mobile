@@ -48,25 +48,38 @@ const statusOrder = (presence: UserPresence): number => {
   }
 };
 
-function localeCompare(a, b) {
-  const s = Date.now();
-  const result = a.localeCompare(b);
-  const e = Date.now();
-  if (e - s > 100) {
-    console.log(`slow localeCompare: ${e - s}ms for '${a}' vs '${b}'`);
-  }
-  return result;
-}
-
 export const sortUserList = (
   users: $ReadOnlyArray<UserOrBot>,
   presences: PresenceState,
-): $ReadOnlyArray<UserOrBot> =>
-  [...users].sort(
-    (x1, x2) =>
-      statusOrder(presences[x1.email]) - statusOrder(presences[x2.email])
-      || localeCompare(x1.full_name.toLowerCase(), x2.full_name.toLowerCase()),
+): $ReadOnlyArray<UserOrBot> => {
+  // const names = users.map(u => u.full_name.toLowerCase());
+  // console.log(JSON.stringify(names));
+
+  const randInt = (end, start = 0) => Math.floor(Math.random() * (end - start) + start);
+  const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+  const names = Array.from({ length: 30000 }, () =>
+    Array.from({ length: 8 }, () => alphabet[randInt(alphabet.length)]).join(''),
   );
+
+  names.sort(localeCompare);
+
+  function localeCompare(a, b) {
+    const s = Date.now();
+    const result = a.localeCompare(b);
+    const e = Date.now();
+    if (e - s > 100) {
+      console.log(`slow localeCompare: ${e - s}ms for '${a}' vs '${b}'`);
+    }
+    return result;
+  }
+
+  return users;
+
+  const l = [...users].sort((x1, x2) =>
+    localeCompare(x1.full_name.toLowerCase(), x2.full_name.toLowerCase()),
+  );
+  return l.sort((x1, x2) => statusOrder(presences[x1.email]) - statusOrder(presences[x2.email]));
+};
 
 export const filterUserList = (
   users: $ReadOnlyArray<UserOrBot>,
