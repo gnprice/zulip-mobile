@@ -184,6 +184,7 @@ android {
             applicationIdSuffix ".debug"
         }
         release {
+            applicationIdSuffix ".debug"
             minifyEnabled enableProguardInReleaseBuilds
             // `minifyEnabled` is required for `shrinkResources`
             shrinkResources(enableProguardInReleaseBuilds && shrinkResourcesInProguardBuilds)
