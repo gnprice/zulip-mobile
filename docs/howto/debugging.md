@@ -111,11 +111,11 @@ Redux state, and a log of the Redux actions.
 
 We have exactly that information logged to the console (in the Chrome
 Developer Tools; see above), thanks to the middleware
-[`redux-logger`](https://github.com/evgenyrodionov/redux-logger).
+[`redux-logger`](https://github.com/LogRocket/redux-logger).
 
 By default, it logs the previous state and next state of every action that
 is dispatched.  You can control its behavior in more detail by editing the
-call to `createLogger` in `src/boot/middleware.js`.
+call to `createLogger` in `src/boot/store.js`.
 
 * `diff: true` will compute the diff (using
   [`deep-diff`](https://github.com/flitbit/diff#simple-examples)) between the
@@ -132,7 +132,7 @@ call to `createLogger` in `src/boot/middleware.js`.
   studying.
 
 * Many other options exist!  See [the
-  doc](https://github.com/evgenyrodionov/redux-logger#options).
+  doc](https://github.com/LogRocket/redux-logger#options).
 
 
 <div id="immutable-devtools" />
