@@ -139,8 +139,11 @@ export default function ReadReceiptsScreen(props: Props): Node {
               num_of_people: displayUserIds.length,
               'z-link': chunks => (
                 <WebLink url={new URL('/help/read-receipts', auth.realm)}>
-                  {chunks.map(chunk => (
-                    <ZulipText>{chunk}</ZulipText>
+                  {chunks.map((chunk, i) => (
+                    // This isn't a list that's actually dynamic, so the
+                    // array index is as good a key as any.
+                    // eslint-disable-next-line react/no-array-index-key
+                    <ZulipText key={i}>{chunk}</ZulipText>
                   ))}
                 </WebLink>
               ),
