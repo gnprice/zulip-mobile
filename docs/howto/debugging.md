@@ -109,13 +109,23 @@ One extremely useful kind of information for debugging many kinds of issues
 -- as well as for getting to understand how the app works! -- is to see the
 Redux state, and a log of the Redux actions.
 
-We have exactly that information logged to the console (in the Chrome
-Developer Tools; see above), thanks to the middleware
-[`redux-logger`](https://github.com/LogRocket/redux-logger).
+We have exactly that information logged to the console, thanks to the
+middleware [`redux-logger`](https://github.com/LogRocket/redux-logger).
 
-By default, it logs the previous state and next state of every action that
-is dispatched.  You can control its behavior in more detail by editing the
-call to `createLogger` in `src/store/reduxLogging.js`.
+By default, we enable `redux-logger` just when using the Chrome
+Developer Tools, as described [above](#chrome-devtools).  To use it,
+open those or edit `src/storage/reduxLogging.js` to enable it.
+
+To control what's shown, edit the call to `createLogger` in
+`src/storage/reduxLogging.js`:
+
+* `stateTransformer` controls what's shown of the previous and next
+  state for each action.  By default, when in Chrome (where it's cheap
+  to do so) we show the whole thing, but otherwise we suppress this
+  data completely.  Edit to show whatever's relevant for your current
+  debugging.
+
+* `actionTransformer` controls what's shown of each action itself.
 
 * `diff: true` will compute the diff (using
   [`deep-diff`](https://github.com/flitbit/diff#simple-examples)) between the
