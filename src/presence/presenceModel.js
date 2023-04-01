@@ -159,10 +159,8 @@ export function getPresenceOnlyStatusForUser(
     return 'offline';
   }
 
-  const timestampDate = new Date(timestamp * 1000);
-  const diffToNowInSeconds = differenceInSeconds(Date.now(), timestampDate);
-
-  if (diffToNowInSeconds > state.offlineThresholdSeconds) {
+  const dateNow = Date.now();
+  if (dateNow / 1000 - timestamp > state.offlineThresholdSeconds) {
     return 'offline';
   }
 
