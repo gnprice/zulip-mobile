@@ -662,8 +662,9 @@ export type UserTopic = {|
  *
  * The elements are the stream name, then topic, then possibly timestamp.
  */
-// Server issue for using stream IDs (#3918) for muted topics, not names:
-//   https://github.com/zulip/zulip/issues/21015
+// This uses stream names, not stream IDs (#3918).  But that's harmless,
+// because it's in the event system so atomic with our mapping of names to IDs.
+// In any case we use it only on old servers.
 // TODO(server-3.0): Simplify away the no-timestamp version, new in FL 1.
 // TODO(server-6.0): Remove, in favor of UserTopic.
 export type MutedTopicTuple = [string, string] | [string, string, number];
