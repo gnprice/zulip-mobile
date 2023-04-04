@@ -213,7 +213,7 @@ function interpretCustomProfileField(
 
     case 3: {
       // CustomProfileFieldType.Choice
-      // TODO(server): This isn't really documented.  But see chat thread:
+      // TODO(server-#24993): This isn't really documented.  But see chat thread:
       //   https://chat.zulip.org/#narrow/stream/378-api-design/topic/custom.20profile.20fields/near/1383005
       const choices = JSON.parse(realmField.field_data);
       return { displayType: 'text', text: choices[value].text };
@@ -221,7 +221,7 @@ function interpretCustomProfileField(
 
     case 4: {
       // CustomProfileFieldType.Date
-      // TODO(server): The value's format is undocumented, but empirically
+      // TODO(server-#24993): The value's format is undocumented, but empirically
       //   it's a date in ISO format, like 2000-01-01.
       // That's readable as is, but:
       // TODO format this date using user's locale.
@@ -234,7 +234,7 @@ function interpretCustomProfileField(
 
     case 7: {
       // CustomProfileFieldType.ExternalAccount
-      // TODO(server): This is undocumented.  See chat thread:
+      // TODO(server-#24993): This is undocumented.  See chat thread:
       //   https://chat.zulip.org/#narrow/stream/378-api-design/topic/external.20account.20custom.20profile.20fields/near/1387213
       const realmData: { subtype: string, url_pattern?: string } = JSON.parse(
         realmField.field_data,
@@ -252,7 +252,7 @@ function interpretCustomProfileField(
 
     case 6: {
       // CustomProfileFieldType.User
-      // TODO(server): This is completely undocumented.  The key to
+      // TODO(server-#24993): This is completely undocumented.  The key to
       //   reverse-engineering it was:
       //   https://github.com/zulip/zulip/blob/18230fcd9/static/js/settings_account.js#L247
       const userIds: $ReadOnlyArray<UserId> = JSON.parse(value);
@@ -282,7 +282,7 @@ export function getCustomProfileFieldsForUser(
   const realmFields = realm.customProfileFields;
   const realmDefaultExternalAccounts = realm.defaultExternalAccounts;
 
-  // TODO(server): The realm-wide field objects have an `order` property,
+  // TODO(server-#24993): The realm-wide field objects have an `order` property,
   //   but the actual API appears to be that the fields should be shown in
   //   the order they appear in the array (`custom_profile_fields` in the
   //   API; our `realmFields` array here.)  See chat thread:

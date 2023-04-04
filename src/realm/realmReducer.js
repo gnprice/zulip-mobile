@@ -231,7 +231,7 @@ export default (
       const { event } = action;
       switch (event.type) {
         case EventTypes.custom_profile_fields:
-          // TODO(server): The API docs suggest that this event just
+          // TODO(server-#24993): The API docs suggest that this event just
           //   contains new custom profile fields, but it looks like in fact
           //   it's the new entire list of them.  See chat thread:
           //     https://chat.zulip.org/#narrow/stream/378-api-design/topic/custom.20profile.20fields/near/1382993
