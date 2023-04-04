@@ -293,7 +293,7 @@ export type User = {|
   // TODO(server-4.0): Remove these and rely on `role`.
   -is_owner?: boolean, // TODO(server-3.0): New in FL 8
   -is_admin: boolean,
-  -is_guest?: boolean, // TODO(server-1.9): New; if absent, treat as false.
+  -is_guest: boolean,
 
   // TODO(server-5.0): New in FL 73
   +is_billing_admin?: boolean,
@@ -378,7 +378,7 @@ export type CrossRealmBot = {|
   // TODO(server-4.0): Remove these and rely on `role`.
   -is_owner?: boolean, // TODO(server-3.0): New in FL 8
   -is_admin: boolean,
-  -is_guest?: boolean, // TODO(server-1.9): New; if absent, treat as false.
+  -is_guest: boolean,
 
   // TODO(server-5.0): New in FL 73
   +is_billing_admin?: boolean,

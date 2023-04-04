@@ -162,6 +162,7 @@ const userOrBotProperties = (args: UserOrBotPropertiesArgs) => {
     email: args.email ?? `${randName}@example.org`,
     full_name: args.full_name ?? `${randName} User`,
     is_admin: false,
+    is_guest: false,
     timezone: 'UTC',
     user_id,
   });
@@ -176,7 +177,6 @@ export const makeUser = (args: UserOrBotPropertiesArgs = Object.freeze({})): Use
     bot_type: null,
     // bot_owner omitted
 
-    is_guest: false,
     profile_data: {},
   });
 
