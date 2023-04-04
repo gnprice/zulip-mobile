@@ -936,12 +936,7 @@ describe('getEditSequence correct for interesting changes', () => {
       const msgWithVote = {
         ...baseMessage,
         submessages: [
-          // TODO(server-1.9): No invariant needed when `.submessages` is
-          //   required.
-          ...(() => {
-            invariant(msgWithChoice.submessages, 'msgWithChoice has submessages');
-            return msgWithChoice.submessages;
-          })(),
+          ...msgWithChoice.submessages,
           {
             ...baseSubmessage,
             content: `{"type":"vote","key":"${baseMessage.sender_id},1","vote":1}`,

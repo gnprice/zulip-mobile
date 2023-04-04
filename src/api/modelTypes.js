@@ -961,11 +961,9 @@ type MessageBase = $ReadOnly<{|
   // stream_id handled on StreamMessage
   // subject handled on StreamMessage
 
-  /** Servers <1.9.0 omit this; when omitted, equivalent to empty array. */
   // The doc is wrong to say this is (string)[]; see
   //   https://chat.zulip.org/#narrow/stream/412-api-documentation/topic/.60.2Esubmessages.60.20on.20message.20objects/near/1389473
-  // TODO(server-1.9): Make required.
-  submessages?: $ReadOnlyArray<Submessage>,
+  submessages: $ReadOnlyArray<Submessage>,
 
   timestamp: number,
 

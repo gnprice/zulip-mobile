@@ -1,7 +1,6 @@
 /* @flow strict-local */
 import deepFreeze from 'deep-freeze';
 
-import type { Submessage } from '../../types';
 import messagesReducer from '../messagesReducer';
 import { FIRST_UNREAD_ANCHOR } from '../../anchor';
 import {
@@ -129,10 +128,7 @@ describe('messagesReducer', () => {
         {
           ...message2,
           submessages: [
-            // We know message2 has `submessages`; we defined it that
-            // way.
-            // $FlowFixMe[incompatible-cast]
-            ...(message2.submessages: $ReadOnlyArray<Submessage>),
+            ...message2.submessages,
             {
               id: 2,
               message_id: 2,
