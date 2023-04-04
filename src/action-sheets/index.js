@@ -283,8 +283,7 @@ const unmuteTopic = {
   action: async ({ auth, streamId, topic, streams }) => {
     const stream = streams.get(streamId);
     invariant(stream !== undefined, 'Stream with provided streamId must exist.');
-    // This still uses a stream name (#3918) because the API method does; see there.
-    await api.setTopicMute(auth, stream.name, topic, false);
+    await api.setTopicMute(auth, stream.stream_id, topic, false);
   },
 };
 
@@ -294,8 +293,7 @@ const muteTopic = {
   action: async ({ auth, streamId, topic, streams }) => {
     const stream = streams.get(streamId);
     invariant(stream !== undefined, 'Stream with provided streamId must exist.');
-    // This still uses a stream name (#3918) because the API method does; see there.
-    await api.setTopicMute(auth, stream.name, topic, true);
+    await api.setTopicMute(auth, stream.stream_id, topic, true);
   },
 };
 
