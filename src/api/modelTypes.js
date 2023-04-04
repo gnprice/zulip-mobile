@@ -336,9 +336,6 @@ export type User = {|
   +profile_data?: {|
     +[id: string]: {|
       +value: string,
-      // New in server 2.0, server commit e3aed0f7b.
-      // TODO(server-2.0): Delete the server-2.0 comment, but keep the type
-      //   optional; only some custom profile field types support Markdown.
       +rendered_value?: string,
     |},
   |},
