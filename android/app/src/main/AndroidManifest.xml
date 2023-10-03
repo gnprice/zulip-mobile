@@ -122,9 +122,7 @@
 
         <!-- To make a build that reports errors to Sentry, fill in the Sentry DSN below
              and uncomment.  See src/sentryConfig.js for another site and more discussion. -->
-        <!--
         <meta-data android:name="io.sentry.auto-init" android:value="true" tools:node="replace" />
-        <meta-data android:name="io.sentry.dsn" android:value="https://123@sentry.example/45" />
-        -->
+        <meta-data android:name="io.sentry.dsn" android:value="https://1bce396f73e3415297cff8ad2d143fa9@o48127.ingest.sentry.io/191284" />
     </application>
 </manifest>

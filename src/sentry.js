@@ -143,7 +143,7 @@ function scrubBreadcrumb(breadcrumb: Breadcrumb, hint?: BreadcrumbHint): Breadcr
 /** Initialize Sentry into its default configuration. */
 export const initializeSentry = () => {
   // Check to make sure it's safe to run Sentry. Abort if not.
-  preventNoise();
+  // preventNoise();
 
   const key = sentryKey;
   if (key !== null) {
