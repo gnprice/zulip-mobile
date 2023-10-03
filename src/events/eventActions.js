@@ -214,7 +214,7 @@ export const registerAndStartPolling =
     // in case we hit an exception in reducers on `registerComplete` below.
     logging.setTagsFromServerVersion(serverVersion);
 
-    logging.warn('Hello from test build');
+    throw new Error('An exception from test build');
 
     if (!serverVersion.isAtLeast(kNextMinSupportedVersion)) {
       // The server version is either one we already don't support, or one
