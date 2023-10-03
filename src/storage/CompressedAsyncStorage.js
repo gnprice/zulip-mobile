@@ -47,7 +47,15 @@ export default class CompressedAsyncStorage {
         // TODO: It'd be real nice to handle this decompression on the
         //   native side within getItem, so that we pass the data one way
         //   native->JS instead of three ways native->JS->native->JS.
-        return NativeModules.TextCompressionModule.decompress(item);
+        console.log('Decompressing...');
+        try {
+          const r = await NativeModules.TextCompressionModule.decompress(item);
+          console.log(`Decompressed: ${r}`);
+          return r;
+        } catch (e) {
+          console.log(`Error in decompressing: ${e}`);
+          throw e;
+        }
       } else {
         // Panic! If we are confronted with an unknown format, there is
         // nothing we can do to save the situation. Log an error and ignore
