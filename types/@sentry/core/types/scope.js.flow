@@ -52,7 +52,7 @@ declare export class Scope implements ScopeInterface {
     getUser(): User | void,
     getRequestSession(): RequestSession | void,
     setRequestSession(requestSession?: RequestSession): this,
-    setTags(tags: { [key: string]: Primitive, ... }): this,
+    setTags(tags: { +[key: string]: Primitive, ... }): this,
     setTag(key: string, value: Primitive): this,
     setExtras(extras: Extras): this,
     setExtra(key: string, extra: Extra): this,
