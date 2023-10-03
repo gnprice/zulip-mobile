@@ -209,7 +209,7 @@ run_only()
     rm -rf "${rootdir}"/types/"${package}"/lib/typescript/example/
     format_dir "${rootdir}"/types/"${package}"
 
-    for package in @sentry/{types,core,react-native}; do
+    for package in @sentry/{types,core,utils,browser,integrations,react,react-native}; do
         run_on_package "${package}"
         rm -rf "${rootdir}"/types/"${package}"/{,types-}ts3.8/
     done
