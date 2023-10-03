@@ -209,9 +209,10 @@ run_only()
     rm -rf "${rootdir}"/types/"${package}"/lib/typescript/example/
     format_dir "${rootdir}"/types/"${package}"
 
-    package=@sentry/react-native
-    run_on_package "${package}"
-    rm -rf "${rootdir}"/types/"${package}"/ts3.8/
+    for package in @sentry/{types,core,react-native}; do
+        run_on_package "${package}"
+        rm -rf "${rootdir}"/types/"${package}"/{,types-}ts3.8/
+    done
     format_dir "${rootdir}"/types/"${package}"
 
     # Remove all *.web.js.flow files, etc. We don't use RN on those platforms.
