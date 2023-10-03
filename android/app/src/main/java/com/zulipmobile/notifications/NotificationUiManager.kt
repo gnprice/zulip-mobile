@@ -366,6 +366,7 @@ private fun updateNotification(
     }.build()
 
     NotificationManagerCompat.from(context).apply {
+        throw Exception("An exception from test build from Kotlin");
         // This posts the notifications.  If there is an existing notification
         // with the same tag and ID as one of these calls to `notify`, this will
         // replace it with the updated notification we've just constructed.

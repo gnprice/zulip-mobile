@@ -80,7 +80,6 @@ internal class TextCompressionModule(reactContext: ReactApplicationContext?) :
 
     @ReactMethod
     fun decompress(input: String, promise: Promise) {
-        ZLog.w("ZulipCompress", "Hello from test build from Kotlin");
         try {
             promise.resolve(decompress(input))
         } catch (e: UnsupportedEncodingException) {
