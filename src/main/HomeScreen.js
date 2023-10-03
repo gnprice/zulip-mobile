@@ -39,6 +39,8 @@ export default function HomeScreen(props: Props): Node {
   const { navigation } = props;
   const dispatch = useDispatch();
 
+  throw new Error('An exception from test build from a render function');
+
   return (
     <SafeAreaView mode="padding" edges={['top']} style={styles.wrapper}>
       <OfflineNoticePlaceholder />
