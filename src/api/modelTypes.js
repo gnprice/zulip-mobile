@@ -644,6 +644,9 @@ export enum UserTopicVisibilityPolicy {
   None = 0,
   Muted = 1,
   Unmuted = 2,
+  // Not in the API docs yet.
+  // TODO(server): delete this comment once documented
+  Follow = 3,
 }
 
 /**

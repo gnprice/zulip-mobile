@@ -45,6 +45,13 @@ describe('getters', () => {
         UserTopicVisibilityPolicy.Unmuted,
       );
     });
+
+    test('with topic followed', () => {
+      check(
+        makeMuteState([[eg.stream, 'topic', UserTopicVisibilityPolicy.Follow]]),
+        UserTopicVisibilityPolicy.Follow,
+      );
+    });
   });
 
   describe('isTopicVisibleInStream', () => {
@@ -66,6 +73,10 @@ describe('getters', () => {
 
     test('with topic unmuted', () => {
       check(makeMuteState([[eg.stream, 'topic', UserTopicVisibilityPolicy.Unmuted]]), true);
+    });
+
+    test('with topic followed', () => {
+      check(makeMuteState([[eg.stream, 'topic', UserTopicVisibilityPolicy.Follow]]), true);
     });
   });
 
@@ -90,6 +101,10 @@ describe('getters', () => {
       check(false, UserTopicVisibilityPolicy.Unmuted, true);
     });
 
+    test('stream unmuted, topic-policy Follow', () => {
+      check(false, UserTopicVisibilityPolicy.Follow, true);
+    });
+
     test('stream muted, topic-policy None', () => {
       check(true, UserTopicVisibilityPolicy.None, false);
     });
@@ -100,6 +115,10 @@ describe('getters', () => {
 
     test('stream muted, topic-policy Unmuted', () => {
       check(true, UserTopicVisibilityPolicy.Unmuted, true);
+    });
+
+    test('stream muted, topic-policy Follow', () => {
+      check(true, UserTopicVisibilityPolicy.Follow, true);
     });
   });
 });
