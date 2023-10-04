@@ -34,5 +34,5 @@ export interface ReportDialogOptions {
     errorGeneric?: string,
     errorFormEntry?: string,
     successMessage?: string,
-    onLoad?(this: void): void,
+    onLoad?: (this: void) => void,
 };

@@ -5,7 +5,7 @@ import { type Location, type ReactRouterInstrumentation } from "./types";
 
 type HistoryV3 = {
     location?: Location,
-    listen?(cb: (location: Location) => void): void,
+    listen?: (cb: (location: Location) => void) => void,
     ...
 } & { [key: string]: any };
 

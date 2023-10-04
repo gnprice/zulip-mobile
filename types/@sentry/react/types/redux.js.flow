@@ -10,7 +10,7 @@ export interface SentryEnhancerOptions<S=any> {
     attachReduxState?: boolean,
     stateTransformer(state: S | void): S & any | null,
     actionTransformer(action: AnyAction): AnyAction | null,
-    configureScopeWithState?(scope: Scope, state: S): void,
+    configureScopeWithState?: (scope: Scope, state: S) => void,
 };
 
 declare function createReduxEnhancer(enhancerOptions?: Partial<SentryEnhancerOptions<>>): any;

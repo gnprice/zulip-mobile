@@ -213,7 +213,10 @@ run_only()
         run_on_package "${package}"
         rm -rf "${rootdir}"/types/"${package}"/{,types-}ts3.8/
     done
-    format_dir "${rootdir}"/types/"${package}"
+    # TODO(tsflower): should avoid emitting `foo?(): void` syntax
+    perl -i -0pe 's/\w+ \? \K ( \( .*? \) ) :/: $1 =>/xsg' \
+      -- $(git grep -Fl '?(' types/@sentry)
+    format_dir "${rootdir}"/types/"${package}" # TODO fix
 
     # Remove all *.web.js.flow files, etc. We don't use RN on those platforms.
     # TODO(tsflower): When tsflower supports skipping files, simplify away.

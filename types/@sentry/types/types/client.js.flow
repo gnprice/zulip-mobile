@@ -27,61 +27,61 @@ export interface Client<O: ClientOptions<>=ClientOptions<>> {
         scope?: Scope
     ): string | void,
     captureEvent(event: Event, hint?: EventHint, scope?: Scope): string | void,
-    captureSession?(session: Session): void,
-    captureCheckIn?(checkIn: CheckIn, monitorConfig?: MonitorConfig, scope?: Scope): string,
+    captureSession?: (session: Session) => void,
+    captureCheckIn?: (checkIn: CheckIn, monitorConfig?: MonitorConfig, scope?: Scope) => string,
     getDsn(): DsnComponents | void,
     getOptions(): O,
-    getSdkMetadata?(): SdkMetadata | void,
+    getSdkMetadata?: () => SdkMetadata | void,
     getTransport(): Transport | void,
     close(timeout?: number): PromiseLike<boolean>,
     flush(timeout?: number): PromiseLike<boolean>,
     getIntegration<T: Integration>(integration: IntegrationClass<T>): T | null,
-    addIntegration?(integration: Integration): void,
+    addIntegration?: (integration: Integration) => void,
     setupIntegrations(): void,
     eventFromException(exception: any, hint?: EventHint): PromiseLike<Event>,
     eventFromMessage(message: string, level?: Severity | SeverityLevel, hint?: EventHint): PromiseLike<Event>,
     sendEvent(event: Event, hint?: EventHint): void,
     sendSession(session: Session | SessionAggregates): void,
     recordDroppedEvent(reason: EventDropReason, dataCategory: DataCategory, event?: Event): void,
-    on?(hook: "startTransaction", callback: (transaction: Transaction) => void): void,
-    on?(hook: "finishTransaction", callback: (transaction: Transaction) => void): void,
-    on?(hook: "beforeEnvelope", callback: (envelope: Envelope) => void): void,
-    on?(
+    on?: (hook: "startTransaction", callback: (transaction: Transaction) => void) => void,
+    on?: (hook: "finishTransaction", callback: (transaction: Transaction) => void) => void,
+    on?: (hook: "beforeEnvelope", callback: (envelope: Envelope) => void) => void,
+    on?: (
         hook: "beforeSendEvent",
         callback: (event: Event, hint?: EventHint | void) => void
-    ): void,
-    on?(
+    ) => void,
+    on?: (
         hook: "preprocessEvent",
         callback: (event: Event, hint?: EventHint | void) => void
-    ): void,
-    on?(
+    ) => void,
+    on?: (
         hook: "afterSendEvent",
         callback: (event: Event, sendResponse: TransportMakeRequestResponse | void) => void
-    ): void,
-    on?(
+    ) => void,
+    on?: (
         hook: "beforeAddBreadcrumb",
         callback: (breadcrumb: Breadcrumb, hint?: BreadcrumbHint) => void
-    ): void,
-    on?(hook: "createDsc", callback: (dsc: DynamicSamplingContext) => void): void,
-    on?(
+    ) => void,
+    on?: (hook: "createDsc", callback: (dsc: DynamicSamplingContext) => void) => void,
+    on?: (
         hook: "otelSpanEnd",
         callback: (otelSpan: mixed, mutableOptions: { drop: boolean, ... }) => void
-    ): void,
-    emit?(hook: "startTransaction", transaction: Transaction): void,
-    emit?(hook: "finishTransaction", transaction: Transaction): void,
-    emit?(hook: "beforeEnvelope", envelope: Envelope): void,
-    emit?(hook: "beforeSendEvent", event: Event, hint?: EventHint): void,
-    emit?(hook: "preprocessEvent", event: Event, hint?: EventHint): void,
-    emit?(
+    ) => void,
+    emit?: (hook: "startTransaction", transaction: Transaction) => void,
+    emit?: (hook: "finishTransaction", transaction: Transaction) => void,
+    emit?: (hook: "beforeEnvelope", envelope: Envelope) => void,
+    emit?: (hook: "beforeSendEvent", event: Event, hint?: EventHint) => void,
+    emit?: (hook: "preprocessEvent", event: Event, hint?: EventHint) => void,
+    emit?: (
         hook: "afterSendEvent",
         event: Event,
         sendResponse: TransportMakeRequestResponse | void
-    ): void,
-    emit?(hook: "beforeAddBreadcrumb", breadcrumb: Breadcrumb, hint?: BreadcrumbHint): void,
-    emit?(hook: "createDsc", dsc: DynamicSamplingContext): void,
-    emit?(
+    ) => void,
+    emit?: (hook: "beforeAddBreadcrumb", breadcrumb: Breadcrumb, hint?: BreadcrumbHint) => void,
+    emit?: (hook: "createDsc", dsc: DynamicSamplingContext) => void,
+    emit?: (
         hook: "otelSpanEnd",
         otelSpan: mixed,
         mutableOptions: { drop: boolean, ... }
-    ): void,
+    ) => void,
 };

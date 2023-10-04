@@ -15,7 +15,7 @@ type Match = {
 
 export type RouterHistory = {
     location?: Location,
-    listen?(cb: (location: Location, action: Action) => void): void,
+    listen?: (cb: (location: Location, action: Action) => void) => void,
     ...
 } & { [key: string]: any };
 

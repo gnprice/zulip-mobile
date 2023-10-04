@@ -18,5 +18,5 @@ export interface Integration {
         addGlobalEventProcessor: (callback: EventProcessor) => void,
         getCurrentHub: () => Hub
     ): void,
-    preprocessEvent?(event: Event, hint: EventHint | void, client: Client<>): void,
+    preprocessEvent?: (event: Event, hint: EventHint | void, client: Client<>) => void,
 };

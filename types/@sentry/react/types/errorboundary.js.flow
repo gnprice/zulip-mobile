@@ -22,11 +22,11 @@ export type ErrorBoundaryProps = {
     showDialog?: boolean,
     dialogOptions?: ReportDialogOptions,
     fallback?: React$Element<React$ElementType> | FallbackRender,
-    onError?(error: Error, componentStack: string, eventId: string): void,
-    onMount?(): void,
-    onReset?(error: Error | null, componentStack: string | null, eventId: string | null): void,
-    onUnmount?(error: Error | null, componentStack: string | null, eventId: string | null): void,
-    beforeCapture?(scope: Scope, error: Error | null, componentStack: string | null): void,
+    onError?: (error: Error, componentStack: string, eventId: string) => void,
+    onMount?: () => void,
+    onReset?: (error: Error | null, componentStack: string | null, eventId: string | null) => void,
+    onUnmount?: (error: Error | null, componentStack: string | null, eventId: string | null) => void,
+    beforeCapture?: (scope: Scope, error: Error | null, componentStack: string | null) => void,
     ...
 };
 
