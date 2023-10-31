@@ -201,6 +201,10 @@ android {
     }
 }
 
+configurations.configureEach {
+  exclude group: "io.sentry", module: "sentry-android-ndk"
+}
+
 repositories {
     mavenCentral()
 }
