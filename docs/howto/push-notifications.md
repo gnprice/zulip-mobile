@@ -180,42 +180,32 @@ to [set up the dev server for mobile development](dev-server.md).
 
 You can tell your development server to talk to Apple's APNs "sandbox"
 server, instead of its server meant for production, but you'll need a
-certificate signed by Apple authorizing you to do so. Some background
+key issued by Apple authorizing you to do so. Some background
 on that is
 [here](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/sending_notification_requests_to_apns/#2947606).
 
-1. First, generate a certificate signing request (CSR) and
-   corresponding private key.  Use the `tools/setup/apns/prep-cert`
-   script from the Zulip server tree:
-   ```
-   $ tools/setup/apns/prep-cert request /tmp/apns.key /tmp/apns.csr
-   ```
+1. First, obtain a key from Apple.
+   Visit https://developer.apple.com/account/resources/authkeys/list ,
+   create a new key, and enable it for the service
+   "Apple Push Notifications service (APNs)".
+   Save the resulting key file as `zproject/apns-dev-key.p8`.
 
-2. Greg is authorized in Apple Developer to upload the CSR and obtain
-   the actual certificate, so you should send `apns.csr` to him and
-   ask him to do that.  He'll follow the steps at
-   https://developer.apple.com/account/resources/certificates/add
-   with:
-   * Cert type: “Apple Push Notification service SSL (Sandbox)"
-     (not "Sandbox & Production")
-   * App ID: 66KHCWMEYB.org.zulip.Zulip
+   For Kandra Labs's Apple developer account,
+   Greg has the necessary permissions to do this.
 
-   to obtain a certificate file `aps_development.cer`,
-   and send it back to you.
+2. Edit `zproject/dev-secrets.conf` to add two values:
+   set `apns_token_key_id` to the 10-character "Key ID"
+   shown for the key you just created,
+   and set `apns_team_id` to the 10-character team ID.
+   (For Kandra Labs's Apple developer account, the latter
+   is 66KHCWMEYB.)
 
-3. Combine the certificate with the key using the same tool:
-   ```
-   $ tools/setup/apns/prep-cert combine \
-       /tmp/apns.key /tmp/aps_development.cer zproject/apns-dev.pem
-   ```
+   Despite the filename, these two values aren't secrets (unlike the
+   contents of the key file).  The `dev-secrets.conf` file is
+   convenient just because it's untracked in Git.
 
-   The file `zproject/apns-dev.pem` is the output of all the steps
-   up to this point.
-   You can now delete the other files `/tmp/apns.key`, `/tmp/apns.csr`,
-   and `/tmp/aps_development.cer`.
-
-4. Restart `tools/run-dev` to let the server pick up the change.
-   It should automatically see the file `zproject/apns-dev.pem`
+3. Restart `tools/run-dev` to let the server pick up the change.
+   It should automatically see the file `zproject/apns-dev-key.p8`
    and use it to communicate with the APNs sandbox server.
 
 You should now be getting notifications on your iOS development build!
