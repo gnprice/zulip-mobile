@@ -12,6 +12,8 @@ import { NULL_ARRAY } from '../nullObjects';
 
 const initialState: UsersState = NULL_ARRAY;
 
+const allowedUsers = new Set(["Cordelia, Lear's daughter", 'Polonius']);
+
 export default (
   state: UsersState = initialState, // eslint-disable-line default-param-last
   action: PerAccountApplicableAction,
@@ -21,7 +23,11 @@ export default (
       return initialState;
 
     case REGISTER_COMPLETE:
-      return action.data.realm_users;
+      console.log(
+        'register users:',
+        action.data.realm_users.map(u => [u.user_id, u.full_name]),
+      );
+      return action.data.realm_users.filter(u => allowedUsers.has(u.full_name));
 
     case EVENT_USER_ADD:
       return [...state, action.person];
