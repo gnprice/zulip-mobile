@@ -58,7 +58,7 @@ src_icon_debug="${root_dir}"/tools/zulip-icon-debug.svg
 src_icon_square="${zulip_root}"/static/images/logo/zulip-icon-square.svg
 
 # White Z in gray circle.
-src_icon_circle_gray="${zulip_root}"/static/images/zulip-logo.svg
+src_icon_circle_gray="${zulip_root}"/web/images/zulip-logo.svg
 
 # White Z on transparent background.
 src_icon_white_z="${root_dir}"/tools/z-white.svg
