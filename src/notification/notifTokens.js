@@ -37,7 +37,9 @@ import * as logging from '../utils/logging';
 export const androidGetToken =
   (): GlobalThunkAction<Promise<mixed>> => async (dispatch, getState) => {
     try {
-      return await NativeModules.Notifications.getToken();
+      const token = await NativeModules.Notifications.getToken();
+      logging.info(`notif: FCM token: ${token}`);
+      return token;
     } catch (e) {
       // `getToken` failed.  That happens sometimes, apparently including
       // due to network errors: see #5061.  In that case all will be well
